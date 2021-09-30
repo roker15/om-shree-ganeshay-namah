@@ -52,7 +52,9 @@ const Home: React.FC<ProfileListProps> = ({ data }) => {
   }, [data]);
   useEffect(() => {
     // console.log("data id at position 0 ", data[0].subheading_id.main_topic_id.id);
-    shareContext.setPostHeadingId(data![0].subheading_id.main_topic_id!.id);
+
+    
+    // shareContext.setPostHeadingId(data![0].subheading_id.main_topic_id!.id);
   }, []);
 
   const [value, setValue] = React.useState("");
