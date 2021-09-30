@@ -49,7 +49,7 @@ const Home: React.FC<ProfileListProps> = ({ data }) => {
   const router = useRouter();
   useEffect(() => {
     if (data && data.length !== 0) {
-      appContext.setPostHeadingId(data![1].subheading_id!.main_topic_id!.id);
+      // appContext.setPostHeadingId(data![1].subheading_id!.main_topic_id!.id);
     }
   }, []);
 
@@ -65,7 +65,7 @@ const Home: React.FC<ProfileListProps> = ({ data }) => {
         {/* <Head>
         </Head> */}
 
-        <h1>{data[0].subheading_id.topic}</h1>
+        {/* <h1>{data[0].subheading_id.topic}</h1> */}
         <Link href="../editor">Go to editor</Link>
         <div className="container" style={{ padding: "50px 0 50px 0" }}>
           {/* <DynamicComponent test={data[0].post} /> */}
