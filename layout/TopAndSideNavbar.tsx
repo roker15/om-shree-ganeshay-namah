@@ -1,0 +1,264 @@
+import React, { ReactNode, useState } from "react";
+import Image from "next/image";
+import {
+  IconButton,
+  Avatar,
+  Box,
+  CloseButton,
+  Flex,
+  HStack,
+  VStack,
+  Icon,
+  useColorModeValue,
+  Link,
+  Drawer,
+  DrawerContent,
+  Text,
+  useDisclosure,
+  BoxProps,
+  FlexProps,
+  Menu,
+  MenuButton,
+  MenuDivider,
+  MenuItem,
+  MenuList,
+  Button,
+} from "@chakra-ui/react";
+import { FiHome, FiTrendingUp, FiCompass, FiStar, FiSettings, FiMenu, FiBell, FiChevronDown } from "react-icons/fi";
+import { IconType } from "react-icons";
+import { ReactText } from "react";
+import { useAppContext } from "../context/state";
+import useSWR from "swr";
+import { supabase } from "../lib/supabaseClient";
+import { Headings, Subheading } from "../types/myTypes";
+import { useAuthContext } from "../context/Authcontext";
+import { FaGoogle } from "react-icons/fa";
+
+interface LinkItemProps {
+  name: string;
+  // icon: IconType;
+  icon: number;
+}
+
+const LinkItems: Array<Subheading> = [];
+
+export default function TopAndSideNavbar({ children }: { children: ReactNode }) {
+  const { isOpen, onOpen, onClose } = useDisclosure();
+  // const [subheading, setSubheading] = useState(0);
+  const {postHeadingId} = useAppContext();
+  const { signUp, signOut, signIn } = useAuthContext();
+  // setSubheading(shareContext.postHeadingId);
+  //**************************useSWR******************************************888 */
+  // `data` will always be available as it's in `fallback`.
+
+  const { data, error } = useSWR(
+    ["/headingId", postHeadingId],
+    async () => await supabase.from<Subheading>("subheadings").select("*").eq("main_topic_id", postHeadingId)
+  );
+
+  // return <h1>{data.title}</h1>;
+  if (error)
+    return (
+      <Box minH="100vh" bg="white.100">
+        <div>failed to load</div>
+      </Box>
+    );
+  if (!data) return <div>loading...</div>;
+  LinkItems.length = 0;
+  if (data.data && data.data.length !== 0) {
+    data.data!.map((x) => {
+      LinkItems.push(x);
+    });
+  }
+
+  return (
+    <Box
+      minH="100vh"
+      // bg={useColorModeValue("blue.100", "blue")} // this is for toggling dark mode
+      bg="green.100"
+    >
+      {/* mobilenav */}
+      <MobileNav onOpen={onOpen} />
+
+      <SidebarContent onClose={() => onClose} display={{ base: "none", md: "block" }} />
+      <Drawer
+        autoFocus={false}
+        isOpen={isOpen}
+        placement="left"
+        onClose={onClose}
+        returnFocusOnClose={false}
+        onOverlayClick={onClose}
+        size="full"
+      >
+        <DrawerContent>
+          <SidebarContent onClose={onClose} />
+        </DrawerContent>
+      </Drawer>
+
+      <Box mt={"16"} bg="white" ml={{ base: 0, md: 80 }} p="4">
+        {children}
+        {/* {shareContext.postHeadingId} */}
+      </Box>
+    </Box>
+  );
+}
+
+interface SidebarProps extends BoxProps {
+  onClose: () => void;
+}
+
+const SidebarContent = ({ onClose, ...rest }: SidebarProps) => {
+  const shareContext = useAppContext();
+  return (
+    <Box
+      transition="3s ease"
+      bg={useColorModeValue("white", "gray.900")}
+      borderRight="1px"
+      borderRightColor={useColorModeValue("gray.200", "gray.700")}
+      w={{ base: "full", md: "80" }}
+      pos="fixed"
+      h="full"
+      overflowY="scroll"
+      {...rest}
+    >
+      <Flex h="20" alignItems="center" mx="8" justifyContent="space-between">
+        <Text fontSize="2xl" fontFamily="monospace" fontWeight="bold">
+          logo
+        </Text>
+        <CloseButton display={{ base: "flex", md: "none" }} onClick={onClose} />
+      </Flex>
+   
+
+      {LinkItems && LinkItems.length !== 0 ? (
+        LinkItems.map((subheading) => (
+          <li key={subheading.id}>
+            <Link href={`/posts/${encodeURIComponent(subheading.id)}`}>
+              <a>{subheading.topic}</a>
+            </Link>
+          </li>
+        ))
+      ) : (
+        <div>no data</div>
+      )}
+    </Box>
+  );
+};
+
+interface NavItemProps extends FlexProps {
+  // icon: IconType;
+  icon: number;
+  children: ReactText;
+}
+// const NavItem = ({ icon, children, ...rest }: NavItemProps) => {
+//   return (
+//     <Link href={`/blog/${encodeURIComponent(post.slug)}`}>
+//       <a>{post.title}</a>
+//     </Link>
+//   );
+// };
+
+interface MobileProps extends FlexProps {
+  onOpen: () => void;
+}
+
+const MobileNav = ({ onOpen, ...rest }: MobileProps) => {
+  const { signIn, signUp, signOut } = useAuthContext();
+  return (
+    <Flex
+      // ml={{ base: 10, md: 60 }}
+      px={{ base: 4, md: 4 }}
+      height="16"
+      width="full"
+      alignItems="center"
+      bg={useColorModeValue("#f8f6fa", "#e5e0f1")}
+      borderBottomWidth="1px"
+      zIndex={9999}
+      pos="fixed"
+      top={0}
+
+      borderBottomColor={useColorModeValue("gray.200", "gray.700")}
+      justifyContent={{ base: "space-between", md: "flex" }}
+      {...rest}
+    >
+      <Image priority={true} src="/vercel.svg" alt="Picture of the author" width={100} height={100} />
+      {/* <Image  boxSize="50px" objectFit="fill" src="vercel.svg" alt="Segun Adebayo" /> */}
+      <Text
+        justifyContent={{ base: "space-between", md: "flex" }}
+        align="left"
+        display={{ base: "flex", md: "flex-start" }}
+        fontSize="2xl"
+        fontFamily="monospace"
+        fontWeight="bold"
+      >
+        Welcome to Qlook
+      </Text>
+
+      <HStack spacing={{ base: "0", md: "6" }}>
+        {/* <button onClick={() => setLanguage("jp")}>sign in</button> */}
+        {supabase.auth.session() === null ? (
+          <Button
+            border="0px"
+            colorScheme="google"
+            leftIcon={<FaGoogle />}
+            variant="ghost"
+            onClick={() => signUp("gg", "tt")}
+          >
+            Sign in
+          </Button>
+        ) : (
+          ""
+        )}
+
+        <IconButton size="sm" variant="outline" aria-label="open menu" icon={<FiBell />} />
+        <Flex border="0px" alignItems={"center"}>
+          <Menu boundary="clippingParents">
+            <MenuButton border="0px" py={2} transition="all 0.3s" _focus={{ boxShadow: "none" }}>
+              <HStack>
+                {supabase.auth.session() === null ? (
+                  <Avatar size={"sm"} src="https://bit.ly/broken-link" />
+                ) : (
+                  <Avatar
+                    size={"sm"}
+                    src={
+                      "https://images.unsplash.com/photo-1619946794135-5bc917a27793?ixlib=rb-0.3.5&q=80&fm=jpg&crop=faces&fit=crop&h=200&w=200&s=b616b2c5b373a80ffc9636ba24f7a4a9"
+                    }
+                  />
+                )}
+
+                <VStack display={{ base: "none", md: "flex" }} alignItems="flex-start" spacing="1px" ml="2">
+                  <Text fontSize="sm">{useAuthContext().username}</Text>
+                  <Text fontSize="xs" color="gray.600">
+                    {/* Admin */}
+                  </Text>
+                </VStack>
+                <Box display={{ base: "none", md: "flex" }}>
+                  <FiChevronDown />
+                </Box>
+              </HStack>
+            </MenuButton>
+            <MenuList
+              border="0px"
+              bg={useColorModeValue("white", "gray.900")}
+              borderColor={useColorModeValue("gray.200", "gray.700")}
+            >
+              <MenuItem border="0px">Profile</MenuItem>
+              <MenuItem border="0px">Settings</MenuItem>
+              <MenuItem border="0px">Billing</MenuItem>
+              {supabase.auth.session() !== null ? (
+                <>
+                  {" "}
+                  <MenuDivider />
+                  <MenuItem border="0px" onClick={() => signOut("vv")}>
+                    Sign out
+                  </MenuItem>
+                </>
+              ) : (
+                ""
+              )}
+            </MenuList>
+          </Menu>
+        </Flex>
+      </HStack>
+    </Flex>
+  );
+};
