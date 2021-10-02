@@ -1,7 +1,7 @@
 import { useRouter } from "next/router";
 import PropTypes from "prop-types";
 import React, { ReactNode } from "react";
-import EditorComponent from "../components/Suneditor";
+// import EditorComponent from "../components/Suneditor";
 // const MyComponent = dynamic(() => import("../components/Suneditor"),{ ssr: false });
 import LayoutWithTopAndSideNavbar from "../layout/LayoutWithTopAndSideNavbar";
 import PageWithLayoutType from "../types/pageWithLayout";
@@ -20,9 +20,10 @@ const Editor: React.FC = () => {
 
   return (
     <div>
-      <div>{postId}</div>
+      edior not working
+      {/* <div>{postId}</div>
       <div>{isNew}</div>
-      <EditorComponent isNew={isNew} postId={Number(postId)} subHeadingId={Number(subHeadingId)} />
+      <EditorComponent isNew={isNew} postId={Number(postId)} subHeadingId={Number(subHeadingId)} /> */}
     </div>
   );
 };

@@ -76,7 +76,7 @@ const Home: React.FC<ProfileListProps> = ({ data }) => {
               </Select>
             </Stack>
           </div>
-        </VStack>{" "}
+        </VStack>
       </Container>
     );
   }

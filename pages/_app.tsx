@@ -19,7 +19,7 @@ type AppLayoutProps = {
 };
 
 function MyApp({ Component, pageProps }: AppLayoutProps) {
-  const Layout = Component.layout || ((children) => <>{children}</>);
+  const Layout = Component.layout || (({children}) => <>{children}</>);
   return (
     <AuthProvider>
       

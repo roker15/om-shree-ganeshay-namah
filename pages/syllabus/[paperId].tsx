@@ -90,7 +90,7 @@ export async function getStaticPaths() {
       { params: { paperId: "1" } }, // See the "paths" section below
       { params: { paperId: "2" } }, // See the "paths" section below
     ],
-    fallback: false, // See the "fallback" section below
+    fallback: true, // See the "fallback" section below
   };
 }
 export const getStaticProps = async ({ params }: any) => {
