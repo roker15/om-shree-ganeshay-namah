@@ -90,7 +90,7 @@ export async function getStaticPaths() {
       { params: { paperId: "1" } }, // See the "paths" section below
       { params: { paperId: "2" } }, // See the "paths" section below
     ],
-    fallback: true, // See the "fallback" section below
+    fallback: false, // See the "fallback" section below
   };
 }
 export const getStaticProps = async ({ params }: any) => {
@@ -99,7 +99,7 @@ export const getStaticProps = async ({ params }: any) => {
     .from<Headings>("headings")
     .select(` id,main_topic`)
     .eq("paper_id", params.paperId);
-  console.log("Start");
+  console.log("getstatic props inside ",params.paperId);
   // let subheadings: Subheading[][] = [];
   let subheadingsMap = new Map<string | undefined, Subheading[] | null>();
   console.log("subheadings are88 ", data?.length);

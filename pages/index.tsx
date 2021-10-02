@@ -9,7 +9,7 @@ import {
 import { useRouter } from "next/dist/client/router";
 import React from "react";
 import { useAuthContext } from "../context/Authcontext";
-import SecondaryLayout from "../layout/LayoutWithTopNavbar";
+import LayoutWithTopNavbar from "../layout/LayoutWithTopNavbar";
 import { supabase } from "../lib/supabaseClient";
 import { Papers } from "../types/myTypes";
 import PageWithLayoutType from "../types/pageWithLayout";
@@ -19,6 +19,7 @@ type ProfileListProps = {
 };
 
 const Home: React.FC<ProfileListProps> = ({ data }) => {
+  
   const [value, setValue] = React.useState("");
   const router = useRouter();
   const handleChange = (event: any) => {
@@ -90,7 +91,7 @@ export const getStaticProps = async () => {
 `);
 
   // const res = await fetch("https://.../data");
-  console.log("data is ", data);
+  console.log("data is inside index ", data);
   return {
     props: {
       data,
@@ -98,5 +99,5 @@ export const getStaticProps = async () => {
   };
 };
 
-(Home as PageWithLayoutType).layout = SecondaryLayout;
+(Home as PageWithLayoutType).layout = LayoutWithTopNavbar;
 export default Home;

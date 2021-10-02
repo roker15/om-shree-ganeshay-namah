@@ -1,16 +1,15 @@
-import { useQuery } from "@chakra-ui/media-query";
 import { useRouter } from "next/router";
 import PropTypes from "prop-types";
 import React, { ReactNode } from "react";
 import EditorComponent from "../components/Suneditor";
 // const MyComponent = dynamic(() => import("../components/Suneditor"),{ ssr: false });
-import MainLayout from "../layout/LayoutWithTopAndSideNavbar";
+import LayoutWithTopAndSideNavbar from "../layout/LayoutWithTopAndSideNavbar";
 import PageWithLayoutType from "../types/pageWithLayout";
 
 type PropTypes = {
   children?: ReactNode;
   subheadingId?: number;
-  userId?: string;
+  userId?: string; 
 };
 const Editor: React.FC = () => {
   const router = useRouter();
@@ -28,5 +27,5 @@ const Editor: React.FC = () => {
   );
 };
 
-(Editor as PageWithLayoutType).layout = MainLayout;
+(Editor as PageWithLayoutType).layout = LayoutWithTopAndSideNavbar;
 export default Editor;

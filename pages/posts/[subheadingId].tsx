@@ -12,7 +12,7 @@ import {
   OrderedList,
   Spacer,
   Text,
-  VStack,
+  VStack
 } from "@chakra-ui/react";
 import { AuthSession } from "@supabase/supabase-js";
 import { Element } from "domhandler/lib/node";
@@ -20,28 +20,23 @@ import DOMPurify from "dompurify";
 import parse, {
   attributesToProps,
   domToReact,
-  HTMLReactParserOptions,
+  HTMLReactParserOptions
 } from "html-react-parser";
 import "katex/dist/katex.min.css";
-import dynamic from "next/dynamic";
-import Head from "next/head";
 import router, { useRouter } from "next/router";
 import React, { useEffect, useState } from "react";
 import { CurrentAppState, useAppContext } from "../../context/state";
-import MainLayout from "../../layout/LayoutWithTopAndSideNavbar";
+import LayoutWithTopAndSideNavbar from "../../layout/LayoutWithTopAndSideNavbar";
 // import SideNavBar from "../../layout/sideNavBar";
 import { Profile } from "../../lib/constants";
 import { supabase } from "../../lib/supabaseClient";
-import { Post, Subheading } from "../../types/myTypes";
+import { Headings, Post, Subheading } from "../../types/myTypes";
 import PageWithLayoutType from "../../types/pageWithLayout";
-const DynamicComponent = dynamic(() => import("../../layout/sideNavBar"));
-import Script from "next/script";
-import ReactDOM from 'react-dom'
 type ProfileListProps = {
   data: Post[];
 };
 
-const Home: React.FC<ProfileListProps> = ({ data }) => {
+const Posts: React.FC<ProfileListProps> = ({ data }) => {
   const [session, setSession] = useState<AuthSession | null>(null);
   const [profiles, setProfiles] = useState<Profile[]>([]);
   // const [data, setProfiles] = useState<Profile[]>([]);
@@ -49,15 +44,16 @@ const Home: React.FC<ProfileListProps> = ({ data }) => {
   const router = useRouter();
   useEffect(() => {
     if (data && data.length !== 0) {
-      // appContext.setPostHeadingId(data![1].subheading_id!.main_topic_id!.id);
+      appContext.setPostHeadingId(((data![1].subheading_id as Subheading).main_topic_id as Headings)!.id);
     }
-  }, []);
+  },);
 
   const [value, setValue] = React.useState("");
   const handleChange = (event: any) => {
     setValue(event.target.value);
     console.log("hello hello ", value);
   };
+  
   if (data && data.length !== 0) {
     return (
       <>
@@ -65,10 +61,9 @@ const Home: React.FC<ProfileListProps> = ({ data }) => {
         {/* <Head>
         </Head> */}
 
-        {/* <h1>{data[0].subheading_id.topic}</h1> */}
+        <h1>{(data[0].subheading_id as Subheading).topic}</h1>
         <Link href="../editor">Go to editor</Link>
         <div className="container" style={{ padding: "50px 0 50px 0" }}>
-          {/* <DynamicComponent test={data[0].post} /> */}
           {data!.map((x) => {
             return (
               <div key={x.id}>
@@ -94,7 +89,7 @@ const Home: React.FC<ProfileListProps> = ({ data }) => {
       </>
     );
   }
-  return <div>no data</div>;
+  return <div><Link href="../editor">Go to editor</Link></div>;
 };
 
 const options: HTMLReactParserOptions = {
@@ -166,10 +161,10 @@ const options: HTMLReactParserOptions = {
   },
 };
 
-const DynamicComponentWithNoSSR = dynamic(
-  () => import("../../components/Account"),
-  { ssr: false }
-);
+// const DynamicComponentWithNoSSR = dynamic(
+//   () => import("../../components/Account"),
+//   { ssr: false }
+// );
 
 const handleEditPostOrCreateNewPost = (
   post: Post,
@@ -231,6 +226,10 @@ export async function getStaticPaths() {
   };
 }
 export const getStaticProps = async ({ params }: any) => {
+
+
+
+  console.log(`Building slug: ${params.subheadingId}`)
   // Make a request
   let { data, error } = await supabase
     .from<Post>("posts")
@@ -250,7 +249,7 @@ export const getStaticProps = async ({ params }: any) => {
     .eq("subheading_id", params.subheadingId);
 
   // const res = await fetch("https://.../../data");
-  console.log("data is ", data);
+  console.log("data is inside subheadingId ", data);
   return {
     props: {
       data,
@@ -258,8 +257,8 @@ export const getStaticProps = async ({ params }: any) => {
   };
 };
 
-(Home as PageWithLayoutType).layout = MainLayout;
-export default Home;
+(Posts as PageWithLayoutType).layout = LayoutWithTopAndSideNavbar;
+export default Posts;
 // pages/index.js
 
 //*****************Following example two network call made and both passed as

@@ -25,11 +25,11 @@ function MyApp({ Component, pageProps }: AppLayoutProps) {
       
       <AppContextWrapper>
         <ChakraProvider theme={theme}>
-          {/* <AuthProvider> */}
+          <AuthProvider>
           <Layout>
             <Component {...pageProps} />
           </Layout>
-          {/* </AuthProvider> */}
+          </AuthProvider>
         </ChakraProvider>
       </AppContextWrapper>
     </AuthProvider>

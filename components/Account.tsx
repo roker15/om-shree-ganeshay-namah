@@ -50,7 +50,7 @@ export default function Auth({}) {
             className={'button block'}
             disabled={loading}
           >
-            {loading ? <img className="loader" src="loader.svg" /> : <span>Send magic link Account component</span>}
+            {/* {loading ? <img className="loader" src="loader.svg" /> : <span>Send magic link Account component</span>} */}
           </button>
         </div>
       </div>

@@ -87,7 +87,7 @@ const EditorComponent: React.FC<Props> = ({ postId, isNew, subHeadingId }) => {
     // Notice that useEffect is been used because you have to make sure the editor is rendered.
     // console.log(editorRef.current!.editor.core)
     console.log("from use effect in editor", editorRef);
-  }, []);
+  });
 
   return (
     <div>

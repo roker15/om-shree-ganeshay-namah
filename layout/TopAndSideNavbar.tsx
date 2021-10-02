@@ -1,38 +1,21 @@
-import React, { ReactNode, useState } from "react";
-import Image from "next/image";
 import {
-  IconButton,
   Avatar,
-  Box,
-  CloseButton,
-  Flex,
-  HStack,
-  VStack,
-  Icon,
-  useColorModeValue,
-  Link,
-  Drawer,
-  DrawerContent,
-  Text,
-  useDisclosure,
-  BoxProps,
-  FlexProps,
-  Menu,
+  Box, BoxProps, Button, CloseButton, Drawer,
+  DrawerContent, Flex, FlexProps, HStack, IconButton, Link, Menu,
   MenuButton,
   MenuDivider,
   MenuItem,
-  MenuList,
-  Button,
+  MenuList, Text, useColorModeValue, useDisclosure, VStack
 } from "@chakra-ui/react";
-import { FiHome, FiTrendingUp, FiCompass, FiStar, FiSettings, FiMenu, FiBell, FiChevronDown } from "react-icons/fi";
-import { IconType } from "react-icons";
-import { ReactText } from "react";
-import { useAppContext } from "../context/state";
-import useSWR from "swr";
-import { supabase } from "../lib/supabaseClient";
-import { Headings, Subheading } from "../types/myTypes";
-import { useAuthContext } from "../context/Authcontext";
+import Image from "next/image";
+import React, { ReactNode, ReactText } from "react";
 import { FaGoogle } from "react-icons/fa";
+import { FiBell, FiChevronDown } from "react-icons/fi";
+import useSWR from "swr";
+import { useAuthContext } from "../context/Authcontext";
+import { useAppContext } from "../context/state";
+import { supabase } from "../lib/supabaseClient";
+import { Subheading } from "../types/myTypes";
 
 interface LinkItemProps {
   name: string;
