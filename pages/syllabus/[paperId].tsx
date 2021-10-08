@@ -38,7 +38,7 @@ const Syllabus: React.FC<ProfileListProps> = ({ array }) => {
     <div className="container" style={{ padding: "50px 0 100px 0" }}>
       {/* <Heading>Subject Name</Heading> */}
       <Table size="sm" variant="striped">
-        <TableCaption>Imperial to metric conversion factors</TableCaption>
+        <TableCaption>These syllabus are exactly as per UPSC Notificaiton</TableCaption>
         <Thead>
           <Tr>
             <Th>Headings</Th>

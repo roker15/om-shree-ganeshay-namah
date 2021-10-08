@@ -171,14 +171,20 @@ const MobileNav = ({ onOpen, ...rest }: MobileProps) => {
       justifyContent={{ base: "space-between", md: "flex" }}
       {...rest}
     >
-      {/* <Image
+      <Box pt="4"> 
+      <Image
         priority={true}
-        src="/vercel.svg"
+        src="/logo1111.png"
         alt="Picture of the author"
-        width={100}
-        height={100}
-      /> */}
-      <Heading color="black">?LOOK<span>&#128512;</span></Heading>
+        width={90}
+        height={90}
+        
+      />
+      </Box>
+   
+      
+      
+      {/* <Heading color="black">?LOOK<span>&#128512;</span></Heading> */}
    
       
       <span></span>

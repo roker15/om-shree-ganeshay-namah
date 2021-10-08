@@ -178,7 +178,18 @@ const MobileNav = ({ onOpen, ...rest }: MobileProps) => {
         width={100}
         height={100}
       /> */}
-      <Heading color="black">?LOOK<span>&#128512;</span></Heading>
+
+<Box pt="4"> 
+      <Image
+        priority={true}
+        src="/logo1111.png"
+        alt="Picture of the author"
+        width={90}
+        height={90}
+        
+      />
+      </Box>
+      {/* <Heading color="black">?LOOK<span>&#128512;</span></Heading> */}
       {/* <Image  boxSize="50px" objectFit="fill" src="vercel.svg" alt="Segun Adebayo" /> */}
       {/* <Text
         justifyContent={{ base: "space-between", md: "flex" }}

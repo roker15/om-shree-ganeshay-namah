@@ -8,6 +8,7 @@ import {
 } from "@chakra-ui/react";
 import { useRouter } from "next/dist/client/router";
 import React from "react";
+import Table1 from "../components/TableBasic";
 import { useAuthContext } from "../context/Authcontext";
 import LayoutWithTopNavbar from "../layout/LayoutWithTopNavbar";
 import { supabase } from "../lib/supabaseClient";
@@ -57,11 +58,12 @@ const Home: React.FC<ProfileListProps> = ({ data }) => {
               </Button>
             </ButtonGroup>
           )}
+          
 
           <div className="container" style={{ padding: "10px 0 100px 0" }}>
             <Stack>
               <Select
-                placeholder="Select option"
+                placeholder="Select UPSC paper"
                 variant="outline"
                 onChange={handleChange}
               >
