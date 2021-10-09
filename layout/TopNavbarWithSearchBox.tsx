@@ -189,7 +189,7 @@ const MobileNav = ({ onOpen, ...rest }: MobileProps) => {
         
       />
       </Box>
-      {/* <Heading color="black">?LOOK<span>&#128512;</span></Heading> */}
+      {/* <Heading color="black">?LOOK<span>&#128512;</span></Heading>i */}
       {/* <Image  boxSize="50px" objectFit="fill" src="vercel.svg" alt="Segun Adebayo" /> */}
       {/* <Text
         justifyContent={{ base: "space-between", md: "flex" }}
