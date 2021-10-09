@@ -100,42 +100,6 @@ interface SidebarProps extends BoxProps {
   onClose: () => void;
 }
 
-const SidebarContent = ({ onClose, ...rest }: SidebarProps) => {
-  const shareContext = useAppContext();
-  return (
-    <Box
-      transition="3s ease"
-      bg={useColorModeValue("white", "gray.900")}
-      borderRight="1px"
-      borderRightColor={useColorModeValue("gray.200", "gray.700")}
-      w={{ base: "full", md: "80" }}
-      pos="fixed"
-      h="full"
-      overflowY="scroll"
-      {...rest}
-    >
-      <Flex h="20" alignItems="center" mx="8" justifyContent="space-between">
-        <Text fontSize="2xl" fontFamily="monospace" fontWeight="bold">
-          logo
-        </Text>
-        <CloseButton display={{ base: "flex", md: "none" }} onClick={onClose} />
-      </Flex>
-      {/* {LinkItems.map((link) => (
-        <NavItem key={link.name} icon={link.icon}>
-          {link.name}
-        </NavItem>
-      ))} */}
-
-      {LinkItems.map((subheading) => (
-        <li key={subheading.id}>
-          <Link href={`/posts/${encodeURIComponent(subheading.id)}`}>
-            <a>{subheading.topic}</a>
-          </Link>
-        </li>
-      ))}
-    </Box>
-  );
-};
 
 interface NavItemProps extends FlexProps {
   // icon: IconType;
@@ -187,7 +151,7 @@ const MobileNav = ({ onOpen, ...rest }: MobileProps) => {
       {/* <Heading color="black">?LOOK<span>&#128512;</span></Heading> */}
    
       
-      <span></span>
+      <Heading  as="h2" size="md">Welcome to Qlook </Heading>
       <HStack spacing={{ base: "0", md: "6" }}>
         {/* <button onClick={() => setLanguage("jp")}>sign in</button> */}
         {supabase.auth.session() === null ? (

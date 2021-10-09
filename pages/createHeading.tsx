@@ -32,7 +32,8 @@ import SecondaryLayout from "../layout/LayoutWithTopNavbar";
 import { supabase } from "../lib/supabaseClient";
 import { Headings } from "../types/myTypes";
 import PageWithLayoutType from "../types/pageWithLayout";
-import  ReactTable  from "../components/ReactTable";
+import ReactTable from "../components/ReactTable";
+import { useAuthContext } from "../context/Authcontext";
 
 interface tableProps {
   headings: Headings[] | undefined | null;
@@ -42,7 +43,7 @@ const Basic: React.FC = () => {
   //this is customhooks using swr, it can be used in any component
   // The most beautiful thing is that there will be only 1 request sent to the API,
   // because they use the same SWR key and the request is deduped, cached and shared automatically.
-
+  const { role } = useAuthContext();
   const { examPapers, isLoading, isError } = useGetExamPapers();
 
   const [selectedForEdit, setSelectedForEdit] = React.useState<
@@ -183,7 +184,6 @@ const Basic: React.FC = () => {
             ) : (
               <div></div>
             ),
-            
 
           //   },
         },
@@ -311,113 +311,133 @@ const Basic: React.FC = () => {
       </Alert>
     );
 
-  return (
-    <Container mt="2" maxW={{ base: "container.xl", md: "container.md" }}>
-      {headings !== undefined && headings.data!.length > 0 ? (
-        <Table1 headings={headings?.data!} />
-      ) : (
-        <div></div>
-      )}
+  if (supabase.auth.session !== null && role === "MODERATOR") {
+    return (
+      <Container mt="2" maxW={{ base: "container.xl", md: "container.md" }}>
+        {headings !== undefined && headings.data!.length > 0 ? (
+          <Table1 headings={headings?.data!} />
+        ) : (
+          <div></div>
+        )}
 
-      <form onSubmit={handleSubmit(onSubmit)}>
-        <VStack
-          // divider={<StackDivider borderColor="gray.200" />}
-          spacing={4}
-          align="center"
-        >
-          <FormControl isInvalid={errors.paper}>
-            <FormLabel color="blue.600" htmlFor="paper">
-              Exam paper
-            </FormLabel>
-            <Select
-              id="paper"
-              placeholder="Select Exam Paper"
-              {...register("paper", {
-                required: "This is required",
-                // minLength: { value: 4, message: "Minimum length should be 4"  },
-              })}
-              onChange={handleChange}
-            >
-              {examPapers?.map((x) => {
-                return (
-                  <option key={x.id} value={x.id}>
-                    {x.paper_name}
-                  </option>
-                );
-              })}
-            </Select>
-            <FormErrorMessage>
-              {errors.paper && errors.paper.message}
-            </FormErrorMessage>
-          </FormControl>
-
-          <FormControl isInvalid={errors.heading}>
-            <FormLabel color="blue.600" htmlFor="heading">
-              Syllabus heading
-            </FormLabel>
-            <Input
-              id="heading"
-              placeholder="Heading"
-              {...register("heading", {
-                required: "This is required",
-                minLength: { value: 4, message: "Minimum length should be 4" },
-              })}
-            />
-            <FormErrorMessage>
-              {errors.heading && errors.heading.message}
-            </FormErrorMessage>
-          </FormControl>
-
-          <FormControl isInvalid={errors.sequence}>
-            <FormLabel color="blue.600" htmlFor="sequence">
-              Heading Sequence
-            </FormLabel>
-            <NumberInput alignSelf="start" min={1} max={100}>
-              <NumberInputField
-                id="sequence"
-                placeholder="Sequence"
-                {...register("sequence", {
+        <form onSubmit={handleSubmit(onSubmit)}>
+          <VStack
+            // divider={<StackDivider borderColor="gray.200" />}
+            spacing={4}
+            align="center"
+          >
+            <FormControl isInvalid={errors.paper}>
+              <FormLabel color="blue.600" htmlFor="paper">
+                Exam paper
+              </FormLabel>
+              <Select
+                id="paper"
+                placeholder="Select Exam Paper"
+                {...register("paper", {
                   required: "This is required",
-                  min: {
-                    value: 1,
-                    message: "Minimum length should be 1",
+                  // minLength: { value: 4, message: "Minimum length should be 4"  },
+                })}
+                onChange={handleChange}
+              >
+                {examPapers?.map((x) => {
+                  return (
+                    <option key={x.id} value={x.id}>
+                      {x.paper_name}
+                    </option>
+                  );
+                })}
+              </Select>
+              <FormErrorMessage>
+                {errors.paper && errors.paper.message}
+              </FormErrorMessage>
+            </FormControl>
+
+            <FormControl isInvalid={errors.heading}>
+              <FormLabel color="blue.600" htmlFor="heading">
+                Syllabus heading
+              </FormLabel>
+              <Input
+                id="heading"
+                placeholder="Heading"
+                {...register("heading", {
+                  required: "This is required",
+                  minLength: {
+                    value: 4,
+                    message: "Minimum length should be 4",
                   },
                 })}
               />
-              <NumberInputStepper>
-                <NumberIncrementStepper />
-                <NumberDecrementStepper />
-              </NumberInputStepper>
-            </NumberInput>
+              <FormErrorMessage>
+                {errors.heading && errors.heading.message}
+              </FormErrorMessage>
+            </FormControl>
 
-            <FormErrorMessage>
-              {errors.sequence && errors.sequence.message}
-            </FormErrorMessage>
-          </FormControl>
+            <FormControl isInvalid={errors.sequence}>
+              <FormLabel color="blue.600" htmlFor="sequence">
+                Heading Sequence
+              </FormLabel>
+              <NumberInput alignSelf="start" min={1} max={100}>
+                <NumberInputField
+                  id="sequence"
+                  placeholder="Sequence"
+                  {...register("sequence", {
+                    required: "This is required",
+                    min: {
+                      value: 1,
+                      message: "Minimum length should be 1",
+                    },
+                  })}
+                />
+                <NumberInputStepper>
+                  <NumberIncrementStepper />
+                  <NumberDecrementStepper />
+                </NumberInputStepper>
+              </NumberInput>
 
-          {isEditMode === false ? (
-            <Button
-              variant="solid"
-              colorScheme="yellow"
-              isLoading={isSubmitting}
-              type="submit"
-            >
-              Create Heading
-            </Button>
-          ) : (
-            <Button
-              variant="solid"
-              colorScheme="yellow"
-              isLoading={isSubmitting}
-              type="submit"
-            >
-              Update Heading
-            </Button>
-          )}
-        </VStack>
-      </form>
-    </Container>
-  );
+              <FormErrorMessage>
+                {errors.sequence && errors.sequence.message}
+              </FormErrorMessage>
+            </FormControl>
+
+            {isEditMode === false ? (
+              <Button
+                variant="solid"
+                colorScheme="yellow"
+                isLoading={isSubmitting}
+                type="submit"
+              >
+                Create Heading
+              </Button>
+            ) : (
+              <Button
+                variant="solid"
+                colorScheme="yellow"
+                isLoading={isSubmitting}
+                type="submit"
+              >
+                Update Heading
+              </Button>
+            )}
+          </VStack>
+        </form>
+      </Container>
+    );
+  } else {
+    return (
+      <Center >
+      <Alert
+        status="warning"
+        alignItems="center"
+        justifyContent="center"
+        textAlign="center"
+        variant="left-accent"
+      >
+        <AlertIcon />
+        You are not allowed to access this page
+      </Alert>
+    </Center>
+    );
+  }
 };
 
 (Basic as PageWithLayoutType).layout = SecondaryLayout;

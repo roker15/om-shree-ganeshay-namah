@@ -34,7 +34,8 @@ import SecondaryLayout from "../layout/LayoutWithTopNavbar";
 import { supabase } from "../lib/supabaseClient";
 import { Headings, Subheading } from "../types/myTypes";
 import PageWithLayoutType from "../types/pageWithLayout";
-import  ReactTable  from "../components/ReactTable";
+import ReactTable from "../components/ReactTable";
+import { useAuthContext } from "../context/Authcontext";
 
 const Styles = styled.div`
   padding: 1rem;
@@ -76,6 +77,7 @@ interface tableProps {
 }
 
 const CreateSubheading: React.FC = () => {
+  const { role } = useAuthContext();
   const [selectedForEdit, setSelectedForEdit] = React.useState<
     Subheading | undefined
   >(undefined);
@@ -126,16 +128,11 @@ const CreateSubheading: React.FC = () => {
                 color: "blue",
                 textDecoration: "underline",
               }}
-              onClick={
-              
-                async () => {
-
+              onClick={async () => {
                 const result = await supabase
-                .from<Subheading>('subheadings')
-                .delete()
-                .eq('id', data[tableProps.row.index].id)
-
-
+                  .from<Subheading>("subheadings")
+                  .delete()
+                  .eq("id", data[tableProps.row.index].id);
 
                 console.log("table props is ", tableProps);
                 // ES6 Syntax use the rvalue if your data is an array.
@@ -143,9 +140,7 @@ const CreateSubheading: React.FC = () => {
                 // It should not matter what you name tableProps. It made the most sense to me.
                 dataCopy.splice(tableProps.row.index, 1);
                 setData(dataCopy);
-              }
-            
-            }
+              }}
             >
               Delete
             </span>
@@ -173,21 +168,31 @@ const CreateSubheading: React.FC = () => {
                     setIdSelectedTopic(data[tableProps.row.index].id);
                     setIsEditMode(true);
 
-                    if(document.getElementById("subheading")){
-                      (document.getElementById("subheading") as HTMLInputElement).value = data[tableProps.row.index]!.topic!;
+                    if (document.getElementById("subheading")) {
+                      (
+                        document.getElementById(
+                          "subheading"
+                        ) as HTMLInputElement
+                      ).value = data[tableProps.row.index]!.topic!;
                     }
 
-                    if(document.getElementById("sequence")){
-                      console.log("current seq is ",String(data[tableProps.row.index].sequence));
+                    if (document.getElementById("sequence")) {
+                      console.log(
+                        "current seq is ",
+                        String(data[tableProps.row.index].sequence)
+                      );
 
-                      (document.getElementById("sequence") as HTMLInputElement).defaultValue = String(data[tableProps.row.index].sequence);
+                      (
+                        document.getElementById("sequence") as HTMLInputElement
+                      ).defaultValue = String(
+                        data[tableProps.row.index].sequence
+                      );
                     }
                     {
                       console.log("table props is ", tableProps);
                     }
                     // ES6 Syntax use the rvalue if your data is an array.
                     const dataCopy = [...data];
-                   
                   }}
                 >
                   Edit
@@ -211,7 +216,6 @@ const CreateSubheading: React.FC = () => {
                     {
                       console.log("table props is ", tableProps);
                     }
-                  
                   }}
                 >
                   Cancel Edit
@@ -233,7 +237,6 @@ const CreateSubheading: React.FC = () => {
       // </Styles>
     );
   };
-
 
   const { examPapers, isLoading, isError } = useGetExamPapers();
 
@@ -317,10 +320,8 @@ const CreateSubheading: React.FC = () => {
   
  `
         )
-        .eq("paper_id", paperId),
+        .eq("paper_id", paperId)
   );
-
-
 
   const { data: subHeadings } = useSWR(
     headingId === undefined ? null : [`/upsc/${headingId}`],
@@ -333,7 +334,8 @@ const CreateSubheading: React.FC = () => {
   
  `
         )
-        .eq("main_topic_id", headingId),{refreshInterval:1000}
+        .eq("main_topic_id", headingId),
+    { refreshInterval: 1000 }
   );
 
   function validateName(value: any) {
@@ -363,142 +365,162 @@ const CreateSubheading: React.FC = () => {
       </Alert>
     );
 
-  return (
-    <Container mt="2" maxW={{ base: "container.xl", md: "container.md" }}>
-      {subHeadings !== undefined && subHeadings.data!.length > 0 ? (
-        <Table1 subheadings={subHeadings?.data!} />
-      ) : (
-        <div></div>
-      )}
+  if (supabase.auth.session !== null && role === "MODERATOR") {
+    return (
+      <Container mt="2" maxW={{ base: "container.xl", md: "container.md" }}>
+        {subHeadings !== undefined && subHeadings.data!.length > 0 ? (
+          <Table1 subheadings={subHeadings?.data!} />
+        ) : (
+          <div></div>
+        )}
 
-      <form onSubmit={handleSubmit(onSubmit)}>
-        <VStack
-          // divider={<StackDivider borderColor="gray.200" />}
-          spacing={4}
-          align="center"
-          py="3"
-        >
-          <FormControl isInvalid={errors.paper}>
-            <FormLabel color="blue.600" htmlFor="paper">
-              Exam paper
-            </FormLabel>
-            <Select
-              id="paper"
-              placeholder="Select Exam Paper"
-              {...register("paper", {
-                required: "This is required",
-                // minLength: { value: 4, message: "Minimum length should be 4"  },
-              })}
-              onChange={handlePaperChange}
-            >
-              {examPapers?.map((x) => {
-                return (
-                  <option key={x.id} value={x.id}>
-                    {x.paper_name}
-                  </option>
-                );
-              })}
-            </Select>
-            <FormErrorMessage>
-              {errors.paper && errors.paper.message}
-            </FormErrorMessage>
-          </FormControl>
-
-          <FormControl isInvalid={errors.heading}>
-            <FormLabel color="blue.600" htmlFor="heading">
-              Syllabus headiing
-            </FormLabel>
-            <Select
-              id="heading"
-              placeholder="Select Syllabus Heading"
-              {...register("heading", {
-                required: "This is required",
-                // minLength: { value: 4, message: "Minimum length should be 4"  },
-              })}
-              onChange={handleHeadingChange}
-            >
-              {headings?.data?.map((x) => {
-                return (
-                  <option key={x.id} value={x.id}>
-                    {x.main_topic}
-                  </option>
-                );
-              })}
-            </Select>
-            <FormErrorMessage>
-              {errors.heading && errors.heading.message}
-            </FormErrorMessage>
-          </FormControl>
-          <FormControl isInvalid={errors.subheading}>
-            <FormLabel color="blue.600" htmlFor="subheading">
-              Syllabus subheading
-            </FormLabel>
-            <Input
-              id="subheading"
-              placeholder="Subheading"
-              // value={
-              //   selectedForEdit !== undefined ? selectedForEdit?.topic : ""
-              // }
-              {...register("subheading", {
-                required: "This is required",
-                minLength: { value: 4, message: "Minimum length should be 4" },
-              })}
-            />
-            <FormErrorMessage>
-              {errors.subheading && errors.subheading.message}
-            </FormErrorMessage>
-          </FormControl>
-          <FormControl isInvalid={errors.sequence}>
-            <FormLabel color="blue.600" htmlFor="sequence">
-              Subheading Sequence
-            </FormLabel>
-            <NumberInput id="sequenceIn" alignSelf="start" min={1} max={100}>
-              <NumberInputField
-                id="sequence"
-                // value="9"
-                placeholder="Sequence"
-                {...register("sequence", {
+        <form onSubmit={handleSubmit(onSubmit)}>
+          <VStack
+            // divider={<StackDivider borderColor="gray.200" />}
+            spacing={4}
+            align="center"
+            py="3"
+          >
+            <FormControl isInvalid={errors.paper}>
+              <FormLabel color="blue.600" htmlFor="paper">
+                Exam paper
+              </FormLabel>
+              <Select
+                id="paper"
+                placeholder="Select Exam Paper"
+                {...register("paper", {
                   required: "This is required",
-                  min: {
-                    value: 1,
+                  // minLength: { value: 4, message: "Minimum length should be 4"  },
+                })}
+                onChange={handlePaperChange}
+              >
+                {examPapers?.map((x) => {
+                  return (
+                    <option key={x.id} value={x.id}>
+                      {x.paper_name}
+                    </option>
+                  );
+                })}
+              </Select>
+              <FormErrorMessage>
+                {errors.paper && errors.paper.message}
+              </FormErrorMessage>
+            </FormControl>
+
+            <FormControl isInvalid={errors.heading}>
+              <FormLabel color="blue.600" htmlFor="heading">
+                Syllabus headiing
+              </FormLabel>
+              <Select
+                id="heading"
+                placeholder="Select Syllabus Heading"
+                {...register("heading", {
+                  required: "This is required",
+                  // minLength: { value: 4, message: "Minimum length should be 4"  },
+                })}
+                onChange={handleHeadingChange}
+              >
+                {headings?.data?.map((x) => {
+                  return (
+                    <option key={x.id} value={x.id}>
+                      {x.main_topic}
+                    </option>
+                  );
+                })}
+              </Select>
+              <FormErrorMessage>
+                {errors.heading && errors.heading.message}
+              </FormErrorMessage>
+            </FormControl>
+            <FormControl isInvalid={errors.subheading}>
+              <FormLabel color="blue.600" htmlFor="subheading">
+                Syllabus subheading
+              </FormLabel>
+              <Input
+                id="subheading"
+                placeholder="Subheading"
+                // value={
+                //   selectedForEdit !== undefined ? selectedForEdit?.topic : ""
+                // }
+                {...register("subheading", {
+                  required: "This is required",
+                  minLength: {
+                    value: 4,
                     message: "Minimum length should be 4",
                   },
                 })}
               />
-              <NumberInputStepper>
-                <NumberIncrementStepper />
-                <NumberDecrementStepper />
-              </NumberInputStepper>
-            </NumberInput>
+              <FormErrorMessage>
+                {errors.subheading && errors.subheading.message}
+              </FormErrorMessage>
+            </FormControl>
+            <FormControl isInvalid={errors.sequence}>
+              <FormLabel color="blue.600" htmlFor="sequence">
+                Subheading Sequence
+              </FormLabel>
+              <NumberInput id="sequenceIn" alignSelf="start" min={1} max={100}>
+                <NumberInputField
+                  id="sequence"
+                  // value="9"
+                  placeholder="Sequence"
+                  {...register("sequence", {
+                    required: "This is required",
+                    min: {
+                      value: 1,
+                      message: "Minimum length should be 4",
+                    },
+                  })}
+                />
+                <NumberInputStepper>
+                  <NumberIncrementStepper />
+                  <NumberDecrementStepper />
+                </NumberInputStepper>
+              </NumberInput>
 
-            <FormErrorMessage>
-              {errors.sequence && errors.sequence.message}
-            </FormErrorMessage>
-          </FormControl>
+              <FormErrorMessage>
+                {errors.sequence && errors.sequence.message}
+              </FormErrorMessage>
+            </FormControl>
 
-          {isEditMode === false ? (
-            <Button
-              variant="solid"
-              colorScheme="yellow"
-              isLoading={isSubmitting}
-              type="submit"
-            >
-              Create Topic
-            </Button>
-          ) : (
-            <Button
-              variant="solid"
-              colorScheme="yellow"
-              isLoading={isSubmitting}
-              type="submit"
-            >
-              Update Topic
-            </Button>
-          )}
-        </VStack>
-      </form>
-    </Container>
-  );
+            {isEditMode === false ? (
+              <Button
+                variant="solid"
+                colorScheme="yellow"
+                isLoading={isSubmitting}
+                type="submit"
+              >
+                Create Topic
+              </Button>
+            ) : (
+              <Button
+                variant="solid"
+                colorScheme="yellow"
+                isLoading={isSubmitting}
+                type="submit"
+              >
+                Update Topic
+              </Button>
+            )}
+          </VStack>
+        </form>
+      </Container>
+    );
+  } else {
+    return (
+      <Center >
+        <Alert
+          status="warning"
+          alignItems="center"
+          justifyContent="center"
+          textAlign="center"
+          variant="left-accent"
+        >
+          <AlertIcon />
+          You are not allowed to access this page
+        </Alert>
+      </Center>
+    );
+  }
 };
 
 (CreateSubheading as PageWithLayoutType).layout = SecondaryLayout;
