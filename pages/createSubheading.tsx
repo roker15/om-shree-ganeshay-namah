@@ -34,7 +34,7 @@ import SecondaryLayout from "../layout/LayoutWithTopNavbar";
 import { supabase } from "../lib/supabaseClient";
 import { Headings, Subheading } from "../types/myTypes";
 import PageWithLayoutType from "../types/pageWithLayout";
-import { ReactTable } from "./ReactTable";
+import  ReactTable  from "../components/ReactTable";
 
 const Styles = styled.div`
   padding: 1rem;

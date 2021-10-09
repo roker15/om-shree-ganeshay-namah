@@ -8,7 +8,6 @@ import {
 } from "@chakra-ui/react";
 import { useRouter } from "next/dist/client/router";
 import React from "react";
-import Table1 from "../components/TableBasic";
 import { useAuthContext } from "../context/Authcontext";
 import LayoutWithTopNavbar from "../layout/LayoutWithTopNavbar";
 import { supabase } from "../lib/supabaseClient";

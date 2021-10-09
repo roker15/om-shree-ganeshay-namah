@@ -32,7 +32,7 @@ import SecondaryLayout from "../layout/LayoutWithTopNavbar";
 import { supabase } from "../lib/supabaseClient";
 import { Headings } from "../types/myTypes";
 import PageWithLayoutType from "../types/pageWithLayout";
-import { ReactTable } from "./ReactTable";
+import  ReactTable  from "../components/ReactTable";
 
 interface tableProps {
   headings: Headings[] | undefined | null;
@@ -183,6 +183,7 @@ const Basic: React.FC = () => {
             ) : (
               <div></div>
             ),
+            
 
           //   },
         },
