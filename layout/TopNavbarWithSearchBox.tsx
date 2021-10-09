@@ -179,13 +179,13 @@ const MobileNav = ({ onOpen, ...rest }: MobileProps) => {
         height={100}
       /> */}
 
-<Box pt="4"> 
+<Box pt="2"> 
       <Image
         priority={true}
-        src="/logo1111.png"
+        src="/logo-150x150.png"
         alt="Picture of the author"
-        width={90}
-        height={90}
+        width={50}
+        height={50}
         
       />
       </Box>

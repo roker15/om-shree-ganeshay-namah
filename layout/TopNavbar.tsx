@@ -100,7 +100,6 @@ interface SidebarProps extends BoxProps {
   onClose: () => void;
 }
 
-
 interface NavItemProps extends FlexProps {
   // icon: IconType;
   icon: number;
@@ -135,23 +134,23 @@ const MobileNav = ({ onOpen, ...rest }: MobileProps) => {
       justifyContent={{ base: "space-between", md: "flex" }}
       {...rest}
     >
-      <Box pt="4"> 
-      <Image
-        priority={true}
-        src="/logo1111.png"
-        alt="Picture of the author"
-        width={90}
-        height={90}
-        
-      />
+      <Box pt="2">
+        <Image
+          priority={true}
+          src="/logo-150x150.png"
+          alt="Picture of the author"
+          width={50}
+          height={50}
+          // layout="fill"
+          // objectFit="scale-down"
+        />
       </Box>
-   
-      
-      
+
       {/* <Heading color="black">?LOOK<span>&#128512;</span></Heading> */}
-   
-      
-      <Heading  as="h2" size="md">Welcome to Qlook </Heading>
+
+      <Heading as="h2" size="md">
+        Welcome to Qlook{" "}
+      </Heading>
       <HStack spacing={{ base: "0", md: "6" }}>
         {/* <button onClick={() => setLanguage("jp")}>sign in</button> */}
         {supabase.auth.session() === null ? (
