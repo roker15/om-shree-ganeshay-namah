@@ -1,11 +1,25 @@
 import {
   Avatar,
-  Box, BoxProps, Button, CloseButton, Drawer,
-  DrawerContent, Flex, FlexProps, HStack, IconButton, Link, Menu,
+  Box,
+  BoxProps,
+  Button,
+  CloseButton,
+  Drawer,
+  DrawerContent,
+  Flex,
+  FlexProps,
+  HStack,
+  IconButton,
+  Link,
+  Menu,
   MenuButton,
   MenuDivider,
   MenuItem,
-  MenuList, Text, useColorModeValue, useDisclosure, VStack
+  MenuList,
+  Text,
+  useColorModeValue,
+  useDisclosure,
+  VStack,
 } from "@chakra-ui/react";
 import Image from "next/image";
 import React, { ReactNode, ReactText } from "react";
@@ -25,10 +39,14 @@ interface LinkItemProps {
 
 const LinkItems: Array<Subheading> = [];
 
-export default function TopAndSideNavbar({ children }: { children: ReactNode }) {
+export default function TopAndSideNavbar({
+  children,
+}: {
+  children: ReactNode;
+}) {
   const { isOpen, onOpen, onClose } = useDisclosure();
   // const [subheading, setSubheading] = useState(0);
-  const {postHeadingId} = useAppContext();
+  const { postHeadingId } = useAppContext();
   const { signUp, signOut, signIn } = useAuthContext();
   // setSubheading(shareContext.postHeadingId);
   //**************************useSWR******************************************888 */
@@ -36,7 +54,11 @@ export default function TopAndSideNavbar({ children }: { children: ReactNode }) 
 
   const { data, error } = useSWR(
     ["/headingId", postHeadingId],
-    async () => await supabase.from<Subheading>("subheadings").select("*").eq("main_topic_id", postHeadingId)
+    async () =>
+      await supabase
+        .from<Subheading>("subheadings")
+        .select("*")
+        .eq("main_topic_id", postHeadingId)
   );
 
   // return <h1>{data.title}</h1>;
@@ -63,7 +85,10 @@ export default function TopAndSideNavbar({ children }: { children: ReactNode }) 
       {/* mobilenav */}
       <MobileNav onOpen={onOpen} />
 
-      <SidebarContent onClose={() => onClose} display={{ base: "none", md: "block" }} />
+      <SidebarContent
+        onClose={() => onClose}
+        display={{ base: "none", md: "block" }}
+      />
       <Drawer
         autoFocus={false}
         isOpen={isOpen}
@@ -110,7 +135,6 @@ const SidebarContent = ({ onClose, ...rest }: SidebarProps) => {
         </Text>
         <CloseButton display={{ base: "flex", md: "none" }} onClick={onClose} />
       </Flex>
-   
 
       {LinkItems && LinkItems.length !== 0 ? (
         LinkItems.map((subheading) => (
@@ -158,12 +182,20 @@ const MobileNav = ({ onOpen, ...rest }: MobileProps) => {
       zIndex={9999}
       pos="fixed"
       top={0}
-
       borderBottomColor={useColorModeValue("gray.200", "gray.700")}
       justifyContent={{ base: "space-between", md: "flex" }}
       {...rest}
     >
-      <Image priority={true} src="/vercel.svg" alt="Picture of the author" width={100} height={100} />
+      <Box pt="4">
+        <Image
+          priority={true}
+          src="/logo1111.png"
+          alt="Picture of the author"
+          width={90}
+          height={90}
+        />
+      </Box>
+
       {/* <Image  boxSize="50px" objectFit="fill" src="vercel.svg" alt="Segun Adebayo" /> */}
       <Text
         justifyContent={{ base: "space-between", md: "flex" }}
@@ -192,10 +224,20 @@ const MobileNav = ({ onOpen, ...rest }: MobileProps) => {
           ""
         )}
 
-        <IconButton size="sm" variant="outline" aria-label="open menu" icon={<FiBell />} />
+        <IconButton
+          size="sm"
+          variant="outline"
+          aria-label="open menu"
+          icon={<FiBell />}
+        />
         <Flex border="0px" alignItems={"center"}>
           <Menu boundary="clippingParents">
-            <MenuButton border="0px" py={2} transition="all 0.3s" _focus={{ boxShadow: "none" }}>
+            <MenuButton
+              border="0px"
+              py={2}
+              transition="all 0.3s"
+              _focus={{ boxShadow: "none" }}
+            >
               <HStack>
                 {supabase.auth.session() === null ? (
                   <Avatar size={"sm"} src="https://bit.ly/broken-link" />
@@ -208,7 +250,12 @@ const MobileNav = ({ onOpen, ...rest }: MobileProps) => {
                   />
                 )}
 
-                <VStack display={{ base: "none", md: "flex" }} alignItems="flex-start" spacing="1px" ml="2">
+                <VStack
+                  display={{ base: "none", md: "flex" }}
+                  alignItems="flex-start"
+                  spacing="1px"
+                  ml="2"
+                >
                   <Text fontSize="sm">{useAuthContext().username}</Text>
                   <Text fontSize="xs" color="gray.600">
                     {/* Admin */}

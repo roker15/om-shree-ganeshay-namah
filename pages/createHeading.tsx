@@ -129,7 +129,7 @@ const Basic: React.FC = () => {
                     setIdSelectedTopic(data[tableProps.row.index].id);
                     setIsEditMode(true);
 
-                    if (document.getElementById("Headings")) {
+                    if (document.getElementById("heading")) {
                       (
                         document.getElementById("Headings") as HTMLInputElement
                       ).value = data[tableProps.row.index]!.main_topic!;
