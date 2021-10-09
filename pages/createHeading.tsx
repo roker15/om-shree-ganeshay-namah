@@ -131,7 +131,7 @@ const Basic: React.FC = () => {
 
                     if (document.getElementById("heading")) {
                       (
-                        document.getElementById("Headings") as HTMLInputElement
+                        document.getElementById("heading") as HTMLInputElement
                       ).value = data[tableProps.row.index]!.main_topic!;
                     }
 
