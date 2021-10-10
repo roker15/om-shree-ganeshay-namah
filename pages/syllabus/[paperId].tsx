@@ -4,7 +4,7 @@ import {
   Tbody,
   Td, Th,
   Thead,
-  Tr
+  Tr,Text
 } from "@chakra-ui/react";
 import { AuthSession } from "@supabase/supabase-js";
 import NextLink from "next/link";
@@ -68,7 +68,7 @@ const Syllabus: React.FC<ProfileListProps> = ({ array }) => {
                         {/* </Box> */}
                       </span>
 
-                      <span>,&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;     </span>
+                      <span><Text as="b">,</Text>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span>
                     </>
                   ))}
                 </Td>
