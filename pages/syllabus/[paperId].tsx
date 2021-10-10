@@ -54,7 +54,7 @@ const Syllabus: React.FC<ProfileListProps> = ({ array }) => {
                 <Td key={entry.id} value={entry.name}>
                   {entry.value!.map((value) => (
                     // return
-                    //  <li>{value.topic}</li>;
+                    //  <li>{value.topic}</li>;;
                     <>
                       <span>
                         {/* <Box display="flex" color="yellow.400" key={value.id}> */}
