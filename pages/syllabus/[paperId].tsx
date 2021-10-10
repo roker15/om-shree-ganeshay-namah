@@ -68,7 +68,7 @@ const Syllabus: React.FC<ProfileListProps> = ({ array }) => {
                         {/* </Box> */}
                       </span>
 
-                      <span>,     </span>
+                      <span>,&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;     </span>
                     </>
                   ))}
                 </Td>
