@@ -50,8 +50,8 @@ const Syllabus: React.FC<ProfileListProps> = ({ array }) => {
           {array.sort((a, b) => a.name!.sequence! - b.name!.sequence!).map((entry) => {
             return (
               <Tr key={entry.id}>
-                <Td value={entry.name}>{entry.name}</Td>
-                <Td key={entry.id} value={entry.name}>
+                <Td value={entry.name?.main_topic}>{entry.name?.main_topic}</Td>
+                <Td key={entry.id} value={entry.name?.main_topic}>
                   {entry.value!.map((value) => (
                     // return
                     //  <li>{value.topic}</li>;;
