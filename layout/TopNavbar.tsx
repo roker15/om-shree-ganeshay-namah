@@ -15,6 +15,8 @@ import {
   HStack,
   IconButton,
   Link,
+  LinkBox,
+  LinkOverlay,
   Menu,
   MenuButton,
   MenuDivider,
@@ -26,6 +28,7 @@ import {
   VStack,
 } from "@chakra-ui/react";
 import Image from "next/image";
+import router from "next/router";
 import React, { ReactNode, ReactText } from "react";
 import { FaGoogle } from "react-icons/fa";
 import { FiBell, FiChevronDown } from "react-icons/fi";
@@ -118,6 +121,7 @@ interface MobileProps extends FlexProps {
 }
 
 const MobileNav = ({ onOpen, ...rest }: MobileProps) => {
+ 
   const { signIn, signUp, signOut } = useAuthContext();
   return (
     <Flex
@@ -134,17 +138,25 @@ const MobileNav = ({ onOpen, ...rest }: MobileProps) => {
       justifyContent={{ base: "space-between", md: "flex" }}
       {...rest}
     >
-      <Box pt="2">
-        <Image
-          priority={true}
-          src="/logo-150x150.png"
-          alt="Picture of the author"
-          width={50}
-          height={50}
-          // layout="fill"
-          // objectFit="scale-down"
-        />
-      </Box>
+      <LinkBox pt="2">
+        <LinkOverlay
+          _hover={{
+            background: "none",
+            color: "white",
+          }}
+          href="/"
+        >
+          <Image
+            priority={true}
+            src="/logo-150x150.png"
+            alt="Picture of the author"
+            width={50}
+            height={50}
+            // layout="fill"
+            // objectFit="scale-down"
+          />
+        </LinkOverlay>
+      </LinkBox>
 
       {/* <Heading color="black">?LOOK<span>&#128512;</span></Heading> */}
 

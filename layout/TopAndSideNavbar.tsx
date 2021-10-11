@@ -11,6 +11,8 @@ import {
   HStack,
   IconButton,
   Link,
+  LinkBox,
+  LinkOverlay,
   Menu,
   MenuButton,
   MenuDivider,
@@ -186,15 +188,25 @@ const MobileNav = ({ onOpen, ...rest }: MobileProps) => {
       justifyContent={{ base: "space-between", md: "flex" }}
       {...rest}
     >
-      <Box pt="2">
-        <Image
-          priority={true}
-          src="/logo-150x150.png"
-          alt="Picture of the author"
-          width={50}
-          height={50}
-        />
-      </Box>
+      <LinkBox pt="2">
+        <LinkOverlay
+          _hover={{
+            background: "none",
+            color: "white",
+          }}
+          href="/"
+        >
+          <Image
+            priority={true}
+            src="/logo-150x150.png"
+            alt="Picture of the author"
+            width={50}
+            height={50}
+            // layout="fill"
+            // objectFit="scale-down"
+          />
+        </LinkOverlay>
+      </LinkBox>
 
       {/* <Image  boxSize="50px" objectFit="fill" src="vercel.svg" alt="Segun Adebayo" /> */}
       <Text

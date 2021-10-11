@@ -15,6 +15,8 @@ import {
   HStack,
   IconButton,
   Link,
+  LinkBox,
+  LinkOverlay,
   Menu,
   MenuButton,
   MenuDivider,
@@ -26,6 +28,7 @@ import {
   VStack,
 } from "@chakra-ui/react";
 import Image from "next/image";
+import router from "next/router";
 import React, { ReactNode, ReactText } from "react";
 import { FaGoogle } from "react-icons/fa";
 import { FiBell, FiChevronDown } from "react-icons/fi";
@@ -43,7 +46,11 @@ interface LinkItemProps {
 }
 const LinkItems: Array<Subheading> = [];
 
-export default function TopNavbarWithSearchBox({ children }: { children: ReactNode }) {
+export default function TopNavbarWithSearchBox({
+  children,
+}: {
+  children: ReactNode;
+}) {
   const { isOpen, onOpen, onClose } = useDisclosure();
   // const [subheading, setSubheading] = useState(0);
   const shareContext = useAppContext();
@@ -155,6 +162,8 @@ interface MobileProps extends FlexProps {
 }
 
 const MobileNav = ({ onOpen, ...rest }: MobileProps) => {
+  
+
   const { signIn, signUp, signOut } = useAuthContext();
   return (
     <Flex
@@ -179,16 +188,27 @@ const MobileNav = ({ onOpen, ...rest }: MobileProps) => {
         height={100}
       /> */}
 
-<Box pt="2"> 
-      <Image
-        priority={true}
-        src="/logo-150x150.png"
-        alt="Picture of the author"
-        width={50}
-        height={50}
-        
-      />
-      </Box>
+      <LinkBox
+        pt="2"
+      >
+        <LinkOverlay
+          _hover={{
+            background: "none",
+            color: "white",
+          }}
+          href="/"
+        >
+          <Image
+            priority={true}
+            src="/logo-150x150.png"
+            alt="Picture of the author"
+            width={50}
+            height={50}
+            // layout="fill"
+            // objectFit="scale-down"
+          />
+        </LinkOverlay>
+      </LinkBox>
       {/* <Heading color="black">?LOOK<span>&#128512;</span></Heading>i *}
       {/* <Image  boxSize="50px" objectFit="fill" src="vercel.svg" alt="Segun Adebayo" /> */}
       {/* <Text
@@ -201,7 +221,7 @@ const MobileNav = ({ onOpen, ...rest }: MobileProps) => {
       >
         Welcome to Qlook
       </Text> */}
-      <Box 
+      <Box
         // align="left"
         bg="lavender"
         p="0.5"
@@ -210,8 +230,7 @@ const MobileNav = ({ onOpen, ...rest }: MobileProps) => {
         ml="12"
         // h="12"
         // display={{ base: "flex", md: "flex-start" }}
-        
-        >
+      >
         <SubjectSearch />
       </Box>
       <span></span>
@@ -231,12 +250,12 @@ const MobileNav = ({ onOpen, ...rest }: MobileProps) => {
           ""
         )}
 
-        <IconButton
+        {/* <IconButton
           size="sm"
           variant="outline"
           aria-label="open menu"
           icon={<FiBell />}
-        />
+        /> */}
         <Flex border="0px" alignItems={"center"}>
           <Menu boundary="clippingParents">
             <MenuButton
@@ -263,7 +282,7 @@ const MobileNav = ({ onOpen, ...rest }: MobileProps) => {
                   spacing="1px"
                   ml="2"
                 >
-                  <Text fontSize="sm">{useAuthContext().username}</Text>
+                  <Text fontSize="sm">{useAuthContext().user?.email}</Text>
                   <Text fontSize="xs" color="gray.600">
                     {/* Admin */}
                   </Text>

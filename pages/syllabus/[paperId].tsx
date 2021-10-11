@@ -1,10 +1,13 @@
 import {
-  Link, Table,
+  Link,
+  Table,
   TableCaption,
   Tbody,
-  Td, Th,
+  Td,
+  Th,
   Thead,
-  Tr,Text
+  Tr,
+  Text,
 } from "@chakra-ui/react";
 import { AuthSession } from "@supabase/supabase-js";
 import NextLink from "next/link";
@@ -38,7 +41,9 @@ const Syllabus: React.FC<ProfileListProps> = ({ array }) => {
     <div className="container" style={{ padding: "50px 0 100px 0" }}>
       {/* <Heading>Subject Name</Heading> */}
       <Table size="sm" variant="striped">
-        <TableCaption>These syllabus are exactly as per UPSC Notificaiton</TableCaption>
+        <TableCaption>
+          These syllabus are exactly as per UPSC Notificaiton
+        </TableCaption>
         <Thead>
           <Tr>
             <Th>Headings</Th>
@@ -47,35 +52,45 @@ const Syllabus: React.FC<ProfileListProps> = ({ array }) => {
         </Thead>
         <Tbody>
           {/* {console.log("array sorted ......", array.sort((a, b) => a.name!.sequence! - b.name!.sequence!))} */}
-          {array.sort((a, b) => a.name!.sequence! - b.name!.sequence!).map((entry) => {
-            return (
-              <Tr key={entry.name?.id}>
-                <Td  value={entry.name?.main_topic}>{entry.name?.main_topic}</Td>
-                <Td  value={entry.name?.main_topic}>
-                  {entry.value!.sort((a, b) => a.sequence! - b.sequence!).map((value) => (
-                    // return
-                    //  <li>{value.topic}</li>;;
-                    <div key={value.id}>
-                      <span >
-                        {/* <Box display="flex" color="yellow.400" key={value.id}> */}
-                        <NextLink
+          {array
+            .sort((a, b) => a.name!.sequence! - b.name!.sequence!)
+            .map((entry) => {
+              return (
+                <Tr key={entry.name?.id}>
+                  <Td value={entry.name?.main_topic}>
+                    {entry.name?.main_topic}
+                  </Td>
+                  <Td value={entry.name?.main_topic}>
+                    {entry
+                      .value!.sort((a, b) => a.sequence! - b.sequence!)
+                      .map((value) => (
+                        // return
+                        //  <li>{value.topic}</li>;;
+                        <div key={value.id}>
+                          <Text
+                            color="teal.500"
+                            _hover={{
+                              background: "gray.600",
+                              color: "white",
+                            }}
+                          >
+                            {value.topic}
+                            <Text as="b">,&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</Text>
+
+                            {/* Following is for future implementation */}
+                            {/* <NextLink
                           href={`/posts/${encodeURIComponent(value.id)}`}
                           passHref
                         >
-                          {/* <a color="teal.500"></a> */}
-                          <Link color="teal.500">{value.topic}</Link>
-                        </NextLink>
-                        {/* </Box> */}
-                      </span>
-
-                      <span ><Text as="b">,</Text>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span>
-                    </div>
-
-                  ))}
-                </Td>
-              </Tr>
-            );
-          })}
+                          <Link disable="true" color="telegram.600">{value.topic}</Link>
+                        </NextLink> */}
+                          </Text>
+                        </div>
+                      ))}
+                  </Td>
+                </Tr>
+              );
+            })}
 
           {/* <Td>inches</Td>
             <Td>millimetres (mm)</Td>
@@ -106,7 +121,7 @@ export const getStaticProps = async ({ params }: any) => {
     .from<Headings>("headings")
     .select(` id,main_topic,sequence`)
     .eq("paper_id", params.paperId);
-  console.log("getstatic props inside ",params.paperId);
+  console.log("getstatic props inside ", params.paperId);
   // let subheadings: Subheading[][] = [];
   let subheadingsMap = new Map<Headings | undefined, Subheading[] | null>();
   console.log("subheadings are88 ", data?.length);
@@ -124,7 +139,6 @@ export const getStaticProps = async ({ params }: any) => {
     name,
     value,
   }));
-
 
   return {
     props: {
