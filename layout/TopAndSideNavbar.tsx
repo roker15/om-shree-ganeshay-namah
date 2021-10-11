@@ -268,7 +268,7 @@ const MobileNav = ({ onOpen, ...rest }: MobileProps) => {
                   spacing="1px"
                   ml="2"
                 >
-                  <Text fontSize="sm">{useAuthContext().username}</Text>
+                  <Text fontSize="sm">{useAuthContext().user?.email}</Text>
                   <Text fontSize="xs" color="gray.600">
                     {/* Admin */}
                   </Text>
