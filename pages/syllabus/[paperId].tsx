@@ -46,17 +46,17 @@ const Syllabus: React.FC<ProfileListProps> = ({ array }) => {
           </Tr>
         </Thead>
         <Tbody>
-          {console.log("array is ......", array)}
+          {/* {console.log("array sorted ......", array.sort((a, b) => a.name!.sequence! - b.name!.sequence!))} */}
           {array.sort((a, b) => a.name!.sequence! - b.name!.sequence!).map((entry) => {
             return (
-              <Tr key={entry.id}>
-                <Td value={entry.name?.main_topic}>{entry.name?.main_topic}</Td>
-                <Td key={entry.id} value={entry.name?.main_topic}>
-                  {entry.value!.map((value) => (
+              <Tr key={entry.name?.id}>
+                <Td  value={entry.name?.main_topic}>{entry.name?.main_topic}</Td>
+                <Td  value={entry.name?.main_topic}>
+                  {entry.value!.sort((a, b) => a.sequence! - b.sequence!).map((value) => (
                     // return
                     //  <li>{value.topic}</li>;;
-                    <>
-                      <span>
+                    <div key={value.id}>
+                      <span >
                         {/* <Box display="flex" color="yellow.400" key={value.id}> */}
                         <NextLink
                           href={`/posts/${encodeURIComponent(value.id)}`}
@@ -68,8 +68,9 @@ const Syllabus: React.FC<ProfileListProps> = ({ array }) => {
                         {/* </Box> */}
                       </span>
 
-                      <span><Text as="b">,</Text>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span>
-                    </>
+                      <span ><Text as="b">,</Text>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span>
+                    </div>
+
                   ))}
                 </Td>
               </Tr>
@@ -103,7 +104,7 @@ export const getStaticProps = async ({ params }: any) => {
   // Make a request
   const { data, error } = await supabase
     .from<Headings>("headings")
-    .select(` id,main_topic`)
+    .select(` id,main_topic,sequence`)
     .eq("paper_id", params.paperId);
   console.log("getstatic props inside ",params.paperId);
   // let subheadings: Subheading[][] = [];
