@@ -20,7 +20,7 @@ import PageWithLayoutType from "../../types/pageWithLayout";
 
 type x = {
   id: number | undefined;
-  name: string | undefined;
+  name: Headings | undefined;
   value: Subheading[] | null;
 };
 type ProfileListProps = {
@@ -47,7 +47,7 @@ const Syllabus: React.FC<ProfileListProps> = ({ array }) => {
         </Thead>
         <Tbody>
           {console.log("array is ......", array)}
-          {array.map((entry) => {
+          {array.sort((a, b) => a.name!.sequence! - b.name!.sequence!).map((entry) => {
             return (
               <Tr key={entry.id}>
                 <Td value={entry.name}>{entry.name}</Td>
@@ -107,7 +107,7 @@ export const getStaticProps = async ({ params }: any) => {
     .eq("paper_id", params.paperId);
   console.log("getstatic props inside ",params.paperId);
   // let subheadings: Subheading[][] = [];
-  let subheadingsMap = new Map<string | undefined, Subheading[] | null>();
+  let subheadingsMap = new Map<Headings | undefined, Subheading[] | null>();
   console.log("subheadings are88 ", data?.length);
 
   for (let index = 0; index < data!.length; index++) {
@@ -116,9 +116,9 @@ export const getStaticProps = async ({ params }: any) => {
       .select(` id,topic,sequence`)
       .eq("main_topic_id", data![index].id);
     // subheadings.push(subheading.data!);
-    subheadingsMap.set(data![index].main_topic, subheading.data);
+    subheadingsMap.set(data![index], subheading.data);
   }
-  console.log("subheading map is ", subheadingsMap);
+  // console.log("subheading map is ", subheadingsMap);
   const array = Array.from(subheadingsMap, ([name, value]) => ({
     name,
     value,
