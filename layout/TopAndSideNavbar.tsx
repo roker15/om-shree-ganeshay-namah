@@ -221,7 +221,7 @@ const MobileNav = ({ onOpen, ...rest }: MobileProps) => {
       </Text>
 
       <HStack spacing={{ base: "0", md: "6" }}>
-        {/* <button onClick={() => setLanguage("jp")}>sign in</button> */}
+        {/* <button onClick={() => setLanguage("jp")}>sign in</buttonb> */}
         {supabase.auth.session() === null ? (
           <Button
             border="0px"
