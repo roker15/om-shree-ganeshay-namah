@@ -64,8 +64,10 @@ const Syllabus: React.FC<ProfileListProps> = ({ array }) => {
                     {entry
                       .value!.sort((a, b) => a.sequence! - b.sequence!)
                       .map((value) => (
+                        <Text key={value.id}>
+
                         <NextLink
-                          key={value.id}
+                          
                           href={`/posts/${encodeURIComponent(value.id)}`}
                           passHref
                         >
@@ -73,6 +75,7 @@ const Syllabus: React.FC<ProfileListProps> = ({ array }) => {
                             {value.topic}
                           </Link>
                         </NextLink>
+                        </Text>
 
                         // return
                         //  <li>{value.topic}</li>;;
