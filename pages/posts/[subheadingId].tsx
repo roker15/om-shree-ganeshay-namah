@@ -22,6 +22,8 @@ import parse, {
   domToReact,
   HTMLReactParserOptions
 } from "html-react-parser";
+// import "katex/dist/katex.min.css";
+// import katex from "katex";
 import "katex/dist/katex.min.css";
 import router, { useRouter } from "next/router";
 import React, { useEffect, useState } from "react";

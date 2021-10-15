@@ -22,6 +22,30 @@ interface Props {
   isNew: string | undefined | string[];
 }
 
+const buttonList = [
+  ["undo", "redo"],
+  ["font", "fontSize", "formatBlock"],
+  ["paragraphStyle", "blockquote"],
+  [
+    "bold",
+    "underline",
+    "italic",
+    "strike",
+    "subscript",
+    "superscript",
+  ],
+  ["fontColor", "hiliteColor", "textStyle"],
+  ["removeFormat"],
+  "/",
+  ["outdent", "indent"],
+  ["align", "horizontalRule", "list", "lineHeight"],
+  ["table", "link", "image", "video", "audio", "math"],
+
+  /** ['imageGallery'] */ // You must add the "imageGalleryUrl".
+  ["fullScreen", "showBlocks", "codeView"],
+  ["preview", "print"],
+  ["save", "template"],
+];
 const EditorComponent: React.FC<Props> = ({ postId, isNew, subHeadingId }) => {
   /**
    * @type {React.MutableRefObject<SunEditor>} get type definitions for editor
@@ -94,41 +118,17 @@ const EditorComponent: React.FC<Props> = ({ postId, isNew, subHeadingId }) => {
       <p> My Other Contents </p>
       <SunEditor
         setContents={defaultValue1}
-        // defaultValue={defaultValue1}
         onChange={handleOnChange}
         setOptions={{
           katex: katex,
           height: "500",
 
-          buttonList: [
-            ["undo", "redo"],
-            ["font", "fontSize", "formatBlock"],
-            ["paragraphStyle", "blockquote"],
-            [
-              "bold",
-              "underline",
-              "italic",
-              "strike",
-              "subscript",
-              "superscript",
-            ],
-            ["fontColor", "hiliteColor", "textStyle"],
-            ["removeFormat"],
-            "/", // Line break
-            ["outdent", "indent"],
-            ["align", "horizontalRule", "list", "lineHeight"],
-            ["table", "link", "image", "video", "audio", "math"], // You must add the 'katex' library at options to use the 'math' plugin.
-            /** ['imageGallery'] */ // You must add the "imageGalleryUrl".
-            ["fullScreen", "showBlocks", "codeView"],
-            ["preview", "print"],
-            ["save", "template"],
-          ],
-          // plugins: [font] set plugins, all plugins are set by default
-          // Other option
+          buttonList: buttonList,
+         
         }}
       />
       {appcontext.isNew === true ? (
-        <Button mt="2" colorScheme="blue" variant="outline" onClick={handleUpdatePost}>
+        <Button mt="2" colorScheme="blue" variant="outline" onClick={handleCreateNewPost}>
           Create Post
         </Button>
       ) : (
