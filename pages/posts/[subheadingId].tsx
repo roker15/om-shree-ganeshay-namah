@@ -25,6 +25,7 @@ import parse, {
 // import "katex/dist/katex.min.css";
 // import katex from "katex";
 import "katex/dist/katex.min.css";
+import 'suneditor/dist/css/suneditor.min.css'; // Import Sun Editor's CSS File
 import router, { useRouter } from "next/router";
 import React, { useEffect, useState } from "react";
 import { CurrentAppState, useAppContext } from "../../context/state";
