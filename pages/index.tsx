@@ -8,6 +8,7 @@ import {
 } from "@chakra-ui/react";
 import { useRouter } from "next/dist/client/router";
 import React from "react";
+import SlateEdit from "../components/SlateEditor";
 import { useAuthContext } from "../context/Authcontext";
 import LayoutWithTopNavbar from "../layout/LayoutWithTopNavbar";
 import { supabase } from "../lib/supabaseClient";
@@ -47,6 +48,7 @@ const Home: React.FC<ProfileListProps> = ({ data }) => {
     return (
       <Container maxW="container.md" pt="14">
         <VStack>
+          <SlateEdit/>
           {role !== "MODERATOR" ? null : (
             <ButtonGroup size="sm" isAttached variant="outline">
               <Button onClick={() => goToCreateHeading()}>

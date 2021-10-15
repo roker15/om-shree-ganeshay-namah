@@ -5,6 +5,8 @@ import { ChakraProvider, extendTheme } from "@chakra-ui/react";
 import { AppContextWrapper } from "../context/state";
 import { AuthProvider } from "../context/Authcontext";
 import Head from "next/head"
+//this import is for react page editor
+// import '@react-page/editor/lib/index.css';
 
 const colors = {
   brand: {

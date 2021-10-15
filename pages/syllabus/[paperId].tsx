@@ -64,28 +64,33 @@ const Syllabus: React.FC<ProfileListProps> = ({ array }) => {
                     {entry
                       .value!.sort((a, b) => a.sequence! - b.sequence!)
                       .map((value) => (
-                        // return
-                        //  <li>{value.topic}</li>;;
-                        <div key={value.id}>
-                          <Text
-                            color="teal.500"
-                            _hover={{
-                              background: "gray.600",
-                              color: "white",
-                            }}
-                          >
-                            {value.topic}
-                            <Text as="b">,&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</Text>
-
-                            {/* Following is for future implementation */}
-                            {/* <NextLink
+                        <NextLink
+                          key={value.id}
                           href={`/posts/${encodeURIComponent(value.id)}`}
                           passHref
                         >
-                          <Link disable="true" color="telegram.600">{value.topic}</Link>
-                        </NextLink> */}
-                          </Text>
-                        </div>
+                          <Link disable="true" color="telegram.600">
+                            {value.topic}
+                          </Link>
+                        </NextLink>
+
+                        // return
+                        //  <li>{value.topic}</li>;;
+                        // <div key={value.id}>
+                        //   <Text
+                        //     color="teal.500"
+                        //     _hover={{
+                        //       background: "gray.600",
+                        //       color: "white",
+                        //     }}
+                        //   >
+                        //     {value.topic}
+                        //     <Text as="b">,&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</Text>
+
+                        //   </Text>
+                        // </div>
+
+                        // {/* Following is for future implementation */}
                       ))}
                   </Td>
                 </Tr>
