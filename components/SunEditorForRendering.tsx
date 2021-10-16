@@ -17,9 +17,10 @@ import { supabase } from "../lib/supabaseClient";
 import { Post } from "../types/myTypes";
 
 interface Props {
-  postId: number;
-  subHeadingId: number;
-  isNew: string | undefined | string[];
+  postId?: number;
+  subHeadingId?: number;
+  isNew?: string | undefined | string[];
+  content1?: string ;
 }
 
 const buttonList = [
@@ -40,7 +41,12 @@ const buttonList = [
   ["save", "template"],
 ];
 
-const EditorComponent: React.FC<Props> = ({ postId, isNew, subHeadingId }) => {
+const SunEditorForRendering: React.FC<Props> = ({
+  postId,
+  isNew,
+  subHeadingId,
+  content1,
+}) => {
   /**
    * @type {React.MutableRefObject<SunEditor>} get type definitions for editor
    */
@@ -48,7 +54,7 @@ const EditorComponent: React.FC<Props> = ({ postId, isNew, subHeadingId }) => {
     useRef();
   const [content, setContent] = useState("");
   const [isSubmitting, setIsSubmitting] = useState(false);
-  const [defaultValue1, setDefaultValue1] = useState("");
+  const [defaultValue1, setDefaultValue1] = useState(content1);
   const appcontext = useAppContext();
 
   // // When the editor's content has changed, store it in state
@@ -95,32 +101,50 @@ const EditorComponent: React.FC<Props> = ({ postId, isNew, subHeadingId }) => {
   };
 
   useEffect(() => {
-    async function fetchData() {
-      // You can await here
+    setContent(content1!);
 
-      if (appcontext.isNewPost) {
-        setDefaultValue1("");
-      } else {
-        setDefaultValue1(appcontext.postForEdit!.post);
-      }
-    }
-    fetchData();
+    // async function fetchData() {
+    //   // You can await here
+
+    //   if (appcontext.isNewPost) {
+    //     setDefaultValue1("");
+    //   } else {
+    //     setDefaultValue1(appcontext.postForEdit!.post);
+    //   }
+    // }
+    // fetchData();
 
     // Get underlining core object here
     // Notice that useEffect is been used because you have to make sure the editor is rendered.
     // console.log(editorRef.current!.editor.core)
     console.log("from use effect in editor", editorRef);
-  });
+  },[content1]);
 
   return (
     <div>
       <p> My Other Contents </p>
+      <Button
+        isLoading={isSubmitting}
+        mt="2"
+        colorScheme="blue"
+        variant="outline"
+        onClick={handleUpdatePost}
+        
+      >
+        Edit Post
+      </Button>
       <SunEditor
         setContents={defaultValue1}
         onChange={handleOnChange}
+        // hideToolbar={true}
+        // readOnly={true}
+        disable={true}
+      
+        // hide={true}
         setOptions={{
+          mode:"classic",
           katex: katex,
-          height: "500",
+          height: "100%",
 
           buttonList: buttonList,
         }}
@@ -149,7 +173,7 @@ const EditorComponent: React.FC<Props> = ({ postId, isNew, subHeadingId }) => {
     </div>
   );
 };
-export default EditorComponent;
+export default SunEditorForRendering;
 
 //******************* draft.js*************************************** */
 // import React, { useEffect, useState } from "react";

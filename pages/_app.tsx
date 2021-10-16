@@ -5,6 +5,7 @@ import { ChakraProvider, extendTheme } from "@chakra-ui/react";
 import { AppContextWrapper } from "../context/state";
 import { AuthProvider } from "../context/Authcontext";
 import Head from "next/head";
+import Script from 'next/script'
 //this import is for react page editor
 // import '@react-page/editor/lib/index.css';
 
@@ -38,10 +39,7 @@ function MyApp({ Component, pageProps }: AppLayoutProps) {
           <link rel="manifest" href="/site.webmanifest" />
           <link rel="mask-icon" href="/safari-pinned-tab.svg" color="#5bbad5" />
           <meta name="theme-color" content="#ffffff" /> */}
-        <link
-          href="//cdnjs.cloudflare.com/ajax/libs/KaTeX/0.9.0/katex.min.css"
-          // rel="stylesheet"
-        />
+  
       </Head>
 
       <AppContextWrapper>

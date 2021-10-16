@@ -22,10 +22,9 @@ import parse, {
   domToReact,
   HTMLReactParserOptions
 } from "html-react-parser";
-// import "katex/dist/katex.min.css";
-// import katex from "katex";
+import katex from "katex";
 import "katex/dist/katex.min.css";
-import 'suneditor/dist/css/suneditor.min.css'; // Import Sun Editor's CSS File
+// import 'suneditor/dist/css/suneditor.min.css'; // Import Sun Editor's CSS File
 import router, { useRouter } from "next/router";
 import React, { useEffect, useState } from "react";
 import { CurrentAppState, useAppContext } from "../../context/state";
@@ -35,6 +34,10 @@ import { Profile } from "../../lib/constants";
 import { supabase } from "../../lib/supabaseClient";
 import { Headings, Post, Subheading } from "../../types/myTypes";
 import PageWithLayoutType from "../../types/pageWithLayout";
+import Head from "next/head";
+import Script from 'next/script'
+import SunEditorForRendering from "../../components/SunEditorForRendering";
+
 type ProfileListProps = {
   data: Post[];
 };
@@ -61,8 +64,7 @@ const Posts: React.FC<ProfileListProps> = ({ data }) => {
     return (
       <>
       
-        {/* <Head>
-        </Head> */}
+      
 
         <h1>{(data[0].subheading_id as Subheading).topic}</h1>
         <Link href="../editor">Go to editor</Link>
@@ -70,12 +72,20 @@ const Posts: React.FC<ProfileListProps> = ({ data }) => {
           {data!.map((x) => {
             return (
               <div key={x.id}>
+                <SunEditorForRendering content1={x.post}/>
                 {postHeader(x, appContext)}
                 <div>
                   {parse(
-                    DOMPurify.sanitize(x.post, {
-                      USE_PROFILES: { html: true },
-                    }),
+                    DOMPurify.sanitize(
+                      
+                      x.post
+                      
+                      , {
+                      USE_PROFILES: { svg: true,html: true },
+                    })
+                    
+                    
+                    ,
                     options
                     // {
                     //   replace: domNode => {

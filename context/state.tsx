@@ -10,7 +10,7 @@ export interface CurrentAppState {
   setSubheadingIdForNewPost: (id: number) => void;
   postForEdit: Post|undefined;
   setPostForEdit: (post: Post) => void;
-  isNew: boolean|undefined;
+  isNewPost: boolean|undefined;
   setIsNew: (isNew: boolean) => void;
   //******paperId for syllabus heading*** */
   paperId: string|undefined;
@@ -23,7 +23,7 @@ const AppContext = createContext<CurrentAppState>({
   setSubheadingIdForNewPost: () => {},
   postForEdit:undefined,
   setPostForEdit: () => {},
-  isNew: false,
+  isNewPost: false,
   setIsNew: (isNew: boolean) => {},
   paperId:undefined,
   setPaperId: (paperId: string) => {},
@@ -60,7 +60,7 @@ export function AppContextWrapper({ children }: { children: ReactNode }) {
     setSubheadingIdForNewPost: updateSubHeadingIdForNewPost,
     postForEdit: postForEdit,
     setPostForEdit: updatePostForEdit,
-    isNew: isNew,
+    isNewPost: isNew,
     setIsNew: updateIsNew,
     paperId:paperId,
     setPaperId:updatePaperId
