@@ -12,7 +12,7 @@ import {
   OrderedList,
   Spacer,
   Text,
-  VStack
+  VStack,
 } from "@chakra-ui/react";
 import { AuthSession } from "@supabase/supabase-js";
 import { Element } from "domhandler/lib/node";
@@ -20,7 +20,7 @@ import DOMPurify from "dompurify";
 import parse, {
   attributesToProps,
   domToReact,
-  HTMLReactParserOptions
+  HTMLReactParserOptions,
 } from "html-react-parser";
 import katex from "katex";
 import "katex/dist/katex.min.css";
@@ -32,11 +32,12 @@ import LayoutWithTopAndSideNavbar from "../../layout/LayoutWithTopAndSideNavbar"
 // import SideNavBar from "../../layout/sideNavBar";
 import { Profile } from "../../lib/constants";
 import { supabase } from "../../lib/supabaseClient";
-import { Headings, Post, Subheading } from "../../types/myTypes";
+import { Headings, Post, SharedPost, Subheading } from "../../types/myTypes";
 import PageWithLayoutType from "../../types/pageWithLayout";
 import Head from "next/head";
-import Script from 'next/script'
+import Script from "next/script";
 import SunEditorForRendering from "../../components/SunEditorForRendering";
+import useSWR from "swr";
 
 type ProfileListProps = {
   data: Post[];
@@ -45,64 +46,178 @@ type ProfileListProps = {
 const Posts: React.FC<ProfileListProps> = ({ data }) => {
   const [session, setSession] = useState<AuthSession | null>(null);
   const [profiles, setProfiles] = useState<Profile[]>([]);
+  const [userNote, setUserNote] = useState<string | undefined | null>(null);
+  const [mounted, setMounted] = useState(false);
   // const [data, setProfiles] = useState<Profile[]>([]);
   const appContext = useAppContext();
   const router = useRouter();
-  useEffect(() => {
-    if (data && data.length !== 0) {
-      appContext.setPostHeadingId(((data![1].subheading_id as Subheading).main_topic_id as Headings)!.id);
-    }
-  },);
+  const {
+    query: { subheadingId },
+  } = router;
 
+  // let isSubscribed = true
+
+  const { data: sharedPost } = useSWR(
+    `/sharedPost/${subheadingId}`,
+    async () =>
+      await supabase
+        .from<SharedPost>("sharedpost")
+        .select(
+          `
+    id,
+      created_at,
+      updated_at,
+      post_id(
+        id,post,
+        created_by(id,email)
+      ),
+      shared_with(id,email),
+      subheading_id (
+      
+      topic,
+      main_topic_id(id)
+    )
+    `
+        )
+        .eq("subheading_id", subheadingId as string)
+        .eq("shared_with", supabase.auth.user()?.id as string),
+    { refreshInterval: 1000 }
+  );
+
+  const { data: headings } = useSWR(
+    mounted ? `/upsc/${subheadingId}/ss` : null,
+    async () =>
+      await supabase
+        .from<Post>("posts")
+        .select(
+          `
+    id,
+      created_at,
+      updated_at,
+      post,
+      subheading_id (
+      
+      topic,
+      main_topic_id(id)
+    )
+    `
+        )
+        .eq("subheading_id", subheadingId as string)
+        .eq("created_by", supabase.auth.user()?.id as string)
+    // { refreshInterval: 1000 }
+  );
+
+  useEffect(() => {
+    setMounted(true);
+    console.log("usernotes is ", userNote);
+    if (
+      headings != undefined &&
+      headings?.data?.length != 0 &&
+      headings!.data != null
+    ) {
+      // console.log("notes is ", data![0].post);
+      setUserNote(headings!.data![0].post);
+    } else {
+      console.log("use effect is hittin");
+      setUserNote(undefined);
+    }
+    console.log("usernotes is ", userNote);
+    // if (data && data.length !== 0) {
+    //   appContext.setPostHeadingId(
+    //     ((data![1].subheading_id as Subheading).main_topic_id as Headings)!.id
+    //   );
+    // }
+    // return () => isSubscribed = false
+  });
+  // const [data,error]
   const [value, setValue] = React.useState("");
   const handleChange = (event: any) => {
     setValue(event.target.value);
     console.log("hello hello ", value);
   };
-  
-  if (data && data.length !== 0) {
-    return (
-      <>
-      
-      
 
-        <h1>{(data[0].subheading_id as Subheading).topic}</h1>
-        <Link href="../editor">Go to editor</Link>
-        <div className="container" style={{ padding: "50px 0 50px 0" }}>
-          {data!.map((x) => {
+  // if (data && data.length !== 0) {
+  return (
+    <>
+      <h1>Subheading id is {subheadingId}</h1>
+
+      <div className="container" style={{ padding: "50px 0 50px 0" }}>
+        {sharedPost?.data?.length == 0 ? (
+          <div></div>
+        ) : (
+          sharedPost?.data!.map((x) => {
+            const sanitisedPostData = DOMPurify.sanitize(
+              (x.post_id as Post).post as string,
+              {
+                USE_PROFILES: { svg: true, html: true },
+              }
+            );
             return (
               <div key={x.id}>
-                <SunEditorForRendering content1={x.post}/>
-                {postHeader(x, appContext)}
-                <div>
-                  {parse(
-                    DOMPurify.sanitize(
-                      
-                      x.post
-                      
-                      , {
-                      USE_PROFILES: { svg: true,html: true },
-                    })
-                    
-                    
-                    ,
-                    options
-                    // {
-                    //   replace: domNode => {
-                    //     console.dir(domNode, { depth: null });
-                    //   }
-                    // }............
-                  )}
-                </div>
+                {/* {postHeader(x, appContext)} */}
+
+                <SunEditorForRendering
+                  // postId={x.id}
+                  postContent={sanitisedPostData}
+                  isSharedPost={true}
+                  sharedBy={((x.post_id as Post).created_by as Profile).email}
+                />
+
+                {/* <div>
+          {parse(
+            DOMPurify.sanitize(
+              
+              x.post
+              
+              , {
+              USE_PROFILES: { svg: true,html: true },
+            })
+            
+            
+            ,
+            options
+          
+          )}
+       
+        </div> */}
                 <Divider mt="100" />
               </div>
             );
-          })}
-        </div>
-      </>
-    );
-  }
-  return <div><Link href="../editor">Go to editor</Link></div>;
+          })
+        )}
+
+        {userNote == undefined ? (
+          <div>
+            <Text fontSize="3xl">
+              You Dont have notes on this Topic Create Notes on this Topic
+            </Text>
+            <SunEditorForRendering
+              subHeadingId={Number(subheadingId)}
+              isNew={true}
+            />
+          </div>
+        ) : (
+          ""
+        )}
+        {headings && headings?.data?.length!=0 && headings!.data![0]!=null? (
+          <SunEditorForRendering
+            subHeadingId={Number(subheadingId)}
+            isNew={false}
+            postId={headings.data![0].id}
+            postContent={headings.data![0].post}
+          />
+        ) : (
+          <div></div>
+        )}
+      </div>
+    </>
+  );
+  // }
+  // return (
+  //   <div>
+  //     <Link href="../editor">Go to editor</Link>
+  //   </div>
+  // );
 };
 
 const options: HTMLReactParserOptions = {
@@ -118,7 +233,7 @@ const options: HTMLReactParserOptions = {
     if (domNode instanceof Element && domNode.name === "h2") {
       const props = attributesToProps(domNode.attribs);
       return (
-        <Heading as="h1"size="xl" >
+        <Heading as="h1" size="xl">
           {domToReact(domNode.children, options)}
         </Heading>
       );
@@ -126,7 +241,7 @@ const options: HTMLReactParserOptions = {
     if (domNode instanceof Element && domNode.name === "p") {
       const props = attributesToProps(domNode.attribs);
       return (
-        <Text as ="p" {...props} >
+        <Text as="p" {...props}>
           {domToReact(domNode.children, options)}
         </Text>
       );
@@ -134,7 +249,7 @@ const options: HTMLReactParserOptions = {
     if (domNode instanceof Element && domNode.name === "span") {
       const props = attributesToProps(domNode.attribs);
       return (
-        <Text as ="span" {...props} >
+        <Text as="span" {...props}>
           {domToReact(domNode.children, options)}
         </Text>
       );
@@ -142,7 +257,7 @@ const options: HTMLReactParserOptions = {
     if (domNode instanceof Element && domNode.name === "ol") {
       const props = attributesToProps(domNode.attribs);
       return (
-        <OrderedList backgroundColor="#ff9999" ml={"14"} {...props} >
+        <OrderedList backgroundColor="#ff9999" ml={"14"} {...props}>
           {domToReact(domNode.children, options)}
         </OrderedList>
       );
@@ -150,7 +265,7 @@ const options: HTMLReactParserOptions = {
     if (domNode instanceof Element && domNode.name === "li") {
       const props = attributesToProps(domNode.attribs);
       return (
-        <ListItem backgroundColor="#ffe5e5" {...props} >
+        <ListItem backgroundColor="#ffe5e5" {...props}>
           {domToReact(domNode.children, options)}
         </ListItem>
       );
@@ -158,7 +273,7 @@ const options: HTMLReactParserOptions = {
     if (domNode instanceof Element && domNode.attribs.classssss === "li") {
       const props = attributesToProps(domNode.attribs);
       return (
-        <ListItem backgroundColor="#ffe5e5" {...props} >
+        <ListItem backgroundColor="#ffe5e5" {...props}>
           {domToReact(domNode.children, options)}
         </ListItem>
       );
@@ -221,54 +336,51 @@ const postHeader = (post: Post, context: CurrentAppState) => {
   );
 };
 
-export async function getStaticPaths() {
-  let { data, error } = await supabase.from<Subheading>("subheadings").select(
-    `
-  id
-`
-  );
-  // Get the paths we want to pre-render based on posts
-  const paths = data!.map((post) => ({
-    params: { subheadingId: post.id.toString() },
-  }));
+// export async function getStaticPaths() {
+//   let { data, error } = await supabase.from<Subheading>("subheadings").select(
+//     `
+//   id
+// `
+//   );
+//   // Get the paths we want to pre-render based on posts
+//   const paths = data!.map((post) => ({
+//     params: { subheadingId: post.id.toString() },
+//   }));
 
-  return {
-    paths,
+//   return {
+//     paths,
 
-    fallback: true, // See the "fallback" section below
-  };
-}
-export const getStaticProps = async ({ params }: any) => {
+//     fallback: true, // See the "fallback" section below
+//   };
+// }
+// export const getStaticProps = async ({ params }: any) => {
+//   console.log(`Building slug: ${params.subheadingId}`);
+//   // Make a request
+//   let { data, error } = await supabase
+//     .from<Post>("posts")
+//     .select(
+//       `
+//   id,
+//     created_at,
+//     updated_at,
+//     post,
+//     subheading_id (
 
+//     topic,
+//     main_topic_id(id)
+//   )
+// `
+//     )
+//     .eq("subheading_id", params.subheadingId);
 
-
-  console.log(`Building slug: ${params.subheadingId}`)
-  // Make a request
-  let { data, error } = await supabase
-    .from<Post>("posts")
-    .select(
-      `
-  id,
-    created_at,
-    updated_at,
-    post,
-    subheading_id (
-    
-    topic,
-    main_topic_id(id)
-  )
-`
-    )
-    .eq("subheading_id", params.subheadingId);
-
-  // const res = await fetch("https://.../../data");
-  console.log("data is inside subheadingId ", data);
-  return {
-    props: {
-      data,
-    },
-  };
-};
+//   // const res = await fetch("https://.../../data");
+//   console.log("data is inside subheadingId ", data);
+//   return {
+//     props: {
+//       data,
+//     },
+//   };
+// };
 
 (Posts as PageWithLayoutType).layout = LayoutWithTopAndSideNavbar;
 export default Posts;

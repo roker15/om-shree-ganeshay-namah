@@ -29,8 +29,24 @@ export type Subheading = {
   };
 export type Post = {
     id: number,
+    created_at?: string,
+    updated_at?: string,
+    post?: string,
+    subheading_id?:Subheading|number
+    created_by?:string|Profile
+};
+export type Profile = {
+    id: string,
+    created_at?: string,
+    updated_at?: string,
+    email?: string,
+    role?:string
+};
+export type SharedPost = {
+    id: string,
     created_at: string,
     updated_at: string,
-    post: string,
+    post_id: Post|number,
+    shared_with:Profile|string
     subheading_id:Subheading|number
 };
