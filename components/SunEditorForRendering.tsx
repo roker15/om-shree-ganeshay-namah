@@ -1,6 +1,8 @@
 //******************* sun editor*************************************** */
 
 // Import katex
+import { EmailIcon } from "@chakra-ui/icons";
+import { MdEditNote, MdEditOff, MdMode, MdShare } from "react-icons/md";
 import {
   Box,
   Button,
@@ -22,6 +24,7 @@ import {
   Avatar,
   Tag,
   TagLabel,
+  Heading,
 } from "@chakra-ui/react";
 import katex from "katex";
 import "katex/dist/katex.min.css";
@@ -283,7 +286,7 @@ const SunEditorForRendering: React.FC<Props> = ({
 
   return (
     <div>
-      <p> My Other Contents </p>
+      <Heading fontSize="2xl"> My Notes on this Topic </Heading>
       {/* {isSharedPost:():(div)} */}
 
       {editMode && !isPostNew ? (
@@ -296,12 +299,13 @@ const SunEditorForRendering: React.FC<Props> = ({
         >
           {" "}
           <Button
+            leftIcon={<MdEditOff />}
             mt="2"
             // colorScheme="blue"
             variant="outline"
             onClick={handelCancelEdit}
           >
-            Cancel Edit
+            Disable edit
           </Button>
           <Button
             mt="2"
@@ -349,9 +353,10 @@ const SunEditorForRendering: React.FC<Props> = ({
           variant="outline"
         >
           <Button
+            leftIcon={<MdMode />}
             mt="2"
-            colorScheme="blue"
-            variant="outline"
+            // colorScheme="blue"
+            // variant="outline"
             onClick={handleEditPost}
           >
             Edit Post
@@ -360,22 +365,7 @@ const SunEditorForRendering: React.FC<Props> = ({
       ) : (
         <div></div>
       )}
-      <ButtonGroup
-        mb="4"
-        justifyContent="end"
-        size="sm"
-        isAttached
-        variant="outline"
-      >
-        <Button
-          mt="2"
-          colorScheme="blue"
-          variant="outline"
-          onClick={handleSharePost}
-        >
-          Share Post
-        </Button>
-      </ButtonGroup>
+
       <UiForSharing
         postId={postId as number}
         subheadingId={subHeadingId as number}
@@ -469,10 +459,20 @@ const UiForSharing: React.FC<sharedProps> = ({ postId, subheadingId }) => {
 
   return (
     <>
-      <Button onClick={onOpen}>Open Modal</Button>
-      <Button ml={4} ref={finalRef as React.RefObject<HTMLButtonElement>}>
+      <ButtonGroup
+        mb="4"
+        justifyContent="end"
+        size="sm"
+        isAttached
+        variant="outline"
+      >
+        <Button leftIcon={<MdShare />} onClick={onOpen}>
+          Share This Note
+        </Button>
+      </ButtonGroup>
+      {/* <Button ml={4} ref={finalRef as React.RefObject<HTMLButtonElement>}>
         Ill receive focus on close
-      </Button>
+      </Button> */}
 
       <Modal
         initialFocusRef={initialRef}
@@ -497,11 +497,11 @@ const UiForSharing: React.FC<sharedProps> = ({ postId, subheadingId }) => {
               />
               {/* <FormErrorMessage>{error}</FormErrorMessage> */}
             </FormControl>
-
+            {/* 
             <FormControl mt={4}>
               <FormLabel>Last name</FormLabel>
               <Input placeholder="Last name" />
-            </FormControl>
+            </FormControl> */}
           </ModalBody>
 
           <ModalFooter>
