@@ -1,4 +1,6 @@
 import {
+  Alert,
+  AlertIcon,
   Avatar,
   Box,
   Button,
@@ -29,6 +31,7 @@ import router, { useRouter } from "next/router";
 import React, { useEffect, useState } from "react";
 import { CurrentAppState, useAppContext } from "../../context/state";
 import LayoutWithTopAndSideNavbar from "../../layout/LayoutWithTopAndSideNavbar";
+import LayoutWithTopNavbar from "../../layout/LayoutWithTopNavbar";
 // import SideNavBar from "../../layout/sideNavBar";
 import { Profile } from "../../lib/constants";
 import { supabase } from "../../lib/supabaseClient";
@@ -135,7 +138,14 @@ const Posts: React.FC<ProfileListProps> = ({ data }) => {
     setValue(event.target.value);
     console.log("hello hello ", value);
   };
-
+  if (!supabase.auth.session()) {
+    return (
+      <Alert status="info">
+        <AlertIcon />
+        Seems your are not logged in, Please login to view content
+      </Alert>
+    );
+  }
   // if (data && data.length !== 0) {
   return (
     <>
@@ -188,9 +198,10 @@ const Posts: React.FC<ProfileListProps> = ({ data }) => {
 
         {userNote == undefined ? (
           <div>
-            <Text mb="4"fontSize="3xl">
+            <Alert status="info">
+              <AlertIcon />
               You Don&apos;t have notes on this Topic Create Notes in Editor
-            </Text>
+            </Alert>
             <SunEditorForRendering
               subHeadingId={Number(subheadingId)}
               isNew={true}
@@ -199,7 +210,9 @@ const Posts: React.FC<ProfileListProps> = ({ data }) => {
         ) : (
           ""
         )}
-        {headings && headings?.data?.length!=0 && headings!.data![0]!=null? (
+        {headings &&
+        headings?.data?.length != 0 &&
+        headings!.data![0] != null ? (
           <SunEditorForRendering
             subHeadingId={Number(subheadingId)}
             isNew={false}
@@ -294,48 +307,6 @@ const options: HTMLReactParserOptions = {
 //   { ssr: false }
 // );
 
-const handleEditPostOrCreateNewPost = (
-  post: Post,
-  context: CurrentAppState
-) => {
-  context.setPostForEdit(post);
-  context.setIsNew(false);
-  router.push({
-    pathname: "../editor",
-    // query: { postId: postId,subHeadingId:subHeadingId,isNew:isNew },
-  });
-};
-
-const postHeader = (post: Post, context: CurrentAppState) => {
-  return (
-    <Flex mb="4">
-      <Box p="4">
-        <VStack spacing="1">
-          <Avatar
-            bg="red.500"
-            name="Rajiv Kumar"
-            src="https://bit.ly/dan-abramov"
-          />
-          <Text as="cite">Rajiv kumar</Text>
-        </VStack>
-      </Box>
-      <Spacer />
-      <Center>
-        <Text as="em">Posted on 13/2/2021</Text>
-      </Center>
-      <Spacer />
-      <Center>
-        <ButtonGroup size="sm" isAttached variant="outline">
-          <Button onClick={() => handleEditPostOrCreateNewPost(post, context)}>
-            Edit
-          </Button>
-          <Button>Cancel</Button>
-        </ButtonGroup>
-      </Center>
-    </Flex>
-  );
-};
-
 // export async function getStaticPaths() {
 //   let { data, error } = await supabase.from<Subheading>("subheadings").select(
 //     `
@@ -381,9 +352,14 @@ const postHeader = (post: Post, context: CurrentAppState) => {
 //     },
 //   };
 // };
+if (!supabase.auth.session()) {
+  (Posts as PageWithLayoutType).layout = LayoutWithTopNavbar;
+} else {
+  (Posts as PageWithLayoutType).layout = LayoutWithTopAndSideNavbar;
+}
 
-(Posts as PageWithLayoutType).layout = LayoutWithTopAndSideNavbar;
 export default Posts;
+
 // pages/index.js
 
 //*****************Following example two network call made and both passed as

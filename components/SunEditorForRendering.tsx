@@ -128,6 +128,9 @@ const SunEditorForRendering: React.FC<Props> = ({ postId, isNew, subHeadingId, p
   /**
    * @type {React.MutableRefObject<SunEditor>} get type definitions for editor
    */
+  
+  
+  
   const editorRef: React.MutableRefObject<typeof SunEditor | undefined> = useRef();
   const [content, setContent] = useState("");
   const [isSubmitting, setIsSubmitting] = useState(false);
@@ -139,12 +142,18 @@ const SunEditorForRendering: React.FC<Props> = ({ postId, isNew, subHeadingId, p
   const appcontext = useAppContext();
 
   useEffect(() => {
+    console.log("value of is new is ", isNew)
+    console.log("value of is post new is ", isPostNew)
     if (isNew) {
       setEditorReadOnly(false);
       setHideToolbar(false);
       setIsPostNew(true);
     }
-  }, [isNew]);
+
+    console.log("value of is editorread only after is ", editorReadOnly)
+    console.log("value of is hidetoolbar after is ", hideToolbar)
+    console.log("value of is post new after is ", isPostNew)
+  },[editorReadOnly, hideToolbar, isNew, isPostNew]);
 
   // // When the editor's content has changed, store it in state
   const handleOnChange = (editorContent: string) => {
@@ -218,34 +227,19 @@ const SunEditorForRendering: React.FC<Props> = ({ postId, isNew, subHeadingId, p
 
   useEffect(() => {
     setContent(postContent!);
-
-    // async function fetchData() {
-    //   // You can await here
-
-    //   if (appcontext.isNewPost) {
-    //     setDefaultValue1("");
-    //   } else {
-    //     setDefaultValue1(appcontext.postForEdit!.post);
-    //   }
-    // }
-    // fetchData();
-
-    // Get underlining core object here
-    // Notice that useEffect is been used because you have to make sure the editor is rendered.
-    // console.log(editorRef.current!.editor.core)
     console.log("from use effect in editor", editorRef);
   }, [postContent]);
 
   if (isSharedPost) {
     return (
       <>
-        <Text fontSize="xl" fontWeight="bold">
+        <Text mb="4"fontSize="xl" fontWeight="bold">
           {/* Shared by{" "} */}
           {/* <Badge>{"Author"}</Badge> */}
           {/* <TagLabel>{"Author"}</TagLabel> */}
           <Tag size="lg" colorScheme="blackAlpha" borderRadius="full">
             <Avatar
-              src="https://bit.ly/broken-link"
+              src="https://bit.ly/broken-link"glo
               size="xs"
               // name="Segun Adebayo"
               ml={-1}
@@ -340,14 +334,14 @@ const SunEditorForRendering: React.FC<Props> = ({ postId, isNew, subHeadingId, p
             // variant="outline"
             onClick={handleEditPost}
           >
-            Edit Post
+            Edit Note
           </Button>
         </ButtonGroup>
       ) : (
         // <div></div>
         ""
       )}
-      {!editMode ? <UiForSharing postId={postId as number} subheadingId={subHeadingId as number} /> : ""}
+      {!editMode && !isNew ? <UiForSharing postId={postId as number} subheadingId={subHeadingId as number} /> : ""}
 
       <EditorStyle>
         <SunEditor

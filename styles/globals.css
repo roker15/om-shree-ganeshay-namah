@@ -334,7 +334,9 @@ button.primary,
   border-radius: var(--custom-border-radius);
   padding: var(--custom-spacing);
 }
-
+.css-gfh94v{
+  background: rgb(255, 255, 255) !important;
+}
 .avatar {
   border-radius: var(--custom-border-radius);
   overflow: hidden;

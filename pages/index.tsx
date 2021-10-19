@@ -48,7 +48,7 @@ const Home: React.FC<ProfileListProps> = ({ data }) => {
     return (
       <Container maxW="container.md" pt="14">
         <VStack>
-          <SlateEdit/>
+          {/* <SlateEdit/> */}
           {role !== "MODERATOR" ? null : (
             <ButtonGroup size="sm" isAttached variant="outline">
               <Button onClick={() => goToCreateHeading()}>
