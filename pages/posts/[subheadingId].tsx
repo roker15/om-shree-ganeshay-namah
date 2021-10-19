@@ -190,7 +190,7 @@ const Posts: React.FC<ProfileListProps> = ({ data }) => {
           )}
        
         </div> */}
-                <Divider mt="100" />
+                <Divider mt="100" visibility="hidden"/>
               </div>
             );
           })

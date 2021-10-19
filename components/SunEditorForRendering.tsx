@@ -25,6 +25,7 @@ import {
   Tag,
   TagLabel,
   Heading,
+  Divider,
 } from "@chakra-ui/react";
 import katex from "katex";
 import "katex/dist/katex.min.css";
@@ -274,6 +275,7 @@ const SunEditorForRendering: React.FC<Props> = ({
 
   return (
     <div>
+      <Divider  />
 
       <Heading mb="6" fontSize="2xl">
         {" "}
