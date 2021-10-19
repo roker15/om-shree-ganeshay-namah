@@ -124,36 +124,36 @@ const buttonList = [
   ["save", "template"],
 ];
 
-const SunEditorForRendering: React.FC<Props> = ({ postId, isNew, subHeadingId, postContent, isSharedPost, sharedBy }) => {
+const SunEditorForRendering: React.FC<Props> = ({
+  postId,
+  isNew,
+  subHeadingId,
+  postContent,
+  isSharedPost,
+  sharedBy,
+}) => {
   /**
    * @type {React.MutableRefObject<SunEditor>} get type definitions for editor
    */
-  
-  
-  
-  const editorRef: React.MutableRefObject<typeof SunEditor | undefined> = useRef();
+
+  const editorRef: React.MutableRefObject<typeof SunEditor | undefined> =
+    useRef();
   const [content, setContent] = useState("");
   const [isSubmitting, setIsSubmitting] = useState(false);
+  const [hideToolbar, setHideToolbar] = useState(true);
   const [editorReadOnly, setEditorReadOnly] = useState(true);
   const [editMode, setEditMode] = useState(false);
-  const [hideToolbar, setHideToolbar] = useState(true);
   const [defaultValue1, setDefaultValue1] = useState(postContent);
   const [isPostNew, setIsPostNew] = useState(false);
   const appcontext = useAppContext();
 
   useEffect(() => {
-    console.log("value of is new is ", isNew)
-    console.log("value of is post new is ", isPostNew)
     if (isNew) {
-      setEditorReadOnly(false);
-      setHideToolbar(false);
+      // setEditorReadOnly(false);
+      // setHideToolbar(false);
       setIsPostNew(true);
     }
-
-    console.log("value of is editorread only after is ", editorReadOnly)
-    console.log("value of is hidetoolbar after is ", hideToolbar)
-    console.log("value of is post new after is ", isPostNew)
-  },[editorReadOnly, hideToolbar, isNew, isPostNew]);
+  }, []);
 
   // // When the editor's content has changed, store it in state
   const handleOnChange = (editorContent: string) => {
@@ -226,6 +226,7 @@ const SunEditorForRendering: React.FC<Props> = ({ postId, isNew, subHeadingId, p
   };
 
   useEffect(() => {
+    
     setContent(postContent!);
     console.log("from use effect in editor", editorRef);
   }, [postContent]);
@@ -233,13 +234,14 @@ const SunEditorForRendering: React.FC<Props> = ({ postId, isNew, subHeadingId, p
   if (isSharedPost) {
     return (
       <>
-        <Text mb="4"fontSize="xl" fontWeight="bold">
+        <Text mb="4" fontSize="xl" fontWeight="bold">
           {/* Shared by{" "} */}
           {/* <Badge>{"Author"}</Badge> */}
           {/* <TagLabel>{"Author"}</TagLabel> */}
           <Tag size="lg" colorScheme="blackAlpha" borderRadius="full">
             <Avatar
-              src="https://bit.ly/broken-link"glo
+              src="https://bit.ly/broken-link"
+              // glo="true"
               size="xs"
               // name="Segun Adebayo"
               ml={-1}
@@ -272,14 +274,41 @@ const SunEditorForRendering: React.FC<Props> = ({ postId, isNew, subHeadingId, p
 
   return (
     <div>
+
       <Heading mb="6" fontSize="2xl">
         {" "}
         My Notes on this Topic{" "}
       </Heading>
       {/* {isSharedPost:():(div)} */}
 
+      {isPostNew && hideToolbar?(<ButtonGroup
+          mb="4"
+          justifyContent="end"
+          size="sm"
+          isAttached
+          variant="outline"
+        >
+         
+          <Button
+            leftIcon={<MdDoneAll />}
+            mt="2"
+            isLoading={isSubmitting}
+            // colorScheme="blue"
+            variant="outline"
+            onClick={()=>{setHideToolbar(false);setEditorReadOnly(false)}}
+          >
+            Activate Editor
+          </Button>
+        </ButtonGroup>):("")}
+
       {editMode && !isPostNew ? (
-        <ButtonGroup mb="4" justifyContent="end" size="sm" isAttached variant="outline">
+        <ButtonGroup
+          mb="4"
+          justifyContent="end"
+          size="sm"
+          isAttached
+          variant="outline"
+        >
           {" "}
           <Button
             leftIcon={<MdEditOff />}
@@ -309,13 +338,19 @@ const SunEditorForRendering: React.FC<Props> = ({ postId, isNew, subHeadingId, p
       {}
 
       {isPostNew ? (
-        <ButtonGroup mb="4" justifyContent="end" size="sm" isAttached variant="outline">
+        <ButtonGroup
+          mb="4"
+          justifyContent="end"
+          size="sm"
+          isAttached
+          variant="outline"
+        >
           <Button
-            leftIcon={<MdSave/>}
+            leftIcon={<MdSave />}
             mt="2"
             // colorScheme="blue"
             // variant="outline"
-            isDisabled={content==undefined||content.length<20}
+            isDisabled={content == undefined || content.length < 20}
             onClick={handleCreateNewPost}
           >
             Save This Notes
@@ -326,7 +361,13 @@ const SunEditorForRendering: React.FC<Props> = ({ postId, isNew, subHeadingId, p
         // <div></div>
       )}
       {!editMode && !isPostNew ? (
-        <ButtonGroup mb="4" justifyContent="end" size="sm" isAttached variant="outline">
+        <ButtonGroup
+          mb="4"
+          justifyContent="end"
+          size="sm"
+          isAttached
+          variant="outline"
+        >
           <Button
             leftIcon={<MdMode />}
             mt="2"
@@ -341,13 +382,20 @@ const SunEditorForRendering: React.FC<Props> = ({ postId, isNew, subHeadingId, p
         // <div></div>
         ""
       )}
-      {!editMode && !isNew ? <UiForSharing postId={postId as number} subheadingId={subHeadingId as number} /> : ""}
+      {!editMode && !isNew ? (
+        <UiForSharing
+          postId={postId as number}
+          subheadingId={subHeadingId as number}
+        />
+      ) : (
+        ""
+      )}
 
       <EditorStyle>
         <SunEditor
+          hideToolbar={hideToolbar}
           setContents={defaultValue1}
           onChange={handleOnChange}
-          hideToolbar={hideToolbar}
           readOnly={editorReadOnly}
           // disable={true}
 
@@ -385,11 +433,18 @@ const UiForSharing: React.FC<sharedProps> = ({ postId, subheadingId }) => {
   const [message, setMessage] = React.useState("");
   // const [error, setError] = React.useState(null);
 
-  const initialRef = useRef<HTMLInputElement | HTMLButtonElement | HTMLLabelElement>(null);
-  const finalRef = useRef<HTMLInputElement | HTMLButtonElement | HTMLLabelElement>(null);
+  const initialRef = useRef<
+    HTMLInputElement | HTMLButtonElement | HTMLLabelElement
+  >(null);
+  const finalRef = useRef<
+    HTMLInputElement | HTMLButtonElement | HTMLLabelElement
+  >(null);
   const handleSharePost = async () => {
     console.log("handle share clicked");
-    const { data: email, error } = await supabase.from<Profile>("profiles").select("id,email").eq("email", inputEmail);
+    const { data: email, error } = await supabase
+      .from<Profile>("profiles")
+      .select("id,email")
+      .eq("email", inputEmail);
     // .single();
     if (error) {
       console.log("error hai ");
@@ -400,11 +455,13 @@ const UiForSharing: React.FC<sharedProps> = ({ postId, subheadingId }) => {
       setMessage("This email is not valid");
     } else {
       setMessage("");
-      const { data: sharedData, error } = await supabase.from<SharedPost>("sharedpost").insert({
-        post_id: postId,
-        shared_with: email![0].id,
-        subheading_id: subheadingId,
-      });
+      const { data: sharedData, error } = await supabase
+        .from<SharedPost>("sharedpost")
+        .insert({
+          post_id: postId,
+          shared_with: email![0].id,
+          subheading_id: subheadingId,
+        });
       if (error) {
         setMessage(error.message);
       }
@@ -422,7 +479,13 @@ const UiForSharing: React.FC<sharedProps> = ({ postId, subheadingId }) => {
 
   return (
     <>
-      <ButtonGroup mb="4" justifyContent="end" size="sm" isAttached variant="outline">
+      <ButtonGroup
+        mb="4"
+        justifyContent="end"
+        size="sm"
+        isAttached
+        variant="outline"
+      >
         <Button leftIcon={<MdShare />} onClick={onOpen}>
           Share This Note
         </Button>
@@ -431,7 +494,12 @@ const UiForSharing: React.FC<sharedProps> = ({ postId, subheadingId }) => {
         Ill receive focus on close
       </Button> */}
 
-      <Modal initialFocusRef={initialRef} finalFocusRef={finalRef} isOpen={isOpen} onClose={onClose}>
+      <Modal
+        initialFocusRef={initialRef}
+        finalFocusRef={finalRef}
+        isOpen={isOpen}
+        onClose={onClose}
+      >
         <ModalOverlay />
         <ModalContent>
           <ModalHeader>Share your post</ModalHeader>
