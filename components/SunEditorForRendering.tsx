@@ -509,7 +509,7 @@ const UiForSharing: React.FC<sharedProps> = ({ postId, subheadingId }) => {
           <ModalCloseButton />
           <ModalBody pb={6}>
             <FormControl>
-              <FormLabel>First name</FormLabel>
+              <FormLabel>Email of your friend</FormLabel>
               <Input
                 name="email"
                 value={inputEmail}
@@ -527,8 +527,8 @@ const UiForSharing: React.FC<sharedProps> = ({ postId, subheadingId }) => {
           </ModalBody>
 
           <ModalFooter>
-            <Button onClick={handleSharePost} colorScheme="blue" mr={3}>
-              Save
+            <Button leftIcon={<MdShare/>} onClick={handleSharePost} colorScheme="blue" mr={3}>
+              Share
             </Button>
             <Button onClick={onClose}>Cancel</Button>
           </ModalFooter>
