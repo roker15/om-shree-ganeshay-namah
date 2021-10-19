@@ -384,7 +384,7 @@ const SunEditorForRendering: React.FC<Props> = ({
         // <div></div>
         ""
       )}
-      {!editMode && !isNew ? (
+      {!editMode && !isPostNew ? (
         <UiForSharing
           postId={postId as number}
           subheadingId={subHeadingId as number}
