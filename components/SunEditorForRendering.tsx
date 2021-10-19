@@ -2,7 +2,7 @@
 
 // Import katex
 import { EmailIcon } from "@chakra-ui/icons";
-import { MdEditNote, MdEditOff, MdMode, MdShare } from "react-icons/md";
+import { MdDoneAll, MdEditOff, MdMode, MdSave, MdShare } from "react-icons/md";
 import {
   Box,
   Button,
@@ -63,6 +63,7 @@ const EditorStyle = styled.div`
   }
 
   .sun-editor {
+    margin-top: -18px !important;
     // border: 1px solid blue;
   }
 
@@ -123,19 +124,11 @@ const buttonList = [
   ["save", "template"],
 ];
 
-const SunEditorForRendering: React.FC<Props> = ({
-  postId,
-  isNew,
-  subHeadingId,
-  postContent,
-  isSharedPost,
-  sharedBy,
-}) => {
+const SunEditorForRendering: React.FC<Props> = ({ postId, isNew, subHeadingId, postContent, isSharedPost, sharedBy }) => {
   /**
    * @type {React.MutableRefObject<SunEditor>} get type definitions for editor
    */
-  const editorRef: React.MutableRefObject<typeof SunEditor | undefined> =
-    useRef();
+  const editorRef: React.MutableRefObject<typeof SunEditor | undefined> = useRef();
   const [content, setContent] = useState("");
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [editorReadOnly, setEditorReadOnly] = useState(true);
@@ -147,7 +140,6 @@ const SunEditorForRendering: React.FC<Props> = ({
 
   useEffect(() => {
     if (isNew) {
-      console.log("use effect is being calledddd");
       setEditorReadOnly(false);
       setHideToolbar(false);
       setIsPostNew(true);
@@ -286,17 +278,14 @@ const SunEditorForRendering: React.FC<Props> = ({
 
   return (
     <div>
-      <Heading fontSize="2xl"> My Notes on this Topic </Heading>
+      <Heading mb="6" fontSize="2xl">
+        {" "}
+        My Notes on this Topic{" "}
+      </Heading>
       {/* {isSharedPost:():(div)} */}
 
       {editMode && !isPostNew ? (
-        <ButtonGroup
-          mb="4"
-          justifyContent="end"
-          size="sm"
-          isAttached
-          variant="outline"
-        >
+        <ButtonGroup mb="4" justifyContent="end" size="sm" isAttached variant="outline">
           {" "}
           <Button
             leftIcon={<MdEditOff />}
@@ -305,9 +294,10 @@ const SunEditorForRendering: React.FC<Props> = ({
             variant="outline"
             onClick={handelCancelEdit}
           >
-            Disable edit
+            Disable edit Mode
           </Button>
           <Button
+            leftIcon={<MdDoneAll />}
             mt="2"
             isLoading={isSubmitting}
             // colorScheme="blue"
@@ -318,40 +308,31 @@ const SunEditorForRendering: React.FC<Props> = ({
           </Button>
         </ButtonGroup>
       ) : (
-        <div></div>
+        ""
+        // <div></div>
       )}
 
       {}
 
       {isPostNew ? (
-        <ButtonGroup
-          mb="4"
-          justifyContent="end"
-          size="sm"
-          isAttached
-          variant="outline"
-        >
+        <ButtonGroup mb="4" justifyContent="end" size="sm" isAttached variant="outline">
           <Button
+            leftIcon={<MdSave/>}
             mt="2"
-            colorScheme="blue"
-            variant="outline"
-            isDisabled={true} //{!content||content==""||content==undefined||content==null}
+            // colorScheme="blue"
+            // variant="outline"
+            isDisabled={content==undefined||content.length<20}
             onClick={handleCreateNewPost}
           >
-            Save Post
+            Save This Notes
           </Button>
         </ButtonGroup>
       ) : (
-        <div></div>
+        ""
+        // <div></div>
       )}
       {!editMode && !isPostNew ? (
-        <ButtonGroup
-          mb="4"
-          justifyContent="end"
-          size="sm"
-          isAttached
-          variant="outline"
-        >
+        <ButtonGroup mb="4" justifyContent="end" size="sm" isAttached variant="outline">
           <Button
             leftIcon={<MdMode />}
             mt="2"
@@ -363,13 +344,10 @@ const SunEditorForRendering: React.FC<Props> = ({
           </Button>
         </ButtonGroup>
       ) : (
-        <div></div>
+        // <div></div>
+        ""
       )}
-
-      <UiForSharing
-        postId={postId as number}
-        subheadingId={subHeadingId as number}
-      />
+      {!editMode ? <UiForSharing postId={postId as number} subheadingId={subHeadingId as number} /> : ""}
 
       <EditorStyle>
         <SunEditor
@@ -413,18 +391,11 @@ const UiForSharing: React.FC<sharedProps> = ({ postId, subheadingId }) => {
   const [message, setMessage] = React.useState("");
   // const [error, setError] = React.useState(null);
 
-  const initialRef = useRef<
-    HTMLInputElement | HTMLButtonElement | HTMLLabelElement
-  >(null);
-  const finalRef = useRef<
-    HTMLInputElement | HTMLButtonElement | HTMLLabelElement
-  >(null);
+  const initialRef = useRef<HTMLInputElement | HTMLButtonElement | HTMLLabelElement>(null);
+  const finalRef = useRef<HTMLInputElement | HTMLButtonElement | HTMLLabelElement>(null);
   const handleSharePost = async () => {
     console.log("handle share clicked");
-    const { data: email, error } = await supabase
-      .from<Profile>("profiles")
-      .select("id,email")
-      .eq("email", inputEmail);
+    const { data: email, error } = await supabase.from<Profile>("profiles").select("id,email").eq("email", inputEmail);
     // .single();
     if (error) {
       console.log("error hai ");
@@ -435,13 +406,11 @@ const UiForSharing: React.FC<sharedProps> = ({ postId, subheadingId }) => {
       setMessage("This email is not valid");
     } else {
       setMessage("");
-      const { data: sharedData, error } = await supabase
-        .from<SharedPost>("sharedpost")
-        .insert({
-          post_id: postId,
-          shared_with: email![0].id,
-          subheading_id: subheadingId,
-        });
+      const { data: sharedData, error } = await supabase.from<SharedPost>("sharedpost").insert({
+        post_id: postId,
+        shared_with: email![0].id,
+        subheading_id: subheadingId,
+      });
       if (error) {
         setMessage(error.message);
       }
@@ -459,13 +428,7 @@ const UiForSharing: React.FC<sharedProps> = ({ postId, subheadingId }) => {
 
   return (
     <>
-      <ButtonGroup
-        mb="4"
-        justifyContent="end"
-        size="sm"
-        isAttached
-        variant="outline"
-      >
+      <ButtonGroup mb="4" justifyContent="end" size="sm" isAttached variant="outline">
         <Button leftIcon={<MdShare />} onClick={onOpen}>
           Share This Note
         </Button>
@@ -474,12 +437,7 @@ const UiForSharing: React.FC<sharedProps> = ({ postId, subheadingId }) => {
         Ill receive focus on close
       </Button> */}
 
-      <Modal
-        initialFocusRef={initialRef}
-        finalFocusRef={finalRef}
-        isOpen={isOpen}
-        onClose={onClose}
-      >
+      <Modal initialFocusRef={initialRef} finalFocusRef={finalRef} isOpen={isOpen} onClose={onClose}>
         <ModalOverlay />
         <ModalContent>
           <ModalHeader>Share your post</ModalHeader>

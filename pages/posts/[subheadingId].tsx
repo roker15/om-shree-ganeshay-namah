@@ -188,8 +188,8 @@ const Posts: React.FC<ProfileListProps> = ({ data }) => {
 
         {userNote == undefined ? (
           <div>
-            <Text fontSize="3xl">
-              You Dont have notes on this Topic Create Notes on this Topic
+            <Text mb="4"fontSize="3xl">
+              You Don&apos;t have notes on this Topic Create Notes in Editor
             </Text>
             <SunEditorForRendering
               subHeadingId={Number(subheadingId)}
