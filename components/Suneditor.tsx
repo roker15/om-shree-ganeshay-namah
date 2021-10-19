@@ -101,7 +101,7 @@ const EditorComponent: React.FC<Props> = ({ postId, isNew, subHeadingId }) => {
       if (appcontext.isNewPost) {
         setDefaultValue1("");
       } else {
-        setDefaultValue1(appcontext.postForEdit!.post);
+        setDefaultValue1(appcontext.postForEdit!.post as string);
       }
     }
     fetchData();
