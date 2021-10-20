@@ -63,7 +63,7 @@ export default function TopAndSideNavbar({
       await supabase
         .from<Subheading>("subheadings")
         .select("*")
-        .eq("main_topic_id", currentHeadingId),
+        .eq("main_topic_id", currentHeadingId)
     // { refreshInterval: 1000 }
   );
 
@@ -133,31 +133,44 @@ const SidebarContent = ({ onClose, ...rest }: SidebarProps) => {
       w={{ base: "full", md: "80" }}
       pos="fixed"
       h="full"
+      pb="20"//added by me
       overflowY="scroll"
       {...rest}
     >
-      <Flex h="20" alignItems="center" mx="8" justifyContent="space-between">
-        <Text fontSize="2xl" fontFamily="monospace" fontWeight="bold">
-          logo
+      <Flex h="20" alignItems="center" mb="8" mx="8" justifyContent="space-between">
+        <Text as="u" color="darkviolet" fontSize="normal"  fontWeight="bold">
+          {postContext.currentPapername}
         </Text>
         <CloseButton display={{ base: "flex", md: "none" }} onClick={onClose} />
       </Flex>
 
       {LinkItems && LinkItems.length !== 0 ? (
         LinkItems.map((subheading) => (
-          <li key={subheading.id}>
-            <Link
-              onClick={() => {
-                // postContext.updateCurrentSubheadingId(value.id);
-                postContext.updateCurrentSubheadingId(subheading.id);
-                postContext.updateCurrentSubheading(subheading.topic as string);
-              }}
+          <Text
+            // bg="ghostwhite"
+            lineHeight="shorter"
+            fontWeight="bold"
+            fontSize="medium"
+            fontStyle=""
+            key={subheading.id}
+            // textShadow="1px 0px 1px " 
+            ml="6"
+            mt="4"
+            mr="2"
+            
+            pl="2"
+            onClick={() => {
+              // postContext.updateCurrentSubheadingId(value.id);
+              postContext.updateCurrentSubheadingId(subheading.id);
+              postContext.updateCurrentSubheading(subheading.topic as string);
+            }}
 
-              // href={`/posts/${encodeURIComponent(subheading.id)}`}
-            >
-              <a>{subheading.topic}</a>
-            </Link>
-          </li>
+            // href={`/posts/${encodeURIComponent(subheading.id)}`}
+          >
+            <Link textDecoration="pink">{subheading.topic}</Link>
+
+            {/* </Button> */}
+          </Text>
         ))
       ) : (
         <div>no data</div>

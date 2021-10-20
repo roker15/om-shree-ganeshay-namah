@@ -19,7 +19,7 @@ import LayoutWithTopNavbarWithSearchBox from "../../layout/LayoutWithTopNavbarWi
 // import SideNavBar from "../../layout/sideNavBar";
 import { Profile } from "../../lib/constants";
 import { supabase } from "../../lib/supabaseClient";
-import { Headings, Subheading } from "../../types/myTypes";
+import { Headings, Papers, Subheading } from "../../types/myTypes";
 import PageWithLayoutType from "../../types/pageWithLayout";
 
 type x = {
@@ -75,11 +75,23 @@ const Syllabus: React.FC<ProfileListProps> = ({ array }) => {
                               onClick={() => {
                                 postContext.updateCurrentSubheadingId(value.id);
                                 postContext.updateCurrentHeadingId(
-                                  value.main_topic_id as number
+                                  (value.main_topic_id as Headings).id
                                 );
                                 postContext.updateCurrentSubheading(
                                   value.topic as string
                                 );
+                                postContext.updateCurrentPapername(
+                                  // (
+                                  //   (value.main_topic_id as Headings)
+                                  //     .paper_id as Papers
+                                  // ).paper_name as string
+
+                                  
+                                    (value.main_topic_id as Headings)
+                                      .main_topic as string
+                                  
+                                );
+                                console.log("paper is ");
                               }}
                               disable="false"
                               color="telegram.600"
@@ -149,7 +161,15 @@ export const getStaticProps = async ({ params }: any) => {
   for (let index = 0; index < data!.length; index++) {
     const subheading = await supabase
       .from<Subheading>("subheadings")
-      .select(` id,topic,sequence,main_topic_id`)
+      .select(
+        ` id,topic,sequence,
+      main_topic_id(
+        id,main_topic,
+        paper_id(
+paper_name
+        )
+        )`
+      )
       .eq("main_topic_id", data![index].id);
     // subheadings.push(subheading.data!);
     subheadingsMap.set(data![index], subheading.data);
