@@ -139,7 +139,7 @@ const SidebarContent = ({ onClose, ...rest }: SidebarProps) => {
     >
       <Flex h="20" alignItems="center" mb="8" mx="8" justifyContent="space-between">
         <Text as="u" color="darkviolet" fontSize="normal"  fontWeight="bold">
-          {postContext.currentPapername}
+          {postContext.currentHeadingname}
         </Text>
         <CloseButton display={{ base: "flex", md: "none" }} onClick={onClose} />
       </Flex>
@@ -198,6 +198,7 @@ interface MobileProps extends FlexProps {
 
 const MobileNav = ({ onOpen, ...rest }: MobileProps) => {
   const { signIn, signUp, signOut } = useAuthContext();
+  const postContext = usePostContext();
   return (
     <Flex
       // ml={{ base: 10, md: 60 }}
@@ -240,10 +241,11 @@ const MobileNav = ({ onOpen, ...rest }: MobileProps) => {
         align="left"
         display={{ base: "flex", md: "flex-start" }}
         fontSize="2xl"
-        fontFamily="monospace"
+        // fontFamily="monospace"
         fontWeight="bold"
+        color="gray.600"
       >
-        Welcome to Qlook
+        {postContext.currentPapername}
       </Text>
 
       <HStack spacing={{ base: "0", md: "6" }}>

@@ -12,11 +12,13 @@ export interface CurrentAppState {
   currentSubheadingId: number | undefined;
   currentSubheading: string | undefined;
   currentPapername: string | undefined;
+  currentHeadingname: string | undefined;
 
   updateCurrentHeadingId: (id: number) => void;
   updateCurrentSubheadingId: (id: number) => void;
   updateCurrentSubheading: (subheading: string) => void;
   updateCurrentPapername: (papername: string) => void;
+  updateCurrentHeadingname: (headingname: string) => void;
 
   // subHeadingIdForNewPost: number|undefined;
   // setSubheadingIdForNewPost: (id: number) => void;
@@ -32,6 +34,8 @@ const PostContext = createContext<CurrentAppState>({
   updateCurrentSubheading: () => {},
   currentPapername: undefined,
   updateCurrentPapername: () => {},
+  currentHeadingname: undefined,
+  updateCurrentHeadingname: () => {},
 });
 
 export function PostContextWrapper({ children }: { children: ReactNode }) {
@@ -47,6 +51,9 @@ export function PostContextWrapper({ children }: { children: ReactNode }) {
   const [currentPapername, setCurrentPapername] = useState<string | undefined>(
     undefined
   );
+  const [currentHeadingname, setCurrentHeadingname] = useState<
+    string | undefined
+  >(undefined);
 
   // useEffect(() => {
   //   if (currentSubheadingId) {
@@ -82,6 +89,9 @@ export function PostContextWrapper({ children }: { children: ReactNode }) {
   function updateCurrentPapername(papername: string) {
     setCurrentPapername(papername);
   }
+  function updateCurrentHeadingname(heading: string) {
+    setCurrentHeadingname(heading);
+  }
 
   let sharedState: CurrentAppState = {
     /* whatever you want */
@@ -91,8 +101,11 @@ export function PostContextWrapper({ children }: { children: ReactNode }) {
     updateCurrentSubheadingId: updateCurrentSubheadingId,
     currentSubheading: currentSubheading,
     updateCurrentSubheading: updateCurrentSubheading,
-    currentPapername:currentPapername,
-    updateCurrentPapername:updateCurrentPapername
+    currentPapername: currentPapername,
+    updateCurrentPapername: updateCurrentPapername,
+    currentHeadingname:currentHeadingname,
+    updateCurrentHeadingname:updateCurrentHeadingname
+
   };
 
   return (

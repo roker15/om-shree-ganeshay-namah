@@ -81,16 +81,16 @@ const Syllabus: React.FC<ProfileListProps> = ({ array }) => {
                                   value.topic as string
                                 );
                                 postContext.updateCurrentPapername(
-                                  // (
-                                  //   (value.main_topic_id as Headings)
-                                  //     .paper_id as Papers
-                                  // ).paper_name as string
-
-                                  
+                                  (
                                     (value.main_topic_id as Headings)
-                                      .main_topic as string
-                                  
+                                      .paper_id as Papers
+                                  ).paper_name as string
                                 );
+                                postContext.updateCurrentHeadingname(
+                                  (value.main_topic_id as Headings)
+                                    .main_topic as string
+                                );
+
                                 console.log("paper is ");
                               }}
                               disable="false"
