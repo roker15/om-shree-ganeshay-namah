@@ -70,10 +70,6 @@ export default function TopAndSideNavbar({ children }: { children: ReactNode }) 
   console.log("current heading is ", currentHeadingId);
 
   const { data, error } = useSWR(
-<<<<<<< HEAD
-    ["/headingId", postHeadingId],
-    async () => await supabase.from<Subheading>("subheadings").select("*").eq("main_topic_id", postHeadingId)
-=======
     currentHeadingId == undefined ? null : ["/headingId", currentHeadingId],
     async () =>
       await supabase
@@ -81,7 +77,6 @@ export default function TopAndSideNavbar({ children }: { children: ReactNode }) 
         .select("*")
         .eq("main_topic_id", currentHeadingId)
     // { refreshInterval: 1000 }
->>>>>>> 8db9bb0f4a8dcbf8cebff6eb99133c93aff2eb13
   );
 
   // return <h1>{data.title}</h1>;
@@ -160,14 +155,6 @@ const SidebarContent = ({ onClose, ...rest }: SidebarProps) => {
 
       {LinkItems && LinkItems.length !== 0 ? (
         LinkItems.map((subheading) => (
-<<<<<<< HEAD
-          <Text fontSize="17px" color="blackAlpha.700" fontWeight="semibold" mt="2" p="2" key={subheading.id}>
-           <RedLink>
-            <Link href={`/posts/${encodeURIComponent(subheading.id)}`}>
-              <a>{subheading.topic}</a>
-            </Link>
-            </RedLink>
-=======
           <Text
             // bg="ghostwhite"
             lineHeight="shorter"
@@ -192,7 +179,6 @@ const SidebarContent = ({ onClose, ...rest }: SidebarProps) => {
             <Link textDecoration="pink">{subheading.topic}</Link>
 
             {/* </Button> */}
->>>>>>> 8db9bb0f4a8dcbf8cebff6eb99133c93aff2eb13
           </Text>
         ))
       ) : (

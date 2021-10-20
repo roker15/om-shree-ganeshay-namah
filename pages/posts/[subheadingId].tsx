@@ -194,14 +194,10 @@ const Posts: React.FC<ProfileListProps> = ({ data }) => {
               <AlertIcon />
               You Don&apos;t have notes on this Topic Create Notes in Editor
             </Alert>
-<<<<<<< HEAD
-            <SunEditorForRendering subHeadingId={Number(subheadingId)} isNew={true} />
-=======
             <SunEditorForRendering
               subHeadingId={currentSubheadingId as number}
               isNew={true}
             />
->>>>>>> 8db9bb0f4a8dcbf8cebff6eb99133c93aff2eb13
           </div>
         ) : (
           ""
