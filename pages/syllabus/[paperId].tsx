@@ -13,6 +13,7 @@ import { AuthSession } from "@supabase/supabase-js";
 import NextLink from "next/link";
 import React, { useState } from "react";
 import { useAuthContext } from "../../context/Authcontext";
+import { usePostContext } from "../../context/PostContext";
 import { useAppContext } from "../../context/state";
 import LayoutWithTopNavbarWithSearchBox from "../../layout/LayoutWithTopNavbarWithSearchBox";
 // import SideNavBar from "../../layout/sideNavBar";
@@ -36,6 +37,7 @@ const Syllabus: React.FC<ProfileListProps> = ({ array }) => {
   // const [data, setProfiles] = useState<Profile[]>([]);
   const shareContext = useAppContext();
   const authcontext = useAuthContext();
+  const postContext = usePostContext();
 
   return (
     <div className="container" style={{ padding: "50px 0 100px 0" }}>
@@ -65,16 +67,26 @@ const Syllabus: React.FC<ProfileListProps> = ({ array }) => {
                       .value!.sort((a, b) => a.sequence! - b.sequence!)
                       .map((value) => (
                         <Text key={value.id}>
-
-                        <NextLink
-                          
-                          href={`/posts/${encodeURIComponent(value.id)}`}
-                          passHref
-                        >
-                          <Link disable="true" color="telegram.600">
-                            {value.topic}
-                          </Link>
-                        </NextLink>
+                          <NextLink
+                            href={`/posts/${encodeURIComponent(value.id)}`}
+                            passHref
+                          >
+                            <Link
+                              onClick={() => {
+                                postContext.updateCurrentSubheadingId(value.id);
+                                postContext.updateCurrentHeadingId(
+                                  value.main_topic_id as number
+                                );
+                                postContext.updateCurrentSubheading(
+                                  value.topic as string
+                                );
+                              }}
+                              disable="false"
+                              color="telegram.600"
+                            >
+                              {value.topic}
+                            </Link>
+                          </NextLink>
                         </Text>
 
                         // return
@@ -137,7 +149,7 @@ export const getStaticProps = async ({ params }: any) => {
   for (let index = 0; index < data!.length; index++) {
     const subheading = await supabase
       .from<Subheading>("subheadings")
-      .select(` id,topic,sequence`)
+      .select(` id,topic,sequence,main_topic_id`)
       .eq("main_topic_id", data![index].id);
     // subheadings.push(subheading.data!);
     subheadingsMap.set(data![index], subheading.data);

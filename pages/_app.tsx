@@ -6,6 +6,7 @@ import { AppContextWrapper } from "../context/state";
 import { AuthProvider } from "../context/Authcontext";
 import Head from "next/head";
 import Script from 'next/script'
+import { PostContextWrapper } from "../context/PostContext";
 //this import is for react page editor
 // import '@react-page/editor/lib/index.css';
 
@@ -45,9 +46,11 @@ function MyApp({ Component, pageProps }: AppLayoutProps) {
       <AppContextWrapper>
         <ChakraProvider theme={theme}>
           <AuthProvider>
+          <PostContextWrapper>
             <Layout>
               <Component {...pageProps} />
             </Layout>
+            </PostContextWrapper>
           </AuthProvider>
         </ChakraProvider>
       </AppContextWrapper>

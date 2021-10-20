@@ -41,6 +41,7 @@ import Head from "next/head";
 import Script from "next/script";
 import SunEditorForRendering from "../../components/SunEditorForRendering";
 import useSWR from "swr";
+import { usePostContext } from "../../context/PostContext";
 
 type ProfileListProps = {
   data: Post[];
@@ -54,14 +55,15 @@ const Posts: React.FC<ProfileListProps> = ({ data }) => {
   // const [data, setProfiles] = useState<Profile[]>([]);
   const appContext = useAppContext();
   const router = useRouter();
-  const {
-    query: { subheadingId },
-  } = router;
+  const { currentSubheadingId,currentSubheading } = usePostContext();
+  // const {
+  //   query: { currentSubheadingId }
+  // } = router;
 
   // let isSubscribed = true
 
   const { data: sharedPost } = useSWR(
-    `/sharedPost/${subheadingId}`,
+    `/sharedPost/${currentSubheadingId}`,
     async () =>
       await supabase
         .from<SharedPost>("sharedpost")
@@ -82,13 +84,13 @@ const Posts: React.FC<ProfileListProps> = ({ data }) => {
     )
     `
         )
-        .eq("subheading_id", subheadingId as string)
+        .eq("subheading_id", currentSubheadingId as number)
         .eq("shared_with", supabase.auth.user()?.id as string),
     { refreshInterval: 1000 }
   );
 
   const { data: headings } = useSWR(
-    mounted ? `/upsc/${subheadingId}/ss` : null,
+    mounted ? `/upsc/${currentSubheadingId}/ss` : null,
     async () =>
       await supabase
         .from<Post>("posts")
@@ -105,7 +107,7 @@ const Posts: React.FC<ProfileListProps> = ({ data }) => {
     )
     `
         )
-        .eq("subheading_id", subheadingId as string)
+        .eq("subheading_id", currentSubheadingId as number)
         .eq("created_by", supabase.auth.user()?.id as string)
     // { refreshInterval: 1000 }
   );
@@ -149,7 +151,7 @@ const Posts: React.FC<ProfileListProps> = ({ data }) => {
   // if (data && data.length !== 0) {
   return (
     <>
-      <h1>Subheading id is {subheadingId}</h1>
+      <h1>{currentSubheading}</h1>
 
       <div className="container" style={{ padding: "50px 0 50px 0" }}>
         {sharedPost?.data?.length == 0 ? (
@@ -190,7 +192,7 @@ const Posts: React.FC<ProfileListProps> = ({ data }) => {
           )}
        
         </div> */}
-                <Divider mt="100" visibility="hidden"/>
+                <Divider mt="100" visibility="hidden" />
               </div>
             );
           })
@@ -203,7 +205,7 @@ const Posts: React.FC<ProfileListProps> = ({ data }) => {
               You Don&apos;t have notes on this Topic Create Notes in Editor
             </Alert>
             <SunEditorForRendering
-              subHeadingId={Number(subheadingId)}
+              subHeadingId={currentSubheadingId as number}
               isNew={true}
             />
           </div>
@@ -214,7 +216,7 @@ const Posts: React.FC<ProfileListProps> = ({ data }) => {
         headings?.data?.length != 0 &&
         headings!.data![0] != null ? (
           <SunEditorForRendering
-            subHeadingId={Number(subheadingId)}
+            subHeadingId={currentSubheadingId}
             isNew={false}
             postId={headings.data![0].id}
             postContent={headings.data![0].post}
@@ -315,7 +317,7 @@ const options: HTMLReactParserOptions = {
 //   );
 //   // Get the paths we want to pre-render based on posts
 //   const paths = data!.map((post) => ({
-//     params: { subheadingId: post.id.toString() },
+//     params: { currentSubheadingId: post.id.toString() },
 //   }));
 
 //   return {
@@ -325,7 +327,7 @@ const options: HTMLReactParserOptions = {
 //   };
 // }
 // export const getStaticProps = async ({ params }: any) => {
-//   console.log(`Building slug: ${params.subheadingId}`);
+//   console.log(`Building slug: ${params.currentSubheadingId}`);
 //   // Make a request
 //   let { data, error } = await supabase
 //     .from<Post>("posts")
@@ -342,10 +344,10 @@ const options: HTMLReactParserOptions = {
 //   )
 // `
 //     )
-//     .eq("subheading_id", params.subheadingId);
+//     .eq("subheading_id", params.currentSubheadingId);
 
 //   // const res = await fetch("https://.../../data");
-//   console.log("data is inside subheadingId ", data);
+//   console.log("data is inside currentSubheadingId ", data);
 //   return {
 //     props: {
 //       data,

@@ -29,6 +29,7 @@ import { FaGoogle } from "react-icons/fa";
 import { FiBell, FiChevronDown } from "react-icons/fi";
 import useSWR from "swr";
 import { useAuthContext } from "../context/Authcontext";
+import { usePostContext } from "../context/PostContext";
 import { useAppContext } from "../context/state";
 import { supabase } from "../lib/supabaseClient";
 import { Subheading } from "../types/myTypes";
@@ -53,14 +54,17 @@ export default function TopAndSideNavbar({
   // setSubheading(shareContext.postHeadingId);
   //**************************useSWR******************************************888 */
   // `data` will always be available as it's in `fallback`.
+  const { currentHeadingId, updateCurrentHeadingId } = usePostContext();
+  console.log("current heading is ", currentHeadingId);
 
   const { data, error } = useSWR(
-    ["/headingId", postHeadingId],
+    currentHeadingId == undefined ? null : ["/headingId", currentHeadingId],
     async () =>
       await supabase
         .from<Subheading>("subheadings")
         .select("*")
-        .eq("main_topic_id", postHeadingId)
+        .eq("main_topic_id", currentHeadingId),
+    // { refreshInterval: 1000 }
   );
 
   // return <h1>{data.title}</h1>;
@@ -75,6 +79,7 @@ export default function TopAndSideNavbar({
   if (data.data && data.data.length !== 0) {
     data.data!.map((x) => {
       LinkItems.push(x);
+      console.log("subheadings are ", x);
     });
   }
 
@@ -118,7 +123,7 @@ interface SidebarProps extends BoxProps {
 }
 
 const SidebarContent = ({ onClose, ...rest }: SidebarProps) => {
-  const shareContext = useAppContext();
+  const postContext = usePostContext();
   return (
     <Box
       transition="3s ease"
@@ -141,7 +146,15 @@ const SidebarContent = ({ onClose, ...rest }: SidebarProps) => {
       {LinkItems && LinkItems.length !== 0 ? (
         LinkItems.map((subheading) => (
           <li key={subheading.id}>
-            <Link href={`/posts/${encodeURIComponent(subheading.id)}`}>
+            <Link
+              onClick={() => {
+                // postContext.updateCurrentSubheadingId(value.id);
+                postContext.updateCurrentSubheadingId(subheading.id);
+                postContext.updateCurrentSubheading(subheading.topic as string);
+              }}
+
+              // href={`/posts/${encodeURIComponent(subheading.id)}`}
+            >
               <a>{subheading.topic}</a>
             </Link>
           </li>
