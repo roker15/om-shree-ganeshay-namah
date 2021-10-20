@@ -32,6 +32,7 @@ import { FiBell, FiChevronDown } from "react-icons/fi";
 import styled from "styled-components";
 import useSWR from "swr";
 import { useAuthContext } from "../context/Authcontext";
+import { usePostContext } from "../context/PostContext";
 import { useAppContext } from "../context/state";
 import { supabase } from "../lib/supabaseClient";
 import { Subheading } from "../types/myTypes";
@@ -65,10 +66,22 @@ export default function TopAndSideNavbar({ children }: { children: ReactNode }) 
   // setSubheading(shareContext.postHeadingId);
   //**************************useSWR******************************************888 */
   // `data` will always be available as it's in `fallback`.
+  const { currentHeadingId, updateCurrentHeadingId } = usePostContext();
+  console.log("current heading is ", currentHeadingId);
 
   const { data, error } = useSWR(
+<<<<<<< HEAD
     ["/headingId", postHeadingId],
     async () => await supabase.from<Subheading>("subheadings").select("*").eq("main_topic_id", postHeadingId)
+=======
+    currentHeadingId == undefined ? null : ["/headingId", currentHeadingId],
+    async () =>
+      await supabase
+        .from<Subheading>("subheadings")
+        .select("*")
+        .eq("main_topic_id", currentHeadingId)
+    // { refreshInterval: 1000 }
+>>>>>>> 8db9bb0f4a8dcbf8cebff6eb99133c93aff2eb13
   );
 
   // return <h1>{data.title}</h1>;
@@ -83,6 +96,7 @@ export default function TopAndSideNavbar({ children }: { children: ReactNode }) 
   if (data.data && data.data.length !== 0) {
     data.data!.map((x) => {
       LinkItems.push(x);
+      console.log("subheadings are ", x);
     });
   }
 
@@ -123,7 +137,7 @@ interface SidebarProps extends BoxProps {
 }
 
 const SidebarContent = ({ onClose, ...rest }: SidebarProps) => {
-  const shareContext = useAppContext();
+  const postContext = usePostContext();
   return (
     <Box
       transition="3s ease"
@@ -133,24 +147,52 @@ const SidebarContent = ({ onClose, ...rest }: SidebarProps) => {
       w={{ base: "full", md: "80" }}
       pos="fixed"
       h="full"
+      pb="20"//added by me
       overflowY="scroll"
       {...rest}
     >
-      <Flex h="20" alignItems="center" mx="8" justifyContent="space-between">
-        <Text fontSize="2xl" fontFamily="monospace" fontWeight="bold">
-          logo
+      <Flex h="20" alignItems="center" mb="8" mx="8" justifyContent="space-between">
+        <Text as="u" color="darkviolet" fontSize="normal"  fontWeight="bold">
+          {postContext.currentHeadingname}
         </Text>
         <CloseButton display={{ base: "flex", md: "none" }} onClick={onClose} />
       </Flex>
 
       {LinkItems && LinkItems.length !== 0 ? (
         LinkItems.map((subheading) => (
+<<<<<<< HEAD
           <Text fontSize="17px" color="blackAlpha.700" fontWeight="semibold" mt="2" p="2" key={subheading.id}>
            <RedLink>
             <Link href={`/posts/${encodeURIComponent(subheading.id)}`}>
               <a>{subheading.topic}</a>
             </Link>
             </RedLink>
+=======
+          <Text
+            // bg="ghostwhite"
+            lineHeight="shorter"
+            fontWeight="bold"
+            fontSize="medium"
+            fontStyle=""
+            key={subheading.id}
+            // textShadow="1px 0px 1px " 
+            ml="6"
+            mt="4"
+            mr="2"
+            
+            pl="2"
+            onClick={() => {
+              // postContext.updateCurrentSubheadingId(value.id);
+              postContext.updateCurrentSubheadingId(subheading.id);
+              postContext.updateCurrentSubheading(subheading.topic as string);
+            }}
+
+            // href={`/posts/${encodeURIComponent(subheading.id)}`}
+          >
+            <Link textDecoration="pink">{subheading.topic}</Link>
+
+            {/* </Button> */}
+>>>>>>> 8db9bb0f4a8dcbf8cebff6eb99133c93aff2eb13
           </Text>
         ))
       ) : (
@@ -179,6 +221,7 @@ interface MobileProps extends FlexProps {
 
 const MobileNav = ({ onOpen, ...rest }: MobileProps) => {
   const { signIn, signUp, signOut } = useAuthContext();
+  const postContext = usePostContext();
   return (
     <Flex
       // ml={{ base: 10, md: 60 }}
@@ -221,10 +264,11 @@ const MobileNav = ({ onOpen, ...rest }: MobileProps) => {
         align="left"
         display={{ base: "flex", md: "flex-start" }}
         fontSize="2xl"
-        fontFamily="monospace"
+        // fontFamily="monospace"
         fontWeight="bold"
+        color="gray.600"
       >
-        Welcome to Qlook
+        {postContext.currentPapername}
       </Text>
 
       <HStack spacing={{ base: "0", md: "6" }}>

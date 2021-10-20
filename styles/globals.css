@@ -97,10 +97,27 @@ blockquote p {
 /* mouse over link */
 /* a:hover {
   color: rgb(240, 240, 247);
+<<<<<<< HEAD
   height: 40px;
   border: hotpink;
   background-color: rgb(53, 4, 117);
 } */
+=======
+  /* height: 70px; */
+  /* line-height: 200%; */
+  /* border: hotpink; */
+  background-color: rgb(68, 67, 70);
+  text-decoration: none !important;
+}
+a {
+  /* color: rgb(240, 240, 247); */
+  /* height: 50px; */
+  line-height: 30%;
+  /* border: hotpink; */
+  /* background-color: rgb(68, 67, 70); */
+  text-decoration: none !important;
+}
+>>>>>>> 8db9bb0f4a8dcbf8cebff6eb99133c93aff2eb13
 
 .container {
   width: 90%;
