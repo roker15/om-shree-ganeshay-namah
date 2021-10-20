@@ -95,12 +95,12 @@ blockquote p {
 }
 
 /* mouse over link */
-a:hover {
+/* a:hover {
   color: rgb(240, 240, 247);
   height: 40px;
   border: hotpink;
   background-color: rgb(53, 4, 117);
-}
+} */
 
 .container {
   width: 90%;

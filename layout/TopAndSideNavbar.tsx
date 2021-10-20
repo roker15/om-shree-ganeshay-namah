@@ -1,5 +1,6 @@
 import {
   Avatar,
+  Badge,
   Box,
   BoxProps,
   Button,
@@ -18,6 +19,7 @@ import {
   MenuDivider,
   MenuItem,
   MenuList,
+  Tag,
   Text,
   useColorModeValue,
   useDisclosure,
@@ -27,6 +29,7 @@ import Image from "next/image";
 import React, { ReactNode, ReactText } from "react";
 import { FaGoogle } from "react-icons/fa";
 import { FiBell, FiChevronDown } from "react-icons/fi";
+import styled from "styled-components";
 import useSWR from "swr";
 import { useAuthContext } from "../context/Authcontext";
 import { useAppContext } from "../context/state";
@@ -38,14 +41,23 @@ interface LinkItemProps {
   // icon: IconType;
   icon: number;
 }
-
+const RedLink = styled.a`
+  /* background-color: #f44336; */
+  color: #181717;
+  /* padding: 14px 25px; */
+  /* text-align: center; */
+  text-decoration: none !important;
+  /* display: inline-block; */
+  &:hover {
+    color: #080808;
+    background-color: #ffffff;
+    text-decoration: none !important;
+  }
+  
+`;
 const LinkItems: Array<Subheading> = [];
 
-export default function TopAndSideNavbar({
-  children,
-}: {
-  children: ReactNode;
-}) {
+export default function TopAndSideNavbar({ children }: { children: ReactNode }) {
   const { isOpen, onOpen, onClose } = useDisclosure();
   // const [subheading, setSubheading] = useState(0);
   const { postHeadingId } = useAppContext();
@@ -56,11 +68,7 @@ export default function TopAndSideNavbar({
 
   const { data, error } = useSWR(
     ["/headingId", postHeadingId],
-    async () =>
-      await supabase
-        .from<Subheading>("subheadings")
-        .select("*")
-        .eq("main_topic_id", postHeadingId)
+    async () => await supabase.from<Subheading>("subheadings").select("*").eq("main_topic_id", postHeadingId)
   );
 
   // return <h1>{data.title}</h1>;
@@ -87,10 +95,7 @@ export default function TopAndSideNavbar({
       {/* mobilenav */}
       <MobileNav onOpen={onOpen} />
 
-      <SidebarContent
-        onClose={() => onClose}
-        display={{ base: "none", md: "block" }}
-      />
+      <SidebarContent onClose={() => onClose} display={{ base: "none", md: "block" }} />
       <Drawer
         autoFocus={false}
         isOpen={isOpen}
@@ -140,11 +145,13 @@ const SidebarContent = ({ onClose, ...rest }: SidebarProps) => {
 
       {LinkItems && LinkItems.length !== 0 ? (
         LinkItems.map((subheading) => (
-          <li key={subheading.id}>
+          <Text fontSize="17px" color="blackAlpha.700" fontWeight="semibold" mt="2" p="2" key={subheading.id}>
+           <RedLink>
             <Link href={`/posts/${encodeURIComponent(subheading.id)}`}>
               <a>{subheading.topic}</a>
             </Link>
-          </li>
+            </RedLink>
+          </Text>
         ))
       ) : (
         <div>no data</div>
@@ -236,20 +243,10 @@ const MobileNav = ({ onOpen, ...rest }: MobileProps) => {
           ""
         )}
 
-        <IconButton
-          size="sm"
-          variant="outline"
-          aria-label="open menu"
-          icon={<FiBell />}
-        />
+        <IconButton size="sm" variant="outline" aria-label="open menu" icon={<FiBell />} />
         <Flex border="0px" alignItems={"center"}>
           <Menu boundary="clippingParents">
-            <MenuButton
-              border="0px"
-              py={2}
-              transition="all 0.3s"
-              _focus={{ boxShadow: "none" }}
-            >
+            <MenuButton border="0px" py={2} transition="all 0.3s" _focus={{ boxShadow: "none" }}>
               <HStack>
                 {supabase.auth.session() === null ? (
                   <Avatar size={"sm"} src="https://bit.ly/broken-link" />
@@ -262,12 +259,7 @@ const MobileNav = ({ onOpen, ...rest }: MobileProps) => {
                   />
                 )}
 
-                <VStack
-                  display={{ base: "none", md: "flex" }}
-                  alignItems="flex-start"
-                  spacing="1px"
-                  ml="2"
-                >
+                <VStack display={{ base: "none", md: "flex" }} alignItems="flex-start" spacing="1px" ml="2">
                   <Text fontSize="sm">{useAuthContext().user?.email}</Text>
                   <Text fontSize="xs" color="gray.600">
                     {/* Admin */}
