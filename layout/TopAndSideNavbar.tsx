@@ -14,6 +14,8 @@ import {
   Link,
   LinkBox,
   LinkOverlay,
+  List,
+  ListItem,
   Menu,
   MenuButton,
   MenuDivider,
@@ -21,6 +23,7 @@ import {
   MenuList,
   Tag,
   Text,
+  UnorderedList,
   useColorModeValue,
   useDisclosure,
   VStack,
@@ -54,7 +57,6 @@ const RedLink = styled.a`
     background-color: #ffffff;
     text-decoration: none !important;
   }
-  
 `;
 const LinkItems: Array<Subheading> = [];
 
@@ -71,11 +73,7 @@ export default function TopAndSideNavbar({ children }: { children: ReactNode }) 
 
   const { data, error } = useSWR(
     currentHeadingId == undefined ? null : ["/headingId", currentHeadingId],
-    async () =>
-      await supabase
-        .from<Subheading>("subheadings")
-        .select("*")
-        .eq("main_topic_id", currentHeadingId)
+    async () => await supabase.from<Subheading>("subheadings").select("*").eq("main_topic_id", currentHeadingId)
     // { refreshInterval: 1000 }
   );
 
@@ -142,12 +140,12 @@ const SidebarContent = ({ onClose, ...rest }: SidebarProps) => {
       w={{ base: "full", md: "80" }}
       pos="fixed"
       h="full"
-      pb="20"//added by me
+      pb="20" //added by me
       overflowY="scroll"
       {...rest}
     >
       <Flex h="20" alignItems="center" mb="8" mx="8" justifyContent="space-between">
-        <Text as="u" color="darkviolet" fontSize="normal"  fontWeight="bold">
+        <Text as="u" color="darkviolet" fontSize="normal" fontWeight="bold">
           {postContext.currentHeadingname}
         </Text>
         <CloseButton display={{ base: "flex", md: "none" }} onClick={onClose} />
@@ -155,31 +153,33 @@ const SidebarContent = ({ onClose, ...rest }: SidebarProps) => {
 
       {LinkItems && LinkItems.length !== 0 ? (
         LinkItems.map((subheading) => (
-          <Text
-            // bg="ghostwhite"
-            lineHeight="shorter"
-            fontWeight="bold"
-            fontSize="medium"
-            fontStyle=""
-            key={subheading.id}
-            // textShadow="1px 0px 1px " 
-            ml="6"
-            mt="4"
-            mr="2"
-            
-            pl="2"
-            onClick={() => {
-              // postContext.updateCurrentSubheadingId(value.id);
-              postContext.updateCurrentSubheadingId(subheading.id);
-              postContext.updateCurrentSubheading(subheading.topic as string);
-            }}
+          <UnorderedList key={subheading.id}>
+            <ListItem ml="6">
+              <Text
+                // bg="InactiveCaptionText"
+                lineHeight="shorter"
+                fontWeight="bold"
+                fontSize="medium"
+                fontStyle=""
+                // textShadow="1px 0px 1px "
+                // ml="6"
+                mt="4"
+                mr="2"
+                pl="2"
+                onClick={() => {
+                  // postContext.updateCurrentSubheadingId(value.id);
+                  postContext.updateCurrentSubheadingId(subheading.id);
+                  postContext.updateCurrentSubheading(subheading.topic as string);
+                }}
 
-            // href={`/posts/${encodeURIComponent(subheading.id)}`}
-          >
-            <Link textDecoration="pink">{subheading.topic}</Link>
+                // href={`/posts/${encodeURIComponent(subheading.id)}`}
+              >
+                <Link>{subheading.topic}</Link>
 
-            {/* </Button> */}
-          </Text>
+                {/* </Button> */}
+              </Text>
+            </ListItem>
+          </UnorderedList>
         ))
       ) : (
         <div>no data</div>
