@@ -55,25 +55,53 @@ export function PostContextWrapper({ children }: { children: ReactNode }) {
     string | undefined
   >(undefined);
 
-  // useEffect(() => {
-  //   if (currentSubheadingId) {
-  //     window.localStorage.setItem(
-  //       "currentSubheadingId",
-  //       String(currentSubheadingId as number)
-  //     );
-  //   }
-  // }, [currentSubheadingId]);
+  useEffect(() => {
+    setCurrentSubheadingId(
+      Number(window.localStorage.getItem("currentSubheadingId") as string)
+    );
+    setCurrentHeadingId(
+      Number(window.localStorage.getItem("currentHeadingId") as string)
+    );
+    setCurrentSubheading(
+      window.localStorage.getItem("currentSubheading") as string
+    );
+    setCurrentHeadingname(
+      window.localStorage.getItem("currentHeadingname") as string
+    );
+    setCurrentPapername(
+      window.localStorage.getItem("currentPapername") as string
+    );
+  }, []);
 
-  // useEffect(() => {
-  //   if (JSON.parse(window.localStorage.getItem("currentSubheadingId")=="undefined") {
-
-  //   }
-  //   setCurrentSubheadingId(
-  //     Number(
-  //       JSON.parse(window.localStorage.getItem("currentSubheadingId") as string)
-  //     )
-  //   );
-  // }, []);
+  useEffect(() => {
+    if (currentSubheadingId) {
+      window.localStorage.setItem(
+        "currentSubheadingId",
+        String(currentSubheadingId as number)
+      );
+    }
+    if (currentHeadingId) {
+      window.localStorage.setItem(
+        "currentHeadingId",
+        String(currentHeadingId as number)
+      );
+    }
+    if (currentSubheading) {
+      window.localStorage.setItem("currentSubheading", currentSubheading);
+    }
+    if (currentHeadingname) {
+      window.localStorage.setItem("currentHeadingname", currentHeadingname);
+    }
+    if (currentPapername) {
+      window.localStorage.setItem("currentPapername", currentPapername);
+    }
+  }, [
+    currentHeadingId,
+    currentHeadingname,
+    currentPapername,
+    currentSubheading,
+    currentSubheadingId,
+  ]);
 
   function updateCurrentHeadingId(id: number) {
     console.log("current heading is ", id);
@@ -103,9 +131,8 @@ export function PostContextWrapper({ children }: { children: ReactNode }) {
     updateCurrentSubheading: updateCurrentSubheading,
     currentPapername: currentPapername,
     updateCurrentPapername: updateCurrentPapername,
-    currentHeadingname:currentHeadingname,
-    updateCurrentHeadingname:updateCurrentHeadingname
-
+    currentHeadingname: currentHeadingname,
+    updateCurrentHeadingname: updateCurrentHeadingname,
   };
 
   return (

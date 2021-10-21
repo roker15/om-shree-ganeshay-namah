@@ -63,7 +63,7 @@ export default function TopAndSideNavbar({
       await supabase
         .from<Subheading>("subheadings")
         .select("*")
-        .eq("main_topic_id", currentHeadingId)
+        .eq("main_topic_id", currentHeadingId),
     // { refreshInterval: 1000 }
   );
 
@@ -74,7 +74,16 @@ export default function TopAndSideNavbar({
         <div>failed to load</div>
       </Box>
     );
-  if (!data) return <div>loading...</div>;
+  if (!data){
+    // updateCurrentHeadingId(
+    //   Number(
+    //     // JSON.parse(
+    //       window.localStorage.getItem("currentSubheadingId") as string
+    //     // )
+    //   )
+    // )
+    return (<div>loading...hh</div>);
+  } 
   LinkItems.length = 0;
   if (data.data && data.data.length !== 0) {
     data.data!.map((x) => {
