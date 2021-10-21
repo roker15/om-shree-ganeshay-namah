@@ -111,7 +111,7 @@ export default function TopAndSideNavbar({ children }: { children: ReactNode }) 
       {/* mobilenav */}
       <MobileNav onOpen={onOpen} />
 
-      <SidebarContent onClose={() => onClose} display={{ base: "none", md: "block" }} />
+      <SidebarContent  onClose={() => onClose} display={{ base: "none", md: "table" }}  _hover={{display: 'block' }} />
       <Drawer
         autoFocus={false}
         isOpen={isOpen}
@@ -258,7 +258,7 @@ const MobileNav = ({ onOpen, ...rest }: MobileProps) => {
         justifyContent={{ base: "space-between", md: "flex" }}
         align="left"
         display={{ base: "flex", md: "flex-start" }}
-        fontSize="2xl"
+        fontSize={{ base: "large", md: "xl" }}
         // fontFamily="monospace"
         fontWeight="bold"
         color="gray.600"
@@ -282,7 +282,7 @@ const MobileNav = ({ onOpen, ...rest }: MobileProps) => {
           ""
         )}
 
-        <IconButton size="sm" variant="outline" aria-label="open menu" icon={<FiBell />} />
+        {/* <IconButton size="sm" variant="outline" aria-label="open menu" icon={<FiBell />} /> */}
         <Flex border="0px" alignItems={"center"}>
           <Menu boundary="clippingParents">
             <MenuButton border="0px" py={2} transition="all 0.3s" _focus={{ boxShadow: "none" }}>
