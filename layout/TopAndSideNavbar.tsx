@@ -92,7 +92,7 @@ export default function TopAndSideNavbar({ children }: { children: ReactNode }) 
     //     // )
     //   )
     // )
-    return (<div>loading...hh</div>);
+    return (<div>loading...</div>);
   } 
   LinkItems.length = 0;
   if (data.data && data.data.length !== 0) {
