@@ -89,7 +89,7 @@ const Posts: React.FC<ProfileListProps> = ({ data }) => {
     { refreshInterval: 1000 }
   );
 
-  const { data: headings } = useSWR(
+  const { data: userposts } = useSWR(
     mounted ? `/upsc/${currentSubheadingId}/ss` : null,
     async () =>
       await supabase
@@ -116,14 +116,14 @@ const Posts: React.FC<ProfileListProps> = ({ data }) => {
     setMounted(true);
     console.log("usernotes is ", userNote);
     if (
-      headings != undefined &&
-      headings?.data?.length != 0 &&
-      headings!.data != null
+      userposts != undefined &&
+      userposts?.data?.length != 0 &&
+      userposts!.data != null
     ) {
       // console.log("notes is ", data![0].post);
-      setUserNote(headings!.data![0].post);
+      setUserNote(userposts!.data![0].post);
       appContext.setPostHeadingId(
-        ((headings!.data![0].subheading_id as Subheading)
+        ((userposts!.data![0].subheading_id as Subheading)
           .main_topic_id as Headings)!.id
       );
     } else {
@@ -216,14 +216,14 @@ const Posts: React.FC<ProfileListProps> = ({ data }) => {
         ) : (
           ""
         )}
-        {headings &&
-        headings?.data?.length != 0 &&
-        headings!.data![0] != null ? (
+        {userposts &&
+        userposts?.data?.length != 0 &&
+        userposts!.data![0] != null ? (
           <SunEditorForRendering
             subHeadingId={currentSubheadingId}
             isNew={false}
-            postId={headings.data![0].id}
-            postContent={headings.data![0].post}
+            postId={userposts.data![0].id}
+            postContent={userposts.data![0].post}
           />
         ) : (
           <div></div>
