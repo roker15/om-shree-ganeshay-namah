@@ -31,7 +31,7 @@ import {
 import Image from "next/image";
 import React, { ReactNode, ReactText } from "react";
 import { FaGoogle } from "react-icons/fa";
-import { FiBell, FiChevronDown } from "react-icons/fi";
+import { FiBell, FiChevronDown, FiMenu } from "react-icons/fi";
 import styled from "styled-components";
 import useSWR from "swr";
 import { useAuthContext } from "../context/Authcontext";
@@ -60,7 +60,11 @@ const RedLink = styled.a`
 `;
 const LinkItems: Array<Subheading> = [];
 
-export default function TopAndSideNavbar({ children }: { children: ReactNode }) {
+export default function TopAndSideNavbar({
+  children,
+}: {
+  children: ReactNode;
+}) {
   const { isOpen, onOpen, onClose } = useDisclosure();
   // const [subheading, setSubheading] = useState(0);
   const { postHeadingId } = useAppContext();
@@ -73,7 +77,11 @@ export default function TopAndSideNavbar({ children }: { children: ReactNode }) 
 
   const { data, error } = useSWR(
     currentHeadingId == undefined ? null : ["/headingId", currentHeadingId],
-    async () => await supabase.from<Subheading>("subheadings").select("*").eq("main_topic_id", currentHeadingId)
+    async () =>
+      await supabase
+        .from<Subheading>("subheadings")
+        .select("*")
+        .eq("main_topic_id", currentHeadingId)
     // { refreshInterval: 1000 }
   );
 
@@ -84,7 +92,7 @@ export default function TopAndSideNavbar({ children }: { children: ReactNode }) 
         <div>failed to load</div>
       </Box>
     );
-  if (!data){
+  if (!data) {
     // updateCurrentHeadingId(
     //   Number(
     //     // JSON.parse(
@@ -92,8 +100,8 @@ export default function TopAndSideNavbar({ children }: { children: ReactNode }) 
     //     // )
     //   )
     // )
-    return (<div>loading...</div>);
-  } 
+    return <div>loading...</div>;
+  }
   LinkItems.length = 0;
   if (data.data && data.data.length !== 0) {
     data.data!.map((x) => {
@@ -111,7 +119,11 @@ export default function TopAndSideNavbar({ children }: { children: ReactNode }) 
       {/* mobilenav */}
       <MobileNav onOpen={onOpen} />
 
-      <SidebarContent  onClose={() => onClose} display={{ base: "none", md: "table" }}  _hover={{display: 'block' }} />
+      <SidebarContent
+        onClose={() => onClose}
+        display={{ base: "none", md: "table" }}
+        _hover={{ display: "block" }}
+      />
       <Drawer
         autoFocus={false}
         isOpen={isOpen}
@@ -126,7 +138,7 @@ export default function TopAndSideNavbar({ children }: { children: ReactNode }) 
         </DrawerContent>
       </Drawer>
 
-      <Box mt={"16"} bg="white" ml={{ base: 0, md: 80 }} p="4">
+      <Box mt={"16"} bg="white" ml={{ base: 0, md: "80" }} p="4">
         {children}
         {/* {shareContext.postHeadingId} */}
       </Box>
@@ -153,8 +165,14 @@ const SidebarContent = ({ onClose, ...rest }: SidebarProps) => {
       overflowY="scroll"
       {...rest}
     >
-      <Flex h="20" alignItems="center" mb="8" mx="8" justifyContent="space-between">
-        <Text as="u" color="darkviolet" fontSize="normal" fontWeight="bold">
+      <Flex
+        h="20"
+        alignItems="center"
+        mb="8"
+        mx="8"
+        justifyContent="space-between"
+      >
+        <Text  as="u" color="darkviolet" fontSize="normal" fontWeight="bold">
           {postContext.currentHeadingname}
         </Text>
         <CloseButton display={{ base: "flex", md: "none" }} onClick={onClose} />
@@ -178,7 +196,9 @@ const SidebarContent = ({ onClose, ...rest }: SidebarProps) => {
                 onClick={() => {
                   // postContext.updateCurrentSubheadingId(value.id);
                   postContext.updateCurrentSubheadingId(subheading.id);
-                  postContext.updateCurrentSubheading(subheading.topic as string);
+                  postContext.updateCurrentSubheading(
+                    subheading.topic as string
+                  );
                 }}
 
                 // href={`/posts/${encodeURIComponent(subheading.id)}`}
@@ -233,6 +253,14 @@ const MobileNav = ({ onOpen, ...rest }: MobileProps) => {
       justifyContent={{ base: "space-between", md: "flex" }}
       {...rest}
     >
+      {/* this portion is for navigation close button of side bar */}
+      {/* <IconButton
+        display={{ base: "flex", md: "none" }}
+        onClick={onOpen}
+        variant="outline"
+        aria-label="open menu"
+        icon={<FiMenu />}
+      /> */}
       <LinkBox pt="2">
         <LinkOverlay
           _hover={{
@@ -285,20 +313,25 @@ const MobileNav = ({ onOpen, ...rest }: MobileProps) => {
         {/* <IconButton size="sm" variant="outline" aria-label="open menu" icon={<FiBell />} /> */}
         <Flex border="0px" alignItems={"center"}>
           <Menu boundary="clippingParents">
-            <MenuButton border="0px" py={2} transition="all 0.3s" _focus={{ boxShadow: "none" }}>
+            <MenuButton
+              border="0px"
+              py={2}
+              transition="all 0.3s"
+              _focus={{ boxShadow: "none" }}
+            >
               <HStack>
                 {supabase.auth.session() === null ? (
                   <Avatar size={"sm"} src="https://bit.ly/broken-link" />
                 ) : (
-                  <Avatar
-                    size={"sm"}
-                    src={
-                      "https://bit.ly/broken-link"
-                    }
-                  />
+                  <Avatar size={"sm"} src={"https://bit.ly/broken-link"} />
                 )}
 
-                <VStack display={{ base: "none", md: "flex" }} alignItems="flex-start" spacing="1px" ml="2">
+                <VStack
+                  display={{ base: "none", md: "flex" }}
+                  alignItems="flex-start"
+                  spacing="1px"
+                  ml="2"
+                >
                   <Text fontSize="sm">{useAuthContext().user?.email}</Text>
                   <Text fontSize="xs" color="gray.600">
                     {/* Admin */}

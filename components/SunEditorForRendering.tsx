@@ -110,19 +110,19 @@ interface Props {
 const buttonList = [
   ["undo", "redo"],
   ["font", "fontSize", "formatBlock"],
-  ["paragraphStyle", "blockquote"],
+  [/*"paragraphStyle",*/ "blockquote"],
   ["bold", "underline", "italic", "strike", "subscript", "superscript"],
   ["fontColor", "hiliteColor", "textStyle"],
   ["removeFormat"],
   "/",
   ["outdent", "indent"],
   ["align", "horizontalRule", "list", "lineHeight"],
-  ["table", "link", "image", "video", "audio", "math"],
+  ["table", "link", "image",/* "video","audio",*/  "math"],
 
   /** ['imageGallery'] */ // You must add the "imageGalleryUrl".
-  ["fullScreen", "showBlocks", "codeView"],
+["fullScreen"/*, "showBlocks", "codeView"*/],
   ["preview", "print"],
-  ["save", "template"],
+  // ["save", "template"],
 ];
 
 const SunEditorForRendering: React.FC<Props> = ({
