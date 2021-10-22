@@ -19,7 +19,11 @@ import {
 import { AuthSession } from "@supabase/supabase-js";
 import { Element } from "domhandler/lib/node";
 import DOMPurify from "dompurify";
-import parse, { attributesToProps, domToReact, HTMLReactParserOptions } from "html-react-parser";
+import parse, {
+  attributesToProps,
+  domToReact,
+  HTMLReactParserOptions,
+} from "html-react-parser";
 import katex from "katex";
 import "katex/dist/katex.min.css";
 // import 'suneditor/dist/css/suneditor.min.css'; // Import Sun Editor's CSS File
@@ -51,7 +55,7 @@ const Posts: React.FC<ProfileListProps> = ({ data }) => {
   // const [data, setProfiles] = useState<Profile[]>([]);
   const appContext = useAppContext();
   const router = useRouter();
-  const { currentSubheadingId,currentSubheading } = usePostContext();
+  const { currentSubheadingId, currentSubheading } = usePostContext();
   // const {
   //   query: { currentSubheadingId }
   // } = router;
@@ -111,10 +115,17 @@ const Posts: React.FC<ProfileListProps> = ({ data }) => {
   useEffect(() => {
     setMounted(true);
     console.log("usernotes is ", userNote);
-    if (headings != undefined && headings?.data?.length != 0 && headings!.data != null) {
+    if (
+      headings != undefined &&
+      headings?.data?.length != 0 &&
+      headings!.data != null
+    ) {
       // console.log("notes is ", data![0].post);
       setUserNote(headings!.data![0].post);
-      appContext.setPostHeadingId(((headings!.data![0].subheading_id as Subheading).main_topic_id as Headings)!.id);
+      appContext.setPostHeadingId(
+        ((headings!.data![0].subheading_id as Subheading)
+          .main_topic_id as Headings)!.id
+      );
     } else {
       console.log("use effect is hittin");
       setUserNote(undefined);
@@ -151,9 +162,12 @@ const Posts: React.FC<ProfileListProps> = ({ data }) => {
           <div></div>
         ) : (
           sharedPost?.data!.map((x) => {
-            const sanitisedPostData = DOMPurify.sanitize((x.post_id as Post).post as string, {
-              USE_PROFILES: { svg: true, html: true },
-            });
+            const sanitisedPostData = DOMPurify.sanitize(
+              (x.post_id as Post).post as string,
+              {
+                USE_PROFILES: { svg: true, html: true },
+              }
+            );
             return (
               <div key={x.id}>
                 {/* {postHeader(x, appContext)} */}
@@ -202,7 +216,9 @@ const Posts: React.FC<ProfileListProps> = ({ data }) => {
         ) : (
           ""
         )}
-        {headings && headings?.data?.length != 0 && headings!.data![0] != null ? (
+        {headings &&
+        headings?.data?.length != 0 &&
+        headings!.data![0] != null ? (
           <SunEditorForRendering
             subHeadingId={currentSubheadingId}
             isNew={false}

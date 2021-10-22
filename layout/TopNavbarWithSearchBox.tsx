@@ -162,8 +162,6 @@ interface MobileProps extends FlexProps {
 }
 
 const MobileNav = ({ onOpen, ...rest }: MobileProps) => {
-  
-
   const { signIn, signUp, signOut } = useAuthContext();
   return (
     <Flex
@@ -188,9 +186,7 @@ const MobileNav = ({ onOpen, ...rest }: MobileProps) => {
         height={100}
       /> */}
 
-      <LinkBox
-        pt="2"
-      >
+      <LinkBox pt="2">
         <LinkOverlay
           _hover={{
             background: "none",
@@ -268,12 +264,7 @@ const MobileNav = ({ onOpen, ...rest }: MobileProps) => {
                 {supabase.auth.session() === null ? (
                   <Avatar size={"sm"} src="https://bit.ly/broken-link" />
                 ) : (
-                  <Avatar
-                    size={"sm"}
-                    src={
-                      "https://images.unsplash.com/photo-1619946794135-5bc917a27793?ixlib=rb-0.3.5&q=80&fm=jpg&crop=faces&fit=crop&h=200&w=200&s=b616b2c5b373a80ffc9636ba24f7a4a9"
-                    }
-                  />
+                  <Avatar size={"sm"} src={"https://bit.ly/broken-link"} />
                 )}
 
                 <VStack
@@ -299,7 +290,6 @@ const MobileNav = ({ onOpen, ...rest }: MobileProps) => {
             >
               <MenuItem border="0px">Profile</MenuItem>
               <MenuItem border="0px">Settings</MenuItem>
-              <MenuItem border="0px">Billing</MenuItem>
               {supabase.auth.session() !== null ? (
                 <>
                   {" "}
