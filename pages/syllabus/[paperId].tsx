@@ -66,7 +66,7 @@ const Syllabus: React.FC<ProfileListProps> = ({ array }) => {
                     {entry
                       .value!.sort((a, b) => a.sequence! - b.sequence!)
                       .map((value) => (
-                        <Text key={value.id}>
+                        <Text mb={{base:"1", md:"0"}} key={value.id}>
                           <NextLink
                             href={`/posts/${encodeURIComponent(value.id)}`}
                             passHref
