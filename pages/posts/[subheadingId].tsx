@@ -42,6 +42,7 @@ import Script from "next/script";
 import SunEditorForRendering from "../../components/SunEditorForRendering";
 import useSWR from "swr";
 import { usePostContext } from "../../context/PostContext";
+import { ArrowBackIcon } from "@chakra-ui/icons";
 
 type ProfileListProps = {
   data: Post[];
@@ -153,8 +154,18 @@ const Posts: React.FC<ProfileListProps> = ({ data }) => {
     );
   }
   // if (data && data.length !== 0) {
+
   return (
     <>
+      <Button
+        variant="outline"
+        // colorScheme="purple"
+        leftIcon={<ArrowBackIcon />}
+        size="xs"
+        onClick={() => router.back()}
+      >
+        Go back
+      </Button>
       <h1>{currentSubheading}</h1>
 
       <div className="container" style={{ padding: "50px 0 50px 0" }}>
