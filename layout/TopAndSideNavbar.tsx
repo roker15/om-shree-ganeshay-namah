@@ -1,4 +1,5 @@
 import {
+  Image,
   Avatar,
   Badge,
   Box,
@@ -28,7 +29,7 @@ import {
   useDisclosure,
   VStack,
 } from "@chakra-ui/react";
-import Image from "next/image";
+// import Image from "next/image";
 import React, { ReactNode, ReactText } from "react";
 import { FaGoogle } from "react-icons/fa";
 import { FiBell, FiChevronDown, FiMenu } from "react-icons/fi";
@@ -132,8 +133,9 @@ export default function TopAndSideNavbar({
         returnFocusOnClose={false}
         onOverlayClick={onClose}
         size="full"
+        
       >
-        <DrawerContent>
+        <DrawerContent mt={"16"}>
           <SidebarContent onClose={onClose} />
         </DrawerContent>
       </Drawer>
@@ -199,6 +201,7 @@ const SidebarContent = ({ onClose, ...rest }: SidebarProps) => {
                   postContext.updateCurrentSubheading(
                     subheading.topic as string
                   );
+                  onClose()
                 }}
 
                 // href={`/posts/${encodeURIComponent(subheading.id)}`}
@@ -254,13 +257,13 @@ const MobileNav = ({ onOpen, ...rest }: MobileProps) => {
       {...rest}
     >
       {/* this portion is for navigation close button of side bar */}
-      {/* <IconButton
+      <IconButton
         display={{ base: "flex", md: "none" }}
         onClick={onOpen}
         variant="outline"
         aria-label="open menu"
         icon={<FiMenu />}
-      /> */}
+      />
       <LinkBox pt="2">
         <LinkOverlay
           _hover={{
@@ -270,13 +273,15 @@ const MobileNav = ({ onOpen, ...rest }: MobileProps) => {
           href="/"
         >
           <Image
-            priority={true}
+            // priority={true}
+            loading="eager"
             src="/logo-150x150.png"
             alt="Picture of the author"
-            width={50}
-            height={50}
+            boxSize={{ base : "0px", md: "50px" }}
+            // w={{ base : "50", md: "40" }}
+            // h={{ base: 50, md: 40 }}
             // layout="fill"
-            // objectFit="scale-down"
+            objectFit="contain"
           />
         </LinkOverlay>
       </LinkBox>

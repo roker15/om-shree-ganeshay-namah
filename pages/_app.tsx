@@ -28,7 +28,7 @@ function MyApp({ Component, pageProps }: AppLayoutProps) {
   return (
     <AuthProvider>
       <Head>
-        <title>Qlook ...</title>
+        <title>Qlook - Target Strategically</title>
         <link
           rel="icon"
           type="image/png"
