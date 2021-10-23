@@ -133,7 +133,6 @@ export default function TopAndSideNavbar({
         returnFocusOnClose={false}
         onOverlayClick={onClose}
         size="full"
-        
       >
         <DrawerContent mt={"16"}>
           <SidebarContent onClose={onClose} />
@@ -174,7 +173,7 @@ const SidebarContent = ({ onClose, ...rest }: SidebarProps) => {
         mx="8"
         justifyContent="space-between"
       >
-        <Text  as="u" color="darkviolet" fontSize="normal" fontWeight="bold">
+        <Text as="u" color="darkviolet" fontSize="normal" fontWeight="bold">
           {postContext.currentHeadingname}
         </Text>
         <CloseButton display={{ base: "flex", md: "none" }} onClick={onClose} />
@@ -201,7 +200,7 @@ const SidebarContent = ({ onClose, ...rest }: SidebarProps) => {
                   postContext.updateCurrentSubheading(
                     subheading.topic as string
                   );
-                  onClose()
+                  onClose();
                 }}
 
                 // href={`/posts/${encodeURIComponent(subheading.id)}`}
@@ -277,7 +276,7 @@ const MobileNav = ({ onOpen, ...rest }: MobileProps) => {
             loading="eager"
             src="/logo-150x150.png"
             alt="Picture of the author"
-            boxSize={{ base : "0px", md: "50px" }}
+            boxSize={{ base: "0px", md: "50px" }}
             // w={{ base : "50", md: "40" }}
             // h={{ base: 50, md: 40 }}
             // layout="fill"
@@ -288,6 +287,8 @@ const MobileNav = ({ onOpen, ...rest }: MobileProps) => {
 
       {/* <Image  boxSize="50px" objectFit="fill" src="vercel.svg" alt="Segun Adebayo" /> */}
       <Text
+        isTruncated
+        // noOfLines={1}
         justifyContent={{ base: "space-between", md: "flex" }}
         align="left"
         display={{ base: "flex", md: "flex-start" }}
