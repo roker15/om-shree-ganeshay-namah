@@ -1,23 +1,11 @@
 import {
   Button,
   ButtonGroup,
-  Container,
-  Drawer,
-  DrawerBody,
-  DrawerCloseButton,
-  DrawerContent,
-  DrawerFooter,
-  DrawerHeader,
-  DrawerOverlay,
-  Input,
-  Select,
-  Stack,
-  useDisclosure,
-  VStack,
+  Container, Select,
+  Stack, VStack
 } from "@chakra-ui/react";
 import { useRouter } from "next/dist/client/router";
 import React from "react";
-import SlateEdit from "../components/SlateEditor";
 import { useAuthContext } from "../context/Authcontext";
 import LayoutWithTopNavbar from "../layout/LayoutWithTopNavbar";
 import { supabase } from "../lib/supabaseClient";
@@ -32,7 +20,6 @@ const Home: React.FC<ProfileListProps> = ({ data }) => {
   const [value, setValue] = React.useState("");
   const router = useRouter();
 
-  const { isOpen, onToggle, onClose, onOpen } = useDisclosure();
 
   const handleChange = (event: any) => {
     // event.preventDefault();
@@ -71,34 +58,6 @@ const Home: React.FC<ProfileListProps> = ({ data }) => {
             </ButtonGroup>
           )}
 
-          <>
-            <Button colorScheme="teal" onClick={onOpen}>
-              Open
-            </Button>
-            <Drawer
-              isOpen={isOpen}
-              placement="right"
-              onClose={onClose}
-              // finalFocusRef={btnRef}
-            >
-              <DrawerOverlay />
-              <DrawerContent>
-                {/* <DrawerCloseButton /> */}
-                <DrawerHeader>Create your account</DrawerHeader>
-
-                <DrawerBody>
-                  <Input placeholder="Type here..." />
-                </DrawerBody>
-
-                <DrawerFooter>
-                  <Button variant="outline" mr={3} onClick={onClose}>
-                    Cancel
-                  </Button>
-                  <Button colorScheme="blue">Save</Button>
-                </DrawerFooter>
-              </DrawerContent>
-            </Drawer>
-          </>
           <div className="container" style={{ padding: "10px 0 100px 0" }}>
             <Stack>
               <Select
