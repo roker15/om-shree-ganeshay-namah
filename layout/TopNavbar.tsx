@@ -1,4 +1,5 @@
 import {
+  Image,
   Alert,
   AlertDescription,
   AlertIcon,
@@ -27,7 +28,7 @@ import {
   useDisclosure,
   VStack,
 } from "@chakra-ui/react";
-import Image from "next/image";
+// import Image from "next/image";
 import router from "next/router";
 import React, { ReactNode, ReactText } from "react";
 import { FaGoogle } from "react-icons/fa";
@@ -121,7 +122,6 @@ interface MobileProps extends FlexProps {
 }
 
 const MobileNav = ({ onOpen, ...rest }: MobileProps) => {
- 
   const { signIn, signUp, signOut } = useAuthContext();
   return (
     <Flex
@@ -150,8 +150,9 @@ const MobileNav = ({ onOpen, ...rest }: MobileProps) => {
             priority={true}
             src="/logo-150x150.png"
             alt="Picture of the author"
-            width={50}
-            height={50}
+            boxSize={{ base : "35px", md: "50px" }}
+            // w={{ base : "50", md: "40" }}
+            // h={{ base: 50, md: 40 }}
             // layout="fill"
             // objectFit="scale-down"
           />
@@ -179,12 +180,12 @@ const MobileNav = ({ onOpen, ...rest }: MobileProps) => {
           ""
         )}
 
-        <IconButton
+        {/* <IconButton
           size="sm"
           variant="outline"
           aria-label="open menu"
           icon={<FiBell />}
-        />
+        /> */}
         <Flex border="0px" alignItems={"center"}>
           <Menu boundary="clippingParents">
             <MenuButton
@@ -200,7 +201,7 @@ const MobileNav = ({ onOpen, ...rest }: MobileProps) => {
                   <Avatar
                     size={"sm"}
                     src={
-                      "https://bit.ly/broken-link"// change this to url from database avatar
+                      "https://bit.ly/broken-link" // change this to url from database avatar
                     }
                   />
                 )}
