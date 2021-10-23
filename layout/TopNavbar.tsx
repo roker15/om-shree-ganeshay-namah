@@ -138,7 +138,7 @@ const MobileNav = ({ onOpen, ...rest }: MobileProps) => {
       justifyContent={{ base: "space-between", md: "flex" }}
       {...rest}
     >
-      <LinkBox pt="2">
+      <LinkBox >
         <LinkOverlay
           _hover={{
             background: "none",
@@ -161,7 +161,7 @@ const MobileNav = ({ onOpen, ...rest }: MobileProps) => {
 
       {/* <Heading color="black">?LOOK<span>&#128512;</span></Heading> */}
 
-      <Heading as="h2" size="md">
+      <Heading as="h2" size="md" display={{base:"none",md:"block"}}>
         Welcome to Qlook{" "}
       </Heading>
       <HStack spacing={{ base: "0", md: "6" }}>
