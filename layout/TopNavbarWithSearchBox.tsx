@@ -1,4 +1,5 @@
 import {
+  Image,
   Alert,
   AlertDescription,
   AlertIcon,
@@ -27,7 +28,7 @@ import {
   useDisclosure,
   VStack,
 } from "@chakra-ui/react";
-import Image from "next/image";
+// import Image from "next/image";
 import router from "next/router";
 import React, { ReactNode, ReactText } from "react";
 import { FaGoogle } from "react-icons/fa";
@@ -39,11 +40,6 @@ import { useAppContext } from "../context/state";
 import { supabase } from "../lib/supabaseClient";
 import { Subheading } from "../types/myTypes";
 
-interface LinkItemProps {
-  name: string;
-  // icon: IconType;
-  icon: number;
-}
 const LinkItems: Array<Subheading> = [];
 
 export default function TopNavbarWithSearchBox({
@@ -103,59 +99,6 @@ export default function TopNavbarWithSearchBox({
   );
 }
 
-interface SidebarProps extends BoxProps {
-  onClose: () => void;
-}
-
-const SidebarContent = ({ onClose, ...rest }: SidebarProps) => {
-  const shareContext = useAppContext();
-  return (
-    <Box
-      transition="3s ease"
-      bg={useColorModeValue("white", "gray.900")}
-      borderRight="1px"
-      borderRightColor={useColorModeValue("gray.200", "gray.700")}
-      w={{ base: "full", md: "80" }}
-      pos="fixed"
-      h="full"
-      overflowY="scroll"
-      {...rest}
-    >
-      <Flex h="20" alignItems="center" mx="8" justifyContent="space-between">
-        <Text fontSize="2xl" fontFamily="monospace" fontWeight="bold">
-          logo
-        </Text>
-        <CloseButton display={{ base: "flex", md: "none" }} onClick={onClose} />
-      </Flex>
-      {/* {LinkItems.map((link) => (
-        <NavItem key={link.name} icon={link.icon}>
-          {link.name}
-        </NavItem>
-      ))} */}
-
-      {LinkItems.map((subheading) => (
-        <li key={subheading.id}>
-          <Link href={`/posts/${encodeURIComponent(subheading.id)}`}>
-            <a>{subheading.topic}</a>
-          </Link>
-        </li>
-      ))}
-    </Box>
-  );
-};
-
-interface NavItemProps extends FlexProps {
-  // icon: IconType;
-  icon: number;
-  children: ReactText;
-}
-// const NavItem = ({ icon, children, ...rest }: NavItemProps) => {
-//   return (
-//     <Link href={`/blog/${encodeURIComponent(post.slug)}`}>
-//       <a>{post.title}</a>
-//     </Link>
-//   );
-// };
 
 interface MobileProps extends FlexProps {
   onOpen: () => void;
@@ -178,15 +121,8 @@ const MobileNav = ({ onOpen, ...rest }: MobileProps) => {
       justifyContent={{ base: "space-between", md: "flex" }}
       {...rest}
     >
-      {/* <Image
-        priority={true}
-        src="/vercel.svg"
-        alt="Picture of the author"
-        width={100}
-        height={100}
-      /> */}
 
-      <LinkBox pt="2">
+      <LinkBox pt="0">
         <LinkOverlay
           _hover={{
             background: "none",
@@ -194,42 +130,33 @@ const MobileNav = ({ onOpen, ...rest }: MobileProps) => {
           }}
           href="/"
         >
-          <Image
-            priority={true}
+           <Image
+            // priority={true}
+            loading="eager"
             src="/logo-150x150.png"
             alt="Picture of the author"
-            width={50}
-            height={50}
+            boxSize={{ base : "0px", md: "50px" }}
+            // w={{ base : "50", md: "40" }}
+            // h={{ base: 50, md: 40 }}
             // layout="fill"
-            // objectFit="scale-down"
+            objectFit="contain"
           />
         </LinkOverlay>
       </LinkBox>
-      {/* <Heading color="black">?LOOK<span>&#128512;</span></Heading>i *}
-      {/* <Image  boxSize="50px" objectFit="fill" src="vercel.svg" alt="Segun Adebayo" /> */}
-      {/* <Text
-        justifyContent={{ base: "space-between", md: "flex" }}
-        align="left"
-        display={{ base: "flex", md: "flex-start" }}
-        fontSize="2xl"
-        fontFamily="monospace"
-        fontWeight="bold"
-      >
-        Welcome to Qlook
-      </Text> */}
       <Box
         // align="left"
         bg="lavender"
         p="0.5"
+        m="2"
         // borderRadius="3xl"
         w="xl"
-        ml="12"
+        // ml="12"
         // h="12"
         // display={{ base: "flex", md: "flex-start" }}
       >
         <SubjectSearch />
       </Box>
-      <span></span>
+      {/* <span></span> */}
       <HStack spacing={{ base: "0", md: "6" }}>
         {/* <button onClick={() => setLanguage("jp")}>sign in</button> */}
         {supabase.auth.session() === null ? (
@@ -245,13 +172,6 @@ const MobileNav = ({ onOpen, ...rest }: MobileProps) => {
         ) : (
           ""
         )}
-
-        {/* <IconButton
-          size="sm"
-          variant="outline"
-          aria-label="open menu"
-          icon={<FiBell />}
-        /> */}
         <Flex border="0px" alignItems={"center"}>
           <Menu boundary="clippingParents">
             <MenuButton

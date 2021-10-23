@@ -41,6 +41,7 @@ const SubjectSearch: React.FC = () => {
                 variant="outlined"
                 // bg="greenyellow"
                 w="full"
+                fontSize={{base:"smaller",md:"md"}}
                 // height="auto"
                 onChange={handleChange}
               >

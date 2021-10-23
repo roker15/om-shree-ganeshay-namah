@@ -147,7 +147,8 @@ const MobileNav = ({ onOpen, ...rest }: MobileProps) => {
           href="/"
         >
           <Image
-            priority={true}
+            // priority={true}
+            loading="eager"
             src="/logo-150x150.png"
             alt="Picture of the author"
             boxSize={{ base : "35px", md: "50px" }}
