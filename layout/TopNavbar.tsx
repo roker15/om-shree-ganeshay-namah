@@ -1,5 +1,4 @@
 import {
-  Image,
   Alert,
   AlertDescription,
   AlertIcon,
@@ -7,16 +6,11 @@ import {
   Avatar,
   Box,
   BoxProps,
-  Button,
-  Center,
-  CloseButton,
+  Button, CloseButton,
   Flex,
   FlexProps,
   Heading,
-  HStack,
-  IconButton,
-  Link,
-  LinkBox,
+  HStack, Image, LinkBox,
   LinkOverlay,
   Menu,
   MenuButton,
@@ -26,15 +20,12 @@ import {
   Text,
   useColorModeValue,
   useDisclosure,
-  VStack,
+  VStack
 } from "@chakra-ui/react";
-// import Image from "next/image";
-import router from "next/router";
 import React, { ReactNode, ReactText } from "react";
 import { FaGoogle } from "react-icons/fa";
-import { FiBell, FiChevronDown } from "react-icons/fi";
+import { FiChevronDown } from "react-icons/fi";
 import useSWR from "swr";
-import SubjectSearch from "../components/SubjectSearch";
 import { useAuthContext } from "../context/Authcontext";
 import { useAppContext } from "../context/state";
 import { supabase } from "../lib/supabaseClient";

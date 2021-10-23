@@ -96,7 +96,7 @@ const Syllabus: React.FC<ProfileListProps> = ({ array }) => {
                               disable="false"
                               color="telegram.600"
                             >
-                              {value.topic}
+                              {value.topic},
                             </Link>
                           </NextLink>
                         </Text>
