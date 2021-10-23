@@ -292,10 +292,11 @@ const MobileNav = ({ onOpen, ...rest }: MobileProps) => {
         justifyContent={{ base: "space-between", md: "flex" }}
         align="left"
         display={{ base: "flex", md: "flex-start" }}
-        fontSize={{ base: "large", md: "xl" }}
+        fontSize={{ base: "sm", md: "xl" }}
         // fontFamily="monospace"
         fontWeight="bold"
         color="gray.600"
+        mx="2"
       >
         {postContext.currentPapername}
       </Text>
