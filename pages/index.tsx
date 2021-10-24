@@ -1,11 +1,7 @@
-import {
-  Button,
-  ButtonGroup,
-  Container, Select,
-  Stack, VStack
-} from "@chakra-ui/react";
+import { Box,Text, Button, ButtonGroup, Container, HStack, Select, Stack, VStack } from "@chakra-ui/react";
 import { useRouter } from "next/dist/client/router";
 import React from "react";
+import { FaFacebook, FaTelegram, FaTwitter, FaWhatsapp } from "react-icons/fa";
 import { useAuthContext } from "../context/Authcontext";
 import LayoutWithTopNavbar from "../layout/LayoutWithTopNavbar";
 import { supabase } from "../lib/supabaseClient";
@@ -19,7 +15,6 @@ type ProfileListProps = {
 const Home: React.FC<ProfileListProps> = ({ data }) => {
   const [value, setValue] = React.useState("");
   const router = useRouter();
-
 
   const handleChange = (event: any) => {
     // event.preventDefault();
@@ -49,22 +44,23 @@ const Home: React.FC<ProfileListProps> = ({ data }) => {
           {/* <SlateEdit/> */}
           {role !== "MODERATOR" ? null : (
             <ButtonGroup size="sm" isAttached variant="outline">
-              <Button onClick={() => goToCreateHeading()}>
-                Create New Heading
-              </Button>
-              <Button onClick={() => goToCreateSubeading()}>
-                Create New Subheading
-              </Button>
+              <Button onClick={() => goToCreateHeading()}>Create New Heading</Button>
+              <Button onClick={() => goToCreateSubeading()}>Create New Subheading</Button>
             </ButtonGroup>
           )}
+          <HStack>
+            <Text as="b" color="">Get latest updates and Interact with us at </Text>
+            <Button variant="outline" colorScheme="whatsapp" leftIcon={<FaWhatsapp />}>
+              WhatsApp
+            </Button>
+            <Button variant="outline" colorScheme="telegram" leftIcon={<FaTelegram />}>
+              Telegram
+            </Button>
+          </HStack>
 
           <div className="container" style={{ padding: "10px 0 100px 0" }}>
             <Stack>
-              <Select
-                placeholder="Select UPSC paper"
-                variant="outline"
-                onChange={handleChange}
-              >
+              <Select placeholder="Select UPSC paper" variant="outline" onChange={handleChange}>
                 {data!.map((number) => {
                   console.log("ho raha haw ");
                   return (
