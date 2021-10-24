@@ -48,15 +48,15 @@ const Home: React.FC<ProfileListProps> = ({ data }) => {
               <Button onClick={() => goToCreateSubeading()}>Create New Subheading</Button>
             </ButtonGroup>
           )}
-          <HStack>
+          {/* <HStack> */}
             <Text as="b" color="">Get latest updates and Interact with us at </Text>
-            <Button variant="outline" colorScheme="whatsapp" leftIcon={<FaWhatsapp />}>
+            <Button w="40"variant="outline" colorScheme="whatsapp" leftIcon={<FaWhatsapp />}>
               WhatsApp
             </Button>
-            <Button variant="outline" colorScheme="telegram" leftIcon={<FaTelegram />}>
+            <Button w="40" variant="outline" colorScheme="telegram" leftIcon={<FaTelegram />}>
               Telegram
             </Button>
-          </HStack>
+          {/* </HStack> */}
 
           <div className="container" style={{ padding: "10px 0 100px 0" }}>
             <Stack>
