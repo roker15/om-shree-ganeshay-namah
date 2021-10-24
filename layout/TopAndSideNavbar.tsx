@@ -180,7 +180,7 @@ const SidebarContent = ({ onClose, ...rest }: SidebarProps) => {
       </Flex>
 
       {LinkItems && LinkItems.length !== 0 ? (
-        LinkItems.map((subheading) => (
+        LinkItems.sort((a, b) => a.sequence! - b.sequence!).map((subheading) => (
           <UnorderedList key={subheading.id}>
             <ListItem ml="6">
               <Text
