@@ -1,4 +1,17 @@
-import { Box,Text, Button, ButtonGroup, Container, HStack, Select, Stack, VStack, IconButton, InputRightAddon } from "@chakra-ui/react";
+import {
+  Box,
+  Text,
+  Button,
+  ButtonGroup,
+  Container,
+  HStack,
+  Select,
+  Stack,
+  VStack,
+  IconButton,
+  InputRightAddon,
+  Heading,
+} from "@chakra-ui/react";
 import { useRouter } from "next/dist/client/router";
 import React from "react";
 import { FaFacebook, FaTelegram, FaTwitter, FaWhatsapp } from "react-icons/fa";
@@ -41,6 +54,9 @@ const Home: React.FC<ProfileListProps> = ({ data }) => {
     return (
       <Container maxW="container.md" pt="14">
         <VStack>
+          <Heading as="h3" size="lg">
+            Make Your UPSC notes online
+          </Heading>
           {/* <SlateEdit/> */}
           {role !== "MODERATOR" ? null : (
             <ButtonGroup size="sm" isAttached variant="outline">
@@ -49,23 +65,10 @@ const Home: React.FC<ProfileListProps> = ({ data }) => {
             </ButtonGroup>
           )}
           {/* <HStack> */}
-          <Text as="b" color="">Get latest updates and Interact with us at </Text>
-          <ButtonGroup size="sm" isAttached variant="outline">
-            <Button w="40"variant="outline" colorScheme="whatsapp" leftIcon={<FaWhatsapp />}>
-              WhatsApp
-            </Button>
-            <Button colorScheme="whatsapp"  >958-8701-073</Button>
-          </ButtonGroup>
-          <ButtonGroup size="sm" isAttached variant="outline">
-            <Button w="40"  variant="outline" colorScheme="telegram" leftIcon={<FaTelegram />}>
-              Telegram
-            </Button>
-            <Button colorScheme="telegram"  >958-8701-073</Button>
-            
-            </ButtonGroup>
+
           {/* </HStack> */}
 
-          <div className="container" style={{ padding: "10px 0 100px 0" }}>
+          <div className="container" style={{ padding: "10px 0 10px 0" }}>
             <Stack>
               <Select placeholder="Select UPSC paper" variant="outline" onChange={handleChange}>
                 {data!.map((number) => {
@@ -79,6 +82,21 @@ const Home: React.FC<ProfileListProps> = ({ data }) => {
               </Select>
             </Stack>
           </div>
+          <Text as="b" color="">
+            Get latest updates and Interact with us at{" "}
+          </Text>
+          <ButtonGroup size="sm" isAttached variant="outline">
+            <Button w="40" variant="outline" colorScheme="whatsapp" leftIcon={<FaWhatsapp />}>
+              WhatsApp
+            </Button>
+            <Button colorScheme="whatsapp">958-8701-073</Button>
+          </ButtonGroup>
+          <ButtonGroup size="sm" isAttached variant="outline">
+            <Button w="40" variant="outline" colorScheme="telegram" leftIcon={<FaTelegram />}>
+              Telegram
+            </Button>
+            <Button colorScheme="telegram">958-8701-073</Button>
+          </ButtonGroup>
         </VStack>
       </Container>
     );
