@@ -162,7 +162,7 @@ const SidebarContent = ({ onClose, ...rest }: SidebarProps) => {
       w={{ base: "full", md: "80" }}
       pos="fixed"
       h="full"
-      pb="20" //added by me
+      pb="48" //added by me
       overflowY="scroll"
       {...rest}
     >
@@ -219,18 +219,7 @@ const SidebarContent = ({ onClose, ...rest }: SidebarProps) => {
   );
 };
 
-interface NavItemProps extends FlexProps {
-  // icon: IconType;
-  icon: number;
-  children: ReactText;
-}
-// const NavItem = ({ icon, children, ...rest }: NavItemProps) => {
-//   return (
-//     <Link href={`/blog/${encodeURIComponent(post.slug)}`}>
-//       <a>{post.title}</a>
-//     </Link>
-//   );
-// };
+
 
 interface MobileProps extends FlexProps {
   onOpen: () => void;
