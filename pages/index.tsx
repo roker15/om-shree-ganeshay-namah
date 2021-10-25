@@ -54,8 +54,12 @@ const Home: React.FC<ProfileListProps> = ({ data }) => {
     return (
       <Container maxW="container.md" pt="14">
         <VStack>
-          <Heading as="h3" size="lg">
+          <Heading as="h3" size="lg" mb="0">
             Make Your UPSC notes online
+            
+          </Heading>
+          <Heading as="h3" size="lg" mb="24">
+           (Strictly as per Syllabus)
           </Heading>
           {/* <SlateEdit/> */}
           {role !== "MODERATOR" ? null : (
@@ -68,7 +72,7 @@ const Home: React.FC<ProfileListProps> = ({ data }) => {
 
           {/* </HStack> */}
 
-          <div className="container" style={{ padding: "10px 0 10px 0" }}>
+          <div className="container" style={{ padding: "10px 0 50px 0" }}>
             <Stack>
               <Select placeholder="Select UPSC paper" variant="outline" onChange={handleChange}>
                 {data!.map((number) => {
@@ -85,7 +89,7 @@ const Home: React.FC<ProfileListProps> = ({ data }) => {
           <Text as="b" color="">
             Get latest updates and Interact with us at{" "}
           </Text>
-          <ButtonGroup size="sm" isAttached variant="outline">
+          <ButtonGroup size="sm" isAttached variant="outline" mt="16">
             <Button w="40" variant="outline" colorScheme="whatsapp" leftIcon={<FaWhatsapp />}>
               WhatsApp
             </Button>
@@ -98,6 +102,7 @@ const Home: React.FC<ProfileListProps> = ({ data }) => {
             <Button colorScheme="telegram">958-8701-073</Button>
           </ButtonGroup>
         </VStack>
+        
       </Container>
     );
   }
