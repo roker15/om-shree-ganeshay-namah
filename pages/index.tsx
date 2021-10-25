@@ -87,16 +87,16 @@ const Home: React.FC<ProfileListProps> = ({ data }) => {
             </Stack>
           </div>
           <Text as="b" color="">
-            Get latest updates and Interact with us at{" "}
+           Interact With Us At{" "}
           </Text>
           <ButtonGroup size="sm" isAttached variant="outline" mt="16">
-            <Button w="40" variant="outline" colorScheme="whatsapp" leftIcon={<FaWhatsapp />}>
+            <Button w="32" variant="outline" colorScheme="whatsapp" leftIcon={<FaWhatsapp />}>
               WhatsApp
             </Button>
             <Button colorScheme="whatsapp">958-8701-073</Button>
           </ButtonGroup>
           <ButtonGroup size="sm" isAttached variant="outline">
-            <Button w="40" variant="outline" colorScheme="telegram" leftIcon={<FaTelegram />}>
+            <Button w="32" variant="outline" colorScheme="telegram" leftIcon={<FaTelegram />}>
               Telegram
             </Button>
             <Button colorScheme="telegram">958-8701-073</Button>
