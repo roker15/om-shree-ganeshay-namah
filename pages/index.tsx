@@ -1,4 +1,4 @@
-import { Box,Text, Button, ButtonGroup, Container, HStack, Select, Stack, VStack } from "@chakra-ui/react";
+import { Box,Text, Button, ButtonGroup, Container, HStack, Select, Stack, VStack, IconButton, InputRightAddon } from "@chakra-ui/react";
 import { useRouter } from "next/dist/client/router";
 import React from "react";
 import { FaFacebook, FaTelegram, FaTwitter, FaWhatsapp } from "react-icons/fa";
@@ -49,13 +49,20 @@ const Home: React.FC<ProfileListProps> = ({ data }) => {
             </ButtonGroup>
           )}
           {/* <HStack> */}
-            <Text as="b" color="">Get latest updates and Interact with us at </Text>
+          <Text as="b" color="">Get latest updates and Interact with us at </Text>
+          <ButtonGroup size="sm" isAttached variant="outline">
             <Button w="40"variant="outline" colorScheme="whatsapp" leftIcon={<FaWhatsapp />}>
               WhatsApp
             </Button>
-            <Button w="40" variant="outline" colorScheme="telegram" leftIcon={<FaTelegram />}>
+            <Button colorScheme="whatsapp"  >958-8701-073</Button>
+          </ButtonGroup>
+          <ButtonGroup size="sm" isAttached variant="outline">
+            <Button w="40"  variant="outline" colorScheme="telegram" leftIcon={<FaTelegram />}>
               Telegram
             </Button>
+            <Button colorScheme="telegram"  >958-8701-073</Button>
+            
+            </ButtonGroup>
           {/* </HStack> */}
 
           <div className="container" style={{ padding: "10px 0 100px 0" }}>
