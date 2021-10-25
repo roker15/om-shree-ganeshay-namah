@@ -162,7 +162,7 @@ const SidebarContent = ({ onClose, ...rest }: SidebarProps) => {
       w={{ base: "full", md: "80" }}
       pos="fixed"
       h="full"
-      pb="48" //added by me
+      pb="36" //added by me
       overflowY="scroll"
       {...rest}
     >
