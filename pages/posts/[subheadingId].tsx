@@ -215,6 +215,10 @@ const Posts: React.FC<ProfileListProps> = ({ data }) => {
 
         {userNote == undefined ? (
           <div>
+            <Heading mb="6" fontSize="2xl">
+              {" "}
+              My Notes on this Topic{" "}
+            </Heading>
             <Alert status="info">
               <AlertIcon />
               You Don&apos;t have notes on this Topic Create Notes in Editor

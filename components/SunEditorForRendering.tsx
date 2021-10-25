@@ -277,10 +277,7 @@ const SunEditorForRendering: React.FC<Props> = ({
     <div>
       <Divider  />
 
-      <Heading mb="6" fontSize="2xl">
-        {" "}
-        My Notes on this Topic{" "}
-      </Heading>
+     
       {/* {isSharedPost:():(div)} */}
 
       {isPostNew && hideToolbar?(<ButtonGroup
