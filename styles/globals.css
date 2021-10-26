@@ -113,7 +113,7 @@ a {
 }
 
 .container {
-  width: 90%;
+  width: 100%;
   margin-left: auto;
   margin-right: auto;
 }
@@ -188,7 +188,7 @@ a {
 @media only screen and (min-width: 33.75em) {
   /* 540px */
   .container {
-    width: 80%;
+    width: 90%;
   }
 }
 
@@ -238,7 +238,7 @@ a {
 @media only screen and (min-width: 60em) {
   /* 960px */
   .container {
-    width: 90%;
+    width: 100%;
     max-width: 60rem;
   }
 }
