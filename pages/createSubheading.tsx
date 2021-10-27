@@ -288,6 +288,8 @@ const CreateSubheading: React.FC = () => {
         })
         .eq("id", idSelectedTopic);
       isSubmitting == false;
+      setActiveIndex(1000);
+      setIsEditMode(false);
 
       if (data) {
         toast({

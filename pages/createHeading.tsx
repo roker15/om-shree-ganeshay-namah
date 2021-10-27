@@ -250,7 +250,7 @@ const Basic: React.FC = () => {
           sequence: values.sequence,
         })
         .eq("id", idSelectedTopic);
-      // isSubmitting == false;
+      isSubmitting == false;
       setActiveIndex(1000);
       setIsEditMode(false);
 
