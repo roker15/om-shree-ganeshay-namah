@@ -9,6 +9,7 @@ import Script from 'next/script'
 import { PostContextWrapper } from "../context/PostContext";
 //this import is for react page editor
 // import '@react-page/editor/lib/index.css';
+import * as gtag from '../lib/gtag'
 
 const colors = {
   brand: {
@@ -35,6 +36,20 @@ function MyApp({ Component, pageProps }: AppLayoutProps) {
           sizes="32x32"
           href="/logo-150x150.png"
         />
+<script async src="https://www.googletagmanager.com/gtag/js?id=UA-211304831-1">
+</script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
+
+  gtag('config', 'UA-211304831-1');
+</script>
+
+
+
+
+
         {/* <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png" />
           <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png" />
           <link rel="manifest" href="/site.webmanifest" />
