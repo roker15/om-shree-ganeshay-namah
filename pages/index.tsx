@@ -55,7 +55,7 @@ const Home: React.FC<ProfileListProps> = ({ data }) => {
       <Container maxW="container.md" pt="14">
         <VStack>
           <Heading as="h3" size="lg" mb="0">
-            Make Your UPSC notes online
+            Make Your UPSC notes onlineeeee
             
           </Heading>
           <Heading as="h3" size="lg" mb="24">
