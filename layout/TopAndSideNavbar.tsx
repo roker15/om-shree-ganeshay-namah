@@ -272,6 +272,7 @@ const MobileNav = ({ onOpen, ...rest }: MobileProps) => {
             objectFit="contain"
           />
         </LinkOverlay>
+        <Button>hide sidebar</Button>
       </LinkBox>
 
       {/* <Image  boxSize="50px" objectFit="fill" src="vercel.svg" alt="Segun Adebayo" /> */}
