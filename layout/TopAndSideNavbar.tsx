@@ -118,7 +118,7 @@ export default function TopAndSideNavbar({
       bg="green.100"
     >
       {/* mobilenav */}
-      <MobileNav onOpen={onOpen} />
+      <TopBar onOpen={onOpen} />
 
       <SidebarContent
         onClose={() => onClose}
@@ -225,7 +225,7 @@ interface MobileProps extends FlexProps {
   onOpen: () => void;
 }
 
-const MobileNav = ({ onOpen, ...rest }: MobileProps) => {
+const TopBar = ({ onOpen, ...rest }: MobileProps) => {
   const { signIn, signUp, signOut } = useAuthContext();
   const postContext = usePostContext();
   return (
@@ -272,7 +272,7 @@ const MobileNav = ({ onOpen, ...rest }: MobileProps) => {
             objectFit="contain"
           />
         </LinkOverlay>
-        <Button>hide sidebar</Button>
+        {/* <Button>hide sidebar</Button> */}
       </LinkBox>
 
       {/* <Image  boxSize="50px" objectFit="fill" src="vercel.svg" alt="Segun Adebayo" /> */}
