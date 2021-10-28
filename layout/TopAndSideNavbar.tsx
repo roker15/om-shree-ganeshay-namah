@@ -272,8 +272,8 @@ const TopBar = ({ onOpen, ...rest }: MobileProps) => {
             objectFit="contain"
           />
         </LinkOverlay>
-        {/* <Button>hide sidebar</Button> */}
       </LinkBox>
+        <Button>hide sidebar</Button>
 
       {/* <Image  boxSize="50px" objectFit="fill" src="vercel.svg" alt="Segun Adebayo" /> */}
       <Text
