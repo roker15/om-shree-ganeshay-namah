@@ -28,9 +28,12 @@ import {
   useColorModeValue,
   useDisclosure,
   VStack,
+  FormControl,
+  FormLabel,
+  Switch,
 } from "@chakra-ui/react";
 // import Image from "next/image";
-import React, { ReactNode, ReactText } from "react";
+import React, { ReactNode, ReactText, useState } from "react";
 import { FaGoogle } from "react-icons/fa";
 import { FiBell, FiChevronDown, FiMenu } from "react-icons/fi";
 import styled from "styled-components";
@@ -67,7 +70,7 @@ export default function TopAndSideNavbar({
   children: ReactNode;
 }) {
   const { isOpen, onOpen, onClose } = useDisclosure();
-  // const [subheading, setSubheading] = useState(0);
+  const [hideSidebar, setHideSidebar] = useState(false);
   const { postHeadingId } = useAppContext();
   const { signUp, signOut, signIn } = useAuthContext();
   // setSubheading(shareContext.postHeadingId);
@@ -118,7 +121,7 @@ export default function TopAndSideNavbar({
       bg="green.100"
     >
       {/* mobilenav */}
-      <TopBar onOpen={onOpen} />
+      <TopBar hideSidebar={hideSidebar} onOpen={onOpen} />
 
       <SidebarContent
         onClose={() => onClose}
@@ -180,38 +183,40 @@ const SidebarContent = ({ onClose, ...rest }: SidebarProps) => {
       </Flex>
 
       {LinkItems && LinkItems.length !== 0 ? (
-        LinkItems.sort((a, b) => a.sequence! - b.sequence!).map((subheading) => (
-          <UnorderedList key={subheading.id}>
-            <ListItem ml="6">
-              <Text
-                // bg="InactiveCaptionText"
-                lineHeight="shorter"
-                fontWeight="bold"
-                fontSize="medium"
-                fontStyle=""
-                // textShadow="1px 0px 1px "
-                // ml="6"
-                mt="4"
-                mr="2"
-                pl="2"
-                onClick={() => {
-                  // postContext.updateCurrentSubheadingId(value.id);
-                  postContext.updateCurrentSubheadingId(subheading.id);
-                  postContext.updateCurrentSubheading(
-                    subheading.topic as string
-                  );
-                  onClose();
-                }}
+        LinkItems.sort((a, b) => a.sequence! - b.sequence!).map(
+          (subheading) => (
+            <UnorderedList key={subheading.id}>
+              <ListItem ml="6">
+                <Text
+                  // bg="InactiveCaptionText"
+                  lineHeight="shorter"
+                  fontWeight="bold"
+                  fontSize="medium"
+                  fontStyle=""
+                  // textShadow="1px 0px 1px "
+                  // ml="6"
+                  mt="4"
+                  mr="2"
+                  pl="2"
+                  onClick={() => {
+                    // postContext.updateCurrentSubheadingId(value.id);
+                    postContext.updateCurrentSubheadingId(subheading.id);
+                    postContext.updateCurrentSubheading(
+                      subheading.topic as string
+                    );
+                    onClose();
+                  }}
 
-                // href={`/posts/${encodeURIComponent(subheading.id)}`}
-              >
-                <Link>{subheading.topic}</Link>
+                  // href={`/posts/${encodeURIComponent(subheading.id)}`}
+                >
+                  <Link>{subheading.topic}</Link>
 
-                {/* </Button> */}
-              </Text>
-            </ListItem>
-          </UnorderedList>
-        ))
+                  {/* </Button> */}
+                </Text>
+              </ListItem>
+            </UnorderedList>
+          )
+        )
       ) : (
         <div>no data</div>
       )}
@@ -219,13 +224,12 @@ const SidebarContent = ({ onClose, ...rest }: SidebarProps) => {
   );
 };
 
-
-
 interface MobileProps extends FlexProps {
   onOpen: () => void;
+  hideSidebar:boolean;
 }
 
-const TopBar = ({ onOpen, ...rest }: MobileProps) => {
+const TopBar = ({ hideSidebar,onOpen, ...rest }: MobileProps) => {
   const { signIn, signUp, signOut } = useAuthContext();
   const postContext = usePostContext();
   return (
@@ -273,7 +277,12 @@ const TopBar = ({ onOpen, ...rest }: MobileProps) => {
           />
         </LinkOverlay>
       </LinkBox>
-        <Button>hide sidebar</Button>
+      <FormControl display="flex" alignItems="center">
+        <FormLabel htmlFor="email-alerts" mb="0">
+          Enable email alerts?
+        </FormLabel>
+        <Switch onChange={handleSwitchChange} id="email-alerts" />
+      </FormControl>
 
       {/* <Image  boxSize="50px" objectFit="fill" src="vercel.svg" alt="Segun Adebayo" /> */}
       <Text
@@ -364,3 +373,6 @@ const TopBar = ({ onOpen, ...rest }: MobileProps) => {
     </Flex>
   );
 };
+const handleSwitchChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+console.log(event.target.value)
+}
