@@ -374,5 +374,5 @@ const TopBar = ({ hideSidebar,onOpen, ...rest }: MobileProps) => {
   );
 };
 const handleSwitchChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-console.log(event.target.value)
+console.log("switch handle is ",event.target.checked)
 }
