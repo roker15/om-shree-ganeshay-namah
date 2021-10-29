@@ -150,7 +150,7 @@ export default function TopAndSideNavbar({
         </DrawerContent>
       </Drawer>
 
-      <Box mt={"16"} bg="white" ml={{ base: 0, md: "80" }} p="4">
+      <Box mt={"16"} bg="white" ml={{ base: 0, md: hideSidebar ? 0 : "80" }} p="4">
         {children}
         {/* {shareContext.postHeadingId} */}
       </Box>
