@@ -168,7 +168,7 @@ const Posts: React.FC<ProfileListProps> = ({ data }) => {
       </Button>
       <h1>{currentSubheading}</h1>
 
-      <div  style={{ padding: "50px 0 50px 50px" }}>
+      <div  style={{ padding: "50px 25px 50px 25px" }}>
         {sharedPost?.data?.length == 0 ? (
           <div></div>
         ) : (
