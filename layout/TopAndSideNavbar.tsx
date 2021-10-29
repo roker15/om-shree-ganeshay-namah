@@ -286,15 +286,18 @@ const TopBar = ({ setHideSidebar, onOpen, ...rest }: MobileProps) => {
         </LinkOverlay>
       </LinkBox>
       <FormControl display="flex" alignItems="center">
-        <FormLabel htmlFor="email-alerts" mb="0">
-          Enable email alerts?
-        </FormLabel>
-        <Switch
+        {/* <FormLabel htmlFor="email-alerts" mb="0">
+          View full screen?
+        </FormLabel> */}
+        <Switch  size="sm"
+        colorScheme="black"
           onChange={(e: ChangeEvent<HTMLInputElement>) =>
             setHideSidebar(e.target.checked)
           }
           id="email-alerts"
-        />
+        >
+          Hide side bar
+        </Switch>
       </FormControl>
 
       {/* <Image  boxSize="50px" objectFit="fill" src="vercel.svg" alt="Segun Adebayo" /> */}
