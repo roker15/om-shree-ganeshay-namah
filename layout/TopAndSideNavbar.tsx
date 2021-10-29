@@ -269,7 +269,7 @@ const TopBar = ({ setHideSidebar, onOpen, ...rest }: MobileProps) => {
         aria-label="open menu"
         icon={<FiMenu />}
       />
-      <Box>
+      <HStack>
         <LinkBox pt="2">
           <LinkOverlay
             _hover={{
@@ -296,7 +296,7 @@ const TopBar = ({ setHideSidebar, onOpen, ...rest }: MobileProps) => {
           display={{ base: "none", md: "flex" }}
           alignItems="center"
         >
-          <FormLabel htmlFor="email-alerts" mb="0">
+          <FormLabel fontSize="sm" fontStyle="normal" htmlFor="email-alerts" mb="0">
             View full screen?
           </FormLabel>
           <Switch
@@ -310,7 +310,7 @@ const TopBar = ({ setHideSidebar, onOpen, ...rest }: MobileProps) => {
             {/* Hide side bar */}
           </Switch>
         </FormControl>
-      </Box>
+      </HStack>
 
       {/* <Image  boxSize="50px" objectFit="fill" src="vercel.svg" alt="Segun Adebayo" /> */}
       <Text
