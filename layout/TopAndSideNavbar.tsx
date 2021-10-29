@@ -33,7 +33,14 @@ import {
   Switch,
 } from "@chakra-ui/react";
 // import Image from "next/image";
-import React, { ChangeEvent, Dispatch, ReactNode, ReactText, SetStateAction, useState } from "react";
+import React, {
+  ChangeEvent,
+  Dispatch,
+  ReactNode,
+  ReactText,
+  SetStateAction,
+  useState,
+} from "react";
 import { FaGoogle } from "react-icons/fa";
 import { FiBell, FiChevronDown, FiMenu } from "react-icons/fi";
 import styled from "styled-components";
@@ -122,11 +129,11 @@ export default function TopAndSideNavbar({
     >
       {/* mobilenav */}
       <TopBar setHideSidebar={setHideSidebar} onOpen={onOpen} />
-      {console.log("new state is chaned to ",hideSidebar)}
+      {console.log("new state is chaned to ", hideSidebar)}
 
       <SidebarContent
         onClose={() => onClose}
-        display={{ base: "none", md: "table" }}
+        display={{ base: "none", md: hideSidebar ? "none" : "table" }}
         _hover={{ display: "block" }}
       />
       <Drawer
@@ -227,10 +234,10 @@ const SidebarContent = ({ onClose, ...rest }: SidebarProps) => {
 
 interface MobileProps extends FlexProps {
   onOpen: () => void;
-  setHideSidebar:Dispatch<SetStateAction<boolean>>;
+  setHideSidebar: Dispatch<SetStateAction<boolean>>;
 }
 
-const TopBar = ({ setHideSidebar,onOpen, ...rest }: MobileProps) => {
+const TopBar = ({ setHideSidebar, onOpen, ...rest }: MobileProps) => {
   const { signIn, signUp, signOut } = useAuthContext();
   const postContext = usePostContext();
   return (
@@ -282,7 +289,12 @@ const TopBar = ({ setHideSidebar,onOpen, ...rest }: MobileProps) => {
         <FormLabel htmlFor="email-alerts" mb="0">
           Enable email alerts?
         </FormLabel>
-        <Switch onChange={(e: ChangeEvent<HTMLInputElement>)=>setHideSidebar(e.target.checked)} id="email-alerts" />
+        <Switch
+          onChange={(e: ChangeEvent<HTMLInputElement>) =>
+            setHideSidebar(e.target.checked)
+          }
+          id="email-alerts"
+        />
       </FormControl>
 
       {/* <Image  boxSize="50px" objectFit="fill" src="vercel.svg" alt="Segun Adebayo" /> */}
@@ -374,4 +386,3 @@ const TopBar = ({ setHideSidebar,onOpen, ...rest }: MobileProps) => {
     </Flex>
   );
 };
-
