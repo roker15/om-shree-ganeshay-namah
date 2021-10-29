@@ -150,7 +150,12 @@ export default function TopAndSideNavbar({
         </DrawerContent>
       </Drawer>
 
-      <Box mt={"16"} bg="white" ml={{ base: 0, md: hideSidebar ? 0 : "80" }} p="4">
+      <Box
+        mt={"16"}
+        bg="white"
+        ml={{ base: 0, md: hideSidebar ? 0 : "80" }}
+        p="4"
+      >
         {children}
         {/* {shareContext.postHeadingId} */}
       </Box>
@@ -264,41 +269,48 @@ const TopBar = ({ setHideSidebar, onOpen, ...rest }: MobileProps) => {
         aria-label="open menu"
         icon={<FiMenu />}
       />
-      <LinkBox pt="2">
-        <LinkOverlay
-          _hover={{
-            background: "none",
-            color: "white",
-          }}
-          href="/"
+      <Box>
+        <LinkBox pt="2">
+          <LinkOverlay
+            _hover={{
+              background: "none",
+              color: "white",
+            }}
+            href="/"
+          >
+            <Image
+              // priority={true}
+              loading="eager"
+              src="/logo-150x150.png"
+              alt="Picture of the author"
+              boxSize={{ base: "0px", md: "50px" }}
+              // w={{ base : "50", md: "40" }}
+              // h={{ base: 50, md: 40 }}
+              // layout="fill"
+              objectFit="contain"
+            />
+          </LinkOverlay>
+        </LinkBox>
+        <FormControl
+          pl="4"
+          display={{ base: "none", md: "flex" }}
+          alignItems="center"
         >
-          <Image
-            // priority={true}
-            loading="eager"
-            src="/logo-150x150.png"
-            alt="Picture of the author"
-            boxSize={{ base: "0px", md: "50px" }}
-            // w={{ base : "50", md: "40" }}
-            // h={{ base: 50, md: 40 }}
-            // layout="fill"
-            objectFit="contain"
-          />
-        </LinkOverlay>
-      </LinkBox>
-      <FormControl display="flex" alignItems="center">
-        {/* <FormLabel htmlFor="email-alerts" mb="0">
-          View full screen?
-        </FormLabel> */}
-        <Switch  size="sm"
-        colorScheme="black"
-          onChange={(e: ChangeEvent<HTMLInputElement>) =>
-            setHideSidebar(e.target.checked)
-          }
-          id="email-alerts"
-        >
-          Hide side bar
-        </Switch>
-      </FormControl>
+          <FormLabel htmlFor="email-alerts" mb="0">
+            View full screen?
+          </FormLabel>
+          <Switch
+            size="sm"
+            colorScheme="purple"
+            onChange={(e: ChangeEvent<HTMLInputElement>) =>
+              setHideSidebar(e.target.checked)
+            }
+            id="email-alerts"
+          >
+            {/* Hide side bar */}
+          </Switch>
+        </FormControl>
+      </Box>
 
       {/* <Image  boxSize="50px" objectFit="fill" src="vercel.svg" alt="Segun Adebayo" /> */}
       <Text
