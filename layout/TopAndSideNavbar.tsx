@@ -33,7 +33,7 @@ import {
   Switch,
 } from "@chakra-ui/react";
 // import Image from "next/image";
-import React, { ReactNode, ReactText, useState } from "react";
+import React, { ChangeEvent, Dispatch, ReactNode, ReactText, SetStateAction, useState } from "react";
 import { FaGoogle } from "react-icons/fa";
 import { FiBell, FiChevronDown, FiMenu } from "react-icons/fi";
 import styled from "styled-components";
@@ -121,7 +121,8 @@ export default function TopAndSideNavbar({
       bg="green.100"
     >
       {/* mobilenav */}
-      <TopBar hideSidebar={hideSidebar} onOpen={onOpen} />
+      <TopBar setHideSidebar={setHideSidebar} onOpen={onOpen} />
+      {console.log("new state is chaned to ",hideSidebar)}
 
       <SidebarContent
         onClose={() => onClose}
@@ -226,10 +227,10 @@ const SidebarContent = ({ onClose, ...rest }: SidebarProps) => {
 
 interface MobileProps extends FlexProps {
   onOpen: () => void;
-  hideSidebar:boolean;
+  setHideSidebar:Dispatch<SetStateAction<boolean>>;
 }
 
-const TopBar = ({ hideSidebar,onOpen, ...rest }: MobileProps) => {
+const TopBar = ({ setHideSidebar,onOpen, ...rest }: MobileProps) => {
   const { signIn, signUp, signOut } = useAuthContext();
   const postContext = usePostContext();
   return (
@@ -281,7 +282,7 @@ const TopBar = ({ hideSidebar,onOpen, ...rest }: MobileProps) => {
         <FormLabel htmlFor="email-alerts" mb="0">
           Enable email alerts?
         </FormLabel>
-        <Switch onChange={handleSwitchChange} id="email-alerts" />
+        <Switch onChange={(e: ChangeEvent<HTMLInputElement>)=>setHideSidebar(e.target.checked)} id="email-alerts" />
       </FormControl>
 
       {/* <Image  boxSize="50px" objectFit="fill" src="vercel.svg" alt="Segun Adebayo" /> */}
@@ -373,6 +374,4 @@ const TopBar = ({ hideSidebar,onOpen, ...rest }: MobileProps) => {
     </Flex>
   );
 };
-const handleSwitchChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-console.log("switch handle is ",event.target.checked)
-}
+
