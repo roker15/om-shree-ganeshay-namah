@@ -128,7 +128,7 @@ export default function TopAndSideNavbar({
       bg="green.100"
     >
       {/* mobilenav */}
-      <TopBar setHideSidebar={setHideSidebar} onOpen={onOpen} />
+      <TopBar setHideSidebar={setHideSidebar} onOpen={onOpen} hideSidebar={hideSidebar} />
       {console.log("new state is chaned to ", hideSidebar)}
 
       <SidebarContent
@@ -240,9 +240,10 @@ const SidebarContent = ({ onClose, ...rest }: SidebarProps) => {
 interface MobileProps extends FlexProps {
   onOpen: () => void;
   setHideSidebar: Dispatch<SetStateAction<boolean>>;
+  hideSidebar:boolean;
 }
 
-const TopBar = ({ setHideSidebar, onOpen, ...rest }: MobileProps) => {
+const TopBar = ({ hideSidebar,setHideSidebar, onOpen, ...rest }: MobileProps) => {
   const { signIn, signUp, signOut } = useAuthContext();
   const postContext = usePostContext();
   return (
@@ -297,7 +298,7 @@ const TopBar = ({ setHideSidebar, onOpen, ...rest }: MobileProps) => {
           alignItems="center"
         >
           <FormLabel fontSize="sm" fontStyle="normal" htmlFor="email-alerts" mb="0">
-            View full screen?
+            {hideSidebar?"Show side panel":"Hide Side Panel"}
           </FormLabel>
           <Switch
             size="sm"
