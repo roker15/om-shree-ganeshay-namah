@@ -301,7 +301,7 @@ const TopBar = ({
             />
           </LinkOverlay>
         </LinkBox>
-        <Box display={{ base: "none", md: "block" }}>
+        <Box display={{ base: "none", md: "inline" }}>
           <FormLabel
             fontSize="sm"
             fontStyle="normal"
