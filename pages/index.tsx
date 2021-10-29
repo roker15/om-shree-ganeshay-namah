@@ -62,10 +62,11 @@ const Home: React.FC<ProfileListProps> = ({ data }) => {
            (Strictly as per Syllabus)
           </Heading>
           {/* <SlateEdit/> */}
-          {role !== "MODERATOR" ? null : (
+          {role == "MODERATOR" ? null : (
             <ButtonGroup size="sm" isAttached variant="outline">
               <Button onClick={() => goToCreateHeading()}>Create New Heading</Button>
               <Button onClick={() => goToCreateSubeading()}>Create New Subheading</Button>
+              <Button onClick={() => goToCreateSubeading()}>Create Question Bank</Button>
             </ButtonGroup>
           )}
           {/* <HStack> */}
