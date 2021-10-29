@@ -128,7 +128,11 @@ export default function TopAndSideNavbar({
       bg="green.100"
     >
       {/* mobilenav */}
-      <TopBar setHideSidebar={setHideSidebar} onOpen={onOpen} hideSidebar={hideSidebar} />
+      <TopBar
+        setHideSidebar={setHideSidebar}
+        onOpen={onOpen}
+        hideSidebar={hideSidebar}
+      />
       {console.log("new state is chaned to ", hideSidebar)}
 
       <SidebarContent
@@ -240,10 +244,15 @@ const SidebarContent = ({ onClose, ...rest }: SidebarProps) => {
 interface MobileProps extends FlexProps {
   onOpen: () => void;
   setHideSidebar: Dispatch<SetStateAction<boolean>>;
-  hideSidebar:boolean;
+  hideSidebar: boolean;
 }
 
-const TopBar = ({ hideSidebar,setHideSidebar, onOpen, ...rest }: MobileProps) => {
+const TopBar = ({
+  hideSidebar,
+  setHideSidebar,
+  onOpen,
+  ...rest
+}: MobileProps) => {
   const { signIn, signUp, signOut } = useAuthContext();
   const postContext = usePostContext();
   return (
@@ -292,13 +301,14 @@ const TopBar = ({ hideSidebar,setHideSidebar, onOpen, ...rest }: MobileProps) =>
             />
           </LinkOverlay>
         </LinkBox>
-        <FormControl
-          pl="4"
-          display={{ base: "none", md: "flex" }}
-          alignItems="center"
-        >
-          <FormLabel fontSize="sm" fontStyle="normal" htmlFor="email-alerts" mb="0">
-            {hideSidebar?"Show side panel":"Hide Side Panel"}
+        <>
+          <FormLabel
+            fontSize="sm"
+            fontStyle="normal"
+            htmlFor="email-alerts"
+            mb="0"
+          >
+            {hideSidebar ? "Show side panel" : "Hide Side Panel"}
           </FormLabel>
           <Switch
             size="sm"
@@ -310,7 +320,7 @@ const TopBar = ({ hideSidebar,setHideSidebar, onOpen, ...rest }: MobileProps) =>
           >
             {/* Hide side bar */}
           </Switch>
-        </FormControl>
+        </>
       </HStack>
 
       {/* <Image  boxSize="50px" objectFit="fill" src="vercel.svg" alt="Segun Adebayo" /> */}
