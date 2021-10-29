@@ -301,7 +301,7 @@ const TopBar = ({
             />
           </LinkOverlay>
         </LinkBox>
-        <>
+        <Box display={{ base: "none", md: "flex" }}>
           <FormLabel
             fontSize="sm"
             fontStyle="normal"
@@ -320,7 +320,7 @@ const TopBar = ({
           >
             {/* Hide side bar */}
           </Switch>
-        </>
+        </Box>
       </HStack>
 
       {/* <Image  boxSize="50px" objectFit="fill" src="vercel.svg" alt="Segun Adebayo" /> */}
