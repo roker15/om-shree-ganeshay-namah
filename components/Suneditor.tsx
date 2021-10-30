@@ -6,6 +6,7 @@ import katex from "katex";
 import "katex/dist/katex.min.css";
 import dynamic from "next/dynamic";
 import React, { useEffect, useRef, useState } from "react";
+import { useController } from "react-hook-form";
 // import SunEditor from "suneditor-react";
 const SunEditor = dynamic(() => import("suneditor-react"), {
   ssr: false,
@@ -22,202 +23,64 @@ interface Props {
   isNew: string | undefined | string[];
 }
 
-const buttonList = [
+const ButtonCustomList = [
   ["undo", "redo"],
   ["font", "fontSize", "formatBlock"],
-  ["paragraphStyle", "blockquote"],
+  [/*"paragraphStyle",*/ "blockquote"],
   ["bold", "underline", "italic", "strike", "subscript", "superscript"],
   ["fontColor", "hiliteColor", "textStyle"],
   ["removeFormat"],
   "/",
   ["outdent", "indent"],
   ["align", "horizontalRule", "list", "lineHeight"],
-  ["table", "link", "image", "video", "audio", "math"],
+  ["table", "link", "image", /* "video","audio",*/ "math"],
 
   /** ['imageGallery'] */ // You must add the "imageGalleryUrl".
-  ["fullScreen", "showBlocks", "codeView"],
+  ["fullScreen" /*, "showBlocks", "codeView"*/],
   ["preview", "print"],
-  ["save", "template"],
+  // ["save", "template"],
 ];
 
-const EditorComponent: React.FC<Props> = ({ postId, isNew, subHeadingId }) => {
-  /**
-   * @type {React.MutableRefObject<SunEditor>} get type definitions for editor
-   */
-  const editorRef: React.MutableRefObject<typeof SunEditor | undefined> =
-    useRef();
-  const [content, setContent] = useState("");
-  const [isSubmitting, setIsSubmitting] = useState(false);
-  const [defaultValue1, setDefaultValue1] = useState("");
-  const appcontext = useAppContext();
-
-  // // When the editor's content has changed, store it in state
-  const handleOnChange = (editorContent: string) => {
-    // setDefaultValue1("madarchod")
-    setContent(editorContent);
-  };
-  const createNewPostInDatabase = async () => {
-    const { data, error } = await supabase
-      .from<Post>("posts")
-      .insert([{ post: content, subheading_id: subHeadingId }]);
-    setIsSubmitting(false);
-    // setDefaultValue1("hello")
-  };
-  const updatePostInDatabase = async () => {
-    const { data, error } = await supabase
-      .from<Post>("posts")
-      .update({ post: content })
-      .eq("id", appcontext.postForEdit?.id!);
-    setIsSubmitting(false);
-    // setDefaultValue1("hello")
-  };
-
-  // Send data to Firebase
-  const handleCreateNewPost = () => {
-    setIsSubmitting(true);
-    try {
-      console.log(content);
-      // await sendDataToFirebase(content)
-      createNewPostInDatabase();
-    } catch (error) {
-      console.error("error is ss", error);
-    }
-  };
-  const handleUpdatePost = () => {
-    setIsSubmitting(true);
-    try {
-      console.log(content);
-      // await sendDataToFirebase(content)
-      updatePostInDatabase();
-    } catch (error) {
-      console.error("error is ss", error);
-    }
-  };
-
-  useEffect(() => {
-    async function fetchData() {
-      // You can await here
-
-      if (appcontext.isNewPost) {
-        setDefaultValue1("");
-      } else {
-        setDefaultValue1(appcontext.postForEdit!.post as string);
-      }
-    }
-    fetchData();
-
-    // Get underlining core object here
-    // Notice that useEffect is been used because you have to make sure the editor is rendered.
-    // console.log(editorRef.current!.editor.core)
-    console.log("from use effect in editor", editorRef);
+const Editor = ({ control, name,  ...props }) => {
+  const [editorMode, setEditorMode] = useState<"balloon" | "classic" | "inline" | "balloon-always" | undefined>("balloon");
+  const {
+    field: { value,onChange, ...inputProps },
+    fieldState: { invalid, isTouched, isDirty },
+    formState: { touchedFields, dirtyFields },
+  } = useController({
+    name,
+    control,
+    rules: { required: true },
+    defaultValue:"",
   });
 
-  return (
-    <div>
-      <p> My Other Contents </p>
-      <SunEditor
-        setContents={defaultValue1}
-        onChange={handleOnChange}
-        setOptions={{
-          katex: katex,
-          height: "500",
+  // console.log('inputProps:', inputProps);
+  // console.log('invalid:', invalid);
+  // console.log('isTouched:', isTouched);
+  // console.log('isDirty:', isDirty);
+  // console.log('touchedFields:', touchedFields);
+  // console.log('dirtyFields:', dirtyFields);
+  const handleChange=(content: any)=>{
+    console.log(content); //Get Content Inside Editor
+    // value = content
+    
+  }
 
-          buttonList: buttonList,
-        }}
-      />
-      {appcontext.isNewPost === true ? (
-        <Button
-          isLoading={isSubmitting}
-          mt="2"
-          colorScheme="blue"
-          variant="outline"
-          onClick={handleCreateNewPost}
-        >
-          Create Post
-        </Button>
-      ) : (
-        <Button
-          isLoading={isSubmitting}
-          mt="2"
-          colorScheme="blue"
-          variant="outline"
-          onClick={handleUpdatePost}
-        >
-          Update Post
-        </Button>
-      )}
-    </div>
+  return (
+    <SunEditor
+      {...props}
+      {...inputProps}
+      // defaultValue={value}
+      // setContents={value}
+      onChange={onChange}
+      setOptions={{
+        height: "100%",
+        buttonList: ButtonCustomList,
+        mode: editorMode,
+        katex: katex,
+      }}
+    />
   );
 };
-export default EditorComponent;
 
-//******************* draft.js*************************************** */
-// import React, { useEffect, useState } from "react";
-// import { Editor } from "react-draft-wysiwyg";
-// import { EditorState } from "draft-js";
-// import "react-draft-wysiwyg/dist/react-draft-wysiwyg.css";
-
-// const MyComponent=()=> {
-//   const [editorState, setEditorState] = useState(() =>
-//     EditorState.createEmpty()
-//   );
-//   useEffect(() => {
-//     console.log(editorState);
-//   }, [editorState]);
-//   return (
-//     <div>
-//       <h1 >React Editors</h1>
-//       <h2>Start editing to see some magic happen!</h2>
-//       <div style={{ border: "1px solid black", padding: '2px', minHeight: '400px' }}>
-//         <Editor
-//           editorState={editorState}
-//           onEditorStateChange={setEditorState}
-//         />
-//       </div>
-//     </div>
-//   );
-// }
-// export default MyComponent;
-
-//******************* quill.js*************************************** */
-// import { useState } from "react";
-// import ReactQuill from "react-quill";
-// import "react-quill/dist/quill.snow.css";
-
-// const MyComponent = () => {
-//   const [convertedText, setConvertedText] = useState("Some default content");
-//   return (
-//     <div>
-//       <ReactQuill
-//         modules={{
-//           formula: true,
-//           toolbar: [
-//             ["bold", "italic", "underline", "strike"], // toggled buttons
-//             ["blockquote", "code-block"],
-
-//             [{ header: 1 }, { header: 2 }], // custom button values
-//             [{ list: "ordered" }, { list: "bullet" }],
-//             [{ script: "sub" }, { script: "super" }], // superscript/subscript
-//             [{ indent: "-1" }, { indent: "+1" }], // outdent/indent
-//             [{ direction: "rtl" }], // text direction
-
-//             [{ size: ["small", false, "large", "huge"] }], // custom dropdown
-//             [{ header: [1, 2, 3, 4, 5, 6, false] }],
-
-//             [{ color: [] }, { background: [] }], // dropdown with defaults from theme
-//             [{ font: [] }],
-//             [{ align: [] }],
-
-//             ["clean"], // remove formatting button
-//             ['formula']
-//           ],
-//         }}
-//         theme="snow"
-//         value={convertedText}
-//         onChange={setConvertedText}
-//         style={{ minHeight: "300px" }}
-//       />
-//     </div>
-//   );
-// };
-// export default MyComponent;
+export default Editor;
