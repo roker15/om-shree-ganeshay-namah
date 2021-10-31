@@ -49,6 +49,12 @@ const Home: React.FC<ProfileListProps> = ({ data }) => {
       // query: { postId: postId,subHeadingId:subHeadingId,isNew:isNew },
     });
   };
+  const gotoCreateQuestionBank = () => {
+    router.push({
+      pathname: "./createQuestionBank",
+      // query: { postId: postId,subHeadingId:subHeadingId,isNew:isNew },
+    });
+  };
 
   if (data && data.length !== 0) {
     return (
@@ -66,7 +72,7 @@ const Home: React.FC<ProfileListProps> = ({ data }) => {
             <ButtonGroup size="sm" isAttached variant="outline">
               <Button onClick={() => goToCreateHeading()}>Create New Heading</Button>
               <Button onClick={() => goToCreateSubeading()}>Create New Subheading</Button>
-              <Button onClick={() => goToCreateSubeading()}>Create Question Bank</Button>
+              <Button onClick={() => gotoCreateQuestionBank()}>Create Question Bank</Button>
             </ButtonGroup>
           )}
           {/* <HStack> */}
