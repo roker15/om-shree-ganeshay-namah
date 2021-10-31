@@ -11,6 +11,7 @@ import { useController } from "react-hook-form";
 const SunEditor = dynamic(() => import("suneditor-react"), {
   ssr: false,
 });
+// import SunEditor from 'suneditor-react';
 
 import "suneditor/dist/css/suneditor.min.css"; // Import Sun Editor's CSS File
 import { useAppContext } from "../context/state";
@@ -41,17 +42,16 @@ const ButtonCustomList = [
   // ["save", "template"],
 ];
 
-const Editor = ({ control, name,  ...props }) => {
-  const [editorMode, setEditorMode] = useState<"balloon" | "classic" | "inline" | "balloon-always" | undefined>("balloon");
+const Editor = ({ control, defaultValue, name, ...props }: any) => {
   const {
-    field: { value,onChange, ...inputProps },
+    field: { value, onChange, ...inputProps },
     fieldState: { invalid, isTouched, isDirty },
     formState: { touchedFields, dirtyFields },
   } = useController({
     name,
     control,
     rules: { required: true },
-    defaultValue:"",
+    defaultValue: defaultValue || "",
   });
 
   // console.log('inputProps:', inputProps);
@@ -60,23 +60,18 @@ const Editor = ({ control, name,  ...props }) => {
   // console.log('isDirty:', isDirty);
   // console.log('touchedFields:', touchedFields);
   // console.log('dirtyFields:', dirtyFields);
-  const handleChange=(content: any)=>{
-    console.log(content); //Get Content Inside Editor
-    // value = content
-    
-  }
 
   return (
     <SunEditor
       {...props}
       {...inputProps}
-      // defaultValue={value}
+      defaultValue={value}
       // setContents={value}
-      onChange={onChange}
+      // onChange={onChange}
       setOptions={{
         height: "100%",
         buttonList: ButtonCustomList,
-        mode: editorMode,
+        mode: "balloon",
         katex: katex,
       }}
     />
