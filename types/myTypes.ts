@@ -26,7 +26,7 @@ export type Subheading = {
     topic?: string,
     main_topic_id?:Headings|number
     sequence?:number
-  };
+};
 export type Post = {
     id: number,
     created_at?: string,
@@ -49,4 +49,14 @@ export type SharedPost = {
     post_id: Post|number,
     shared_with:Profile|string
     subheading_id:Subheading|number
+};
+export type QuestionBank = {
+    id: number,
+    created_at: string,
+    updated_at: string,
+    question_content?: string,
+    search_keys?: string,
+    year?: number,
+    sequence?:number
+    paper_id: Papers|number,
 };

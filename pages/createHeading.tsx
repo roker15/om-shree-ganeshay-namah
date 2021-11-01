@@ -209,14 +209,6 @@ const Basic: React.FC = () => {
     paper: number;
     sequence: number;
   }
-  async function onSubmit1(values: FormValues) {
-    const { data, error } = await supabase.from<Headings>("headings").insert({
-      main_topic: values.heading,
-      paper_id: values.paper,
-      sequence: values.sequence,
-    });
-    isSubmitting == false;
-  }
 
   async function onSubmit(values: FormValues) {
     if (isEditMode == false) {
