@@ -33,10 +33,9 @@ export function useGetHeadingsFromPaperId(id?: number) {
     isError: error,
   };
 }
-export function useGetQuestionsByPaperidAndYear(paperId?: number, year?: number,shouldFetch?:boolean) {
-  
+export function useGetQuestionsByPaperidAndYear(paperId?: number, year?: number, shouldFetch?: boolean) {
   const { data, error } = useSWR(
-    shouldFetch ? [`/upsc/${paperId}/${year}`] : null,
+    shouldFetch && paperId && year? [`/upsc/${paperId}/${year}`] : null,
     async () =>
       await supabase
         .from<QuestionBank>("questionbank")
@@ -47,7 +46,7 @@ export function useGetQuestionsByPaperidAndYear(paperId?: number, year?: number,
       search_keys,
       year,
       sequence,
-      paper_id:number,
+      paper_id
  `
         )
         .eq("paper_id", paperId)
