@@ -50,11 +50,11 @@ td {
 /* tr:hover {background-color: yellow;} */
 /* Grid */
 
-ol {
+/* ol {
   background: #ff9999 !important;
   padding: 0px !important;
   margin-left: 35px !important;
-}
+} */
 
 /* ul {
   background: #ebc683;
@@ -62,11 +62,11 @@ ol {
   margin-left: 35px;
 } */
 
-ol li {
+/* ol li {
   background: #ffe5e5 !important;
   padding: 10px !important;
   margin-left: 25px !important;
-}
+} */
 
 /* ul li {
   background: #fffacc;
@@ -74,15 +74,15 @@ ol li {
   margin-left: 32px;
 } */
 
-blockquote {
+/* blockquote {
   background: #f9f9f9;
   border-left: 10px solid #ccc;
   margin: 1.5em 10px !important;
   margin-left: 1.5em 10px !important;
   padding: 0.5em 10px;
   quotes: "\201C""\201D""\2018""\2019";
-}
-blockquote:before {
+} */
+/* blockquote:before {
   color: #ccc;
   content: open-quote;
   font-size: 4em;
@@ -92,7 +92,7 @@ blockquote:before {
 }
 blockquote p {
   display: inline;
-}
+} */
 
 /* mouse over link */
 a:hover {
@@ -314,7 +314,8 @@ input[disabled] {
 
 /* Button */
 
-button,
+/* button style is cancelled by me*/
+/* button,
 .button {
   color: var(--custom-color);
   border: var(--custom-border);
@@ -327,7 +328,7 @@ button,
   text-align: center;
   font-size: 0.9rem;
   text-transform: uppercase;
-}
+} */
 
 button.primary,
 .button.primary {

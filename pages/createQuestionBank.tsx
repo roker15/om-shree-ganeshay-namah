@@ -1,16 +1,38 @@
 import { Button } from "@chakra-ui/button";
 import { Input } from "@chakra-ui/input";
-import { Box, Container } from "@chakra-ui/layout";
+import { Box } from "@chakra-ui/layout";
+import { Badge, Center, FormControl, FormLabel, Select, Text } from "@chakra-ui/react";
+import katex from "katex";
+import "katex/dist/katex.min.css";
 import dynamic from "next/dynamic";
 import React, { useEffect, useState } from "react";
-import { Badge, Center, FormControl, FormErrorMessage, FormLabel, Select, Text } from "@chakra-ui/react";
 import { Controller, SubmitHandler, useForm } from "react-hook-form";
-import "suneditor/dist/css/suneditor.min.css"; // Import Sun Editor's CSS File
-import { supabase } from "../lib/supabaseClient";
-import { Headings, QuestionBank } from "../types/myTypes";
-import { useGetExamPapers, useGetQuestionsByPaperidAndYear } from "../customHookes/useUser";
 import { MdMode } from "react-icons/md";
+import "suneditor/dist/css/suneditor.min.css"; // Import Sun Editor's CSS File
+import useSWR from "swr";
+import { useGetExamPapers, useGetQuestionsByPaperidAndYear } from "../customHookes/useUser";
+import { supabase } from "../lib/supabaseClient";
+import { QuestionBank } from "../types/myTypes";
 // import Suneditor from "../components/Suneditor";
+
+const buttonList = [
+  ["undo", "redo"],
+  ["font", "fontSize", "formatBlock"],
+  [/*"paragraphStyle",*/ "blockquote"],
+  ["bold", "underline", "italic", "strike", "subscript", "superscript"],
+  ["fontColor", "hiliteColor", "textStyle"],
+  ["removeFormat"],
+  "/",
+  ["outdent", "indent"],
+  ["align", "horizontalRule", "list", "lineHeight"],
+  ["table", "link", "image", /* "video","audio",*/ "math"],
+
+  /** ['imageGallery'] */ // You must add the "imageGalleryUrl".
+  ["fullScreen" /*, "showBlocks", "codeView"*/],
+  ["preview", "print"],
+  // ["save", "template"],
+];
+
 const SunEditor = dynamic(() => import("suneditor-react"), {
   ssr: false,
 });
@@ -24,6 +46,8 @@ interface IFormInput {
   searchKeys?: string;
   year?: number;
   sequence?: number;
+  questionNo?: number;
+  remark?: string;
 }
 
 export default function App() {
@@ -31,33 +55,82 @@ export default function App() {
   const [year, setYear] = useState<number | undefined>(undefined);
   const [shouldfetch, setShouldfetch] = useState(false);
   const [isEditMode, setIsEditMode] = useState(false);
-  const [currentEditId, setCurrentEditId] = useState(1000);
+  const [triggerRefetch, setTriggerRefetch] = useState("Y");
+  const [currentEditQuestion, setCurrentEditQuestion] = useState<QuestionBank>();
   const { examPapers, isLoading, isError } = useGetExamPapers();
-  const {
-    questions,
-    isLoading: isLoadingQuestions,
-    isError: isErrorQuestions,
-  } = useGetQuestionsByPaperidAndYear(paperId, year, shouldfetch);
+  // const {
+  //   questions,
+  //   isLoading: isLoadingQuestions,
+  //   isError: isErrorQuestions,
+  // } = useGetQuestionsByPaperidAndYear(paperId, year, shouldfetch, triggerRefetch);
+
+  const { data:questions, error } = useSWR(
+    shouldfetch && paperId && year && (triggerRefetch == "Y" || "N") ? [`/upsc/${paperId}/${year}`] : null,
+    async () =>
+      await supabase
+        .from<QuestionBank>("questionbank")
+        .select(
+          `
+      id,
+      question_content,
+      search_keys,
+      year,
+      sequence,
+      paper_id
+ `
+        )
+        .eq("paper_id", paperId)
+        .eq("year", year),
+    { refreshInterval: 1000 }
+  );
+
+
+
+
+
+
 
   const onSubmit: SubmitHandler<IFormInput> = async (values) => {
-    const { data, error } = await supabase.from<QuestionBank>("questionbank").insert({
-      // id: number,
-      // created_at: string,
-      // updated_at: string,
-      paper_id: values.paperId,
-      question_content: values.questionContent,
-      search_keys: values.searchKeys,
-      year: values.year,
-      sequence: values.sequence,
-    });
-    // isSubmitting == false;
-    console.log(data);
+    if (!isEditMode) {
+      const { data, error } = await supabase.from<QuestionBank>("questionbank").insert({
+        paper_id: values.paperId,
+        question_content: values.questionContent,
+        search_keys: values.searchKeys,
+        year: values.year,
+        sequence: values.sequence,
+      });
+      if (triggerRefetch == "Y") {
+        setTriggerRefetch("N");
+      } else {
+        setTriggerRefetch("Y");
+      }
 
-    alert(JSON.stringify(data));
+      console.log(data);
+      alert(JSON.stringify(data));
+    } else {
+      const { data, error } = await supabase
+        .from<QuestionBank>("questionbank")
+        .update({
+          paper_id: values.paperId,
+          question_content: values.questionContent,
+          search_keys: values.searchKeys,
+          year: values.year,
+          sequence: values.sequence,
+        })
+        .eq("id", currentEditQuestion?.id);
+      if (triggerRefetch == "Y") {
+        setTriggerRefetch("N");
+      } else {
+        setTriggerRefetch("Y");
+      }
+    }
+
+    // isSubmitting == false;
   };
   const {
     register,
     watch,
+    setValue,
     control,
     handleSubmit,
     formState: { errors },
@@ -80,15 +153,30 @@ export default function App() {
 
   const handleQuestionEdit = (e: QuestionBank) => {
     setIsEditMode(!isEditMode);
-    setCurrentEditId(e.id);
+    setCurrentEditQuestion(e);
 
     console.log("editing", e.id, e.question_content);
   };
   useEffect(() => {
-    if (isEditMode ) {
-      
+    if (isEditMode) {
+      setValue("questionContent", currentEditQuestion?.question_content);
+      setValue("year", currentEditQuestion?.year);
+      setValue("sequence", currentEditQuestion?.sequence);
+      setValue("searchKeys", currentEditQuestion?.search_keys);
+    } else {
+      setValue("questionContent", "");
+      setValue("year", currentEditQuestion?.year);
+      setValue("sequence", 0);
+      setValue("searchKeys", "");
     }
-  });
+  }, [
+    currentEditQuestion?.question_content,
+    currentEditQuestion?.search_keys,
+    currentEditQuestion?.sequence,
+    currentEditQuestion?.year,
+    isEditMode,
+    setValue,
+  ]);
 
   return (
     <Box mx={{ base: "4", md: "28", lg: "52" }}>
@@ -112,6 +200,7 @@ export default function App() {
             </Text>
           )}
           <Select
+            isDisabled={isEditMode}
             id="paperId"
             // w="48"
             placeholder="Select Exam Paper"
@@ -152,10 +241,10 @@ export default function App() {
                   name={field.name}
                   setOptions={{
                     mode: "balloon",
-                    //   katex: katex,
+                    katex: katex,
                     height: "100%",
 
-                    //   buttonList: buttonList,
+                    buttonList: buttonList,
                   }}
                   placeholder="put ur content"
                   setContents={field.value}
@@ -185,7 +274,7 @@ export default function App() {
               **Year should be from 1995 to 2021
             </Text>
           )}
-          <Input type="number" {...register("year", { min: 1995, max: 2021 })} />
+          <Input isDisabled={isEditMode} type="number" {...register("year", { min: 1995, max: 2021 })} />
         </FormControl>
         <FormControl m="2">
           <FormLabel color="blue.600" htmlFor="paperId">
@@ -198,6 +287,28 @@ export default function App() {
           )}
           <Input type="number" {...register("sequence", { min: 1, max: 700 })} />
         </FormControl>
+        <FormControl m="2">
+          <FormLabel color="blue.600" htmlFor="paperId">
+            Question Number
+          </FormLabel>
+          {errors.questionNo && (
+            <Text fontSize="16px" color="#bf1650">
+              **Sequence should be from 1 to 200
+            </Text>
+          )}
+          <Input type="number" {...register("questionNo", { min: 1, max: 200 })} />
+        </FormControl>
+        <FormControl m="2">
+          <FormLabel color="blue.600" htmlFor="paperId">
+            Remark
+          </FormLabel>
+          {errors?.remark?.type === "required" && (
+            <Text fontSize="16px" color="#bf1650">
+              **This field is required
+            </Text>
+          )}
+          <Input {...register("remark", { required: false, maxLength: 100 })} />
+        </FormControl>
         {/* <Editor name="description" defaultValue={description} control={control} placeholder="Write a Description..." /> */}
         <Button size="sm" mb="6" mt="6" color="yellow.900" bg="yellow" type="submit">
           {isEditMode ? "update question" : "create question"}
@@ -207,32 +318,52 @@ export default function App() {
         Get data
       </Button> */}
       {questions ? (
-        (questions as QuestionBank[]).map((x) => {
-          return (
-            <Box key={x.id} mb="6">
-              <Button colorScheme = "blackAlpha" leftIcon={<MdMode />} size="xs" onClick={() => handleQuestionEdit(x)}>
-                {isEditMode && currentEditId == x.id ? "Cancel Edit" : "Edit"}
-              </Button>
-              <Box>{x.year}</Box>
-              <Box>
-                <SunEditor
-                  defaultValue={x.question_content}
-                  // name={field.name}
-                  setOptions={{
-                    mode: "balloon",
-                    //   katex: katex,
-                    height: "100%",
+        (questions.data as QuestionBank[])
+          .sort((a, b) => a.id - b.id)
+          .map((x) => {
+            return (
+              <Box key={x.id} mb="6">
+                <Button
+                  isDisabled={isEditMode && currentEditQuestion?.id != x.id}
+                  colorScheme="teal"
+                  variant="ghost"
+                  leftIcon={<MdMode />}
+                  size="xs"
+                  onClick={() => handleQuestionEdit(x)}
+                >
+                  {isEditMode && currentEditQuestion?.id == x.id ? "Cancel Edit" : "Edit"}
+                </Button>
+                <Button
+                  isDisabled={isEditMode}
+                  colorScheme="teal"
+                  variant="ghost"
+                  leftIcon={<MdMode />}
+                  size="xs"
+                  // onClick={() => handleQuestionEdit(x)}
+                >
+                  Delete
+                </Button>
+                <Box>{x.year}</Box>
+                <Box>{x.id}</Box>
+                <Box>
+                  <SunEditor
+                    defaultValue={x.question_content}
+                    // name={field.name}
+                    setOptions={{
+                      mode: "balloon",
+                      katex: katex,
+                      height: "100%",
 
-                    //   buttonList: buttonList,
-                  }}
-                  placeholder="put ur content"
-                  // setContents={field.value}
-                  // onChange={field.onChange}
-                />
+                      buttonList: buttonList,
+                    }}
+                    placeholder="put ur content"
+                    // setContents={field.value}
+                    // onChange={field.onChange}
+                  />
+                </Box>
               </Box>
-            </Box>
-          );
-        })
+            );
+          })
       ) : (
         <div> no data </div>
       )}
