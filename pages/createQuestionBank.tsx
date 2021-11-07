@@ -1,15 +1,30 @@
 import { Button } from "@chakra-ui/button";
 import { Input } from "@chakra-ui/input";
-import { Box } from "@chakra-ui/layout";
-import { Badge, Center, FormControl, FormLabel, Select, Text } from "@chakra-ui/react";
+import { Box, Divider } from "@chakra-ui/layout";
+import {
+  AlertDialog,
+  AlertDialogBody,
+  AlertDialogContent,
+  AlertDialogFooter,
+  AlertDialogHeader,
+  AlertDialogOverlay,
+  Badge,
+  Center,
+  FormControl,
+  FormLabel,
+  HStack,
+  Select,
+  Text,
+} from "@chakra-ui/react";
 import katex from "katex";
 import "katex/dist/katex.min.css";
 import dynamic from "next/dynamic";
 import React, { useEffect, useState } from "react";
 import { Controller, SubmitHandler, useForm } from "react-hook-form";
-import { MdMode } from "react-icons/md";
+import { MdDelete, MdMode } from "react-icons/md";
+import styled from "styled-components";
 import "suneditor/dist/css/suneditor.min.css"; // Import Sun Editor's CSS File
-import useSWR from "swr";
+import useSWR, { mutate } from "swr";
 import { useGetExamPapers, useGetQuestionsByPaperidAndYear } from "../customHookes/useUser";
 import { supabase } from "../lib/supabaseClient";
 import { QuestionBank } from "../types/myTypes";
@@ -46,7 +61,7 @@ interface IFormInput {
   searchKeys?: string;
   year?: number;
   sequence?: number;
-  questionNo?: number;
+  // questionNo?: number;
   remark?: string;
 }
 
@@ -58,37 +73,11 @@ export default function App() {
   const [triggerRefetch, setTriggerRefetch] = useState("Y");
   const [currentEditQuestion, setCurrentEditQuestion] = useState<QuestionBank>();
   const { examPapers, isLoading, isError } = useGetExamPapers();
-  // const {
-  //   questions,
-  //   isLoading: isLoadingQuestions,
-  //   isError: isErrorQuestions,
-  // } = useGetQuestionsByPaperidAndYear(paperId, year, shouldfetch, triggerRefetch);
-
-  const { data:questions, error } = useSWR(
-    shouldfetch && paperId && year && (triggerRefetch == "Y" || "N") ? [`/upsc/${paperId}/${year}`] : null,
-    async () =>
-      await supabase
-        .from<QuestionBank>("questionbank")
-        .select(
-          `
-      id,
-      question_content,
-      search_keys,
-      year,
-      sequence,
-      paper_id
- `
-        )
-        .eq("paper_id", paperId)
-        .eq("year", year),
-    { refreshInterval: 1000 }
-  );
-
-
-
-
-
-
+  const {
+    questions,
+    isLoading: isLoadingQuestions,
+    isError: isErrorQuestions,
+  } = useGetQuestionsByPaperidAndYear(paperId, year, shouldfetch);
 
   const onSubmit: SubmitHandler<IFormInput> = async (values) => {
     if (!isEditMode) {
@@ -98,13 +87,9 @@ export default function App() {
         search_keys: values.searchKeys,
         year: values.year,
         sequence: values.sequence,
+        remark: values.remark,
       });
-      if (triggerRefetch == "Y") {
-        setTriggerRefetch("N");
-      } else {
-        setTriggerRefetch("Y");
-      }
-
+      mutate([`/upsc/${paperId}/${year}`]);
       console.log(data);
       alert(JSON.stringify(data));
     } else {
@@ -116,13 +101,10 @@ export default function App() {
           search_keys: values.searchKeys,
           year: values.year,
           sequence: values.sequence,
+          remark: values.remark,
         })
         .eq("id", currentEditQuestion?.id);
-      if (triggerRefetch == "Y") {
-        setTriggerRefetch("N");
-      } else {
-        setTriggerRefetch("Y");
-      }
+      mutate([`/upsc/${paperId}/${year}`]);
     }
 
     // isSubmitting == false;
@@ -141,10 +123,12 @@ export default function App() {
 
   React.useEffect(() => {
     const subscription = watch((value, { name, type }) => {
-      if (value.year && value.year < 2021 && value.year > 1994) {
+      if (value.year && value.year < 2022 && value.year > 1994) {
         setPaperId(value.paperId);
         setYear(value.year);
         setShouldfetch(true);
+      } else {
+        setYear(undefined);
       }
       console.log("watching value", value, name, type);
     });
@@ -157,20 +141,28 @@ export default function App() {
 
     console.log("editing", e.id, e.question_content);
   };
+  const handleQuestionDelete = async (e: QuestionBank) => {
+    const { data, error } = await supabase.from<QuestionBank>("questionbank").delete().eq("id", e.id);
+    mutate([`/upsc/${paperId}/${year}`]);
+  };
+
   useEffect(() => {
     if (isEditMode) {
       setValue("questionContent", currentEditQuestion?.question_content);
       setValue("year", currentEditQuestion?.year);
       setValue("sequence", currentEditQuestion?.sequence);
       setValue("searchKeys", currentEditQuestion?.search_keys);
+      setValue("remark", currentEditQuestion?.remark);
     } else {
       setValue("questionContent", "");
       setValue("year", currentEditQuestion?.year);
       setValue("sequence", 0);
       setValue("searchKeys", "");
+      setValue("remark", "");
     }
   }, [
     currentEditQuestion?.question_content,
+    currentEditQuestion?.remark,
     currentEditQuestion?.search_keys,
     currentEditQuestion?.sequence,
     currentEditQuestion?.year,
@@ -222,7 +214,7 @@ export default function App() {
         </FormControl>
 
         <FormControl m="2">
-          <FormLabel color="blue.600" htmlFor="paperId">
+          <FormLabel color="blue.600" htmlFor="questionContent">
             Question content
           </FormLabel>
           {errors?.questionContent?.type === "required" && (
@@ -255,7 +247,7 @@ export default function App() {
           />
         </FormControl>
         <FormControl m="2">
-          <FormLabel color="blue.600" htmlFor="paperId">
+          <FormLabel color="blue.600" htmlFor="searchKeys">
             Search Keys
           </FormLabel>
           {errors?.searchKeys?.type === "required" && (
@@ -266,7 +258,7 @@ export default function App() {
           <Input {...register("searchKeys", { required: true, maxLength: 200 })} />
         </FormControl>
         <FormControl m="2">
-          <FormLabel color="blue.600" htmlFor="paperId">
+          <FormLabel color="blue.600" htmlFor="year">
             Question Year
           </FormLabel>
           {errors.year && (
@@ -277,7 +269,7 @@ export default function App() {
           <Input isDisabled={isEditMode} type="number" {...register("year", { min: 1995, max: 2021 })} />
         </FormControl>
         <FormControl m="2">
-          <FormLabel color="blue.600" htmlFor="paperId">
+          <FormLabel color="blue.600" htmlFor="sequence">
             Question sequence
           </FormLabel>
           {errors.sequence && (
@@ -288,18 +280,7 @@ export default function App() {
           <Input type="number" {...register("sequence", { min: 1, max: 700 })} />
         </FormControl>
         <FormControl m="2">
-          <FormLabel color="blue.600" htmlFor="paperId">
-            Question Number
-          </FormLabel>
-          {errors.questionNo && (
-            <Text fontSize="16px" color="#bf1650">
-              **Sequence should be from 1 to 200
-            </Text>
-          )}
-          <Input type="number" {...register("questionNo", { min: 1, max: 200 })} />
-        </FormControl>
-        <FormControl m="2">
-          <FormLabel color="blue.600" htmlFor="paperId">
+          <FormLabel color="blue.600" htmlFor="remark">
             Remark
           </FormLabel>
           {errors?.remark?.type === "required" && (
@@ -310,44 +291,54 @@ export default function App() {
           <Input {...register("remark", { required: false, maxLength: 100 })} />
         </FormControl>
         {/* <Editor name="description" defaultValue={description} control={control} placeholder="Write a Description..." /> */}
-        <Button size="sm" mb="6" mt="6" color="yellow.900" bg="yellow" type="submit">
-          {isEditMode ? "update question" : "create question"}
+        <Button size="sm" mb="6" mt="6" colorScheme="purple" type="submit">
+          {isEditMode ? "Update Question" : "Create Question"}
         </Button>
       </form>
       {/* <Button size="sm" mb="6" mt="6" color="yellow.900" bg="yellow" type="submit">
         Get data
       </Button> */}
-      {questions ? (
-        (questions.data as QuestionBank[])
-          .sort((a, b) => a.id - b.id)
+      {year && year != undefined && paperId ? (
+        <Center mb="16">
+          {" "}
+          <Text as="u">
+            Question Bank For Year <Text as="b"> {year}</Text> ({examPapers?.filter((x) => x.id == paperId)[0].paper_name})
+          </Text>
+        </Center>
+      ) : (
+        <Center mb="16">Select Paper and Mention year (1995-2021) to view question bank</Center>
+      )}
+
+      {questions && questions.length != 0 ? (
+        (questions as QuestionBank[])
+          .sort((a, b) => b.id - a.id)
           .map((x) => {
             return (
-              <Box key={x.id} mb="6">
-                <Button
-                  isDisabled={isEditMode && currentEditQuestion?.id != x.id}
-                  colorScheme="teal"
-                  variant="ghost"
-                  leftIcon={<MdMode />}
-                  size="xs"
-                  onClick={() => handleQuestionEdit(x)}
-                >
-                  {isEditMode && currentEditQuestion?.id == x.id ? "Cancel Edit" : "Edit"}
-                </Button>
-                <Button
-                  isDisabled={isEditMode}
-                  colorScheme="teal"
-                  variant="ghost"
-                  leftIcon={<MdMode />}
-                  size="xs"
-                  // onClick={() => handleQuestionEdit(x)}
-                >
-                  Delete
-                </Button>
-                <Box>{x.year}</Box>
-                <Box>{x.id}</Box>
-                <Box>
+              <Box key={x.id} mb="16">
+                <HStack>
+                  <Button
+                    isDisabled={isEditMode && currentEditQuestion?.id != x.id}
+                    colorScheme="teal"
+                    variant="ghost"
+                    leftIcon={<MdMode />}
+                    size="xs"
+                    onClick={() => handleQuestionEdit(x)}
+                  >
+                    {isEditMode && currentEditQuestion?.id == x.id ? "Cancel Edit" : "Edit"}
+                  </Button>
+
+                  <AlertDialogExample
+                    isDisabled={isEditMode}
+                    handleDelete={handleQuestionDelete}
+                    x={x}
+                    dialogueHeader={"Delete Question"}
+                  ></AlertDialogExample>
+                </HStack>
+                <EditorStyle>
                   <SunEditor
-                    defaultValue={x.question_content}
+                    setContents={x.question_content}
+                    hideToolbar={true}
+                    readOnly={true}
                     // name={field.name}
                     setOptions={{
                       mode: "balloon",
@@ -360,13 +351,113 @@ export default function App() {
                     // setContents={field.value}
                     // onChange={field.onChange}
                   />
-                </Box>
+                </EditorStyle>
+                <HStack>
+                  <Badge color="teal" size="small">
+                    {x.year}
+                  </Badge>
+                  <Badge color="teal" size="small">
+                    {x.id}
+                  </Badge>
+                  <Badge color="teal" size="small">
+                    {x.search_keys}
+                  </Badge>
+                  <Badge color="teal" size="small">
+                    {x.remark}
+                  </Badge>
+                </HStack>
+                <Divider />
               </Box>
             );
           })
       ) : (
-        <div> no data </div>
+        <Box mb="16"> **No data for selected Paper & year</Box>
       )}
     </Box>
   );
 }
+interface AlertdialogueProps {
+  handleDelete: (e: any) => Promise<void>;
+  x: QuestionBank;
+  dialogueHeader: string;
+  isDisabled: boolean;
+}
+function AlertDialogExample({ handleDelete, x, dialogueHeader, isDisabled }: AlertdialogueProps) {
+  const [isOpen, setIsOpen] = React.useState(false);
+  const onClose = () => setIsOpen(false);
+  const cancelRef = React.useRef(null);
+  const handleQuestionDelete = () => {
+    handleDelete(x);
+    onClose();
+  };
+
+  return (
+    <>
+      <Button
+        colorScheme="red"
+        isDisabled={isDisabled}
+        leftIcon={<MdDelete />}
+        variant="ghost"
+        size="xs"
+        onClick={() => setIsOpen(true)}
+      >
+        {dialogueHeader}
+      </Button>
+
+      <AlertDialog isOpen={isOpen} leastDestructiveRef={cancelRef} onClose={onClose}>
+        <AlertDialogOverlay>
+          <AlertDialogContent>
+            <AlertDialogHeader fontSize="lg" fontWeight="bold">
+              {dialogueHeader}
+            </AlertDialogHeader>
+
+            <AlertDialogBody>Are you sure? You can`t undo this action afterwards.</AlertDialogBody>
+
+            <AlertDialogFooter>
+              <Button ref={cancelRef} size="sm" onClick={onClose}>
+                Cancel
+              </Button>
+              <Button colorScheme="red" size="sm" onClick={() => handleQuestionDelete()} ml={3}>
+                Delete
+              </Button>
+            </AlertDialogFooter>
+          </AlertDialogContent>
+        </AlertDialogOverlay>
+      </AlertDialog>
+    </>
+  );
+}
+const EditorStyle = styled.div`
+  .sun-editor {
+    border: 0px solid blue;
+  }
+
+  table {
+    border-collapse: collapse;
+    width: 100%;
+  }
+
+  th,
+  td {
+    text-align: left;
+    padding: 8px;
+    font-family: "Rock Salt", cursive;
+    padding: 20px;
+    // font-style: italic;
+    caption-side: bottom;
+    // color: #666;
+    text-align: right;
+    letter-spacing: 1px;
+    font-weight: lighter !important;
+  }
+  th {
+    font-style: italic;
+    caption-side: bottom;
+    color: #616 !important;
+    font-weight: lighter !important;
+  }
+
+  tr:nth-child(even) {
+    background-color: #f2f2f2;
+  }
+`;

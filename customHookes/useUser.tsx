@@ -37,12 +37,10 @@ export function useGetQuestionsByPaperidAndYear(
   paperId?: number,
   year?: number,
   shouldFetch?: boolean,
-  triggerRefetch?: string,
-  isEditMode?: boolean
 ) {
   console.log("refetching data............");
   const { data, error } = useSWR(
-    shouldFetch && paperId && year && (triggerRefetch == "Y" || "N") ? [`/upsc/${paperId}/${year}`] : null,
+    shouldFetch && paperId && year ? [`/upsc/${paperId}/${year}`] : null,
     async () =>
       await supabase
         .from<QuestionBank>("questionbank")
@@ -53,7 +51,8 @@ export function useGetQuestionsByPaperidAndYear(
       search_keys,
       year,
       sequence,
-      paper_id
+      paper_id,
+      remark
  `
         )
         .eq("paper_id", paperId)

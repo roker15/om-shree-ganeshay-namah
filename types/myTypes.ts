@@ -59,4 +59,5 @@ export type QuestionBank = {
     year?: number,
     sequence?:number
     paper_id: Papers|number,
+    remark: string,
 };
