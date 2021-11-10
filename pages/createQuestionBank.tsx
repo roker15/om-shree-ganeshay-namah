@@ -70,7 +70,10 @@ export default function App() {
   const [year, setYear] = useState<number | undefined>(undefined);
   const [shouldfetch, setShouldfetch] = useState(false);
   const [isEditMode, setIsEditMode] = useState(false);
-  const [triggerRefetch, setTriggerRefetch] = useState("Y");
+  const [email, setEmail] = useState("");
+  const [userId, setUserId] = useState("");
+  const [isLoggedin, setIsLoggedin] = useState(false);
+
   const [currentEditQuestion, setCurrentEditQuestion] = useState<QuestionBank>();
   const { examPapers, isLoading, isError } = useGetExamPapers();
   const {
@@ -78,6 +81,38 @@ export default function App() {
     isLoading: isLoadingQuestions,
     isError: isErrorQuestions,
   } = useGetQuestionsByPaperidAndYear(paperId, year, shouldfetch);
+
+  useEffect(() => {
+    // listen for changes to auth
+    const { data: listener } = supabase.auth.onAuthStateChange((event, session) => {
+      if (session) {
+        setIsLoggedin(true);
+        // setEmail(supabase!.auth!.session()!.user!.email!);
+        setEmail(supabase!.auth!.session()!.user!.user_metadata.full_name);
+        setUserId(supabase!.auth!.session()!.user!.id);
+        // console.log(supabase!.auth!.session()!.user!.user_metadata.full_name);
+      } else {
+        setIsLoggedin(false);
+        setEmail("");
+        setUserId("");
+      }
+    });
+
+    // cleanup the useEffect hook
+    return () => {
+      listener?.unsubscribe();
+    };
+  }, []);
+  const signUpUser = async (email: string, role: string) => {
+    let { user, error } = await supabase.auth.signIn(
+      {
+        provider: "google",
+      },
+      {
+        redirectTo: "https://om-shree-ganeshay-namah-git-development1-roker15.vercel.app/createQuestionBank",
+      }
+    );
+  };
 
   const onSubmit: SubmitHandler<IFormInput> = async (values) => {
     if (!isEditMode) {
@@ -88,6 +123,7 @@ export default function App() {
         year: values.year,
         sequence: values.sequence,
         remark: values.remark,
+        created_by:userId
       });
       mutate([`/upsc/${paperId}/${year}`]);
       console.log(data);
@@ -102,6 +138,7 @@ export default function App() {
           year: values.year,
           sequence: values.sequence,
           remark: values.remark,
+          created_by:userId
         })
         .eq("id", currentEditQuestion?.id);
       mutate([`/upsc/${paperId}/${year}`]);
@@ -130,7 +167,6 @@ export default function App() {
       } else {
         setYear(undefined);
       }
-      console.log("watching value", value, name, type);
     });
     return () => subscription.unsubscribe();
   }, [watch]);
@@ -169,177 +205,92 @@ export default function App() {
     isEditMode,
     setValue,
   ]);
-
-  return (
-    <Box mx={{ base: "4", md: "28", lg: "52" }}>
-      <form onSubmit={handleSubmit(onSubmit)}>
-        <br />
-        <Center>
-          <Badge colorScheme="purple" fontSize="2xl">
-            Create Questions
-          </Badge>
-        </Center>
-        <br />
-        <br />
-
-        <FormControl m="2">
-          <FormLabel color="blue.600" htmlFor="paperId">
-            Exam paper
-          </FormLabel>
-          {errors?.paperId?.type === "required" && (
-            <Text fontSize="16px" color="#bf1650">
-              **This field is required
-            </Text>
-          )}
-          <Select
-            isDisabled={isEditMode}
-            id="paperId"
-            // w="48"
-            placeholder="Select Exam Paper"
-            {...register("paperId", {
-              required: "This is required",
-              // minLength: { value: 4, message: "Minimum length should be 4"  },
-            })}
-            // onChange={handleChange}
-          >
-            {examPapers?.map((x) => {
-              return (
-                <option key={x.id} value={x.id}>
-                  {x.paper_name}
-                </option>
-              );
-            })}
-          </Select>
-          {/* <FormErrorMessage>{errors.paperId && errors.paperId.message}</FormErrorMessage> */}
-        </FormControl>
-
-        <FormControl m="2">
-          <FormLabel color="blue.600" htmlFor="questionContent">
-            Question content
-          </FormLabel>
-          {errors?.questionContent?.type === "required" && (
-            <Text fontSize="16px" color="#bf1650">
-              **This field is required
-            </Text>
-          )}
-          <Controller
-            name="questionContent"
-            control={control}
-            // defaultValue=""
-            rules={{ required: true }}
-            render={({ field }) => (
-              <Box>
-                <SunEditor
-                  name={field.name}
-                  setOptions={{
-                    mode: "balloon",
-                    katex: katex,
-                    height: "100%",
-
-                    buttonList: buttonList,
-                  }}
-                  placeholder="put ur content"
-                  setContents={field.value}
-                  onChange={field.onChange}
-                />
-              </Box>
-            )}
-          />
-        </FormControl>
-        <FormControl m="2">
-          <FormLabel color="blue.600" htmlFor="searchKeys">
-            Search Keys
-          </FormLabel>
-          {errors?.searchKeys?.type === "required" && (
-            <Text fontSize="16px" color="#bf1650">
-              **This field is required
-            </Text>
-          )}
-          <Input {...register("searchKeys", { required: true, maxLength: 200 })} />
-        </FormControl>
-        <FormControl m="2">
-          <FormLabel color="blue.600" htmlFor="year">
-            Question Year
-          </FormLabel>
-          {errors.year && (
-            <Text fontSize="16px" color="#bf1650">
-              **Year should be from 1995 to 2021
-            </Text>
-          )}
-          <Input isDisabled={isEditMode} type="number" {...register("year", { min: 1995, max: 2021 })} />
-        </FormControl>
-        <FormControl m="2">
-          <FormLabel color="blue.600" htmlFor="sequence">
-            Question sequence
-          </FormLabel>
-          {errors.sequence && (
-            <Text fontSize="16px" color="#bf1650">
-              **Sequence should be from 1 to 700
-            </Text>
-          )}
-          <Input type="number" {...register("sequence", { min: 1, max: 700 })} />
-        </FormControl>
-        <FormControl m="2">
-          <FormLabel color="blue.600" htmlFor="remark">
-            Remark
-          </FormLabel>
-          {errors?.remark?.type === "required" && (
-            <Text fontSize="16px" color="#bf1650">
-              **This field is required
-            </Text>
-          )}
-          <Input {...register("remark", { required: false, maxLength: 100 })} />
-        </FormControl>
-        {/* <Editor name="description" defaultValue={description} control={control} placeholder="Write a Description..." /> */}
-        <Button size="sm" mb="6" mt="6" colorScheme="purple" type="submit">
-          {isEditMode ? "Update Question" : "Create Question"}
+  if (!isLoggedin) {
+    console.log("session null hai bhai");
+    // setEmail("")
+    return (
+      <div>
+        Please login to view content
+        <Button variant=" outline" color="violet" onClick={() => signUpUser("hello", "hello")}>
+          Log In
         </Button>
-      </form>
-      {/* <Button size="sm" mb="6" mt="6" color="yellow.900" bg="yellow" type="submit">
-        Get data
-      </Button> */}
-      {year && year != undefined && paperId ? (
-        <Center mb="16">
-          {" "}
-          <Text as="u">
-            Question Bank For Year <Text as="b"> {year}</Text> ({examPapers?.filter((x) => x.id == paperId)[0].paper_name})
-          </Text>
-        </Center>
-      ) : (
-        <Center mb="16">Select Paper and Mention year (1995-2021) to view question bank</Center>
-      )}
+        <Text>{email}</Text>
+      </div>
+    );
+  } else if (isLoggedin) {
+    console.log("session null  nahi hai bhai");
+    return (
+      <Box mx={{ base: "4", md: "28", lg: "52" }}>
+        <Button
+          onClick={() => {
+            console.log("session isss ", supabase.auth.session());
+            supabase.auth.signOut();
+            setEmail("");
+            setIsLoggedin(false);
+          }}
+        >
+          Log out
+        </Button>
+        <Text>{email}</Text>
+        <form onSubmit={handleSubmit(onSubmit)}>
+          <br />
+          <Center>
+            <Badge colorScheme="purple" fontSize="2xl">
+              Create Questions
+            </Badge>
+          </Center>
+          <br />
+          <br />
 
-      {questions && questions.length != 0 ? (
-        (questions as QuestionBank[])
-          .sort((a, b) => b.id - a.id)
-          .map((x) => {
-            return (
-              <Box key={x.id} mb="16">
-                <HStack>
-                  <Button
-                    isDisabled={isEditMode && currentEditQuestion?.id != x.id}
-                    colorScheme="teal"
-                    variant="ghost"
-                    leftIcon={<MdMode />}
-                    size="xs"
-                    onClick={() => handleQuestionEdit(x)}
-                  >
-                    {isEditMode && currentEditQuestion?.id == x.id ? "Cancel Edit" : "Edit"}
-                  </Button>
+          <FormControl m="2">
+            <FormLabel color="blue.600" htmlFor="paperId">
+              Exam paper
+            </FormLabel>
+            {errors?.paperId?.type === "required" && (
+              <Text fontSize="16px" color="#bf1650">
+                **This field is required
+              </Text>
+            )}
+            <Select
+              isDisabled={isEditMode}
+              id="paperId"
+              // w="48"
+              placeholder="Select Exam Paper"
+              {...register("paperId", {
+                required: "This is required",
+                // minLength: { value: 4, message: "Minimum length should be 4"  },
+              })}
+              // onChange={handleChange}
+            >
+              {examPapers?.map((x) => {
+                return (
+                  <option key={x.id} value={x.id}>
+                    {x.paper_name}
+                  </option>
+                );
+              })}
+            </Select>
+            {/* <FormErrorMessage>{errors.paperId && errors.paperId.message}</FormErrorMessage> */}
+          </FormControl>
 
-                  <AlertDialogExample
-                    isDisabled={isEditMode}
-                    handleDelete={handleQuestionDelete}
-                    x={x}
-                    dialogueHeader={"Delete Question"}
-                  ></AlertDialogExample>
-                </HStack>
-                <EditorStyle>
+          <FormControl m="2">
+            <FormLabel color="blue.600" htmlFor="questionContent">
+              Question content
+            </FormLabel>
+            {errors?.questionContent?.type === "required" && (
+              <Text fontSize="16px" color="#bf1650">
+                **This field is required
+              </Text>
+            )}
+            <Controller
+              name="questionContent"
+              control={control}
+              // defaultValue=""
+              rules={{ required: true }}
+              render={({ field }) => (
+                <Box>
                   <SunEditor
-                    setContents={x.question_content}
-                    hideToolbar={true}
-                    readOnly={true}
-                    // name={field.name}
+                    name={field.name}
                     setOptions={{
                       mode: "balloon",
                       katex: katex,
@@ -348,33 +299,143 @@ export default function App() {
                       buttonList: buttonList,
                     }}
                     placeholder="put ur content"
-                    // setContents={field.value}
-                    // onChange={field.onChange}
+                    setContents={field.value}
+                    onChange={field.onChange}
                   />
-                </EditorStyle>
-                <HStack>
-                  <Badge color="teal" size="small">
-                    {x.year}
-                  </Badge>
-                  <Badge color="teal" size="small">
-                    {x.id}
-                  </Badge>
-                  <Badge color="teal" size="small">
-                    {x.search_keys}
-                  </Badge>
-                  <Badge color="teal" size="small">
-                    {x.remark}
-                  </Badge>
-                </HStack>
-                <Divider />
-              </Box>
-            );
-          })
-      ) : (
-        <Box mb="16"> **No data for selected Paper & year</Box>
-      )}
-    </Box>
-  );
+                </Box>
+              )}
+            />
+          </FormControl>
+          <FormControl m="2">
+            <FormLabel color="blue.600" htmlFor="searchKeys">
+              Search Keys
+            </FormLabel>
+            {errors?.searchKeys?.type === "required" && (
+              <Text fontSize="16px" color="#bf1650">
+                **This field is required
+              </Text>
+            )}
+            <Input {...register("searchKeys", { required: true, maxLength: 200 })} />
+          </FormControl>
+          <FormControl m="2">
+            <FormLabel color="blue.600" htmlFor="year">
+              Question Year
+            </FormLabel>
+            {errors.year && (
+              <Text fontSize="16px" color="#bf1650">
+                **Year should be from 1995 to 2021
+              </Text>
+            )}
+            <Input isDisabled={isEditMode} type="number" {...register("year", { min: 1995, max: 2021 })} />
+          </FormControl>
+          <FormControl m="2">
+            <FormLabel color="blue.600" htmlFor="sequence">
+              Question sequence
+            </FormLabel>
+            {errors.sequence && (
+              <Text fontSize="16px" color="#bf1650">
+                **Sequence should be from 1 to 700
+              </Text>
+            )}
+            <Input type="number" {...register("sequence", { min: 1, max: 700 })} />
+          </FormControl>
+          <FormControl m="2">
+            <FormLabel color="blue.600" htmlFor="remark">
+              Remark
+            </FormLabel>
+            {errors?.remark?.type === "required" && (
+              <Text fontSize="16px" color="#bf1650">
+                **This field is required
+              </Text>
+            )}
+            <Input {...register("remark", { required: false, maxLength: 100 })} />
+          </FormControl>
+          {/* <Editor name="description" defaultValue={description} control={control} placeholder="Write a Description..." /> */}
+          <Button size="sm" mb="6" mt="6" colorScheme="purple" type="submit">
+            {isEditMode ? "Update Question" : "Create Question"}
+          </Button>
+        </form>
+        {/* <Button size="sm" mb="6" mt="6" color="yellow.900" bg="yellow" type="submit">
+          Get data
+        </Button> */}
+        {year && year != undefined && paperId ? (
+          <Center mb="16">
+            {" "}
+            <Text as="u">
+              Question Bank For Year <Text as="b"> {year}</Text> ({examPapers?.filter((x) => x.id == paperId)[0].paper_name})
+            </Text>
+          </Center>
+        ) : (
+          <Center mb="16">Select Paper and Mention year (1995-2021) to view question bank</Center>
+        )}
+
+        {questions && questions.length != 0 ? (
+          (questions as QuestionBank[])
+            .sort((a, b) => b.id - a.id)
+            .map((x) => {
+              return (
+                <Box key={x.id} mb="16">
+                  <HStack>
+                    <Button
+                      isDisabled={isEditMode && currentEditQuestion?.id != x.id}
+                      colorScheme="teal"
+                      variant="ghost"
+                      leftIcon={<MdMode />}
+                      size="xs"
+                      onClick={() => handleQuestionEdit(x)}
+                    >
+                      {isEditMode && currentEditQuestion?.id == x.id ? "Cancel Edit" : "Edit"}
+                    </Button>
+
+                    <AlertDialogExample
+                      isDisabled={isEditMode}
+                      handleDelete={handleQuestionDelete}
+                      x={x}
+                      dialogueHeader={"Delete Question"}
+                    ></AlertDialogExample>
+                  </HStack>
+                  <EditorStyle>
+                    <SunEditor
+                      setContents={x.question_content}
+                      hideToolbar={true}
+                      readOnly={true}
+                      // name={field.name}
+                      setOptions={{
+                        mode: "balloon",
+                        katex: katex,
+                        height: "100%",
+
+                        buttonList: buttonList,
+                      }}
+                      placeholder="put ur content"
+                      // setContents={field.value}
+                      // onChange={field.onChange}
+                    />
+                  </EditorStyle>
+                  <HStack>
+                    <Badge color="teal" size="small">
+                      {x.year}
+                    </Badge>
+                    <Badge color="teal" size="small">
+                      {x.id}
+                    </Badge>
+                    <Badge color="teal" size="small">
+                      {x.search_keys}
+                    </Badge>
+                    <Badge color="teal" size="small">
+                      {x.remark}
+                    </Badge>
+                  </HStack>
+                  <Divider />
+                </Box>
+              );
+            })
+        ) : (
+          <Box mb="16"> **No data for selected Paper & year</Box>
+        )}
+      </Box>
+    );
+  }
 }
 interface AlertdialogueProps {
   handleDelete: (e: any) => Promise<void>;
