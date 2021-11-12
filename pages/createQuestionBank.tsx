@@ -24,7 +24,7 @@ import { Controller, SubmitHandler, useForm } from "react-hook-form";
 import { MdDelete, MdMode } from "react-icons/md";
 import styled from "styled-components";
 import "suneditor/dist/css/suneditor.min.css"; // Import Sun Editor's CSS File
-import useSWR, { mutate } from "swr";
+import useSWR, { mutate, } from "swr";
 import { useGetExamPapers, useGetQuestionsByPaperidAndYear } from "../customHookes/useUser";
 import { supabase } from "../lib/supabaseClient";
 import { QuestionBank } from "../types/myTypes";
@@ -123,7 +123,7 @@ export default function App() {
         year: values.year,
         sequence: values.sequence,
         remark: values.remark,
-        created_by:userId
+        created_by: userId,
       });
       mutate([`/upsc/${paperId}/${year}`]);
       console.log(data);
@@ -138,7 +138,7 @@ export default function App() {
           year: values.year,
           sequence: values.sequence,
           remark: values.remark,
-          created_by:userId
+          created_by: userId,
         })
         .eq("id", currentEditQuestion?.id);
       mutate([`/upsc/${paperId}/${year}`]);
@@ -211,7 +211,17 @@ export default function App() {
     return (
       <div>
         Please login to view content
-        <Button variant=" outline" color="violet" onClick={() => signUpUser("hello", "hello")}>
+        <Button
+          _active={{
+            border:"none",
+            bg: "#dddfe2",
+            transform: "scale(0.98)",
+            borderColor: "#bec3c9",
+          }}
+          variant=" outline"
+          color="violet"
+          onClick={() => signUpUser("hello", "hello")}
+        >
           Log In
         </Button>
         <Text>{email}</Text>
