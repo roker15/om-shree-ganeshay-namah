@@ -24,6 +24,7 @@ import { Controller, SubmitHandler, useForm } from "react-hook-form";
 import { MdDelete, MdMode } from "react-icons/md";
 import styled from "styled-components";
 import "suneditor/dist/css/suneditor.min.css"; // Import Sun Editor's CSS File
+// now recommend to always use the mutate returned from the useSWRConfig hook:
 import useSWR, { mutate, } from "swr";
 import { useGetExamPapers, useGetQuestionsByPaperidAndYear } from "../customHookes/useUser";
 import { supabase } from "../lib/supabaseClient";
@@ -109,7 +110,7 @@ export default function App() {
         provider: "google",
       },
       {
-        redirectTo: "https://om-shree-ganeshay-namah-git-development1-roker15.vercel.app/createQuestionBank",
+        redirectTo: "https://om-shree-ganeshay-namah-git-development2-roker15.vercel.app/createQuestionBank",
       }
     );
   };
