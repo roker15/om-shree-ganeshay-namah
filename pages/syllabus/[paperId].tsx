@@ -101,32 +101,13 @@ const Syllabus: React.FC<ProfileListProps> = ({ array }) => {
                           </NextLink>
                         </Text>
 
-                        // return
-                        //  <li>{value.topic}</li>;;
-                        // <div key={value.id}>
-                        //   <Text
-                        //     color="teal.500"
-                        //     _hover={{
-                        //       background: "gray.600",
-                        //       color: "white",
-                        //     }}
-                        //   >
-                        //     {value.topic}
-                        //     <Text as="b">,&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</Text>
-
-                        //   </Text>
-                        // </div>
-
-                        // {/* Following is for future implementation */}
+                   
                       ))}
                   </Td>
                 </Tr>
               );
             })}
 
-          {/* <Td>inches</Td>
-            <Td>millimetres (mm)</Td>
-            <Td isNumeric>25.4</Td> */}
         </Tbody>
       </Table>
     </div>
@@ -153,7 +134,6 @@ export const getStaticProps = async ({ params }: any) => {
     .from<Headings>("headings")
     .select(` id,main_topic,sequence`)
     .eq("paper_id", params.paperId);
-  // let subheadings: Subheading[][] = [];
   let subheadingsMap = new Map<Headings | undefined, Subheading[] | null>();
   console.log("subheadings are88 ", data?.length);
 
@@ -170,10 +150,8 @@ paper_name
         )`
       )
       .eq("main_topic_id", data![index].id);
-    // subheadings.push(subheading.data!);
     subheadingsMap.set(data![index], subheading.data);
   }
-  // console.log("subheading map is ", subheadingsMap);
   const array = Array.from(subheadingsMap, ([name, value]) => ({
     name,
     value,
