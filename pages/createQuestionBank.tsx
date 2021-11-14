@@ -1,6 +1,7 @@
 import { Button } from "@chakra-ui/button";
+import { LinkIcon } from "@chakra-ui/icons";
 import { Input } from "@chakra-ui/input";
-import { Box, Divider } from "@chakra-ui/layout";
+import { Box, Divider, Stack } from "@chakra-ui/layout";
 import {
   AlertDialog,
   AlertDialogBody,
@@ -13,19 +14,29 @@ import {
   FormControl,
   FormLabel,
   HStack,
+  Modal,
+  ModalBody,
+  ModalCloseButton,
+  ModalContent,
+  ModalFooter,
+  ModalHeader,
+  ModalOverlay,
+  Radio,
+  RadioGroup,
   Select,
   Text,
+  useDisclosure,
 } from "@chakra-ui/react";
 import katex from "katex";
 import "katex/dist/katex.min.css";
 import dynamic from "next/dynamic";
 import React, { useEffect, useState } from "react";
 import { Controller, SubmitHandler, useForm } from "react-hook-form";
-import { MdDelete, MdMode } from "react-icons/md";
+import { MdDelete, MdLink, MdMode } from "react-icons/md";
 import styled from "styled-components";
 import "suneditor/dist/css/suneditor.min.css"; // Import Sun Editor's CSS File
 // now recommend to always use the mutate returned from the useSWRConfig hook:
-import useSWR, { mutate, } from "swr";
+import useSWR, { mutate } from "swr";
 import { useGetExamPapers, useGetQuestionsByPaperidAndYear } from "../customHookes/useUser";
 import { supabase } from "../lib/supabaseClient";
 import { QuestionBank } from "../types/myTypes";
@@ -83,6 +94,7 @@ export default function App() {
     isError: isErrorQuestions,
   } = useGetQuestionsByPaperidAndYear(paperId, year, shouldfetch);
 
+
   useEffect(() => {
     // listen for changes to auth
     const { data: listener } = supabase.auth.onAuthStateChange((event, session) => {
@@ -110,7 +122,8 @@ export default function App() {
         provider: "google",
       },
       {
-        redirectTo: "https://om-shree-ganeshay-namah-git-development2-roker15.vercel.app/createQuestionBank",
+        redirectTo: "http://localhost:3000/createQuestionBank",
+        // redirectTo: "https://om-shree-ganeshay-namah-git-development2-roker15.vercel.app/createQuestionBank",
       }
     );
   };
@@ -214,7 +227,7 @@ export default function App() {
         Please login to view content
         <Button
           _active={{
-            border:"none",
+            border: "none",
             bg: "#dddfe2",
             transform: "scale(0.98)",
             borderColor: "#bec3c9",
@@ -404,12 +417,15 @@ export default function App() {
                       x={x}
                       dialogueHeader={"Delete Question"}
                     ></AlertDialogExample>
+                    <ScrollingExample></ScrollingExample>
                   </HStack>
                   <EditorStyle>
                     <SunEditor
                       setContents={x.question_content}
                       hideToolbar={true}
                       readOnly={true}
+                      disable={true}
+                      // autoFocus={false}
                       // name={field.name}
                       setOptions={{
                         mode: "balloon",
@@ -447,6 +463,51 @@ export default function App() {
       </Box>
     );
   }
+
+
+  function ScrollingExample() {
+    const { isOpen, onOpen, onClose } = useDisclosure();
+    const [scrollBehavior, setScrollBehavior] = React.useState<"inside" | "outside" | undefined | string>("inside");
+  
+    const btnRef = React.useRef(null);
+    return (
+      <>
+        {/* <RadioGroup value={scrollBehavior} onChange={setScrollBehavior}>
+          <Stack direction="row">
+            <Radio value="inside">inside</Radio>
+            <Radio value="outside">outside</Radio>
+          </Stack>
+        </RadioGroup> */}
+  
+        <Button mt={3} ref={btnRef} size="xs"  leftIcon={<MdLink />} variant="ghost" onClick={onOpen}>
+          Link Syllabus
+        </Button>
+  
+        <Modal onClose={onClose} finalFocusRef={btnRef} size="xl" isOpen={isOpen} scrollBehavior="inside">
+          <ModalOverlay />
+          <ModalContent>
+            <ModalHeader>Modal Title</ModalHeader>
+            <ModalCloseButton />
+            <ModalBody>
+            {examPapers?.map((x) => {
+                return (
+                  <Box key={x.id} value={x.id}>
+                    {x.paper_name}
+                  </Box>
+                );
+              })}
+              {/* <Lorem count={15} /> */}
+            </ModalBody>
+            <ModalFooter>
+              <Button onClick={onClose}>Close</Button>
+            </ModalFooter>
+          </ModalContent>
+        </Modal>
+      </>
+    );
+  }
+  
+
 }
 interface AlertdialogueProps {
   handleDelete: (e: any) => Promise<void>;
@@ -499,6 +560,7 @@ function AlertDialogExample({ handleDelete, x, dialogueHeader, isDisabled }: Ale
     </>
   );
 }
+
 const EditorStyle = styled.div`
   .sun-editor {
     border: 0px solid blue;

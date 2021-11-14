@@ -153,7 +153,6 @@ export const getStaticProps = async ({ params }: any) => {
     .from<Headings>("headings")
     .select(` id,main_topic,sequence`)
     .eq("paper_id", params.paperId);
-  console.log("getstatic props inside ", params.paperId);
   // let subheadings: Subheading[][] = [];
   let subheadingsMap = new Map<Headings | undefined, Subheading[] | null>();
   console.log("subheadings are88 ", data?.length);
