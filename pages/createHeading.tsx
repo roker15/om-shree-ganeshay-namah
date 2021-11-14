@@ -78,7 +78,6 @@ const Basic: React.FC = () => {
             {
               Header: "Sequence",
               accessor: "sequence",
-              // sortType: 'basic'
             },
           ],
         },
