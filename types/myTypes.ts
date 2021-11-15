@@ -62,3 +62,25 @@ export type QuestionBank = {
   remark: string;
   created_by: string | Profile;
 };
+export type SubheadingQuestionLink = {
+  id: number;
+  created_at?: string;
+  updated_at?: string;
+
+  heading_id?: Headings | number;
+  questionbank_id?: QuestionBank | number;
+  subheading_id?: Subheading | number;
+
+  created_by: string | Profile;
+};
+
+export type SubheadingViews = {
+  subheading_id: number;
+  main_topic_id?: number;
+  topic?: string;
+  subheading_sequence?: number;
+  heading_id?: number;
+  main_topic?: string;
+  heading_sequence?: number;
+  paper_id?: number;
+};

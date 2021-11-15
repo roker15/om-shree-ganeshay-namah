@@ -32,14 +32,14 @@ import "katex/dist/katex.min.css";
 import dynamic from "next/dynamic";
 import React, { useEffect, useState } from "react";
 import { Controller, SubmitHandler, useForm } from "react-hook-form";
-import { MdDelete, MdLink, MdMode } from "react-icons/md";
+import { MdDelete, MdLink, MdLinkOff, MdMode } from "react-icons/md";
 import styled from "styled-components";
 import "suneditor/dist/css/suneditor.min.css"; // Import Sun Editor's CSS File
 // now recommend to always use the mutate returned from the useSWRConfig hook:
 import useSWR, { mutate } from "swr";
-import { useGetExamPapers, useGetQuestionsByPaperidAndYear } from "../customHookes/useUser";
+import { useGetExamPapers, useGetQuestionsByPaperidAndYear, useSubheadingByPaperId } from "../customHookes/useUser";
 import { supabase } from "../lib/supabaseClient";
-import { QuestionBank } from "../types/myTypes";
+import { QuestionBank, SubheadingQuestionLink } from "../types/myTypes";
 // import Suneditor from "../components/Suneditor";
 
 const buttonList = [
@@ -94,6 +94,7 @@ export default function App() {
     isError: isErrorQuestions,
   } = useGetQuestionsByPaperidAndYear(paperId, year, shouldfetch);
 
+  const { subheadingsView, isLoading_useSubheadingByPaperId } = useSubheadingByPaperId(paperId);
 
   useEffect(() => {
     // listen for changes to auth
@@ -417,7 +418,7 @@ export default function App() {
                       x={x}
                       dialogueHeader={"Delete Question"}
                     ></AlertDialogExample>
-                    <ScrollingExample></ScrollingExample>
+                    <LinkSyllabusModal questionId={x.id}></LinkSyllabusModal>
                   </HStack>
                   <EditorStyle>
                     <SunEditor
@@ -463,12 +464,27 @@ export default function App() {
       </Box>
     );
   }
-
-
-  function ScrollingExample() {
+  const handleLinkSyllabusButtonClick = async (x: number) => {
+    const { data, error } = await supabase
+      .from<SubheadingQuestionLink>("subheadingquestionlink")
+      .select(
+        `
+          id,
+          questionbank_id,
+          subheading_id
+        created_by: string | Profile;
+ `
+      )
+      .eq("questionbank_id", x);
+    // { refreshInterval: 1000 }
+  };
+  interface LinkSyllabusModalProps {
+    questionId: number;
+  }
+  function LinkSyllabusModal({ questionId }: LinkSyllabusModalProps) {
     const { isOpen, onOpen, onClose } = useDisclosure();
     const [scrollBehavior, setScrollBehavior] = React.useState<"inside" | "outside" | undefined | string>("inside");
-  
+
     const btnRef = React.useRef(null);
     return (
       <>
@@ -478,24 +494,41 @@ export default function App() {
             <Radio value="outside">outside</Radio>
           </Stack>
         </RadioGroup> */}
-  
-        <Button mt={3} ref={btnRef} size="xs"  leftIcon={<MdLink />} variant="ghost" onClick={onOpen}>
+
+        <Button mt={3} ref={btnRef} size="xs" leftIcon={<MdLink />} variant="ghost" onClick={handleLinkSyllabusButtonClick(questionId);
+          onOpen()}>
           Link Syllabus
         </Button>
-  
+
         <Modal onClose={onClose} finalFocusRef={btnRef} size="xl" isOpen={isOpen} scrollBehavior="inside">
           <ModalOverlay />
           <ModalContent>
-            <ModalHeader>Modal Title</ModalHeader>
+            <ModalHeader>Link Syllabus to Question</ModalHeader>
             <ModalCloseButton />
             <ModalBody>
-            {examPapers?.map((x) => {
-                return (
-                  <Box key={x.id} value={x.id}>
-                    {x.paper_name}
-                  </Box>
-                );
-              })}
+              {subheadingsView ? (
+                subheadingsView!.map((x) => {
+                  console.log("bgbgbgbg", x);
+                  return (
+                    <Box p="2" key={x.subheading_id}>
+                      <Text as="b" fontSize="smaller">
+                        {x!.main_topic!}
+                        <Text color="blue" fontSize="smaller">
+                          {"  " + x!.topic}
+                          <Button colorScheme="green" leftIcon={<MdLink />} variant="ghost" size="xs">
+                            link
+                          </Button>
+                          <Button colorScheme="orange" leftIcon={<MdLinkOff />} variant="ghost" size="xs">
+                            unlink
+                          </Button>
+                        </Text>
+                      </Text>
+                    </Box>
+                  );
+                })
+              ) : (
+                <div>no data</div>
+              )}
               {/* <Lorem count={15} /> */}
             </ModalBody>
             <ModalFooter>
@@ -506,8 +539,6 @@ export default function App() {
       </>
     );
   }
-  
-
 }
 interface AlertdialogueProps {
   handleDelete: (e: any) => Promise<void>;

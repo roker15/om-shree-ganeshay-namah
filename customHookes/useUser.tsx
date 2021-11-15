@@ -1,6 +1,7 @@
 import { supabase } from "../lib/supabaseClient";
-import { Headings, Papers, QuestionBank, Subheading } from "../types/myTypes";
+import { Headings, Papers, QuestionBank, Subheading, SubheadingViews } from "../types/myTypes";
 import useSWR from "swr";
+import React from "react";
 
 export function useGetExamPapers(id?: any) {
   const { data, error } = useSWR(
@@ -33,11 +34,7 @@ export function useGetHeadingsFromPaperId(id?: number) {
     isError: error,
   };
 }
-export function useGetQuestionsByPaperidAndYear(
-  paperId?: number,
-  year?: number,
-  shouldFetch?: boolean,
-) {
+export function useGetQuestionsByPaperidAndYear(paperId?: number, year?: number, shouldFetch?: boolean) {
   console.log("refetching data............");
   const { data, error } = useSWR(
     shouldFetch && paperId && year ? [`/upsc/${paperId}/${year}`] : null,
@@ -56,7 +53,7 @@ export function useGetQuestionsByPaperidAndYear(
  `
         )
         .eq("paper_id", paperId)
-        .eq("year", year),
+        .eq("year", year)
     // { refreshInterval: 1000 }
   );
 
@@ -66,36 +63,76 @@ export function useGetQuestionsByPaperidAndYear(
     isError: error,
   };
 }
+
 export function useSubheadingByPaperId(
   paperId?: number,
   // year?: number,
-  shouldFetch?: boolean,
+  shouldFetch?: boolean
 ) {
   console.log("refetching data............");
   const { data, error } = useSWR(
-    paperId ? [`/upsc/${paperId}`] : null,
+    paperId ? [`/subheadingviews/${paperId}`] : null,
     async () =>
       await supabase
-        .from<Subheading>("subheadings")
+        .from<SubheadingViews>("subheadings_view")
         .select(
           `
-      id,
-      question_content,
-      search_keys,
-      year,
-      sequence,
-      paper_id,
-      remark
+          subheading_id,
+          main_topic_id,
+          topic,
+          subheading_sequence,
+          heading_id,
+          main_topic,
+          heading_sequence,
+          paper_id
  `
         )
         .eq("paper_id", paperId)
-        .eq("year", year),
     // { refreshInterval: 1000 }
   );
-
+  let subheadingsView:SubheadingViews[] | null | undefined = [];
+  if (data && data.data!=null) {
+      subheadingsView=data.data.sort((a, b)=>a.heading_sequence!-b.heading_sequence!)
+  }
+  else {
+    subheadingsView = null;
+  }
   return {
-    questions: data?.data,
-    isLoading: !error && !data,
+  
+    subheadingsView,//: data?.data,
+    isLoading_useSubheadingByPaperId: !error && !data,
     isError: error,
   };
+}
+
+function useAsyncHook(searchBook: string) {
+  const [result, setResult] = React.useState([]);
+  const [loading, setLoading] = React.useState("false");
+  // We cannot use 'async' keyword with 'useEffect' callback method.
+  // It will result in race conditions.
+  React.useEffect(() => {
+    async function fetchBookList() {
+      try {
+        setLoading("true");
+        const response = await fetch(`https://www.googleapis.com/books/v1/volumes?q=${searchBook}`);
+
+        const json = await response.json();
+        // console.log(json);
+        setResult(
+          json.items.map((item: { volumeInfo: { title: any } }) => {
+            console.log(item.volumeInfo.title);
+            return item.volumeInfo.title;
+          })
+        );
+      } catch (error) {
+        setLoading("null");
+      }
+    }
+
+    if (searchBook !== "") {
+      fetchBookList();
+    }
+  }, [searchBook]);
+
+  return [result, loading];
 }
