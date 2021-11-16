@@ -464,27 +464,65 @@ export default function App() {
       </Box>
     );
   }
-  const handleLinkSyllabusButtonClick = async (x: number) => {
-    const { data, error } = await supabase
-      .from<SubheadingQuestionLink>("subheadingquestionlink")
-      .select(
-        `
-          id,
-          questionbank_id,
-          subheading_id
-        created_by: string | Profile;
- `
-      )
-      .eq("questionbank_id", x);
-    // { refreshInterval: 1000 }
-  };
+
   interface LinkSyllabusModalProps {
     questionId: number;
   }
   function LinkSyllabusModal({ questionId }: LinkSyllabusModalProps) {
     const { isOpen, onOpen, onClose } = useDisclosure();
     const [scrollBehavior, setScrollBehavior] = React.useState<"inside" | "outside" | undefined | string>("inside");
+    const [qlink, setQlink] = useState<SubheadingQuestionLink[]>([]);
+    const handleLinkSyllabusButtonClick = async (x: number) => {
+      const { data, error } = await supabase
+        .from<SubheadingQuestionLink>("subheadingquestionlink")
+        .select(
+          `
+            id,
+            questionbank_id,
+            subheading_id
+          
+   `
+        )
+        .eq("questionbank_id", x);
+      console.log("questionlink", data);
+      if (data) {
+        setQlink(data);
+        console.log("qlinkmmmm", data);
+      }
+      onOpen();
+      // { refreshInterval: 1000 }
+    };
+    const handlelinkClick = async (questionId: number, syllabusId: number) => {
+      const { data, error } = await supabase.from<SubheadingQuestionLink>("subheadingquestionlink").insert({
+        questionbank_id: questionId,
+        subheading_id: syllabusId,
+      });
+      if (data && data[0]) {
+        setQlink([...qlink, data[0]]);
+      }
+      console.log("data after linking", data);
+    };
 
+    const handleunlinkClick = async (questionId: number, syllabusId: number) => {
+      const { data, error } = await supabase
+        .from<SubheadingQuestionLink>("subheadingquestionlink")
+        .delete()
+        .match({ questionbank_id: questionId, subheading_id: syllabusId });
+      if (data && data[0]) {
+        console.log("qlink array before delete.....", qlink);
+        console.log("questionid and subheading id ", questionId,syllabusId);
+        // let arr: SubheadingQuestionLink[];
+        const arr: SubheadingQuestionLink[] = qlink.filter(
+          (item) => (item.subheading_id !== syllabusId )
+        )
+
+        console.log("array after delete.....", arr);
+        setQlink(arr);
+      }
+    };
+//     useEffect(() => {
+ 
+// })
     const btnRef = React.useRef(null);
     return (
       <>
@@ -495,12 +533,18 @@ export default function App() {
           </Stack>
         </RadioGroup> */}
 
-        <Button mt={3} ref={btnRef} size="xs" leftIcon={<MdLink />} variant="ghost" onClick={handleLinkSyllabusButtonClick(questionId);
-          onOpen()}>
+        <Button
+          mt={3}
+          ref={btnRef}
+          size="xs"
+          leftIcon={<MdLink />}
+          variant="ghost"
+          onClick={() => handleLinkSyllabusButtonClick(questionId)}
+        >
           Link Syllabus
         </Button>
 
-        <Modal onClose={onClose} finalFocusRef={btnRef} size="xl" isOpen={isOpen} scrollBehavior="inside">
+        <Modal onClose={onClose} finalFocusRef={btnRef} size="xl" isOpen={isOpen} scrollBehavior="outside">
           <ModalOverlay />
           <ModalContent>
             <ModalHeader>Link Syllabus to Question</ModalHeader>
@@ -508,19 +552,35 @@ export default function App() {
             <ModalBody>
               {subheadingsView ? (
                 subheadingsView!.map((x) => {
-                  console.log("bgbgbgbg", x);
+                  // console.log("bgbgbgbg", x);
                   return (
                     <Box p="2" key={x.subheading_id}>
                       <Text as="b" fontSize="smaller">
                         {x!.main_topic!}
                         <Text color="blue" fontSize="smaller">
                           {"  " + x!.topic}
-                          <Button colorScheme="green" leftIcon={<MdLink />} variant="ghost" size="xs">
-                            link
-                          </Button>
-                          <Button colorScheme="orange" leftIcon={<MdLinkOff />} variant="ghost" size="xs">
-                            unlink
-                          </Button>
+                          {console.log("qlink", qlink)}
+                          {qlink.some((item) => item.subheading_id == x.subheading_id) ? (
+                            <Button
+                              colorScheme="orange"
+                              onClick={() => handleunlinkClick(questionId, x.subheading_id)}
+                              leftIcon={<MdLinkOff />}
+                              variant="ghost"
+                              size="xs"
+                            >
+                              unlink
+                            </Button>
+                          ) : (
+                            <Button
+                              colorScheme="green"
+                              onClick={() => handlelinkClick(questionId, x.subheading_id)}
+                              leftIcon={<MdLink />}
+                              variant="ghost"
+                              size="xs"
+                            >
+                              link
+                            </Button>
+                          )}
                         </Text>
                       </Text>
                     </Box>
