@@ -472,6 +472,7 @@ export default function App() {
     const { isOpen, onOpen, onClose } = useDisclosure();
     const [scrollBehavior, setScrollBehavior] = React.useState<"inside" | "outside" | undefined | string>("inside");
     const [qlink, setQlink] = useState<SubheadingQuestionLink[]>([]);
+    const [isLoading, setIsLoading] = useState(false);
     const handleLinkSyllabusButtonClick = async (x: number) => {
       const { data, error } = await supabase
         .from<SubheadingQuestionLink>("subheadingquestionlink")
@@ -493,6 +494,7 @@ export default function App() {
       // { refreshInterval: 1000 }
     };
     const handlelinkClick = async (questionId: number, syllabusId: number) => {
+      setIsLoading(true);
       const { data, error } = await supabase.from<SubheadingQuestionLink>("subheadingquestionlink").insert({
         questionbank_id: questionId,
         subheading_id: syllabusId,
@@ -500,29 +502,30 @@ export default function App() {
       if (data && data[0]) {
         setQlink([...qlink, data[0]]);
       }
+      setIsLoading(false);
       console.log("data after linking", data);
     };
 
     const handleunlinkClick = async (questionId: number, syllabusId: number) => {
+      setIsLoading(true);
       const { data, error } = await supabase
         .from<SubheadingQuestionLink>("subheadingquestionlink")
         .delete()
         .match({ questionbank_id: questionId, subheading_id: syllabusId });
       if (data && data[0]) {
         console.log("qlink array before delete.....", qlink);
-        console.log("questionid and subheading id ", questionId,syllabusId);
+        console.log("questionid and subheading id ", questionId, syllabusId);
         // let arr: SubheadingQuestionLink[];
-        const arr: SubheadingQuestionLink[] = qlink.filter(
-          (item) => (item.subheading_id !== syllabusId )
-        )
+        const arr: SubheadingQuestionLink[] = qlink.filter((item) => item.subheading_id !== syllabusId);
 
         console.log("array after delete.....", arr);
         setQlink(arr);
       }
+      setIsLoading(false);
     };
-//     useEffect(() => {
- 
-// })
+    //     useEffect(() => {
+
+    // })
     const btnRef = React.useRef(null);
     return (
       <>
@@ -539,6 +542,7 @@ export default function App() {
           size="xs"
           leftIcon={<MdLink />}
           variant="ghost"
+          isLoading={isLoading}
           onClick={() => handleLinkSyllabusButtonClick(questionId)}
         >
           Link Syllabus
@@ -564,6 +568,7 @@ export default function App() {
                             <Button
                               colorScheme="orange"
                               onClick={() => handleunlinkClick(questionId, x.subheading_id)}
+                              isLoading={isLoading}
                               leftIcon={<MdLinkOff />}
                               variant="ghost"
                               size="xs"
@@ -576,6 +581,7 @@ export default function App() {
                               onClick={() => handlelinkClick(questionId, x.subheading_id)}
                               leftIcon={<MdLink />}
                               variant="ghost"
+                              isLoading={isLoading}
                               size="xs"
                             >
                               link
