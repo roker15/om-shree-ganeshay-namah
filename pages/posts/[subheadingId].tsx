@@ -19,11 +19,7 @@ import {
 import { AuthSession } from "@supabase/supabase-js";
 import { Element } from "domhandler/lib/node";
 import DOMPurify from "dompurify";
-import parse, {
-  attributesToProps,
-  domToReact,
-  HTMLReactParserOptions,
-} from "html-react-parser";
+import parse, { attributesToProps, domToReact, HTMLReactParserOptions } from "html-react-parser";
 import katex from "katex";
 import "katex/dist/katex.min.css";
 // import 'suneditor/dist/css/suneditor.min.css'; // Import Sun Editor's CSS File
@@ -63,7 +59,8 @@ const Posts: React.FC<ProfileListProps> = ({ data }) => {
 
   // let isSubscribed = true
 
-  const { data: sharedPost } = useSWR(
+
+  const { data: sharedPost, error } = useSWR(
     `/sharedPost/${currentSubheadingId}`,
     async () =>
       await supabase
@@ -78,10 +75,10 @@ const Posts: React.FC<ProfileListProps> = ({ data }) => {
         created_by(id,email)
       ),
       shared_with(id,email),
-      subheading_id (
+      subheading_id:subheadings!id (
       
       topic,
-      main_topic_id(id)
+      main_topic_id:headings!topics_main_topic_id_fkey(id)
     )
     `
         )
@@ -89,8 +86,9 @@ const Posts: React.FC<ProfileListProps> = ({ data }) => {
         .eq("shared_with", supabase.auth.user()?.id as string),
     { refreshInterval: 1000 }
   );
-
-  const { data: userposts } = useSWR(
+  console.log("shared post data ", sharedPost);
+  console.log("shared post error ", error);
+  const { data: userposts, error:userposterror} = useSWR(
     mounted ? `/upsc/${currentSubheadingId}/ss` : null,
     async () =>
       await supabase
@@ -101,10 +99,10 @@ const Posts: React.FC<ProfileListProps> = ({ data }) => {
       created_at,
       updated_at,
       post,
-      subheading_id (
+      subheading_id:subheadings!posts_subheading_id_fkey(
       
       topic,
-      main_topic_id(id)
+      main_topic_id:headings!topics_main_topic_id_fkey(id)
     )
     `
         )
@@ -112,21 +110,16 @@ const Posts: React.FC<ProfileListProps> = ({ data }) => {
         .eq("created_by", supabase.auth.user()?.id as string)
     // { refreshInterval: 1000 }
   );
+  console.log("user post data ", userposts);
+  console.log("user post error ", userposterror);
 
   useEffect(() => {
     setMounted(true);
     console.log("usernotes is ", userNote);
-    if (
-      userposts != undefined &&
-      userposts?.data?.length != 0 &&
-      userposts!.data != null
-    ) {
+    if (userposts != undefined && userposts?.data?.length != 0 && userposts!.data != null) {
       // console.log("notes is ", data![0].post);
       setUserNote(userposts!.data![0].post);
-      appContext.setPostHeadingId(
-        ((userposts!.data![0].subheading_id as Subheading)
-          .main_topic_id as Headings)!.id
-      );
+      appContext.setPostHeadingId(((userposts!.data![0].subheading_id as Subheading).main_topic_id as Headings)!.id);
     } else {
       console.log("use effect is hittin");
       setUserNote(undefined);
@@ -168,17 +161,14 @@ const Posts: React.FC<ProfileListProps> = ({ data }) => {
       </Button>
       <h1>{currentSubheading}</h1>
 
-      <div  style={{ padding: "50px 25px 50px 25px" }}>
+      <div style={{ padding: "50px 25px 50px 25px" }}>
         {sharedPost?.data?.length == 0 ? (
           <div></div>
         ) : (
           sharedPost?.data!.map((x) => {
-            const sanitisedPostData = DOMPurify.sanitize(
-              (x.post_id as Post).post as string,
-              {
-                USE_PROFILES: { svg: true, html: true },
-              }
-            );
+            const sanitisedPostData = DOMPurify.sanitize((x.post_id as Post).post as string, {
+              USE_PROFILES: { svg: true, html: true },
+            });
             return (
               <div key={x.id}>
                 {/* {postHeader(x, appContext)} */}
@@ -224,18 +214,13 @@ const Posts: React.FC<ProfileListProps> = ({ data }) => {
               You Don&apos;t have notes on this Topic Create Notes in Editor
             </Alert>
             <Box zIndex="5000">
-              <SunEditorForRendering
-                subHeadingId={currentSubheadingId as number}
-                isNew={true}
-              />
+              <SunEditorForRendering subHeadingId={currentSubheadingId as number} isNew={true} />
             </Box>
           </div>
         ) : (
           ""
         )}
-        {userposts &&
-        userposts?.data?.length != 0 &&
-        userposts!.data![0] != null ? (
+        {userposts && userposts?.data?.length != 0 && userposts!.data![0] != null ? (
           <SunEditorForRendering
             subHeadingId={currentSubheadingId}
             isNew={false}

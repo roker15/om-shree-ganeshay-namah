@@ -1,7 +1,7 @@
 import { Button } from "@chakra-ui/button";
 import { LinkIcon } from "@chakra-ui/icons";
 import { Input } from "@chakra-ui/input";
-import { Box, Divider, Stack } from "@chakra-ui/layout";
+import { Box, Divider, Flex, Spacer, Stack } from "@chakra-ui/layout";
 import {
   AlertDialog,
   AlertDialogBody,
@@ -82,7 +82,7 @@ export default function App() {
   const [year, setYear] = useState<number | undefined>(undefined);
   const [shouldfetch, setShouldfetch] = useState(false);
   const [isEditMode, setIsEditMode] = useState(false);
-  const [email, setEmail] = useState("");
+  const [name, setEmail] = useState("");
   const [userId, setUserId] = useState("");
   const [isLoggedin, setIsLoggedin] = useState(false);
 
@@ -95,6 +95,7 @@ export default function App() {
   } = useGetQuestionsByPaperidAndYear(paperId, year, shouldfetch);
 
   const { subheadingsView, isLoading_useSubheadingByPaperId } = useSubheadingByPaperId(paperId);
+
 
   useEffect(() => {
     // listen for changes to auth
@@ -123,8 +124,8 @@ export default function App() {
         provider: "google",
       },
       {
-        // redirectTo: "http://localhost:3000/createQuestionBank",
-        redirectTo: "https://om-shree-ganeshay-namah-git-development2-roker15.vercel.app/createQuestionBank",
+        redirectTo: "http://localhost:3000/createQuestionBank",
+        // redirectTo: "https://om-shree-ganeshay-namah-git-development2-roker15.vercel.app/createQuestionBank",
       }
     );
   };
@@ -141,8 +142,6 @@ export default function App() {
         created_by: userId,
       });
       mutate([`/upsc/${paperId}/${year}`]);
-      console.log(data);
-      alert(JSON.stringify(data));
     } else {
       const { data, error } = await supabase
         .from<QuestionBank>("questionbank")
@@ -186,7 +185,16 @@ export default function App() {
     return () => subscription.unsubscribe();
   }, [watch]);
 
-  const handleQuestionEdit = (e: QuestionBank) => {
+  const handleQuestionEdit =  (e: QuestionBank) => {
+    // let { data, error } = await supabase.rpc("getsyllabusd", {
+    //   paper_idd:49,
+    // });
+  
+    // if (error) console.error(error);
+    // else console.log(data);
+  
+
+
     setIsEditMode(!isEditMode);
     setCurrentEditQuestion(e);
 
@@ -207,7 +215,7 @@ export default function App() {
     } else {
       setValue("questionContent", "");
       setValue("year", currentEditQuestion?.year);
-      setValue("sequence", 0);
+      setValue("sequence", undefined);
       setValue("searchKeys", "");
       setValue("remark", "");
     }
@@ -239,33 +247,40 @@ export default function App() {
         >
           Log In
         </Button>
-        <Text>{email}</Text>
+        <Text>{name}</Text>
       </div>
     );
   } else if (isLoggedin) {
     console.log("session null  nahi hai bhai");
     return (
       <Box mx={{ base: "4", md: "28", lg: "52" }}>
-        <Button
-          onClick={() => {
-            console.log("session isss ", supabase.auth.session());
-            supabase.auth.signOut();
-            setEmail("");
-            setIsLoggedin(false);
-          }}
-        >
-          Log out
-        </Button>
-        <Text>{email}</Text>
+        <Flex p="1">
+          <Spacer />
+          <Center>
+            <Text px="2">{name}</Text>
+            <Button
+              variant="outline"
+              onClick={() => {
+                console.log("session isss ", supabase.auth.session());
+                supabase.auth.signOut();
+                setEmail("");
+                setIsLoggedin(false);
+              }}
+            >
+              Log out
+            </Button>
+          </Center>
+        </Flex>
+
         <form onSubmit={handleSubmit(onSubmit)}>
-          <br />
+          {/* <br /> */}
           <Center>
             <Badge colorScheme="purple" fontSize="2xl">
               Create Questions
             </Badge>
           </Center>
           <br />
-          <br />
+          {/* <br /> */}
 
           <FormControl m="2">
             <FormLabel color="blue.600" htmlFor="paperId">
@@ -331,7 +346,8 @@ export default function App() {
               )}
             />
           </FormControl>
-          <FormControl m="2">
+
+          <FormControl m="2" visibility="hidden" w="0.5" h="0.5">
             <FormLabel color="blue.600" htmlFor="searchKeys">
               Search Keys
             </FormLabel>
@@ -340,30 +356,39 @@ export default function App() {
                 **This field is required
               </Text>
             )}
-            <Input {...register("searchKeys", { required: true, maxLength: 200 })} />
+            <Input {...register("searchKeys", { required: false, maxLength: 200 })} />
           </FormControl>
-          <FormControl m="2">
-            <FormLabel color="blue.600" htmlFor="year">
-              Question Year
-            </FormLabel>
-            {errors.year && (
-              <Text fontSize="16px" color="#bf1650">
-                **Year should be from 1995 to 2021
-              </Text>
-            )}
-            <Input isDisabled={isEditMode} type="number" {...register("year", { min: 1995, max: 2021 })} />
-          </FormControl>
-          <FormControl m="2">
-            <FormLabel color="blue.600" htmlFor="sequence">
-              Question sequence
-            </FormLabel>
-            {errors.sequence && (
-              <Text fontSize="16px" color="#bf1650">
-                **Sequence should be from 1 to 700
-              </Text>
-            )}
-            <Input type="number" {...register("sequence", { min: 1, max: 700 })} />
-          </FormControl>
+
+          <HStack>
+            <FormControl m="2">
+              <FormLabel color="blue.600" htmlFor="year">
+                Question Year
+              </FormLabel>
+              {errors.year && (
+                <Text fontSize="16px" color="#bf1650">
+                  **Year should be from 1995 to 2021
+                </Text>
+              )}
+              <Input
+                placeholder="Year should be from 1995 to 2021"
+                isDisabled={isEditMode}
+                type="number"
+                {...register("year", { min: 1995, max: 2021 })}
+              />
+            </FormControl>
+            <FormControl m="2">
+              <FormLabel color="blue.600" htmlFor="sequence">
+                Question sequence
+              </FormLabel>
+              {errors.sequence && (
+                <Text fontSize="16px" color="#bf1650">
+                  **Sequence should be from 1 to 700
+                </Text>
+              )}
+              <Input placeholder="10,20,30....." type="number" {...register("sequence", { min: 1, max: 700 })} />
+            </FormControl>
+          </HStack>
+
           <FormControl m="2">
             <FormLabel color="blue.600" htmlFor="remark">
               Remark
@@ -480,7 +505,8 @@ export default function App() {
           `
             id,
             questionbank_id,
-            subheading_id
+            subheading_id,
+            heading_id
           
    `
         )
@@ -493,11 +519,13 @@ export default function App() {
       onOpen();
       // { refreshInterval: 1000 }
     };
-    const handlelinkClick = async (questionId: number, syllabusId: number) => {
+    const handlelinkClick = async (questionId: number, syllabusId: number, headingId: number) => {
       setIsLoading(true);
       const { data, error } = await supabase.from<SubheadingQuestionLink>("subheadingquestionlink").insert({
         questionbank_id: questionId,
         subheading_id: syllabusId,
+        heading_id: headingId,
+        created_by: supabase.auth.user()?.id,
       });
       if (data && data[0]) {
         setQlink([...qlink, data[0]]);
@@ -578,7 +606,7 @@ export default function App() {
                           ) : (
                             <Button
                               colorScheme="green"
-                              onClick={() => handlelinkClick(questionId, x.subheading_id)}
+                              onClick={() => handlelinkClick(questionId, x.subheading_id, x.heading_id!)}
                               leftIcon={<MdLink />}
                               variant="ghost"
                               isLoading={isLoading}

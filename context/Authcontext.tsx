@@ -121,10 +121,12 @@ export const AuthProvider = ({ children }: any) => {
     let { user, error } = await supabase.auth.signIn(
       {
         provider: "google",
+      },
+      {
+        redirectTo: "http://localhost:3000"
+        // redirectTo: "https://om-shree-ganeshay-namah-git-development2-roker15.vercel.app/createQuestionBank",
+     
       }
-      // {
-      //   redirectTo: "http://localhost:3000/editor",
-      // }
     );
     console.log(
       "signUp is being called bhaiiiiiiiiiiiiiiiiiiiiiii   ",
