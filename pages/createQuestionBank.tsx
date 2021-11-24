@@ -267,9 +267,6 @@ export default function App() {
             >
               Log out
             </Button>
-            <Circle size="40px" bg="tomato" color="white">
-              <PhoneIcon />
-            </Circle>
           </Center>
         </Flex>
 
