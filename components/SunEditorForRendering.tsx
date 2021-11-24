@@ -1,16 +1,13 @@
 //******************* sun editor*************************************** */
 
 // Import katex
-import { EmailIcon } from "@chakra-ui/icons";
-import { MdDoneAll, MdEditOff, MdMode, MdSave, MdShare } from "react-icons/md";
 import {
-  Box,
+  Avatar,
   Button,
   ButtonGroup,
+  Divider,
   FormControl,
-  FormErrorMessage,
   FormLabel,
-  Text,
   Input,
   Modal,
   ModalBody,
@@ -19,36 +16,33 @@ import {
   ModalFooter,
   ModalHeader,
   ModalOverlay,
-  useDisclosure,
-  Badge,
-  Avatar,
   Tag,
   TagLabel,
-  Heading,
-  Divider,
+  Text,
+  useDisclosure,
 } from "@chakra-ui/react";
 import katex from "katex";
 import "katex/dist/katex.min.css";
 import dynamic from "next/dynamic";
 import React, { useEffect, useRef, useState } from "react";
+import { MdDoneAll, MdEditOff, MdMode, MdSave, MdShare } from "react-icons/md";
 import styled from "styled-components";
+import "suneditor/dist/css/suneditor.min.css"; // Import Sun Editor's CSS File
+import { usePostContext } from "../context/PostContext";
+import { useAppContext } from "../context/state";
+import { supabase } from "../lib/supabaseClient";
+import { Post, Profile, SharedPost } from "../types/myTypes";
 // import SunEditor from "suneditor-react";
 const SunEditor = dynamic(() => import("suneditor-react"), {
   ssr: false,
 });
 
-import "suneditor/dist/css/suneditor.min.css"; // Import Sun Editor's CSS File
-import { useAuthContext } from "../context/Authcontext";
-import { useAppContext } from "../context/state";
-import { supabase } from "../lib/supabaseClient";
-import { Post, Profile, SharedPost } from "../types/myTypes";
-
 const EditorStyle = styled.div`
-  ol {
+  /* ol {
     background: #ff9999 !important;
     padding: 0px !important;
     margin-left: 35px !important;
-  }
+  } */
 
   /* ul {
   background: #ebc683;
@@ -56,16 +50,17 @@ const EditorStyle = styled.div`
   margin-left: 35px;
 } */
 
-  ol li {
+  /* ol li {
     background: #ffe5e5 !important;
     padding: 10px !important;
     margin-left: 25px !important;
     margin-top: -6px !important;
-  }
+  } */
 
   .sun-editor {
-    margin-top: -18px !important;
-    // border: 1px solid blue;
+    /* margin-top: -18px !important; */
+    /* border: 1px solid blue; */
+    /* border: none; */
   }
 
   table {
@@ -81,8 +76,8 @@ const EditorStyle = styled.div`
     padding: 20px;
     // font-style: italic;
     caption-side: bottom;
-    // color: #666;
-    text-align: right;
+    /* color: #666; */
+    /* text-align: right; */
     letter-spacing: 1px;
     font-weight: lighter !important;
   }
@@ -100,7 +95,7 @@ const EditorStyle = styled.div`
 
 interface Props {
   postId?: number;
-  subHeadingId?: number;
+  currentSubheadingId?: number;
   isNew?: boolean;
   postContent?: string;
   isSharedPost?: boolean;
@@ -117,44 +112,37 @@ const buttonList = [
   "/",
   ["outdent", "indent"],
   ["align", "horizontalRule", "list", "lineHeight"],
-  ["table", "link", "image",/* "video","audio",*/  "math"],
+  ["table", "link", "image", /* "video","audio",*/ "math"],
 
   /** ['imageGallery'] */ // You must add the "imageGalleryUrl".
-["fullScreen"/*, "showBlocks", "codeView"*/],
+  ["fullScreen" /*, "showBlocks", "codeView"*/],
   ["preview", "print"],
   // ["save", "template"],
 ];
 
-const SunEditorForRendering: React.FC<Props> = ({
-  postId,
-  isNew,
-  subHeadingId,
-  postContent,
-  isSharedPost,
-  sharedBy,
-}) => {
+const SunEditorForRendering: React.FC<Props> = ({ postId, isNew, postContent, isSharedPost, sharedBy }) => {
   /**
    * @type {React.MutableRefObject<SunEditor>} get type definitions for editor
    */
-
-  const editorRef: React.MutableRefObject<typeof SunEditor | undefined> =
-    useRef();
+  console.log("passed post content is ", postContent);
+  console.log("suneditor is rendering");
+  const editorRef: React.MutableRefObject<typeof SunEditor | undefined> = useRef();
   const [content, setContent] = useState("");
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [hideToolbar, setHideToolbar] = useState(true);
   const [editorReadOnly, setEditorReadOnly] = useState(true);
   const [editMode, setEditMode] = useState(false);
   const [defaultValue1, setDefaultValue1] = useState(postContent);
-  const [isPostNew, setIsPostNew] = useState(false);
+  const [isNoPostExists, setIsNoPostExists] = useState(false);
   const appcontext = useAppContext();
-
+  const { currentSubheadingId, currentSubheading, updateCurrentSubheadingId } = usePostContext();
   useEffect(() => {
     if (isNew) {
       // setEditorReadOnly(false);
       // setHideToolbar(false);
-      setIsPostNew(true);
+      setIsNoPostExists(true);
     }
-  }, []);
+  }, [isNew]);
 
   // // When the editor's content has changed, store it in state
   const handleOnChange = (editorContent: string) => {
@@ -166,13 +154,13 @@ const SunEditorForRendering: React.FC<Props> = ({
     const { data, error } = await supabase.from<Post>("posts").insert([
       {
         post: content,
-        subheading_id: subHeadingId,
+        subheading_id: currentSubheadingId,
         created_by: supabase.auth.user()?.id,
       },
     ]);
     setIsSubmitting(false);
     setEditMode(true);
-    setIsPostNew(false);
+    setIsNoPostExists(false);
     // setDefaultValue1("hello")
   };
   const updatePostInDatabase = async () => {
@@ -183,18 +171,13 @@ const SunEditorForRendering: React.FC<Props> = ({
 
     setIsSubmitting(false);
     setEditMode(true);
-    // setIsPostNew(false)
-    // setContent(data![0].post)
-    // setDefaultValue1("hello")
   };
 
   // Send data to Firebase
   const handleCreateNewPost = () => {
-    console.log("ffffffffffffffffffffff");
     setIsSubmitting(true);
     try {
       console.log(content);
-      // await sendDataToFirebase(content)
       createNewPostInDatabase();
     } catch (error) {
       console.error("error is ss", error);
@@ -220,25 +203,15 @@ const SunEditorForRendering: React.FC<Props> = ({
     setHideToolbar(true);
     setEditMode(false);
   };
-  const handleSharePost = () => {
-    // setEditorReadOnly(true);
-    // setHideToolbar(true);
-    // setEditMode(false);
-  };
 
   useEffect(() => {
-    
     setContent(postContent!);
-    console.log("from use effect in editor", editorRef);
   }, [postContent]);
 
   if (isSharedPost) {
     return (
       <>
-        <Text mb="4" fontSize="xl" fontWeight="bold">
-          {/* Shared by{" "} */}
-          {/* <Badge>{"Author"}</Badge> */}
-          {/* <TagLabel>{"Author"}</TagLabel> */}
+        <Text mb="" fontSize="xl" fontWeight="bold">
           <Tag size="lg" colorScheme="blackAlpha" borderRadius="full">
             <Avatar
               src="https://bit.ly/broken-link"
@@ -261,10 +234,9 @@ const SunEditorForRendering: React.FC<Props> = ({
 
             // hide={hideToolbar}
             setOptions={{
-              mode: "classic",
+              mode: "balloon",
               katex: katex,
               height: "100%",
-
               buttonList: buttonList,
             }}
           />
@@ -275,39 +247,32 @@ const SunEditorForRendering: React.FC<Props> = ({
 
   return (
     <div>
-      <Divider  />
+      <Divider />
 
-     
       {/* {isSharedPost:():(div)} */}
 
-      {isPostNew && hideToolbar?(<ButtonGroup
-          mb="4"
-          justifyContent="end"
-          size="sm"
-          isAttached
-          variant="outline"
-        >
-         
+      {isNoPostExists && hideToolbar ? (
+        <ButtonGroup mb="" justifyContent="end" size="sm" isAttached variant="outline">
           <Button
             leftIcon={<MdDoneAll />}
             mt="2"
             isLoading={isSubmitting}
             // colorScheme="blue"
             variant="outline"
-            onClick={()=>{setHideToolbar(false);setEditorReadOnly(false)}}
+            onClick={() => {
+              setHideToolbar(false);
+              setEditorReadOnly(false);
+            }}
           >
             Activate Editor
           </Button>
-        </ButtonGroup>):("")}
+        </ButtonGroup>
+      ) : (
+        ""
+      )}
 
-      {editMode && !isPostNew ? (
-        <ButtonGroup
-          mb="4"
-          justifyContent="end"
-          size="sm"
-          isAttached
-          variant="outline"
-        >
+      {editMode && !isNoPostExists ? (
+        <ButtonGroup mb="" justifyContent="end" size="sm" isAttached variant="outline">
           {" "}
           <Button
             leftIcon={<MdEditOff />}
@@ -336,14 +301,8 @@ const SunEditorForRendering: React.FC<Props> = ({
 
       {}
 
-      {isPostNew ? (
-        <ButtonGroup
-          mb="4"
-          justifyContent="end"
-          size="sm"
-          isAttached
-          variant="outline"
-        >
+      {isNoPostExists ? (
+        <ButtonGroup mb="" justifyContent="end" size="sm" isAttached variant="outline">
           <Button
             leftIcon={<MdSave />}
             mt="2"
@@ -359,14 +318,8 @@ const SunEditorForRendering: React.FC<Props> = ({
         ""
         // <div></div>
       )}
-      {!editMode && !isPostNew ? (
-        <ButtonGroup
-          mb="4"
-          justifyContent="end"
-          size="sm"
-          isAttached
-          variant="outline"
-        >
+      {!editMode && !isNoPostExists ? (
+        <ButtonGroup mb="" justifyContent="end" size="sm" isAttached variant="outline">
           <Button
             leftIcon={<MdMode />}
             mt="2"
@@ -381,26 +334,24 @@ const SunEditorForRendering: React.FC<Props> = ({
         // <div></div>
         ""
       )}
-      {!editMode && !isPostNew ? (
-        <UiForSharing
-          postId={postId as number}
-          subheadingId={subHeadingId as number}
-        />
+      {!editMode && !isNoPostExists ? (
+        <UiForSharing postId={postId as number} subheadingId={currentSubheadingId as number} />
       ) : (
         ""
       )}
 
       <EditorStyle>
         <SunEditor
+          setDefaultStyle="font-family: arial; font-size: 16px;"
           hideToolbar={hideToolbar}
-          setContents={defaultValue1}
+          setContents={content}
           onChange={handleOnChange}
           readOnly={editorReadOnly}
           // disable={true}
 
           // hide={hideToolbar}
           setOptions={{
-            mode: "classic",
+            mode: "balloon-always",
             katex: katex,
             height: "100%",
 
@@ -408,16 +359,6 @@ const SunEditorForRendering: React.FC<Props> = ({
           }}
         />
       </EditorStyle>
-
-      {/* <Button
-        isLoading={isSubmitting}
-        mt="2"
-        colorScheme="blue"
-        variant="outline"
-        onClick={handleCreateNewPost}
-      >
-        Create Post
-      </Button> */}
     </div>
   );
 };
@@ -432,18 +373,11 @@ const UiForSharing: React.FC<sharedProps> = ({ postId, subheadingId }) => {
   const [message, setMessage] = React.useState("");
   // const [error, setError] = React.useState(null);
 
-  const initialRef = useRef<
-    HTMLInputElement | HTMLButtonElement | HTMLLabelElement
-  >(null);
-  const finalRef = useRef<
-    HTMLInputElement | HTMLButtonElement | HTMLLabelElement
-  >(null);
+  const initialRef = useRef<HTMLInputElement | HTMLButtonElement | HTMLLabelElement>(null);
+  const finalRef = useRef<HTMLInputElement | HTMLButtonElement | HTMLLabelElement>(null);
   const handleSharePost = async () => {
     console.log("handle share clicked");
-    const { data: email, error } = await supabase
-      .from<Profile>("profiles")
-      .select("id,email")
-      .eq("email", inputEmail);
+    const { data: email, error } = await supabase.from<Profile>("profiles").select("id,email").eq("email", inputEmail);
     // .single();
     if (error) {
       console.log("error hai ");
@@ -454,13 +388,11 @@ const UiForSharing: React.FC<sharedProps> = ({ postId, subheadingId }) => {
       setMessage("This email is not valid");
     } else {
       setMessage("");
-      const { data: sharedData, error } = await supabase
-        .from<SharedPost>("sharedpost")
-        .insert({
-          post_id: postId,
-          shared_with: email![0].id,
-          subheading_id: subheadingId,
-        });
+      const { data: sharedData, error } = await supabase.from<SharedPost>("sharedpost").insert({
+        post_id: postId,
+        shared_with: email![0].id,
+        subheading_id: subheadingId,
+      });
       if (error) {
         setMessage(error.message);
       }
@@ -478,27 +410,13 @@ const UiForSharing: React.FC<sharedProps> = ({ postId, subheadingId }) => {
 
   return (
     <>
-      <ButtonGroup
-        mb="4"
-        justifyContent="end"
-        size="sm"
-        isAttached
-        variant="outline"
-      >
+      <ButtonGroup mb="" justifyContent="end" size="sm" isAttached variant="outline">
         <Button leftIcon={<MdShare />} onClick={onOpen}>
           Share This Note
         </Button>
       </ButtonGroup>
-      {/* <Button ml={4} ref={finalRef as React.RefObject<HTMLButtonElement>}>
-        Ill receive focus on close
-      </Button> */}
 
-      <Modal
-        initialFocusRef={initialRef}
-        finalFocusRef={finalRef}
-        isOpen={isOpen}
-        onClose={onClose}
-      >
+      <Modal initialFocusRef={initialRef} finalFocusRef={finalRef} isOpen={isOpen} onClose={onClose}>
         <ModalOverlay />
         <ModalContent>
           <ModalHeader>Share your post</ModalHeader>
@@ -516,15 +434,10 @@ const UiForSharing: React.FC<sharedProps> = ({ postId, subheadingId }) => {
               />
               {/* <FormErrorMessage>{error}</FormErrorMessage> */}
             </FormControl>
-            {/* 
-            <FormControl mt={4}>
-              <FormLabel>Last name</FormLabel>
-              <Input placeholder="Last name" />
-            </FormControl> */}
           </ModalBody>
 
           <ModalFooter>
-            <Button leftIcon={<MdShare/>} onClick={handleSharePost} colorScheme="blue" mr={3}>
+            <Button leftIcon={<MdShare />} onClick={handleSharePost} colorScheme="blue" mr={3}>
               Share
             </Button>
             <Button onClick={onClose}>Cancel</Button>

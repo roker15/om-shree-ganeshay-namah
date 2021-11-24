@@ -1,5 +1,5 @@
 import { Button } from "@chakra-ui/button";
-import { LinkIcon } from "@chakra-ui/icons";
+import { LinkIcon, PhoneIcon } from "@chakra-ui/icons";
 import { Input } from "@chakra-ui/input";
 import { Box, Divider, Flex, Spacer, Stack } from "@chakra-ui/layout";
 import {
@@ -11,6 +11,7 @@ import {
   AlertDialogOverlay,
   Badge,
   Center,
+  Circle,
   FormControl,
   FormLabel,
   HStack,
@@ -95,7 +96,6 @@ export default function App() {
   } = useGetQuestionsByPaperidAndYear(paperId, year, shouldfetch);
 
   const { subheadingsView, isLoading_useSubheadingByPaperId } = useSubheadingByPaperId(paperId);
-
 
   useEffect(() => {
     // listen for changes to auth
@@ -185,15 +185,13 @@ export default function App() {
     return () => subscription.unsubscribe();
   }, [watch]);
 
-  const handleQuestionEdit =  (e: QuestionBank) => {
+  const handleQuestionEdit = (e: QuestionBank) => {
     // let { data, error } = await supabase.rpc("getsyllabusd", {
     //   paper_idd:49,
     // });
-  
+
     // if (error) console.error(error);
     // else console.log(data);
-  
-
 
     setIsEditMode(!isEditMode);
     setCurrentEditQuestion(e);
@@ -269,6 +267,9 @@ export default function App() {
             >
               Log out
             </Button>
+            <Circle size="40px" bg="tomato" color="white">
+              <PhoneIcon />
+            </Circle>
           </Center>
         </Flex>
 
@@ -424,7 +425,7 @@ export default function App() {
             .sort((a, b) => b.id - a.id)
             .map((x) => {
               return (
-                <Box key={x.id} mb="16">
+                <Box key={x.id} mb="8">
                   <HStack>
                     <Button
                       isDisabled={isEditMode && currentEditQuestion?.id != x.id}
@@ -470,13 +471,10 @@ export default function App() {
                       {x.year}
                     </Badge>
                     <Badge color="teal" size="small">
-                      {x.id}
-                    </Badge>
-                    <Badge color="teal" size="small">
-                      {x.search_keys}
-                    </Badge>
-                    <Badge color="teal" size="small">
                       {x.remark}
+                    </Badge>
+                    <Badge color="teal" size="small">
+                      {x.sequence}
                     </Badge>
                   </HStack>
                   <Divider />

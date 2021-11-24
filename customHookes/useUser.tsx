@@ -1,7 +1,7 @@
 import { supabase } from "../lib/supabaseClient";
-import { Headings, Papers, QuestionBank, Subheading, SubheadingViews } from "../types/myTypes";
-import useSWR from "swr";
-import React from "react";
+import { Headings, Papers, Post, QuestionBank, SharedPost, Subheading, SubheadingViews } from "../types/myTypes";
+import useSWR, { useSWRConfig } from "swr";
+import React, { useEffect, useState } from "react";
 
 export function useGetExamPapers(id?: any) {
   const { data, error } = useSWR(
@@ -90,18 +90,107 @@ export function useSubheadingByPaperId(
         .eq("paper_id", paperId)
     // { refreshInterval: 1000 }
   );
-  let subheadingsView:SubheadingViews[] | null | undefined = [];
-  if (data && data.data!=null) {
-      subheadingsView=data.data.sort((a, b)=>a.heading_sequence!-b.heading_sequence!)
-  }
-  else {
+  let subheadingsView: SubheadingViews[] | null | undefined = [];
+  if (data && data.data != null) {
+    subheadingsView = data.data.sort((a, b) => a.heading_sequence! - b.heading_sequence!);
+  } else {
     subheadingsView = null;
   }
   return {
-  
-    subheadingsView,//: data?.data,
+    subheadingsView, //: data?.data,
     isLoading_useSubheadingByPaperId: !error && !data,
     isError: error,
+  };
+}
+
+export function useGetSharedpostBySubheadingidAndUserid(
+  currentSubheadingId?: number,
+  // year?: number,
+  useId?: number
+) {
+  const [id, setId] = useState<number | undefined>(undefined);
+  const [mounted, setMounted] = useState(false);
+  console.log("useGetsharedpost post is being called", currentSubheadingId);
+  const { data, error } = useSWR(
+    id && mounted ? `/sharedPost/${id}` : null,
+    async () =>
+      await supabase
+        .from<SharedPost>("sharedpost")
+        .select(
+          `
+    id,
+      created_at,
+      updated_at,
+      post_id(
+        id,post,
+        created_by(id,email)
+      ),
+      shared_with(id,email),
+      subheading_id:subheadings!id (
+      
+      topic,
+      main_topic_id:headings!topics_main_topic_id_fkey(id)
+    )
+    `
+        )
+        .eq("subheading_id", id as number)
+        .eq("shared_with", supabase.auth.user()?.id as string),
+    { refreshInterval: 1000 }
+  );
+  useEffect(() => {
+    setId(currentSubheadingId);
+    setMounted(true);
+  }, [currentSubheadingId]);
+
+  return {
+    // sharedPost_SUP_ERR:data?.error,
+    sharedPost: data,
+    isLoadingSharedPost: !error && !data,
+    sharedPosterror: error,
+  };
+}
+
+export function useGetUserpostBySubheadingidAndUserid(
+  currentSubheadingId?: number,
+  // year?: number,
+  useId?: number
+) {
+  console.log("useGetUserpost post is being called", currentSubheadingId);
+
+  const [id, setId] = useState<number | undefined>(undefined);
+  const [mounted, setMounted] = useState(false);
+  const { mutate } = useSWRConfig();
+  const { data, error } = useSWR(
+    currentSubheadingId && mounted ? `/userpost/${currentSubheadingId}` : null,
+    async () =>
+      await supabase
+        .from<Post>("posts")
+        .select(
+          `
+    id,
+      created_at,
+      updated_at,
+      post,
+      subheading_id:subheadings!posts_subheading_id_fkey(
+      
+      topic,
+      main_topic_id:headings!topics_main_topic_id_fkey(id)
+    )
+    `
+        )
+        .eq("subheading_id", currentSubheadingId as number)
+        .eq("created_by", supabase.auth.user()?.id as string),
+    { refreshInterval: 1000 }
+  );
+  useEffect(() => {
+    setMounted(true);
+  }, [currentSubheadingId]);
+  // console.log("data returned from useUserpost call ", data!.data);
+  return {
+    // userposts_SUP_ERR:data?.error,
+    userposts: data,
+    isLoadingUserPost: !error && !data,
+    userposterror: error,
   };
 }
 
