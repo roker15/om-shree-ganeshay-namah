@@ -83,7 +83,7 @@ export default function App() {
   const [year, setYear] = useState<number | undefined>(undefined);
   const [shouldfetch, setShouldfetch] = useState(false);
   const [isEditMode, setIsEditMode] = useState(false);
-  const [name, setEmail] = useState("");
+  const [name, setName] = useState("");
   const [userId, setUserId] = useState("");
   const [isLoggedin, setIsLoggedin] = useState(false);
 
@@ -103,12 +103,12 @@ export default function App() {
       if (session) {
         setIsLoggedin(true);
         // setEmail(supabase!.auth!.session()!.user!.email!);
-        setEmail(supabase!.auth!.session()!.user!.user_metadata.full_name);
+        setName(supabase!.auth!.session()!.user!.user_metadata.full_name);
         setUserId(supabase!.auth!.session()!.user!.id);
         // console.log(supabase!.auth!.session()!.user!.user_metadata.full_name);
       } else {
         setIsLoggedin(false);
-        setEmail("");
+        setName("");
         setUserId("");
       }
     });
@@ -261,12 +261,13 @@ export default function App() {
               onClick={() => {
                 console.log("session isss ", supabase.auth.session());
                 supabase.auth.signOut();
-                setEmail("");
+                setName("");
                 setIsLoggedin(false);
               }}
             >
               Log out
             </Button>
+
           </Center>
         </Flex>
 
