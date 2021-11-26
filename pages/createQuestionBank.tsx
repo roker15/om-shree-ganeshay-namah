@@ -99,6 +99,11 @@ export default function App() {
 
   useEffect(() => {
     // listen for changes to auth
+    if (supabase.auth.session()) {
+      setIsLoggedin(true)
+      setName(supabase!.auth!.session()!.user!.user_metadata.full_name);
+      setUserId(supabase!.auth!.session()!.user!.id);
+    }
     const { data: listener } = supabase.auth.onAuthStateChange((event, session) => {
       if (session) {
         setIsLoggedin(true);
