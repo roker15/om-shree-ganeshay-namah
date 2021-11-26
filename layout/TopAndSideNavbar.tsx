@@ -187,8 +187,9 @@ const SidebarContent = ({ onClose, ...rest }: SidebarProps) => {
                 pl="2"
                 onClick={() => {
                   // postContext.updateCurrentSubheadingId(value.id);
-                  postContext.updateCurrentSubheadingId(subheading.id);
-                  postContext.updateCurrentSubheading(subheading.topic as string);
+                  postContext.updateCurrentSubheadingProps(subheading.id,subheading.topic as string)
+                  // postContext.updateCurrentSubheadingId(subheading.id);
+                  // postContext.updateCurrentSubheading(subheading.topic as string);
                   onClose();
                 }}
 

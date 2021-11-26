@@ -135,7 +135,7 @@ export function useGetSharedpostBySubheadingidAndUserid(
         )
         .eq("subheading_id", id as number)
         .eq("shared_with", supabase.auth.user()?.id as string),
-    { refreshInterval: 1000 }
+    // { refreshInterval: 1000 }
   );
   useEffect(() => {
     setId(currentSubheadingId);
@@ -180,7 +180,7 @@ export function useGetUserpostBySubheadingidAndUserid(
         )
         .eq("subheading_id", currentSubheadingId as number)
         .eq("created_by", supabase.auth.user()?.id as string),
-    { refreshInterval: 1000 }
+    // { refreshInterval: 1000 }
   );
   useEffect(() => {
     setMounted(true);

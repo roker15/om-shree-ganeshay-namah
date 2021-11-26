@@ -38,9 +38,9 @@ const Posts: React.FC<ProfileListProps> = ({ data }) => {
   // const [data, setProfiles] = useState<Profile[]>([]);
   const appContext = useAppContext();
   const router = useRouter();
-  const { currentSubheadingId, currentSubheading } = usePostContext();
-  const {userposts,isLoadingUserPost,userposterror } = useGetUserpostBySubheadingidAndUserid(currentSubheadingId);
-  const { sharedPost,isLoadingSharedPost,sharedPosterror}=useGetSharedpostBySubheadingidAndUserid(currentSubheadingId)
+  const { currentSubheadingProps } = usePostContext();
+  const {userposts,isLoadingUserPost,userposterror } = useGetUserpostBySubheadingidAndUserid(currentSubheadingProps?.id);
+  const { sharedPost,isLoadingSharedPost,sharedPosterror}=useGetSharedpostBySubheadingidAndUserid(currentSubheadingProps?.id)
 
 
   useEffect(() => {
@@ -80,7 +80,7 @@ const Posts: React.FC<ProfileListProps> = ({ data }) => {
       >
         Go back
       </Button>
-      <h1>{currentSubheading}</h1>
+      <h1>{currentSubheadingProps?.topic}</h1>
 
       <div style={{ padding: "50px 25px 50px 25px" }}>
         {sharedPost?.data?.length == 0 ? (

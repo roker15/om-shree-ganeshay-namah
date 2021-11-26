@@ -20,6 +20,7 @@ import {
   TagLabel,
   Text,
   useDisclosure,
+  useToast,
 } from "@chakra-ui/react";
 import katex from "katex";
 import "katex/dist/katex.min.css";
@@ -28,10 +29,13 @@ import React, { useEffect, useRef, useState } from "react";
 import { MdDoneAll, MdEditOff, MdMode, MdSave, MdShare } from "react-icons/md";
 import styled from "styled-components";
 import "suneditor/dist/css/suneditor.min.css"; // Import Sun Editor's CSS File
+import { mutate, useSWRConfig } from "swr";
 import { usePostContext } from "../context/PostContext";
 import { useAppContext } from "../context/state";
+import { myErrorLog } from "../lib/mylog";
 import { supabase } from "../lib/supabaseClient";
 import { Post, Profile, SharedPost } from "../types/myTypes";
+import { customToast } from "./CustomToast";
 // import SunEditor from "suneditor-react";
 const SunEditor = dynamic(() => import("suneditor-react"), {
   ssr: false,
@@ -124,7 +128,7 @@ const SunEditorForRendering: React.FC<Props> = ({ postId, isNew, postContent, is
   /**
    * @type {React.MutableRefObject<SunEditor>} get type definitions for editor
    */
-  console.log("passed post content is ", postContent);
+  // console.log("passed post content is ", postContent);
   console.log("suneditor is rendering");
   const editorRef: React.MutableRefObject<typeof SunEditor | undefined> = useRef();
   const [content, setContent] = useState("");
@@ -135,7 +139,9 @@ const SunEditorForRendering: React.FC<Props> = ({ postId, isNew, postContent, is
   const [defaultValue1, setDefaultValue1] = useState(postContent);
   const [isNoPostExists, setIsNoPostExists] = useState(false);
   const appcontext = useAppContext();
-  const { currentSubheadingId, currentSubheading, updateCurrentSubheadingId } = usePostContext();
+  const { currentSubheadingProps } = usePostContext();
+  const { mutate } = useSWRConfig()
+  const toast = useToast();
   useEffect(() => {
     if (isNew) {
       // setEditorReadOnly(false);
@@ -154,13 +160,23 @@ const SunEditorForRendering: React.FC<Props> = ({ postId, isNew, postContent, is
     const { data, error } = await supabase.from<Post>("posts").insert([
       {
         post: content,
-        subheading_id: currentSubheadingId,
+        subheading_id: currentSubheadingProps?.id,
         created_by: supabase.auth.user()?.id,
       },
     ]);
+    if (error) {
+      myErrorLog("SunEditorForRendering", error.message);
+      customToast({title:"Post not created,error occurred",status: "error"})
+    }
+    if (data) {
+      customToast({ title: "Post Created", status: "success" })
+      //refresh user post data
+      mutate(`/userpost/${currentSubheadingProps?.id}`)
+      setEditMode(true);
+      setIsNoPostExists(false);
+    }
     setIsSubmitting(false);
-    setEditMode(true);
-    setIsNoPostExists(false);
+
     // setDefaultValue1("hello")
   };
   const updatePostInDatabase = async () => {
@@ -256,7 +272,7 @@ const SunEditorForRendering: React.FC<Props> = ({ postId, isNew, postContent, is
           <Button
             leftIcon={<MdDoneAll />}
             mt="2"
-            isLoading={isSubmitting}
+            
             // colorScheme="blue"
             variant="outline"
             onClick={() => {
@@ -308,10 +324,11 @@ const SunEditorForRendering: React.FC<Props> = ({ postId, isNew, postContent, is
             mt="2"
             // colorScheme="blue"
             // variant="outline"
+            isLoading={isSubmitting}
             isDisabled={content == undefined || content.length < 20}
             onClick={handleCreateNewPost}
           >
-            Save This Notes
+            Create new Note
           </Button>
         </ButtonGroup>
       ) : (
@@ -335,7 +352,7 @@ const SunEditorForRendering: React.FC<Props> = ({ postId, isNew, postContent, is
         ""
       )}
       {!editMode && !isNoPostExists ? (
-        <UiForSharing postId={postId as number} subheadingId={currentSubheadingId as number} />
+        <UiForSharing postId={postId as number} subheadingId={currentSubheadingProps?.id as number} />
       ) : (
         ""
       )}

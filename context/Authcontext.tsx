@@ -79,14 +79,14 @@ export const AuthProvider = ({ children }: any) => {
         .single();
 
      
-      if (data && data.role) {
+      if (data && data.username && data.role&& data.avatar_url) {
         setProfile(data);
         return;
       }
       if (data && data!==null) {
         const { data } = await supabase
           .from<Profile>("profiles")
-          .update({ role: "USER" })
+          .update({ role: "USER",username:user?.user_metadata.full_name,avatar_url:user?.user_metadata.avatar_url })
           .eq("id", user!.id)
           .single();
         setProfile(data);
@@ -94,7 +94,7 @@ export const AuthProvider = ({ children }: any) => {
       }
       const { data: profile } = await supabase
         .from<Profile>("profiles")
-        .insert({ id: user!.id, role: "USER", email: user?.email })
+        .insert({ id: user!.id, role: "USER", email: user?.email,username:user?.user_metadata.full_name,avatar_url:user?.user_metadata.avatar_url })
         .single();
 
       setProfile(profile);
