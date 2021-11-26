@@ -124,6 +124,28 @@ const buttonList = [
   // ["save", "template"],
 ];
 
+// const initialState = {
+//   content: "",
+//   isSubmitting: false,
+//   hideToolbar: true,
+//   editorReadOnly: true,
+//   editMode: false,
+//   defaultValue1: "",
+//   isNoPostExists: false,
+// };
+// const reducer = (state, action:"activate"|"save"|"update"|"edit"|) => {
+//   switch (action.type) {
+//     case 'increment':
+//       return { ...state, counter1: state.counter1 + action.value };
+//     case 'decrement':
+//       return { ...state, counter1: state.counter1 - action.value };
+//     case 'reset':
+//       return initialState;
+//     default:
+//       return state;
+//   }
+// }
+
 const SunEditorForRendering: React.FC<Props> = ({ postId, isNew, postContent, isSharedPost, sharedBy }) => {
   /**
    * @type {React.MutableRefObject<SunEditor>} get type definitions for editor
