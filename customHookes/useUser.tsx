@@ -5,7 +5,7 @@ import useSWR from "swr";
 export function useGetExamPapers(id?: any) {
   console.log("this is being called again again again")
   const { data, error } = useSWR(
-    ["/upszzzzzzzc"],
+    ["/upszz"],
     async () => await supabase.from<Papers>("papers").select(`
   id,paper_name
   
