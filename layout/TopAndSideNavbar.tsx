@@ -31,20 +31,19 @@ import {
   FormControl,
   FormLabel,
   Switch,
+  Center,
+  Alert,
+  AlertDescription,
+  AlertIcon,
+  Spinner,
 } from "@chakra-ui/react";
 // import Image from "next/image";
-import React, {
-  ChangeEvent,
-  Dispatch,
-  ReactNode,
-  ReactText,
-  SetStateAction,
-  useState,
-} from "react";
+import React, { ChangeEvent, Dispatch, ReactNode, ReactText, SetStateAction, useState } from "react";
 import { FaGoogle } from "react-icons/fa";
 import { FiBell, FiChevronDown, FiMenu } from "react-icons/fi";
 import styled from "styled-components";
 import useSWR from "swr";
+import ErrorAlert from "../components/ErrorAlert";
 import { useAuthContext } from "../context/Authcontext";
 import { usePostContext } from "../context/PostContext";
 import { useAppContext } from "../context/state";
@@ -71,11 +70,7 @@ const RedLink = styled.a`
 `;
 const LinkItems: Array<Subheading> = [];
 
-export default function TopAndSideNavbar({
-  children,
-}: {
-  children: ReactNode;
-}) {
+export default function TopAndSideNavbar({ children }: { children: ReactNode }) {
   const { isOpen, onOpen, onClose } = useDisclosure();
   const [hideSidebar, setHideSidebar] = useState(false);
   const { postHeadingId } = useAppContext();
@@ -88,30 +83,22 @@ export default function TopAndSideNavbar({
 
   const { data, error } = useSWR(
     currentHeadingId == undefined ? null : ["/headingId", currentHeadingId],
-    async () =>
-      await supabase
-        .from<Subheading>("subheadings")
-        .select("*")
-        .eq("main_topic_id", currentHeadingId)
+    async () => await supabase.from<Subheading>("subheadings").select("*").eq("main_topic_id", currentHeadingId)
     // { refreshInterval: 1000 }
   );
 
-  // return <h1>{data.title}</h1>;
   if (error)
     return (
       <Box minH="100vh" bg="white.100">
-        <div>failed to load</div>
+      <ErrorAlert description={"Failed to load, check network connection!!"} alertType={"error"}></ErrorAlert>
       </Box>
     );
   if (!data) {
-    // updateCurrentHeadingId(
-    //   Number(
-    //     // JSON.parse(
-    //       window.localStorage.getItem("currentSubheadingId") as string
-    //     // )
-    //   )
-    // )
-    return <div>loading...</div>;
+    return <Box minH="100vh" bg="white.100"><Center h="100vh"><Spinner /></Center></Box>;
+  }
+  if (data.error) {
+    console.log("SUP_TOPANDSIDENAVBAR_1",data.error); //for debug
+    return<ErrorAlert description={"Server error, Error code: SUP_TOPANDSIDENAVBAR_1"} alertType={"error"}></ErrorAlert>
   }
   LinkItems.length = 0;
   if (data.data && data.data.length !== 0) {
@@ -128,12 +115,7 @@ export default function TopAndSideNavbar({
       bg="green.100"
     >
       {/* mobilenav */}
-      <TopBar
-        setHideSidebar={setHideSidebar}
-        onOpen={onOpen}
-        hideSidebar={hideSidebar}
-      />
-      {console.log("new state is chaned to ", hideSidebar)}
+      <TopBar setHideSidebar={setHideSidebar} onOpen={onOpen} hideSidebar={hideSidebar} />
 
       <SidebarContent
         onClose={() => onClose}
@@ -154,12 +136,7 @@ export default function TopAndSideNavbar({
         </DrawerContent>
       </Drawer>
 
-      <Box
-        mt={"16"}
-        bg="white"
-        ml={{ base: 0, md: hideSidebar ? 0 : "80" }}
-        p="4"
-      >
+      <Box mt={"16"} bg="white" ml={{ base: 0, md: hideSidebar ? 0 : "80" }} p="4">
         {children}
         {/* {shareContext.postHeadingId} */}
       </Box>
@@ -186,13 +163,7 @@ const SidebarContent = ({ onClose, ...rest }: SidebarProps) => {
       overflowY="scroll"
       {...rest}
     >
-      <Flex
-        h="20"
-        alignItems="center"
-        mb="8"
-        mx="8"
-        justifyContent="space-between"
-      >
+      <Flex h="20" alignItems="center" mb="8" mx="8" justifyContent="space-between">
         <Text as="u" color="darkviolet" fontSize="normal" fontWeight="bold">
           {postContext.currentHeadingname}
         </Text>
@@ -200,40 +171,37 @@ const SidebarContent = ({ onClose, ...rest }: SidebarProps) => {
       </Flex>
 
       {LinkItems && LinkItems.length !== 0 ? (
-        LinkItems.sort((a, b) => a.sequence! - b.sequence!).map(
-          (subheading) => (
-            <UnorderedList key={subheading.id}>
-              <ListItem ml="6">
-                <Text
-                  // bg="InactiveCaptionText"
-                  lineHeight="shorter"
-                  fontWeight="bold"
-                  fontSize="medium"
-                  fontStyle=""
-                  // textShadow="1px 0px 1px "
-                  // ml="6"
-                  mt="4"
-                  mr="2"
-                  pl="2"
-                  onClick={() => {
-                    // postContext.updateCurrentSubheadingId(value.id);
-                    postContext.updateCurrentSubheadingId(subheading.id);
-                    postContext.updateCurrentSubheading(
-                      subheading.topic as string
-                    );
-                    onClose();
-                  }}
+        LinkItems.sort((a, b) => a.sequence! - b.sequence!).map((subheading) => (
+          <UnorderedList key={subheading.id}>
+            <ListItem ml="6">
+              <Text
+                // bg="InactiveCaptionText"
+                lineHeight="shorter"
+                fontWeight="bold"
+                fontSize="medium"
+                fontStyle=""
+                // textShadow="1px 0px 1px "
+                // ml="6"
+                mt="4"
+                mr="2"
+                pl="2"
+                onClick={() => {
+                  // postContext.updateCurrentSubheadingId(value.id);
+                  postContext.updateCurrentSubheadingProps(subheading.id,subheading.topic as string)
+                  // postContext.updateCurrentSubheadingId(subheading.id);
+                  // postContext.updateCurrentSubheading(subheading.topic as string);
+                  onClose();
+                }}
 
-                  // href={`/posts/${encodeURIComponent(subheading.id)}`}
-                >
-                  <Link>{subheading.topic}</Link>
+                // href={`/posts/${encodeURIComponent(subheading.id)}`}
+              >
+                <Link>{subheading.topic}</Link>
 
-                  {/* </Button> */}
-                </Text>
-              </ListItem>
-            </UnorderedList>
-          )
-        )
+                {/* </Button> */}
+              </Text>
+            </ListItem>
+          </UnorderedList>
+        ))
       ) : (
         <div>no data</div>
       )}
@@ -247,12 +215,7 @@ interface MobileProps extends FlexProps {
   hideSidebar: boolean;
 }
 
-const TopBar = ({
-  hideSidebar,
-  setHideSidebar,
-  onOpen,
-  ...rest
-}: MobileProps) => {
+const TopBar = ({ hideSidebar, setHideSidebar, onOpen, ...rest }: MobileProps) => {
   const { signIn, signUp, signOut } = useAuthContext();
   const postContext = usePostContext();
   return (
@@ -302,20 +265,13 @@ const TopBar = ({
           </LinkOverlay>
         </LinkBox>
         <Box display={{ base: "none", md: "inline-flex" }}>
-          <FormLabel
-            fontSize="sm"
-            fontStyle="normal"
-            htmlFor="email-alerts"
-            mb="0"
-          >
+          <FormLabel fontSize="sm" fontStyle="normal" htmlFor="email-alerts" mb="0">
             {hideSidebar ? "Show side panel" : "Hide Side Panel"}
           </FormLabel>
           <Switch
             size="sm"
             colorScheme="purple"
-            onChange={(e: ChangeEvent<HTMLInputElement>) =>
-              setHideSidebar(e.target.checked)
-            }
+            onChange={(e: ChangeEvent<HTMLInputElement>) => setHideSidebar(e.target.checked)}
             id="email-alerts"
           >
             {/* Hide side bar */}
@@ -358,12 +314,7 @@ const TopBar = ({
         {/* <IconButton size="sm" variant="outline" aria-label="open menu" icon={<FiBell />} /> */}
         <Flex border="0px" alignItems={"center"}>
           <Menu boundary="clippingParents">
-            <MenuButton
-              border="0px"
-              py={2}
-              transition="all 0.3s"
-              _focus={{ boxShadow: "none" }}
-            >
+            <MenuButton border="0px" py={2} transition="all 0.3s" _focus={{ boxShadow: "none" }}>
               <HStack>
                 {supabase.auth.session() === null ? (
                   <Avatar size={"sm"} src="https://bit.ly/broken-link" />
@@ -371,12 +322,7 @@ const TopBar = ({
                   <Avatar size={"sm"} src={"https://bit.ly/broken-link"} />
                 )}
 
-                <VStack
-                  display={{ base: "none", md: "flex" }}
-                  alignItems="flex-start"
-                  spacing="1px"
-                  ml="2"
-                >
+                <VStack display={{ base: "none", md: "flex" }} alignItems="flex-start" spacing="1px" ml="2">
                   <Text fontSize="sm">{useAuthContext().user?.email}</Text>
                   <Text fontSize="xs" color="gray.600">
                     {/* Admin */}

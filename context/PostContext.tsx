@@ -1,10 +1,4 @@
-import {
-  createContext,
-  ReactNode,
-  useContext,
-  useEffect,
-  useState,
-} from "react";
+import { createContext, ReactNode, useContext, useEffect, useState } from "react";
 import { Post } from "../types/myTypes";
 
 export interface CurrentAppState {
@@ -13,12 +7,14 @@ export interface CurrentAppState {
   currentSubheading: string | undefined;
   currentPapername: string | undefined;
   currentHeadingname: string | undefined;
+  currentSubheadingProps: { id: number | undefined; topic: string | undefined } | undefined;
 
   updateCurrentHeadingId: (id: number) => void;
   updateCurrentSubheadingId: (id: number) => void;
   updateCurrentSubheading: (subheading: string) => void;
   updateCurrentPapername: (papername: string) => void;
   updateCurrentHeadingname: (headingname: string) => void;
+  updateCurrentSubheadingProps: (id: number,topic:string) => void;
 
   // subHeadingIdForNewPost: number|undefined;
   // setSubheadingIdForNewPost: (id: number) => void;
@@ -36,55 +32,36 @@ const PostContext = createContext<CurrentAppState>({
   updateCurrentPapername: () => {},
   currentHeadingname: undefined,
   updateCurrentHeadingname: () => {},
+  currentSubheadingProps: undefined,
+  updateCurrentSubheadingProps: () => {},
 });
 
 export function PostContextWrapper({ children }: { children: ReactNode }) {
-  const [currentHeadingId, setCurrentHeadingId] = useState<number | undefined>(
-    undefined
-  );
-  const [currentSubheadingId, setCurrentSubheadingId] = useState<
-    number | undefined
-  >(undefined);
-  const [currentSubheading, setCurrentSubheading] = useState<
-    string | undefined
-  >(undefined);
-  const [currentPapername, setCurrentPapername] = useState<string | undefined>(
-    undefined
-  );
-  const [currentHeadingname, setCurrentHeadingname] = useState<
-    string | undefined
-  >(undefined);
+  const [currentHeadingId, setCurrentHeadingId] = useState<number | undefined>(undefined);
+  const [currentSubheadingId, setCurrentSubheadingId] = useState<number | undefined>(undefined);
+  const [currentSubheading, setCurrentSubheading] = useState<string | undefined>(undefined);
+  const [currentPapername, setCurrentPapername] = useState<string | undefined>(undefined);
+  const [currentHeadingname, setCurrentHeadingname] = useState<string | undefined>(undefined);
+  const [currentSubheadingProps, setCurrentSubheadingProps] = useState<{ id: number; topic: string } | undefined>(undefined);
 
   useEffect(() => {
-    setCurrentSubheadingId(
-      Number(window.localStorage.getItem("currentSubheadingId") as string)
-    );
-    setCurrentHeadingId(
-      Number(window.localStorage.getItem("currentHeadingId") as string)
-    );
-    setCurrentSubheading(
-      window.localStorage.getItem("currentSubheading") as string
-    );
-    setCurrentHeadingname(
-      window.localStorage.getItem("currentHeadingname") as string
-    );
-    setCurrentPapername(
-      window.localStorage.getItem("currentPapername") as string
-    );
+    setCurrentSubheadingId(Number(window.localStorage.getItem("currentSubheadingId") as string));
+    setCurrentHeadingId(Number(window.localStorage.getItem("currentHeadingId") as string));
+    setCurrentSubheading(window.localStorage.getItem("currentSubheading") as string);
+    setCurrentHeadingname(window.localStorage.getItem("currentHeadingname") as string);
+    setCurrentPapername(window.localStorage.getItem("currentPapername") as string);
+    setCurrentSubheadingProps({
+      id: parseInt(window.localStorage.getItem("id") as string, 10),
+      topic: window.localStorage.getItem("topic") as string,
+    });
   }, []);
 
   useEffect(() => {
     if (currentSubheadingId) {
-      window.localStorage.setItem(
-        "currentSubheadingId",
-        String(currentSubheadingId as number)
-      );
+      window.localStorage.setItem("currentSubheadingId", String(currentSubheadingId as number));
     }
     if (currentHeadingId) {
-      window.localStorage.setItem(
-        "currentHeadingId",
-        String(currentHeadingId as number)
-      );
+      window.localStorage.setItem("currentHeadingId", String(currentHeadingId as number));
     }
     if (currentSubheading) {
       window.localStorage.setItem("currentSubheading", currentSubheading);
@@ -95,12 +72,17 @@ export function PostContextWrapper({ children }: { children: ReactNode }) {
     if (currentPapername) {
       window.localStorage.setItem("currentPapername", currentPapername);
     }
+    if (currentSubheadingProps) {
+      window.localStorage.setItem("id", String(currentSubheadingProps.id));
+      window.localStorage.setItem("topic", currentSubheadingProps.topic);
+    }
   }, [
     currentHeadingId,
     currentHeadingname,
     currentPapername,
     currentSubheading,
     currentSubheadingId,
+    currentSubheadingProps,
   ]);
 
   function updateCurrentHeadingId(id: number) {
@@ -120,7 +102,9 @@ export function PostContextWrapper({ children }: { children: ReactNode }) {
   function updateCurrentHeadingname(heading: string) {
     setCurrentHeadingname(heading);
   }
-
+  function updateCurrentSubheadingProps(id: number,topic:string) {
+    setCurrentSubheadingProps({id:id,topic:topic});
+  }
   let sharedState: CurrentAppState = {
     /* whatever you want */
     currentHeadingId: currentHeadingId,
@@ -133,11 +117,11 @@ export function PostContextWrapper({ children }: { children: ReactNode }) {
     updateCurrentPapername: updateCurrentPapername,
     currentHeadingname: currentHeadingname,
     updateCurrentHeadingname: updateCurrentHeadingname,
+    currentSubheadingProps: currentSubheadingProps,
+    updateCurrentSubheadingProps: updateCurrentSubheadingProps
   };
 
-  return (
-    <PostContext.Provider value={sharedState}>{children}</PostContext.Provider>
-  );
+  return <PostContext.Provider value={sharedState}>{children}</PostContext.Provider>;
 }
 
 export function usePostContext() {

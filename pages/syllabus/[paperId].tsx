@@ -1,14 +1,4 @@
-import {
-  Link,
-  Table,
-  TableCaption,
-  Tbody,
-  Td,
-  Th,
-  Thead,
-  Tr,
-  Text,
-} from "@chakra-ui/react";
+import { Link, Table, TableCaption, Tbody, Td, Th, Thead, Tr, Text } from "@chakra-ui/react";
 import { AuthSession } from "@supabase/supabase-js";
 import NextLink from "next/link";
 import React, { useState } from "react";
@@ -43,9 +33,7 @@ const Syllabus: React.FC<ProfileListProps> = ({ array }) => {
     <div className="container" style={{ padding: "50px 0 100px 0" }}>
       {/* <Heading>Subject Name</Heading> */}
       <Table size="sm" variant="striped">
-        <TableCaption>
-          These syllabus are exactly as per UPSC Notificaiton
-        </TableCaption>
+        <TableCaption>These syllabus are exactly as per UPSC Notificaiton</TableCaption>
         <Thead>
           <Tr>
             <Th>Headings</Th>
@@ -59,37 +47,22 @@ const Syllabus: React.FC<ProfileListProps> = ({ array }) => {
             .map((entry) => {
               return (
                 <Tr key={entry.name?.id}>
-                  <Td value={entry.name?.main_topic}>
-                    {entry.name?.main_topic}
-                  </Td>
+                  <Td value={entry.name?.main_topic}>{entry.name?.main_topic}</Td>
                   <Td value={entry.name?.main_topic}>
                     {entry
                       .value!.sort((a, b) => a.sequence! - b.sequence!)
                       .map((value) => (
-                        <Text mb={{base:"2", md:"0"}} key={value.id}>
-                          <NextLink
-                            href={`/posts/${encodeURIComponent(value.id)}`}
-                            passHref
-                          >
+                        <Text mb={{ base: "2", md: "0" }} key={value.id}>
+                          <NextLink href={`/posts/${encodeURIComponent(value.id)}`} passHref>
                             <Link
                               onClick={() => {
                                 postContext.updateCurrentSubheadingId(value.id);
-                                postContext.updateCurrentHeadingId(
-                                  (value.main_topic_id as Headings).id
-                                );
-                                postContext.updateCurrentSubheading(
-                                  value.topic as string
-                                );
+                                postContext.updateCurrentHeadingId((value.main_topic_id as Headings).id);
+                                postContext.updateCurrentSubheading(value.topic as string);
                                 postContext.updateCurrentPapername(
-                                  (
-                                    (value.main_topic_id as Headings)
-                                      .paper_id as Papers
-                                  ).paper_name as string
+                                  ((value.main_topic_id as Headings).paper_id as Papers).paper_name as string
                                 );
-                                postContext.updateCurrentHeadingname(
-                                  (value.main_topic_id as Headings)
-                                    .main_topic as string
-                                );
+                                postContext.updateCurrentHeadingname((value.main_topic_id as Headings).main_topic as string);
 
                                 console.log("paper is ");
                               }}
@@ -100,33 +73,11 @@ const Syllabus: React.FC<ProfileListProps> = ({ array }) => {
                             </Link>
                           </NextLink>
                         </Text>
-
-                        // return
-                        //  <li>{value.topic}</li>;;
-                        // <div key={value.id}>
-                        //   <Text
-                        //     color="teal.500"
-                        //     _hover={{
-                        //       background: "gray.600",
-                        //       color: "white",
-                        //     }}
-                        //   >
-                        //     {value.topic}
-                        //     <Text as="b">,&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</Text>
-
-                        //   </Text>
-                        // </div>
-
-                        // {/* Following is for future implementation */}
                       ))}
                   </Td>
                 </Tr>
               );
             })}
-
-          {/* <Td>inches</Td>
-            <Td>millimetres (mm)</Td>
-            <Td isNumeric>25.4</Td> */}
         </Tbody>
       </Table>
     </div>
@@ -153,8 +104,6 @@ export const getStaticProps = async ({ params }: any) => {
     .from<Headings>("headings")
     .select(` id,main_topic,sequence`)
     .eq("paper_id", params.paperId);
-  console.log("getstatic props inside ", params.paperId);
-  // let subheadings: Subheading[][] = [];
   let subheadingsMap = new Map<Headings | undefined, Subheading[] | null>();
   console.log("subheadings are88 ", data?.length);
 
@@ -163,23 +112,28 @@ export const getStaticProps = async ({ params }: any) => {
       .from<Subheading>("subheadings")
       .select(
         ` id,topic,sequence,
-      main_topic_id(
-        id,main_topic,
-        paper_id(
-paper_name
-        )
-        )`
+        main_topic_id:headings!topics_main_topic_id_fkey
+        (
+          id,main_topic,
+          paper_id:papers!mainTopics_paper_id_fkey
+          (
+            id,
+            paper_name
+          )
+          )
+          
+          `
       )
       .eq("main_topic_id", data![index].id);
-    // subheadings.push(subheading.data!);
+    console.log("  subheading is ", JSON.stringify(subheading.data));
+    console.log("  subheading error detail is  ", subheading.error?.details);
     subheadingsMap.set(data![index], subheading.data);
   }
-  // console.log("subheading map is ", subheadingsMap);
   const array = Array.from(subheadingsMap, ([name, value]) => ({
     name,
     value,
   }));
-
+  console.log(" array of heading subheading is ", array);
   return {
     props: {
       array,

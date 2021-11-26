@@ -3,7 +3,7 @@ body {
   --custom-font-family: -apple-system, BlinkMacSystemFont, Segoe UI, Roboto,
     Oxygen, Ubuntu, Cantarell, Fira Sans, Droid Sans, Helvetica Neue, sans-serif;
   --custom-bg-color: rgb(255, 255, 255);
-  --custom-panel-color: rgb(255, 255, 255);
+  --custom-panel-color: rgb(22, 7, 7);
   --custom-box-shadow: 0 2px 8px 0 rgba(0, 0, 0, 0.8);
   --custom-color: rgb(78, 72, 99);
   --custom-color-brand: #ffffff;
@@ -50,11 +50,11 @@ td {
 /* tr:hover {background-color: yellow;} */
 /* Grid */
 
-ol {
+/* ol {
   background: #ff9999 !important;
   padding: 0px !important;
   margin-left: 35px !important;
-}
+} */
 
 /* ul {
   background: #ebc683;
@@ -62,11 +62,11 @@ ol {
   margin-left: 35px;
 } */
 
-ol li {
+/* ol li {
   background: #ffe5e5 !important;
   padding: 10px !important;
   margin-left: 25px !important;
-}
+} */
 
 /* ul li {
   background: #fffacc;
@@ -74,15 +74,15 @@ ol li {
   margin-left: 32px;
 } */
 
-blockquote {
+/* blockquote {
   background: #f9f9f9;
   border-left: 10px solid #ccc;
   margin: 1.5em 10px !important;
   margin-left: 1.5em 10px !important;
   padding: 0.5em 10px;
   quotes: "\201C""\201D""\2018""\2019";
-}
-blockquote:before {
+} */
+/* blockquote:before {
   color: #ccc;
   content: open-quote;
   font-size: 4em;
@@ -92,7 +92,7 @@ blockquote:before {
 }
 blockquote p {
   display: inline;
-}
+} */
 
 /* mouse over link */
 a:hover {
@@ -314,11 +314,12 @@ input[disabled] {
 
 /* Button */
 
-button,
-.button {
-  color: var(--custom-color);
-  border: var(--custom-border);
-  background-color: var(--custom-bg-color);
+/* button style is cancelled by me */
+/* button,
+.button { */
+  /* color: var(--custom-color); */
+  /* border: var(--custom-border); */
+  /* background-color: var(--custom-bg-color);
   display: inline-block;
   text-align: center;
   border-radius: var(--custom-border-radius);
@@ -326,14 +327,26 @@ button,
   cursor: pointer;
   text-align: center;
   font-size: 0.9rem;
-  text-transform: uppercase;
+  text-transform: uppercase; */
+/* }  */
+/* button,
+.button:focus{
+  outline: none !important;
+  
+} */
+button {
+  /* outline: none !important;
+  border: none !important; */
+  box-shadow: none !important;
+  /* box-shadow:  rgba(0, 0, 255, .2); */
 }
 
+/* 
 button.primary,
 .button.primary {
-  background-color: var(--custom-color-brand);
+  background-color: var(--custom-color-brand); 
   border: 1px solid var(--custom-color-brand);
-}
+} */
 
 /* Widgets */
 
