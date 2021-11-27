@@ -152,6 +152,8 @@ const SunEditorForRendering: React.FC<Props> = ({ postId, isNew, postContent, is
    */
   // console.log("passed post content is ", postContent);
   console.log("suneditor is rendering");
+
+  
   const editorRef: React.MutableRefObject<typeof SunEditor | undefined> = useRef();
   const [content, setContent] = useState("");
   const [isSubmitting, setIsSubmitting] = useState(false);
