@@ -63,6 +63,7 @@ const Syllabus: React.FC<ProfileListProps> = ({ array }) => {
                                   ((value.main_topic_id as Headings).paper_id as Papers).paper_name as string
                                 );
                                 postContext.updateCurrentHeadingname((value.main_topic_id as Headings).main_topic as string);
+                                postContext.updateCurrentSubheadingProps(value.id,value.topic as string);
 
                                 console.log("paper is ");
                               }}

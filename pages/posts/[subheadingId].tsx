@@ -1,10 +1,5 @@
 import { ArrowBackIcon } from "@chakra-ui/icons";
-import {
-  Alert,
-  AlertIcon, Box,
-  Button, Divider, Heading, ListItem,
-  OrderedList, Text
-} from "@chakra-ui/react";
+import { Alert, AlertIcon, Box, Button, Divider, Heading, ListItem, OrderedList, Text } from "@chakra-ui/react";
 import { AuthSession } from "@supabase/supabase-js";
 import { Element } from "domhandler/lib/node";
 import DOMPurify from "dompurify";
@@ -35,22 +30,31 @@ const Posts: React.FC<ProfileListProps> = ({ data }) => {
   const [profiles, setProfiles] = useState<Profile[]>([]);
   const [userNote, setUserNote] = useState<string | undefined | null>(null);
   const [mounted, setMounted] = useState(false);
+  // const [currentSubheadingId, setCurrentSubheadingId] = useState<number>();
+
   // const [data, setProfiles] = useState<Profile[]>([]);
   const appContext = useAppContext();
   const router = useRouter();
-  const { currentSubheadingProps } = usePostContext();
-  const {userposts,isLoadingUserPost,userposterror } = useGetUserpostBySubheadingidAndUserid(currentSubheadingProps?.id);
-  const { sharedPost,isLoadingSharedPost,sharedPosterror}=useGetSharedpostBySubheadingidAndUserid(currentSubheadingProps?.id)
+  const { currentSubheadingId,currentSubheadingProps,currentSubheading } = usePostContext();
+  const { userposts, isLoadingUserPost, userposterror } = useGetUserpostBySubheadingidAndUserid(currentSubheadingProps?.id);
+  const { sharedPost, isLoadingSharedPost, sharedPosterror } = useGetSharedpostBySubheadingidAndUserid(
+    currentSubheadingProps?.id
+  );
+  // console.log("current subhading iss ", currentSubheadingProps?.id);
+  // console.log("current subhading topic iss ", currentSubheadingProps?.topic);
 
+  // useEffect(() => {
+  //   setCurrentSubheadingId(currentSubheadingProps?.id);
+  // }, [currentSubheadingProps?.id]);
 
   useEffect(() => {
     if (userposts && userposts.data && userposts.data[0]) {
       setUserNote(userposts.data[0].post);
-      console.log("user post is ",userposts.data[0].post)
+      console.log("user post is ", userposts.data[0].post);
       // appContext.setPostHeadingId(((userposts!.data[0].subheading_id as Subheading).main_topic_id as Headings)!.id);
     }
-  },[appContext,userposts]);
- 
+  }, [appContext, userposts]);
+
   if (!supabase.auth.session()) {
     return (
       <Alert status="info">
@@ -59,14 +63,14 @@ const Posts: React.FC<ProfileListProps> = ({ data }) => {
       </Alert>
     );
   }
- if (sharedPosterror||userposterror) {
-   <div>Error Code: SWR_SUBHEADING, Check Internet connection</div>
+  if (sharedPosterror || userposterror) {
+    <div>Error Code: SWR_SUBHEADING, Check Internet connection</div>;
   }
   if (sharedPost?.error) {
-    <ErrorAlert description={"ERROR CODE: SUP_subheading_1"} alertType={"error"}></ErrorAlert>
+    <ErrorAlert description={"ERROR CODE: SUP_subheading_1"} alertType={"error"}></ErrorAlert>;
   }
   if (userposts?.error) {
-    <ErrorAlert description={"ERROR CODE: SUP_subheading_2"} alertType={"error"}></ErrorAlert>
+    <ErrorAlert description={"ERROR CODE: SUP_subheading_2"} alertType={"error"}></ErrorAlert>;
   }
 
   return (
@@ -124,7 +128,7 @@ const Posts: React.FC<ProfileListProps> = ({ data }) => {
           })
         )}
 
-        {!userposts || !userposts.data ||!userposts.data.length || userNote == undefined ||null ? (
+        {!userposts || !userposts.data || !userposts.data.length || userNote == undefined || null ? (
           <div>
             <Heading mb="6" fontSize="2xl">
               {" "}
@@ -135,18 +139,16 @@ const Posts: React.FC<ProfileListProps> = ({ data }) => {
               You Don&apos;t have notes on this Topic Create Notes in Editor
             </Alert>
             <Box zIndex="5000">
-              <SunEditorForRendering  isNew={true} />
+              <SunEditorForRendering isNew={true} />
             </Box>
           </div>
         ) : (
-            
-           
-        <SunEditorForRendering
-          // subHeadingId={currentSubheadingId}
-          isNew={false}
-          postId={userposts!.data![0].id}
-          postContent={userNote}
-        />
+          <SunEditorForRendering
+            // subHeadingId={currentSubheadingId}
+            isNew={false}
+            postId={userposts!.data![0].id}
+            postContent={userNote}
+          />
         )}
         {/* {userposts && userposts?.data?.length != 0 && userposts!.data![0] != null ? (
           <SunEditorForRendering

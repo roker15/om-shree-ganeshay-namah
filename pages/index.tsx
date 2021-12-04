@@ -15,6 +15,7 @@ import {
 import { useRouter } from "next/dist/client/router";
 import React from "react";
 import { FaFacebook, FaTelegram, FaTwitter, FaWhatsapp } from "react-icons/fa";
+import FileInput from "../components/FileInput";
 import { useAuthContext } from "../context/Authcontext";
 import LayoutWithTopNavbar from "../layout/LayoutWithTopNavbar";
 import { supabase } from "../lib/supabaseClient";
@@ -109,6 +110,7 @@ const Home: React.FC<ProfileListProps> = ({ data }) => {
             <Button colorScheme="telegram">958-8701-073</Button>
           </ButtonGroup>
         </VStack>
+        <FileInput/>
         
       </Container>
     );
