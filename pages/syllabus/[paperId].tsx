@@ -65,7 +65,6 @@ const Syllabus: React.FC<ProfileListProps> = ({ array }) => {
                                 postContext.updateCurrentHeadingname((value.main_topic_id as Headings).main_topic as string);
                                 postContext.updateCurrentSubheadingProps(value.id,value.topic as string);
 
-                                console.log("paper is ");
                               }}
                               disable="false"
                               color="telegram.600"

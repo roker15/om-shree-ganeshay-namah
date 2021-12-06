@@ -113,18 +113,17 @@ const SunEditorForRendering: React.FC<Props> = ({ postId, isNew, postContent, is
   /**
    * @type {React.MutableRefObject<SunEditor>} get type definitions for editor
    */
-  // console.log("passed post content is ", postContent);
-  if (!isSharedPost) {
-    console.log("post id is ", postId);
-    console.log("post  is ", postContent);
-  }
+
   console.log("suneditor is rendering");
   //new ---editing enabled default, no button shown.
   //editing --> user finished typeing , edit mode off, saving indicator or saved indicator.
   //          ---> user still typeing
   //creating
   //normal --> edit mode on, share note,
-  const isPostNewRef = useRef(isNew);
+
+  const isPostNewRef = useRef(isNew);// using props directily is valid for one
+  //time only, (first render), in later rendering this will not be updating
+  // use useeeffect to update it every time prosp changes.
   const postRef = useRef(postContent);
   const isMountedRef = useRef(true);
   const postIdref = useRef<number>();
@@ -153,16 +152,19 @@ const SunEditorForRendering: React.FC<Props> = ({ postId, isNew, postContent, is
       isPostNewRef.current = false;
     }
   }, [isNew]);
-  useEffect(() => {
-    if (editor && editor.current) {
-      // editor.current.core.blur();
-    }
-  },[]);
+
   useEffect(() => {
     if (postContent) {
-      postRef.current=postContent;
+      editor.current?.setContents(postContent);
+      // postRef.current=postContent;
     }
   }, [postContent]);
+
+  // useEffect(() => {
+  //   if (postRef.current) {
+  //     editor.current?.setContents(postRef.current)
+  //   }
+  // });
 
   
   // // When the editor's content has changed, store it in state
@@ -172,7 +174,10 @@ const SunEditorForRendering: React.FC<Props> = ({ postId, isNew, postContent, is
     if (editor.current?.core.hasFocus) {
       debouncedChange(editorContent, postIdref.current, isNoPostExists);
     }
-    setContent(editorContent);
+    // setContent(editorContent);
+    // postRef.current = editorContent;
+    // editor.current?.setContents(editorContent);
+    
     // debouncedChange(editorContent, postId, isNoPostExists);
     // verify();
   };
@@ -234,9 +239,9 @@ const SunEditorForRendering: React.FC<Props> = ({ postId, isNew, postContent, is
     []
   );
   //--------------------------------------------------------
-  useEffect(() => {
-    setContent(postContent as string);
-  }, [postContent]);
+  // useEffect(() => {
+  //   setContent(postContent as string);
+  // }, [postContent]);
 
   if (isSharedPost) {
     return (
@@ -295,7 +300,7 @@ const SunEditorForRendering: React.FC<Props> = ({ postId, isNew, postContent, is
           // defaultValue={postContent}
           // defaultValue={content}
           // setContents={content}
-          setContents={postRef.current}
+          setContents={postContent}
           onChange={handleOnChange}
           readOnly={!editMode}
           // disable={!isPostNewRef.current}
