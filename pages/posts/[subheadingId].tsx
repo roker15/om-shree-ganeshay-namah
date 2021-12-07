@@ -35,7 +35,7 @@ const Posts: React.FC<ProfileListProps> = ({ data }) => {
   const [profiles, setProfiles] = useState<Profile[]>([]);
   const [userNote, setUserNote] = useState<string | undefined | null>(null);
   const [mounted, setMounted] = useState(false);
-  // const [data, setProfiles] = useState<Profile[]>([]);
+  // const [data, setProfiles] = useState<Profile[]>([]);;
   const appContext = useAppContext();
   const router = useRouter();
   const { currentSubheadingProps } = usePostContext();
