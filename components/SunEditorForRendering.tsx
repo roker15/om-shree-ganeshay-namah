@@ -133,7 +133,7 @@ const SunEditorForRendering: React.FC<Props> = ({ postId, isNew, postContent, is
   const [editFinished, seteditFinished] = useState(false);
   const [editOngoing, seteditOngoing] = useState(false);
 
-  const [content, setContent] = useState("");
+  const [content, setContent] = useState("hello world");
 
   const { currentSubheadingProps } = usePostContext();
   const [isNoPostExists, setIsNoPostExists] = useState(false);
@@ -155,16 +155,18 @@ const SunEditorForRendering: React.FC<Props> = ({ postId, isNew, postContent, is
 
   useEffect(() => {
     if (postContent) {
-      editor.current?.setContents(postContent);
+      // console.log("useeffect when post content changes , post content is ",postContent)
+      editor.current?.core.setContents(postContent);
+      setContent(postContent);
       // postRef.current=postContent;
     }
   }, [postContent]);
 
-  // useEffect(() => {
-  //   if (postRef.current) {
-  //     editor.current?.setContents(postRef.current)
-  //   }
-  // });
+  useEffect(() => {
+    if (content) {
+      editor.current?.setContents(content)
+    }
+  },[content]);
 
   
   // // When the editor's content has changed, store it in state
@@ -299,10 +301,11 @@ const SunEditorForRendering: React.FC<Props> = ({ postId, isNew, postContent, is
           // setContents={postContent} //--- this works
           // defaultValue={postContent}
           // defaultValue={content}
-          // setContents={content}
-          setContents={postContent}
+          setContents={content}
+          // setContents={postContent}
           onChange={handleOnChange}
           readOnly={!editMode}
+          autoFocus={false}
           // disable={!isPostNewRef.current}
 
           // hide={hideToolbar}

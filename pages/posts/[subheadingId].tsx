@@ -30,22 +30,14 @@ const Posts: React.FC<ProfileListProps> = ({ data }) => {
   const [profiles, setProfiles] = useState<Profile[]>([]);
   const [userNote, setUserNote] = useState<string | undefined | null>(null);
   const [mounted, setMounted] = useState(false);
-  // const [currentSubheadingId, setCurrentSubheadingId] = useState<number>();
-
-  // const [data, setProfiles] = useState<Profile[]>([]);
   const appContext = useAppContext();
   const router = useRouter();
-  const { currentSubheadingId,currentSubheadingProps,currentSubheading } = usePostContext();
+  const { currentSubheadingId, currentSubheadingProps, currentSubheading } = usePostContext();
   const { userposts, isLoadingUserPost, userposterror } = useGetUserpostBySubheadingidAndUserid(currentSubheadingProps?.id);
   const { sharedPost, isLoadingSharedPost, sharedPosterror } = useGetSharedpostBySubheadingidAndUserid(
     currentSubheadingProps?.id
   );
-  // console.log("current subhading iss ", currentSubheadingProps?.id);
-  // console.log("current subhading topic iss ", currentSubheadingProps?.topic);
-
-  // useEffect(() => {
-  //   setCurrentSubheadingId(currentSubheadingProps?.id);
-  // }, [currentSubheadingProps?.id]);
+ 
 
   useEffect(() => {
     if (userposts && userposts.data && userposts.data[0]) {
@@ -127,8 +119,7 @@ const Posts: React.FC<ProfileListProps> = ({ data }) => {
             );
           })
         )}
-
-        {!userposts || !userposts.data || !userposts.data.length || userNote == undefined || null ? (
+        {isLoadingUserPost ? <div>Loading...</div> : !userposts || !userposts.data || !userposts.data.length || userNote == undefined || null ? (
           <div>
             <Heading mb="6" fontSize="2xl">
               {" "}
@@ -150,25 +141,10 @@ const Posts: React.FC<ProfileListProps> = ({ data }) => {
             postContent={userNote}
           />
         )}
-        {/* {userposts && userposts?.data?.length != 0 && userposts!.data![0] != null ? (
-          <SunEditorForRendering
-            subHeadingId={currentSubheadingId}
-            isNew={false}
-            postId={userposts!.data![0].id}
-            postContent={userNote}
-          />
-        ) : (
-          <div></div>
-        )} */}
+        
       </div>
     </>
   );
-  // }
-  // return (
-  //   <div>
-  //     <Link href="../editor">Go to editor</Link>
-  //   </div>
-  // );
 };
 
 const options: HTMLReactParserOptions = {

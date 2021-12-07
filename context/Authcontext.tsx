@@ -123,8 +123,8 @@ export const AuthProvider = ({ children }: any) => {
         provider: "google",
       },
       {
-        // redirectTo: "http://localhost:3000"
-        redirectTo: "https://om-shree-ganeshay-namah-git-development3-roker15.vercel.app",
+        redirectTo: "http://localhost:3000"
+        // redirectTo: "https://om-shree-ganeshay-namah-git-development3-roker15.vercel.app",
      
       }
     );
