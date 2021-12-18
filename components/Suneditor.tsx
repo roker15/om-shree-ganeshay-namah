@@ -14,7 +14,7 @@ const SunEditor = dynamic(() => import("suneditor-react"), {
 // import SunEditor from 'suneditor-react';
 
 import "suneditor/dist/css/suneditor.min.css"; // Import Sun Editor's CSS File
-import { useAppContext } from "../context/state";
+import { useAppContext } from "../state/state";
 import { supabase } from "../lib/supabaseClient";
 import { Post } from "../types/myTypes";
 

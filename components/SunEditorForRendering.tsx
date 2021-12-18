@@ -1,8 +1,4 @@
-//******************* sun editor*************************************** */
-
-// Import katex
 import {
-  Avatar,
   Box,
   Button,
   ButtonGroup,
@@ -17,68 +13,35 @@ import {
   ModalFooter,
   ModalHeader,
   ModalOverlay,
-  Tag,
-  TagLabel,
   Text,
   useDisclosure,
-  useToast,
 } from "@chakra-ui/react";
 import katex from "katex";
 import "katex/dist/katex.min.css";
 import { debounce } from "lodash";
 import dynamic from "next/dynamic";
 import React, { useCallback, useEffect, useRef, useState } from "react";
-import { MdDoneAll, MdEdit, MdEditNote, MdEditOff, MdMode, MdRawOff, MdSave, MdShare } from "react-icons/md";
+import { MdEdit, MdEditOff, MdShare } from "react-icons/md";
 import styled from "styled-components";
 import "suneditor/dist/css/suneditor.min.css"; // Import Sun Editor's CSS File
-import { mutate, useSWRConfig } from "swr";
-import { usePostContext } from "../context/PostContext";
-import { useAppContext } from "../context/state";
-import { myErrorLog } from "../lib/mylog";
+import SunEditorCore from "suneditor/src/lib/core";
+import { useSWRConfig } from "swr";
+import { usePostContext } from "../state/PostContext";
+import { myErrorLog, myInfoLog } from "../lib/mylog";
 import { supabase } from "../lib/supabaseClient";
 import { Post, Profile, SharedPost } from "../types/myTypes";
 import { customToast } from "./CustomToast";
+
 // import SunEditor from "suneditor-react";
 const SunEditor = dynamic(() => import("suneditor-react"), {
   ssr: false,
 });
-import SunEditorCore from "suneditor/src/lib/core";
-import { FaAngrycreative } from "react-icons/fa";
 
 const EditorStyle = styled.div`
   .sun-editor {
     /* margin-top: -18px !important; */
     /* border: 1px solid blue; */
     /* border: none; */
-  }
-
-  table {
-    border-collapse: collapse;
-    width: 100%;
-  }
-
-  th,
-  td {
-    text-align: left;
-    padding: 8px;
-    font-family: "Rock Salt", cursive;
-    padding: 20px;
-    // font-style: italic;
-    caption-side: bottom;
-    /* color: #666; */
-    /* text-align: right; */
-    letter-spacing: 1px;
-    font-weight: lighter !important;
-  }
-  th {
-    font-style: italic;
-    caption-side: bottom;
-    color: #616 !important;
-    font-weight: lighter !important;
-  }
-
-  tr:nth-child(even) {
-    background-color: #f2f2f2;
   }
 `;
 
@@ -92,7 +55,7 @@ interface Props {
 }
 
 const buttonList = [
-  ["undo", "redo"],
+  // ["undo", "redo"],
   ["font", "fontSize", "formatBlock"],
   [/*"paragraphStyle",*/ "blockquote"],
   ["bold", "underline", "italic", "strike", "subscript", "superscript"],
@@ -100,41 +63,31 @@ const buttonList = [
   ["removeFormat"],
   "/",
   ["outdent", "indent"],
-  ["align", "horizontalRule", "list", "lineHeight"],
+  ["align", "horizontalRule", "list" /* "lineHeight"*/],
   ["table", "link", "image", /* "video","audio",*/ "math"],
 
   /** ['imageGallery'] */ // You must add the "imageGalleryUrl".
   ["fullScreen" /*, "showBlocks", "codeView"*/],
-  ["preview", "print"],
+  [
+    // "preview",
+    "print",
+  ],
   // ["save", "template"],
 ];
 
-const SunEditorForRendering: React.FC<Props> = ({ postId, isNew, postContent, isSharedPost, sharedBy }) => {
+const SunEditorForRendering: React.FC<Props> = ({ postId, isNew, postContent }) => {
   /**
    * @type {React.MutableRefObject<SunEditor>} get type definitions for editor
    */
 
-  console.log("suneditor is rendering");
-  //new ---editing enabled default, no button shown.
-  //editing --> user finished typeing , edit mode off, saving indicator or saved indicator.
-  //          ---> user still typeing
-  //creating
-  //normal --> edit mode on, share note,
+  myInfoLog("SunEditorForRendering postContent is ", postContent);
+  myInfoLog("SunEditorForRendering ", "component is rendering");
 
-  const isPostNewRef = useRef(isNew);// using props directily is valid for one
-  //time only, (first render), in later rendering this will not be updating
-  // use useeeffect to update it every time prosp changes.
-  const postRef = useRef(postContent);
+  const isPostNewRef = useRef(isNew);
   const isMountedRef = useRef(true);
   const postIdref = useRef<number>();
   postIdref.current = postId;
-  const [firstTime, setFirstTime] = useState(false);
   const [editMode, setEditMode] = useState(true);
-  const [editFinished, seteditFinished] = useState(false);
-  const [editOngoing, seteditOngoing] = useState(false);
-
-  const [content, setContent] = useState("hello world");
-
   const { currentSubheadingProps } = usePostContext();
   const [isNoPostExists, setIsNoPostExists] = useState(false);
 
@@ -144,7 +97,12 @@ const SunEditorForRendering: React.FC<Props> = ({ postId, isNew, postContent, is
   const getSunEditorInstance = (sunEditor: SunEditorCore) => {
     editor.current = sunEditor;
   };
-
+  useEffect(() => {
+    isMountedRef.current = true;
+    return () => {
+      isMountedRef.current = false;
+    };
+  }, []);
   useEffect(() => {
     if (isNew) {
       isPostNewRef.current = true;
@@ -154,34 +112,17 @@ const SunEditorForRendering: React.FC<Props> = ({ postId, isNew, postContent, is
   }, [isNew]);
 
   useEffect(() => {
-    if (postContent) {
-      // console.log("useeffect when post content changes , post content is ",postContent)
+    if (postContent && editor.current && editor.current.core) {
       editor.current?.core.setContents(postContent);
-      setContent(postContent);
-      // postRef.current=postContent;
     }
   }, [postContent]);
 
-  useEffect(() => {
-    if (content) {
-      editor.current?.setContents(content)
-    }
-  },[content]);
-
-  
   // // When the editor's content has changed, store it in state
   const handleOnChange = (editorContent: string) => {
-    
     console.log("post id inside handle change", postIdref.current);
     if (editor.current?.core.hasFocus) {
       debouncedChange(editorContent, postIdref.current, isNoPostExists);
     }
-    // setContent(editorContent);
-    // postRef.current = editorContent;
-    // editor.current?.setContents(editorContent);
-    
-    // debouncedChange(editorContent, postId, isNoPostExists);
-    // verify();
   };
   const createNewPostInDatabase = async (newcontent: string) => {
     console.log("creating post ");
@@ -199,18 +140,14 @@ const SunEditorForRendering: React.FC<Props> = ({ postId, isNew, postContent, is
     if (data) {
       isPostNewRef.current = false;
       customToast({ title: "Post Created", status: "success" });
-      //refresh user post data
-      mutate(`/userpost/${currentSubheadingProps?.id}`);
-      // setEditMode(true);
+      // mutate(`/userpost/${currentSubheadingProps?.id}`);
     }
-
-    // setDefaultValue1("hello")
   };
   const updatePostInDatabase = async (newcontent: string, postId: number) => {
     console.log("post id inside updatepostmethod", postId);
     const { data, error } = await supabase.from<Post>("posts").update({ post: newcontent }).eq("id", postId);
     if (data) {
-      customToast({ title: "Post updated..", status: "success" });
+      customToast({ title: "Post updated...", status: "success" });
       // mutate(`/userpost/${currentSubheadingProps?.id}`);
     }
     if (isMountedRef.current) {
@@ -227,7 +164,6 @@ const SunEditorForRendering: React.FC<Props> = ({ postId, isNew, postContent, is
 
       updatePostInDatabase(newcontent, postId);
     }
-    // console.log(`processing ${content}`);
   };
 
   //-------------------------------------------------------
@@ -240,57 +176,22 @@ const SunEditorForRendering: React.FC<Props> = ({ postId, isNew, postContent, is
     debounce((content1, postId, isNoPostExists) => debouncedFunctionRef.current!(content1, postId, isNoPostExists), 5000),
     []
   );
-  //--------------------------------------------------------
-  // useEffect(() => {
-  //   setContent(postContent as string);
-  // }, [postContent]);
-
-  if (isSharedPost) {
-    return (
-      <>
-        <Text mb="" fontSize="xl" fontWeight="bold">
-          <Tag size="lg" colorScheme="blackAlpha" borderRadius="full">
-            <Avatar
-              src="https://bit.ly/broken-link"
-              // glo="true"
-              size="xs"
-              // name="Segun Adebayo"
-              ml={-1}
-              mr={2}
-            />
-            <TagLabel>{sharedBy}</TagLabel>
-          </Tag>
-        </Text>
-        <EditorStyle>
-          <SunEditor
-            setContents={postContent}
-            // defaultValue={postContent}
-            // onChange={handleOnChange}
-            hideToolbar={true}
-            readOnly={true}
-            // disable={true}
-
-            // hide={hideToolbar}
-            setOptions={{
-              mode: "balloon",
-              katex: katex,
-              height: "100%",
-              buttonList: buttonList,
-            }}
-          />
-        </EditorStyle>
-      </>
-    );
-  }
 
   return (
     <div>
       <Divider />
-      <ButtonGroup  mb="" justifyContent="end" size="sm" isAttached variant="outline">
+      <ButtonGroup mb="-3" justifyContent="end" size="sm" isAttached variant="outline">
+        <Button
+          variant="solid"
+          colorScheme={editMode ? "twitter" : "facebook"}
+          onClick={() => setEditMode(!editMode)}
+          leftIcon={editMode ? <MdEditOff /> : <MdEdit />}
+        >
+          {editMode ? "Deactivate Edit Mode" : "Activate Edit Mode"}
+        </Button>
         <Box display={editMode ? "none" : "block"}>
           <UiForSharing postId={postId!} subheadingId={currentSubheadingProps?.id!} />
         </Box>
-        <Button variant="solid" colorScheme={editMode ? "green" : "red"} onClick={ ()=>setEditMode(!editMode)}leftIcon={editMode?<MdEditOff />:<MdEdit/>}>{editMode ? "Edit mode off" : "Edit mode on"}</Button>
       </ButtonGroup>
 
       <EditorStyle>
@@ -298,29 +199,18 @@ const SunEditorForRendering: React.FC<Props> = ({ postId, isNew, postContent, is
           getSunEditorInstance={getSunEditorInstance}
           setDefaultStyle="font-family: arial; font-size: 16px;"
           hideToolbar={!editMode}
-          // setContents={postContent} //--- this works
-          // defaultValue={postContent}
-          // defaultValue={content}
-          setContents={content}
-          // setContents={postContent}
+          defaultValue={postContent}
           onChange={handleOnChange}
           readOnly={!editMode}
           autoFocus={false}
-          // disable={!isPostNewRef.current}
-
-          // hide={hideToolbar}
           setOptions={{
             mode: "balloon-always",
             katex: katex,
             height: "100%",
-
             buttonList: buttonList,
           }}
         />
       </EditorStyle>
-      <Text>content Is : {content}</Text>
-      <br />
-      <Text>postcontent Is : {postContent}</Text>
     </div>
   );
 };
@@ -333,46 +223,46 @@ const UiForSharing: React.FC<sharedProps> = ({ postId, subheadingId }) => {
   const { isOpen, onOpen, onClose } = useDisclosure();
   const [inputEmail, setInputEmail] = React.useState("");
   const [message, setMessage] = React.useState("");
+  const [isLoading, setIsLoading] = React.useState(false);
   // const [error, setError] = React.useState(null);
 
   const initialRef = useRef<HTMLInputElement | HTMLButtonElement | HTMLLabelElement>(null);
   const finalRef = useRef<HTMLInputElement | HTMLButtonElement | HTMLLabelElement>(null);
   const handleSharePost = async () => {
-    console.log("handle share clicked");
-
+    setIsLoading(true);
     const { data: email, error } = await supabase.from<Profile>("profiles").select("id,email").eq("email", inputEmail);
     // .single();
     if (error) {
-      console.log("error hai ");
-      setMessage("No user found for this email");
+      setMessage("Something went wrong!");
       return;
     }
     if (email?.length == 0) {
       setMessage("This email is not valid");
     } else {
       setMessage("");
-      const {data:ispostexist,error:ispostexisterror}=await supabase.from<SharedPost>("sharedpost").select(
-        `post_id`).match({post_id: postId,shared_with: email![0].id});
-      
-      if (ispostexist?.length!=0) {
+      const { data: ispostexist, error: ispostexisterror } = await supabase
+        .from<SharedPost>("sharedpost")
+        .select(`post_id`)
+        .match({ post_id: postId, shared_with: email![0].id });
+
+      if (ispostexist?.length != 0) {
         setMessage("This post is already shared");
       } else {
-        
-      const { data: sharedData, error } = await supabase.from<SharedPost>("sharedpost").insert({
-        post_id: postId,
-        shared_with: email![0].id,
-        subheading_id: subheadingId,
-      });
-      if (error) {
-        setMessage(error.message);
-      }
+        const { data: sharedData, error } = await supabase.from<SharedPost>("sharedpost").insert({
+          post_id: postId,
+          shared_with: email![0].id,
+          subheading_id: subheadingId,
+        });
+        if (error) {
+          setMessage(error.message);
+        }
 
-      if (sharedData) {
-        setMessage("Shared successfully");
+        if (sharedData) {
+          setMessage("Shared successfully");
+        }
       }
-      }
-
     }
+    setIsLoading(false);
   };
 
   const handleChange = (e: any) => {
@@ -383,7 +273,7 @@ const UiForSharing: React.FC<sharedProps> = ({ postId, subheadingId }) => {
   return (
     <>
       <ButtonGroup mb="" justifyContent="end" size="sm" isAttached variant="outline">
-        <Button bg="yellow.200" leftIcon={<MdShare />} onClick={onOpen}>
+        <Button colorScheme="facebook" variant="outline" leftIcon={<MdShare />} onClick={onOpen}>
           Share This Note
         </Button>
       </ButtonGroup>
@@ -392,7 +282,10 @@ const UiForSharing: React.FC<sharedProps> = ({ postId, subheadingId }) => {
         <ModalOverlay />
         <ModalContent>
           <ModalHeader>Share your post</ModalHeader>
-          <Text ml="4" color="red.300">{message}</Text>
+          <Text ml="4" color="blue.400">
+            {message}
+            {message ? "..." : ""}
+          </Text>
           <ModalCloseButton />
           <ModalBody pb={6}>
             <FormControl>
@@ -409,7 +302,7 @@ const UiForSharing: React.FC<sharedProps> = ({ postId, subheadingId }) => {
           </ModalBody>
 
           <ModalFooter>
-            <Button leftIcon={<MdShare />} onClick={handleSharePost} colorScheme="blue" mr={3}>
+            <Button isLoading={isLoading} leftIcon={<MdShare />} onClick={handleSharePost} colorScheme="blue" mr={3}>
               Share
             </Button>
             <Button onClick={onClose}>Cancel</Button>
@@ -419,12 +312,3 @@ const UiForSharing: React.FC<sharedProps> = ({ postId, subheadingId }) => {
     </>
   );
 };
-
-interface editorActionsProps {
-  isNew: boolean;
-  editOngoing: boolean;
-  editFinished: boolean;
-  normal: boolean;
-  postId: number;
-  subheadingId: number;
-}

@@ -35,7 +35,7 @@ import { supabase } from "../lib/supabaseClient";
 import { Headings, Subheading } from "../types/myTypes";
 import PageWithLayoutType from "../types/pageWithLayout";
 import ReactTable from "../components/ReactTable";
-import { useAuthContext } from "../context/Authcontext";
+import { useAuthContext } from "../state/Authcontext";
 
 const Styles = styled.div`
   padding: 1rem;

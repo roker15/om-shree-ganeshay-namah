@@ -16,7 +16,7 @@ import { useRouter } from "next/dist/client/router";
 import React from "react";
 import { FaFacebook, FaTelegram, FaTwitter, FaWhatsapp } from "react-icons/fa";
 import FileInput from "../components/FileInput";
-import { useAuthContext } from "../context/Authcontext";
+import { useAuthContext } from "../state/Authcontext";
 import LayoutWithTopNavbar from "../layout/LayoutWithTopNavbar";
 import { supabase } from "../lib/supabaseClient";
 import { Papers } from "../types/myTypes";

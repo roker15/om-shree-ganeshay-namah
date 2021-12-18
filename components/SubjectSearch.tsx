@@ -2,7 +2,7 @@ import { Container, Select, Stack, VStack } from "@chakra-ui/react";
 import { useRouter } from "next/dist/client/router";
 import React, { useEffect } from "react";
 import useSWR from "swr";
-import { useAuthContext } from "../context/Authcontext";
+import { useAuthContext } from "../state/Authcontext";
 import { supabase } from "../lib/supabaseClient";
 import { Papers } from "../types/myTypes";
 

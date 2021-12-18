@@ -4535,10 +4535,10 @@ stylis@^4.0.3:
   resolved "https://registry.yarnpkg.com/stylis/-/stylis-4.0.10.tgz#446512d1097197ab3f02fb3c258358c3f7a14240"
   integrity sha512-m3k+dk7QeJw660eIKRRn3xPF6uuvHs/FFzjX3HQ5ove0qYsiygoAhwn5a3IYKaZPo5LrYD0rfVmtv1gNY1uYwg==
 
-suneditor-react@^3.3.0:
-  version "3.3.0"
-  resolved "https://registry.yarnpkg.com/suneditor-react/-/suneditor-react-3.3.0.tgz#06f6cef81c10a5a3e27af106eaea91068afad6c1"
-  integrity sha512-FB0C7/52MoXtAr96ACTJU3WUHAlSKTd0GnLGj8cKuXW8L8KtUOvxzXn7qGzhJS/hL9HcQCRYz1UHKUdtGIbwUg==
+suneditor-react@^3.3.1:
+  version "3.3.1"
+  resolved "https://registry.yarnpkg.com/suneditor-react/-/suneditor-react-3.3.1.tgz#540901d71d5f45a2485ac923cada8eeb692aab18"
+  integrity sha512-/bljp0IGEvkpzJ4Ty9xrb89RHN6U/Ap+OGtZtpJzVb9V6fLk6wuCEyt/9mH1xslefQnM8/FPZwcIP/vo//xh9A==
 
 suneditor@^2.41.3:
   version "2.41.3"

@@ -33,7 +33,7 @@ import { supabase } from "../lib/supabaseClient";
 import { Headings } from "../types/myTypes";
 import PageWithLayoutType from "../types/pageWithLayout";
 import ReactTable from "../components/ReactTable";
-import { useAuthContext } from "../context/Authcontext";
+import { useAuthContext } from "../state/Authcontext";
 
 interface tableProps {
   headings: Headings[] | undefined | null;

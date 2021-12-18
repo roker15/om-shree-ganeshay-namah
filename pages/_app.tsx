@@ -2,11 +2,11 @@ import "../styles/globals.css";
 import PageWithLayoutType from "../types/pageWithLayout";
 import React, { createContext, useContext } from "react";
 import { ChakraProvider, extendTheme } from "@chakra-ui/react";
-import { AppContextWrapper } from "../context/state";
-import { AuthProvider } from "../context/Authcontext";
+import { AppContextWrapper } from "../state/state";
+import { AuthProvider } from "../state/Authcontext";
 import Head from "next/head";
 import Script from 'next/script'
-import { PostContextWrapper } from "../context/PostContext";
+import { PostContextWrapper } from "../state/PostContext";
 //this import is for react page editor
 // import '@react-page/editor/lib/index.css';
 import * as gtag from '../lib/gtag'

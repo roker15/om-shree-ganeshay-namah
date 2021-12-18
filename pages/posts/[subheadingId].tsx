@@ -1,5 +1,20 @@
 import { ArrowBackIcon } from "@chakra-ui/icons";
-import { Alert, AlertIcon, Box, Button, Divider, Heading, ListItem, OrderedList, Text } from "@chakra-ui/react";
+import {
+  Alert,
+  AlertIcon,
+  Box,
+  Button,
+  Divider,
+  Heading,
+  ListItem,
+  OrderedList,
+  Skeleton,
+  SkeletonCircle,
+  SkeletonText,
+  Stack,
+  Tag,
+  Text,
+} from "@chakra-ui/react";
 import { AuthSession } from "@supabase/supabase-js";
 import { Element } from "domhandler/lib/node";
 import DOMPurify from "dompurify";
@@ -8,10 +23,11 @@ import "katex/dist/katex.min.css";
 // import 'suneditor/dist/css/suneditor.min.css'; // Import Sun Editor's CSS File
 import { useRouter } from "next/router";
 import React, { useEffect, useState } from "react";
+import EditorForShredPost from "../../components/EditorForSharedPost";
 import ErrorAlert from "../../components/ErrorAlert";
 import SunEditorForRendering from "../../components/SunEditorForRendering";
-import { usePostContext } from "../../context/PostContext";
-import { useAppContext } from "../../context/state";
+import { usePostContext } from "../../state/PostContext";
+import { useAppContext } from "../../state/state";
 import { useGetSharedpostBySubheadingidAndUserid, useGetUserpostBySubheadingidAndUserid } from "../../customHookes/useUser";
 import LayoutWithTopAndSideNavbar from "../../layout/LayoutWithTopAndSideNavbar";
 import LayoutWithTopNavbar from "../../layout/LayoutWithTopNavbar";
@@ -34,10 +50,8 @@ const Posts: React.FC<ProfileListProps> = ({ data }) => {
   const router = useRouter();
   const { currentSubheadingId, currentSubheadingProps, currentSubheading } = usePostContext();
   const { userposts, isLoadingUserPost, userposterror } = useGetUserpostBySubheadingidAndUserid(currentSubheadingProps?.id);
-  const { sharedPost, isLoadingSharedPost, sharedPosterror } = useGetSharedpostBySubheadingidAndUserid(
-    currentSubheadingProps?.id
-  );
- 
+  const { data_sharedpost, isLoadingSharedPost, supError_sharedpost, swrError_sharedpost } =
+    useGetSharedpostBySubheadingidAndUserid(currentSubheadingProps?.id);
 
   useEffect(() => {
     if (userposts && userposts.data && userposts.data[0]) {
@@ -55,10 +69,11 @@ const Posts: React.FC<ProfileListProps> = ({ data }) => {
       </Alert>
     );
   }
-  if (sharedPosterror || userposterror) {
+
+  if (swrError_sharedpost || userposterror) {
     <div>Error Code: SWR_SUBHEADING, Check Internet connection</div>;
   }
-  if (sharedPost?.error) {
+  if (supError_sharedpost) {
     <ErrorAlert description={"ERROR CODE: SUP_subheading_1"} alertType={"error"}></ErrorAlert>;
   }
   if (userposts?.error) {
@@ -68,8 +83,9 @@ const Posts: React.FC<ProfileListProps> = ({ data }) => {
   return (
     <>
       <Button
-        variant="outline"
-        // colorScheme="purple"
+        variant="solid"
+        // colorScheme="#3b5998"
+        color="#3b5998"
         leftIcon={<ArrowBackIcon />}
         size="xs"
         onClick={() => router.back()}
@@ -78,11 +94,24 @@ const Posts: React.FC<ProfileListProps> = ({ data }) => {
       </Button>
       <h1>{currentSubheadingProps?.topic}</h1>
 
-      <div style={{ padding: "50px 25px 50px 25px" }}>
-        {sharedPost?.data?.length == 0 ? (
-          <div></div>
+      <div style={{ padding: "0px 25px 50px 25px" }}>
+        <Heading mt="50" mb="25" fontSize="2xl">
+          {" "}
+          <Text as="u">Notes Shared by My firends on this Topic </Text>
+        </Heading>
+        {isLoadingSharedPost ? (
+          <Box padding="6" boxShadow="lg" bg="white">
+            <SkeletonCircle isLoaded={false} size="10" />
+            <SkeletonText isLoaded={false} mt="4" noOfLines={4} spacing="4" />
+          </Box>
+        ) : data_sharedpost?.length == 0 ? (
+          <Alert status="warning">
+            <AlertIcon />
+            You don&apos;t have shared notes. Ask your friend to share notes on this topic, After that
+            your friends notes on this topic will be visible here.{" "}
+          </Alert>
         ) : (
-          sharedPost?.data?.map((x) => {
+          data_sharedpost?.map((x) => {
             const sanitisedPostData = DOMPurify.sanitize((x.post_id as Post).post as string, {
               USE_PROFILES: { svg: true, html: true },
             });
@@ -90,13 +119,16 @@ const Posts: React.FC<ProfileListProps> = ({ data }) => {
               <div key={x.id}>
                 {/* {postHeader(x, appContext)} */}
 
-                <SunEditorForRendering
+                {/* <SunEditorForRendering
                   // postId={x.id}
                   postContent={sanitisedPostData}
                   isSharedPost={true}
                   sharedBy={((x.post_id as Post).created_by as Profile).email}
-                />
-
+                /> */}
+                <EditorForShredPost
+                  postContent={sanitisedPostData}
+                  sharedBy={((x.post_id as Post).created_by as Profile).email}
+                ></EditorForShredPost>
                 {/* <div>
           {parse(
             DOMPurify.sanitize(
@@ -119,13 +151,18 @@ const Posts: React.FC<ProfileListProps> = ({ data }) => {
             );
           })
         )}
-        {isLoadingUserPost ? <div>Loading...</div> : !userposts || !userposts.data || !userposts.data.length || userNote == undefined || null ? (
+        <Heading mb="6" mt="50" fontSize="2xl">
+          {" "}
+          <Text as="u">My Notes on this Topic </Text>
+        </Heading>
+        {isLoadingUserPost ? (
+          <Box padding="6" boxShadow="lg" bg="white">
+            <SkeletonCircle isLoaded={false} size="10" />
+            <SkeletonText isLoaded={false} mt="4" noOfLines={4} spacing="4" />
+          </Box>
+        ) : !userposts || !userposts.data || !userposts.data.length || userNote == undefined || null ? (
           <div>
-            <Heading mb="6" fontSize="2xl">
-              {" "}
-              My Notes on this Topic{" "}
-            </Heading>
-            <Alert status="info">
+            <Alert status="warning">
               <AlertIcon />
               You Don&apos;t have notes on this Topic Create Notes in Editor
             </Alert>
@@ -141,7 +178,6 @@ const Posts: React.FC<ProfileListProps> = ({ data }) => {
             postContent={userNote}
           />
         )}
-        
       </div>
     </>
   );

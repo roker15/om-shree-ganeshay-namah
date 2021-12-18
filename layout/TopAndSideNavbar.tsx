@@ -44,9 +44,9 @@ import { FiBell, FiChevronDown, FiMenu } from "react-icons/fi";
 import styled from "styled-components";
 import useSWR from "swr";
 import ErrorAlert from "../components/ErrorAlert";
-import { useAuthContext } from "../context/Authcontext";
-import { usePostContext } from "../context/PostContext";
-import { useAppContext } from "../context/state";
+import { useAuthContext } from "../state/Authcontext";
+import { usePostContext } from "../state/PostContext";
+import { useAppContext } from "../state/state";
 import { supabase } from "../lib/supabaseClient";
 import { Subheading } from "../types/myTypes";
 
@@ -164,7 +164,7 @@ const SidebarContent = ({ onClose, ...rest }: SidebarProps) => {
       {...rest}
     >
       <Flex h="20" alignItems="center" mb="8" mx="8" justifyContent="space-between">
-        <Text as="u" color="darkviolet" fontSize="normal" fontWeight="bold">
+        <Text as="u" color="#3b5998" fontSize="normal" fontWeight="bold">
           {postContext.currentHeadingname}
         </Text>
         <CloseButton display={{ base: "flex", md: "none" }} onClick={onClose} />

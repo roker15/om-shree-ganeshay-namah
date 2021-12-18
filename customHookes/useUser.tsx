@@ -144,9 +144,10 @@ export function useGetSharedpostBySubheadingidAndUserid(
 
   return {
     // sharedPost_SUP_ERR:data?.error,
-    sharedPost: data,
+    data_sharedpost: data?.data,
+    supError_sharedpost:data?.error,
     isLoadingSharedPost: !error && !data,
-    sharedPosterror: error,
+    swrError_sharedpost: error,
   };
 }
 

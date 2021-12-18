@@ -26,8 +26,8 @@ import React, { ReactNode, ReactText } from "react";
 import { FaGoogle } from "react-icons/fa";
 import { FiChevronDown } from "react-icons/fi";
 import useSWR from "swr";
-import { useAuthContext } from "../context/Authcontext";
-import { useAppContext } from "../context/state";
+import { useAuthContext } from "../state/Authcontext";
+import { useAppContext } from "../state/state";
 import { supabase } from "../lib/supabaseClient";
 import { Subheading } from "../types/myTypes";
 

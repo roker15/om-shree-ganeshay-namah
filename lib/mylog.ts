@@ -5,7 +5,7 @@ export function myErrorLog(errorPlace?: string, message?: any) {
     console.log("Error"," ",errorPlace, " ", message);
   }
 }
-export function myInfoLog(infoPlace?: string, info?: any) {
+export function myInfoLog(infoPlace: string, info: any) {
   if (debug_mode) {
     console.log("Info"," ", infoPlace, " ", info);
   }

@@ -2,9 +2,9 @@ import { Link, Table, TableCaption, Tbody, Td, Th, Thead, Tr, Text } from "@chak
 import { AuthSession } from "@supabase/supabase-js";
 import NextLink from "next/link";
 import React, { useState } from "react";
-import { useAuthContext } from "../../context/Authcontext";
-import { usePostContext } from "../../context/PostContext";
-import { useAppContext } from "../../context/state";
+import { useAuthContext } from "../../state/Authcontext";
+import { usePostContext } from "../../state/PostContext";
+import { useAppContext } from "../../state/state";
 import LayoutWithTopNavbarWithSearchBox from "../../layout/LayoutWithTopNavbarWithSearchBox";
 // import SideNavBar from "../../layout/sideNavBar";
 import { Profile } from "../../lib/constants";
@@ -94,6 +94,30 @@ export async function getStaticPaths() {
       { params: { paperId: "6" } }, // See the "paths" section below
       { params: { paperId: "7" } }, // See the "paths" section below
       { params: { paperId: "8" } }, // See the "paths" section below
+      { params: { paperId: "9" } }, // See the "paths" section below
+      { params: { paperId: "10" } }, // See the "paths" section below
+      { params: { paperId: "11" } }, // See the "paths" section below
+      { params: { paperId: "12" } }, // See the "paths" section below
+      { params: { paperId: "13" } }, // See the "paths" section below
+      { params: { paperId: "14" } }, // See the "paths" section below
+      { params: { paperId: "15" } }, // See the "paths" section below
+      { params: { paperId: "16" } }, // See the "paths" section below
+      { params: { paperId: "17" } }, // See the "paths" section below
+      { params: { paperId: "18" } }, // See the "paths" section below
+      { params: { paperId: "19" } }, // See the "paths" section below
+      { params: { paperId: "20" } }, // See the "paths" section below
+      { params: { paperId: "21" } }, // See the "paths" section below
+      { params: { paperId: "22" } }, // See the "paths" section below
+      { params: { paperId: "23" } }, // See the "paths" section below
+      { params: { paperId: "24" } }, // See the "paths" section below
+      { params: { paperId: "25" } }, // See the "paths" section below
+      { params: { paperId: "26" } }, // See the "paths" section below
+      { params: { paperId: "27" } }, // See the "paths" section below
+      { params: { paperId: "28" } }, // See the "paths" section below
+      { params: { paperId: "29" } }, // See the "paths" section below
+      { params: { paperId: "30" } }, // See the "paths" section below
+      { params: { paperId: "31" } }, // See the "paths" section below
+      { params: { paperId: "32" } }, // See the "paths" section below
     ],
     fallback: true, // See the "fallback" section below
   };
@@ -121,8 +145,7 @@ export const getStaticProps = async ({ params }: any) => {
             paper_name
           )
           )
-          
-          `
+           `
       )
       .eq("main_topic_id", data![index].id);
     console.log("  subheading is ", JSON.stringify(subheading.data));
