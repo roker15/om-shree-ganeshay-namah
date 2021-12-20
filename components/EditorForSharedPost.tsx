@@ -46,7 +46,8 @@ const EditorForShredPost: React.FC<Props> = ({ postId, postContent, sharedBy }) 
       </Text>
       <EditorStyle>
         <SunEditor
-        //   setContents={postContent}
+          //   setContents={postContent}
+          setDefaultStyle="font-family: arial; font-size: 16px;"
           defaultValue={postContent}
           hideToolbar={true}
           readOnly={true}

@@ -107,8 +107,8 @@ const Posts: React.FC<ProfileListProps> = ({ data }) => {
         ) : data_sharedpost?.length == 0 ? (
           <Alert status="warning">
             <AlertIcon />
-            You don&apos;t have shared notes. Ask your friend to share notes on this topic, After that
-            your friends notes on this topic will be visible here.{" "}
+            You don&apos;t have shared notes. Ask your friend to share notes on this topic, After that your friends notes on
+            this topic will be visible here.{" "}
           </Alert>
         ) : (
           data_sharedpost?.map((x) => {
@@ -173,6 +173,7 @@ const Posts: React.FC<ProfileListProps> = ({ data }) => {
         ) : (
           <SunEditorForRendering
             // subHeadingId={currentSubheadingId}
+            key={userposts!.data![0].id} // it will rerender if key changes
             isNew={false}
             postId={userposts!.data![0].id}
             postContent={userNote}

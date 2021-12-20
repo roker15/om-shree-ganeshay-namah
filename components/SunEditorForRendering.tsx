@@ -31,6 +31,8 @@ import { myErrorLog, myInfoLog } from "../lib/mylog";
 import { supabase } from "../lib/supabaseClient";
 import { Post, Profile, SharedPost } from "../types/myTypes";
 import { customToast } from "./CustomToast";
+import { SupabaseClient } from "@supabase/supabase-js";
+import { SupabaseAuthClient } from "@supabase/supabase-js/dist/main/lib/SupabaseAuthClient";
 
 // import SunEditor from "suneditor-react";
 const SunEditor = dynamic(() => import("suneditor-react"), {
@@ -85,12 +87,9 @@ const SunEditorForRendering: React.FC<Props> = ({ postId, isNew, postContent }) 
 
   const isPostNewRef = useRef(isNew);
   const isMountedRef = useRef(true);
-  const postIdref = useRef<number>();
-  postIdref.current = postId;
+  const postIdref = useRef<number | undefined>(postId);
   const [editMode, setEditMode] = useState(true);
   const { currentSubheadingProps } = usePostContext();
-  const [isNoPostExists, setIsNoPostExists] = useState(false);
-
   const { mutate } = useSWRConfig();
   const editor = useRef<SunEditorCore>();
   // The sunEditor parameter will be set to the core suneditor instance when this function is called
@@ -112,6 +111,11 @@ const SunEditorForRendering: React.FC<Props> = ({ postId, isNew, postContent }) 
   }, [isNew]);
 
   useEffect(() => {
+    postIdref.current = postId;
+  }, [postId]);
+
+  // Below useEffect is important because suneditor does not automatically update after first render, we need to manually update, other react component will automatically & correctly update after first render, when props changes.
+  useEffect(() => {
     if (postContent && editor.current && editor.current.core) {
       editor.current?.core.setContents(postContent);
     }
@@ -121,59 +125,82 @@ const SunEditorForRendering: React.FC<Props> = ({ postId, isNew, postContent }) 
   const handleOnChange = (editorContent: string) => {
     console.log("post id inside handle change", postIdref.current);
     if (editor.current?.core.hasFocus) {
-      debouncedChange(editorContent, postIdref.current, isNoPostExists);
+      debouncedFunctionRef.current!(editorContent, postIdref.current);
     }
   };
   const createNewPostInDatabase = async (newcontent: string) => {
-    console.log("creating post ");
-    const { data, error } = await supabase.from<Post>("posts").insert([
-      {
-        post: newcontent,
-        subheading_id: currentSubheadingProps?.id,
-        created_by: supabase.auth.user()?.id,
-      },
-    ]);
-    if (error) {
-      myErrorLog("SunEditorForRendering", error.message);
-      customToast({ title: "Post not created,error occurred", status: "error" });
-    }
-    if (data) {
-      isPostNewRef.current = false;
-      customToast({ title: "Post Created", status: "success" });
-      // mutate(`/userpost/${currentSubheadingProps?.id}`);
+    try {
+      console.log("creating post ");
+      const { data, error } = await supabase.from<Post>("posts").insert([
+        {
+          post: newcontent,
+          subheading_id: currentSubheadingProps?.id,
+          created_by: supabase.auth.user()?.id,
+        },
+      ]);
+      if (error) {
+        myErrorLog("SunEditorForRendering", error.message);
+        customToast({ title: "Post not created,error occurred", status: "error" });
+      }
+      if (data) {
+        isPostNewRef.current = false; // now post is not new
+        postIdref.current = data[0].id; // now post id is available
+        customToast({ title: "Post Created", status: "success" });
+        // mutate(`/userpost/${currentSubheadingProps?.id}`);
+      }
+    } catch (error: any) {
+      customToast({ title: "Post not updated,error occurred,  " + error.message, status: "error" });
     }
   };
   const updatePostInDatabase = async (newcontent: string, postId: number) => {
-    console.log("post id inside updatepostmethod", postId);
-    const { data, error } = await supabase.from<Post>("posts").update({ post: newcontent }).eq("id", postId);
-    if (data) {
-      customToast({ title: "Post updated...", status: "success" });
-      // mutate(`/userpost/${currentSubheadingProps?.id}`);
-    }
-    if (isMountedRef.current) {
-      // use this always when updating ui after asynchronus call finish
+    myInfoLog("SunEditorForRendering->updatepostindatabase","method is called")
+    try {
+      const { data, error } = await supabase.from<Post>("posts").update({ post: newcontent }).eq("id", postId);
+      if (error) {
+        myErrorLog("SunEditorForRendering", error.message);
+        customToast({ title: "Post not updated,error occurred", status: "error" });
+      }
+
+      if (data) {
+        customToast({ title: "Post updated...", status: "success" });
+        // mutate(`/userpost/${currentSubheadingProps?.id}`);
+      }
+      if (isMountedRef.current) {
+        // use this always when updating ui after asynchronus call finish
+      }
+    } catch (error: any) {
+      customToast({ title: "Post not updated,error occurred,  " + error.message, status: "error" });
     }
   };
 
-  const verify1 = (newcontent: any, postId: any, isNoPostExists: any) => {
+  const createOrUpdatePost = (newcontent: any, postId: any) => {
     if (isPostNewRef.current) {
-      console.log("creating new post");
       createNewPostInDatabase(newcontent);
     } else {
-      console.log("updating old post id no", postId);
-
       updatePostInDatabase(newcontent, postId);
     }
   };
 
   //-------------------------------------------------------
 
-  const debouncedFunctionRef = useRef<(newcontent: any, postId: any, isNoPostExists: any) => void>();
-  debouncedFunctionRef.current = (newcontent: any, postId: any, isNoPostExists: any) =>
-    verify1(newcontent, postId, isNoPostExists);
+  // const debouncedFunctionRef = useRef<(newcontent: any, postId: any) => void>((newcontent: any, postId: any) =>
+  //   createOrUpdatePost(newcontent, postId)
+  // );
+  // const debouncedChange = useCallback(
+  //   // debounce((editorContent, postId) => debouncedFunctionRef.current!(editorContent, postId), 5000),
+  //   // []
 
+  //   debounce((editorContent, postId) => createOrUpdatePost(editorContent, postId), 5000),
+  //   []
+  // );
+
+  const debouncedFunctionRef = useRef<(newcontent: any, postId: any) => void>();
+  debouncedFunctionRef.current = debounce((newcontent: any, postId: any) => createOrUpdatePost(newcontent, postId), 5000);
   const debouncedChange = useCallback(
-    debounce((content1, postId, isNoPostExists) => debouncedFunctionRef.current!(content1, postId, isNoPostExists), 5000),
+    // debounce((editorContent, postId) => debouncedFunctionRef.current!(editorContent, postId), 5000),
+    // []
+
+    debounce((editorContent, postId) => createOrUpdatePost(editorContent, postId), 5000),
     []
   );
 
@@ -200,6 +227,7 @@ const SunEditorForRendering: React.FC<Props> = ({ postId, isNew, postContent }) 
           setDefaultStyle="font-family: arial; font-size: 16px;"
           hideToolbar={!editMode}
           defaultValue={postContent}
+          // key={postId}
           onChange={handleOnChange}
           readOnly={!editMode}
           autoFocus={false}
@@ -211,6 +239,7 @@ const SunEditorForRendering: React.FC<Props> = ({ postId, isNew, postContent }) 
           }}
         />
       </EditorStyle>
+      <div>{postContent}</div>
     </div>
   );
 };
@@ -230,6 +259,11 @@ const UiForSharing: React.FC<sharedProps> = ({ postId, subheadingId }) => {
   const finalRef = useRef<HTMLInputElement | HTMLButtonElement | HTMLLabelElement>(null);
   const handleSharePost = async () => {
     setIsLoading(true);
+    if (inputEmail == supabase.auth.session()?.user?.email) {
+      setMessage("**You can not share your post to yourself ! ");
+      setIsLoading(false);
+      return;
+    }
     const { data: email, error } = await supabase.from<Profile>("profiles").select("id,email").eq("email", inputEmail);
     // .single();
     if (error) {
