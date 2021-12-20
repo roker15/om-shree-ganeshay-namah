@@ -124,7 +124,7 @@ export const AuthProvider = ({ children }: any) => {
       },
       {
         // redirectTo: "http://localhost:3000"
-        redirectTo: "https://om-shree-ganeshay-namah-git-development4-roker15.vercel.app",
+        redirectTo: "https://om-shree-ganeshay-namah-git-development4-roker15.vercel.app/",
      
       }
     );
