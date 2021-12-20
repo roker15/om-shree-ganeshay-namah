@@ -130,7 +130,7 @@ export default function App() {
       },
       {
         // redirectTo: "http://localhost:3000/createQuestionBank",
-        redirectTo: "https://om-shree-ganeshay-namah-git-development3-roker15.vercel.app/createQuestionBank",
+        redirectTo: "https://om-shree-ganeshay-namah-git-development4-roker15.vercel.app/createQuestionBank",
       }
     );
   };
