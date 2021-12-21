@@ -69,7 +69,7 @@ const buttonList = [
   ["table", "link", "image", /* "video","audio",*/ "math"],
 
   /** ['imageGallery'] */ // You must add the "imageGalleryUrl".
-  ["fullScreen" /*, "showBlocks", "codeView"*/],
+  // ["fullScreen" /*, "showBlocks", "codeView"*/],
   [
     // "preview",
     "print",
@@ -77,6 +77,26 @@ const buttonList = [
   // ["save", "template"],
 ];
 
+const fontList = [
+  "Arial",
+  "Comic Sans Ms",
+  // "Bookman Old Style",
+  // "Georgia",
+  // "Calibri",
+  // "Comic Sans",
+  // "Courier",
+  // "Garamond",
+  // "Impact",
+  // "Lucida Console",
+  // "Palatino Linotype",
+  // "Segoe UI",
+  // "Tahoma",
+  // "Times New Roman",
+  // "Trebuchet MS",
+  // "Open Sans",
+  // "Roboto Slab",
+
+];
 const SunEditorForRendering: React.FC<Props> = ({ postId, isNew, postContent }) => {
   /**
    * @type {React.MutableRefObject<SunEditor>} get type definitions for editor
@@ -232,14 +252,18 @@ const SunEditorForRendering: React.FC<Props> = ({ postId, isNew, postContent }) 
           readOnly={!editMode}
           autoFocus={false}
           setOptions={{
-            mode: "balloon-always",
+            placeholder: "**** Start Writing your notes here, we will save it automatically!!!",
+            mode: "balloon",
             katex: katex,
             height: "100%",
             buttonList: buttonList,
+            formats: ["p", "div", "h1", "h2", "h3"],
+            font: fontList,
+            fontSize: [12, 14, 16, 20],
+            
           }}
         />
       </EditorStyle>
-      <div>{postContent}</div>
     </div>
   );
 };

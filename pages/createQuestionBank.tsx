@@ -129,8 +129,8 @@ export default function App() {
         provider: "google",
       },
       {
-        // redirectTo: "http://localhost:3000/createQuestionBank",
-        redirectTo: "https://om-shree-ganeshay-namah-git-development4-roker15.vercel.app/createQuestionBank",
+        redirectTo: "http://localhost:3000/createQuestionBank",
+        // redirectTo: "https://om-shree-ganeshay-namah-git-development4-roker15.vercel.app/createQuestionBank",
       }
     );
   };
