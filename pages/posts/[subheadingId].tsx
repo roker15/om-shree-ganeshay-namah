@@ -19,6 +19,8 @@ import { AuthSession } from "@supabase/supabase-js";
 import { Element } from "domhandler/lib/node";
 import DOMPurify from "dompurify";
 import { attributesToProps, domToReact, HTMLReactParserOptions } from "html-react-parser";
+import parse from "html-react-parser";
+
 import "katex/dist/katex.min.css";
 // import 'suneditor/dist/css/suneditor.min.css'; // Import Sun Editor's CSS File
 import { useRouter } from "next/router";
@@ -94,7 +96,7 @@ const Posts: React.FC<ProfileListProps> = ({ data }) => {
       </Button>
       <h1>{currentSubheadingProps?.topic}</h1>
 
-      <div style={{ padding: "0px 25px 50px 25px" }}>
+      <Box padding={{ base: "0px 5px 30px 5px", sm: "0px 25px 30px 25px", md: "0px 25px 30px 25px" }}>
         <Heading mt="50" mb="25" fontSize="2xl">
           {" "}
           <Text as="u">Notes Shared by My firends on this Topic </Text>
@@ -117,35 +119,23 @@ const Posts: React.FC<ProfileListProps> = ({ data }) => {
             });
             return (
               <div key={x.id}>
-                {/* {postHeader(x, appContext)} */}
-
-                {/* <SunEditorForRendering
-                  // postId={x.id}
-                  postContent={sanitisedPostData}
-                  isSharedPost={true}
-                  sharedBy={((x.post_id as Post).created_by as Profile).email}
-                /> */}
                 <EditorForShredPost
                   postContent={sanitisedPostData}
                   sharedBy={((x.post_id as Post).created_by as Profile).email}
                 ></EditorForShredPost>
-                {/* <div>
-          {parse(
-            DOMPurify.sanitize(
-              
-              x.post
-              
-              , {
-              USE_PROFILES: { svg: true,html: true },
-            })
-            
-            
-            ,
-            options
-          
-          )}
-       
-        </div> */}
+                <div>
+                  {parse(
+                    DOMPurify.sanitize(
+                      (x.post_id as Post).post as string,
+
+                      {
+                        USE_PROFILES: { svg: true, html: true },
+                      }
+                    ),
+
+                    options
+                  )}
+                </div>
                 <Divider mt="100" visibility="hidden" />
               </div>
             );
@@ -166,20 +156,35 @@ const Posts: React.FC<ProfileListProps> = ({ data }) => {
               <AlertIcon />
               You Don&apos;t have notes on this Topic Create Notes in Editor
             </Alert>
-            <Box zIndex="5000">
-              <SunEditorForRendering isNew={true} />
+            <Box>
+              {/*here passing empty postcontent is desired, otherwise it will  take this from last render */}
+              <SunEditorForRendering isNew={true} postContent="" editModeActive={true} />
             </Box>
           </div>
         ) : (
-          <SunEditorForRendering
-            // subHeadingId={currentSubheadingId}
-            key={userposts!.data![0].id} // it will rerender if key changes
-            isNew={false}
-            postId={userposts!.data![0].id}
-            postContent={userNote}
-          />
+          <Box>
+            <SunEditorForRendering
+              // subHeadingId={currentSubheadingId}
+              key={userposts!.data![0].id} // it will rerender if key changes
+              isNew={false}
+              postId={userposts!.data![0].id}
+              postContent={userNote}
+              editModeActive={false}
+            />
+            {parse(
+              DOMPurify.sanitize(
+                userNote,
+
+                {
+                  USE_PROFILES: { svg: true, html: true },
+                }
+              ),
+
+              options
+            )}
+          </Box>
         )}
-      </div>
+      </Box>
     </>
   );
 };
@@ -221,7 +226,7 @@ const options: HTMLReactParserOptions = {
     if (domNode instanceof Element && domNode.name === "ol") {
       const props = attributesToProps(domNode.attribs);
       return (
-        <OrderedList backgroundColor="#ff9999" ml={"14"} {...props}>
+        <OrderedList  ml={"14"}  {...props}>
           {domToReact(domNode.children, options)}
         </OrderedList>
       );
@@ -229,7 +234,15 @@ const options: HTMLReactParserOptions = {
     if (domNode instanceof Element && domNode.name === "li") {
       const props = attributesToProps(domNode.attribs);
       return (
-        <ListItem backgroundColor="#ffe5e5" {...props}>
+        <ListItem  mt="2" {...props}>
+          {domToReact(domNode.children, options)}
+        </ListItem>
+      );
+    }
+    if (domNode instanceof Element && domNode.name === "li.ol") {
+      const props = attributesToProps(domNode.attribs);
+      return (
+        <ListItem  mt="10" {...props}>
           {domToReact(domNode.children, options)}
         </ListItem>
       );

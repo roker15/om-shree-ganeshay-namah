@@ -3,8 +3,9 @@ import { Avatar, Tag, TagLabel, Text } from "@chakra-ui/react";
 import katex from "katex";
 import "katex/dist/katex.min.css";
 import dynamic from "next/dynamic";
-import React from "react";
+import React, { useEffect, useRef } from "react";
 import styled from "styled-components";
+import SunEditorCore from "suneditor/src/lib/core";
 import "suneditor/dist/css/suneditor.min.css"; // Import Sun Editor's CSS File
 // import SunEditor from "suneditor-react";
 const SunEditor = dynamic(() => import("suneditor-react"), {
@@ -26,6 +27,19 @@ interface Props {
 }
 
 const EditorForShredPost: React.FC<Props> = ({ postId, postContent, sharedBy }) => {
+  
+  const editor = useRef<SunEditorCore>();
+  // The sunEditor parameter will be set to the core suneditor instance when this function is called
+  const getSunEditorInstance = (sunEditor: SunEditorCore) => {
+    editor.current = sunEditor;
+  };
+  
+  //Always keep check of props in useeffect otherwise , old data may show in rerendering, because suneditor is not updated automatically.
+  useEffect(() => {
+    if (postContent && editor.current && editor.current.core) {
+      editor.current?.core.setContents(postContent);
+    }
+  }, [postContent]);
   /**
    * @type {React.MutableRefObject<SunEditor>} get type definitions for editor
    */
@@ -47,6 +61,7 @@ const EditorForShredPost: React.FC<Props> = ({ postId, postContent, sharedBy }) 
       <EditorStyle>
         <SunEditor
           //   setContents={postContent}
+          getSunEditorInstance={getSunEditorInstance}
           setDefaultStyle="font-family: arial; font-size: 16px;"
           defaultValue={postContent}
           hideToolbar={true}
