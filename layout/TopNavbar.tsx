@@ -76,7 +76,7 @@ export default function TopNavbar({ children }: { children: ReactNode }) {
     LinkItems.push(x);
   });
   return (
-    <Box minH="100vh" bg="white.100">
+    <Box minH="100vh" bg="white.500">
       {/* <Box bg="white" ml={{ base: 0, md: 80 }} p="4"> */}
 
       <MobileNav onOpen={onOpen} />

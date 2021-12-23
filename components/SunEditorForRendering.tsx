@@ -14,7 +14,7 @@ import {
   ModalHeader,
   ModalOverlay,
   Text,
-  useDisclosure
+  useDisclosure,
 } from "@chakra-ui/react";
 import katex from "katex";
 import "katex/dist/katex.min.css";
@@ -52,7 +52,7 @@ interface Props {
   postContent?: string;
   isSharedPost?: boolean;
   sharedBy?: string;
-  editModeActive:boolean
+  editModeActive: boolean;
 }
 
 const buttonList = [
@@ -95,7 +95,7 @@ const fontList = [
   // "Open Sans",
   // "Roboto Slab",
 ];
-const SunEditorForRendering: React.FC<Props> = ({ postId, isNew, postContent,editModeActive }) => {
+const SunEditorForRendering: React.FC<Props> = ({ postId, isNew, postContent, editModeActive }) => {
   /**
    * @type {React.MutableRefObject<SunEditor>} get type definitions for editor
    */
@@ -130,9 +130,9 @@ const SunEditorForRendering: React.FC<Props> = ({ postId, isNew, postContent,edi
 
   useEffect(() => {
     if (editModeActive) {
-      setEditMode(true)
+      setEditMode(true);
     } else {
-      setEditMode(false)
+      setEditMode(false);
     }
   }, [editModeActive]);
 
@@ -149,9 +149,7 @@ const SunEditorForRendering: React.FC<Props> = ({ postId, isNew, postContent,edi
 
   // // When the editor's content has changed, store it in state
   const handleOnChange = (editorContent: string) => {
-    console.log("post id inside handle change", postIdref.current);
     if (editor.current?.core.hasFocus && debouncedFunctionRef.current) {
-      // debouncedChange(editorContent, postIdref.current);
       debouncedFunctionRef.current(editorContent, postIdref.current);
     }
   };
@@ -255,7 +253,6 @@ const SunEditorForRendering: React.FC<Props> = ({ postId, isNew, postContent,edi
             font: fontList,
             fontSize: [12, 14, 16, 20],
             imageFileInput: false, //this disable image as file, only from url allowed
-            
           }}
         />
       </EditorStyle>
