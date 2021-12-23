@@ -100,7 +100,7 @@ export default function App() {
   useEffect(() => {
     // listen for changes to auth
     if (supabase.auth.session()) {
-      setIsLoggedin(true)
+      setIsLoggedin(true);
       setName(supabase!.auth!.session()!.user!.user_metadata.full_name);
       setUserId(supabase!.auth!.session()!.user!.id);
     }
@@ -272,7 +272,6 @@ export default function App() {
             >
               Log out
             </Button>
-
           </Center>
         </Flex>
 
@@ -389,7 +388,11 @@ export default function App() {
                   **Sequence should be from 1 to 700
                 </Text>
               )}
-              <Input placeholder="10,20,30....." type="number" {...register("sequence", { min: 1, max: 700 })} />
+              <Input
+                placeholder="10,20,30....."
+                type="number"
+                {...register("sequence", { required: true, min: 1, max: 700 })}
+              />
             </FormControl>
           </HStack>
 
