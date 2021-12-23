@@ -376,7 +376,7 @@ export default function App() {
                 placeholder="Year should be from 1995 to 2021"
                 isDisabled={isEditMode}
                 type="number"
-                {...register("year", { min: 1995, max: 2021 })}
+                {...register("year", {required:true, min: 1995, max: 2021 })}
               />
             </FormControl>
             <FormControl m="2">
