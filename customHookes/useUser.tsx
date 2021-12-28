@@ -134,7 +134,7 @@ export function useGetSharedpostBySubheadingidAndUserid(
     `
         )
         .eq("subheading_id", id as number)
-        .eq("shared_with", supabase.auth.user()?.id as string),
+        .eq("shared_with", supabase.auth.user()?.id as string)
     // { refreshInterval: 1000 }
   );
   useEffect(() => {
@@ -145,7 +145,7 @@ export function useGetSharedpostBySubheadingidAndUserid(
   return {
     // sharedPost_SUP_ERR:data?.error,
     data_sharedpost: data?.data,
-    supError_sharedpost:data?.error,
+    supError_sharedpost: data?.error,
     isLoadingSharedPost: !error && !data,
     swrError_sharedpost: error,
   };
@@ -180,7 +180,7 @@ export function useGetUserpostBySubheadingidAndUserid(
     `
         )
         .eq("subheading_id", currentSubheadingId as number)
-        .eq("created_by", supabase.auth.user()?.id as string),
+        .eq("created_by", supabase.auth.user()?.id as string)
     // { refreshInterval: 1000 }
   );
   useEffect(() => {
@@ -195,34 +195,23 @@ export function useGetUserpostBySubheadingidAndUserid(
   };
 }
 
-function useAsyncHook(searchBook: string) {
-  const [result, setResult] = React.useState([]);
-  const [loading, setLoading] = React.useState("false");
-  // We cannot use 'async' keyword with 'useEffect' callback method.
-  // It will result in race conditions.
-  React.useEffect(() => {
-    async function fetchBookList() {
-      try {
-        setLoading("true");
-        const response = await fetch(`https://www.googleapis.com/books/v1/volumes?q=${searchBook}`);
-
-        const json = await response.json();
-        // console.log(json);
-        setResult(
-          json.items.map((item: { volumeInfo: { title: any } }) => {
-            console.log(item.volumeInfo.title);
-            return item.volumeInfo.title;
-          })
-        );
-      } catch (error) {
-        setLoading("null");
-      }
+export function useGetSubheadingsFromHeadingId(currentHeadingId?: number) {
+  const { data, error } = useSWR(
+    currentHeadingId == undefined ? null : ["/headingId", currentHeadingId],
+    async () => await supabase.from<Subheading>("subheadings").select("*").eq("main_topic_id", currentHeadingId),
+    {
+      revalidateIfStale: false,
+      revalidateOnFocus: false,
+      revalidateOnReconnect: false,
     }
+    // { refreshInterval: 1000 }
+  );
 
-    if (searchBook !== "") {
-      fetchBookList();
-    }
-  }, [searchBook]);
-
-  return [result, loading];
+  return {
+    // sharedPost_SUP_ERR:data?.error,
+    data: data?.data,
+    supError: data?.error,
+    isLoading: !error && !data,
+    swrError: error,
+  };
 }

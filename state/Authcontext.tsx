@@ -1,54 +1,42 @@
-import { Session, User } from "@supabase/gotrue-js";
-import React, { useContext, useState, useEffect, createContext } from "react";
+import { Center } from "@chakra-ui/layout";
+import { CircularProgress } from "@chakra-ui/progress";
+import { Session } from "@supabase/gotrue-js";
+import React, { createContext, useContext, useEffect, useState } from "react";
 import { Profile } from "../lib/constants";
+import { myInfoLog } from "../lib/mylog";
 import { supabase } from "../lib/supabaseClient";
 interface AuthContextValues {
-  signUp: (email: string, role: string) => void;
+  signInWithgoogle: (redirectUrl: string) => void;
   signIn: (data: any) => void;
   signOut: (data: any) => void;
-  user: User | null;
-  role?: string | null;
-  username: string | null;
+  profile: Profile | null;
 }
 // create a context for authentication
 const AuthContext = createContext<AuthContextValues>({
-  signUp: () => {},
+  signInWithgoogle: () => {},
   signIn: () => {},
   signOut: () => {},
-
-  user: null,
-  role: null,
-  username: null,
+  profile: null,
 });
 
 export const AuthProvider = ({ children }: any) => {
-  // create state values for user data and loading
-  const [user, setUser] = useState<User | null>(null);
   const [loading, setLoading] = useState(true);
   const [session, setSession] = useState<Session | null>(null);
-  const [avatar, setAvatar] = useState<string | null>(null);
-  const [username, setUsername] = useState<string | null>(null);
-  const [role, setRole] = useState<string | null>(null);
+  const [profile, setProfile] = useState<Profile | null>(null);
 
   useEffect(() => {
-    // get session data if there is an active session
-    const session = supabase.auth.session();
+    const { data: listener } = supabase.auth.onAuthStateChange((_event, session) => {
+      setSession(session);
+    });
+    setSession(supabase.auth.session());
 
-    // setUser(session?.user ?? null);
-    setSession(session); //set new session so that it can trigger profile update.
-    setUser(session?.user ?? null); // this line may be unnecessary, get user from session.
-    setLoading(false);
-
-    // listen for changes to auth
-    const { data: listener } = supabase.auth.onAuthStateChange(
-      (event, session) => {
-        console.log("session is ", session);
-        setSession(session);
-        setUser(session?.user ?? null);
-        setLoading(false);
-      }
-    );
-
+    // window.onstorage = (e) => {
+    //   if (e.key === "supabase.auth.token") {
+    //     const newSession = JSON.parse(e.newValue!);
+    //     setSession(newSession?.currentSession);
+    //     setUser(session?.user ?? null);
+    //   }
+    // };
     // cleanup the useEffect hook
     return () => {
       listener?.unsubscribe();
@@ -56,105 +44,79 @@ export const AuthProvider = ({ children }: any) => {
   }, []);
 
   useEffect(() => {
+    setLoading(true);
     if (session) {
+      myInfoLog("authcontext->getprofile-> place3--> session hai ", session);
+      const getProfile = async () => {
+        try {
+          const user = supabase.auth.user();
+          const { data, error } = await supabase
+            .from<Profile>("profiles")
+            .upsert({
+              id: user!.id,
+              role: "USER",
+              email: user?.email,
+              username: user?.identities![0].identity_data.full_name,
+              avatar_url: user?.identities![0].identity_data.avatar_url,
+            })
+            .single();
+          if (data) {
+            setProfile(data);
+          }
+
+          if (error) {
+            setProfile(null);
+            throw error;
+          }
+        } catch (error: any) {
+          // setProfile(null);
+          console.log("error", error.message);
+        } finally {
+          setLoading(false);
+        }
+      };
       getProfile();
+      // setLoading(false)
+    } else {
+      myInfoLog("authcontext->getprofile-> place4--> session nahi hai", session);
+      setProfile(null);
+      setLoading(false);
     }
   }, [session]);
 
-  function setProfile(profile: Profile | null) {
-    setAvatar(profile!.avatar_url);
-    setUsername(profile!.username);
-    setRole(profile!.role);
-    // setWebsite(profile.website)
-  }
-  async function getProfile() {
-    try {
-      setLoading(true);
-      const user = supabase.auth.user();
-
-      const { data, error } = await supabase
-        .from<Profile>("profiles")
-        .select(`username, website, avatar_url,role`)
-        .eq("id", user!.id)
-        .single();
-
-     
-      if (data && data.username && data.role&& data.avatar_url) {
-        setProfile(data);
-        return;
-      }
-      if (data && data!==null) {
-        const { data } = await supabase
-          .from<Profile>("profiles")
-          .update({ role: "USER",username:user?.user_metadata.full_name,avatar_url:user?.user_metadata.avatar_url })
-          .eq("id", user!.id)
-          .single();
-        setProfile(data);
-        return;
-      }
-      const { data: profile } = await supabase
-        .from<Profile>("profiles")
-        .insert({ id: user!.id, role: "USER", email: user?.email,username:user?.user_metadata.full_name,avatar_url:user?.user_metadata.avatar_url })
-        .single();
-
-      setProfile(profile);
-
-      if (error) {
-        console.log("profile is error");
-        throw error;
-      }
-
-      // console.log("profile is role", data?.role);
-    } catch (error: any) {
-      setUsername("");
-      console.log("error", error.message);
-    } finally {
-      setLoading(false);
-    }
-  }
-
   // create signUp, signIn, signOut functions
-  const signUpUser = async (email: string, role: string) => {
-    console.log("email is ", email);
-    console.log("role is ", role);
-    // const { user, error } = await supabase.auth.signIn({ email });
+  const signUpUser = async (redirectUrl: string) => {
     let { user, error } = await supabase.auth.signIn(
       {
         provider: "google",
       },
       {
-        redirectTo: "http://localhost:3000"
+        redirectTo: redirectUrl,
+        // redirectTo: "http://localhost:3000",
         // redirectTo: "https://om-shree-ganeshay-namah-git-development4-roker15.vercel.app",
-     
       }
     );
-    console.log(
-      "signUp is being called bhaiiiiiiiiiiiiiiiiiiiiiii   ",
-      console.log(user)
-    );
-
-    const { data } = await supabase
-      .from<Profile>("profiles")
-      .upsert({ id: user?.id, role: role });
   };
 
   const value: AuthContextValues = {
-    signUp: (email: string, role: string) => {
-      signUpUser(email, role);
+    signInWithgoogle: (redirectUrl: string) => {
+      signUpUser(redirectUrl);
     },
     signIn: (data: any) => supabase.auth.signIn(data),
     signOut: (data: any) => supabase.auth.signOut(),
-    user,
-
-    username: username,
-    role: role,
+    profile: profile,
   };
 
   // use a provider to pass down the value
   return (
     <AuthContext.Provider value={value}>
-      {/* {!loading && children} */}
-      {children}
+      {loading ? (
+        <Center h="100vh">
+          <CircularProgress isIndeterminate size="40px" thickness="8px" />
+        </Center>
+      ) : (
+        children
+      )}
     </AuthContext.Provider>
   );
 };

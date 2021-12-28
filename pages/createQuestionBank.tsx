@@ -580,7 +580,7 @@ export default function App() {
           Link Syllabus
         </Button>
 
-        <Modal onClose={onClose} finalFocusRef={btnRef} size="xl" isOpen={isOpen} scrollBehavior="outside">
+        <Modal onClose={onClose} finalFocusRef={btnRef}  isOpen={isOpen} scrollBehavior="outside">
           <ModalOverlay />
           <ModalContent>
             <ModalHeader>Link Syllabus to Question</ModalHeader>

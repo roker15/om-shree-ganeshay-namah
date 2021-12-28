@@ -5,7 +5,7 @@ import Image from "next/image";
 import profilePic from "../public/loader.svg";
 
 export default function Avatar({ url, size }: { url: string | null; size: number }) {
-  const [avatarUrl, setAvatarUrl] = useState<string | null>(null);
+  const [avatarUrl, setAvatarUrl] = useState<string>();
 
   useEffect(() => {
     if (url) downloadImage(url);
@@ -17,8 +17,10 @@ export default function Avatar({ url, size }: { url: string | null; size: number
       if (error) {
         throw error;
       }
-      const url = URL.createObjectURL(data);
-      setAvatarUrl(url);
+      if (data) {
+        const url = URL.createObjectURL(data);
+        setAvatarUrl(url);
+      }
     } catch (error: any) {
       console.log("Error downloading image: ", error.message);
     }

@@ -38,7 +38,7 @@ import {
   Spinner,
 } from "@chakra-ui/react";
 // import Image from "next/image";
-import React, { ChangeEvent, Dispatch, ReactNode, ReactText, SetStateAction, useState } from "react";
+import React, { ChangeEvent, Dispatch, ReactNode, ReactText, SetStateAction, useEffect, useState } from "react";
 import { FaGoogle } from "react-icons/fa";
 import { FiBell, FiChevronDown, FiMenu } from "react-icons/fi";
 import styled from "styled-components";
@@ -49,62 +49,51 @@ import { usePostContext } from "../state/PostContext";
 import { useAppContext } from "../state/state";
 import { supabase } from "../lib/supabaseClient";
 import { Subheading } from "../types/myTypes";
+import { BASE_URL } from "../lib/constants";
+import { useGetSubheadingsFromHeadingId } from "../customHookes/useUser";
 
-interface LinkItemProps {
-  name: string;
-  // icon: IconType;
-  icon: number;
-}
-const RedLink = styled.a`
-  /* background-color: #f44336; */
-  color: #181717;
-  /* padding: 14px 25px; */
-  /* text-align: center; */
-  text-decoration: none !important;
-  /* display: inline-block; */
-  &:hover {
-    color: #080808;
-    background-color: #ffffff;
-    text-decoration: none !important;
-  }
-`;
 const LinkItems: Array<Subheading> = [];
 
 export default function TopAndSideNavbar({ children }: { children: ReactNode }) {
   const { isOpen, onOpen, onClose } = useDisclosure();
   const [hideSidebar, setHideSidebar] = useState(false);
   const { postHeadingId } = useAppContext();
-  const { signUp, signOut, signIn } = useAuthContext();
   // setSubheading(shareContext.postHeadingId);
   //**************************useSWR******************************************888 */
   // `data` will always be available as it's in `fallback`.
   const { currentHeadingId, updateCurrentHeadingId } = usePostContext();
-  console.log("current heading is ", currentHeadingId);
+  const {data,isLoading,supError,swrError} = useGetSubheadingsFromHeadingId(currentHeadingId);
 
-  const { data, error } = useSWR(
-    currentHeadingId == undefined ? null : ["/headingId", currentHeadingId],
-    async () => await supabase.from<Subheading>("subheadings").select("*").eq("main_topic_id", currentHeadingId)
-    // { refreshInterval: 1000 }
-  );
+  // const { data, error } = useSWR(
+  //   currentHeadingId == undefined ? null : ["/headingId", currentHeadingId],
+  //   async () => await supabase.from<Subheading>("subheadings").select("*").eq("main_topic_id", currentHeadingId)
+  //   // { refreshInterval: 1000 }
+  // );
 
-  if (error)
+  useEffect(() => {});
+  if (swrError)
     return (
       <Box minH="100vh" bg="white.100">
-      <ErrorAlert description={"Failed to load, check network connection!!"} alertType={"error"}></ErrorAlert>
+        <ErrorAlert description={"Failed to load, check network connection!!"} alertType={"error"}></ErrorAlert>
       </Box>
     );
   if (!data) {
-    return <Box minH="100vh" bg="white.100"><Center h="100vh"><Spinner /></Center></Box>;
+    return (
+      <Box minH="100vh" bg="white.100">
+        <Center h="100vh">
+          <Spinner />
+        </Center>
+      </Box>
+    );
   }
-  if (data.error) {
-    console.log("SUP_TOPANDSIDENAVBAR_1",data.error); //for debug
-    return<ErrorAlert description={"Server error, Error code: SUP_TOPANDSIDENAVBAR_1"} alertType={"error"}></ErrorAlert>
+  if (supError) {
+    console.log("SUP_TOPANDSIDENAVBAR_1", supError); //for debug
+    return <ErrorAlert description={"Server error, Error code: SUP_TOPANDSIDENAVBAR_1"} alertType={"error"}></ErrorAlert>;
   }
   LinkItems.length = 0;
-  if (data.data && data.data.length !== 0) {
-    data.data!.map((x) => {
+  if (data && data.length !== 0) {
+    data.map((x) => {
       LinkItems.push(x);
-      console.log("subheadings are ", x);
     });
   }
 
@@ -179,7 +168,6 @@ const SidebarContent = ({ onClose, ...rest }: SidebarProps) => {
                 lineHeight="shorter"
                 fontWeight="bold"
                 fontSize="medium"
-                fontStyle=""
                 // textShadow="1px 0px 1px "
                 // ml="6"
                 mt="4"
@@ -187,7 +175,7 @@ const SidebarContent = ({ onClose, ...rest }: SidebarProps) => {
                 pl="2"
                 onClick={() => {
                   // postContext.updateCurrentSubheadingId(value.id);
-                  postContext.updateCurrentSubheadingProps(subheading.id,subheading.topic as string)
+                  postContext.updateCurrentSubheadingProps(subheading.id, subheading.topic as string);
                   postContext.updateCurrentSubheadingId(subheading.id);
                   postContext.updateCurrentSubheading(subheading.topic as string);
                   onClose();
@@ -216,7 +204,7 @@ interface MobileProps extends FlexProps {
 }
 
 const TopBar = ({ hideSidebar, setHideSidebar, onOpen, ...rest }: MobileProps) => {
-  const { signIn, signUp, signOut } = useAuthContext();
+  const { profile, signInWithgoogle, signOut } = useAuthContext();
   const postContext = usePostContext();
   return (
     <Flex
@@ -255,11 +243,8 @@ const TopBar = ({ hideSidebar, setHideSidebar, onOpen, ...rest }: MobileProps) =
               // priority={true}
               loading="eager"
               src="/logo-150x150.png"
-              alt="Picture of the author"
+              alt="logo"
               boxSize={{ base: "0px", md: "50px" }}
-              // w={{ base : "50", md: "40" }}
-              // h={{ base: 50, md: 40 }}
-              // layout="fill"
               objectFit="contain"
             />
           </LinkOverlay>
@@ -270,7 +255,7 @@ const TopBar = ({ hideSidebar, setHideSidebar, onOpen, ...rest }: MobileProps) =
           </FormLabel>
           <Switch
             size="sm"
-            colorScheme="purple"
+            colorScheme="blue"
             onChange={(e: ChangeEvent<HTMLInputElement>) => setHideSidebar(e.target.checked)}
             id="email-alerts"
           >
@@ -297,33 +282,36 @@ const TopBar = ({ hideSidebar, setHideSidebar, onOpen, ...rest }: MobileProps) =
 
       <HStack spacing={{ base: "0", md: "6" }}>
         {/* <button onClick={() => setLanguage("jp")}>sign in</buttonb> */}
-        {supabase.auth.session() === null ? (
+        {!profile ? (
           <Button
             border="0px"
             colorScheme="google"
             leftIcon={<FaGoogle />}
             variant="ghost"
-            onClick={() => signUp("gg", "tt")}
+            onClick={() => signInWithgoogle(BASE_URL + "/createQuestionBank")}
           >
             Sign in
           </Button>
-        ) : (
-          ""
-        )}
+        ) : null}
 
         {/* <IconButton size="sm" variant="outline" aria-label="open menu" icon={<FiBell />} /> */}
         <Flex border="0px" alignItems={"center"}>
           <Menu boundary="clippingParents">
             <MenuButton border="0px" py={2} transition="all 0.3s" _focus={{ boxShadow: "none" }}>
               <HStack>
-                {supabase.auth.session() === null ? (
+                {!profile ? (
                   <Avatar size={"sm"} src="https://bit.ly/broken-link" />
                 ) : (
-                  <Avatar size={"sm"} src={"https://bit.ly/broken-link"} />
+                  <Avatar
+                    size={"sm"}
+                    src={
+                      profile.avatar_url // change this to url from database avatar
+                    }
+                  />
                 )}
 
                 <VStack display={{ base: "none", md: "flex" }} alignItems="flex-start" spacing="1px" ml="2">
-                  <Text fontSize="sm">{useAuthContext().user?.email}</Text>
+                  <Text fontSize="sm">{profile?.email}</Text>
                   <Text fontSize="xs" color="gray.600">
                     {/* Admin */}
                   </Text>
@@ -340,7 +328,7 @@ const TopBar = ({ hideSidebar, setHideSidebar, onOpen, ...rest }: MobileProps) =
             >
               <MenuItem border="0px">Profile</MenuItem>
               <MenuItem border="0px">Settings</MenuItem>
-              {supabase.auth.session() !== null ? (
+              {profile ? (
                 <>
                   {" "}
                   <MenuDivider />

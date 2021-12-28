@@ -11,7 +11,10 @@ import {
   Skeleton,
   SkeletonCircle,
   SkeletonText,
+  // SkeletonCircle,
+  // SkeletonText,
   Stack,
+  StylesProvider,
   Tag,
   Text,
 } from "@chakra-ui/react";
@@ -38,19 +41,19 @@ import { Profile } from "../../lib/constants";
 import { supabase } from "../../lib/supabaseClient";
 import { Headings, Post, Subheading } from "../../types/myTypes";
 import PageWithLayoutType from "../../types/pageWithLayout";
+import { useAuthContext } from "../../state/Authcontext";
 
 type ProfileListProps = {
   data: Post[];
 };
 
 const Posts: React.FC<ProfileListProps> = ({ data }) => {
-  const [session, setSession] = useState<AuthSession | null>(null);
-  const [profiles, setProfiles] = useState<Profile[]>([]);
   const [userNote, setUserNote] = useState<string | undefined | null>(null);
   const [mounted, setMounted] = useState(false);
   const appContext = useAppContext();
+  const { profile } = useAuthContext();
   const router = useRouter();
-  const { currentSubheadingId, currentSubheadingProps, currentSubheading } = usePostContext();
+  const { currentSubheadingProps } = usePostContext();
   const { userposts, isLoadingUserPost, userposterror } = useGetUserpostBySubheadingidAndUserid(currentSubheadingProps?.id);
   const { data_sharedpost, isLoadingSharedPost, supError_sharedpost, swrError_sharedpost } =
     useGetSharedpostBySubheadingidAndUserid(currentSubheadingProps?.id);
@@ -63,7 +66,7 @@ const Posts: React.FC<ProfileListProps> = ({ data }) => {
     }
   }, [appContext, userposts]);
 
-  if (!supabase.auth.session()) {
+  if (!profile) {
     return (
       <Alert status="info">
         <AlertIcon />
@@ -104,7 +107,7 @@ const Posts: React.FC<ProfileListProps> = ({ data }) => {
         {isLoadingSharedPost ? (
           <Box padding="6" boxShadow="lg" bg="white">
             <SkeletonCircle isLoaded={false} size="10" />
-            <SkeletonText isLoaded={false} mt="4" noOfLines={4} spacing="4" />
+            <SkeletonText isLoaded={false} noOfLines={4} spacing="4" />
           </Box>
         ) : data_sharedpost?.length == 0 ? (
           <Alert status="warning">
@@ -148,7 +151,7 @@ const Posts: React.FC<ProfileListProps> = ({ data }) => {
         {isLoadingUserPost ? (
           <Box padding="6" boxShadow="lg" bg="white">
             <SkeletonCircle isLoaded={false} size="10" />
-            <SkeletonText isLoaded={false} mt="4" noOfLines={4} spacing="4" />
+            <SkeletonText isLoaded={false} noOfLines={4} spacing="4" />
           </Box>
         ) : !userposts || !userposts.data || !userposts.data.length || userNote == undefined || null ? (
           <div>
@@ -226,35 +229,37 @@ const options: HTMLReactParserOptions = {
     if (domNode instanceof Element && domNode.name === "ol") {
       const props = attributesToProps(domNode.attribs);
       return (
-        <OrderedList  ml={"14"}  {...props}>
+        <OrderedList ml={"14"} {...props}>
           {domToReact(domNode.children, options)}
         </OrderedList>
       );
     }
-    if (domNode instanceof Element && domNode.name === "li") {
-      const props = attributesToProps(domNode.attribs);
-      return (
-        <ListItem  mt="2" {...props}>
-          {domToReact(domNode.children, options)}
-        </ListItem>
-      );
-    }
-    if (domNode instanceof Element && domNode.name === "li.ol") {
-      const props = attributesToProps(domNode.attribs);
-      return (
-        <ListItem  mt="10" {...props}>
-          {domToReact(domNode.children, options)}
-        </ListItem>
-      );
-    }
-    if (domNode instanceof Element && domNode.attribs.classssss === "li") {
-      const props = attributesToProps(domNode.attribs);
-      return (
-        <ListItem backgroundColor="#ffe5e5" {...props}>
-          {domToReact(domNode.children, options)}
-        </ListItem>
-      );
-    }
+    // if (domNode instanceof Element && domNode.name === "li") {
+    //   const props = attributesToProps(domNode.attribs);
+    //   return (
+    //     <StylesProvider value={undefined}>
+    //       <ListItem mt="2" {...props}>
+    //         {domToReact(domNode.children, options)}
+    //       </ListItem>
+    //     </StylesProvider>
+    //   );
+    // }
+    // if (domNode instanceof Element && domNode.name === "li.ol") {
+    //   const props = attributesToProps(domNode.attribs);
+    //   return (
+    //     <ListItem mt="10" {...props}>
+    //       {domToReact(domNode.children, options)}
+    //     </ListItem>
+    //   );
+    // }
+    // if (domNode instanceof Element && domNode.attribs.classssss === "li") {
+    //   const props = attributesToProps(domNode.attribs);
+    //   return (
+    //     <ListItem backgroundColor="#ffe5e5" {...props}>
+    //       {domToReact(domNode.children, options)}
+    //     </ListItem>
+    //   );
+    // }
     // if (domNode instanceof Element && domNode.name === "blockquote") {
     //   const props = attributesToProps(domNode.attribs);
     //   return (
