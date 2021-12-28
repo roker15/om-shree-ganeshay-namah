@@ -217,12 +217,11 @@ const SunEditorForRendering: React.FC<Props> = ({ postId, isNew, postContent, ed
   );
 
   return (
-    <div>
-      <Divider />
+    <Box>
       <ButtonGroup mb="-3" justifyContent="end" size="sm" isAttached variant="outline">
         <Button
           variant="solid"
-          colorScheme={editMode ? "twitter" : "facebook"}
+          colorScheme={editMode ? "yellow" : "facebook"}
           onClick={() => setEditMode(!editMode)}
           leftIcon={editMode ? <MdEditOff /> : <MdEdit />}
         >
@@ -256,7 +255,7 @@ const SunEditorForRendering: React.FC<Props> = ({ postId, isNew, postContent, ed
           }}
         />
       </EditorStyle>
-    </div>
+    </Box>
   );
 };
 export default SunEditorForRendering;

@@ -57,20 +57,10 @@ const LinkItems: Array<Subheading> = [];
 export default function TopAndSideNavbar({ children }: { children: ReactNode }) {
   const { isOpen, onOpen, onClose } = useDisclosure();
   const [hideSidebar, setHideSidebar] = useState(false);
-  const { postHeadingId } = useAppContext();
-  // setSubheading(shareContext.postHeadingId);
-  //**************************useSWR******************************************888 */
-  // `data` will always be available as it's in `fallback`.
   const { currentHeadingId, updateCurrentHeadingId } = usePostContext();
-  const {data,isLoading,supError,swrError} = useGetSubheadingsFromHeadingId(currentHeadingId);
+  const { data, isLoading, supError, swrError } = useGetSubheadingsFromHeadingId(currentHeadingId);
 
-  // const { data, error } = useSWR(
-  //   currentHeadingId == undefined ? null : ["/headingId", currentHeadingId],
-  //   async () => await supabase.from<Subheading>("subheadings").select("*").eq("main_topic_id", currentHeadingId)
-  //   // { refreshInterval: 1000 }
-  // );
 
-  useEffect(() => {});
   if (swrError)
     return (
       <Box minH="100vh" bg="white.100">
@@ -152,8 +142,8 @@ const SidebarContent = ({ onClose, ...rest }: SidebarProps) => {
       overflowY="scroll"
       {...rest}
     >
-      <Flex h="20" alignItems="center" mb="8" mx="8" justifyContent="space-between">
-        <Text as="u" color="#3b5998" fontSize="normal" fontWeight="bold">
+      <Flex h="20" alignItems="center" mb="8" mx="4" justifyContent="space-between">
+        <Text mt="2" p="4" mx="4" color="blue.600" bg="blue.50" fontSize="lg" fontWeight="medium">
           {postContext.currentHeadingname}
         </Text>
         <CloseButton display={{ base: "flex", md: "none" }} onClick={onClose} />
@@ -164,12 +154,7 @@ const SidebarContent = ({ onClose, ...rest }: SidebarProps) => {
           <UnorderedList key={subheading.id}>
             <ListItem ml="6">
               <Text
-                // bg="InactiveCaptionText"
-                lineHeight="shorter"
-                fontWeight="bold"
-                fontSize="medium"
-                // textShadow="1px 0px 1px "
-                // ml="6"
+                fontWeight="medium"
                 mt="4"
                 mr="2"
                 pl="2"

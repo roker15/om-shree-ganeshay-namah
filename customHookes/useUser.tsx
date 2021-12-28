@@ -103,16 +103,9 @@ export function useSubheadingByPaperId(
   };
 }
 
-export function useGetSharedpostBySubheadingidAndUserid(
-  currentSubheadingId?: number,
-  // year?: number,
-  useId?: number
-) {
-  const [id, setId] = useState<number | undefined>(undefined);
-  const [mounted, setMounted] = useState(false);
-  console.log("useGetsharedpost post is being called", currentSubheadingId);
+export function useGetSharedpostBySubheadingidAndUserid(currentSubheadingId?: number) {
   const { data, error } = useSWR(
-    id && mounted ? `/sharedPost/${id}` : null,
+    currentSubheadingId ? `/sharedPost/${currentSubheadingId}` : null,
     async () =>
       await supabase
         .from<SharedPost>("sharedpost")
@@ -133,14 +126,15 @@ export function useGetSharedpostBySubheadingidAndUserid(
     )
     `
         )
-        .eq("subheading_id", id as number)
-        .eq("shared_with", supabase.auth.user()?.id as string)
+        .eq("subheading_id", currentSubheadingId as number)
+        .eq("shared_with", supabase.auth.user()?.id as string),
+    {
+      // revalidateIfStale: false,
+      revalidateOnFocus: false,
+      // revalidateOnReconnect: false,
+    }
     // { refreshInterval: 1000 }
   );
-  useEffect(() => {
-    setId(currentSubheadingId);
-    setMounted(true);
-  }, [currentSubheadingId]);
 
   return {
     // sharedPost_SUP_ERR:data?.error,
@@ -151,18 +145,9 @@ export function useGetSharedpostBySubheadingidAndUserid(
   };
 }
 
-export function useGetUserpostBySubheadingidAndUserid(
-  currentSubheadingId?: number,
-  // year?: number,
-  useId?: number
-) {
-  console.log("useGetUserpost post is being called", currentSubheadingId);
-
-  const [id, setId] = useState<number | undefined>(undefined);
-  const [mounted, setMounted] = useState(false);
-  const { mutate } = useSWRConfig();
+export function useGetUserpostBySubheadingidAndUserid(currentSubheadingId?: number) {
   const { data, error } = useSWR(
-    currentSubheadingId && mounted ? `/userpost/${currentSubheadingId}` : null,
+    currentSubheadingId ? `/userpost/${currentSubheadingId}` : null,
     async () =>
       await supabase
         .from<Post>("posts")
@@ -173,20 +158,19 @@ export function useGetUserpostBySubheadingidAndUserid(
       updated_at,
       post,
       subheading_id:subheadings!posts_subheading_id_fkey(
-      
       topic,
       main_topic_id:headings!topics_main_topic_id_fkey(id)
     )
     `
         )
         .eq("subheading_id", currentSubheadingId as number)
-        .eq("created_by", supabase.auth.user()?.id as string)
-    // { refreshInterval: 1000 }
+        .eq("created_by", supabase.auth.user()?.id as string),
+    {
+      // revalidateIfStale: false,
+      revalidateOnFocus: false,
+      // revalidateOnReconnect: false,
+    }
   );
-  useEffect(() => {
-    setMounted(true);
-  }, [currentSubheadingId]);
-  // console.log("data returned from useUserpost call ", data!.data);
   return {
     // userposts_SUP_ERR:data?.error,
     userposts: data,
