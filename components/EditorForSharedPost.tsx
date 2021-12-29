@@ -55,7 +55,7 @@ const EditorForShredPost: React.FC<Props> = ({ postId, postContent, sharedBy }) 
             ml={-1}
             mr={2}
           />
-          <TagLabel>{sharedBy}</TagLabel>
+          <TagLabel>Shared By {sharedBy} <span role="img" aria-label="sheep">😀</span></TagLabel>
         </Tag>
       </Text>
       <EditorStyle>

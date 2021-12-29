@@ -78,12 +78,14 @@ const Posts: React.FC<ProfileListProps> = ({ data }) => {
       >
         Go back
       </Button>
-      <Heading fontSize="4xl" color="gray.700">{currentSubheadingProps?.topic}</Heading>
+      <Heading fontSize="4xl" color="gray.700">
+        {currentSubheadingProps?.topic}
+      </Heading>
 
-      <Box padding={{ base: "0px 5px 30px 5px", sm: "0px 25px 30px 25px", md: "0px 25px 30px 25px" }}>
-        <Heading mt="50" mb="25" fontSize="2xl" p="4" bg="blue.50" color="blue.600">
+      <Box padding={{ base: "0px 0px 30px 0px", sm: "0px 5px 30px 5px", md: "0px 25px 30px 25px" }}>
+        <Text mt="50" mb="25" fontSize="xl" fontWeight="medium" p="4" bg="blue.50" color="blue.600">
           Notes Shared by My firends on this Topic{" "}
-        </Heading>
+        </Text>
         {isLoadingSharedPost ? (
           <Box padding="6" boxShadow="lg" bg="white">
             <SkeletonCircle isLoaded={false} size="10" />
@@ -104,7 +106,7 @@ const Posts: React.FC<ProfileListProps> = ({ data }) => {
               <div key={x.id}>
                 <EditorForShredPost
                   postContent={sanitisedPostData}
-                  sharedBy={((x.post_id as Post).created_by as Profile).email}
+                  sharedBy={((x.post_id as Post).created_by as Profile).username}
                 ></EditorForShredPost>
                 <div>
                   {/* {parse(
@@ -124,9 +126,9 @@ const Posts: React.FC<ProfileListProps> = ({ data }) => {
             );
           })
         ) : null}
-        <Heading mt="50" mb="25" fontSize="2xl" p="4" bg="blue.50" color="blue.600">
+        <Text mt="50" mb="25" fontSize="xl" fontWeight="medium" p="4" bg="blue.50" color="blue.600">
           My Notes On this Topic
-        </Heading>
+        </Text>
         {isLoadingUserPost ? (
           <Box padding="6" boxShadow="lg" bg="white">
             <SkeletonCircle isLoaded={false} size="10" />

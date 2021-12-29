@@ -1,56 +1,35 @@
 import {
-  Image,
-  Avatar,
-  Badge,
-  Box,
+  Avatar, Box,
   BoxProps,
-  Button,
-  CloseButton,
+  Button, Center, CloseButton,
   Drawer,
   DrawerContent,
   Flex,
-  FlexProps,
-  HStack,
-  IconButton,
-  Link,
+  FlexProps, FormLabel, HStack,
+  IconButton, Image, Link,
   LinkBox,
-  LinkOverlay,
-  List,
-  ListItem,
+  LinkOverlay, ListItem,
   Menu,
   MenuButton,
   MenuDivider,
   MenuItem,
-  MenuList,
-  Tag,
-  Text,
+  MenuList, Spinner, Switch, Text,
   UnorderedList,
   useColorModeValue,
   useDisclosure,
-  VStack,
-  FormControl,
-  FormLabel,
-  Switch,
-  Center,
-  Alert,
-  AlertDescription,
-  AlertIcon,
-  Spinner,
+  VStack
 } from "@chakra-ui/react";
 // import Image from "next/image";
-import React, { ChangeEvent, Dispatch, ReactNode, ReactText, SetStateAction, useEffect, useState } from "react";
+import React, { ChangeEvent, Dispatch, ReactNode, SetStateAction, useState } from "react";
 import { FaGoogle } from "react-icons/fa";
-import { FiBell, FiChevronDown, FiMenu } from "react-icons/fi";
-import styled from "styled-components";
-import useSWR from "swr";
+import { FiChevronDown, FiMenu } from "react-icons/fi";
 import ErrorAlert from "../components/ErrorAlert";
+import { useGetSubheadingsFromHeadingId } from "../customHookes/useUser";
+import { BASE_URL } from "../lib/constants";
 import { useAuthContext } from "../state/Authcontext";
 import { usePostContext } from "../state/PostContext";
 import { useAppContext } from "../state/state";
-import { supabase } from "../lib/supabaseClient";
 import { Subheading } from "../types/myTypes";
-import { BASE_URL } from "../lib/constants";
-import { useGetSubheadingsFromHeadingId } from "../customHookes/useUser";
 
 const LinkItems: Array<Subheading> = [];
 
@@ -142,8 +121,8 @@ const SidebarContent = ({ onClose, ...rest }: SidebarProps) => {
       overflowY="scroll"
       {...rest}
     >
-      <Flex h="20" alignItems="center" mb="8" mx="4" justifyContent="space-between">
-        <Text mt="2" p="4" mx="4" color="blue.600" bg="blue.50" fontSize="lg" fontWeight="medium">
+      <Flex h="20" alignItems="center" mt="8" mb="8" mx="2" >
+        <Text  p="4" mx="2" color="blue.600" bg="blue.50" fontSize="lg" fontWeight="medium">
           {postContext.currentHeadingname}
         </Text>
         <CloseButton display={{ base: "flex", md: "none" }} onClick={onClose} />
@@ -198,7 +177,8 @@ const TopBar = ({ hideSidebar, setHideSidebar, onOpen, ...rest }: MobileProps) =
       height="16"
       width="full"
       alignItems="center"
-      bg={useColorModeValue("#f8f6fa", "#e5e0f1")}
+      // bg={useColorModeValue("#f8f6fa", "#e5e0f1")}
+      bg="white"
       borderBottomWidth="1px"
       zIndex={40}
       pos="fixed"
@@ -296,10 +276,7 @@ const TopBar = ({ hideSidebar, setHideSidebar, onOpen, ...rest }: MobileProps) =
                 )}
 
                 <VStack display={{ base: "none", md: "flex" }} alignItems="flex-start" spacing="1px" ml="2">
-                  <Text fontSize="sm">{profile?.email}</Text>
-                  <Text fontSize="xs" color="gray.600">
-                    {/* Admin */}
-                  </Text>
+                {profile ? <Text fontSize="sm">{profile?.username}</Text> : null}
                 </VStack>
                 <Box display={{ base: "none", md: "flex" }}>
                   <FiChevronDown />

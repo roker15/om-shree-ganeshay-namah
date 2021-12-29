@@ -40,33 +40,7 @@ import { BASE_URL } from "../lib/constants";
 export default function TopNavbar({ children }: { children: ReactNode }) {
   const { isOpen, onOpen, onClose } = useDisclosure();
   const shareContext = useAppContext();
-  //**************************useSWR******************************************888 */
-  // `data` will always be available as it's in `fallback`.
-  // const { data, error } = useSWR(
-  //   ["/headingId", shareContext.postHeadingId],
-  //   async () => await supabase.from<Subheading>("subheadings").select("*").eq("main_topic_id", shareContext.postHeadingId)
-  // );
 
-  // if (error)
-  //   return (
-  //     <Box minH="100vh" bg="white.100">
-  //       <div>
-  //         <Alert status="error">
-  //           <AlertIcon />
-  //           <AlertTitle mr={2}>There is some Problem!</AlertTitle>
-  //           <AlertDescription>Please try again after some time.</AlertDescription>
-  //           <CloseButton position="absolute" right="8px" top="8px" />
-  //         </Alert>
-  //       </div>
-  //     </Box>
-  //   );
-  // if (!data) return <div>loading...</div>;
-  // LinkItems.length = 0;
-  // if (data.data && data.data.length !== 0) {
-  //   data.data!.map((x) => {
-  //     LinkItems.push(x);
-  //   });
-  // }
   return (
     <Box minH="100vh" bg="white.500">
       <MobileNav onOpen={onOpen} />
@@ -87,7 +61,8 @@ const MobileNav = ({ onOpen, ...rest }: MobileProps) => {
       px={{ base: 4, md: 4 }}
       height="16"
       alignItems="center"
-      bg={useColorModeValue("#f8f6fa", "#e5e0f1")}
+      // bg={useColorModeValue("#f8f6fa", "#e5e0f1")}
+      bg="white"
       borderBottomWidth="1px"
       zIndex={1}
       pos="sticky"
@@ -135,6 +110,7 @@ const MobileNav = ({ onOpen, ...rest }: MobileProps) => {
           <Menu boundary="clippingParents">
             <MenuButton border="0px" py={2} transition="all 0.3s" _focus={{ boxShadow: "none" }}>
               <HStack>
+                
                 {!profile ? (
                   <Avatar size={"sm"} src="https://bit.ly/broken-link" />
                 ) : (
@@ -147,7 +123,7 @@ const MobileNav = ({ onOpen, ...rest }: MobileProps) => {
                 )}
 
                 <VStack display={{ base: "none", md: "flex" }} alignItems="flex-start" spacing="1px" ml="2">
-                  <Text fontSize="sm">{useAuthContext().profile?.email}</Text>
+                  {profile ? <Text fontSize="sm">{profile?.username}</Text> : null}
                   <Text fontSize="xs" color="gray.600">
                     {/* Admin */}
                   </Text>

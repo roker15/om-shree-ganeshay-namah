@@ -49,24 +49,35 @@ export const AuthProvider = ({ children }: any) => {
       myInfoLog("authcontext->getprofile-> place3--> session hai ", session);
       const getProfile = async () => {
         try {
-          const user = supabase.auth.user();
-          const { data, error } = await supabase
+          //first check if user exist or not
+          const { data: x, error: e } = await supabase
             .from<Profile>("profiles")
-            .upsert({
-              id: user!.id,
-              role: "USER",
-              email: user?.email,
-              username: user?.identities![0].identity_data.full_name,
-              avatar_url: user?.identities![0].identity_data.avatar_url,
-            })
+            .select()
+            .eq("id", session.user?.id!)
             .single();
-          if (data) {
-            setProfile(data);
-          }
+          if (x) {
+            setProfile(x);
+          } else {
+            // .single();
+            const user = supabase.auth.user();
+            const { data, error } = await supabase
+              .from<Profile>("profiles")
+              .insert({
+                id: user!.id,
+                role: "USER",
+                email: user?.email,
+                username: user?.identities![0].identity_data.full_name,
+                avatar_url: user?.identities![0].identity_data.avatar_url,
+              })
+              .single();
+            if (data) {
+              setProfile(data);
+            }
 
-          if (error) {
-            setProfile(null);
-            throw error;
+            if (error) {
+              setProfile(null);
+              throw error;
+            }
           }
         } catch (error: any) {
           // setProfile(null);

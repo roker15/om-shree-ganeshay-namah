@@ -1,7 +1,6 @@
 import { supabase } from "../lib/supabaseClient";
 import { Headings, Papers, Post, QuestionBank, SharedPost, Subheading, SubheadingViews } from "../types/myTypes";
 import useSWR, { useSWRConfig } from "swr";
-import React, { useEffect, useState } from "react";
 
 export function useGetExamPapers(id?: any) {
   const { data, error } = useSWR(
@@ -35,9 +34,8 @@ export function useGetHeadingsFromPaperId(id?: number) {
   };
 }
 export function useGetQuestionsByPaperidAndYear(paperId?: number, year?: number, shouldFetch?: boolean) {
-  console.log("refetching data............");
   const { data, error } = useSWR(
-    shouldFetch && paperId && year ? [`/upsc/${paperId}/${year}`] : null,
+    shouldFetch && paperId && year ? [`/questions/${paperId}/${year}`] : null,
     async () =>
       await supabase
         .from<QuestionBank>("questionbank")
@@ -53,8 +51,10 @@ export function useGetQuestionsByPaperidAndYear(paperId?: number, year?: number,
  `
         )
         .eq("paper_id", paperId)
-        .eq("year", year)
-    // { refreshInterval: 1000 }
+        .eq("year", year),
+    {
+      revalidateOnFocus: false,
+    }
   );
 
   return {
@@ -66,10 +66,7 @@ export function useGetQuestionsByPaperidAndYear(paperId?: number, year?: number,
 
 export function useSubheadingByPaperId(
   paperId?: number,
-  // year?: number,
-  shouldFetch?: boolean
 ) {
-  console.log("refetching data............");
   const { data, error } = useSWR(
     paperId ? [`/subheadingviews/${paperId}`] : null,
     async () =>
@@ -116,9 +113,9 @@ export function useGetSharedpostBySubheadingidAndUserid(currentSubheadingId?: nu
       updated_at,
       post_id(
         id,post,
-        created_by(id,email)
+        created_by(id,email,username)
       ),
-      shared_with(id,email),
+      shared_with(id,email,username),
       subheading_id:subheadings!id (
       
       topic,
@@ -133,7 +130,6 @@ export function useGetSharedpostBySubheadingidAndUserid(currentSubheadingId?: nu
       revalidateOnFocus: false,
       // revalidateOnReconnect: false,
     }
-    // { refreshInterval: 1000 }
   );
 
   return {
@@ -188,7 +184,6 @@ export function useGetSubheadingsFromHeadingId(currentHeadingId?: number) {
       revalidateOnFocus: false,
       revalidateOnReconnect: false,
     }
-    // { refreshInterval: 1000 }
   );
 
   return {

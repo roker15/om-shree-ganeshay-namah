@@ -52,7 +52,8 @@ const MobileNav = ({ onOpen, ...rest }: MobileProps) => {
       px={{ base: 4, md: 4 }}
       height="16"
       alignItems="center"
-      bg={useColorModeValue("#f8f6fa", "#e5e0f1")}
+      // bg={useColorModeValue("#f8f6fa", "#e5e0f1")}
+      bg="white"
       borderBottomWidth="1px"
       zIndex={1}
       pos="sticky"
@@ -106,7 +107,7 @@ const MobileNav = ({ onOpen, ...rest }: MobileProps) => {
                 )}
 
                 <VStack display={{ base: "none", md: "flex" }} alignItems="flex-start" spacing="1px" ml="2">
-                  {profile ? <Text fontSize="sm">{profile.email}</Text> : null}
+                  {profile ? <Text fontSize="sm">{profile?.username}</Text> : null}
                 </VStack>
                 <Box display={{ base: "none", md: "flex" }}>
                   <FiChevronDown />
