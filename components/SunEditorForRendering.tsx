@@ -1,8 +1,5 @@
-//******************* sun editor*************************************** */
-
-// Import katex
 import {
-  Avatar,
+  Box,
   Button,
   ButtonGroup,
   Divider,
@@ -16,84 +13,35 @@ import {
   ModalFooter,
   ModalHeader,
   ModalOverlay,
-  Tag,
-  TagLabel,
   Text,
   useDisclosure,
-  useToast,
 } from "@chakra-ui/react";
 import katex from "katex";
 import "katex/dist/katex.min.css";
+import { debounce } from "lodash";
 import dynamic from "next/dynamic";
-import React, { useEffect, useRef, useState } from "react";
-import { MdDoneAll, MdEditOff, MdMode, MdSave, MdShare } from "react-icons/md";
+import React, { useCallback, useEffect, useRef, useState } from "react";
+import { MdEdit, MdEditOff, MdShare } from "react-icons/md";
 import styled from "styled-components";
 import "suneditor/dist/css/suneditor.min.css"; // Import Sun Editor's CSS File
-import { mutate, useSWRConfig } from "swr";
-import { usePostContext } from "../context/PostContext";
-import { useAppContext } from "../context/state";
-import { myErrorLog } from "../lib/mylog";
+import SunEditorCore from "suneditor/src/lib/core";
+import { useSWRConfig } from "swr";
+import { myErrorLog, myInfoLog } from "../lib/mylog";
 import { supabase } from "../lib/supabaseClient";
+import { usePostContext } from "../state/PostContext";
 import { Post, Profile, SharedPost } from "../types/myTypes";
 import { customToast } from "./CustomToast";
+
 // import SunEditor from "suneditor-react";
 const SunEditor = dynamic(() => import("suneditor-react"), {
   ssr: false,
 });
 
 const EditorStyle = styled.div`
-  /* ol {
-    background: #ff9999 !important;
-    padding: 0px !important;
-    margin-left: 35px !important;
-  } */
-
-  /* ul {
-  background: #ebc683;
-  padding: 2px;
-  margin-left: 35px;
-} */
-
-  /* ol li {
-    background: #ffe5e5 !important;
-    padding: 10px !important;
-    margin-left: 25px !important;
-    margin-top: -6px !important;
-  } */
-
   .sun-editor {
     /* margin-top: -18px !important; */
     /* border: 1px solid blue; */
     /* border: none; */
-  }
-
-  table {
-    border-collapse: collapse;
-    width: 100%;
-  }
-
-  th,
-  td {
-    text-align: left;
-    padding: 8px;
-    font-family: "Rock Salt", cursive;
-    padding: 20px;
-    // font-style: italic;
-    caption-side: bottom;
-    /* color: #666; */
-    /* text-align: right; */
-    letter-spacing: 1px;
-    font-weight: lighter !important;
-  }
-  th {
-    font-style: italic;
-    caption-side: bottom;
-    color: #616 !important;
-    font-weight: lighter !important;
-  }
-
-  tr:nth-child(even) {
-    background-color: #f2f2f2;
   }
 `;
 
@@ -104,10 +52,11 @@ interface Props {
   postContent?: string;
   isSharedPost?: boolean;
   sharedBy?: string;
+  editModeActive: boolean;
 }
 
 const buttonList = [
-  ["undo", "redo"],
+  // ["undo", "redo"],
   ["font", "fontSize", "formatBlock"],
   [/*"paragraphStyle",*/ "blockquote"],
   ["bold", "underline", "italic", "strike", "subscript", "superscript"],
@@ -115,268 +64,198 @@ const buttonList = [
   ["removeFormat"],
   "/",
   ["outdent", "indent"],
-  ["align", "horizontalRule", "list", "lineHeight"],
+  ["align", "horizontalRule", "list" /* "lineHeight"*/],
   ["table", "link", "image", /* "video","audio",*/ "math"],
 
   /** ['imageGallery'] */ // You must add the "imageGalleryUrl".
-  ["fullScreen" /*, "showBlocks", "codeView"*/],
-  ["preview", "print"],
+  // ["fullScreen" /*, "showBlocks", "codeView"*/],
+  [
+    // "preview",
+    "print",
+  ],
   // ["save", "template"],
 ];
 
-const SunEditorForRendering: React.FC<Props> = ({ postId, isNew, postContent, isSharedPost, sharedBy }) => {
+const fontList = [
+  "Arial",
+  "Comic Sans Ms",
+  // "Bookman Old Style",
+  // "Georgia",
+  // "Calibri",
+  // "Comic Sans",
+  // "Courier",
+  // "Garamond",
+  // "Impact",
+  // "Lucida Console",
+  // "Palatino Linotype",
+  // "Segoe UI",
+  // "Tahoma",
+  // "Times New Roman",
+  // "Trebuchet MS",
+  // "Open Sans",
+  // "Roboto Slab",
+];
+const SunEditorForRendering: React.FC<Props> = ({ postId, isNew, postContent, editModeActive }) => {
   /**
    * @type {React.MutableRefObject<SunEditor>} get type definitions for editor
    */
-  // console.log("passed post content is ", postContent);
-  console.log("suneditor is rendering");
-  const editorRef: React.MutableRefObject<typeof SunEditor | undefined> = useRef();
-  const [content, setContent] = useState("");
-  const [isSubmitting, setIsSubmitting] = useState(false);
-  const [hideToolbar, setHideToolbar] = useState(true);
-  const [editorReadOnly, setEditorReadOnly] = useState(true);
-  const [editMode, setEditMode] = useState(false);
-  const [defaultValue1, setDefaultValue1] = useState(postContent);
-  const [isNoPostExists, setIsNoPostExists] = useState(false);
-  const appcontext = useAppContext();
+
+  myInfoLog("SunEditorForRendering postContent is ", postContent);
+  myInfoLog("SunEditorForRendering ", "component is rendering");
+
+  const isPostNewRef = useRef(isNew);
+  const isMountedRef = useRef(true);
+  const postIdref = useRef<number | undefined>(postId);
+  const [editMode, setEditMode] = useState(editModeActive);
   const { currentSubheadingProps } = usePostContext();
-  const { mutate } = useSWRConfig()
-  const toast = useToast();
+  const { mutate } = useSWRConfig();
+  const editor = useRef<SunEditorCore>();
+  // The sunEditor parameter will be set to the core suneditor instance when this function is called
+  const getSunEditorInstance = (sunEditor: SunEditorCore) => {
+    editor.current = sunEditor;
+  };
+  useEffect(() => {
+    isMountedRef.current = true;
+    return () => {
+      isMountedRef.current = false;
+    };
+  }, []);
   useEffect(() => {
     if (isNew) {
-      // setEditorReadOnly(false);
-      // setHideToolbar(false);
-      setIsNoPostExists(true);
+      isPostNewRef.current = true;
+    } else {
+      isPostNewRef.current = false;
     }
   }, [isNew]);
 
-  // // When the editor's content has changed, store it in state
-  const handleOnChange = (editorContent: string) => {
-    // setDefaultValue1("madarchod")
-    setContent(editorContent);
-  };
-  const createNewPostInDatabase = async () => {
-    console.log("creating post ");
-    const { data, error } = await supabase.from<Post>("posts").insert([
-      {
-        post: content,
-        subheading_id: currentSubheadingProps?.id,
-        created_by: supabase.auth.user()?.id,
-      },
-    ]);
-    if (error) {
-      myErrorLog("SunEditorForRendering", error.message);
-      customToast({title:"Post not created,error occurred",status: "error"})
-    }
-    if (data) {
-      customToast({ title: "Post Created", status: "success" })
-      //refresh user post data
-      mutate(`/userpost/${currentSubheadingProps?.id}`)
+  useEffect(() => {
+    if (editModeActive) {
       setEditMode(true);
-      setIsNoPostExists(false);
+    } else {
+      setEditMode(false);
     }
-    setIsSubmitting(false);
-
-    // setDefaultValue1("hello")
-  };
-  const updatePostInDatabase = async () => {
-    const { data, error } = await supabase
-      .from<Post>("posts")
-      .update({ post: content })
-      .eq("id", postId as number);
-
-    setIsSubmitting(false);
-    setEditMode(true);
-  };
-
-  // Send data to Firebase
-  const handleCreateNewPost = () => {
-    setIsSubmitting(true);
-    try {
-      console.log(content);
-      createNewPostInDatabase();
-    } catch (error) {
-      console.error("error is ss", error);
-    }
-  };
-  const handleUpdatePost = () => {
-    setIsSubmitting(true);
-    try {
-      console.log(content);
-      // await sendDataToFirebase(content)
-      updatePostInDatabase();
-    } catch (error) {
-      console.error("error is ss", error);
-    }
-  };
-  const handleEditPost = () => {
-    setEditorReadOnly(false);
-    setHideToolbar(false);
-    setEditMode(true);
-  };
-  const handelCancelEdit = () => {
-    setEditorReadOnly(true);
-    setHideToolbar(true);
-    setEditMode(false);
-  };
+  }, [editModeActive]);
 
   useEffect(() => {
-    setContent(postContent!);
+    postIdref.current = postId;
+  }, [postId]);
+
+  // Below useEffect is important because suneditor does not automatically update after first render, we need to manually update, other react component will automatically & correctly update after first render, when props changes.
+  useEffect(() => {
+    if (postContent && editor.current && editor.current.core) {
+      editor.current?.core.setContents(postContent);
+    }
   }, [postContent]);
 
-  if (isSharedPost) {
-    return (
-      <>
-        <Text mb="" fontSize="xl" fontWeight="bold">
-          <Tag size="lg" colorScheme="blackAlpha" borderRadius="full">
-            <Avatar
-              src="https://bit.ly/broken-link"
-              // glo="true"
-              size="xs"
-              // name="Segun Adebayo"
-              ml={-1}
-              mr={2}
-            />
-            <TagLabel>{sharedBy}</TagLabel>
-          </Tag>
-        </Text>
-        <EditorStyle>
-          <SunEditor
-            setContents={defaultValue1}
-            // onChange={handleOnChange}
-            hideToolbar={true}
-            readOnly={true}
-            // disable={true}
+  // // When the editor's content has changed, store it in state
+  const handleOnChange = (editorContent: string) => {
+    if (editor.current?.core.hasFocus && debouncedFunctionRef.current) {
+      debouncedFunctionRef.current(editorContent, postIdref.current);
+    }
+  };
+  const createNewPostInDatabase = async (newcontent: string) => {
+    try {
+      console.log("creating post ");
+      const { data, error } = await supabase.from<Post>("posts").insert([
+        {
+          post: newcontent,
+          subheading_id: currentSubheadingProps?.id,
+          created_by: supabase.auth.user()?.id,
+        },
+      ]);
+      if (error) {
+        myErrorLog("SunEditorForRendering", error.message);
+        customToast({ title: "Post not created,error occurred", status: "error", isUpdating: false });
+      }
+      if (data) {
+        isPostNewRef.current = false; // now post is not new
+        postIdref.current = data[0].id; // now post id is available
+        customToast({ title: "Post Created", status: "success", isUpdating: false });
+        // mutate(`/userpost/${currentSubheadingProps?.id}`);
+      }
+    } catch (error: any) {
+      customToast({ title: "Post not updated,error occurred,  " + error.message, status: "error", isUpdating: false });
+    }
+  };
+  const updatePostInDatabase = async (newcontent: string, postId: number) => {
+    myInfoLog("SunEditorForRendering->updatepostindatabase", "method is called");
+    try {
+      const { data, error } = await supabase.from<Post>("posts").update({ post: newcontent }).eq("id", postId);
+      if (error) {
+        myErrorLog("SunEditorForRendering", error.message);
+        customToast({ title: "Post not updated,error occurred", status: "error", isUpdating: false });
+      }
 
-            // hide={hideToolbar}
-            setOptions={{
-              mode: "balloon",
-              katex: katex,
-              height: "100%",
-              buttonList: buttonList,
-            }}
-          />
-        </EditorStyle>
-      </>
-    );
-  }
+      if (data) {
+        customToast({ title: "Your changes have been saved...", status: "success", isUpdating: true });
+        // mutate(`/userpost/${currentSubheadingProps?.id}`);
+      }
+      if (isMountedRef.current) {
+        // use this always when updating ui after asynchronus call finish
+      }
+    } catch (error: any) {
+      customToast({ title: "Post not updated,error occurred,  " + error.message, status: "error", isUpdating: false });
+    }
+  };
+
+  const createOrUpdatePost = (newcontent: any, postId: any) => {
+    if (isPostNewRef.current) {
+      createNewPostInDatabase(newcontent);
+    } else {
+      updatePostInDatabase(newcontent, postId);
+    }
+  };
+
+  const debouncedFunctionRef = useRef<(newcontent: any, postId: any) => void>();
+  debouncedFunctionRef.current = debounce((newcontent: any, postId: any) => createOrUpdatePost(newcontent, postId), 5000);
+  const debouncedChange = useCallback(
+    debounce((editorContent, postId) => debouncedFunctionRef.current!(editorContent, postId), 5000),
+    []
+
+    // debounce((editorContent, postId) => createOrUpdatePost(editorContent, postId), 5000),
+    // []
+  );
 
   return (
-    <div>
-      <Divider />
-
-      {/* {isSharedPost:():(div)} */}
-
-      {isNoPostExists && hideToolbar ? (
-        <ButtonGroup mb="" justifyContent="end" size="sm" isAttached variant="outline">
-          <Button
-            leftIcon={<MdDoneAll />}
-            mt="2"
-            
-            // colorScheme="blue"
-            variant="outline"
-            onClick={() => {
-              setHideToolbar(false);
-              setEditorReadOnly(false);
-            }}
-          >
-            Activate Editor
-          </Button>
-        </ButtonGroup>
-      ) : (
-        ""
-      )}
-
-      {editMode && !isNoPostExists ? (
-        <ButtonGroup mb="" justifyContent="end" size="sm" isAttached variant="outline">
-          {" "}
-          <Button
-            leftIcon={<MdEditOff />}
-            mt="2"
-            // colorScheme="blue"
-            variant="outline"
-            onClick={handelCancelEdit}
-          >
-            Disable edit Mode
-          </Button>
-          <Button
-            leftIcon={<MdDoneAll />}
-            mt="2"
-            isLoading={isSubmitting}
-            // colorScheme="blue"
-            variant="outline"
-            onClick={handleUpdatePost}
-          >
-            Update Edit
-          </Button>
-        </ButtonGroup>
-      ) : (
-        ""
-        // <div></div>
-      )}
-
-      {}
-
-      {isNoPostExists ? (
-        <ButtonGroup mb="" justifyContent="end" size="sm" isAttached variant="outline">
-          <Button
-            leftIcon={<MdSave />}
-            mt="2"
-            // colorScheme="blue"
-            // variant="outline"
-            isLoading={isSubmitting}
-            isDisabled={content == undefined || content.length < 20}
-            onClick={handleCreateNewPost}
-          >
-            Create new Note
-          </Button>
-        </ButtonGroup>
-      ) : (
-        ""
-        // <div></div>
-      )}
-      {!editMode && !isNoPostExists ? (
-        <ButtonGroup mb="" justifyContent="end" size="sm" isAttached variant="outline">
-          <Button
-            leftIcon={<MdMode />}
-            mt="2"
-            // colorScheme="blue"
-            // variant="outline"
-            onClick={handleEditPost}
-          >
-            Edit Note
-          </Button>
-        </ButtonGroup>
-      ) : (
-        // <div></div>
-        ""
-      )}
-      {!editMode && !isNoPostExists ? (
-        <UiForSharing postId={postId as number} subheadingId={currentSubheadingProps?.id as number} />
-      ) : (
-        ""
-      )}
+    <Box>
+      <ButtonGroup mb="-3" justifyContent="end" size="sm" isAttached variant="outline">
+        <Button
+          variant="solid"
+          colorScheme={editMode ? "yellow" : "facebook"}
+          onClick={() => setEditMode(!editMode)}
+          leftIcon={editMode ? <MdEditOff /> : <MdEdit />}
+        >
+          {editMode ? "Deactivate Editing" : "Activate Editing"}
+        </Button>
+        <Box display={editMode ? "none" : "block"}>
+          <UiForSharing postId={postId!} subheadingId={currentSubheadingProps?.id!} />
+        </Box>
+      </ButtonGroup>
 
       <EditorStyle>
         <SunEditor
+          getSunEditorInstance={getSunEditorInstance}
           setDefaultStyle="font-family: arial; font-size: 16px;"
-          hideToolbar={hideToolbar}
-          setContents={content}
+          hideToolbar={!editMode}
+          defaultValue={postContent}
+          // key={postId}
           onChange={handleOnChange}
-          readOnly={editorReadOnly}
-          // disable={true}
-
-          // hide={hideToolbar}
+          readOnly={!editMode}
+          autoFocus={false}
           setOptions={{
-            mode: "balloon-always",
+            placeholder: "**** Start Writing your notes here, we will save it automatically!!!",
+            mode: "balloon",
             katex: katex,
             height: "100%",
-
             buttonList: buttonList,
+            formats: ["p", "div", "h1", "h2", "h3"],
+            font: fontList,
+            fontSize: [12, 14, 16, 20],
+            imageFileInput: false, //this disable image as file, only from url allowed
           }}
         />
       </EditorStyle>
-    </div>
+    </Box>
   );
 };
 export default SunEditorForRendering;
@@ -388,36 +267,51 @@ const UiForSharing: React.FC<sharedProps> = ({ postId, subheadingId }) => {
   const { isOpen, onOpen, onClose } = useDisclosure();
   const [inputEmail, setInputEmail] = React.useState("");
   const [message, setMessage] = React.useState("");
+  const [isLoading, setIsLoading] = React.useState(false);
   // const [error, setError] = React.useState(null);
 
   const initialRef = useRef<HTMLInputElement | HTMLButtonElement | HTMLLabelElement>(null);
   const finalRef = useRef<HTMLInputElement | HTMLButtonElement | HTMLLabelElement>(null);
   const handleSharePost = async () => {
-    console.log("handle share clicked");
+    setIsLoading(true);
+    if (inputEmail == supabase.auth.session()?.user?.email) {
+      setMessage("**You can not share your post to yourself ! ");
+      setIsLoading(false);
+      return;
+    }
     const { data: email, error } = await supabase.from<Profile>("profiles").select("id,email").eq("email", inputEmail);
     // .single();
     if (error) {
-      console.log("error hai ");
-      setMessage("No user found for this email");
+      setMessage("Something went wrong!");
       return;
     }
     if (email?.length == 0) {
       setMessage("This email is not valid");
     } else {
       setMessage("");
-      const { data: sharedData, error } = await supabase.from<SharedPost>("sharedpost").insert({
-        post_id: postId,
-        shared_with: email![0].id,
-        subheading_id: subheadingId,
-      });
-      if (error) {
-        setMessage(error.message);
-      }
+      const { data: ispostexist, error: ispostexisterror } = await supabase
+        .from<SharedPost>("sharedpost")
+        .select(`post_id`)
+        .match({ post_id: postId, shared_with: email![0].id });
 
-      if (sharedData) {
-        setMessage("shared successfully");
+      if (ispostexist?.length != 0) {
+        setMessage("This post is already shared");
+      } else {
+        const { data: sharedData, error } = await supabase.from<SharedPost>("sharedpost").insert({
+          post_id: postId,
+          shared_with: email![0].id,
+          subheading_id: subheadingId,
+        });
+        if (error) {
+          setMessage(error.message);
+        }
+
+        if (sharedData) {
+          setMessage("Shared successfully");
+        }
       }
     }
+    setIsLoading(false);
   };
 
   const handleChange = (e: any) => {
@@ -428,8 +322,8 @@ const UiForSharing: React.FC<sharedProps> = ({ postId, subheadingId }) => {
   return (
     <>
       <ButtonGroup mb="" justifyContent="end" size="sm" isAttached variant="outline">
-        <Button leftIcon={<MdShare />} onClick={onOpen}>
-          Share This Note
+        <Button colorScheme="facebook" variant="outline" leftIcon={<MdShare />} onClick={onOpen}>
+          Share Note
         </Button>
       </ButtonGroup>
 
@@ -437,7 +331,10 @@ const UiForSharing: React.FC<sharedProps> = ({ postId, subheadingId }) => {
         <ModalOverlay />
         <ModalContent>
           <ModalHeader>Share your post</ModalHeader>
-          <Text>{message}</Text>
+          <Text ml="4" color="blue.400">
+            {message}
+            {message ? "..." : ""}
+          </Text>
           <ModalCloseButton />
           <ModalBody pb={6}>
             <FormControl>
@@ -454,7 +351,7 @@ const UiForSharing: React.FC<sharedProps> = ({ postId, subheadingId }) => {
           </ModalBody>
 
           <ModalFooter>
-            <Button leftIcon={<MdShare />} onClick={handleSharePost} colorScheme="blue" mr={3}>
+            <Button isLoading={isLoading} leftIcon={<MdShare />} onClick={handleSharePost} colorScheme="blue" mr={3}>
               Share
             </Button>
             <Button onClick={onClose}>Cancel</Button>
@@ -464,74 +361,3 @@ const UiForSharing: React.FC<sharedProps> = ({ postId, subheadingId }) => {
     </>
   );
 };
-
-//******************* draft.js*************************************** */
-// import React, { useEffect, useState } from "react";
-// import { Editor } from "react-draft-wysiwyg";
-// import { EditorState } from "draft-js";
-// import "react-draft-wysiwyg/dist/react-draft-wysiwyg.css";
-
-// const MyComponent=()=> {
-//   const [editorState, setEditorState] = useState(() =>
-//     EditorState.createEmpty()
-//   );
-//   useEffect(() => {
-//     console.log(editorState);
-//   }, [editorState]);
-//   return (
-//     <div>
-//       <h1 >React Editors</h1>
-//       <h2>Start editing to see some magic happen!</h2>
-//       <div style={{ border: "1px solid black", padding: '2px', minHeight: '400px' }}>
-//         <Editor
-//           editorState={editorState}
-//           onEditorStateChange={setEditorState}
-//         />
-//       </div>
-//     </div>
-//   );
-// }
-// export default MyComponent;
-
-//******************* quill.js*************************************** */
-// import { useState } from "react";
-// import ReactQuill from "react-quill";
-// import "react-quill/dist/quill.snow.css";
-
-// const MyComponent = () => {
-//   const [convertedText, setConvertedText] = useState("Some default content");
-//   return (
-//     <div>
-//       <ReactQuill
-//         modules={{
-//           formula: true,
-//           toolbar: [
-//             ["bold", "italic", "underline", "strike"], // toggled buttons
-//             ["blockquote", "code-block"],
-
-//             [{ header: 1 }, { header: 2 }], // custom button values
-//             [{ list: "ordered" }, { list: "bullet" }],
-//             [{ script: "sub" }, { script: "super" }], // superscript/subscript
-//             [{ indent: "-1" }, { indent: "+1" }], // outdent/indent
-//             [{ direction: "rtl" }], // text direction
-
-//             [{ size: ["small", false, "large", "huge"] }], // custom dropdown
-//             [{ header: [1, 2, 3, 4, 5, 6, false] }],
-
-//             [{ color: [] }, { background: [] }], // dropdown with defaults from theme
-//             [{ font: [] }],
-//             [{ align: [] }],
-
-//             ["clean"], // remove formatting button
-//             ['formula']
-//           ],
-//         }}
-//         theme="snow"
-//         value={convertedText}
-//         onChange={setConvertedText}
-//         style={{ minHeight: "300px" }}
-//       />
-//     </div>
-//   );
-// };
-// export default MyComponent;

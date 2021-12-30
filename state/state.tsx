@@ -6,12 +6,12 @@ export interface CurrentAppState {
 
   setPostHeadingId: (id: number) => void;
 
-  subHeadingIdForNewPost: number|undefined;
-  setSubheadingIdForNewPost: (id: number) => void;
-  postForEdit: Post|undefined;
-  setPostForEdit: (post: Post) => void;
-  isNewPost: boolean|undefined;
-  setIsNew: (isNew: boolean) => void;
+  // subHeadingIdForNewPost: number|undefined;
+  // setSubheadingIdForNewPost: (id: number) => void;
+  // postForEdit: Post|undefined;
+  // setPostForEdit: (post: Post) => void;
+  // isNewPost: boolean|undefined;
+  // setIsNew: (isNew: boolean) => void;
   //******paperId for syllabus heading*** */
   paperId: string|undefined;
   setPaperId: (paperId: string) => void;
@@ -19,35 +19,35 @@ export interface CurrentAppState {
 const AppContext = createContext<CurrentAppState>({
   postHeadingId: 0,
   setPostHeadingId: () => {},
-  subHeadingIdForNewPost: undefined,
-  setSubheadingIdForNewPost: () => {},
-  postForEdit:undefined,
-  setPostForEdit: () => {},
-  isNewPost: false,
-  setIsNew: (isNew: boolean) => {},
+  // subHeadingIdForNewPost: undefined,
+  // setSubheadingIdForNewPost: () => {},
+  // postForEdit:undefined,
+  // setPostForEdit: () => {},
+  // isNewPost: false,
+  // setIsNew: (isNew: boolean) => {},
   paperId:undefined,
   setPaperId: (paperId: string) => {},
 });
 
 export function AppContextWrapper({ children }: { children: ReactNode }) {
   const [postHeadingId, setPostHeadingId] = useState<number|undefined>(1);
-  const [subHeadingIdForNewPost, setSubheadingIdForNewPost] = useState<number|undefined>(undefined);
-  const [postForEdit, setPostForEdit] = useState<Post|undefined>(undefined);
-  const [isNew, setIsNew] = useState<boolean|undefined>(true);
+  // const [subHeadingIdForNewPost, setSubheadingIdForNewPost] = useState<number|undefined>(undefined);
+  // const [postForEdit, setPostForEdit] = useState<Post|undefined>(undefined);
+  // const [isNew, setIsNew] = useState<boolean|undefined>(true);
   const [paperId, setPaperId] = useState<string|undefined>("");
 
   function updateId(id: number) {
     setPostHeadingId(id);
   }
-  function updateSubHeadingIdForNewPost(id: number) {
-    setSubheadingIdForNewPost(id);
-  }
-  function updatePostForEdit(post: Post) {
-    setPostForEdit(post);
-  }
-  function updateIsNew(id: boolean) {
-    setIsNew(id);
-  }
+  // function updateSubHeadingIdForNewPost(id: number) {
+  //   setSubheadingIdForNewPost(id);
+  // }
+  // function updatePostForEdit(post: Post) {
+  //   setPostForEdit(post);
+  // }
+  // function updateIsNew(id: boolean) {
+  //   setIsNew(id);
+  // }
   function updatePaperId(id: string) {
     setPaperId(id);
   }
@@ -56,12 +56,12 @@ export function AppContextWrapper({ children }: { children: ReactNode }) {
     /* whatever you want */
     postHeadingId: postHeadingId,
     setPostHeadingId: updateId,
-    subHeadingIdForNewPost: subHeadingIdForNewPost,
-    setSubheadingIdForNewPost: updateSubHeadingIdForNewPost,
-    postForEdit: postForEdit,
-    setPostForEdit: updatePostForEdit,
-    isNewPost: isNew,
-    setIsNew: updateIsNew,
+    // subHeadingIdForNewPost: subHeadingIdForNewPost,
+    // setSubheadingIdForNewPost: updateSubHeadingIdForNewPost,
+    // postForEdit: postForEdit,
+    // setPostForEdit: updatePostForEdit,
+    // isNewPost: isNew,
+    // setIsNew: updateIsNew,
     paperId:paperId,
     setPaperId:updatePaperId
     };

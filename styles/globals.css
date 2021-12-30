@@ -47,6 +47,22 @@ td {
   padding: 15px;
   text-align: left;
 }
+
+ol > li >ol>li {
+  /* line-height: 50px;
+  border-radius: 8px; */
+  list-style-type: lower-alpha;
+  /* color: #f4dfe8;
+  margin-bottom: 10px; */
+}
+ol > li >ol>li >ol>li{
+  /* line-height: 50px;
+  border-radius: 8px; */
+  list-style-type: lower-roman;
+  font-weight: bold
+  /* color: #f4dfe8;
+  margin-bottom: 10px; */
+}
 /* tr:hover {background-color: yellow;} */
 /* Grid */
 

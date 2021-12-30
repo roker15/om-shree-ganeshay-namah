@@ -1,29 +1,36 @@
 import { ArrowBackIcon } from "@chakra-ui/icons";
 import {
   Alert,
-  AlertIcon, Box,
-  Button, Divider, Heading, ListItem,
-  OrderedList, Text
+  AlertIcon,
+  Box,
+  Button,
+  Divider,
+  Heading,
+  OrderedList,
+  SkeletonCircle,
+  SkeletonText,
+  Text,
 } from "@chakra-ui/react";
-import { AuthSession } from "@supabase/supabase-js";
 import { Element } from "domhandler/lib/node";
 import DOMPurify from "dompurify";
 import { attributesToProps, domToReact, HTMLReactParserOptions } from "html-react-parser";
 import "katex/dist/katex.min.css";
 // import 'suneditor/dist/css/suneditor.min.css'; // Import Sun Editor's CSS File
 import { useRouter } from "next/router";
-import React, { useEffect, useState } from "react";
+import React, { useState } from "react";
+import EditorForShredPost from "../../components/EditorForSharedPost";
 import ErrorAlert from "../../components/ErrorAlert";
 import SunEditorForRendering from "../../components/SunEditorForRendering";
-import { usePostContext } from "../../context/PostContext";
-import { useAppContext } from "../../context/state";
 import { useGetSharedpostBySubheadingidAndUserid, useGetUserpostBySubheadingidAndUserid } from "../../customHookes/useUser";
 import LayoutWithTopAndSideNavbar from "../../layout/LayoutWithTopAndSideNavbar";
 import LayoutWithTopNavbar from "../../layout/LayoutWithTopNavbar";
 // import SideNavBar from "../../layout/sideNavBar";
 import { Profile } from "../../lib/constants";
 import { supabase } from "../../lib/supabaseClient";
-import { Headings, Post, Subheading } from "../../types/myTypes";
+import { useAuthContext } from "../../state/Authcontext";
+import { usePostContext } from "../../state/PostContext";
+import { useAppContext } from "../../state/state";
+import { Post } from "../../types/myTypes";
 import PageWithLayoutType from "../../types/pageWithLayout";
 
 type ProfileListProps = {
@@ -31,27 +38,14 @@ type ProfileListProps = {
 };
 
 const Posts: React.FC<ProfileListProps> = ({ data }) => {
-  const [session, setSession] = useState<AuthSession | null>(null);
-  const [profiles, setProfiles] = useState<Profile[]>([]);
-  const [userNote, setUserNote] = useState<string | undefined | null>(null);
-  const [mounted, setMounted] = useState(false);
-  // const [data, setProfiles] = useState<Profile[]>([]);;
-  const appContext = useAppContext();
+  const { profile } = useAuthContext();
   const router = useRouter();
   const { currentSubheadingProps } = usePostContext();
-  const {userposts,isLoadingUserPost,userposterror } = useGetUserpostBySubheadingidAndUserid(currentSubheadingProps?.id);
-  const { sharedPost,isLoadingSharedPost,sharedPosterror}=useGetSharedpostBySubheadingidAndUserid(currentSubheadingProps?.id)
+  const { userposts, isLoadingUserPost, userposterror } = useGetUserpostBySubheadingidAndUserid(currentSubheadingProps?.id);
+  const { data_sharedpost, isLoadingSharedPost, supError_sharedpost, swrError_sharedpost } =
+    useGetSharedpostBySubheadingidAndUserid(currentSubheadingProps?.id);
 
-
-  useEffect(() => {
-    if (userposts && userposts.data && userposts.data[0]) {
-      setUserNote(userposts.data[0].post);
-      console.log("user post is ",userposts.data[0].post)
-      // appContext.setPostHeadingId(((userposts!.data[0].subheading_id as Subheading).main_topic_id as Headings)!.id);
-    }
-  },[appContext,userposts]);
- 
-  if (!supabase.auth.session()) {
+  if (!profile) {
     return (
       <Alert status="info">
         <AlertIcon />
@@ -59,114 +53,124 @@ const Posts: React.FC<ProfileListProps> = ({ data }) => {
       </Alert>
     );
   }
- if (sharedPosterror||userposterror) {
-   <div>Error Code: SWR_SUBHEADING, Check Internet connection</div>
+
+  if (swrError_sharedpost || userposterror) {
+    return <div>Error Code: SWR_SUBHEADING, Check Internet connection</div>;
   }
-  if (sharedPost?.error) {
-    <ErrorAlert description={"ERROR CODE: SUP_subheading_1"} alertType={"error"}></ErrorAlert>
+  if (supError_sharedpost) {
+    return (
+      <ErrorAlert description={"ERR_SUP_subheading_1 - " + supError_sharedpost.message} alertType={"error"}></ErrorAlert>
+    );
   }
   if (userposts?.error) {
-    <ErrorAlert description={"ERROR CODE: SUP_subheading_2"} alertType={"error"}></ErrorAlert>
+    return <ErrorAlert description={"ERR_SUP_subheading_2 - " + userposts?.error.message} alertType={"error"}></ErrorAlert>;
   }
 
   return (
     <>
       <Button
-        variant="outline"
-        // colorScheme="purple"
+        variant="solid"
+        // colorScheme="#3b5998"
+        color="#3b5998"
         leftIcon={<ArrowBackIcon />}
         size="xs"
         onClick={() => router.back()}
       >
         Go back
       </Button>
-      <h1>{currentSubheadingProps?.topic}</h1>
+      <Heading fontSize="4xl" color="gray.700">
+        {currentSubheadingProps?.topic}
+      </Heading>
 
-      <div style={{ padding: "50px 25px 50px 25px" }}>
-        {sharedPost?.data?.length == 0 ? (
-          <div></div>
-        ) : (
-          sharedPost?.data?.map((x) => {
+      <Box padding={{ base: "0px 0px 30px 0px", sm: "0px 5px 30px 5px", md: "0px 25px 30px 25px" }}>
+        <Text mt="50" mb="25" fontSize="xl" fontWeight="medium" p="4" bg="blue.50" color="blue.600">
+          Notes Shared by My firends on this Topic{" "}
+        </Text>
+        {isLoadingSharedPost ? (
+          <Box padding="6" boxShadow="lg" bg="white">
+            <SkeletonCircle isLoaded={false} size="10" />
+            <SkeletonText isLoaded={false} noOfLines={4} spacing="4" />
+          </Box>
+        ) : data_sharedpost && data_sharedpost.length == 0 ? (
+          <Alert status="warning">
+            <AlertIcon />
+            You don&apos;t have shared notes. Ask your friend to share notes on this topic, After that your friends notes on
+            this topic will be visible here.{" "}
+          </Alert>
+        ) : data_sharedpost ? (
+          data_sharedpost?.map((x) => {
             const sanitisedPostData = DOMPurify.sanitize((x.post_id as Post).post as string, {
               USE_PROFILES: { svg: true, html: true },
             });
             return (
               <div key={x.id}>
-                {/* {postHeader(x, appContext)} */}
-
-                <SunEditorForRendering
-                  // postId={x.id}
+                <EditorForShredPost
                   postContent={sanitisedPostData}
-                  isSharedPost={true}
-                  sharedBy={((x.post_id as Post).created_by as Profile).email}
-                />
+                  sharedBy={((x.post_id as Post).created_by as Profile).username}
+                ></EditorForShredPost>
+                <div>
+                  {/* {parse(
+                    DOMPurify.sanitize(
+                      (x.post_id as Post).post as string,
 
-                {/* <div>
-          {parse(
-            DOMPurify.sanitize(
-              
-              x.post
-              
-              , {
-              USE_PROFILES: { svg: true,html: true },
-            })
-            
-            
-            ,
-            options
-          
-          )}
-       
-        </div> */}
+                      {
+                        USE_PROFILES: { svg: true, html: true },
+                      }
+                    ),
+
+                    options
+                  )} */}
+                </div>
                 <Divider mt="100" visibility="hidden" />
               </div>
             );
           })
-        )}
-
-        {!userposts || !userposts.data ||!userposts.data.length || userNote == undefined ||null ? (
+        ) : null}
+        <Text mt="50" mb="25" fontSize="xl" fontWeight="medium" p="4" bg="blue.50" color="blue.600">
+          My Notes On this Topic
+        </Text>
+        {isLoadingUserPost ? (
+          <Box padding="6" boxShadow="lg" bg="white">
+            <SkeletonCircle isLoaded={false} size="10" />
+            <SkeletonText isLoaded={false} noOfLines={4} spacing="4" />
+          </Box>
+        ) : !userposts || !userposts.data || !userposts.data.length ? (
           <div>
-            <Heading mb="6" fontSize="2xl">
-              {" "}
-              My Notes on this Topic{" "}
-            </Heading>
-            <Alert status="info">
+            <Alert status="warning">
               <AlertIcon />
               You Don&apos;t have notes on this Topic Create Notes in Editor
             </Alert>
-            <Box zIndex="5000">
-              <SunEditorForRendering  isNew={true} />
+            <Box>
+              {/*here passing empty postcontent is desired, otherwise it will  take this from last render */}
+              <SunEditorForRendering isNew={true} postContent="" editModeActive={true} />
             </Box>
           </div>
-        ) : (
-            
-           
-        <SunEditorForRendering
-          // subHeadingId={currentSubheadingId}
-          isNew={false}
-          postId={userposts!.data![0].id}
-          postContent={userNote}
-        />
-        )}
-        {/* {userposts && userposts?.data?.length != 0 && userposts!.data![0] != null ? (
-          <SunEditorForRendering
-            subHeadingId={currentSubheadingId}
-            isNew={false}
-            postId={userposts!.data![0].id}
-            postContent={userNote}
-          />
-        ) : (
-          <div></div>
-        )} */}
-      </div>
+        ) : userposts && userposts.data && userposts.data.length != 0 ? (
+          <Box>
+            <SunEditorForRendering
+              // subHeadingId={currentSubheadingId}
+              key={userposts!.data![0].id} // it will rerender if key changes
+              isNew={false}
+              postId={userposts!.data![0].id}
+              postContent={userposts.data[0].post}
+              editModeActive={false}
+            />
+            {/* {parse(
+              DOMPurify.sanitize(
+                userNote,
+
+                {
+                  USE_PROFILES: { svg: true, html: true },
+                }
+              ),
+
+              options
+            )} */}
+          </Box>
+        ) : null}
+      </Box>
     </>
   );
-  // }
-  // return (
-  //   <div>
-  //     <Link href="../editor">Go to editor</Link>
-  //   </div>
-  // );
 };
 
 const options: HTMLReactParserOptions = {
@@ -206,27 +210,37 @@ const options: HTMLReactParserOptions = {
     if (domNode instanceof Element && domNode.name === "ol") {
       const props = attributesToProps(domNode.attribs);
       return (
-        <OrderedList backgroundColor="#ff9999" ml={"14"} {...props}>
+        <OrderedList ml={"14"} {...props}>
           {domToReact(domNode.children, options)}
         </OrderedList>
       );
     }
-    if (domNode instanceof Element && domNode.name === "li") {
-      const props = attributesToProps(domNode.attribs);
-      return (
-        <ListItem backgroundColor="#ffe5e5" {...props}>
-          {domToReact(domNode.children, options)}
-        </ListItem>
-      );
-    }
-    if (domNode instanceof Element && domNode.attribs.classssss === "li") {
-      const props = attributesToProps(domNode.attribs);
-      return (
-        <ListItem backgroundColor="#ffe5e5" {...props}>
-          {domToReact(domNode.children, options)}
-        </ListItem>
-      );
-    }
+    // if (domNode instanceof Element && domNode.name === "li") {
+    //   const props = attributesToProps(domNode.attribs);
+    //   return (
+    //     <StylesProvider value={undefined}>
+    //       <ListItem mt="2" {...props}>
+    //         {domToReact(domNode.children, options)}
+    //       </ListItem>
+    //     </StylesProvider>
+    //   );
+    // }
+    // if (domNode instanceof Element && domNode.name === "li.ol") {
+    //   const props = attributesToProps(domNode.attribs);
+    //   return (
+    //     <ListItem mt="10" {...props}>
+    //       {domToReact(domNode.children, options)}
+    //     </ListItem>
+    //   );
+    // }
+    // if (domNode instanceof Element && domNode.attribs.classssss === "li") {
+    //   const props = attributesToProps(domNode.attribs);
+    //   return (
+    //     <ListItem backgroundColor="#ffe5e5" {...props}>
+    //       {domToReact(domNode.children, options)}
+    //     </ListItem>
+    //   );
+    // }
     // if (domNode instanceof Element && domNode.name === "blockquote") {
     //   const props = attributesToProps(domNode.attribs);
     //   return (

@@ -35,7 +35,7 @@ import { supabase } from "../lib/supabaseClient";
 import { Headings, Subheading } from "../types/myTypes";
 import PageWithLayoutType from "../types/pageWithLayout";
 import ReactTable from "../components/ReactTable";
-import { useAuthContext } from "../context/Authcontext";
+import { useAuthContext } from "../state/Authcontext";
 
 const Styles = styled.div`
   padding: 1rem;
@@ -77,7 +77,7 @@ interface tableProps {
 }
 
 const CreateSubheading: React.FC = () => {
-  const { role } = useAuthContext();
+  const { profile } = useAuthContext();
   const [selectedForEdit, setSelectedForEdit] = React.useState<
     Subheading | undefined
   >(undefined);
@@ -367,7 +367,7 @@ const CreateSubheading: React.FC = () => {
       </Alert>
     );
 
-  if (supabase.auth.session !== null && role === "MODERATOR") {
+  if (profile && profile.role === "MODERATOR") {
     return (
       <Container mt="2" maxW={{ base: "container.xl", md: "container.md" }}>
         {subHeadings !== undefined && subHeadings.data!.length > 0 ? (

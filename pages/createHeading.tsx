@@ -33,7 +33,7 @@ import { supabase } from "../lib/supabaseClient";
 import { Headings } from "../types/myTypes";
 import PageWithLayoutType from "../types/pageWithLayout";
 import ReactTable from "../components/ReactTable";
-import { useAuthContext } from "../context/Authcontext";
+import { useAuthContext } from "../state/Authcontext";
 
 interface tableProps {
   headings: Headings[] | undefined | null;
@@ -43,7 +43,7 @@ const Basic: React.FC = () => {
   //this is customhooks using swr, it can be used in any component
   // The most beautiful thing is that there will be only 1 request sent to the API,
   // because they use the same SWR key and the request is deduped, cached and shared automatically.
-  const { role } = useAuthContext();
+  const { profile } = useAuthContext();
   const { examPapers, isLoading, isError } = useGetExamPapers();
 
   const [selectedForEdit, setSelectedForEdit] = React.useState<
@@ -303,7 +303,7 @@ const Basic: React.FC = () => {
       </Alert>
     );
 
-  if (supabase.auth.session !== null && role === "MODERATOR") {
+  if (profile && profile.role === "MODERATOR") {
     return (
       <Container mt="2" maxW={{ base: "container.xl", md: "container.md" }}>
         {headings !== undefined && headings.data!.length > 0 ? (

@@ -50,7 +50,7 @@ export function PostContextWrapper({ children }: { children: ReactNode }) {
     setCurrentSubheading(window.localStorage.getItem("currentSubheading") as string);
     setCurrentHeadingname(window.localStorage.getItem("currentHeadingname") as string);
     setCurrentPapername(window.localStorage.getItem("currentPapername") as string);
-    setCurrentSubheadingProps({
+    setCurrentSubheadingProps({...currentSubheadingProps,
       id: parseInt(window.localStorage.getItem("id") as string, 10),
       topic: window.localStorage.getItem("topic") as string,
     });

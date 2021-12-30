@@ -1,14 +1,11 @@
-import { Link, Table, TableCaption, Tbody, Td, Th, Thead, Tr, Text } from "@chakra-ui/react";
-import { AuthSession } from "@supabase/supabase-js";
+import { Link, Table, TableCaption, Tbody, Td, Text, Th, Thead, Tr } from "@chakra-ui/react";
 import NextLink from "next/link";
-import React, { useState } from "react";
-import { useAuthContext } from "../../context/Authcontext";
-import { usePostContext } from "../../context/PostContext";
-import { useAppContext } from "../../context/state";
+import { useRouter } from "next/router";
+import React, { useEffect } from "react";
 import LayoutWithTopNavbarWithSearchBox from "../../layout/LayoutWithTopNavbarWithSearchBox";
-// import SideNavBar from "../../layout/sideNavBar";
-import { Profile } from "../../lib/constants";
 import { supabase } from "../../lib/supabaseClient";
+import { usePostContext } from "../../state/PostContext";
+import { useAppContext } from "../../state/state";
 import { Headings, Papers, Subheading } from "../../types/myTypes";
 import PageWithLayoutType from "../../types/pageWithLayout";
 
@@ -22,12 +19,13 @@ type ProfileListProps = {
 };
 
 const Syllabus: React.FC<ProfileListProps> = ({ array }) => {
-  const [session, setSession] = useState<AuthSession | null>(null);
-  const [profiles, setProfiles] = useState<Profile[]>([]);
-  // const [data, setProfiles] = useState<Profile[]>([]);
-  const shareContext = useAppContext();
-  const authcontext = useAuthContext();
+  const appContext = useAppContext();
   const postContext = usePostContext();
+  const router = useRouter();
+  const { paperId } = router.query;
+  useEffect(() => {
+    appContext.setPaperId(paperId as string);
+  }, [appContext, paperId]);
 
   return (
     <div className="container" style={{ padding: "50px 0 100px 0" }}>
@@ -63,7 +61,7 @@ const Syllabus: React.FC<ProfileListProps> = ({ array }) => {
                                   ((value.main_topic_id as Headings).paper_id as Papers).paper_name as string
                                 );
                                 postContext.updateCurrentHeadingname((value.main_topic_id as Headings).main_topic as string);
-                                postContext.updateCurrentSubheadingProps(value.id,value.topic as string);
+                                postContext.updateCurrentSubheadingProps(value.id, value.topic as string);
                               }}
                               disable="false"
                               color="telegram.600"
@@ -93,6 +91,30 @@ export async function getStaticPaths() {
       { params: { paperId: "6" } }, // See the "paths" section below
       { params: { paperId: "7" } }, // See the "paths" section below
       { params: { paperId: "8" } }, // See the "paths" section below
+      { params: { paperId: "9" } }, // See the "paths" section below
+      { params: { paperId: "10" } }, // See the "paths" section below
+      { params: { paperId: "11" } }, // See the "paths" section below
+      { params: { paperId: "12" } }, // See the "paths" section below
+      { params: { paperId: "13" } }, // See the "paths" section below
+      { params: { paperId: "14" } }, // See the "paths" section below
+      { params: { paperId: "15" } }, // See the "paths" section below
+      { params: { paperId: "16" } }, // See the "paths" section below
+      { params: { paperId: "17" } }, // See the "paths" section below
+      { params: { paperId: "18" } }, // See the "paths" section below
+      { params: { paperId: "19" } }, // See the "paths" section below
+      { params: { paperId: "20" } }, // See the "paths" section below
+      { params: { paperId: "21" } }, // See the "paths" section below
+      { params: { paperId: "22" } }, // See the "paths" section below
+      { params: { paperId: "23" } }, // See the "paths" section below
+      { params: { paperId: "24" } }, // See the "paths" section below
+      { params: { paperId: "25" } }, // See the "paths" section below
+      { params: { paperId: "26" } }, // See the "paths" section below
+      { params: { paperId: "27" } }, // See the "paths" section below
+      { params: { paperId: "28" } }, // See the "paths" section below
+      { params: { paperId: "29" } }, // See the "paths" section below
+      { params: { paperId: "30" } }, // See the "paths" section below
+      { params: { paperId: "31" } }, // See the "paths" section below
+      { params: { paperId: "32" } }, // See the "paths" section below
     ],
     fallback: true, // See the "fallback" section below
   };
@@ -104,7 +126,6 @@ export const getStaticProps = async ({ params }: any) => {
     .select(` id,main_topic,sequence`)
     .eq("paper_id", params.paperId);
   let subheadingsMap = new Map<Headings | undefined, Subheading[] | null>();
-  console.log("subheadings are88 ", data?.length);
 
   for (let index = 0; index < data!.length; index++) {
     const subheading = await supabase
@@ -120,12 +141,9 @@ export const getStaticProps = async ({ params }: any) => {
             paper_name
           )
           )
-          
-          `
+           `
       )
       .eq("main_topic_id", data![index].id);
-    console.log("  subheading is ", JSON.stringify(subheading.data));
-    console.log("  subheading error detail is  ", subheading.error?.details);
     subheadingsMap.set(data![index], subheading.data);
   }
   const array = Array.from(subheadingsMap, ([name, value]) => ({

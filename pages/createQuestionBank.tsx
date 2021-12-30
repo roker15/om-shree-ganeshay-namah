@@ -100,7 +100,7 @@ export default function App() {
   useEffect(() => {
     // listen for changes to auth
     if (supabase.auth.session()) {
-      setIsLoggedin(true)
+      setIsLoggedin(true);
       setName(supabase!.auth!.session()!.user!.user_metadata.full_name);
       setUserId(supabase!.auth!.session()!.user!.id);
     }
@@ -129,9 +129,8 @@ export default function App() {
         provider: "google",
       },
       {
-        redirectTo: "https://www.qlook.in/createQuestionBank"
-        // redirectTo: "http://localhost:3000/createQuestionBank",
-        // redirectTo: "https://om-shree-ganeshay-namah-git-development2-roker15.vercel.app/createQuestionBank",
+        redirectTo: "http://localhost:3000/createQuestionBank",
+        // redirectTo: "https://om-shree-ganeshay-namah-git-development4-roker15.vercel.app/createQuestionBank",
       }
     );
   };
@@ -273,7 +272,6 @@ export default function App() {
             >
               Log out
             </Button>
-
           </Center>
         </Flex>
 
@@ -378,7 +376,7 @@ export default function App() {
                 placeholder="Year should be from 1995 to 2021"
                 isDisabled={isEditMode}
                 type="number"
-                {...register("year", { min: 1995, max: 2021 })}
+                {...register("year", {required:true, min: 1995, max: 2021 })}
               />
             </FormControl>
             <FormControl m="2">
@@ -390,7 +388,11 @@ export default function App() {
                   **Sequence should be from 1 to 700
                 </Text>
               )}
-              <Input placeholder="10,20,30....." type="number" {...register("sequence", { min: 1, max: 700 })} />
+              <Input
+                placeholder="10,20,30....."
+                type="number"
+                {...register("sequence", { required: true, min: 1, max: 700 })}
+              />
             </FormControl>
           </HStack>
 
@@ -578,7 +580,7 @@ export default function App() {
           Link Syllabus
         </Button>
 
-        <Modal onClose={onClose} finalFocusRef={btnRef} size="xl" isOpen={isOpen} scrollBehavior="outside">
+        <Modal onClose={onClose} finalFocusRef={btnRef}  isOpen={isOpen} scrollBehavior="outside">
           <ModalOverlay />
           <ModalContent>
             <ModalHeader>Link Syllabus to Question</ModalHeader>

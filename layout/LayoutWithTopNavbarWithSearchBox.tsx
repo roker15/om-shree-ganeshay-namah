@@ -8,12 +8,9 @@ type LayoutProps = {
 const Layout: React.FunctionComponent<LayoutProps> = ({ children }) => {
   return (
     <>
-      {/* <Simple> */}
       <TopNavbarWithSearchBox >
         {children}
       </TopNavbarWithSearchBox >
-      {/* </Simple> */}
-      {/* </Simple> */}
      
     </>
   );
