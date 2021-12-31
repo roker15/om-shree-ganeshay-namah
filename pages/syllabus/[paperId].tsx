@@ -115,6 +115,11 @@ export async function getStaticPaths() {
       { params: { paperId: "30" } }, // See the "paths" section below
       { params: { paperId: "31" } }, // See the "paths" section below
       { params: { paperId: "32" } }, // See the "paths" section below
+      { params: { paperId: "33" } }, // See the "paths" section below
+      { params: { paperId: "34" } }, // See the "paths" section below
+      { params: { paperId: "35" } }, // See the "paths" section below
+      { params: { paperId: "36" } }, // See the "paths" section below
+      { params: { paperId: "36" } }, // See the "paths" section below
     ],
     fallback: true, // See the "fallback" section below
   };

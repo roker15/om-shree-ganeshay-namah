@@ -47,8 +47,9 @@ export type SharedPost = {
   created_at: string;
   updated_at: string;
   post_id: Post | number;
-  shared_with: Profile | string;
+  shared_with: Profile | string ;
   subheading_id: Subheading | number;
+  is_public: boolean;
 };
 export type QuestionBank = {
   id: number;

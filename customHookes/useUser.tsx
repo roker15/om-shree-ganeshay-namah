@@ -64,9 +64,7 @@ export function useGetQuestionsByPaperidAndYear(paperId?: number, year?: number,
   };
 }
 
-export function useSubheadingByPaperId(
-  paperId?: number,
-) {
+export function useSubheadingByPaperId(paperId?: number) {
   const { data, error } = useSWR(
     paperId ? [`/subheadingviews/${paperId}`] : null,
     async () =>
@@ -111,6 +109,7 @@ export function useGetSharedpostBySubheadingidAndUserid(currentSubheadingId?: nu
     id,
       created_at,
       updated_at,
+      is_public,
       post_id(
         id,post,
         created_by(id,email,username)
@@ -124,7 +123,8 @@ export function useGetSharedpostBySubheadingidAndUserid(currentSubheadingId?: nu
     `
         )
         .eq("subheading_id", currentSubheadingId as number)
-        .eq("shared_with", supabase.auth.user()?.id as string),
+        .or(`shared_with.eq.${supabase.auth.user()?.id},is_public.eq.true`),
+    // .eq("shared_with", supabase.auth.user()?.id as string),
     {
       // revalidateIfStale: false,
       revalidateOnFocus: false,

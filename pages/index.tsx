@@ -1,5 +1,6 @@
 import {
   Avatar,
+  Box,
   Button,
   ButtonGroup,
   Container,
@@ -137,7 +138,7 @@ function tab1Ui(handleChange: (event: any) => void, data: Papers[]) {
   return (
     <VStack>
       <Text fontSize={"2xl"} mt="8" color="gray.600" fontFamily={"Comic Sans MS"}>
-        Select Exam Paper → Select Syllabus Topic →  Make Notes
+        Select Exam Paper → Select Syllabus Topic → Make Notes
         <Text as="span" color="gray.400">
           📝
         </Text>{" "}
@@ -147,9 +148,16 @@ function tab1Ui(handleChange: (event: any) => void, data: Papers[]) {
         (Strictly as per Syllabus)
       </Text>
 
-      <div className="container" style={{ padding: "10px 0 50px 0" }}>
+      <Box>
         <Stack>
-          <Select placeholder="Select UPSC paper" variant="outline" onChange={handleChange}>
+          <Select
+            my="8"
+            size="sm"
+            w={{ base: "-moz-fit-content", md: "2xl" }}
+            placeholder="Select UPSC paper"
+            variant="filled"
+            onChange={handleChange}
+          >
             {data!.map((x) => {
               return (
                 <option key={x.id} value={x.id}>
@@ -159,7 +167,7 @@ function tab1Ui(handleChange: (event: any) => void, data: Papers[]) {
             })}
           </Select>
         </Stack>
-      </div>
+      </Box>
       <Text bg="blue.50" p="4">
         Click Youtube{" "}
         <Link color="blue.600" isExternal fontWeight="bold" href="https://www.youtube.com/watch?v=iZFosT2a9m8">
