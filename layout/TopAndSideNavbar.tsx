@@ -253,7 +253,7 @@ const TopBar = ({ hideSidebar, setHideSidebar, onOpen, ...rest }: MobileProps) =
             colorScheme="google"
             leftIcon={<FaGoogle />}
             variant="ghost"
-            onClick={() => signInWithgoogle(BASE_URL + "/createQuestionBank")}
+            onClick={() => signInWithgoogle(BASE_URL)}
           >
             Sign in
           </Button>

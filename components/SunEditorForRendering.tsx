@@ -2,6 +2,7 @@ import {
   Box,
   Button,
   ButtonGroup,
+  Checkbox,
   Divider,
   FormControl,
   FormLabel,
@@ -13,6 +14,9 @@ import {
   ModalFooter,
   ModalHeader,
   ModalOverlay,
+  Radio,
+  RadioGroup,
+  Stack,
   Text,
   useDisclosure,
 } from "@chakra-ui/react";
@@ -28,6 +32,7 @@ import SunEditorCore from "suneditor/src/lib/core";
 import { useSWRConfig } from "swr";
 import { myErrorLog, myInfoLog } from "../lib/mylog";
 import { supabase } from "../lib/supabaseClient";
+import { useAuthContext } from "../state/Authcontext";
 import { usePostContext } from "../state/PostContext";
 import { Post, Profile, SharedPost } from "../types/myTypes";
 import { customToast } from "./CustomToast";
@@ -267,15 +272,62 @@ const UiForSharing: React.FC<sharedProps> = ({ postId, subheadingId }) => {
   const { isOpen, onOpen, onClose } = useDisclosure();
   const [inputEmail, setInputEmail] = React.useState("");
   const [message, setMessage] = React.useState("");
+  const [messageColor, setMessageColor] = React.useState("");
   const [isLoading, setIsLoading] = React.useState(false);
+  const [publicSharingChecked, setPublicSharingChecked] = React.useState(false);
+  const { profile } = useAuthContext();
   // const [error, setError] = React.useState(null);
 
+  useEffect(() => {
+    if (!isOpen) {
+      setPublicSharingChecked(false);
+      setMessage("");
+    }
+  }, [isOpen]);
   const initialRef = useRef<HTMLInputElement | HTMLButtonElement | HTMLLabelElement>(null);
   const finalRef = useRef<HTMLInputElement | HTMLButtonElement | HTMLLabelElement>(null);
   const handleSharePost = async () => {
     setIsLoading(true);
-    if (inputEmail == supabase.auth.session()?.user?.email) {
+    if (publicSharingChecked) {
+      //check if this post is shared already
+
+      setMessage("");
+      const { data: ispostexist, error: ispostexisterror } = await supabase
+        .from<SharedPost>("sharedpost")
+        .select(`post_id`)
+        .match({ post_id: postId, is_public: true });
+
+      if (ispostexist?.length != 0) {
+        setMessage("This post is already shared publicly");
+        setMessageColor("red");
+        setIsLoading(false);
+        return;
+      } else {
+        const { data: sharedData, error } = await supabase.from<SharedPost>("sharedpost").insert({
+          post_id: postId,
+          // shared_with: null,
+          is_public: true,
+          subheading_id: subheadingId,
+        });
+        if (error) {
+          setMessage(error.message);
+          setMessageColor("red");
+          setIsLoading(false);
+          return;
+        }
+
+        if (sharedData) {
+          setMessage("Shared successfully");
+          setMessageColor("green");
+          setIsLoading(false);
+          return;
+        }
+      }
+      return;
+    }
+    if (profile && inputEmail == profile.email) {
       setMessage("**You can not share your post to yourself ! ");
+      setMessageColor("red");
       setIsLoading(false);
       return;
     }
@@ -283,10 +335,13 @@ const UiForSharing: React.FC<sharedProps> = ({ postId, subheadingId }) => {
     // .single();
     if (error) {
       setMessage("Something went wrong!");
+      setMessageColor("red");
+      setIsLoading(false);
       return;
     }
     if (email?.length == 0) {
       setMessage("This email is not valid");
+      setMessageColor("red");
     } else {
       setMessage("");
       const { data: ispostexist, error: ispostexisterror } = await supabase
@@ -295,7 +350,8 @@ const UiForSharing: React.FC<sharedProps> = ({ postId, subheadingId }) => {
         .match({ post_id: postId, shared_with: email![0].id });
 
       if (ispostexist?.length != 0) {
-        setMessage("This post is already shared");
+        setMessage("This post is already shared with this user");
+        setMessageColor("red");
       } else {
         const { data: sharedData, error } = await supabase.from<SharedPost>("sharedpost").insert({
           post_id: postId,
@@ -304,10 +360,12 @@ const UiForSharing: React.FC<sharedProps> = ({ postId, subheadingId }) => {
         });
         if (error) {
           setMessage(error.message);
+          setMessageColor("red");
         }
 
         if (sharedData) {
           setMessage("Shared successfully");
+          setMessageColor("green");
         }
       }
     }
@@ -331,24 +389,31 @@ const UiForSharing: React.FC<sharedProps> = ({ postId, subheadingId }) => {
         <ModalOverlay />
         <ModalContent>
           <ModalHeader>Share your post</ModalHeader>
-          <Text ml="4" color="blue.400">
+          <Text ml="4" color={messageColor}>
             {message}
             {message ? "..." : ""}
           </Text>
           <ModalCloseButton />
-          <ModalBody pb={6}>
-            <FormControl>
-              <FormLabel>Email of your friend</FormLabel>
-              <Input
-                name="email"
-                value={inputEmail}
-                onChange={handleChange}
-                ref={initialRef as React.RefObject<HTMLInputElement>}
-                placeholder="First name"
-              />
-              {/* <FormErrorMessage>{error}</FormErrorMessage> */}
-            </FormControl>
-          </ModalBody>
+          {profile?.role == "MODERATOR" ? (
+            <Checkbox textTransform={"capitalize"} ml="6" onChange={(e) => setPublicSharingChecked(e.target.checked)}>
+              Share Public
+            </Checkbox>
+          ) : null}
+          {!publicSharingChecked ? (
+            <ModalBody pb={6}>
+              <FormControl>
+                <FormLabel>Email of your friend</FormLabel>
+                <Input
+                  name="email"
+                  value={inputEmail}
+                  onChange={handleChange}
+                  ref={initialRef as React.RefObject<HTMLInputElement>}
+                  placeholder="First name"
+                />
+                {/* <FormErrorMessage>{error}</FormErrorMessage> */}
+              </FormControl>
+            </ModalBody>
+          ) : null}
 
           <ModalFooter>
             <Button isLoading={isLoading} leftIcon={<MdShare />} onClick={handleSharePost} colorScheme="blue" mr={3}>

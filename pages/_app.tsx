@@ -1,16 +1,16 @@
-import "../styles/globals.css";
-import PageWithLayoutType from "../types/pageWithLayout";
-import React, { createContext, useContext } from "react";
 import { ChakraProvider, extendTheme } from "@chakra-ui/react";
-import { AppContextWrapper } from "../state/state";
-import { AuthProvider } from "../state/Authcontext";
 import Head from "next/head";
-import Script from "next/script";
-import { PostContextWrapper } from "../state/PostContext";
+import React from "react";
 //this import is for react page editor
 // import '@react-page/editor/lib/index.css';
-import * as gtag from "../lib/gtag";
-
+import ReactGA from 'react-ga';
+import { AuthProvider } from "../state/Authcontext";
+import { PostContextWrapper } from "../state/PostContext";
+import { AppContextWrapper } from "../state/state";
+import "../styles/globals.css";
+import PageWithLayoutType from "../types/pageWithLayout";
+ReactGA.initialize('UA-211304831-1');
+ReactGA.pageview(window.location.pathname + window.location.search);
 const colors = {
   brand: {
     900: "#1a365d",

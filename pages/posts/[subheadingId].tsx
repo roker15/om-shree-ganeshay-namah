@@ -17,7 +17,7 @@ import { attributesToProps, domToReact, HTMLReactParserOptions } from "html-reac
 import "katex/dist/katex.min.css";
 // import 'suneditor/dist/css/suneditor.min.css'; // Import Sun Editor's CSS File
 import { useRouter } from "next/router";
-import React, { useState } from "react";
+import React from "react";
 import EditorForShredPost from "../../components/EditorForSharedPost";
 import ErrorAlert from "../../components/ErrorAlert";
 import SunEditorForRendering from "../../components/SunEditorForRendering";
@@ -29,7 +29,6 @@ import { Profile } from "../../lib/constants";
 import { supabase } from "../../lib/supabaseClient";
 import { useAuthContext } from "../../state/Authcontext";
 import { usePostContext } from "../../state/PostContext";
-import { useAppContext } from "../../state/state";
 import { Post } from "../../types/myTypes";
 import PageWithLayoutType from "../../types/pageWithLayout";
 
@@ -106,11 +105,13 @@ const Posts: React.FC<ProfileListProps> = ({ data }) => {
               <div key={x.id}>
                 <EditorForShredPost
                   postContent={sanitisedPostData}
-                  sharedBy={((x.post_id as Post).created_by as Profile).username}
-                ></EditorForShredPost>
+                  sharedBy={
+                    x.is_public ? "'Admin' (Just for demonstration)" : ((x.post_id as Post).created_by as Profile).username
+                  }
+                ></EditorForShredPost>{" "}
                 <div>
-                  {/* {parse(
-                    DOMPurify.sanitize(
+                  {" "}
+                  {/* {parse( DOMPurify.sanitize(
                       (x.post_id as Post).post as string,
 
                       {
