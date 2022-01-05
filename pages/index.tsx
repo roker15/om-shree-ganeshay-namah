@@ -19,7 +19,9 @@ import {
 import { SupabaseClient } from "@supabase/supabase-js";
 import { useRouter } from "next/dist/client/router";
 import React from "react";
+import Dropzone from "react-dropzone";
 import { FaTelegram, FaWhatsapp } from "react-icons/fa";
+import { MyDropzone } from "../components/MyDropzone";
 import QuestionBanks from "../components/QuestionBank";
 import LayoutWithTopNavbar from "../layout/LayoutWithTopNavbar";
 import { myInfoLog } from "../lib/mylog";
@@ -99,11 +101,15 @@ const Home: React.FC<ProfileListProps> = ({ data }) => {
               <VStack>
                 {/* <SlateEdit/> */}
                 {supabase.auth.session() && profile?.role == "MODERATOR" ? (
-                  <ButtonGroup size="sm" isAttached variant="outline">
-                    <Button onClick={() => navigateTo("./createHeading")}>Create New Heading</Button>
-                    <Button onClick={() => navigateTo("./createSubheading")}>Create New Subheading</Button>
-                    <Button onClick={() => navigateTo("./createQuestionBank")}>Create Question Bank</Button>
-                  </ButtonGroup>
+                  <Box>
+                    {" "}
+                    <ButtonGroup size="sm" isAttached variant="outline">
+                      <Button onClick={() => navigateTo("./createHeading")}>Create New Heading</Button>
+                      <Button onClick={() => navigateTo("./createSubheading")}>Create New Subheading</Button>
+                      <Button onClick={() => navigateTo("./createQuestionBank")}>Create Question Bank</Button>
+                    </ButtonGroup>
+                    <MyDropzone/>
+                  </Box>
                 ) : null}
               </VStack>
             </TabPanel>

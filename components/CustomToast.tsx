@@ -9,7 +9,7 @@ interface CustomtoastProps {
   variant?: "solid" | "subtle" | "left-accent" | "top-accent";
   duration?: 2000;
   isClosable?: true;
-  isUpdating: boolean;
+  isUpdating?: boolean;
 }
 export function customToast({ title, position, status, variant, duration, isClosable, isUpdating }: CustomtoastProps) {
   if (isUpdating) {

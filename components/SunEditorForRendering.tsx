@@ -1,4 +1,9 @@
 import {
+  Accordion,
+  AccordionButton,
+  AccordionIcon,
+  AccordionItem,
+  AccordionPanel,
   Box,
   Button,
   ButtonGroup,
@@ -36,6 +41,7 @@ import { useAuthContext } from "../state/Authcontext";
 import { usePostContext } from "../state/PostContext";
 import { Post, Profile, SharedPost } from "../types/myTypes";
 import { customToast } from "./CustomToast";
+import { MyDropzone } from "./MyDropzone";
 
 // import SunEditor from "suneditor-react";
 const SunEditor = dynamic(() => import("suneditor-react"), {
@@ -115,6 +121,7 @@ const SunEditorForRendering: React.FC<Props> = ({ postId, isNew, postContent, ed
   const { currentSubheadingProps } = usePostContext();
   const { mutate } = useSWRConfig();
   const editor = useRef<SunEditorCore>();
+  const imageUploaderRef = useRef<HTMLDivElement>(null);
   // The sunEditor parameter will be set to the core suneditor instance when this function is called
   const getSunEditorInstance = (sunEditor: SunEditorCore) => {
     editor.current = sunEditor;
@@ -260,6 +267,30 @@ const SunEditorForRendering: React.FC<Props> = ({ postId, isNew, postContent, ed
           }}
         />
       </EditorStyle>
+      <Accordion allowToggle>
+        <AccordionItem isFocusable>
+          <h2>
+            <AccordionButton>
+              <Button
+                bg="blue.50"
+                flex="1"
+                textAlign="left"
+                // onClick={() => {
+                //   if (imageUploaderRef.current) {
+                //     imageUploaderRef.current.scrollIntoView({ behavior: "smooth", block: "center" });
+                //   }
+                // }}
+              >
+                Click here to Upload Images and get Link to insert Image in Your Note
+                <AccordionIcon />
+              </Button>
+            </AccordionButton>
+          </h2>
+          <AccordionPanel pb={4}>
+            <MyDropzone />
+          </AccordionPanel>
+        </AccordionItem>
+      </Accordion>
     </Box>
   );
 };
