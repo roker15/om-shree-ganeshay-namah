@@ -88,10 +88,10 @@ export function MyDropzone() {
   });
 
   return (
-      <Container w={{ base: "sm", md: "4xl" }}>
+      <Container w={{ base: "auto", md: "auto" }}>
           
-      <Box p="4" {...getRootProps()}>
-        <Center p="4" bg="blackAlpha.100" h="100px" color="blackAlpha.600">
+      <Box  {...getRootProps()}>
+        <Center p="2" bg="blackAlpha.100" h="100px" color="blackAlpha.600">
           {/* <Spinner display={isLoading ? "block" : "none"}></Spinner> */}
           <CircularProgress display={isLoading ? "block" : "none"} isIndeterminate color="blue.300" />
           <input {...getInputProps()} />

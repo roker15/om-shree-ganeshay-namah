@@ -121,7 +121,7 @@ const Home: React.FC<ProfileListProps> = ({ data }) => {
   return <div>no data</div>;
 };
 
-export const getStaticProps = async () => {
+export const getServerSideProps = async () => {
   // Make a request
   let { data, error } = await supabase.from<Papers>("papers").select(`
  id,paper_name

@@ -30,7 +30,7 @@ import "katex/dist/katex.min.css";
 import { debounce } from "lodash";
 import dynamic from "next/dynamic";
 import React, { useCallback, useEffect, useRef, useState } from "react";
-import { MdEdit, MdEditOff, MdShare } from "react-icons/md";
+import { MdEdit, MdEditOff, MdShare, MdWorkspaces } from "react-icons/md";
 import styled from "styled-components";
 import "suneditor/dist/css/suneditor.min.css"; // Import Sun Editor's CSS File
 import SunEditorCore from "suneditor/src/lib/core";
@@ -78,7 +78,7 @@ const buttonList = [
   ["align", "horizontalRule", "list" /* "lineHeight"*/],
   ["table", "link", "image", /* "video","audio",*/ "math"],
 
-  /** ['imageGallery'] */ // You must add the "imageGalleryUrl".
+  ["imageGallery"], // You must add the "imageGalleryUrl".
   // ["fullScreen" /*, "showBlocks", "codeView"*/],
   [
     // "preview",
@@ -264,33 +264,13 @@ const SunEditorForRendering: React.FC<Props> = ({ postId, isNew, postContent, ed
             font: fontList,
             fontSize: [12, 14, 16, 20],
             imageFileInput: false, //this disable image as file, only from url allowed
+            imageSizeOnlyPercentage: false,
+            // imageUrlInput: true,
+            // imageGalleryUrl: "www.qlook.com",
           }}
         />
       </EditorStyle>
-      <Accordion allowToggle>
-        <AccordionItem isFocusable>
-          <h2>
-            <AccordionButton>
-              <Button
-                bg="blue.50"
-                flex="1"
-                textAlign="left"
-                // onClick={() => {
-                //   if (imageUploaderRef.current) {
-                //     imageUploaderRef.current.scrollIntoView({ behavior: "smooth", block: "center" });
-                //   }
-                // }}
-              >
-                Click here to Upload Images and get Link to insert Image in Your Note
-                <AccordionIcon />
-              </Button>
-            </AccordionButton>
-          </h2>
-          <AccordionPanel pb={4}>
-            <MyDropzone />
-          </AccordionPanel>
-        </AccordionItem>
-      </Accordion>
+      <UiForImageUpload/>
     </Box>
   );
 };
@@ -451,6 +431,31 @@ const UiForSharing: React.FC<sharedProps> = ({ postId, subheadingId }) => {
               Share
             </Button>
             <Button onClick={onClose}>Cancel</Button>
+          </ModalFooter>
+        </ModalContent>
+      </Modal>
+    </>
+  );
+};
+
+const UiForImageUpload = () => {
+  const { isOpen, onOpen, onClose } = useDisclosure();
+
+  return (
+    <>
+      <Button size="sm"variant="outline" color="blue.600"mt={3} onClick={onOpen}>
+        Upload Image
+      </Button>
+      <Modal  onClose={onClose} size={"2xl"} isOpen={isOpen}>
+        <ModalOverlay />
+        <ModalContent>
+          <ModalHeader fontSize="md"color="blue.600">Upload Images & Copy link to Insert Image in your Notes</ModalHeader>
+          <ModalCloseButton />
+          <ModalBody >
+            <MyDropzone />
+          </ModalBody>
+          <ModalFooter>
+            <Button onClick={onClose}>Close</Button>
           </ModalFooter>
         </ModalContent>
       </Modal>
