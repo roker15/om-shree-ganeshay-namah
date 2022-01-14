@@ -254,7 +254,7 @@ const CreateSubheading: React.FC = () => {
     heading: number;
     sequence: number;
   }
-  async function onSubmit(values: FormValues) {
+  async function onSubmit(values: any) {
     if (isEditMode == false) {
       const { data, error } = await supabase
         .from<Subheading>("subheadings")
