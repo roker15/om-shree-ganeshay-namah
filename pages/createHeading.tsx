@@ -1,8 +1,4 @@
-import {
-  FormControl,
-  FormErrorMessage,
-  FormLabel,
-} from "@chakra-ui/form-control";
+import { FormControl, FormErrorMessage, FormLabel } from "@chakra-ui/form-control";
 import {
   Alert,
   AlertDescription,
@@ -46,9 +42,7 @@ const Basic: React.FC = () => {
   const { profile } = useAuthContext();
   const { examPapers, isLoading, isError } = useGetExamPapers();
 
-  const [selectedForEdit, setSelectedForEdit] = React.useState<
-    Headings | undefined
-  >(undefined);
+  const [selectedForEdit, setSelectedForEdit] = React.useState<Headings | undefined>(undefined);
   const [activeIndex, setActiveIndex] = React.useState(1000);
   const [isEditMode, setIsEditMode] = React.useState<boolean>(false);
   const [idSelectedTopic, setIdSelectedTopic] = React.useState<number>(-1000);
@@ -57,9 +51,7 @@ const Basic: React.FC = () => {
   const Table1: React.FC<tableProps> = ({ headings }) => {
     console.log("subheadings are ", headings);
 
-    const [data, setData] = React.useState(
-      React.useMemo(() => headings as Headings[], [])
-    );
+    const [data, setData] = React.useState(React.useMemo(() => headings as Headings[], []));
 
     const columns: Column<Headings>[] = React.useMemo(
       () => [
@@ -98,10 +90,7 @@ const Basic: React.FC = () => {
                 textDecoration: "underline",
               }}
               onClick={async () => {
-                const result = await supabase
-                  .from<Headings>("headings")
-                  .delete()
-                  .eq("id", data[tableProps.row.index].id);
+                const result = await supabase.from<Headings>("headings").delete().eq("id", data[tableProps.row.index].id);
               }}
             >
               Delete
@@ -131,20 +120,14 @@ const Basic: React.FC = () => {
                     setIsEditMode(true);
 
                     if (document.getElementById("heading")) {
-                      (
-                        document.getElementById("heading") as HTMLInputElement
-                      ).value = data[tableProps.row.index]!.main_topic!;
+                      (document.getElementById("heading") as HTMLInputElement).value =
+                        data[tableProps.row.index]!.main_topic!;
                     }
 
                     if (document.getElementById("sequence")) {
-                      console.log(
-                        "current seq is ",
-                        String(data[tableProps.row.index].sequence)
-                      );
+                      console.log("current seq is ", String(data[tableProps.row.index].sequence));
 
-                      (
-                        document.getElementById("sequence") as HTMLInputElement
-                      ).defaultValue = String(
+                      (document.getElementById("sequence") as HTMLInputElement).defaultValue = String(
                         data[tableProps.row.index].sequence
                       );
                     }
@@ -306,11 +289,7 @@ const Basic: React.FC = () => {
   if (profile && profile.role === "MODERATOR") {
     return (
       <Container mt="2" maxW={{ base: "container.xl", md: "container.md" }}>
-        {headings !== undefined && headings.data!.length > 0 ? (
-          <Table1 headings={headings?.data!} />
-        ) : (
-          <div></div>
-        )}
+        {headings !== undefined && headings.data!.length > 0 ? <Table1 headings={headings?.data!} /> : <div></div>}
 
         <form onSubmit={handleSubmit(onSubmit)}>
           <VStack
@@ -339,9 +318,7 @@ const Basic: React.FC = () => {
                   );
                 })}
               </Select>
-              <FormErrorMessage>
-                {errors.paper && errors.paper.message}
-              </FormErrorMessage>
+              <FormErrorMessage>{errors.paper && errors.paper.message}</FormErrorMessage>
             </FormControl>
 
             <FormControl isInvalid={errors.heading}>
@@ -359,9 +336,7 @@ const Basic: React.FC = () => {
                   },
                 })}
               />
-              <FormErrorMessage>
-                {errors.heading && errors.heading.message}
-              </FormErrorMessage>
+              <FormErrorMessage>{errors.heading && errors.heading.message}</FormErrorMessage>
             </FormControl>
 
             <FormControl isInvalid={errors.sequence}>
@@ -386,27 +361,15 @@ const Basic: React.FC = () => {
                 </NumberInputStepper>
               </NumberInput>
 
-              <FormErrorMessage>
-                {errors.sequence && errors.sequence.message}
-              </FormErrorMessage>
+              <FormErrorMessage>{errors.sequence && errors.sequence.message}</FormErrorMessage>
             </FormControl>
 
             {isEditMode === false ? (
-              <Button
-                variant="solid"
-                colorScheme="yellow"
-                isLoading={isSubmitting}
-                type="submit"
-              >
+              <Button variant="solid" colorScheme="yellow" isLoading={isSubmitting} type="submit">
                 Create Heading
               </Button>
             ) : (
-              <Button
-                variant="solid"
-                colorScheme="yellow"
-                isLoading={isSubmitting}
-                type="submit"
-              >
+              <Button variant="solid" colorScheme="yellow" isLoading={isSubmitting} type="submit">
                 Update Heading
               </Button>
             )}
@@ -416,18 +379,12 @@ const Basic: React.FC = () => {
     );
   } else {
     return (
-      <Center >
-      <Alert
-        status="warning"
-        alignItems="center"
-        justifyContent="center"
-        textAlign="center"
-        variant="left-accent"
-      >
-        <AlertIcon />
-        You are not allowed to access this page
-      </Alert>
-    </Center>
+      <Center>
+        <Alert status="warning" alignItems="center" justifyContent="center" textAlign="center" variant="left-accent">
+          <AlertIcon />
+          You are not allowed to access this page
+        </Alert>
+      </Center>
     );
   }
 };
