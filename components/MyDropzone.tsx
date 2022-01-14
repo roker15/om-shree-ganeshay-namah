@@ -1,14 +1,7 @@
 import {
-  Text,
-  Box,
-  Center,
-  CircularProgress,
-  ListItem,
-  OrderedList,
-  Spinner,
-  Link,
-  Button,
-  Container,
+  Box, Button, Center,
+  CircularProgress, Container, ListItem,
+  OrderedList, Text
 } from "@chakra-ui/react";
 import copy from "copy-to-clipboard";
 import React, { useCallback, useEffect, useRef, useState } from "react";

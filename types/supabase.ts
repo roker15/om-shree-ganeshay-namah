@@ -12,6 +12,531 @@ export interface paths {
       };
     };
   };
+  "/countries": {
+    get: {
+      parameters: {
+        query: {
+          id?: parameters["rowFilter.countries.id"];
+          /** Full country name. */
+          name?: parameters["rowFilter.countries.name"];
+          /** ISO 3166-1 alpha-2 code. */
+          iso2?: parameters["rowFilter.countries.iso2"];
+          /** ISO 3166-1 alpha-3 code. */
+          iso3?: parameters["rowFilter.countries.iso3"];
+          /** Local variation of the name. */
+          local_name?: parameters["rowFilter.countries.local_name"];
+          continent?: parameters["rowFilter.countries.continent"];
+          /** Filtering Columns */
+          select?: parameters["select"];
+          /** Ordering */
+          order?: parameters["order"];
+          /** Limiting and Pagination */
+          offset?: parameters["offset"];
+          /** Limiting and Pagination */
+          limit?: parameters["limit"];
+        };
+        header: {
+          /** Limiting and Pagination */
+          Range?: parameters["range"];
+          /** Limiting and Pagination */
+          "Range-Unit"?: parameters["rangeUnit"];
+          /** Preference */
+          Prefer?: parameters["preferCount"];
+        };
+      };
+      responses: {
+        /** OK */
+        200: {
+          schema: definitions["countries"][];
+        };
+        /** Partial Content */
+        206: unknown;
+      };
+    };
+    post: {
+      parameters: {
+        body: {
+          /** countries */
+          countries?: definitions["countries"];
+        };
+        query: {
+          /** Filtering Columns */
+          select?: parameters["select"];
+        };
+        header: {
+          /** Preference */
+          Prefer?: parameters["preferReturn"];
+        };
+      };
+      responses: {
+        /** Created */
+        201: unknown;
+      };
+    };
+    delete: {
+      parameters: {
+        query: {
+          id?: parameters["rowFilter.countries.id"];
+          /** Full country name. */
+          name?: parameters["rowFilter.countries.name"];
+          /** ISO 3166-1 alpha-2 code. */
+          iso2?: parameters["rowFilter.countries.iso2"];
+          /** ISO 3166-1 alpha-3 code. */
+          iso3?: parameters["rowFilter.countries.iso3"];
+          /** Local variation of the name. */
+          local_name?: parameters["rowFilter.countries.local_name"];
+          continent?: parameters["rowFilter.countries.continent"];
+        };
+        header: {
+          /** Preference */
+          Prefer?: parameters["preferReturn"];
+        };
+      };
+      responses: {
+        /** No Content */
+        204: never;
+      };
+    };
+    patch: {
+      parameters: {
+        query: {
+          id?: parameters["rowFilter.countries.id"];
+          /** Full country name. */
+          name?: parameters["rowFilter.countries.name"];
+          /** ISO 3166-1 alpha-2 code. */
+          iso2?: parameters["rowFilter.countries.iso2"];
+          /** ISO 3166-1 alpha-3 code. */
+          iso3?: parameters["rowFilter.countries.iso3"];
+          /** Local variation of the name. */
+          local_name?: parameters["rowFilter.countries.local_name"];
+          continent?: parameters["rowFilter.countries.continent"];
+        };
+        body: {
+          /** countries */
+          countries?: definitions["countries"];
+        };
+        header: {
+          /** Preference */
+          Prefer?: parameters["preferReturn"];
+        };
+      };
+      responses: {
+        /** No Content */
+        204: never;
+      };
+    };
+  };
+  "/exam": {
+    get: {
+      parameters: {
+        query: {
+          id?: parameters["rowFilter.exam.id"];
+          created_at?: parameters["rowFilter.exam.created_at"];
+          updated_at?: parameters["rowFilter.exam.updated_at"];
+          exame_name?: parameters["rowFilter.exam.exame_name"];
+          state_or_central?: parameters["rowFilter.exam.state_or_central"];
+          regular_or_random?: parameters["rowFilter.exam.regular_or_random"];
+          job_or_entrance?: parameters["rowFilter.exam.job_or_entrance"];
+          /** Filtering Columns */
+          select?: parameters["select"];
+          /** Ordering */
+          order?: parameters["order"];
+          /** Limiting and Pagination */
+          offset?: parameters["offset"];
+          /** Limiting and Pagination */
+          limit?: parameters["limit"];
+        };
+        header: {
+          /** Limiting and Pagination */
+          Range?: parameters["range"];
+          /** Limiting and Pagination */
+          "Range-Unit"?: parameters["rangeUnit"];
+          /** Preference */
+          Prefer?: parameters["preferCount"];
+        };
+      };
+      responses: {
+        /** OK */
+        200: {
+          schema: definitions["exam"][];
+        };
+        /** Partial Content */
+        206: unknown;
+      };
+    };
+    post: {
+      parameters: {
+        body: {
+          /** exam */
+          exam?: definitions["exam"];
+        };
+        query: {
+          /** Filtering Columns */
+          select?: parameters["select"];
+        };
+        header: {
+          /** Preference */
+          Prefer?: parameters["preferReturn"];
+        };
+      };
+      responses: {
+        /** Created */
+        201: unknown;
+      };
+    };
+    delete: {
+      parameters: {
+        query: {
+          id?: parameters["rowFilter.exam.id"];
+          created_at?: parameters["rowFilter.exam.created_at"];
+          updated_at?: parameters["rowFilter.exam.updated_at"];
+          exame_name?: parameters["rowFilter.exam.exame_name"];
+          state_or_central?: parameters["rowFilter.exam.state_or_central"];
+          regular_or_random?: parameters["rowFilter.exam.regular_or_random"];
+          job_or_entrance?: parameters["rowFilter.exam.job_or_entrance"];
+        };
+        header: {
+          /** Preference */
+          Prefer?: parameters["preferReturn"];
+        };
+      };
+      responses: {
+        /** No Content */
+        204: never;
+      };
+    };
+    patch: {
+      parameters: {
+        query: {
+          id?: parameters["rowFilter.exam.id"];
+          created_at?: parameters["rowFilter.exam.created_at"];
+          updated_at?: parameters["rowFilter.exam.updated_at"];
+          exame_name?: parameters["rowFilter.exam.exame_name"];
+          state_or_central?: parameters["rowFilter.exam.state_or_central"];
+          regular_or_random?: parameters["rowFilter.exam.regular_or_random"];
+          job_or_entrance?: parameters["rowFilter.exam.job_or_entrance"];
+        };
+        body: {
+          /** exam */
+          exam?: definitions["exam"];
+        };
+        header: {
+          /** Preference */
+          Prefer?: parameters["preferReturn"];
+        };
+      };
+      responses: {
+        /** No Content */
+        204: never;
+      };
+    };
+  };
+  "/headings": {
+    get: {
+      parameters: {
+        query: {
+          id?: parameters["rowFilter.headings.id"];
+          created_at?: parameters["rowFilter.headings.created_at"];
+          updated_at?: parameters["rowFilter.headings.updated_at"];
+          main_topic?: parameters["rowFilter.headings.main_topic"];
+          paper_id?: parameters["rowFilter.headings.paper_id"];
+          sequence?: parameters["rowFilter.headings.sequence"];
+          /** Filtering Columns */
+          select?: parameters["select"];
+          /** Ordering */
+          order?: parameters["order"];
+          /** Limiting and Pagination */
+          offset?: parameters["offset"];
+          /** Limiting and Pagination */
+          limit?: parameters["limit"];
+        };
+        header: {
+          /** Limiting and Pagination */
+          Range?: parameters["range"];
+          /** Limiting and Pagination */
+          "Range-Unit"?: parameters["rangeUnit"];
+          /** Preference */
+          Prefer?: parameters["preferCount"];
+        };
+      };
+      responses: {
+        /** OK */
+        200: {
+          schema: definitions["headings"][];
+        };
+        /** Partial Content */
+        206: unknown;
+      };
+    };
+    post: {
+      parameters: {
+        body: {
+          /** headings */
+          headings?: definitions["headings"];
+        };
+        query: {
+          /** Filtering Columns */
+          select?: parameters["select"];
+        };
+        header: {
+          /** Preference */
+          Prefer?: parameters["preferReturn"];
+        };
+      };
+      responses: {
+        /** Created */
+        201: unknown;
+      };
+    };
+    delete: {
+      parameters: {
+        query: {
+          id?: parameters["rowFilter.headings.id"];
+          created_at?: parameters["rowFilter.headings.created_at"];
+          updated_at?: parameters["rowFilter.headings.updated_at"];
+          main_topic?: parameters["rowFilter.headings.main_topic"];
+          paper_id?: parameters["rowFilter.headings.paper_id"];
+          sequence?: parameters["rowFilter.headings.sequence"];
+        };
+        header: {
+          /** Preference */
+          Prefer?: parameters["preferReturn"];
+        };
+      };
+      responses: {
+        /** No Content */
+        204: never;
+      };
+    };
+    patch: {
+      parameters: {
+        query: {
+          id?: parameters["rowFilter.headings.id"];
+          created_at?: parameters["rowFilter.headings.created_at"];
+          updated_at?: parameters["rowFilter.headings.updated_at"];
+          main_topic?: parameters["rowFilter.headings.main_topic"];
+          paper_id?: parameters["rowFilter.headings.paper_id"];
+          sequence?: parameters["rowFilter.headings.sequence"];
+        };
+        body: {
+          /** headings */
+          headings?: definitions["headings"];
+        };
+        header: {
+          /** Preference */
+          Prefer?: parameters["preferReturn"];
+        };
+      };
+      responses: {
+        /** No Content */
+        204: never;
+      };
+    };
+  };
+  "/papers": {
+    get: {
+      parameters: {
+        query: {
+          id?: parameters["rowFilter.papers.id"];
+          created_at?: parameters["rowFilter.papers.created_at"];
+          updated_at?: parameters["rowFilter.papers.updated_at"];
+          paper_name?: parameters["rowFilter.papers.paper_name"];
+          is_multiple_subjects?: parameters["rowFilter.papers.is_multiple_subjects"];
+          exam_id?: parameters["rowFilter.papers.exam_id"];
+          /** Filtering Columns */
+          select?: parameters["select"];
+          /** Ordering */
+          order?: parameters["order"];
+          /** Limiting and Pagination */
+          offset?: parameters["offset"];
+          /** Limiting and Pagination */
+          limit?: parameters["limit"];
+        };
+        header: {
+          /** Limiting and Pagination */
+          Range?: parameters["range"];
+          /** Limiting and Pagination */
+          "Range-Unit"?: parameters["rangeUnit"];
+          /** Preference */
+          Prefer?: parameters["preferCount"];
+        };
+      };
+      responses: {
+        /** OK */
+        200: {
+          schema: definitions["papers"][];
+        };
+        /** Partial Content */
+        206: unknown;
+      };
+    };
+    post: {
+      parameters: {
+        body: {
+          /** papers */
+          papers?: definitions["papers"];
+        };
+        query: {
+          /** Filtering Columns */
+          select?: parameters["select"];
+        };
+        header: {
+          /** Preference */
+          Prefer?: parameters["preferReturn"];
+        };
+      };
+      responses: {
+        /** Created */
+        201: unknown;
+      };
+    };
+    delete: {
+      parameters: {
+        query: {
+          id?: parameters["rowFilter.papers.id"];
+          created_at?: parameters["rowFilter.papers.created_at"];
+          updated_at?: parameters["rowFilter.papers.updated_at"];
+          paper_name?: parameters["rowFilter.papers.paper_name"];
+          is_multiple_subjects?: parameters["rowFilter.papers.is_multiple_subjects"];
+          exam_id?: parameters["rowFilter.papers.exam_id"];
+        };
+        header: {
+          /** Preference */
+          Prefer?: parameters["preferReturn"];
+        };
+      };
+      responses: {
+        /** No Content */
+        204: never;
+      };
+    };
+    patch: {
+      parameters: {
+        query: {
+          id?: parameters["rowFilter.papers.id"];
+          created_at?: parameters["rowFilter.papers.created_at"];
+          updated_at?: parameters["rowFilter.papers.updated_at"];
+          paper_name?: parameters["rowFilter.papers.paper_name"];
+          is_multiple_subjects?: parameters["rowFilter.papers.is_multiple_subjects"];
+          exam_id?: parameters["rowFilter.papers.exam_id"];
+        };
+        body: {
+          /** papers */
+          papers?: definitions["papers"];
+        };
+        header: {
+          /** Preference */
+          Prefer?: parameters["preferReturn"];
+        };
+      };
+      responses: {
+        /** No Content */
+        204: never;
+      };
+    };
+  };
+  "/posts": {
+    get: {
+      parameters: {
+        query: {
+          id?: parameters["rowFilter.posts.id"];
+          created_at?: parameters["rowFilter.posts.created_at"];
+          updated_at?: parameters["rowFilter.posts.updated_at"];
+          post?: parameters["rowFilter.posts.post"];
+          subheading_id?: parameters["rowFilter.posts.subheading_id"];
+          created_by?: parameters["rowFilter.posts.created_by"];
+          /** Filtering Columns */
+          select?: parameters["select"];
+          /** Ordering */
+          order?: parameters["order"];
+          /** Limiting and Pagination */
+          offset?: parameters["offset"];
+          /** Limiting and Pagination */
+          limit?: parameters["limit"];
+        };
+        header: {
+          /** Limiting and Pagination */
+          Range?: parameters["range"];
+          /** Limiting and Pagination */
+          "Range-Unit"?: parameters["rangeUnit"];
+          /** Preference */
+          Prefer?: parameters["preferCount"];
+        };
+      };
+      responses: {
+        /** OK */
+        200: {
+          schema: definitions["posts"][];
+        };
+        /** Partial Content */
+        206: unknown;
+      };
+    };
+    post: {
+      parameters: {
+        body: {
+          /** posts */
+          posts?: definitions["posts"];
+        };
+        query: {
+          /** Filtering Columns */
+          select?: parameters["select"];
+        };
+        header: {
+          /** Preference */
+          Prefer?: parameters["preferReturn"];
+        };
+      };
+      responses: {
+        /** Created */
+        201: unknown;
+      };
+    };
+    delete: {
+      parameters: {
+        query: {
+          id?: parameters["rowFilter.posts.id"];
+          created_at?: parameters["rowFilter.posts.created_at"];
+          updated_at?: parameters["rowFilter.posts.updated_at"];
+          post?: parameters["rowFilter.posts.post"];
+          subheading_id?: parameters["rowFilter.posts.subheading_id"];
+          created_by?: parameters["rowFilter.posts.created_by"];
+        };
+        header: {
+          /** Preference */
+          Prefer?: parameters["preferReturn"];
+        };
+      };
+      responses: {
+        /** No Content */
+        204: never;
+      };
+    };
+    patch: {
+      parameters: {
+        query: {
+          id?: parameters["rowFilter.posts.id"];
+          created_at?: parameters["rowFilter.posts.created_at"];
+          updated_at?: parameters["rowFilter.posts.updated_at"];
+          post?: parameters["rowFilter.posts.post"];
+          subheading_id?: parameters["rowFilter.posts.subheading_id"];
+          created_by?: parameters["rowFilter.posts.created_by"];
+        };
+        body: {
+          /** posts */
+          posts?: definitions["posts"];
+        };
+        header: {
+          /** Preference */
+          Prefer?: parameters["preferReturn"];
+        };
+      };
+      responses: {
+        /** No Content */
+        204: never;
+      };
+    };
+  };
   "/profiles": {
     get: {
       parameters: {
@@ -21,6 +546,8 @@ export interface paths {
           username?: parameters["rowFilter.profiles.username"];
           avatar_url?: parameters["rowFilter.profiles.avatar_url"];
           website?: parameters["rowFilter.profiles.website"];
+          role?: parameters["rowFilter.profiles.role"];
+          email?: parameters["rowFilter.profiles.email"];
           /** Filtering Columns */
           select?: parameters["select"];
           /** Ordering */
@@ -76,6 +603,8 @@ export interface paths {
           username?: parameters["rowFilter.profiles.username"];
           avatar_url?: parameters["rowFilter.profiles.avatar_url"];
           website?: parameters["rowFilter.profiles.website"];
+          role?: parameters["rowFilter.profiles.role"];
+          email?: parameters["rowFilter.profiles.email"];
         };
         header: {
           /** Preference */
@@ -95,6 +624,8 @@ export interface paths {
           username?: parameters["rowFilter.profiles.username"];
           avatar_url?: parameters["rowFilter.profiles.avatar_url"];
           website?: parameters["rowFilter.profiles.website"];
+          role?: parameters["rowFilter.profiles.role"];
+          email?: parameters["rowFilter.profiles.email"];
         };
         body: {
           /** profiles */
@@ -111,50 +642,1615 @@ export interface paths {
       };
     };
   };
+  "/questionbank": {
+    get: {
+      parameters: {
+        query: {
+          id?: parameters["rowFilter.questionbank.id"];
+          created_at?: parameters["rowFilter.questionbank.created_at"];
+          updated_at?: parameters["rowFilter.questionbank.updated_at"];
+          sequence?: parameters["rowFilter.questionbank.sequence"];
+          question_content?: parameters["rowFilter.questionbank.question_content"];
+          search_keys?: parameters["rowFilter.questionbank.search_keys"];
+          year?: parameters["rowFilter.questionbank.year"];
+          paper_id?: parameters["rowFilter.questionbank.paper_id"];
+          remark?: parameters["rowFilter.questionbank.remark"];
+          created_by?: parameters["rowFilter.questionbank.created_by"];
+          /** Filtering Columns */
+          select?: parameters["select"];
+          /** Ordering */
+          order?: parameters["order"];
+          /** Limiting and Pagination */
+          offset?: parameters["offset"];
+          /** Limiting and Pagination */
+          limit?: parameters["limit"];
+        };
+        header: {
+          /** Limiting and Pagination */
+          Range?: parameters["range"];
+          /** Limiting and Pagination */
+          "Range-Unit"?: parameters["rangeUnit"];
+          /** Preference */
+          Prefer?: parameters["preferCount"];
+        };
+      };
+      responses: {
+        /** OK */
+        200: {
+          schema: definitions["questionbank"][];
+        };
+        /** Partial Content */
+        206: unknown;
+      };
+    };
+    post: {
+      parameters: {
+        body: {
+          /** questionbank */
+          questionbank?: definitions["questionbank"];
+        };
+        query: {
+          /** Filtering Columns */
+          select?: parameters["select"];
+        };
+        header: {
+          /** Preference */
+          Prefer?: parameters["preferReturn"];
+        };
+      };
+      responses: {
+        /** Created */
+        201: unknown;
+      };
+    };
+    delete: {
+      parameters: {
+        query: {
+          id?: parameters["rowFilter.questionbank.id"];
+          created_at?: parameters["rowFilter.questionbank.created_at"];
+          updated_at?: parameters["rowFilter.questionbank.updated_at"];
+          sequence?: parameters["rowFilter.questionbank.sequence"];
+          question_content?: parameters["rowFilter.questionbank.question_content"];
+          search_keys?: parameters["rowFilter.questionbank.search_keys"];
+          year?: parameters["rowFilter.questionbank.year"];
+          paper_id?: parameters["rowFilter.questionbank.paper_id"];
+          remark?: parameters["rowFilter.questionbank.remark"];
+          created_by?: parameters["rowFilter.questionbank.created_by"];
+        };
+        header: {
+          /** Preference */
+          Prefer?: parameters["preferReturn"];
+        };
+      };
+      responses: {
+        /** No Content */
+        204: never;
+      };
+    };
+    patch: {
+      parameters: {
+        query: {
+          id?: parameters["rowFilter.questionbank.id"];
+          created_at?: parameters["rowFilter.questionbank.created_at"];
+          updated_at?: parameters["rowFilter.questionbank.updated_at"];
+          sequence?: parameters["rowFilter.questionbank.sequence"];
+          question_content?: parameters["rowFilter.questionbank.question_content"];
+          search_keys?: parameters["rowFilter.questionbank.search_keys"];
+          year?: parameters["rowFilter.questionbank.year"];
+          paper_id?: parameters["rowFilter.questionbank.paper_id"];
+          remark?: parameters["rowFilter.questionbank.remark"];
+          created_by?: parameters["rowFilter.questionbank.created_by"];
+        };
+        body: {
+          /** questionbank */
+          questionbank?: definitions["questionbank"];
+        };
+        header: {
+          /** Preference */
+          Prefer?: parameters["preferReturn"];
+        };
+      };
+      responses: {
+        /** No Content */
+        204: never;
+      };
+    };
+  };
+  "/questionbank_old": {
+    get: {
+      parameters: {
+        query: {
+          id?: parameters["rowFilter.questionbank_old.id"];
+          created_at?: parameters["rowFilter.questionbank_old.created_at"];
+          updated_at?: parameters["rowFilter.questionbank_old.updated_at"];
+          sequence?: parameters["rowFilter.questionbank_old.sequence"];
+          question_content?: parameters["rowFilter.questionbank_old.question_content"];
+          search_keys?: parameters["rowFilter.questionbank_old.search_keys"];
+          year?: parameters["rowFilter.questionbank_old.year"];
+          paper_id?: parameters["rowFilter.questionbank_old.paper_id"];
+          remark?: parameters["rowFilter.questionbank_old.remark"];
+          created_by?: parameters["rowFilter.questionbank_old.created_by"];
+          /** Filtering Columns */
+          select?: parameters["select"];
+          /** Ordering */
+          order?: parameters["order"];
+          /** Limiting and Pagination */
+          offset?: parameters["offset"];
+          /** Limiting and Pagination */
+          limit?: parameters["limit"];
+        };
+        header: {
+          /** Limiting and Pagination */
+          Range?: parameters["range"];
+          /** Limiting and Pagination */
+          "Range-Unit"?: parameters["rangeUnit"];
+          /** Preference */
+          Prefer?: parameters["preferCount"];
+        };
+      };
+      responses: {
+        /** OK */
+        200: {
+          schema: definitions["questionbank_old"][];
+        };
+        /** Partial Content */
+        206: unknown;
+      };
+    };
+    post: {
+      parameters: {
+        body: {
+          /** questionbank_old */
+          questionbank_old?: definitions["questionbank_old"];
+        };
+        query: {
+          /** Filtering Columns */
+          select?: parameters["select"];
+        };
+        header: {
+          /** Preference */
+          Prefer?: parameters["preferReturn"];
+        };
+      };
+      responses: {
+        /** Created */
+        201: unknown;
+      };
+    };
+    delete: {
+      parameters: {
+        query: {
+          id?: parameters["rowFilter.questionbank_old.id"];
+          created_at?: parameters["rowFilter.questionbank_old.created_at"];
+          updated_at?: parameters["rowFilter.questionbank_old.updated_at"];
+          sequence?: parameters["rowFilter.questionbank_old.sequence"];
+          question_content?: parameters["rowFilter.questionbank_old.question_content"];
+          search_keys?: parameters["rowFilter.questionbank_old.search_keys"];
+          year?: parameters["rowFilter.questionbank_old.year"];
+          paper_id?: parameters["rowFilter.questionbank_old.paper_id"];
+          remark?: parameters["rowFilter.questionbank_old.remark"];
+          created_by?: parameters["rowFilter.questionbank_old.created_by"];
+        };
+        header: {
+          /** Preference */
+          Prefer?: parameters["preferReturn"];
+        };
+      };
+      responses: {
+        /** No Content */
+        204: never;
+      };
+    };
+    patch: {
+      parameters: {
+        query: {
+          id?: parameters["rowFilter.questionbank_old.id"];
+          created_at?: parameters["rowFilter.questionbank_old.created_at"];
+          updated_at?: parameters["rowFilter.questionbank_old.updated_at"];
+          sequence?: parameters["rowFilter.questionbank_old.sequence"];
+          question_content?: parameters["rowFilter.questionbank_old.question_content"];
+          search_keys?: parameters["rowFilter.questionbank_old.search_keys"];
+          year?: parameters["rowFilter.questionbank_old.year"];
+          paper_id?: parameters["rowFilter.questionbank_old.paper_id"];
+          remark?: parameters["rowFilter.questionbank_old.remark"];
+          created_by?: parameters["rowFilter.questionbank_old.created_by"];
+        };
+        body: {
+          /** questionbank_old */
+          questionbank_old?: definitions["questionbank_old"];
+        };
+        header: {
+          /** Preference */
+          Prefer?: parameters["preferReturn"];
+        };
+      };
+      responses: {
+        /** No Content */
+        204: never;
+      };
+    };
+  };
+  "/sharedpost": {
+    get: {
+      parameters: {
+        query: {
+          id?: parameters["rowFilter.sharedpost.id"];
+          created_at?: parameters["rowFilter.sharedpost.created_at"];
+          updated_at?: parameters["rowFilter.sharedpost.updated_at"];
+          post_id?: parameters["rowFilter.sharedpost.post_id"];
+          shared_with?: parameters["rowFilter.sharedpost.shared_with"];
+          subheading_id?: parameters["rowFilter.sharedpost.subheading_id"];
+          /** This post is shared to public or not */
+          is_public?: parameters["rowFilter.sharedpost.is_public"];
+          /** Filtering Columns */
+          select?: parameters["select"];
+          /** Ordering */
+          order?: parameters["order"];
+          /** Limiting and Pagination */
+          offset?: parameters["offset"];
+          /** Limiting and Pagination */
+          limit?: parameters["limit"];
+        };
+        header: {
+          /** Limiting and Pagination */
+          Range?: parameters["range"];
+          /** Limiting and Pagination */
+          "Range-Unit"?: parameters["rangeUnit"];
+          /** Preference */
+          Prefer?: parameters["preferCount"];
+        };
+      };
+      responses: {
+        /** OK */
+        200: {
+          schema: definitions["sharedpost"][];
+        };
+        /** Partial Content */
+        206: unknown;
+      };
+    };
+    post: {
+      parameters: {
+        body: {
+          /** sharedpost */
+          sharedpost?: definitions["sharedpost"];
+        };
+        query: {
+          /** Filtering Columns */
+          select?: parameters["select"];
+        };
+        header: {
+          /** Preference */
+          Prefer?: parameters["preferReturn"];
+        };
+      };
+      responses: {
+        /** Created */
+        201: unknown;
+      };
+    };
+    delete: {
+      parameters: {
+        query: {
+          id?: parameters["rowFilter.sharedpost.id"];
+          created_at?: parameters["rowFilter.sharedpost.created_at"];
+          updated_at?: parameters["rowFilter.sharedpost.updated_at"];
+          post_id?: parameters["rowFilter.sharedpost.post_id"];
+          shared_with?: parameters["rowFilter.sharedpost.shared_with"];
+          subheading_id?: parameters["rowFilter.sharedpost.subheading_id"];
+          /** This post is shared to public or not */
+          is_public?: parameters["rowFilter.sharedpost.is_public"];
+        };
+        header: {
+          /** Preference */
+          Prefer?: parameters["preferReturn"];
+        };
+      };
+      responses: {
+        /** No Content */
+        204: never;
+      };
+    };
+    patch: {
+      parameters: {
+        query: {
+          id?: parameters["rowFilter.sharedpost.id"];
+          created_at?: parameters["rowFilter.sharedpost.created_at"];
+          updated_at?: parameters["rowFilter.sharedpost.updated_at"];
+          post_id?: parameters["rowFilter.sharedpost.post_id"];
+          shared_with?: parameters["rowFilter.sharedpost.shared_with"];
+          subheading_id?: parameters["rowFilter.sharedpost.subheading_id"];
+          /** This post is shared to public or not */
+          is_public?: parameters["rowFilter.sharedpost.is_public"];
+        };
+        body: {
+          /** sharedpost */
+          sharedpost?: definitions["sharedpost"];
+        };
+        header: {
+          /** Preference */
+          Prefer?: parameters["preferReturn"];
+        };
+      };
+      responses: {
+        /** No Content */
+        204: never;
+      };
+    };
+  };
+  "/subheadingquestionlink": {
+    get: {
+      parameters: {
+        query: {
+          id?: parameters["rowFilter.subheadingquestionlink.id"];
+          created_at?: parameters["rowFilter.subheadingquestionlink.created_at"];
+          updated_at?: parameters["rowFilter.subheadingquestionlink.updated_at"];
+          created_by?: parameters["rowFilter.subheadingquestionlink.created_by"];
+          subheading_id?: parameters["rowFilter.subheadingquestionlink.subheading_id"];
+          questionbank_id?: parameters["rowFilter.subheadingquestionlink.questionbank_id"];
+          /** heading reference */
+          heading_id?: parameters["rowFilter.subheadingquestionlink.heading_id"];
+          /** Filtering Columns */
+          select?: parameters["select"];
+          /** Ordering */
+          order?: parameters["order"];
+          /** Limiting and Pagination */
+          offset?: parameters["offset"];
+          /** Limiting and Pagination */
+          limit?: parameters["limit"];
+        };
+        header: {
+          /** Limiting and Pagination */
+          Range?: parameters["range"];
+          /** Limiting and Pagination */
+          "Range-Unit"?: parameters["rangeUnit"];
+          /** Preference */
+          Prefer?: parameters["preferCount"];
+        };
+      };
+      responses: {
+        /** OK */
+        200: {
+          schema: definitions["subheadingquestionlink"][];
+        };
+        /** Partial Content */
+        206: unknown;
+      };
+    };
+    post: {
+      parameters: {
+        body: {
+          /** subheadingquestionlink */
+          subheadingquestionlink?: definitions["subheadingquestionlink"];
+        };
+        query: {
+          /** Filtering Columns */
+          select?: parameters["select"];
+        };
+        header: {
+          /** Preference */
+          Prefer?: parameters["preferReturn"];
+        };
+      };
+      responses: {
+        /** Created */
+        201: unknown;
+      };
+    };
+    delete: {
+      parameters: {
+        query: {
+          id?: parameters["rowFilter.subheadingquestionlink.id"];
+          created_at?: parameters["rowFilter.subheadingquestionlink.created_at"];
+          updated_at?: parameters["rowFilter.subheadingquestionlink.updated_at"];
+          created_by?: parameters["rowFilter.subheadingquestionlink.created_by"];
+          subheading_id?: parameters["rowFilter.subheadingquestionlink.subheading_id"];
+          questionbank_id?: parameters["rowFilter.subheadingquestionlink.questionbank_id"];
+          /** heading reference */
+          heading_id?: parameters["rowFilter.subheadingquestionlink.heading_id"];
+        };
+        header: {
+          /** Preference */
+          Prefer?: parameters["preferReturn"];
+        };
+      };
+      responses: {
+        /** No Content */
+        204: never;
+      };
+    };
+    patch: {
+      parameters: {
+        query: {
+          id?: parameters["rowFilter.subheadingquestionlink.id"];
+          created_at?: parameters["rowFilter.subheadingquestionlink.created_at"];
+          updated_at?: parameters["rowFilter.subheadingquestionlink.updated_at"];
+          created_by?: parameters["rowFilter.subheadingquestionlink.created_by"];
+          subheading_id?: parameters["rowFilter.subheadingquestionlink.subheading_id"];
+          questionbank_id?: parameters["rowFilter.subheadingquestionlink.questionbank_id"];
+          /** heading reference */
+          heading_id?: parameters["rowFilter.subheadingquestionlink.heading_id"];
+        };
+        body: {
+          /** subheadingquestionlink */
+          subheadingquestionlink?: definitions["subheadingquestionlink"];
+        };
+        header: {
+          /** Preference */
+          Prefer?: parameters["preferReturn"];
+        };
+      };
+      responses: {
+        /** No Content */
+        204: never;
+      };
+    };
+  };
+  "/subheadings": {
+    get: {
+      parameters: {
+        query: {
+          /**
+           * let { data: subheadings, error } = await supabase
+           *   .from('subheadings')
+           *   .select('idmmmm')
+           */
+          id?: parameters["rowFilter.subheadings.id"];
+          created_at?: parameters["rowFilter.subheadings.created_at"];
+          updated_at?: parameters["rowFilter.subheadings.updated_at"];
+          topic?: parameters["rowFilter.subheadings.topic"];
+          main_topic_id?: parameters["rowFilter.subheadings.main_topic_id"];
+          sequence?: parameters["rowFilter.subheadings.sequence"];
+          /** Filtering Columns */
+          select?: parameters["select"];
+          /** Ordering */
+          order?: parameters["order"];
+          /** Limiting and Pagination */
+          offset?: parameters["offset"];
+          /** Limiting and Pagination */
+          limit?: parameters["limit"];
+        };
+        header: {
+          /** Limiting and Pagination */
+          Range?: parameters["range"];
+          /** Limiting and Pagination */
+          "Range-Unit"?: parameters["rangeUnit"];
+          /** Preference */
+          Prefer?: parameters["preferCount"];
+        };
+      };
+      responses: {
+        /** OK */
+        200: {
+          schema: definitions["subheadings"][];
+        };
+        /** Partial Content */
+        206: unknown;
+      };
+    };
+    post: {
+      parameters: {
+        body: {
+          /** subheadings */
+          subheadings?: definitions["subheadings"];
+        };
+        query: {
+          /** Filtering Columns */
+          select?: parameters["select"];
+        };
+        header: {
+          /** Preference */
+          Prefer?: parameters["preferReturn"];
+        };
+      };
+      responses: {
+        /** Created */
+        201: unknown;
+      };
+    };
+    delete: {
+      parameters: {
+        query: {
+          /**
+           * let { data: subheadings, error } = await supabase
+           *   .from('subheadings')
+           *   .select('idmmmm')
+           */
+          id?: parameters["rowFilter.subheadings.id"];
+          created_at?: parameters["rowFilter.subheadings.created_at"];
+          updated_at?: parameters["rowFilter.subheadings.updated_at"];
+          topic?: parameters["rowFilter.subheadings.topic"];
+          main_topic_id?: parameters["rowFilter.subheadings.main_topic_id"];
+          sequence?: parameters["rowFilter.subheadings.sequence"];
+        };
+        header: {
+          /** Preference */
+          Prefer?: parameters["preferReturn"];
+        };
+      };
+      responses: {
+        /** No Content */
+        204: never;
+      };
+    };
+    patch: {
+      parameters: {
+        query: {
+          /**
+           * let { data: subheadings, error } = await supabase
+           *   .from('subheadings')
+           *   .select('idmmmm')
+           */
+          id?: parameters["rowFilter.subheadings.id"];
+          created_at?: parameters["rowFilter.subheadings.created_at"];
+          updated_at?: parameters["rowFilter.subheadings.updated_at"];
+          topic?: parameters["rowFilter.subheadings.topic"];
+          main_topic_id?: parameters["rowFilter.subheadings.main_topic_id"];
+          sequence?: parameters["rowFilter.subheadings.sequence"];
+        };
+        body: {
+          /** subheadings */
+          subheadings?: definitions["subheadings"];
+        };
+        header: {
+          /** Preference */
+          Prefer?: parameters["preferReturn"];
+        };
+      };
+      responses: {
+        /** No Content */
+        204: never;
+      };
+    };
+  };
+  "/subheadings_view": {
+    get: {
+      parameters: {
+        query: {
+          subheading_id?: parameters["rowFilter.subheadings_view.subheading_id"];
+          main_topic_id?: parameters["rowFilter.subheadings_view.main_topic_id"];
+          topic?: parameters["rowFilter.subheadings_view.topic"];
+          subheading_sequence?: parameters["rowFilter.subheadings_view.subheading_sequence"];
+          heading_id?: parameters["rowFilter.subheadings_view.heading_id"];
+          main_topic?: parameters["rowFilter.subheadings_view.main_topic"];
+          heading_sequence?: parameters["rowFilter.subheadings_view.heading_sequence"];
+          paper_id?: parameters["rowFilter.subheadings_view.paper_id"];
+          /** Filtering Columns */
+          select?: parameters["select"];
+          /** Ordering */
+          order?: parameters["order"];
+          /** Limiting and Pagination */
+          offset?: parameters["offset"];
+          /** Limiting and Pagination */
+          limit?: parameters["limit"];
+        };
+        header: {
+          /** Limiting and Pagination */
+          Range?: parameters["range"];
+          /** Limiting and Pagination */
+          "Range-Unit"?: parameters["rangeUnit"];
+          /** Preference */
+          Prefer?: parameters["preferCount"];
+        };
+      };
+      responses: {
+        /** OK */
+        200: {
+          schema: definitions["subheadings_view"][];
+        };
+        /** Partial Content */
+        206: unknown;
+      };
+    };
+  };
+  "/userfiles": {
+    get: {
+      parameters: {
+        query: {
+          id?: parameters["rowFilter.userfiles.id"];
+          created_at?: parameters["rowFilter.userfiles.created_at"];
+          url?: parameters["rowFilter.userfiles.url"];
+          /** Filtering Columns */
+          select?: parameters["select"];
+          /** Ordering */
+          order?: parameters["order"];
+          /** Limiting and Pagination */
+          offset?: parameters["offset"];
+          /** Limiting and Pagination */
+          limit?: parameters["limit"];
+        };
+        header: {
+          /** Limiting and Pagination */
+          Range?: parameters["range"];
+          /** Limiting and Pagination */
+          "Range-Unit"?: parameters["rangeUnit"];
+          /** Preference */
+          Prefer?: parameters["preferCount"];
+        };
+      };
+      responses: {
+        /** OK */
+        200: {
+          schema: definitions["userfiles"][];
+        };
+        /** Partial Content */
+        206: unknown;
+      };
+    };
+    post: {
+      parameters: {
+        body: {
+          /** userfiles */
+          userfiles?: definitions["userfiles"];
+        };
+        query: {
+          /** Filtering Columns */
+          select?: parameters["select"];
+        };
+        header: {
+          /** Preference */
+          Prefer?: parameters["preferReturn"];
+        };
+      };
+      responses: {
+        /** Created */
+        201: unknown;
+      };
+    };
+    delete: {
+      parameters: {
+        query: {
+          id?: parameters["rowFilter.userfiles.id"];
+          created_at?: parameters["rowFilter.userfiles.created_at"];
+          url?: parameters["rowFilter.userfiles.url"];
+        };
+        header: {
+          /** Preference */
+          Prefer?: parameters["preferReturn"];
+        };
+      };
+      responses: {
+        /** No Content */
+        204: never;
+      };
+    };
+    patch: {
+      parameters: {
+        query: {
+          id?: parameters["rowFilter.userfiles.id"];
+          created_at?: parameters["rowFilter.userfiles.created_at"];
+          url?: parameters["rowFilter.userfiles.url"];
+        };
+        body: {
+          /** userfiles */
+          userfiles?: definitions["userfiles"];
+        };
+        header: {
+          /** Preference */
+          Prefer?: parameters["preferReturn"];
+        };
+      };
+      responses: {
+        /** No Content */
+        204: never;
+      };
+    };
+  };
+  "/rpc/getsyllabuss": {
+    post: {
+      parameters: {
+        body: {
+          args: {
+            /** Format: bigint */
+            paper_idd: number;
+          };
+        };
+        header: {
+          /** Preference */
+          Prefer?: parameters["preferParams"];
+        };
+      };
+      responses: {
+        /** OK */
+        200: unknown;
+      };
+    };
+  };
+  "/rpc/getsyllabussss": {
+    post: {
+      parameters: {
+        body: {
+          args: {
+            /** Format: bigint */
+            paper_idd: number;
+          };
+        };
+        header: {
+          /** Preference */
+          Prefer?: parameters["preferParams"];
+        };
+      };
+      responses: {
+        /** OK */
+        200: unknown;
+      };
+    };
+  };
+  "/rpc/getsyllabusssss": {
+    post: {
+      parameters: {
+        body: {
+          args: {
+            /** Format: bigint */
+            paper_idd: number;
+          };
+        };
+        header: {
+          /** Preference */
+          Prefer?: parameters["preferParams"];
+        };
+      };
+      responses: {
+        /** OK */
+        200: unknown;
+      };
+    };
+  };
+  "/rpc/getsyllabussssd": {
+    post: {
+      parameters: {
+        body: {
+          args: {
+            /** Format: bigint */
+            paper_idd: number;
+          };
+        };
+        header: {
+          /** Preference */
+          Prefer?: parameters["preferParams"];
+        };
+      };
+      responses: {
+        /** OK */
+        200: unknown;
+      };
+    };
+  };
+  "/rpc/getsyllabusdd": {
+    post: {
+      parameters: {
+        body: {
+          args: {
+            /** Format: bigint */
+            paper_idd: number;
+          };
+        };
+        header: {
+          /** Preference */
+          Prefer?: parameters["preferParams"];
+        };
+      };
+      responses: {
+        /** OK */
+        200: unknown;
+      };
+    };
+  };
+  "/rpc/getsyllabusd": {
+    post: {
+      parameters: {
+        body: {
+          args: {
+            /** Format: bigint */
+            paper_idd: number;
+          };
+        };
+        header: {
+          /** Preference */
+          Prefer?: parameters["preferParams"];
+        };
+      };
+      responses: {
+        /** OK */
+        200: unknown;
+      };
+    };
+  };
+  "/rpc/getsyllabusddd": {
+    post: {
+      parameters: {
+        body: {
+          args: {
+            /** Format: bigint */
+            headingid: number;
+          };
+        };
+        header: {
+          /** Preference */
+          Prefer?: parameters["preferParams"];
+        };
+      };
+      responses: {
+        /** OK */
+        200: unknown;
+      };
+    };
+  };
+  "/rpc/getsyllabusss": {
+    post: {
+      parameters: {
+        body: {
+          args: {
+            /** Format: integer */
+            paper_idd: number;
+          };
+        };
+        header: {
+          /** Preference */
+          Prefer?: parameters["preferParams"];
+        };
+      };
+      responses: {
+        /** OK */
+        200: unknown;
+      };
+    };
+  };
+  "/rpc/get_film_count": {
+    post: {
+      parameters: {
+        body: {
+          args: {
+            /** Format: integer */
+            len_to: number;
+            /** Format: integer */
+            len_from: number;
+          };
+        };
+        header: {
+          /** Preference */
+          Prefer?: parameters["preferParams"];
+        };
+      };
+      responses: {
+        /** OK */
+        200: unknown;
+      };
+    };
+  };
+  "/rpc/fn_list": {
+    post: {
+      parameters: {
+        body: {
+          args: {
+            /** Format: character varying */
+            vname: string;
+          };
+        };
+        header: {
+          /** Preference */
+          Prefer?: parameters["preferParams"];
+        };
+      };
+      responses: {
+        /** OK */
+        200: unknown;
+      };
+    };
+  };
+  "/rpc/getsyllabus": {
+    post: {
+      parameters: {
+        body: {
+          args: {
+            /** Format: integer */
+            paper_idd: number;
+          };
+        };
+        header: {
+          /** Preference */
+          Prefer?: parameters["preferParams"];
+        };
+      };
+      responses: {
+        /** OK */
+        200: unknown;
+      };
+    };
+  };
 }
 
 export interface definitions {
+  /** @description Full list of countries. */
+  countries: {
+    /**
+     * Format: bigint
+     * @description Note:
+     * This is a Primary Key.<pk/>
+     */
+    id: number;
+    /**
+     * Format: text
+     * @description Full country name.
+     */
+    name?: string;
+    /**
+     * Format: text
+     * @description ISO 3166-1 alpha-2 code.
+     */
+    iso2: string;
+    /**
+     * Format: text
+     * @description ISO 3166-1 alpha-3 code.
+     */
+    iso3?: string;
+    /**
+     * Format: text
+     * @description Local variation of the name.
+     */
+    local_name?: string;
+    /**
+     * Format: public.continents
+     * @enum {string}
+     */
+    continent?:
+      | "Africa"
+      | "Antarctica"
+      | "Asia"
+      | "Europe"
+      | "Oceania"
+      | "North America"
+      | "South America";
+  };
+  exam: {
+    /**
+     * Format: bigint
+     * @description Note:
+     * This is a Primary Key.<pk/>
+     */
+    id: number;
+    /**
+     * Format: timestamp with time zone
+     * @default now()
+     */
+    created_at?: string;
+    /**
+     * Format: timestamp with time zone
+     * @default now()
+     */
+    updated_at?: string;
+    /** Format: character varying */
+    exame_name?: string;
+    /** Format: character varying */
+    state_or_central?: string;
+    /** Format: character varying */
+    regular_or_random?: string;
+    /** Format: character varying */
+    job_or_entrance?: string;
+  };
+  headings: {
+    /**
+     * Format: bigint
+     * @description Note:
+     * This is a Primary Key.<pk/>
+     */
+    id: number;
+    /**
+     * Format: timestamp with time zone
+     * @default now()
+     */
+    created_at?: string;
+    /**
+     * Format: timestamp with time zone
+     * @default now()
+     */
+    updated_at?: string;
+    /** Format: text */
+    main_topic?: string;
+    /**
+     * Format: bigint
+     * @description Note:
+     * This is a Foreign Key to `papers.id`.<fk table='papers' column='id'/>
+     */
+    paper_id?: number;
+    /** Format: bigint */
+    sequence?: number;
+  };
+  papers: {
+    /**
+     * Format: bigint
+     * @description Note:
+     * This is a Primary Key.<pk/>
+     */
+    id: number;
+    /**
+     * Format: timestamp with time zone
+     * @default now()
+     */
+    created_at?: string;
+    /**
+     * Format: timestamp with time zone
+     * @default now()
+     */
+    updated_at?: string;
+    /** Format: text */
+    paper_name?: string;
+    /** Format: boolean */
+    is_multiple_subjects?: boolean;
+    /**
+     * Format: bigint
+     * @description Note:
+     * This is a Foreign Key to `exam.id`.<fk table='exam' column='id'/>
+     */
+    exam_id?: number;
+  };
+  posts: {
+    /**
+     * Format: bigint
+     * @description Note:
+     * This is a Primary Key.<pk/>
+     */
+    id: number;
+    /**
+     * Format: timestamp with time zone
+     * @default now()
+     */
+    created_at?: string;
+    /**
+     * Format: timestamp with time zone
+     * @default now()
+     */
+    updated_at?: string;
+    /** Format: text */
+    post?: string;
+    /**
+     * Format: bigint
+     * @description Note:
+     * This is a Foreign Key to `subheadings.id`.<fk table='subheadings' column='id'/>
+     */
+    subheading_id?: number;
+    /**
+     * Format: uuid
+     * @description Note:
+     * This is a Foreign Key to `profiles.id`.<fk table='profiles' column='id'/>
+     */
+    created_by?: string;
+  };
   profiles: {
     /**
-     * Note:
+     * Format: uuid
+     * @description Note:
      * This is a Primary Key.<pk/>
      */
     id: string;
+    /**
+     * Format: timestamp with time zone
+     * @default now()
+     */
     updated_at?: string;
+    /** Format: text */
     username?: string;
+    /** Format: text */
     avatar_url?: string;
+    /** Format: text */
     website?: string;
+    /** Format: text */
+    role?: string;
+    /** Format: text */
+    email?: string;
+  };
+  questionbank: {
+    /**
+     * Format: bigint
+     * @description Note:
+     * This is a Primary Key.<pk/>
+     */
+    id: number;
+    /**
+     * Format: timestamp with time zone
+     * @default now()
+     */
+    created_at?: string;
+    /**
+     * Format: timestamp with time zone
+     * @default now()
+     */
+    updated_at?: string;
+    /** Format: bigint */
+    sequence?: number;
+    /** Format: text */
+    question_content?: string;
+    /** Format: text */
+    search_keys?: string;
+    /** Format: bigint */
+    year?: number;
+    /**
+     * Format: bigint
+     * @description Note:
+     * This is a Foreign Key to `papers.id`.<fk table='papers' column='id'/>
+     */
+    paper_id?: number;
+    /** Format: text */
+    remark?: string;
+    /**
+     * Format: uuid
+     * @description Note:
+     * This is a Foreign Key to `profiles.id`.<fk table='profiles' column='id'/>
+     */
+    created_by?: string;
+  };
+  questionbank_old: {
+    /**
+     * Format: bigint
+     * @description Note:
+     * This is a Primary Key.<pk/>
+     */
+    id: number;
+    /**
+     * Format: timestamp with time zone
+     * @default now()
+     */
+    created_at?: string;
+    /**
+     * Format: timestamp with time zone
+     * @default now()
+     */
+    updated_at?: string;
+    /** Format: bigint */
+    sequence?: number;
+    /** Format: text */
+    question_content?: string;
+    /** Format: text */
+    search_keys?: string;
+    /** Format: bigint */
+    year?: number;
+    /**
+     * Format: bigint
+     * @description Note:
+     * This is a Foreign Key to `papers.id`.<fk table='papers' column='id'/>
+     */
+    paper_id?: number;
+    /** Format: text */
+    remark?: string;
+    /**
+     * Format: uuid
+     * @description Note:
+     * This is a Foreign Key to `profiles.id`.<fk table='profiles' column='id'/>
+     */
+    created_by?: string;
+  };
+  sharedpost: {
+    /**
+     * Format: bigint
+     * @description Note:
+     * This is a Primary Key.<pk/>
+     */
+    id: number;
+    /**
+     * Format: timestamp with time zone
+     * @default now()
+     */
+    created_at?: string;
+    /**
+     * Format: timestamp with time zone
+     * @default now()
+     */
+    updated_at?: string;
+    /**
+     * Format: bigint
+     * @description Note:
+     * This is a Foreign Key to `posts.id`.<fk table='posts' column='id'/>
+     */
+    post_id?: number;
+    /**
+     * Format: uuid
+     * @description Note:
+     * This is a Foreign Key to `profiles.id`.<fk table='profiles' column='id'/>
+     */
+    shared_with?: string;
+    /**
+     * Format: bigint
+     * @description Note:
+     * This is a Foreign Key to `subheadings.id`.<fk table='subheadings' column='id'/>
+     */
+    subheading_id?: number;
+    /**
+     * Format: boolean
+     * @description This post is shared to public or not
+     */
+    is_public?: boolean;
+  };
+  subheadingquestionlink: {
+    /**
+     * Format: bigint
+     * @description Note:
+     * This is a Primary Key.<pk/>
+     */
+    id: number;
+    /**
+     * Format: timestamp with time zone
+     * @default now()
+     */
+    created_at?: string;
+    /**
+     * Format: timestamp with time zone
+     * @default now()
+     */
+    updated_at?: string;
+    /**
+     * Format: uuid
+     * @description Note:
+     * This is a Foreign Key to `profiles.id`.<fk table='profiles' column='id'/>
+     */
+    created_by?: string;
+    /**
+     * Format: bigint
+     * @description Note:
+     * This is a Foreign Key to `subheadings.id`.<fk table='subheadings' column='id'/>
+     */
+    subheading_id?: number;
+    /**
+     * Format: bigint
+     * @description Note:
+     * This is a Foreign Key to `questionbank.id`.<fk table='questionbank' column='id'/>
+     */
+    questionbank_id?: number;
+    /**
+     * Format: bigint
+     * @description heading reference
+     *
+     * Note:
+     * This is a Foreign Key to `headings.id`.<fk table='headings' column='id'/>
+     */
+    heading_id?: number;
+  };
+  subheadings: {
+    /**
+     * Format: bigint
+     * @description
+     * let { data: subheadings, error } = await supabase
+     *   .from('subheadings')
+     *   .select('idmmmm')
+     *
+     *
+     * Note:
+     * This is a Primary Key.<pk/>
+     */
+    id: number;
+    /**
+     * Format: timestamp with time zone
+     * @default now()
+     */
+    created_at?: string;
+    /**
+     * Format: timestamp with time zone
+     * @default now()
+     */
+    updated_at?: string;
+    /** Format: text */
+    topic?: string;
+    /**
+     * Format: bigint
+     * @description Note:
+     * This is a Foreign Key to `headings.id`.<fk table='headings' column='id'/>
+     */
+    main_topic_id?: number;
+    /** Format: bigint */
+    sequence?: number;
+  };
+  subheadings_view: {
+    /**
+     * Format: bigint
+     * @description Note:
+     * This is a Primary Key.<pk/>
+     */
+    subheading_id?: number;
+    /**
+     * Format: bigint
+     * @description Note:
+     * This is a Foreign Key to `headings.id`.<fk table='headings' column='id'/>
+     */
+    main_topic_id?: number;
+    /** Format: text */
+    topic?: string;
+    /** Format: bigint */
+    subheading_sequence?: number;
+    /**
+     * Format: bigint
+     * @description Note:
+     * This is a Primary Key.<pk/>
+     */
+    heading_id?: number;
+    /** Format: text */
+    main_topic?: string;
+    /** Format: bigint */
+    heading_sequence?: number;
+    /**
+     * Format: bigint
+     * @description Note:
+     * This is a Foreign Key to `papers.id`.<fk table='papers' column='id'/>
+     */
+    paper_id?: number;
+  };
+  userfiles: {
+    /**
+     * Format: uuid
+     * @description Note:
+     * This is a Primary Key.<pk/>
+     * This is a Foreign Key to `profiles.id`.<fk table='profiles' column='id'/>
+     */
+    id: string;
+    /**
+     * Format: timestamp with time zone
+     * @default now()
+     */
+    created_at?: string;
+    /** Format: text */
+    url?: string;
   };
 }
 
 export interface parameters {
-  /** Preference */
+  /**
+   * @description Preference
+   * @enum {string}
+   */
   preferParams: "params=single-object";
-  /** Preference */
+  /**
+   * @description Preference
+   * @enum {string}
+   */
   preferReturn: "return=representation" | "return=minimal" | "return=none";
-  /** Preference */
+  /**
+   * @description Preference
+   * @enum {string}
+   */
   preferCount: "count=none";
-  /** Filtering Columns */
+  /** @description Filtering Columns */
   select: string;
-  /** On Conflict */
+  /** @description On Conflict */
   on_conflict: string;
-  /** Ordering */
+  /** @description Ordering */
   order: string;
-  /** Limiting and Pagination */
+  /** @description Limiting and Pagination */
   range: string;
-  /** Limiting and Pagination */
+  /**
+   * @description Limiting and Pagination
+   * @default items
+   */
   rangeUnit: string;
-  /** Limiting and Pagination */
+  /** @description Limiting and Pagination */
   offset: string;
-  /** Limiting and Pagination */
+  /** @description Limiting and Pagination */
   limit: string;
-  /** profiles */
+  /** @description countries */
+  "body.countries": definitions["countries"];
+  /** Format: bigint */
+  "rowFilter.countries.id": string;
+  /**
+   * Format: text
+   * @description Full country name.
+   */
+  "rowFilter.countries.name": string;
+  /**
+   * Format: text
+   * @description ISO 3166-1 alpha-2 code.
+   */
+  "rowFilter.countries.iso2": string;
+  /**
+   * Format: text
+   * @description ISO 3166-1 alpha-3 code.
+   */
+  "rowFilter.countries.iso3": string;
+  /**
+   * Format: text
+   * @description Local variation of the name.
+   */
+  "rowFilter.countries.local_name": string;
+  /** Format: public.continents */
+  "rowFilter.countries.continent": string;
+  /** @description exam */
+  "body.exam": definitions["exam"];
+  /** Format: bigint */
+  "rowFilter.exam.id": string;
+  /** Format: timestamp with time zone */
+  "rowFilter.exam.created_at": string;
+  /** Format: timestamp with time zone */
+  "rowFilter.exam.updated_at": string;
+  /** Format: character varying */
+  "rowFilter.exam.exame_name": string;
+  /** Format: character varying */
+  "rowFilter.exam.state_or_central": string;
+  /** Format: character varying */
+  "rowFilter.exam.regular_or_random": string;
+  /** Format: character varying */
+  "rowFilter.exam.job_or_entrance": string;
+  /** @description headings */
+  "body.headings": definitions["headings"];
+  /** Format: bigint */
+  "rowFilter.headings.id": string;
+  /** Format: timestamp with time zone */
+  "rowFilter.headings.created_at": string;
+  /** Format: timestamp with time zone */
+  "rowFilter.headings.updated_at": string;
+  /** Format: text */
+  "rowFilter.headings.main_topic": string;
+  /** Format: bigint */
+  "rowFilter.headings.paper_id": string;
+  /** Format: bigint */
+  "rowFilter.headings.sequence": string;
+  /** @description papers */
+  "body.papers": definitions["papers"];
+  /** Format: bigint */
+  "rowFilter.papers.id": string;
+  /** Format: timestamp with time zone */
+  "rowFilter.papers.created_at": string;
+  /** Format: timestamp with time zone */
+  "rowFilter.papers.updated_at": string;
+  /** Format: text */
+  "rowFilter.papers.paper_name": string;
+  /** Format: boolean */
+  "rowFilter.papers.is_multiple_subjects": string;
+  /** Format: bigint */
+  "rowFilter.papers.exam_id": string;
+  /** @description posts */
+  "body.posts": definitions["posts"];
+  /** Format: bigint */
+  "rowFilter.posts.id": string;
+  /** Format: timestamp with time zone */
+  "rowFilter.posts.created_at": string;
+  /** Format: timestamp with time zone */
+  "rowFilter.posts.updated_at": string;
+  /** Format: text */
+  "rowFilter.posts.post": string;
+  /** Format: bigint */
+  "rowFilter.posts.subheading_id": string;
+  /** Format: uuid */
+  "rowFilter.posts.created_by": string;
+  /** @description profiles */
   "body.profiles": definitions["profiles"];
+  /** Format: uuid */
   "rowFilter.profiles.id": string;
+  /** Format: timestamp with time zone */
   "rowFilter.profiles.updated_at": string;
+  /** Format: text */
   "rowFilter.profiles.username": string;
+  /** Format: text */
   "rowFilter.profiles.avatar_url": string;
+  /** Format: text */
   "rowFilter.profiles.website": string;
+  /** Format: text */
+  "rowFilter.profiles.role": string;
+  /** Format: text */
+  "rowFilter.profiles.email": string;
+  /** @description questionbank */
+  "body.questionbank": definitions["questionbank"];
+  /** Format: bigint */
+  "rowFilter.questionbank.id": string;
+  /** Format: timestamp with time zone */
+  "rowFilter.questionbank.created_at": string;
+  /** Format: timestamp with time zone */
+  "rowFilter.questionbank.updated_at": string;
+  /** Format: bigint */
+  "rowFilter.questionbank.sequence": string;
+  /** Format: text */
+  "rowFilter.questionbank.question_content": string;
+  /** Format: text */
+  "rowFilter.questionbank.search_keys": string;
+  /** Format: bigint */
+  "rowFilter.questionbank.year": string;
+  /** Format: bigint */
+  "rowFilter.questionbank.paper_id": string;
+  /** Format: text */
+  "rowFilter.questionbank.remark": string;
+  /** Format: uuid */
+  "rowFilter.questionbank.created_by": string;
+  /** @description questionbank_old */
+  "body.questionbank_old": definitions["questionbank_old"];
+  /** Format: bigint */
+  "rowFilter.questionbank_old.id": string;
+  /** Format: timestamp with time zone */
+  "rowFilter.questionbank_old.created_at": string;
+  /** Format: timestamp with time zone */
+  "rowFilter.questionbank_old.updated_at": string;
+  /** Format: bigint */
+  "rowFilter.questionbank_old.sequence": string;
+  /** Format: text */
+  "rowFilter.questionbank_old.question_content": string;
+  /** Format: text */
+  "rowFilter.questionbank_old.search_keys": string;
+  /** Format: bigint */
+  "rowFilter.questionbank_old.year": string;
+  /** Format: bigint */
+  "rowFilter.questionbank_old.paper_id": string;
+  /** Format: text */
+  "rowFilter.questionbank_old.remark": string;
+  /** Format: uuid */
+  "rowFilter.questionbank_old.created_by": string;
+  /** @description sharedpost */
+  "body.sharedpost": definitions["sharedpost"];
+  /** Format: bigint */
+  "rowFilter.sharedpost.id": string;
+  /** Format: timestamp with time zone */
+  "rowFilter.sharedpost.created_at": string;
+  /** Format: timestamp with time zone */
+  "rowFilter.sharedpost.updated_at": string;
+  /** Format: bigint */
+  "rowFilter.sharedpost.post_id": string;
+  /** Format: uuid */
+  "rowFilter.sharedpost.shared_with": string;
+  /** Format: bigint */
+  "rowFilter.sharedpost.subheading_id": string;
+  /**
+   * Format: boolean
+   * @description This post is shared to public or not
+   */
+  "rowFilter.sharedpost.is_public": string;
+  /** @description subheadingquestionlink */
+  "body.subheadingquestionlink": definitions["subheadingquestionlink"];
+  /** Format: bigint */
+  "rowFilter.subheadingquestionlink.id": string;
+  /** Format: timestamp with time zone */
+  "rowFilter.subheadingquestionlink.created_at": string;
+  /** Format: timestamp with time zone */
+  "rowFilter.subheadingquestionlink.updated_at": string;
+  /** Format: uuid */
+  "rowFilter.subheadingquestionlink.created_by": string;
+  /** Format: bigint */
+  "rowFilter.subheadingquestionlink.subheading_id": string;
+  /** Format: bigint */
+  "rowFilter.subheadingquestionlink.questionbank_id": string;
+  /**
+   * Format: bigint
+   * @description heading reference
+   */
+  "rowFilter.subheadingquestionlink.heading_id": string;
+  /** @description subheadings */
+  "body.subheadings": definitions["subheadings"];
+  /**
+   * Format: bigint
+   * @description
+   * let { data: subheadings, error } = await supabase
+   *   .from('subheadings')
+   *   .select('idmmmm')
+   */
+  "rowFilter.subheadings.id": string;
+  /** Format: timestamp with time zone */
+  "rowFilter.subheadings.created_at": string;
+  /** Format: timestamp with time zone */
+  "rowFilter.subheadings.updated_at": string;
+  /** Format: text */
+  "rowFilter.subheadings.topic": string;
+  /** Format: bigint */
+  "rowFilter.subheadings.main_topic_id": string;
+  /** Format: bigint */
+  "rowFilter.subheadings.sequence": string;
+  /** @description subheadings_view */
+  "body.subheadings_view": definitions["subheadings_view"];
+  /** Format: bigint */
+  "rowFilter.subheadings_view.subheading_id": string;
+  /** Format: bigint */
+  "rowFilter.subheadings_view.main_topic_id": string;
+  /** Format: text */
+  "rowFilter.subheadings_view.topic": string;
+  /** Format: bigint */
+  "rowFilter.subheadings_view.subheading_sequence": string;
+  /** Format: bigint */
+  "rowFilter.subheadings_view.heading_id": string;
+  /** Format: text */
+  "rowFilter.subheadings_view.main_topic": string;
+  /** Format: bigint */
+  "rowFilter.subheadings_view.heading_sequence": string;
+  /** Format: bigint */
+  "rowFilter.subheadings_view.paper_id": string;
+  /** @description userfiles */
+  "body.userfiles": definitions["userfiles"];
+  /** Format: uuid */
+  "rowFilter.userfiles.id": string;
+  /** Format: timestamp with time zone */
+  "rowFilter.userfiles.created_at": string;
+  /** Format: text */
+  "rowFilter.userfiles.url": string;
 }
 
 export interface operations {}

@@ -8,6 +8,7 @@ import { usePostContext } from "../../state/PostContext";
 import { useAppContext } from "../../state/state";
 import { Headings, Papers, Subheading } from "../../types/myTypes";
 import PageWithLayoutType from "../../types/pageWithLayout";
+import { definitions } from "../../types/supabase";
 
 type x = {
   id: number | undefined;
@@ -133,23 +134,45 @@ export const getStaticProps = async ({ params }: any) => {
   let subheadingsMap = new Map<Headings | undefined, Subheading[] | null>();
 
   for (let index = 0; index < data!.length; index++) {
-    const subheading = await supabase
-      .from<Subheading>("subheadings")
+    //USING OPENAPI TYPES
+    const { data: subheading, error } = await supabase
+      .from<definitions["subheadings"]>("subheadings")
       .select(
         ` id,topic,sequence,
-        main_topic_id:headings!topics_main_topic_id_fkey
+      main_topic_id:headings!topics_main_topic_id_fkey
+      (
+        id,main_topic,
+        paper_id
         (
-          id,main_topic,
-          paper_id:papers!mainTopics_paper_id_fkey
-          (
-            id,
-            paper_name
-          )
-          )
-           `
+          id,
+          paper_name
+        )
+        )
+         `
       )
       .eq("main_topic_id", data![index].id);
-    subheadingsMap.set(data![index], subheading.data);
+
+    //MANUAL QUERY
+    // const subheading = await supabase
+    //   .from<Subheading>("subheadings")
+    //   .select(
+    //     ` id,topic,sequence,
+    //     main_topic_id:headings!topics_main_topic_id_fkey
+    //     (
+    //       id,main_topic,
+    //       paper_id:papers!mainTopics_paper_id_fkey
+    //       (
+    //         id,
+    //         paper_name
+    //       )
+    //       )
+    //        `
+    //   )
+    //   .eq("main_topic_id", data![index].id);
+    if (error) {
+      console.log("error is ", error);
+    }
+    subheadingsMap.set(data![index], subheading);
   }
   const array = Array.from(subheadingsMap, ([name, value]) => ({
     name,
