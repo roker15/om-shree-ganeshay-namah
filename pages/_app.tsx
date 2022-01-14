@@ -28,9 +28,9 @@ type AppLayoutProps = {
 };
 ReactGA.initialize("G-H6M6EKJRJ1");
 ReactGA.send({ hitType: "pageview", page: "/" });
+ReactGA.send("pageview");
 function MyApp({ Component, pageProps }: AppLayoutProps) {
   useEffect(() => {
-    // ReactGA.send("pageview");
   });
   const Layout = Component.layout || (({ children }) => <>{children}</>);
   return (
