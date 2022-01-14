@@ -150,7 +150,7 @@ function tab1Ui(handleChange: (event: any) => void, data: Papers[]) {
         </Text>{" "}
         online in Editor
       </Text>
-      <Text fontSize={"medium"} size={"md"} mb="24" color="gray.600">
+      <Text fontSize={"medium"}  mb="24" color="gray.600">
         (Strictly as per Syllabus)
       </Text>
 
