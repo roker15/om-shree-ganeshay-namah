@@ -27,7 +27,7 @@ type AppLayoutProps = {
 
 function MyApp({ Component, pageProps }: AppLayoutProps) {
   useEffect(() => {
-    ReactGA.initialize("G-36JKZF5XPX");
+    ReactGA.initialize("UA-217198026-1");
     ReactGA.pageview(window.location.pathname + window.location.search);
   });
   const Layout = Component.layout || (({ children }) => <>{children}</>);
