@@ -9,7 +9,7 @@ import { PostContextWrapper } from "../state/PostContext";
 import { AppContextWrapper } from "../state/state";
 import "../styles/globals.css";
 import PageWithLayoutType from "../types/pageWithLayout";
-// import ReactGA from "react-ga4";
+import ReactGA4 from "react-ga4";
 
 
 const colors = {
@@ -50,6 +50,7 @@ function MyApp({ Component, pageProps }: AppLayoutProps) {
               <PostContextWrapper>
                 <Layout>
                   <Component {...pageProps} />
+                  
                 </Layout>
               </PostContextWrapper>
             </AuthProvider>

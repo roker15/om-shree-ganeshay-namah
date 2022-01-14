@@ -108,7 +108,7 @@ const Home: React.FC<ProfileListProps> = ({ data }) => {
                       <Button onClick={() => navigateTo("./createSubheading")}>Create New Subheading</Button>
                       <Button onClick={() => navigateTo("./createQuestionBank")}>Create Question Bank</Button>
                     </ButtonGroup>
-                    <MyDropzone/>
+                    <MyDropzone />
                   </Box>
                 ) : null}
               </VStack>
@@ -143,6 +143,7 @@ export default Home;
 function tab1Ui(handleChange: (event: any) => void, data: Papers[]) {
   return (
     <VStack>
+      
       <Text fontSize={"2xl"} mt="8" color="gray.600" fontFamily={"Comic Sans MS"}>
         Select Exam Paper → Select Syllabus Topic → Make Notes
         <Text as="span" color="gray.400">
@@ -150,10 +151,9 @@ function tab1Ui(handleChange: (event: any) => void, data: Papers[]) {
         </Text>{" "}
         online in Editor
       </Text>
-      <Text fontSize={"medium"}  mb="24" color="gray.600">
+      <Text fontSize={"medium"} mb="24" color="gray.600">
         (Strictly as per Syllabus)
       </Text>
-
       <Box>
         <Stack>
           <Select
