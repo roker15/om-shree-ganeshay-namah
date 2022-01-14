@@ -3,12 +3,16 @@ import Head from "next/head";
 import React, { useEffect } from "react";
 //this import is for react page editor
 // import '@react-page/editor/lib/index.css';
-import ReactGA from "react-ga";
+// import ReactGA from "react-ga";
 import { AuthProvider } from "../state/Authcontext";
 import { PostContextWrapper } from "../state/PostContext";
 import { AppContextWrapper } from "../state/state";
 import "../styles/globals.css";
 import PageWithLayoutType from "../types/pageWithLayout";
+import ReactGA from "react-ga4";
+
+ReactGA.initialize("your GA measurement id");
+ReactGA.send("pageview");
 
 const colors = {
   brand: {
@@ -26,7 +30,7 @@ type AppLayoutProps = {
 function MyApp({ Component, pageProps }: AppLayoutProps) {
   useEffect(() => {
     ReactGA.initialize("G-H6M6EKJRJ1");
-    ReactGA.pageview(window.location.pathname + window.location.search);
+    ReactGA.send(window.location.pathname + window.location.search);
   });
   const Layout = Component.layout || (({ children }) => <>{children}</>);
   return (
