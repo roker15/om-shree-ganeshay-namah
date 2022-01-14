@@ -193,7 +193,7 @@ const Basic: React.FC = () => {
     sequence: number;
   }
 
-  async function onSubmit(values: FormValues) {
+  async function onSubmit(values: any) {
     if (isEditMode == false) {
       const { data, error } = await supabase.from<Headings>("headings").insert({
         main_topic: values.heading,
