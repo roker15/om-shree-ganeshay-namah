@@ -69,7 +69,7 @@ const Home: React.FC<ProfileListProps> = ({ data }) => {
           💬 Interact With Us At{" "}
         </Text>
         <ButtonGroup size="sm" isAttached variant="solid  " mx="2" mt="2" mb="2">
-          <Button w="28" variant="solid" colorScheme="whatsapp" leftIcon={<FaWhatsapp />}>
+          <Button w="28" variant="with-shadow"  leftIcon={<FaWhatsapp />}>
             WhatsApp
           </Button>
           <Button colorScheme="whatsapp" variant="solid">
