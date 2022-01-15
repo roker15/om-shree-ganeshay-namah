@@ -3,7 +3,7 @@ import { extendTheme } from '@chakra-ui/react'
 import { mode } from '@chakra-ui/theme-tools'
 
 // Version 1: Using objects
-const theme = extendTheme({
+const styles = {
   styles: {
     global: {
       // styles for the `body`
@@ -20,7 +20,7 @@ const theme = extendTheme({
       },
     },
   },
-})
+}
 
 // Version 2: Using functions
 const overrides = extendTheme({
@@ -35,4 +35,4 @@ const overrides = extendTheme({
     }),
   },
 })
-export default theme;
+export default styles;

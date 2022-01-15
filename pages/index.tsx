@@ -60,7 +60,7 @@ const Home: React.FC<ProfileListProps> = ({ data }) => {
   if (data && data.length !== 0) {
     return (
       <Container maxW="container.lg" pt="2" align="center">
-        <Text color="gray.600">
+        <Text color="brand.700">
           <Text as="b">8000+</Text> UPSC Students Using Qlook For making{" "}
           <Text bg="blue.50" p="0.5" as="span" fontWeight="medium">
             online
@@ -86,6 +86,7 @@ const Home: React.FC<ProfileListProps> = ({ data }) => {
             958-8701-073
           </Button>
         </ButtonGroup> */}
+
         <Tabs orientation="horizontal" align="start" variant="enclosed-colored">
           <TabList>
             <Tab>Online Notes Making</Tab>
@@ -145,12 +146,13 @@ export default Home;
 function tab1Ui(handleChange: (event: any) => void, data: Papers[]) {
   return (
     <VStack>
-      <Grid w="80vh"  autoFlow="column" bg="pink.100" p="4">
-        <Flex  bg="pink.300" justifyContent="space-between" p="2">
-          <Text fontSize={"medium"} bg="gray.100" >
+      <Button variant="with-shadow">Button</Button>
+      <Grid w="80vh" autoFlow="column" bg="pink.100" p="4">
+        <Flex bg="pink.300" justifyContent="space-between" p="2">
+          <Text fontSize={"medium"} bg="gray.100" color={"b"}>
             (Strictly1)
           </Text>
-          <Text fontSize={"medium"} bg="gray.100" >
+          <Text fontSize={"medium"} bg="gray.100">
             (Strictly1)
           </Text>
         </Flex>
@@ -161,7 +163,6 @@ function tab1Ui(handleChange: (event: any) => void, data: Papers[]) {
         <Text fontSize={"medium"} bg="gray.100">
           (Strictly 3)
         </Text>
-       
       </Grid>
       <Text fontSize={"2xl"} mt="8" color="gray.600" fontFamily={"Comic Sans MS"}>
         Select Exam Paper → Select Syllabus Topic → Make Notes

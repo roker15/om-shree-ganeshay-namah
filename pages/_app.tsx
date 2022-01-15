@@ -1,4 +1,4 @@
-import { ChakraProvider, extendTheme } from "@chakra-ui/react";
+import { ChakraProvider } from "@chakra-ui/react";
 import Head from "next/head";
 import React, { useEffect } from "react";
 //this import is for react page editor
@@ -11,21 +11,17 @@ import "../styles/globals.css";
 import PageWithLayoutType from "../types/pageWithLayout";
 import ReactGA4 from "react-ga4";
 // Component style overrides
-import Button from "../theme/components/button";
+import theme1 from "../theme/components/button";
+import finalTheme from "../theme/index";
+import { theme } from "../theme/theme";
 
 const colors = {
   brand: {
-    900: "#e6d711",
+    900: "#5c11e6",
     800: "#153e75",
     700: "#2a69ac",
   },
 };
-const theme = extendTheme({
-  components: {
-    Button,
-    // Other components go here
-  },
-});
 type AppLayoutProps = {
   Component: PageWithLayoutType;
   pageProps: any;
