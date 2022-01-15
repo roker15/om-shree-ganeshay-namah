@@ -4,6 +4,8 @@ import {
   Button,
   ButtonGroup,
   Container,
+  Flex,
+  Grid,
   Heading,
   Link,
   Select,
@@ -65,7 +67,7 @@ const Home: React.FC<ProfileListProps> = ({ data }) => {
           </Text>{" "}
           Notes 📝{" "}
         </Text>
-        <Text as="span" color="gray.600">
+        {/* <Text as="span" color="gray.600">
           💬 Interact With Us At{" "}
         </Text>
         <ButtonGroup size="sm" isAttached variant="solid  " mx="2" mt="2" mb="2">
@@ -77,13 +79,13 @@ const Home: React.FC<ProfileListProps> = ({ data }) => {
           </Button>
         </ButtonGroup>
         <ButtonGroup size="sm" isAttached variant="solid" mb="8" mt="2">
-          <Button w="28" variant="solid" colorScheme="telegram" leftIcon={<FaTelegram />}>
+          <Button w="28" variant="solid" color="brand.900"  leftIcon={<FaTelegram />}>
             Telegram
           </Button>
           <Button variant="solid" colorScheme="telegram">
             958-8701-073
           </Button>
-        </ButtonGroup>
+        </ButtonGroup> */}
         <Tabs orientation="horizontal" align="start" variant="enclosed-colored">
           <TabList>
             <Tab>Online Notes Making</Tab>
@@ -143,7 +145,24 @@ export default Home;
 function tab1Ui(handleChange: (event: any) => void, data: Papers[]) {
   return (
     <VStack>
-      
+      <Grid w="80vh"  autoFlow="column" bg="pink.100" p="4">
+        <Flex  bg="pink.300" justifyContent="space-between" p="2">
+          <Text fontSize={"medium"} bg="gray.100" >
+            (Strictly1)
+          </Text>
+          <Text fontSize={"medium"} bg="gray.100" >
+            (Strictly1)
+          </Text>
+        </Flex>
+
+        <Text pos={"absolute"} fontSize={"medium"} bg="gray.100">
+          (Strictly2 )
+        </Text>
+        <Text fontSize={"medium"} bg="gray.100">
+          (Strictly 3)
+        </Text>
+       
+      </Grid>
       <Text fontSize={"2xl"} mt="8" color="gray.600" fontFamily={"Comic Sans MS"}>
         Select Exam Paper → Select Syllabus Topic → Make Notes
         <Text as="span" color="gray.400">
