@@ -147,23 +147,7 @@ function tab1Ui(handleChange: (event: any) => void, data: Papers[]) {
   return (
     <VStack>
       <Button variant="with-shadow">Button</Button>
-      <Grid w="80vh" autoFlow="column" bg="pink.100" p="4">
-        <Flex bg="pink.300" justifyContent="space-between" p="2">
-          <Text fontSize={"medium"} bg="gray.100" color={"b"}>
-            (Strictly1)
-          </Text>
-          <Text fontSize={"medium"} bg="gray.100">
-            (Strictly1)
-          </Text>
-        </Flex>
-
-        <Text pos={"absolute"} fontSize={"medium"} bg="gray.100">
-          (Strictly2 )
-        </Text>
-        <Text fontSize={"medium"} bg="gray.100">
-          (Strictly 3)
-        </Text>
-      </Grid>
+      
       <Text fontSize={"2xl"} mt="8" color="gray.600" fontFamily={"Comic Sans MS"}>
         Select Exam Paper → Select Syllabus Topic → Make Notes
         <Text as="span" color="gray.400">
@@ -194,13 +178,13 @@ function tab1Ui(handleChange: (event: any) => void, data: Papers[]) {
           </Select>
         </Stack>
       </Box>
-      <Text bg="blue.50" p="4">
+      {/* <Text bg="blue.50" p="4">
         Click Youtube{" "}
         <Link color="blue.600" isExternal fontWeight="bold" href="https://www.youtube.com/watch?v=iZFosT2a9m8">
           Video Link{" "}
         </Link>
         to Learn How to make online notes
-      </Text>
+      </Text> */}
     </VStack>
   );
 }
