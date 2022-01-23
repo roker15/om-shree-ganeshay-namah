@@ -1,13 +1,10 @@
 import {
-  Avatar,
   Box,
   Button,
   ButtonGroup,
   Container,
   Flex,
-  Grid,
-  Heading,
-  Link,
+  Grid, Link,
   Select,
   Stack,
   Tab,
@@ -17,13 +14,10 @@ import {
   Tabs,
   Text,
   useColorMode,
-  VStack,
+  VStack
 } from "@chakra-ui/react";
-import { SupabaseClient } from "@supabase/supabase-js";
 import { useRouter } from "next/dist/client/router";
 import React, { useState } from "react";
-import Dropzone from "react-dropzone";
-import { FaTelegram, FaWhatsapp } from "react-icons/fa";
 import { MyDropzone } from "../components/MyDropzone";
 import QuestionBanks from "../components/QuestionBank";
 import LayoutWithTopNavbar from "../layout/LayoutWithTopNavbar";
