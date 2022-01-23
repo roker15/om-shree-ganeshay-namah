@@ -90,10 +90,7 @@ const MobileNav = ({ onOpen, ...rest }: MobileProps) => {
       </LinkBox>
 
       <Heading as="h2" size="md" display={{ base: "none", md: "block" }}>
-        Welcome to Qlook{" "}
-      </Heading>
-      <HStack spacing={{ base: "0", md: "6" }}>
-        {!profile ? (
+        Welcome to Jionote {" "} </Heading> <HStack spacing={{ base: "0", md: "6" }}> {!profile ? (
           <Button
             border="0px"
             colorScheme="google"
