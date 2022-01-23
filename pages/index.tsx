@@ -146,7 +146,6 @@ export default Home;
 function tab1Ui(handleChange: (event: any) => void, data: Papers[]) {
   return (
     <VStack>
-      <Button variant="with-shadow">Button</Button>
       
       <Text fontSize={"2xl"} mt="8" color="gray.600" fontFamily={"Comic Sans MS"}>
         Select Exam Paper → Select Syllabus Topic → Make Notes
