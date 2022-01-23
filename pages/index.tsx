@@ -61,7 +61,7 @@ const Home: React.FC<ProfileListProps> = ({ data }) => {
     return (
       <Container maxW="container.lg" pt="2" align="center">
         <Text color="brand.700">
-          <Text as="b">8000+</Text> UPSC Students Using Qlook For making{" "}
+          <Text as="b">8000+</Text> UPSC Students Using Jionote For making{" "}
           <Text bg="blue.50" p="0.5" as="span" fontWeight="medium">
             online
           </Text>{" "}
