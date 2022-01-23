@@ -16,11 +16,12 @@ import {
   TabPanels,
   Tabs,
   Text,
+  useColorMode,
   VStack,
 } from "@chakra-ui/react";
 import { SupabaseClient } from "@supabase/supabase-js";
 import { useRouter } from "next/dist/client/router";
-import React from "react";
+import React, { useState } from "react";
 import Dropzone from "react-dropzone";
 import { FaTelegram, FaWhatsapp } from "react-icons/fa";
 import { MyDropzone } from "../components/MyDropzone";
@@ -40,7 +41,8 @@ type ProfileListProps = {
 const Home: React.FC<ProfileListProps> = ({ data }) => {
   const router = useRouter();
   const appContext = useAppContext();
-
+  const [display, setDisplay] = useState("flex");
+  const { toggleColorMode } = useColorMode()
   const handleChange = (event: any) => {
     // event.preventDefault();
     appContext.setPaperId(event.target.value);
@@ -67,6 +69,16 @@ const Home: React.FC<ProfileListProps> = ({ data }) => {
           </Text>{" "}
           Notes 📝{" "}
         </Text>
+        <Box onMouseOver={() => setDisplay("none")} onMouseLeave={() => setDisplay("block")}>
+          {" "}
+          <Button display={display} size="sm" variant="variantoutline">
+            Shadow
+          </Button>
+          <Button size="sm" onClick={toggleColorMode}>
+            Toggle Mode
+          </Button>
+        </Box>
+
         {/* <Text as="span" color="gray.600">
           💬 Interact With Us At{" "}
         </Text>
