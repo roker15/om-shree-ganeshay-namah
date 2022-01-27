@@ -2,6 +2,7 @@ import { Box, Radio, RadioGroup, Select, Stack } from "@chakra-ui/react";
 import React, { useEffect } from "react";
 import { useGetBooks, useGetSyllabusByBookId } from "../../customHookes/networkHooks";
 import { BookResponse } from "../../types/myTypes";
+import Syllabus from "./Syllabus";
 
 const BookFilter: React.FC<{ setParentProps: (x: BookResponse | undefined) => void }> = ({ setParentProps }) => {
   const categories = [
@@ -49,6 +50,7 @@ const BookFilter: React.FC<{ setParentProps: (x: BookResponse | undefined) => vo
     // <Container maxW="container.lg" bg="pink">
 
     <Box>
+      <Syllabus />
       <RadioGroup onChange={setValue} value={value}>
         <Stack direction="row">
           {categories.map((x) => {
