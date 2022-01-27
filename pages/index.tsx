@@ -4,7 +4,8 @@ import {
   ButtonGroup,
   Container,
   Flex,
-  Grid, Link,
+  Grid,
+  Link,
   Select,
   Stack,
   Tab,
@@ -14,10 +15,12 @@ import {
   Tabs,
   Text,
   useColorMode,
-  VStack
+  VStack,
 } from "@chakra-ui/react";
 import { useRouter } from "next/dist/client/router";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
+import BookFilter from "../components/jionote/BookFilter";
+import BookList from "../components/jionote/BookList";
 import { MyDropzone } from "../components/MyDropzone";
 import QuestionBanks from "../components/QuestionBank";
 import LayoutWithTopNavbar from "../layout/LayoutWithTopNavbar";
@@ -25,8 +28,9 @@ import { myInfoLog } from "../lib/mylog";
 import { supabase } from "../lib/supabaseClient";
 import { useAuthContext } from "../state/Authcontext";
 import { useAppContext } from "../state/state";
-import { Papers } from "../types/myTypes";
+import { BookResponse, Papers } from "../types/myTypes";
 import PageWithLayoutType from "../types/pageWithLayout";
+import { definitions } from "../types/supabase";
 
 type ProfileListProps = {
   data: Papers[];
@@ -36,7 +40,12 @@ const Home: React.FC<ProfileListProps> = ({ data }) => {
   const router = useRouter();
   const appContext = useAppContext();
   const [display, setDisplay] = useState("flex");
-  const { toggleColorMode } = useColorMode()
+  const { toggleColorMode } = useColorMode();
+  const [childData, setChildData] = useState<BookResponse | undefined>();
+
+  // useEffect(() => {
+  //   window.alert(childData);
+  // }, [childData]);
   const handleChange = (event: any) => {
     // event.preventDefault();
     appContext.setPaperId(event.target.value);
@@ -59,11 +68,11 @@ const Home: React.FC<ProfileListProps> = ({ data }) => {
         <Text color="brand.700">
           <Text as="b">8000+</Text> UPSC Students Using Jionote For making{" "}
           <Text bg="blue.50" p="0.5" as="span" fontWeight="medium">
-            online
+            online {childData?.book_name}
           </Text>{" "}
           Notes 📝{" "}
         </Text>
-        <Box onMouseOver={() => setDisplay("none")} onMouseLeave={() => setDisplay("block")}>
+        {/* <Box onMouseOver={() => setDisplay("none")} onMouseLeave={() => setDisplay("block")}>
           {" "}
           <Button display={display} size="sm" variant="variantoutline">
             Shadow
@@ -71,8 +80,9 @@ const Home: React.FC<ProfileListProps> = ({ data }) => {
           <Button size="sm" onClick={toggleColorMode}>
             Toggle Mode
           </Button>
-        </Box>
-
+        </Box> */}
+        <BookList setParentProps={(x) => setChildData(x)} />
+        <BookFilter setParentProps={(x) => setChildData(x)}></BookFilter>
         {/* <Text as="span" color="gray.600">
           💬 Interact With Us At{" "}
         </Text>
@@ -152,7 +162,6 @@ export default Home;
 function tab1Ui(handleChange: (event: any) => void, data: Papers[]) {
   return (
     <VStack>
-      
       <Text fontSize={"2xl"} mt="8" color="gray.600" fontFamily={"Comic Sans MS"}>
         Select Exam Paper → Select Syllabus Topic → Make Notes
         <Text as="span" color="gray.400">

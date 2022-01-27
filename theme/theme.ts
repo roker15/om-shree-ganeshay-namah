@@ -1,13 +1,17 @@
 import { extendTheme } from "@chakra-ui/react";
 import { buttons } from "./components/buttons";
 import { globalStyles } from "./globalStyles";
+import { selects } from "./components/selects";
 
 // theme.js
 export const theme = extendTheme({
+  defultProps: {
+    colorScheme: "#ffb193",
+  },
   colors: {
     brand: {
-      900: "#1a09b3",
-      800: "#153e75",
+      primary: "#ffbb93",
+      secondary: "#153e75",
       700: "#2a69ac",
     },
   },
@@ -16,5 +20,7 @@ export const theme = extendTheme({
   },
   components: {
     Button: buttons,
+    Select: selects,
+    
   },
 });
