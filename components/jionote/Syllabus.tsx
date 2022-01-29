@@ -122,9 +122,9 @@ const Syllabus: React.FC<Props> = ({ book, changeFormProps }) => {
                         formMode: "CREATE_SUBHEADING",
                         book_id: book?.id,
                         book_name: book?.book_name,
-                        heading_id: undefined,
-                        heading: undefined,
-                        heading_sequence: undefined,
+                        heading_id: Number(key.split(",")[1]),
+                        heading: key.split(",")[2],
+                        heading_sequence: Number(key.split(",")[0]),
                       })
                     }
                     icon={<MdAdd />}
@@ -172,8 +172,10 @@ const Syllabus: React.FC<Props> = ({ book, changeFormProps }) => {
                 {/* </Circle> */}
               </Flex>
               {value.map((x) => (
-                <Flex as="span" ml="4" key={x.subheading_id} role={"group"}>
-                  <Text casing="capitalize">{x.subheading}</Text>
+                <Flex my="2" ml="4" key={x.subheading_id} role={"group"}>
+                  <Text align="start" casing="capitalize">
+                    {x.subheading}
+                  </Text>
                   <HStack display="none" _groupHover={{ display: "inline" }}>
                     <DeleteAlertDialogue
                       isIconButton={true}
@@ -196,9 +198,12 @@ const Syllabus: React.FC<Props> = ({ book, changeFormProps }) => {
                           formMode: "UPDATE_SUBHEADING",
                           book_id: book?.id,
                           book_name: book?.book_name,
-                          heading_id: Number(key.split(",")[1]),
-                          heading: key.split(",")[2],
-                          heading_sequence: Number(key.split(",")[0]),
+                          heading_id: x.heading_id,
+                          heading: x.heading,
+                          heading_sequence: x.heading_sequence,
+                          subheading_id: x.subheading_id,
+                          subheading: x.subheading,
+                          subheading_sequence: x.subheading_sequence,
                         })
                       }
                       icon={<MdModeEdit />}

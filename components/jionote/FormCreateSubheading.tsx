@@ -38,7 +38,7 @@ const FormCreateSubheading: React.FC<Props> = ({ x }) => {
   // The most beautiful thing is that there will be only 1 request sent to the API,
   // because they use the same SWR key and the request is deduped, cached and shared automatically.
   const { profile } = useAuthContext();
-  
+
   interface FormValues {
     subheading: string | undefined;
     sequence: number | undefined;
@@ -47,25 +47,30 @@ const FormCreateSubheading: React.FC<Props> = ({ x }) => {
     handleSubmit,
     register,
     setValue,
+    reset,
     formState: { errors, isSubmitting },
   } = useForm<FormValues>();
   useEffect(() => {
     if (x && x?.formMode === "UPDATE_SUBHEADING") {
-      setValue("subheading", x.subheading);
-      setValue("sequence", x.subheading_sequence);
+      // setValue("subheading", x.subheading,{ shouldValidate: true });
+      // setValue("sequence", x.subheading_sequence, { shouldValidate: true });
+      reset({
+        subheading: x.subheading,
+        sequence: x.subheading_sequence,
+      });
     } else {
       setValue("subheading", "");
       setValue("sequence", undefined);
     }
-  }, [setValue, x]);
+  }, [reset, setValue, x]);
   const toast = useToast();
 
   async function onSubmit(values: any) {
     if (x?.formMode === "CREATE_SUBHEADING") {
-      console.log("form values are ", { values });
+      console.log("form values are ", { values }, x.heading_id);
       const { data, error } = await supabase.from<definitions["books_subheadings"]>("books_subheadings").insert({
-        books_headings_fk: x?.book_id,
-        subheading: values.heading,
+        books_headings_fk: x?.heading_id,
+        subheading: values.subheading,
         sequence: values.sequence,
       });
       isSubmitting == false;
@@ -88,14 +93,14 @@ const FormCreateSubheading: React.FC<Props> = ({ x }) => {
       const { data, error } = await supabase
         .from<definitions["books_subheadings"]>("books_subheadings")
         .update({
-          subheading: values.heading,
+          subheading: values.subheading,
           sequence: values.sequence,
         })
-        .eq("id", x.heading_id);
+        .eq("id", x.subheading_id);
       isSubmitting == false;
-    
 
       if (data) {
+        mutate([`/book_id_syllabuss/${x?.book_id}`]);
         toast({
           title: "Data updated.",
           //   description: `New Topic----   '${data[0].main_topic}'   updated`,
@@ -107,7 +112,6 @@ const FormCreateSubheading: React.FC<Props> = ({ x }) => {
       }
     }
   }
-
 
   if (!profile) {
     return (

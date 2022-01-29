@@ -35,13 +35,13 @@ const CreateBookSyllabus = () => {
           <BookFilter setParentProps={updateBookProps}></BookFilter>
         </Box>
         <Text>{formProps?.book_name}</Text>
-        <FormCreateHeading x={formProps}></FormCreateHeading>
+        {/* <FormCreateHeading x={formProps}></FormCreateHeading> */}
         {formProps?.formMode === "CREATE_HEADING" || formProps?.formMode === "UPDATE_HEADING" ? (
           <FormCreateHeading x={formProps}></FormCreateHeading>
         ) : formProps?.formMode === "CREATE_SUBHEADING" || formProps?.formMode === "UPDATE_SUBHEADING" ? (
           <FormCreateSubheading x={formProps}></FormCreateSubheading>
         ) : null}
-        <FormCreateHeading x={formProps}></FormCreateHeading>
+        {/* <FormCreateHeading x={formProps}></FormCreateHeading> */}
       </VStack>
     </Flex>
   );

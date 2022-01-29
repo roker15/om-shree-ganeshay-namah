@@ -1,15 +1,16 @@
 import { FormControl, FormErrorMessage, FormLabel } from "@chakra-ui/form-control";
 import {
-    Button, Container,
-    Input,
-    NumberDecrementStepper,
-    NumberIncrementStepper,
-    NumberInput,
-    NumberInputField,
-    NumberInputStepper,
-    Text,
-    useToast,
-    VStack
+  Button,
+  Container,
+  Input,
+  NumberDecrementStepper,
+  NumberIncrementStepper,
+  NumberInput,
+  NumberInputField,
+  NumberInputStepper,
+  Text,
+  useToast,
+  VStack,
 } from "@chakra-ui/react";
 import * as React from "react";
 import { useEffect } from "react";
@@ -31,13 +32,18 @@ const FormCreateHeading: React.FC<Props> = ({ x }) => {
     handleSubmit,
     setValue,
     register,
+    reset,
     formState: { errors, isSubmitting },
   } = useForm<FormValues>();
 
   useEffect(() => {
     if (x && x?.formMode === "UPDATE_HEADING") {
-      setValue("heading", x.heading);
-      setValue("sequence", x.heading_sequence);
+    //   setValue("heading", x.heading), { shouldValidate: true };
+    //   setValue("sequence", x.heading_sequence, { shouldValidate: true });
+      reset({
+        heading: x.heading,
+        sequence: x.heading_sequence,
+      });
     } else {
       setValue("heading", "");
       setValue("sequence", undefined);
@@ -147,7 +153,7 @@ const FormCreateHeading: React.FC<Props> = ({ x }) => {
 
             <FormErrorMessage>{errors.sequence && errors.sequence.message}</FormErrorMessage>
           </FormControl>
-         
+
           <Button variant="solid" colorScheme="yellow" isLoading={isSubmitting} type="submit">
             {x?.formMode === "CREATE_HEADING" ? "Create Heading" : "Update Heading"}
           </Button>
