@@ -38,7 +38,7 @@ const FormCreateHeading: React.FC<Props> = ({ x }) => {
 
   useEffect(() => {
     if (x && x?.formMode === "UPDATE_HEADING") {
-    //   setValue("heading", x.heading), { shouldValidate: true };
+    //   setValue("heading", x.heading), { shouldValidate: true };;
     //   setValue("sequence", x.heading_sequence, { shouldValidate: true });
       reset({
         heading: x.heading,
