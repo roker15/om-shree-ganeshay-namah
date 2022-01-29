@@ -171,46 +171,48 @@ const Syllabus: React.FC<Props> = ({ book, changeFormProps }) => {
                 </HStack>
                 {/* </Circle> */}
               </Flex>
-              {value.map((x) => (
-                <Flex my="2" ml="4" key={x.subheading_id} role={"group"}>
-                  <Text align="start" casing="capitalize">
-                    {x.subheading}
-                  </Text>
-                  <HStack display="none" _groupHover={{ display: "inline" }}>
-                    <DeleteAlertDialogue
-                      isIconButton={true}
-                      dialogueHeader={"Delete Heading"}
-                      isDisabled={false}
-                      id={x.subheading_id}
-                      handleDelete={deleteHeading}
-                    />
-                    <IconButton
-                      _hover={{ color: "pink", fontSize: "22px" }}
-                      size="xs"
-                      ml="2"
-                      borderRadius={"full"}
-                      variant="outline"
-                      colorScheme="orange"
-                      aria-label="Call Sage"
-                      fontSize="20px"
-                      onClick={() =>
-                        changeFormProps({
-                          formMode: "UPDATE_SUBHEADING",
-                          book_id: book?.id,
-                          book_name: book?.book_name,
-                          heading_id: x.heading_id,
-                          heading: x.heading,
-                          heading_sequence: x.heading_sequence,
-                          subheading_id: x.subheading_id,
-                          subheading: x.subheading,
-                          subheading_sequence: x.subheading_sequence,
-                        })
-                      }
-                      icon={<MdModeEdit />}
-                    />
-                  </HStack>
-                </Flex>
-              ))}
+              {value
+                .sort((a, b) => a.subheading_sequence - b.subheading_sequence)
+                .map((x) => (
+                  <Flex my="2" ml="4" key={x.subheading_id} role={"group"}>
+                    <Text align="start" casing="capitalize">
+                      {x.subheading}
+                    </Text>
+                    <HStack display="none" _groupHover={{ display: "inline" }}>
+                      <DeleteAlertDialogue
+                        isIconButton={true}
+                        dialogueHeader={"Delete Heading"}
+                        isDisabled={false}
+                        id={x.subheading_id}
+                        handleDelete={deleteSubheading}
+                      />
+                      <IconButton
+                        _hover={{ color: "pink", fontSize: "22px" }}
+                        size="xs"
+                        ml="2"
+                        borderRadius={"full"}
+                        variant="outline"
+                        colorScheme="orange"
+                        aria-label="Call Sage"
+                        fontSize="20px"
+                        onClick={() =>
+                          changeFormProps({
+                            formMode: "UPDATE_SUBHEADING",
+                            book_id: book?.id,
+                            book_name: book?.book_name,
+                            heading_id: x.heading_id,
+                            heading: x.heading,
+                            heading_sequence: x.heading_sequence,
+                            subheading_id: x.subheading_id,
+                            subheading: x.subheading,
+                            subheading_sequence: x.subheading_sequence,
+                          })
+                        }
+                        icon={<MdModeEdit />}
+                      />
+                    </HStack>
+                  </Flex>
+                ))}
             </Box>
           );
         })}
