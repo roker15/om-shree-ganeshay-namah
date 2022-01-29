@@ -6,38 +6,57 @@ import {
   AlertDialogHeader,
   AlertDialogBody,
   AlertDialogFooter,
+  IconButton,
 } from "@chakra-ui/react";
 import React from "react";
 import { MdDelete } from "react-icons/md";
 import { QuestionBank } from "../../types/myTypes";
 
 interface AlertdialogueProps {
-  handleDelete: () => Promise<void>;
+  handleDelete: (id: number) => Promise<void>;
   //   x: QuestionBank;
   dialogueHeader: string;
   isDisabled: boolean;
+  isIconButton: boolean;
+  id: number;
 }
-function DeleteAlertDialogue({ handleDelete, dialogueHeader, isDisabled }: AlertdialogueProps) {
+
+const DeleteAlertDialogue = ({ handleDelete, dialogueHeader, isDisabled, isIconButton,id }: AlertdialogueProps) => {
   const [isOpen, setIsOpen] = React.useState(false);
   const onClose = () => setIsOpen(false);
   const cancelRef = React.useRef(null);
   const confirmDelete = () => {
-    handleDelete();
+    handleDelete!(id);
     onClose();
   };
 
   return (
     <>
-      <Button
-        colorScheme="red"
-        isDisabled={isDisabled}
-        leftIcon={<MdDelete />}
-        variant="ghost"
-        size="xs"
-        onClick={() => setIsOpen(true)}
-      >
-        {dialogueHeader}
-      </Button>
+      {isIconButton ? (
+        <IconButton
+          _hover={{ color: "pink", fontSize: "22px" }}
+          size="xs"
+          ml="2"
+          borderRadius={"full"}
+          variant="outline"
+          colorScheme="pink"
+          aria-label="Call Sage"
+          fontSize="20px"
+          onClick={() => setIsOpen(true)}
+          icon={<MdDelete />}
+        />
+      ) : (
+        <Button
+          colorScheme="red"
+          isDisabled={isDisabled}
+          leftIcon={<MdDelete />}
+          variant="ghost"
+          size="xs"
+          onClick={() => setIsOpen(true)}
+        >
+          {dialogueHeader}
+        </Button>
+      )}
 
       <AlertDialog isOpen={isOpen} leastDestructiveRef={cancelRef} onClose={onClose}>
         <AlertDialogOverlay>
@@ -61,4 +80,5 @@ function DeleteAlertDialogue({ handleDelete, dialogueHeader, isDisabled }: Alert
       </AlertDialog>
     </>
   );
-}
+};
+export default DeleteAlertDialogue;

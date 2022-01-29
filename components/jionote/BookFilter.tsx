@@ -4,7 +4,7 @@ import { useGetBooks, useGetSyllabusByBookId } from "../../customHookes/networkH
 import { BookResponse } from "../../types/myTypes";
 import Syllabus from "./Syllabus";
 
-const BookFilter: React.FC<{ setParentProps: (x: BookResponse | undefined) => void }> = ({ setParentProps }) => {
+const BookFilter: React.FC<{ setParentProps?: (x: BookResponse | undefined) => void }> = ({ setParentProps }) => {
   const categories = [
     { id: "1", name: "NCERT" },
     { id: "2", name: "IGNOU" },
@@ -50,7 +50,6 @@ const BookFilter: React.FC<{ setParentProps: (x: BookResponse | undefined) => vo
     // <Container maxW="container.lg" bg="pink">
 
     <Box>
-      <Syllabus />
       <RadioGroup onChange={setValue} value={value}>
         <Stack direction="row">
           {categories.map((x) => {
@@ -104,7 +103,7 @@ const BookFilter: React.FC<{ setParentProps: (x: BookResponse | undefined) => vo
           id="paper"
           placeholder="Select Book 🍎"
           onChange={(e) => {
-            setParentProps(data?.find((item) => item.id === Number(e.target.value)));
+            setParentProps!(data?.find((item) => item.id === Number(e.target.value)));
           }}
         >
           {bookList?.map((x) => {

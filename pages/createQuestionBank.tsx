@@ -564,10 +564,7 @@ export default function App() {
         .delete()
         .match({ questionbank_id: questionId, subheading_id: syllabusId });
       if (data && data[0]) {
-        console.log("qlink array before delete.....", qlink);
-        console.log("questionid and subheading id ", questionId, syllabusId);
-        // let arr: SubheadingQuestionLink[];
-        const arr: SubheadingQuestionLink[] = qlink.filter((item) => item.subheading_id !== syllabusId);
+                const arr: SubheadingQuestionLink[] = qlink.filter((item) => item.subheading_id !== syllabusId);
 
         console.log("array after delete.....", arr);
         setQlink(arr);

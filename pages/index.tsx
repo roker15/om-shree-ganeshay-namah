@@ -21,6 +21,7 @@ import { useRouter } from "next/dist/client/router";
 import React, { useEffect, useState } from "react";
 import BookFilter from "../components/jionote/BookFilter";
 import BookList from "../components/jionote/BookList";
+import CreateBookSyllabus from "../components/jionote/CreateBookSyllabus";
 import { MyDropzone } from "../components/MyDropzone";
 import QuestionBanks from "../components/QuestionBank";
 import LayoutWithTopNavbar from "../layout/LayoutWithTopNavbar";
@@ -81,8 +82,8 @@ const Home: React.FC<ProfileListProps> = ({ data }) => {
             Toggle Mode
           </Button>
         </Box> */}
-        <BookList setParentProps={(x) => setChildData(x)} />
-        <BookFilter setParentProps={(x) => setChildData(x)}></BookFilter>
+        <CreateBookSyllabus/>
+
         {/* <Text as="span" color="gray.600">
           💬 Interact With Us At{" "}
         </Text>

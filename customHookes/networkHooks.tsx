@@ -33,9 +33,9 @@ export function useGetBooks(bookId?: number) {
 export function useGetSyllabusByBookId(bookId?: number) {
   console.log("usegetbooks getting called");
   const { data, error } = useSWR(
-    bookId == undefined ? null : ["/book_id_syllabus", bookId],
+    bookId == undefined ? null : [`/book_id_syllabuss/${bookId}`],
     async () =>
-      await supabase.rpc<BookSyllabus>("getSyllabusFromBookId", {
+      await supabase.rpc<BookSyllabus>("getSyllabusFromBookIdRightJoinToGetAllHeading", {
         bookid: bookId,
       }),
     {
