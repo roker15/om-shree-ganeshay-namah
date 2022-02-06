@@ -68,7 +68,7 @@ const DeleteAlertDialogue = ({ handleDelete, dialogueHeader, isDisabled, isIconB
             <AlertDialogBody>Are you sure? You can`t undo this action afterwards.</AlertDialogBody>
 
             <AlertDialogFooter>
-              <Button ref={cancelRef} size="sm" onClick={onClose}>
+              <Button colorScheme="pink" ref={cancelRef} size="sm" onClick={onClose}>
                 Cancel
               </Button>
               <Button colorScheme="red" size="sm" onClick={() => confirmDelete()} ml={3}>

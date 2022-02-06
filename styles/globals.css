@@ -111,22 +111,22 @@ blockquote p {
 } */
 
 /* mouse over link */
-a:hover {
+/* a:hover {
   color: rgb(240, 240, 247);
-  /* height: 70px; */
-  /* line-height: 200%; */
-  /* border: hotpink; */
+  height: 70px;
+  line-height: 200%;
+  border: hotpink;
   background-color: rgb(68, 67, 70);
   text-decoration: none !important;
-}
-a {
-  /* color: rgb(240, 240, 247); */
-  /* height: 50px; */
+} */
+/* a {
+  color: rgb(240, 240, 247);
+  height: 50px;
   line-height: 30%;
-  /* border: hotpink; */
-  /* background-color: rgb(68, 67, 70); */
+  border: hotpink;
+  background-color: rgb(68, 67, 70);
   text-decoration: none !important;
-}
+} */
 
 .container {
   width: 100%;

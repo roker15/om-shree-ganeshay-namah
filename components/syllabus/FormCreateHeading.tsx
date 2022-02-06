@@ -48,7 +48,7 @@ const FormCreateHeading: React.FC<Props> = ({ x }) => {
       setValue("heading", "");
       setValue("sequence", undefined);
     }
-  }, [setValue, x]);
+  }, [reset, setValue, x]);
 
   const toast = useToast();
 

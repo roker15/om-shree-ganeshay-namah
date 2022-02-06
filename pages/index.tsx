@@ -19,9 +19,9 @@ import {
 } from "@chakra-ui/react";
 import { useRouter } from "next/dist/client/router";
 import React, { useEffect, useState } from "react";
-import BookFilter from "../components/jionote/BookFilter";
-import BookList from "../components/jionote/BookList";
-import CreateBookSyllabus from "../components/jionote/CreateBookSyllabus";
+import BookFilter from "../components/syllabus/BookFilter";
+import BookList from "../components/syllabus/BookList";
+import CreateBookSyllabus from "../components/syllabus/CreateBookSyllabus";
 import { MyDropzone } from "../components/MyDropzone";
 import QuestionBanks from "../components/QuestionBank";
 import LayoutWithTopNavbar from "../layout/LayoutWithTopNavbar";
@@ -32,6 +32,7 @@ import { useAppContext } from "../state/state";
 import { BookResponse, Papers } from "../types/myTypes";
 import PageWithLayoutType from "../types/pageWithLayout";
 import { definitions } from "../types/supabase";
+import ManageNotes from "../components/notes/ManageNotes";
 
 type ProfileListProps = {
   data: Papers[];
@@ -82,6 +83,7 @@ const Home: React.FC<ProfileListProps> = ({ data }) => {
             Toggle Mode
           </Button>
         </Box> */}
+        <ManageNotes/>
         <CreateBookSyllabus/>
 
         {/* <Text as="span" color="gray.600">

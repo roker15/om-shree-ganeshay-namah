@@ -1,4 +1,4 @@
-import { Box, Flex, HStack, IconButton, Text, toast } from "@chakra-ui/react";
+import { Box, Flex, HStack, IconButton, Text, toast, Tooltip } from "@chakra-ui/react";
 import { groupBy } from "lodash";
 import React from "react";
 import { MdAdd, MdDelete, MdModeEdit } from "react-icons/md";
@@ -17,38 +17,6 @@ interface Props {
 
 const Syllabus: React.FC<Props> = ({ book, changeFormProps }) => {
   const { data } = useGetSyllabusByBookId(book ? book.id : undefined);
-
-  const cars = [
-    {
-      make: "audi",
-      model: "r8",
-      year: "2012",
-    },
-    {
-      make: "audi",
-      model: "rr8",
-      year: "2013",
-    },
-    {
-      make: "ford",
-      model: "mustang",
-      year: "2012",
-    },
-    {
-      make: "ford",
-      model: "fusion",
-      year: "2015",
-    },
-    {
-      make: "kia",
-      model: "optima",
-      year: "2012",
-    },
-  ];
-
-  const grouped = groupBy(cars, (x) => x.make);
-  console.log(console.log("car group entries", Object.entries(grouped)));
-  console.log(console.log("car group", grouped));
   const grouped1 = groupBy(data, (x) => [x.heading_sequence, x.heading_id, x.heading]);
   console.log(console.log("syllabus group entries", Object.entries(grouped1)));
   console.log(console.log("syllabus group", grouped1));
@@ -70,43 +38,46 @@ const Syllabus: React.FC<Props> = ({ book, changeFormProps }) => {
     <Box>
       {book?.book_name ? (
         <Flex align="end">
-          <Text>{book?.book_name}</Text>
-          <IconButton
-            // _groupHover={{ size: "" }}
+          <Text as ="b"><Text as ="u">{book?.book_name}</Text></Text>
+          <Tooltip label="Create New heading" fontSize="sm">
+            <IconButton
+              // _groupHover={{ size: "" }}
 
-            _hover={{ color: " #FF1493", fontSize: "30px" }}
-            size="auto"
-            ml="2"
-            onClick={() =>
-              changeFormProps({
-                formMode: "CREATE_HEADING",
-                book_id: book?.id,
-                book_name: book?.book_name,
-                heading_id: undefined,
-                heading: undefined,
-                heading_sequence: undefined,
-              })
-            }
-            borderRadius={"full"}
-            variant="outline"
-            colorScheme="linkedin"
-            aria-label="Call Sage"
-            fontSize="25px"
-            icon={<MdAdd />}
-          />
+              _hover={{ color: " #FF1493", fontSize: "30px" }}
+              size="auto"
+              ml="2"
+              onClick={() =>
+                changeFormProps({
+                  formMode: "CREATE_HEADING",
+                  book_id: book?.id,
+                  book_name: book?.book_name,
+                  heading_id: undefined,
+                  heading: undefined,
+                  heading_sequence: undefined,
+                })
+              }
+              borderRadius={"full"}
+              variant="outline"
+              colorScheme="linkedin"
+              aria-label="Call Sage"
+              fontSize="25px"
+              icon={<MdAdd />}
+            />
+          </Tooltip>
         </Flex>
       ) : null}
       {Object.entries(grouped1)
         .sort((a, b) => Number(a[0].split(",")[0]) - Number(b[0].split(",")[0]))
         .map(([key, value]) => {
           return (
-            <Box key={key} maxW="80">
+            <Box key={key}>
               <Flex align="center" justifyContent="left" role="group" my="2">
                 <Text align="start" as="address" color=" #FF1493" casing="capitalize">
-                  {value[0].heading_sequence + " " + value[0].heading}
+                  {value[0].heading +" " +"(" + value[0].heading_sequence+")"  }
                 </Text>
                 {/* <Circle ml="2"  bg="green.100" color="pink"> */}
                 <HStack display="none" _groupHover={{ display: "inline" }}>
+                <Tooltip label="Create New Subheading under this heading" fontSize="sm">
                   <IconButton
                     // _groupHover={{ size: "" }}
                     _hover={{ color: "pink", fontSize: "22px" }}
@@ -128,7 +99,7 @@ const Syllabus: React.FC<Props> = ({ book, changeFormProps }) => {
                       })
                     }
                     icon={<MdAdd />}
-                  />
+                  /></Tooltip>
                   {/* <IconButton
                     _hover={{ color: "pink", fontSize: "22px" }}
                     size="xs"
@@ -181,7 +152,7 @@ const Syllabus: React.FC<Props> = ({ book, changeFormProps }) => {
                     <HStack display="none" _groupHover={{ display: "inline" }}>
                       <DeleteAlertDialogue
                         isIconButton={true}
-                        dialogueHeader={"Delete Heading"}
+                        dialogueHeader={"Delete Subheading"}
                         isDisabled={false}
                         id={x.subheading_id}
                         handleDelete={deleteSubheading}

@@ -4,7 +4,7 @@ import { useGetBooks, useGetSyllabusByBookId } from "../../customHookes/networkH
 import { BookResponse } from "../../types/myTypes";
 import Syllabus from "./Syllabus";
 
-const BookFilter: React.FC<{ setParentProps?: (x: BookResponse | undefined) => void }> = ({ setParentProps }) => {
+const BookFilter: React.FC<{ setParentProps: (x: BookResponse | undefined) => void }> = ({ setParentProps }) => {
   const categories = [
     { id: "1", name: "NCERT" },
     { id: "2", name: "IGNOU" },

@@ -126,6 +126,246 @@ export interface paths {
       };
     };
   };
+  "/books_article_sharing": {
+    get: {
+      parameters: {
+        query: {
+          id?: parameters["rowFilter.books_article_sharing.id"];
+          created_at?: parameters["rowFilter.books_article_sharing.created_at"];
+          updated_at?: parameters["rowFilter.books_article_sharing.updated_at"];
+          books_subheadings_fk?: parameters["rowFilter.books_article_sharing.books_subheadings_fk"];
+          shared_by?: parameters["rowFilter.books_article_sharing.shared_by"];
+          shared_with?: parameters["rowFilter.books_article_sharing.shared_with"];
+          /** owner of the shared article */
+          owned_by?: parameters["rowFilter.books_article_sharing.owned_by"];
+          ispublic?: parameters["rowFilter.books_article_sharing.ispublic"];
+          /** Filtering Columns */
+          select?: parameters["select"];
+          /** Ordering */
+          order?: parameters["order"];
+          /** Limiting and Pagination */
+          offset?: parameters["offset"];
+          /** Limiting and Pagination */
+          limit?: parameters["limit"];
+        };
+        header: {
+          /** Limiting and Pagination */
+          Range?: parameters["range"];
+          /** Limiting and Pagination */
+          "Range-Unit"?: parameters["rangeUnit"];
+          /** Preference */
+          Prefer?: parameters["preferCount"];
+        };
+      };
+      responses: {
+        /** OK */
+        200: {
+          schema: definitions["books_article_sharing"][];
+        };
+        /** Partial Content */
+        206: unknown;
+      };
+    };
+    post: {
+      parameters: {
+        body: {
+          /** books_article_sharing */
+          books_article_sharing?: definitions["books_article_sharing"];
+        };
+        query: {
+          /** Filtering Columns */
+          select?: parameters["select"];
+        };
+        header: {
+          /** Preference */
+          Prefer?: parameters["preferReturn"];
+        };
+      };
+      responses: {
+        /** Created */
+        201: unknown;
+      };
+    };
+    delete: {
+      parameters: {
+        query: {
+          id?: parameters["rowFilter.books_article_sharing.id"];
+          created_at?: parameters["rowFilter.books_article_sharing.created_at"];
+          updated_at?: parameters["rowFilter.books_article_sharing.updated_at"];
+          books_subheadings_fk?: parameters["rowFilter.books_article_sharing.books_subheadings_fk"];
+          shared_by?: parameters["rowFilter.books_article_sharing.shared_by"];
+          shared_with?: parameters["rowFilter.books_article_sharing.shared_with"];
+          /** owner of the shared article */
+          owned_by?: parameters["rowFilter.books_article_sharing.owned_by"];
+          ispublic?: parameters["rowFilter.books_article_sharing.ispublic"];
+        };
+        header: {
+          /** Preference */
+          Prefer?: parameters["preferReturn"];
+        };
+      };
+      responses: {
+        /** No Content */
+        204: never;
+      };
+    };
+    patch: {
+      parameters: {
+        query: {
+          id?: parameters["rowFilter.books_article_sharing.id"];
+          created_at?: parameters["rowFilter.books_article_sharing.created_at"];
+          updated_at?: parameters["rowFilter.books_article_sharing.updated_at"];
+          books_subheadings_fk?: parameters["rowFilter.books_article_sharing.books_subheadings_fk"];
+          shared_by?: parameters["rowFilter.books_article_sharing.shared_by"];
+          shared_with?: parameters["rowFilter.books_article_sharing.shared_with"];
+          /** owner of the shared article */
+          owned_by?: parameters["rowFilter.books_article_sharing.owned_by"];
+          ispublic?: parameters["rowFilter.books_article_sharing.ispublic"];
+        };
+        body: {
+          /** books_article_sharing */
+          books_article_sharing?: definitions["books_article_sharing"];
+        };
+        header: {
+          /** Preference */
+          Prefer?: parameters["preferReturn"];
+        };
+      };
+      responses: {
+        /** No Content */
+        204: never;
+      };
+    };
+  };
+  "/books_articles": {
+    get: {
+      parameters: {
+        query: {
+          id?: parameters["rowFilter.books_articles.id"];
+          created_at?: parameters["rowFilter.books_articles.created_at"];
+          updated_at?: parameters["rowFilter.books_articles.updated_at"];
+          books_subheadings_fk?: parameters["rowFilter.books_articles.books_subheadings_fk"];
+          /** Article content in hindi */
+          article_hindi?: parameters["rowFilter.books_articles.article_hindi"];
+          /** Article content in english */
+          article_english?: parameters["rowFilter.books_articles.article_english"];
+          /** Article content in audio */
+          article_audio_link?: parameters["rowFilter.books_articles.article_audio_link"];
+          created_by?: parameters["rowFilter.books_articles.created_by"];
+          /** Title of article */
+          article_title?: parameters["rowFilter.books_articles.article_title"];
+          /** Article sequence */
+          sequence?: parameters["rowFilter.books_articles.sequence"];
+          /** Filtering Columns */
+          select?: parameters["select"];
+          /** Ordering */
+          order?: parameters["order"];
+          /** Limiting and Pagination */
+          offset?: parameters["offset"];
+          /** Limiting and Pagination */
+          limit?: parameters["limit"];
+        };
+        header: {
+          /** Limiting and Pagination */
+          Range?: parameters["range"];
+          /** Limiting and Pagination */
+          "Range-Unit"?: parameters["rangeUnit"];
+          /** Preference */
+          Prefer?: parameters["preferCount"];
+        };
+      };
+      responses: {
+        /** OK */
+        200: {
+          schema: definitions["books_articles"][];
+        };
+        /** Partial Content */
+        206: unknown;
+      };
+    };
+    post: {
+      parameters: {
+        body: {
+          /** books_articles */
+          books_articles?: definitions["books_articles"];
+        };
+        query: {
+          /** Filtering Columns */
+          select?: parameters["select"];
+        };
+        header: {
+          /** Preference */
+          Prefer?: parameters["preferReturn"];
+        };
+      };
+      responses: {
+        /** Created */
+        201: unknown;
+      };
+    };
+    delete: {
+      parameters: {
+        query: {
+          id?: parameters["rowFilter.books_articles.id"];
+          created_at?: parameters["rowFilter.books_articles.created_at"];
+          updated_at?: parameters["rowFilter.books_articles.updated_at"];
+          books_subheadings_fk?: parameters["rowFilter.books_articles.books_subheadings_fk"];
+          /** Article content in hindi */
+          article_hindi?: parameters["rowFilter.books_articles.article_hindi"];
+          /** Article content in english */
+          article_english?: parameters["rowFilter.books_articles.article_english"];
+          /** Article content in audio */
+          article_audio_link?: parameters["rowFilter.books_articles.article_audio_link"];
+          created_by?: parameters["rowFilter.books_articles.created_by"];
+          /** Title of article */
+          article_title?: parameters["rowFilter.books_articles.article_title"];
+          /** Article sequence */
+          sequence?: parameters["rowFilter.books_articles.sequence"];
+        };
+        header: {
+          /** Preference */
+          Prefer?: parameters["preferReturn"];
+        };
+      };
+      responses: {
+        /** No Content */
+        204: never;
+      };
+    };
+    patch: {
+      parameters: {
+        query: {
+          id?: parameters["rowFilter.books_articles.id"];
+          created_at?: parameters["rowFilter.books_articles.created_at"];
+          updated_at?: parameters["rowFilter.books_articles.updated_at"];
+          books_subheadings_fk?: parameters["rowFilter.books_articles.books_subheadings_fk"];
+          /** Article content in hindi */
+          article_hindi?: parameters["rowFilter.books_articles.article_hindi"];
+          /** Article content in english */
+          article_english?: parameters["rowFilter.books_articles.article_english"];
+          /** Article content in audio */
+          article_audio_link?: parameters["rowFilter.books_articles.article_audio_link"];
+          created_by?: parameters["rowFilter.books_articles.created_by"];
+          /** Title of article */
+          article_title?: parameters["rowFilter.books_articles.article_title"];
+          /** Article sequence */
+          sequence?: parameters["rowFilter.books_articles.sequence"];
+        };
+        body: {
+          /** books_articles */
+          books_articles?: definitions["books_articles"];
+        };
+        header: {
+          /** Preference */
+          Prefer?: parameters["preferReturn"];
+        };
+      };
+      responses: {
+        /** No Content */
+        204: never;
+      };
+    };
+  };
   "/books_board_or_university": {
     get: {
       parameters: {
@@ -2557,6 +2797,26 @@ export interface paths {
       };
     };
   };
+  "/rpc/getSyllabusFromBookIdRightJoinToGetAllHeading": {
+    post: {
+      parameters: {
+        body: {
+          args: {
+            /** Format: bigint */
+            bookid: number;
+          };
+        };
+        header: {
+          /** Preference */
+          Prefer?: parameters["preferParams"];
+        };
+      };
+      responses: {
+        /** OK */
+        200: unknown;
+      };
+    };
+  };
   "/rpc/getSyllabusFromPaperId": {
     post: {
       parameters: {
@@ -2577,13 +2837,13 @@ export interface paths {
       };
     };
   };
-  "/rpc/get_syllabus_from_id": {
+  "/rpc/getSyllabusFromBookId": {
     post: {
       parameters: {
         body: {
           args: {
             /** Format: bigint */
-            paperid: number;
+            bookid: number;
           };
         };
         header: {
@@ -2619,7 +2879,7 @@ export interface paths {
       };
     };
   };
-  "/rpc/get_syllabus_from_paperidd": {
+  "/rpc/get_syllabus_from_id": {
     post: {
       parameters: {
         body: {
@@ -2646,6 +2906,68 @@ export interface paths {
           args: {
             /** Format: character varying */
             vname: string;
+          };
+        };
+        header: {
+          /** Preference */
+          Prefer?: parameters["preferParams"];
+        };
+      };
+      responses: {
+        /** OK */
+        200: unknown;
+      };
+    };
+  };
+  "/rpc/getSharedNotesListBySubheading": {
+    post: {
+      parameters: {
+        body: {
+          args: {
+            /** Format: text */
+            sharedwith: string;
+            /** Format: bigint */
+            subheadingid: number;
+          };
+        };
+        header: {
+          /** Preference */
+          Prefer?: parameters["preferParams"];
+        };
+      };
+      responses: {
+        /** OK */
+        200: unknown;
+      };
+    };
+  };
+  "/rpc/getPublicNotesListBySubheading": {
+    post: {
+      parameters: {
+        body: {
+          args: {
+            /** Format: bigint */
+            subheadingid: number;
+          };
+        };
+        header: {
+          /** Preference */
+          Prefer?: parameters["preferParams"];
+        };
+      };
+      responses: {
+        /** OK */
+        200: unknown;
+      };
+    };
+  };
+  "/rpc/get_syllabus_from_paperidd": {
+    post: {
+      parameters: {
+        body: {
+          args: {
+            /** Format: bigint */
+            paperid: number;
           };
         };
         header: {
@@ -2730,6 +3052,109 @@ export interface definitions {
      * This is a Foreign Key to `books_publication.id`.<fk table='books_publication' column='id'/>
      */
     publication_fk?: number;
+  };
+  /** @description Record of article sharing */
+  books_article_sharing: {
+    /**
+     * Format: bigint
+     * @description Note:
+     * This is a Primary Key.<pk/>
+     */
+    id: number;
+    /**
+     * Format: timestamp with time zone
+     * @default now()
+     */
+    created_at?: string;
+    /**
+     * Format: timestamp with time zone
+     * @default now()
+     */
+    updated_at?: string;
+    /**
+     * Format: bigint
+     * @description Note:
+     * This is a Foreign Key to `books_subheadings.id`.<fk table='books_subheadings' column='id'/>
+     */
+    books_subheadings_fk: number;
+    /**
+     * Format: uuid
+     * @description Note:
+     * This is a Foreign Key to `profiles.id`.<fk table='profiles' column='id'/>
+     */
+    shared_by?: string;
+    /**
+     * Format: uuid
+     * @description Note:
+     * This is a Foreign Key to `profiles.id`.<fk table='profiles' column='id'/>
+     */
+    shared_with?: string;
+    /**
+     * Format: uuid
+     * @description owner of the shared article
+     *
+     * Note:
+     * This is a Foreign Key to `profiles.id`.<fk table='profiles' column='id'/>
+     */
+    owned_by: string;
+    /** Format: boolean */
+    ispublic?: boolean;
+  };
+  /** @description article inside a subheading of a book */
+  books_articles: {
+    /**
+     * Format: bigint
+     * @description Note:
+     * This is a Primary Key.<pk/>
+     */
+    id: number;
+    /**
+     * Format: timestamp with time zone
+     * @default now()
+     */
+    created_at?: string;
+    /**
+     * Format: timestamp with time zone
+     * @default now()
+     */
+    updated_at?: string;
+    /**
+     * Format: bigint
+     * @description Note:
+     * This is a Foreign Key to `books_subheadings.id`.<fk table='books_subheadings' column='id'/>
+     */
+    books_subheadings_fk: number;
+    /**
+     * Format: text
+     * @description Article content in hindi
+     */
+    article_hindi?: string;
+    /**
+     * Format: text
+     * @description Article content in english
+     */
+    article_english?: string;
+    /**
+     * Format: text
+     * @description Article content in audio
+     */
+    article_audio_link?: string;
+    /**
+     * Format: uuid
+     * @description Note:
+     * This is a Foreign Key to `profiles.id`.<fk table='profiles' column='id'/>
+     */
+    created_by: string;
+    /**
+     * Format: text
+     * @description Title of article
+     */
+    article_title: string;
+    /**
+     * Format: bigint
+     * @description Article sequence
+     */
+    sequence?: number;
   };
   books_board_or_university: {
     /**
@@ -3472,6 +3897,64 @@ export interface parameters {
   "rowFilter.books.board_or_university_fk": string;
   /** Format: bigint */
   "rowFilter.books.publication_fk": string;
+  /** @description books_article_sharing */
+  "body.books_article_sharing": definitions["books_article_sharing"];
+  /** Format: bigint */
+  "rowFilter.books_article_sharing.id": string;
+  /** Format: timestamp with time zone */
+  "rowFilter.books_article_sharing.created_at": string;
+  /** Format: timestamp with time zone */
+  "rowFilter.books_article_sharing.updated_at": string;
+  /** Format: bigint */
+  "rowFilter.books_article_sharing.books_subheadings_fk": string;
+  /** Format: uuid */
+  "rowFilter.books_article_sharing.shared_by": string;
+  /** Format: uuid */
+  "rowFilter.books_article_sharing.shared_with": string;
+  /**
+   * Format: uuid
+   * @description owner of the shared article
+   */
+  "rowFilter.books_article_sharing.owned_by": string;
+  /** Format: boolean */
+  "rowFilter.books_article_sharing.ispublic": string;
+  /** @description books_articles */
+  "body.books_articles": definitions["books_articles"];
+  /** Format: bigint */
+  "rowFilter.books_articles.id": string;
+  /** Format: timestamp with time zone */
+  "rowFilter.books_articles.created_at": string;
+  /** Format: timestamp with time zone */
+  "rowFilter.books_articles.updated_at": string;
+  /** Format: bigint */
+  "rowFilter.books_articles.books_subheadings_fk": string;
+  /**
+   * Format: text
+   * @description Article content in hindi
+   */
+  "rowFilter.books_articles.article_hindi": string;
+  /**
+   * Format: text
+   * @description Article content in english
+   */
+  "rowFilter.books_articles.article_english": string;
+  /**
+   * Format: text
+   * @description Article content in audio
+   */
+  "rowFilter.books_articles.article_audio_link": string;
+  /** Format: uuid */
+  "rowFilter.books_articles.created_by": string;
+  /**
+   * Format: text
+   * @description Title of article
+   */
+  "rowFilter.books_articles.article_title": string;
+  /**
+   * Format: bigint
+   * @description Article sequence
+   */
+  "rowFilter.books_articles.sequence": string;
   /** @description books_board_or_university */
   "body.books_board_or_university": definitions["books_board_or_university"];
   /** Format: bigint */

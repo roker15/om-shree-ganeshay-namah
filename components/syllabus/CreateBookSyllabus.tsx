@@ -5,7 +5,7 @@ import BookFilter from "./BookFilter";
 import FormCreateHeading from "./FormCreateHeading";
 import FormCreateSubheading from "./FormCreateSubheading";
 import Syllabus from "./Syllabus";
-export interface FormProps {
+export type FormProps ={
   formMode: "CREATE_HEADING" | "UPDATE_HEADING" | "CREATE_SUBHEADING" | "UPDATE_SUBHEADING" | undefined;
   book_id: number | undefined;
   book_name: string | undefined;
@@ -21,24 +21,27 @@ const CreateBookSyllabus = () => {
   const [book, setBook] = useState<BookResponse | undefined>();
   const [formProps, setFormProps] = useState<FormProps>();
 
-  const updateBookProps = (x: BookResponse | undefined) => {
+  const updateBookAndFormProps = (x: BookResponse | undefined) => {
     setBook(x);
+    setFormProps(undefined);
   };
   const changeFormProps = (x: FormProps) => {
     setFormProps(x);
   };
   return (
     <Flex maxW="auto" my="16">
-      <Syllabus book={book} changeFormProps={changeFormProps}></Syllabus>
+      <Box w="96">
+        <Syllabus book={book} changeFormProps={changeFormProps}></Syllabus>
+      </Box>
       <VStack>
         <Box ml="8">
-          <BookFilter setParentProps={updateBookProps}></BookFilter>
+          <BookFilter setParentProps={updateBookAndFormProps}></BookFilter>
         </Box>
         <Text>{formProps?.book_name}</Text>
         {/* <FormCreateHeading x={formProps}></FormCreateHeading> */}
-        {formProps?.formMode === "CREATE_HEADING" || formProps?.formMode === "UPDATE_HEADING" ? (
+        {(formProps && formProps?.formMode === "CREATE_HEADING") || formProps?.formMode === "UPDATE_HEADING" ? (
           <FormCreateHeading x={formProps}></FormCreateHeading>
-        ) : formProps?.formMode === "CREATE_SUBHEADING" || formProps?.formMode === "UPDATE_SUBHEADING" ? (
+        ) : (formProps && formProps?.formMode === "CREATE_SUBHEADING") || formProps?.formMode === "UPDATE_SUBHEADING" ? (
           <FormCreateSubheading x={formProps}></FormCreateSubheading>
         ) : null}
         {/* <FormCreateHeading x={formProps}></FormCreateHeading> */}

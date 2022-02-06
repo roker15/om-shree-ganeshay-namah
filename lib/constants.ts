@@ -19,3 +19,42 @@ export type Profile = {
   role: string;
   email: string;
 };
+export const sunEditorButtonList = [
+  // ["undo", "redo"],
+  ["font", "fontSize", "formatBlock"],
+  [/*"paragraphStyle",*/ "blockquote"],
+  ["bold", "underline", "italic", "strike", "subscript", "superscript"],
+  ["fontColor", "hiliteColor", "textStyle"],
+  ["removeFormat"],
+  "/",
+  ["outdent", "indent"],
+  ["align", "horizontalRule", "list" /* "lineHeight"*/],
+  ["table", "link", "image", /* "video","audio",*/ "math"],
+
+  ["imageGallery"], // You must add the "imageGalleryUrl".
+  // ["fullScreen" /*, "showBlocks", "codeView"*/],
+  [
+    // "preview",
+    "print",
+  ],
+  // ["save", "template"],
+];
+export const sunEditorfontList = [
+  "Arial",
+  "Comic Sans Ms",
+  // "Bookman Old Style",
+  // "Georgia",
+  // "Calibri",
+  // "Comic Sans",
+  // "Courier",
+  // "Garamond",
+  // "Impact",
+  // "Lucida Console",
+  // "Palatino Linotype",
+  // "Segoe UI",
+  // "Tahoma",
+  // "Times New Roman",
+  // "Trebuchet MS",
+  // "Open Sans",
+  // "Roboto Slab",
+];

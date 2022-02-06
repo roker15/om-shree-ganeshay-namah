@@ -120,9 +120,9 @@ const SunEditorForRendering: React.FC<Props> = ({ postId, isNew, postContent, ed
   const [editMode, setEditMode] = useState(editModeActive);
   const { currentSubheadingProps } = usePostContext();
   const { mutate } = useSWRConfig();
-  const editor = useRef<SunEditorCore>();
   const imageUploaderRef = useRef<HTMLDivElement>(null);
   // The sunEditor parameter will be set to the core suneditor instance when this function is called
+  const editor = useRef<SunEditorCore>();
   const getSunEditorInstance = (sunEditor: SunEditorCore) => {
     editor.current = sunEditor;
   };
