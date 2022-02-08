@@ -114,7 +114,7 @@ export function useGetSharedNotesListBySubheading(subheadingId: number | undefin
   };
 }
 export function useGetUserArticles(subheadingId: number | undefined, userid: string | undefined) {
-  console.log("usegetuserarticles is  getting called");
+  console.log("get-user-articles is  getting called");
   const { data, error } = useSWR(
     subheadingId == undefined || userid === undefined ? null : [`/get-user-articles/${subheadingId}/${userid}`],
     async () =>
@@ -141,7 +141,7 @@ export function useGetUserArticles(subheadingId: number | undefined, userid: str
       revalidateOnReconnect: true,
     }
   );
-  data ? console.log("syllabus is ", data!.data) : console.log("data is is not available");
+  data ? console.log("articles are  ", data!.data) : console.log("articles available");
   return {
     // sharedPost_SUP_ERR:data?.error,
     data: data?.data,

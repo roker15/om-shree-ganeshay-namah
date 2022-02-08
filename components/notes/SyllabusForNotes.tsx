@@ -1,6 +1,6 @@
 import { Box, Flex, Link, Text } from "@chakra-ui/react";
 import { groupBy } from "lodash";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { useGetSyllabusByBookId } from "../../customHookes/networkHooks";
 import { BookResponse, BookSyllabus } from "../../types/myTypes";
 
@@ -10,14 +10,16 @@ interface Props {
 }
 
 const Syllabus: React.FC<Props> = ({ book, changeParentProps }) => {
-  const { data } = useGetSyllabusByBookId(book ? book.id : undefined);
-  const [selectedSubheading, setSelectedSubheading] = useState(1000);
+  const { data,isLoading } = useGetSyllabusByBookId(book ? book.id : undefined);
+  const [selectedSubheading, setSelectedSubheading] = useState<number| undefined>();
   const grouped = groupBy(data, (x) => [x.heading_sequence, x.heading_id, x.heading]);
   const handleSyllabusClick = (x: BookSyllabus) => {
     setSelectedSubheading(x.subheading_id);
     changeParentProps(x);
   };
-
+  useEffect(() => {
+    setSelectedSubheading(undefined);
+  }, [book]);
   return (
     <Box>
       {book?.book_name ? (
@@ -27,6 +29,7 @@ const Syllabus: React.FC<Props> = ({ book, changeParentProps }) => {
           </Text>
         </Flex>
       ) : null}
+      {isLoading? (<Text>Loading...</Text>):null}
       {Object.entries(grouped)
         .sort((a, b) => Number(a[0].split(",")[0]) - Number(b[0].split(",")[0]))
         .map(([key, value]) => {
@@ -48,6 +51,8 @@ const Syllabus: React.FC<Props> = ({ book, changeParentProps }) => {
                       onClick={() => handleSyllabusClick(x)}
                       align="start"
                       casing="capitalize"
+                      as="label"
+                      fontSize="14px"
                     >
                       <Link>{x.subheading}</Link>
                     </Text>
