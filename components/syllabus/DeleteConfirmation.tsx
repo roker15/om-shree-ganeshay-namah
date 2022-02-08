@@ -21,7 +21,7 @@ interface AlertdialogueProps {
   id: number;
 }
 
-const DeleteAlertDialogue = ({ handleDelete, dialogueHeader, isDisabled, isIconButton,id }: AlertdialogueProps) => {
+const DeleteAlertDialogue = ({ handleDelete, dialogueHeader, isDisabled, isIconButton, id }: AlertdialogueProps) => {
   const [isOpen, setIsOpen] = React.useState(false);
   const onClose = () => setIsOpen(false);
   const cancelRef = React.useRef(null);
@@ -39,7 +39,7 @@ const DeleteAlertDialogue = ({ handleDelete, dialogueHeader, isDisabled, isIconB
           ml="2"
           borderRadius={"full"}
           variant="outline"
-          colorScheme="pink"
+          colorScheme="whatsapp"
           aria-label="Call Sage"
           fontSize="20px"
           onClick={() => setIsOpen(true)}
@@ -47,7 +47,7 @@ const DeleteAlertDialogue = ({ handleDelete, dialogueHeader, isDisabled, isIconB
         />
       ) : (
         <Button
-          colorScheme="red"
+          colorScheme="whatsapp"
           isDisabled={isDisabled}
           leftIcon={<MdDelete />}
           variant="ghost"

@@ -86,11 +86,11 @@ const MyNotes: React.FC<Props> = ({ subheadingid, changeParentProps }) => {
       {articles?.map((x) => {
         return (
           <Box key={x.id} mt="16">
-            <Flex role={"group"}>
+            <Flex role={"group"} align="center">
               {/* <Badge> */}
               <VStack>
-                <Text bg="blue.50" as="label" casing="capitalize" align="left">
-                  {x.sequence + " " + x.article_title}
+                <Text bg="green.50" p="2" as="label" fontSize="14px" casing="capitalize" align="left">
+                  {x.article_title}
                 </Text>
                 {isArticleCreating === "EDITING" && x.id === selectedArticleForEdit ? (
                   <ArticleForm
@@ -111,7 +111,7 @@ const MyNotes: React.FC<Props> = ({ subheadingid, changeParentProps }) => {
                 // ml="2"
                 borderRadius={"full"}
                 variant="outline"
-                colorScheme="orange"
+                colorScheme="whatsapp"
                 aria-label="Call Sage"
                 fontSize="20px"
                 onClick={() => handleArticleEdit(x.id, false)}
@@ -123,21 +123,23 @@ const MyNotes: React.FC<Props> = ({ subheadingid, changeParentProps }) => {
                 ml="2"
                 borderRadius={"full"}
                 variant="outline"
-                colorScheme="orange"
+                colorScheme="whatsapp"
                 aria-label="Call Sage"
                 fontSize="20px"
                 onClick={() => handleArticleEdit(undefined, true)}
                 icon={<MdCancel />}
               />
-              <DeleteConfirmation
-                handleDelete={deleteArticle}
-                dialogueHeader={"Are you sure to delete this Article?"}
-                isDisabled={false}
-                isIconButton={true}
-                id={x.id}
-              ></DeleteConfirmation>
+              <Box display="none" _groupHover={{ display: "center" }}>
+                <DeleteConfirmation
+                  handleDelete={deleteArticle}
+                  dialogueHeader={"Are you sure to delete this Article?"}
+                  isDisabled={false}
+                  isIconButton={true}
+                  id={x.id}
+                ></DeleteConfirmation>
+              </Box>
             </Flex>
-            <Tabs size="md">
+            <Tabs size="md" colorScheme="whatsapp">
               <TabList>
                 <Tab>Hindi</Tab>
                 <Tab>English</Tab>
@@ -154,7 +156,7 @@ const MyNotes: React.FC<Props> = ({ subheadingid, changeParentProps }) => {
           </Box>
         );
       })}
-      <VStack align="center">
+      <Stack align="center" justifyContent="center" pb="16" direction={"row"}>
         <Box display={isArticleCreating === "NONE" ? "none" : "block"}>
           {/* {form()} */}
 
@@ -164,24 +166,44 @@ const MyNotes: React.FC<Props> = ({ subheadingid, changeParentProps }) => {
         </Box>
 
         <Tooltip label="Create New Article in This Topic" fontSize="sm">
-          <IconButton
-            // _groupHover={{ size: "" }}
-            display={isArticleCreating === "CREATING" || !subheadingid ? "none" : "flex"}
-            _hover={{ color: " #FF1493", fontSize: "45px", w: "45px", h: "45px" }}
-            size="auto"
-            ml="2"
-            onClick={() => setIsArticleCreating("CREATING")}
-            borderRadius={"full"}
-            variant="outline"
-            colorScheme="linkedin"
-            aria-label="Call Sage"
-            fontSize="25px"
-            w="35px"
-            h="35px"
-            icon={<MdAdd />}
-          />
+          <span>
+            <IconButton
+              // _groupHover={{ size: "" }}
+              display={isArticleCreating === "CREATING" || !subheadingid ? "none" : "flex"}
+              _hover={{ color: " #FF1493" }}
+              size="auto"
+              ml="2"
+              onClick={() => setIsArticleCreating("CREATING")}
+              borderRadius={"full"}
+              variant="outline"
+              colorScheme="whatsapp"
+              aria-label="Call Sage"
+              fontSize="25px"
+              w="35px"
+              h="35px"
+              icon={<MdAdd />}
+            />
+          </span>
         </Tooltip>
-      </VStack>
+        {/* <Tooltip label="Create New Article in This Topic" fontSize="sm"> */}
+        <IconButton
+          // _groupHover={{ size: "" }}
+          display={isArticleCreating === "CREATING" ? "flex" : "none"}
+          _hover={{ color: " #FF1493" }}
+          size="auto"
+          ml="2"
+          onClick={() => setIsArticleCreating("NONE")}
+          borderRadius={"full"}
+          variant="outline"
+          colorScheme="red"
+          aria-label="Call Sage"
+          fontSize="25px"
+          w="35px"
+          h="35px"
+          icon={<MdCancel />}
+        />
+        {/* </Tooltip> */}
+      </Stack>
     </Box>
   );
 };
@@ -246,16 +268,34 @@ const ArticleForm: React.FC<ArticleFormProps> = ({ subheadingid, formMode, artic
           />
           <FormErrorMessage>{errors.sequence && errors.sequence.message}</FormErrorMessage>
         </FormControl>
-        <ButtonGroup variant="with-shadow" colorScheme="pink">
-          <IconButton
+        {/* <ButtonGroup variant="with-shadow" colorScheme="pink"> */}
+        {/* <IconButton
             // borderRadius={"full"}
             isLoading={isLoading}
             type="submit"
             aria-label="Search database"
             icon={<MdDone />}
             size="s"
-          />
-        </ButtonGroup>
+          /> */}
+        <IconButton
+          // _groupHover={{ size: "" }}
+          // display={isArticleCreating === "CREATING" || !subheadingid ? "none" : "flex"}
+          // _hover={{ color: " #FF1493" }}
+          size="auto"
+          m="2"
+          // onClick={() => setIsArticleCreating("CREATING")}
+          type="submit"
+          isLoading={isLoading}
+          borderRadius={"full"}
+          variant="outline"
+          colorScheme="whatsapp"
+          aria-label="Call Sage"
+          fontSize="25px"
+          w="35px"
+          h="35px"
+          icon={<MdDone />}
+        />
+        {/* </ButtonGroup> */}
       </form>
     </Box>
   );
@@ -331,33 +371,17 @@ const SuneditorForNotesMaking: React.FC<SuneditorForNotesMakingProps> = ({ artic
       customToast({ title: "Post not updated,error occurred,  " + error.message, status: "error", isUpdating: false });
     }
   };
-  // const EditorStyle =
-  //   editorMode === "READ"
-  //     ? styled.div`
-  //         .sun-editor {
-  //           /* margin-top: -18px !important; */
-  //           /* border: 1px solid blue; */
-  //           border: none;
-  //         }
-  //       `
-  //     : styled.div`
-  //         .sun-editor {
-  //           /* margin-top: -18px !important; */
-  //           /* border: 1px solid blue; */
-  //           /* border: none; */
-  //         }
-  //       `;
   return (
     <Box>
       <Flex justifyContent="space-between">
         <RadioGroup onChange={setEditorMode} value={editorMode}>
           <Stack direction="row">
-            <Radio colorScheme="orange" size="sm" value="READ">
+            <Radio colorScheme="whatsapp" size="sm" value="READ">
               <Text as="b" casing="capitalize">
                 Read
               </Text>
             </Radio>
-            <Radio colorScheme="orange" size="sm" value="EDIT">
+            <Radio colorScheme="pink" size="sm" value="EDIT">
               <Text as="b" casing="capitalize">
                 Edit
               </Text>
@@ -377,7 +401,7 @@ const SuneditorForNotesMaking: React.FC<SuneditorForNotesMakingProps> = ({ artic
             Save
           </Button>
           <Checkbox
-            colorScheme="orange"
+            colorScheme="whatsapp"
             // color="gray.300"
             borderColor="gray.300"
             // isChecked={isAutosaveOn}

@@ -32,35 +32,7 @@ const Home: React.FC<ProfileListProps> = ({ data }) => {
 
   return (
     <Container maxW="full" px="8">
-      <Text color="brand.700">
-        <Text as="b">8000+</Text> UPSC Students Using Jionote For making{" "}
-        <Text bg="blue.50" p="0.5" as="span" fontWeight="medium">
-          online {childData?.book_name}
-        </Text>{" "}
-        Notes 📝{" "}
-      </Text>
-      {supabase.auth.session() ? (
-        <ManageNotes />
-      ) : (
-        <Box>
-          <Circle p="4" size='200px' border='1px' color='green.100' >
-            <Image
-              
-              // priority={true}
-              loading="eager"
-              // borderRadius="full"
-              // boxSize="300px"
-              // borderRadius={"full"}
-              src="/logo-150x150.png"
-              alt="Picture of the author"
-              // w={{ base: "35px", md: "180px" }}
-              // w={{ base: "35px", md: "100px" }}
-            ></Image>
-          </Circle>
-        </Box>
-      )}
-
-      {/* <CreateBookSyllabus /> */}
+      <ManageNotes />
     </Container>
   );
 };

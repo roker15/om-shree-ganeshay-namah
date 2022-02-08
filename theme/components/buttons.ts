@@ -39,8 +39,8 @@ export const buttons = {
       },
     }),
     // 4. We can override existing variants
-    solid: (props: any) => ({
-      bg: props.colorMode === "dark" ? "red.300" : "red.500",
-    }),
+    // solid: (props: any) => ({
+    //   bg: props.colorMode === "dark" ? "red.300" : "red.500",
+    // }),
   },
 };

@@ -54,7 +54,7 @@ const BookFilter: React.FC<{ setParentProps: (x: BookResponse | undefined) => vo
         <Stack direction="row">
           {categories.map((x) => {
             return (
-              <Radio key={x.id} value={x.id}>
+              <Radio key={x.id} value={x.id} colorScheme="whatsapp">
                 {x.name}
               </Radio>
             );
