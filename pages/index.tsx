@@ -1,10 +1,11 @@
-import { Container, Text, useColorMode } from "@chakra-ui/react";
+import { Box, Container, Text, useColorMode, Image, Circle } from "@chakra-ui/react";
 import { useRouter } from "next/dist/client/router";
 import React, { useState } from "react";
 import ManageNotes from "../components/notes/ManageNotes";
 import CreateBookSyllabus from "../components/syllabus/CreateBookSyllabus";
 import LayoutWithTopNavbar from "../layout/LayoutWithTopNavbar";
 import { myInfoLog } from "../lib/mylog";
+import { supabase } from "../lib/supabaseClient";
 import { useAuthContext } from "../state/Authcontext";
 import { useAppContext } from "../state/state";
 import { BookResponse, Papers } from "../types/myTypes";
@@ -38,8 +39,27 @@ const Home: React.FC<ProfileListProps> = ({ data }) => {
         </Text>{" "}
         Notes 📝{" "}
       </Text>
+      {supabase.auth.session() ? (
+        <ManageNotes />
+      ) : (
+        <Box>
+          <Circle p="4" size='200px' border='1px' color='green.100' >
+            <Image
+              
+              // priority={true}
+              loading="eager"
+              // borderRadius="full"
+              // boxSize="300px"
+              // borderRadius={"full"}
+              src="/logo-150x150.png"
+              alt="Picture of the author"
+              // w={{ base: "35px", md: "180px" }}
+              // w={{ base: "35px", md: "100px" }}
+            ></Image>
+          </Circle>
+        </Box>
+      )}
 
-      <ManageNotes />
       {/* <CreateBookSyllabus /> */}
     </Container>
   );

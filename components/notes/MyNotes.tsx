@@ -35,6 +35,7 @@ import DeleteConfirmation from "../syllabus/DeleteConfirmation";
 import useSWR, { useSWRConfig } from "swr";
 import katex from "katex";
 // import SunEditor from "suneditor-react";
+import "suneditor/dist/css/suneditor.min.css"; // Import Sun Editor's CSS File
 import { sunEditorButtonList, sunEditorfontList } from "../../lib/constants";
 import dynamic from "next/dynamic";
 interface Props {
@@ -389,13 +390,7 @@ const SuneditorForNotesMaking: React.FC<SuneditorForNotesMakingProps> = ({ artic
         </HStack>
       </Flex>
 
-      {/* <ButtonGroup>
-        <Switch size="sm" />
-        <Switch size="sm" />
-      </ButtonGroup> */}
-      {/* <EditorStyle
-        // title={editorMode === "READ" ? "READ" : "EDIT"}
-      > */}
+      <EditorStyle title={editorMode === "READ" ? "READ" : "EDIT"}>
         <SunEditor
           getSunEditorInstance={getSunEditorInstance}
           setDefaultStyle="font-family: arial; font-size: 16px;"
@@ -412,7 +407,7 @@ const SuneditorForNotesMaking: React.FC<SuneditorForNotesMakingProps> = ({ artic
             mode: "classic",
             katex: katex,
             height: "100%",
-            // resizingBar: false,
+            resizingBar: false,
             buttonList: sunEditorButtonList,
             formats: ["p", "div", "h1", "h2", "h3"],
             font: sunEditorfontList,
@@ -423,15 +418,16 @@ const SuneditorForNotesMaking: React.FC<SuneditorForNotesMakingProps> = ({ artic
             // imageGalleryUrl: "www.qlook.com",
           }}
         />
-      {/* </EditorStyle> */}
+      </EditorStyle>
     </Box>
   );
 };
+
 const EditorStyle = styled.div`
   .sun-editor {
     /* margin-top: -18px !important; */
     /* border: 1px solid blue; */
-    border: ${props => props.title==="READ" ? "none" : undefined};
-    border: "none";
+    border: ${(props) => (props.title === "READ" ? "none" : undefined)};
+    /* border: "none"; */
   }
 `;
