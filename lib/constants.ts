@@ -26,7 +26,7 @@ export const sunEditorButtonList = [
     "font",
     "fontSize",
     "formatBlock",
-    // "paragraphStyle",
+    "paragraphStyle",
     "blockquote",
     "bold",
     "underline",

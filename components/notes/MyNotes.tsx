@@ -1,54 +1,45 @@
 import {
-  Box,
-  ButtonGroup,
-  FormControl,
-  Text,
-  FormErrorMessage,
-  IconButton,
-  Input,
-  Tooltip,
-  VStack,
-  Flex,
-  TabList,
+  Box, Button,
+  Checkbox, Flex, FormControl, FormErrorMessage, HStack, IconButton,
+  Input, Radio,
+  RadioGroup, SkeletonCircle,
+  SkeletonText, Stack, Tab, TabList,
   TabPanel,
   TabPanels,
-  Tabs,
-  Tab,
-  Tag,
-  Badge,
-  Switch,
-  Radio,
-  RadioGroup,
-  Stack,
-  Button,
-  Checkbox,
-  HStack,
+  Tabs, Text, Tooltip,
+  VStack
 } from "@chakra-ui/react";
+import katex from "katex";
+import { debounce } from "lodash";
+import dynamic from "next/dynamic";
 import React, { ChangeEvent, useCallback, useEffect, useRef, useState } from "react";
 import { SubmitHandler, useForm } from "react-hook-form";
-import { MdAdd, MdCancel, MdClose, MdDone, MdModeEdit } from "react-icons/md";
+import { MdAdd, MdCancel, MdDone, MdModeEdit } from "react-icons/md";
+import styled from "styled-components";
+// import SunEditor from "suneditor-react";
+import "suneditor/dist/css/suneditor.min.css"; // Import Sun Editor's CSS File
+// import SunEditor from "suneditor-react";
+import SunEditorCore from "suneditor/src/lib/core";
+import { useSWRConfig } from "swr";
 import { useGetUserArticles } from "../../customHookes/networkHooks";
+import { sunEditorButtonList, sunEditorfontList } from "../../lib/constants";
 import { supabase } from "../../lib/supabaseClient";
 import { useAuthContext } from "../../state/Authcontext";
 import { definitions } from "../../types/supabase";
+import { customToast } from "../CustomToast";
 import DeleteConfirmation from "../syllabus/DeleteConfirmation";
-import useSWR, { useSWRConfig } from "swr";
-import katex from "katex";
-// import SunEditor from "suneditor-react";
-import "suneditor/dist/css/suneditor.min.css"; // Import Sun Editor's CSS File
-import { sunEditorButtonList, sunEditorfontList } from "../../lib/constants";
-import dynamic from "next/dynamic";
 interface Props {
   subheadingid: number | undefined;
+  notesCreator: string | undefined;
   changeParentProps: () => void;
 }
 type Inputs = {
   articleTitle: string;
   sequence: number;
 };
-const MyNotes: React.FC<Props> = ({ subheadingid, changeParentProps }) => {
+const MyNotes: React.FC<Props> = ({ subheadingid ,notesCreator, changeParentProps }) => {
   const { profile } = useAuthContext();
-  const { data: articles, isLoading: isArticleLoading } = useGetUserArticles(subheadingid, profile?.id);
+  const { data: articles, isLoading: isArticleLoading } = useGetUserArticles(subheadingid, notesCreator);
   const [isLoading, setIsLoading] = useState(false);
   const [selectedArticleForEdit, setSelectedArticleForEdit] = useState<number | undefined>();
   const [isArticleCreating, setIsArticleCreating] = useState<"CREATING" | "EDITING" | "NONE">("NONE");
@@ -58,7 +49,7 @@ const MyNotes: React.FC<Props> = ({ subheadingid, changeParentProps }) => {
   //   setSelectedSubheading(x.subheading_id);
   //   changeParentProps(x);
   // };
-  const [article, setArticle] = React.useState();
+  // const [article, setArticle] = React.useState();
   const deleteArticle = async (id: number): Promise<void> => {
     const { data, error } = await supabase.from<definitions["books_articles"]>("books_articles").delete().eq("id", id);
     if (data) {
@@ -66,12 +57,7 @@ const MyNotes: React.FC<Props> = ({ subheadingid, changeParentProps }) => {
       mutate([`/get-user-articles/${subheadingid}/${profile?.id}`]);
     }
   };
-  const cancelForm = async (e: any) => {
-    const { data, error } = await supabase
-      .from<definitions["books_articles"]>("books_articles")
-      .insert([{ article_title: e.target.value, created_by: profile?.id, books_subheadings_fk: subheadingid }]);
-    setArticle(e.target.value);
-  };
+
   const handleArticleEdit = (articleId: number | undefined, isCancel: boolean) => {
     if (isCancel) {
       setSelectedArticleForEdit(undefined);
@@ -118,7 +104,7 @@ const MyNotes: React.FC<Props> = ({ subheadingid, changeParentProps }) => {
                 icon={<MdModeEdit />}
               />
               <IconButton
-                display={isArticleCreating === "EDITING" && selectedArticleForEdit === x.id ? "center" : "none"}
+                display={isArticleCreating === "EDITING" && selectedArticleForEdit === x.id ? "undefined" : "none"}
                 size="xs"
                 ml="2"
                 borderRadius={"full"}
@@ -146,10 +132,24 @@ const MyNotes: React.FC<Props> = ({ subheadingid, changeParentProps }) => {
               </TabList>
               <TabPanels>
                 <TabPanel>
-                  {isArticleLoading ? "Loading..." : <SuneditorForNotesMaking article={x} language={"HINDI"} />}
+                  {isArticleLoading ? (
+                    <Box padding="6" boxShadow="lg" bg="white">
+                      <SkeletonCircle isLoaded={false} size="10" />
+                      <SkeletonText isLoaded={false} noOfLines={4} spacing="4" />
+                    </Box>
+                  ) : (
+                    <SuneditorForNotesMaking article={x} language={"HINDI"} />
+                  )}
                 </TabPanel>
                 <TabPanel>
-                  {isArticleLoading ? "Loading..." : <SuneditorForNotesMaking article={x} language={"ENGLISH"} />}
+                  {isArticleLoading ? (
+                    <Box padding="6" boxShadow="lg" bg="white">
+                      <SkeletonCircle isLoaded={false} size="10" />
+                      <SkeletonText isLoaded={false} noOfLines={4} spacing="4" />
+                    </Box>
+                  ) : (
+                    <SuneditorForNotesMaking article={x} language={"ENGLISH"} />
+                  )}
                 </TabPanel>
               </TabPanels>
             </Tabs>
@@ -256,12 +256,17 @@ const ArticleForm: React.FC<ArticleFormProps> = ({ subheadingid, formMode, artic
   return (
     <Box>
       <form onSubmit={handleSubmit(onSubmit)}>
-        <FormControl isInvalid={errors.articleTitle as any}>
-          <Input placeholder="Article Title" {...register("articleTitle", { required: "This is required" })} />
+        <FormControl p="2" isInvalid={errors.articleTitle as any}>
+          <Input
+            focusBorderColor="lime"
+            placeholder="Article Title"
+            {...register("articleTitle", { required: "This is required" })}
+          />
           <FormErrorMessage>{errors.articleTitle && errors.articleTitle.message}</FormErrorMessage>
         </FormControl>
-        <FormControl isInvalid={errors.articleTitle as any}>
+        <FormControl p="2" isInvalid={errors.articleTitle as any}>
           <Input
+            focusBorderColor="lime"
             type="number"
             placeholder="Article Sequence (10,20,30.. etc)"
             {...register("sequence", { required: "This is required" })}
@@ -305,12 +310,6 @@ type SuneditorForNotesMakingProps = {
   article: definitions["books_articles"];
   language: "HINDI" | "ENGLISH";
 };
-// import SunEditor from "suneditor-react";
-import SunEditorCore from "suneditor/src/lib/core";
-import { debounce } from "lodash";
-import { customToast } from "../CustomToast";
-import { myErrorLog } from "../../lib/mylog";
-import styled from "styled-components";
 const SunEditor = dynamic(() => import("suneditor-react"), {
   ssr: false,
 });
@@ -372,7 +371,8 @@ const SuneditorForNotesMaking: React.FC<SuneditorForNotesMakingProps> = ({ artic
     }
   };
   return (
-    <Box>
+    <Box spellcheck="false">
+      {/* //use above attrivutes if you want to override spellcheck of browser */}
       <Flex justifyContent="space-between">
         <RadioGroup onChange={setEditorMode} value={editorMode}>
           <Stack direction="row">
@@ -430,6 +430,13 @@ const SuneditorForNotesMaking: React.FC<SuneditorForNotesMakingProps> = ({ artic
             placeholder: "**** Start Writing your notes here, we will save it automatically!!!",
             mode: "classic",
             katex: katex,
+            paragraphStyles: [
+              "spaced",
+              {
+                name: "Box",
+                class: "seCustomClass",
+              },
+            ],
             height: "100%",
             resizingBar: false,
             buttonList: sunEditorButtonList,
@@ -453,5 +460,10 @@ const EditorStyle = styled.div`
     /* border: 1px solid blue; */
     border: ${(props) => (props.title === "READ" ? "none" : undefined)};
     /* border: "none"; */
+  }
+  .seCustomClass {
+    background: #f1e0e0;
+    padding: 5px;
+    list-style-position: inside;
   }
 `;

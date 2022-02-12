@@ -34,7 +34,7 @@ const DeleteAlertDialogue = ({ handleDelete, dialogueHeader, isDisabled, isIconB
     <>
       {isIconButton ? (
         <IconButton
-          _hover={{ color: "pink", fontSize: "22px" }}
+          // _hover={{ color: "pink", fontSize: "22px" }}
           size="xs"
           ml="2"
           borderRadius={"full"}

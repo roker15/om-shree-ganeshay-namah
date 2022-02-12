@@ -1,5 +1,6 @@
 import useSWR from "swr";
 import { supabase } from "../lib/supabaseClient";
+import { useAuthContext } from "../state/Authcontext";
 import { BookResponse, BookSyllabus, Subheading } from "../types/myTypes";
 import { definitions } from "../types/supabase";
 
@@ -27,8 +28,8 @@ export function useGetBooks(bookId?: number) {
         .eq("publication_fk", bookId),
     {
       revalidateIfStale: true,
-      revalidateOnFocus: true,
-      revalidateOnReconnect: true,
+      revalidateOnFocus: false,
+      revalidateOnReconnect: false,
     }
   );
   data ? console.log("subject is ", data!.data) : console.log("data is is not available");
@@ -65,13 +66,15 @@ export function useGetSyllabusByBookId(bookId?: number) {
 }
 export function useGetPublicNotesListBySubheading(subheadingId?: number) {
   console.log("usegetbooks getting called");
-
+  const { profile } = useAuthContext();
   const { data, error } = useSWR(
     subheadingId == undefined ? null : [`/get-public-notes-list-by-subheading/${subheadingId}`],
     async () =>
-      await supabase.rpc<SharedNotesList>("getPublicNotesListBySubheading", {
-        subheadingid: subheadingId,
-      }),
+      await supabase
+        .rpc<SharedNotesList>("getPublicNotesListBySubheading", {
+          subheadingid: subheadingId,
+        })
+        .neq("owned_by_userid", profile?.id as string),
     {
       revalidateIfStale: true,
       revalidateOnFocus: true,
