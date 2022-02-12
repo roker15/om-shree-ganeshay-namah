@@ -17,7 +17,7 @@ const ManageNotes = () => {
     { subheadingId: number | undefined; creatorId: string | undefined } | undefined
   >();
   const [selectedSyllabus, setSelectedSyllabus] = useState<BookSyllabus>();
-  const [isPostPublic, setIsPostPublic] = useState<boolean | undefined>(undefined);
+  const [isPostPublic, setIsPostPublic] = useState<boolean | "loading" | undefined>(undefined);
   const { signInWithgoogle, signOut, profile } = useAuthContext();
   const updateBookProps = (x: BookResponse | undefined) => {
     setBook(x);
@@ -32,30 +32,37 @@ const ManageNotes = () => {
     setSelectedSubheading({ subheadingId: x.subheading_id, creatorId: x.owned_by_userid });
   };
 
-  // const updateSharingStatus = async (x:boolean) => {
-  //   if (x === true) {
-  //     const { data, error } = await supabase.from<definitions["books_article_sharing"]>("books_article_sharing").insert([
-  //       {
-  //         books_subheadings_fk: selectedSubheading?.subheadingId,
-  //         owned_by: profile?.id,
-  //         ispublic: true,
-  //         shared_by: profile?.id,
-  //       },
-  //     ]);
-  //   } else if (x === false) {
-  //     const { data, error } = await supabase
-  //       .from<definitions["books_article_sharing"]>("books_article_sharing")
-  //       .delete()
-  //       .match({
-  //         books_subheadings_fk: selectedSubheading?.subheadingId,
-  //         owned_by: profile?.id,
-  //         ispublic: true,
-  //         shared_by: profile?.id,
-  //       });
-  //   }
-  // };
+  const updateSharingStatus = async (x: boolean) => {
+    if (x === true) {
+      const { data, error } = await supabase.from<definitions["books_article_sharing"]>("books_article_sharing").insert([
+        {
+          books_subheadings_fk: selectedSubheading?.subheadingId,
+          owned_by: profile?.id,
+          ispublic: true,
+          shared_by: profile?.id,
+        },
+      ]);
+      if (data) {
+        setIsPostPublic(true);
+      }
+    } else if (x === false) {
+      const { data, error } = await supabase
+        .from<definitions["books_article_sharing"]>("books_article_sharing")
+        .delete()
+        .match({
+          books_subheadings_fk: selectedSubheading?.subheadingId,
+          owned_by: profile?.id,
+          ispublic: true,
+          shared_by: profile?.id,
+        });
+      if (data) {
+        setIsPostPublic(false);
+      }
+    }
+  };
 
   useEffect(() => {
+    console.log("subheading change use effect being called");
     const getIfThisTopicIsPublic = async () => {
       const { data, error } = await supabase
         .from<definitions["books_article_sharing"]>("books_article_sharing")
@@ -65,12 +72,14 @@ const ManageNotes = () => {
           owned_by: selectedSubheading?.creatorId,
           ispublic: true,
         });
+
       if (!data && !error) {
-        setIsPostPublic(undefined);
+        setIsPostPublic("loading");
       }
       if (data && data.length !== 0) {
         setIsPostPublic(true);
-      } else if (data && data.length === 0) {
+      }
+      if (data && data.length === 0) {
         setIsPostPublic(false);
       }
     };
@@ -81,41 +90,48 @@ const ManageNotes = () => {
     setSelectedSubheading(undefined);
   }, [book]);
 
-  useEffect(() => {
-    const update = async () => {
-      if (isPostPublic === true) {
-        const { data, error } = await supabase.from<definitions["books_article_sharing"]>("books_article_sharing").insert([
-          {
-            books_subheadings_fk: selectedSubheading?.subheadingId,
-            owned_by: profile?.id,
-            ispublic: true,
-            shared_by: profile?.id,
-          },
-        ]);
-      } else if (isPostPublic === false) {
-        const { data, error } = await supabase
-          .from<definitions["books_article_sharing"]>("books_article_sharing")
-          .delete()
-          .match({
-            books_subheadings_fk: selectedSubheading?.subheadingId,
-            owned_by: profile?.id,
-            ispublic: true,
-            shared_by: profile?.id,
-          });
-      }
-    };
+  // useEffect(() => {
+  //   console.log("ispostpublic called and now useeffedct is being called");
+  //   const update = async () => {
+  //     if (isPostPublic === true) {
+  //       const { data, error } = await supabase.from<definitions["books_article_sharing"]>("books_article_sharing").insert([
+  //         {
+  //           books_subheadings_fk: selectedSubheading?.subheadingId,
+  //           owned_by: profile?.id,
+  //           ispublic: true,
+  //           shared_by: profile?.id,
+  //         },
+  //       ]);
+  //     } else if (isPostPublic === false) {
+  //       const { data, error } = await supabase
+  //         .from<definitions["books_article_sharing"]>("books_article_sharing")
+  //         .delete()
+  //         .match({
+  //           books_subheadings_fk: selectedSubheading?.subheadingId,
+  //           owned_by: profile?.id,
+  //           ispublic: true,
+  //           shared_by: profile?.id,
+  //         });
+  //     }
+  //   };
 
-    update();
-  }, [isPostPublic]);
+  //   update();
+  // }, [isPostPublic]);
 
   return (
     <div>
       <Box px="44" pb="8">
         <BookFilter setParentProps={updateBookProps}></BookFilter>
         <Flex justifyContent="end" alignItems="center" mt="2">
-          <HStack borderRadius="full" bg="gray.200" p="1">
-            <Text htmlFor="email-alerts" mb="0" px="2" textTransform="lowercase">
-              Make Public
+          <HStack
+            borderRadius="full"
+            // bg="gray.200"
+            p="1"
+            align="center"
+            display={selectedSubheading?.creatorId !== profile?.id ? "none" : "undefined"}
+          >
+            <Text justifyContent="center" as="label" htmlFor="email-alerts" mb="0" px="2" textTransform="capitalize">
+              {isPostPublic ? "Make Private" : "Make Public"}
             </Text>
             {/* <Switch
               size="sm"
@@ -124,15 +140,15 @@ const ManageNotes = () => {
               isChecked={isPostPublic}
               // onChange={(e: ChangeEvent<HTMLInputElement>) => updateSharingStatus(e.target.checked)}
             /> */}
-            {isPostPublic === undefined ? (
-              "Loading........."
+            {isPostPublic === "loading" ? (
+              <Box>"Loading..."</Box>
             ) : (
               <Switch
                 size="sm"
                 colorScheme="whatsapp"
                 // defaultChecked={isPostPublic}
                 isChecked={isPostPublic}
-                onChange={(e: ChangeEvent<HTMLInputElement>) => setIsPostPublic(e.target.checked)}
+                onChange={(e: ChangeEvent<HTMLInputElement>) => updateSharingStatus(e.target.checked)}
               />
             )}
           </HStack>

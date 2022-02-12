@@ -1,15 +1,29 @@
 import {
-  Box, Button,
-  Checkbox, Flex, FormControl, FormErrorMessage, HStack, IconButton,
-  Input, Radio,
-  RadioGroup, SkeletonCircle,
-  SkeletonText, Stack, Tab, TabList,
+  Box,
+  Button,
+  Checkbox,
+  Flex,
+  FormControl,
+  FormErrorMessage,
+  HStack,
+  IconButton,
+  Input,
+  Radio,
+  RadioGroup,
+  SkeletonCircle,
+  SkeletonText,
+  Stack,
+  Tab,
+  TabList,
   TabPanel,
   TabPanels,
-  Tabs, Text, Tooltip,
-  VStack
+  Tabs,
+  Text,
+  Tooltip,
+  VStack,
 } from "@chakra-ui/react";
 import katex from "katex";
+import "katex/dist/katex.min.css";
 import { debounce } from "lodash";
 import dynamic from "next/dynamic";
 import React, { ChangeEvent, useCallback, useEffect, useRef, useState } from "react";
@@ -37,7 +51,7 @@ type Inputs = {
   articleTitle: string;
   sequence: number;
 };
-const MyNotes: React.FC<Props> = ({ subheadingid ,notesCreator, changeParentProps }) => {
+const MyNotes: React.FC<Props> = ({ subheadingid, notesCreator, changeParentProps }) => {
   const { profile } = useAuthContext();
   const { data: articles, isLoading: isArticleLoading } = useGetUserArticles(subheadingid, notesCreator);
   const [isLoading, setIsLoading] = useState(false);
@@ -88,41 +102,42 @@ const MyNotes: React.FC<Props> = ({ subheadingid ,notesCreator, changeParentProp
                 ) : null}
               </VStack>
               {/* </Badge> */}
-
-              <IconButton
-                display="none"
-                _groupHover={{ display: "center" }}
-                // _hover={{ color: "pink", fontSize: "22px" }}
-                size="xs"
-                // ml="2"
-                borderRadius={"full"}
-                variant="outline"
-                colorScheme="whatsapp"
-                aria-label="Call Sage"
-                fontSize="20px"
-                onClick={() => handleArticleEdit(x.id, false)}
-                icon={<MdModeEdit />}
-              />
-              <IconButton
-                display={isArticleCreating === "EDITING" && selectedArticleForEdit === x.id ? "undefined" : "none"}
-                size="xs"
-                ml="2"
-                borderRadius={"full"}
-                variant="outline"
-                colorScheme="whatsapp"
-                aria-label="Call Sage"
-                fontSize="20px"
-                onClick={() => handleArticleEdit(undefined, true)}
-                icon={<MdCancel />}
-              />
-              <Box display="none" _groupHover={{ display: "center" }}>
-                <DeleteConfirmation
-                  handleDelete={deleteArticle}
-                  dialogueHeader={"Are you sure to delete this Article?"}
-                  isDisabled={false}
-                  isIconButton={true}
-                  id={x.id}
-                ></DeleteConfirmation>
+              <Box display={profile?.id !== notesCreator ? "none" : "undefined"}>
+                <IconButton
+                  display="none"
+                  _groupHover={{ display: "center" }}
+                  // _hover={{ color: "pink", fontSize: "22px" }}
+                  size="xs"
+                  // ml="2"
+                  borderRadius={"full"}
+                  variant="outline"
+                  colorScheme="whatsapp"
+                  aria-label="Call Sage"
+                  fontSize="20px"
+                  onClick={() => handleArticleEdit(x.id, false)}
+                  icon={<MdModeEdit />}
+                />
+                <IconButton
+                  display={isArticleCreating === "EDITING" && selectedArticleForEdit === x.id ? "undefined" : "none"}
+                  size="xs"
+                  ml="2"
+                  borderRadius={"full"}
+                  variant="outline"
+                  colorScheme="whatsapp"
+                  aria-label="Call Sage"
+                  fontSize="20px"
+                  onClick={() => handleArticleEdit(undefined, true)}
+                  icon={<MdCancel />}
+                />
+                <Box display="none" _groupHover={{ display: "center" }}>
+                  <DeleteConfirmation
+                    handleDelete={deleteArticle}
+                    dialogueHeader={"Are you sure to delete this Article?"}
+                    isDisabled={false}
+                    isIconButton={true}
+                    id={x.id}
+                  ></DeleteConfirmation>
+                </Box>
               </Box>
             </Flex>
             <Tabs size="md" colorScheme="whatsapp">
@@ -164,27 +179,29 @@ const MyNotes: React.FC<Props> = ({ subheadingid ,notesCreator, changeParentProp
             <ArticleForm subheadingid={subheadingid} formMode={"CREATING"} x={setIsArticleCreating}></ArticleForm>
           ) : null}
         </Box>
+        <Box display={profile?.id !== notesCreator? "none" : "undefined"}>
+          <Tooltip label="Create New Article in This Topic" fontSize="sm">
+            <span>
+              <IconButton
+                // _groupHover={{ size: "" }}
+                display={isArticleCreating === "CREATING" || !subheadingid ? "none" : "flex"}
+                _hover={{ color: " #FF1493" }}
+                size="auto"
+                ml="2"
+                onClick={() => setIsArticleCreating("CREATING")}
+                borderRadius={"full"}
+                variant="outline"
+                colorScheme="whatsapp"
+                aria-label="Call Sage"
+                fontSize="25px"
+                w="35px"
+                h="35px"
+                icon={<MdAdd />}
+              />
+            </span>
+          </Tooltip>
+        </Box>
 
-        <Tooltip label="Create New Article in This Topic" fontSize="sm">
-          <span>
-            <IconButton
-              // _groupHover={{ size: "" }}
-              display={isArticleCreating === "CREATING" || !subheadingid ? "none" : "flex"}
-              _hover={{ color: " #FF1493" }}
-              size="auto"
-              ml="2"
-              onClick={() => setIsArticleCreating("CREATING")}
-              borderRadius={"full"}
-              variant="outline"
-              colorScheme="whatsapp"
-              aria-label="Call Sage"
-              fontSize="25px"
-              w="35px"
-              h="35px"
-              icon={<MdAdd />}
-            />
-          </span>
-        </Tooltip>
         {/* <Tooltip label="Create New Article in This Topic" fontSize="sm"> */}
         <IconButton
           // _groupHover={{ size: "" }}
@@ -316,6 +333,7 @@ const SunEditor = dynamic(() => import("suneditor-react"), {
 const SuneditorForNotesMaking: React.FC<SuneditorForNotesMakingProps> = ({ article, language }) => {
   const [editorMode, setEditorMode] = React.useState("READ");
   const [isAutosaveOn, setIsAutosaveOn] = React.useState(false);
+  const { profile } = useAuthContext();
   const editor = useRef<SunEditorCore>();
   const getSunEditorInstance = (sunEditor: SunEditorCore) => {
     editor.current = sunEditor;
@@ -373,7 +391,7 @@ const SuneditorForNotesMaking: React.FC<SuneditorForNotesMakingProps> = ({ artic
   return (
     <Box spellcheck="false">
       {/* //use above attrivutes if you want to override spellcheck of browser */}
-      <Flex justifyContent="space-between">
+      <Flex display={profile?.id !== article.created_by ? "none" : "undefined"} justifyContent="space-between">
         <RadioGroup onChange={setEditorMode} value={editorMode}>
           <Stack direction="row">
             <Radio colorScheme="whatsapp" size="sm" value="READ">
