@@ -385,7 +385,7 @@ const SuneditorForNotesMaking: React.FC<SuneditorForNotesMakingProps> = ({ artic
         // mutate(`/userpost/${currentSubheadingProps?.id}`);
       }
     } catch (error: any) {
-      customToast({ title: "Post not updated error occurred,  " + error.message, status: "error", isUpdating: false });
+      customToast({ title: "Post not updated error occurred  " + error.message, status: "error", isUpdating: false });
     }
   };
   return (

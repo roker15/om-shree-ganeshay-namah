@@ -141,7 +141,7 @@ const ManageNotes = () => {
               // onChange={(e: ChangeEvent<HTMLInputElement>) => updateSharingStatus(e.target.checked)}
             /> */}
             {isPostPublic === "loading" ? (
-              <Box>"Loading..."</Box>
+              <Box>Loading...</Box>
             ) : (
               <Switch
                 size="sm"
