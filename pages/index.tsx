@@ -32,7 +32,10 @@ const Home: React.FC<ProfileListProps> = ({ data }) => {
 
   return (
     <Container maxW="full" px="8">
-      <ManageNotes />
+      <Box>
+        Under major changes, we will come back soon
+      </Box>
+      {/* <ManageNotes /> */}
     </Container>
   );
 };
