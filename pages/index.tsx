@@ -59,66 +59,68 @@ const Home: React.FC<ProfileListProps> = ({ data }) => {
 
   if (data && data.length !== 0) {
     return (
-      <Container maxW="container.lg" pt="2" align="center">
-        <Text color="brand.700">
-          <Text as="b">8000+</Text> UPSC Students Using Jionote For making{" "}
-          <Text bg="blue.50" p="0.5" as="span" fontWeight="medium">
-            online
-          </Text>{" "}
-          Notes 📝{" "}
-        </Text>
-        {/* <Text as="span" color="gray.600">
-          💬 Interact With Us At{" "}
-        </Text>
-        <ButtonGroup size="sm" isAttached variant="solid  " mx="2" mt="2" mb="2">
-          <Button w="28" variant="solid" colorScheme="whatsapp" leftIcon={<FaWhatsapp />}>
-            WhatsApp
-          </Button>
-          <Button colorScheme="whatsapp" variant="solid">
-            958-8701-073
-          </Button>
-        </ButtonGroup>
-        <ButtonGroup size="sm" isAttached variant="solid" mb="8" mt="2">
-          <Button w="28" variant="solid" color="brand.900"  leftIcon={<FaTelegram />}>
-            Telegram
-          </Button>
-          <Button variant="solid" colorScheme="telegram">
-            958-8701-073
-          </Button>
-        </ButtonGroup> */}
+      <Box>Under Major change We will come back soon</Box>
 
-        <Tabs orientation="horizontal" align="start" variant="enclosed-colored">
-          <TabList>
-            <Tab>Online Notes Making</Tab>
-            <Tab>Question Bank</Tab>
-            {supabase.auth.session() && profile?.role == "MODERATOR" ? <Tab>Admin</Tab> : null}
-          </TabList>
-          <TabPanels>
-            {/* initially mounted */}
-            <TabPanel>{tab1Ui(handleChange, data)}</TabPanel>
-            {/* initially not mounted */}
-            <TabPanel>
-              <QuestionBanks />
-            </TabPanel>
-            <TabPanel>
-              <VStack>
-                {/* <SlateEdit/> */}
-                {supabase.auth.session() && profile?.role == "MODERATOR" ? (
-                  <Box>
-                    {" "}
-                    <ButtonGroup size="sm" isAttached variant="outline">
-                      <Button onClick={() => navigateTo("./createHeading")}>Create New Heading</Button>
-                      <Button onClick={() => navigateTo("./createSubheading")}>Create New Subheading</Button>
-                      <Button onClick={() => navigateTo("./createQuestionBank")}>Create Question Bank</Button>
-                    </ButtonGroup>
-                    <MyDropzone />
-                  </Box>
-                ) : null}
-              </VStack>
-            </TabPanel>
-          </TabPanels>
-        </Tabs>
-      </Container>
+      // <Container maxW="container.lg" pt="2" align="center">
+      //   <Text color="brand.700">
+      //     <Text as="b">8000+</Text> UPSC Students Using Jionote For making{" "}
+      //     <Text bg="blue.50" p="0.5" as="span" fontWeight="medium">
+      //       online
+      //     </Text>{" "}
+      //     Notes 📝{" "}
+      //   </Text>
+      //   {/* <Text as="span" color="gray.600">
+      //     💬 Interact With Us At{" "}
+      //   </Text>
+      //   <ButtonGroup size="sm" isAttached variant="solid  " mx="2" mt="2" mb="2">
+      //     <Button w="28" variant="solid" colorScheme="whatsapp" leftIcon={<FaWhatsapp />}>
+      //       WhatsApp
+      //     </Button>
+      //     <Button colorScheme="whatsapp" variant="solid">
+      //       958-8701-073
+      //     </Button>
+      //   </ButtonGroup>
+      //   <ButtonGroup size="sm" isAttached variant="solid" mb="8" mt="2">
+      //     <Button w="28" variant="solid" color="brand.900"  leftIcon={<FaTelegram />}>
+      //       Telegram
+      //     </Button>
+      //     <Button variant="solid" colorScheme="telegram">
+      //       958-8701-073
+      //     </Button>
+      //   </ButtonGroup> */}
+
+      //   <Tabs orientation="horizontal" align="start" variant="enclosed-colored">
+      //     <TabList>
+      //       <Tab>Online Notes Making</Tab>
+      //       <Tab>Question Bank</Tab>
+      //       {supabase.auth.session() && profile?.role == "MODERATOR" ? <Tab>Admin</Tab> : null}
+      //     </TabList>
+      //     <TabPanels>
+      //       {/* initially mounted */}
+      //       <TabPanel>{tab1Ui(handleChange, data)}</TabPanel>
+      //       {/* initially not mounted */}
+      //       <TabPanel>
+      //         <QuestionBanks />
+      //       </TabPanel>
+      //       <TabPanel>
+      //         <VStack>
+      //           {/* <SlateEdit/> */}
+      //           {supabase.auth.session() && profile?.role == "MODERATOR" ? (
+      //             <Box>
+      //               {" "}
+      //               <ButtonGroup size="sm" isAttached variant="outline">
+      //                 <Button onClick={() => navigateTo("./createHeading")}>Create New Heading</Button>
+      //                 <Button onClick={() => navigateTo("./createSubheading")}>Create New Subheading</Button>
+      //                 <Button onClick={() => navigateTo("./createQuestionBank")}>Create Question Bank</Button>
+      //               </ButtonGroup>
+      //               <MyDropzone />
+      //             </Box>
+      //           ) : null}
+      //         </VStack>
+      //       </TabPanel>
+      //     </TabPanels>
+      //   </Tabs>
+      // </Container>
     );
   }
   return <div>no data</div>;
@@ -146,7 +148,6 @@ export default Home;
 function tab1Ui(handleChange: (event: any) => void, data: Papers[]) {
   return (
     <VStack>
-      
       <Text fontSize={"2xl"} mt="8" color="gray.600" fontFamily={"Comic Sans MS"}>
         Select Exam Paper → Select Syllabus Topic → Make Notes
         <Text as="span" color="gray.400">
