@@ -4,7 +4,10 @@ export const NEXT_PUBLIC_SUPABASE_ANON_KEY = process.env.NEXT_PUBLIC_SUPABASE_AN
 // export const BASE_URL = "https://om-shree-ganeshay-namah-git-development4-roker15.vercel.app"
 // export const BASE_URL = "http://localhost:3000"
 // export const BASE_URL = "https://qlook.in";
-export const BASE_URL = "https://jionote.com";
+// export const BASE_URL = "https://jionote.com";
+export const BASE_URL = "https://om-shree-ganeshay-namah-git-development4-start-roker15.vercel.app/";
+
+// npx openapi-typescript https://hbvffqslxssdbkdxfqop.supabase.co/rest/v1/?apikey=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJyb2xlIjoiYW5vbiIsImlhdCI6MTYzMDIyNjQxOCwiZXhwIjoxOTQ1ODAyNDE4fQ.CCZ3y_Mzp5HjQJnuEXqL5Wq4tk2ZjZj97gVkODFYNh4 --output types/supabase.ts
 
 export const DEFAULT_AVATARS_BUCKET = "avatars";
 
@@ -17,3 +20,86 @@ export type Profile = {
   role: string;
   email: string;
 };
+export const sunEditorButtonList = [
+  [
+    // "undo",
+    // "redo",
+    "font",
+    "fontSize",
+    "formatBlock",
+    "paragraphStyle",
+    "blockquote",
+    "bold",
+    "underline",
+    "italic",
+    "strike",
+    "subscript",
+    "superscript",
+    "fontColor",
+    "hiliteColor",
+    "textStyle",
+    "removeFormat",
+    "outdent",
+    "indent",
+    "align",
+    // "horizontalRule",
+    "list",
+    // "lineHeight",
+    "table",
+    "link",
+    "image",
+    // "video",
+    // "audio",
+    "math",
+    // "imageGallery",
+    // "fullScreen",
+    // "showBlocks",
+    // "codeView",
+    // "preview",
+    "print",
+    // "save",
+    // "template",
+  ],
+];
+// export const sunEditorButtonList = [
+//   // ["undo", "redo"],
+//   ["font", "fontSize", "formatBlock"],
+//   [/*"paragraphStyle",*/ "blockquote"],
+//   ["bold", "underline", "italic", "strike", "subscript", "superscript"],
+//   ["fontColor", "hiliteColor", "textStyle"],
+//   ["removeFormat"],
+//   "/",
+//   ["outdent", "indent"],
+//   ["align", "horizontalRule", "list" /* "lineHeight"*/],
+//   ["table", "link", "image", /* "video","audio",*/ "math"],
+
+//   ["imageGallery"], // You must add the "imageGalleryUrl".
+//   // ["fullScreen" /*, "showBlocks", "codeView"*/],
+//   [
+//     // "preview",
+//     "print",
+//   ],
+//   ["save", "template"],
+// ];
+
+
+
+export const sunEditorfontList = [
+  "Arial",
+  "Comic Sans Ms",
+  // "Bookman Old Style",
+  // "Georgia",
+  // "Calibri",
+  // "Comic Sans",
+  // "Courier",
+  // "Garamond",
+  // "Impact",
+  // "Lucida Console",
+  // "Palatino Linotype",
+  // "Segoe UI",
+  // "Tahoma",
+  // "Times New Roman",
+  // "Trebuchet MS",
+  // "Open Sans",
+  // "Roboto Slab",
+];

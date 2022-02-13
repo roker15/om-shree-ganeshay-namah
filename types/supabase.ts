@@ -12,6 +12,867 @@ export interface paths {
       };
     };
   };
+  "/books": {
+    get: {
+      parameters: {
+        query: {
+          id?: parameters["rowFilter.books.id"];
+          created_at?: parameters["rowFilter.books.created_at"];
+          updated_at?: parameters["rowFilter.books.updated_at"];
+          /** name of book */
+          book_name?: parameters["rowFilter.books.book_name"];
+          /** foreign key of subjects table */
+          subject_fk?: parameters["rowFilter.books.subject_fk"];
+          class_fk?: parameters["rowFilter.books.class_fk"];
+          board_or_university_fk?: parameters["rowFilter.books.board_or_university_fk"];
+          publication_fk?: parameters["rowFilter.books.publication_fk"];
+          /** Filtering Columns */
+          select?: parameters["select"];
+          /** Ordering */
+          order?: parameters["order"];
+          /** Limiting and Pagination */
+          offset?: parameters["offset"];
+          /** Limiting and Pagination */
+          limit?: parameters["limit"];
+        };
+        header: {
+          /** Limiting and Pagination */
+          Range?: parameters["range"];
+          /** Limiting and Pagination */
+          "Range-Unit"?: parameters["rangeUnit"];
+          /** Preference */
+          Prefer?: parameters["preferCount"];
+        };
+      };
+      responses: {
+        /** OK */
+        200: {
+          schema: definitions["books"][];
+        };
+        /** Partial Content */
+        206: unknown;
+      };
+    };
+    post: {
+      parameters: {
+        body: {
+          /** books */
+          books?: definitions["books"];
+        };
+        query: {
+          /** Filtering Columns */
+          select?: parameters["select"];
+        };
+        header: {
+          /** Preference */
+          Prefer?: parameters["preferReturn"];
+        };
+      };
+      responses: {
+        /** Created */
+        201: unknown;
+      };
+    };
+    delete: {
+      parameters: {
+        query: {
+          id?: parameters["rowFilter.books.id"];
+          created_at?: parameters["rowFilter.books.created_at"];
+          updated_at?: parameters["rowFilter.books.updated_at"];
+          /** name of book */
+          book_name?: parameters["rowFilter.books.book_name"];
+          /** foreign key of subjects table */
+          subject_fk?: parameters["rowFilter.books.subject_fk"];
+          class_fk?: parameters["rowFilter.books.class_fk"];
+          board_or_university_fk?: parameters["rowFilter.books.board_or_university_fk"];
+          publication_fk?: parameters["rowFilter.books.publication_fk"];
+        };
+        header: {
+          /** Preference */
+          Prefer?: parameters["preferReturn"];
+        };
+      };
+      responses: {
+        /** No Content */
+        204: never;
+      };
+    };
+    patch: {
+      parameters: {
+        query: {
+          id?: parameters["rowFilter.books.id"];
+          created_at?: parameters["rowFilter.books.created_at"];
+          updated_at?: parameters["rowFilter.books.updated_at"];
+          /** name of book */
+          book_name?: parameters["rowFilter.books.book_name"];
+          /** foreign key of subjects table */
+          subject_fk?: parameters["rowFilter.books.subject_fk"];
+          class_fk?: parameters["rowFilter.books.class_fk"];
+          board_or_university_fk?: parameters["rowFilter.books.board_or_university_fk"];
+          publication_fk?: parameters["rowFilter.books.publication_fk"];
+        };
+        body: {
+          /** books */
+          books?: definitions["books"];
+        };
+        header: {
+          /** Preference */
+          Prefer?: parameters["preferReturn"];
+        };
+      };
+      responses: {
+        /** No Content */
+        204: never;
+      };
+    };
+  };
+  "/books_article_sharing": {
+    get: {
+      parameters: {
+        query: {
+          id?: parameters["rowFilter.books_article_sharing.id"];
+          created_at?: parameters["rowFilter.books_article_sharing.created_at"];
+          updated_at?: parameters["rowFilter.books_article_sharing.updated_at"];
+          books_subheadings_fk?: parameters["rowFilter.books_article_sharing.books_subheadings_fk"];
+          shared_by?: parameters["rowFilter.books_article_sharing.shared_by"];
+          shared_with?: parameters["rowFilter.books_article_sharing.shared_with"];
+          /** owner of the shared article */
+          owned_by?: parameters["rowFilter.books_article_sharing.owned_by"];
+          ispublic?: parameters["rowFilter.books_article_sharing.ispublic"];
+          /** Filtering Columns */
+          select?: parameters["select"];
+          /** Ordering */
+          order?: parameters["order"];
+          /** Limiting and Pagination */
+          offset?: parameters["offset"];
+          /** Limiting and Pagination */
+          limit?: parameters["limit"];
+        };
+        header: {
+          /** Limiting and Pagination */
+          Range?: parameters["range"];
+          /** Limiting and Pagination */
+          "Range-Unit"?: parameters["rangeUnit"];
+          /** Preference */
+          Prefer?: parameters["preferCount"];
+        };
+      };
+      responses: {
+        /** OK */
+        200: {
+          schema: definitions["books_article_sharing"][];
+        };
+        /** Partial Content */
+        206: unknown;
+      };
+    };
+    post: {
+      parameters: {
+        body: {
+          /** books_article_sharing */
+          books_article_sharing?: definitions["books_article_sharing"];
+        };
+        query: {
+          /** Filtering Columns */
+          select?: parameters["select"];
+        };
+        header: {
+          /** Preference */
+          Prefer?: parameters["preferReturn"];
+        };
+      };
+      responses: {
+        /** Created */
+        201: unknown;
+      };
+    };
+    delete: {
+      parameters: {
+        query: {
+          id?: parameters["rowFilter.books_article_sharing.id"];
+          created_at?: parameters["rowFilter.books_article_sharing.created_at"];
+          updated_at?: parameters["rowFilter.books_article_sharing.updated_at"];
+          books_subheadings_fk?: parameters["rowFilter.books_article_sharing.books_subheadings_fk"];
+          shared_by?: parameters["rowFilter.books_article_sharing.shared_by"];
+          shared_with?: parameters["rowFilter.books_article_sharing.shared_with"];
+          /** owner of the shared article */
+          owned_by?: parameters["rowFilter.books_article_sharing.owned_by"];
+          ispublic?: parameters["rowFilter.books_article_sharing.ispublic"];
+        };
+        header: {
+          /** Preference */
+          Prefer?: parameters["preferReturn"];
+        };
+      };
+      responses: {
+        /** No Content */
+        204: never;
+      };
+    };
+    patch: {
+      parameters: {
+        query: {
+          id?: parameters["rowFilter.books_article_sharing.id"];
+          created_at?: parameters["rowFilter.books_article_sharing.created_at"];
+          updated_at?: parameters["rowFilter.books_article_sharing.updated_at"];
+          books_subheadings_fk?: parameters["rowFilter.books_article_sharing.books_subheadings_fk"];
+          shared_by?: parameters["rowFilter.books_article_sharing.shared_by"];
+          shared_with?: parameters["rowFilter.books_article_sharing.shared_with"];
+          /** owner of the shared article */
+          owned_by?: parameters["rowFilter.books_article_sharing.owned_by"];
+          ispublic?: parameters["rowFilter.books_article_sharing.ispublic"];
+        };
+        body: {
+          /** books_article_sharing */
+          books_article_sharing?: definitions["books_article_sharing"];
+        };
+        header: {
+          /** Preference */
+          Prefer?: parameters["preferReturn"];
+        };
+      };
+      responses: {
+        /** No Content */
+        204: never;
+      };
+    };
+  };
+  "/books_articles": {
+    get: {
+      parameters: {
+        query: {
+          id?: parameters["rowFilter.books_articles.id"];
+          created_at?: parameters["rowFilter.books_articles.created_at"];
+          updated_at?: parameters["rowFilter.books_articles.updated_at"];
+          books_subheadings_fk?: parameters["rowFilter.books_articles.books_subheadings_fk"];
+          /** Article content in hindi */
+          article_hindi?: parameters["rowFilter.books_articles.article_hindi"];
+          /** Article content in english */
+          article_english?: parameters["rowFilter.books_articles.article_english"];
+          /** Article content in audio */
+          article_audio_link?: parameters["rowFilter.books_articles.article_audio_link"];
+          created_by?: parameters["rowFilter.books_articles.created_by"];
+          /** Title of article */
+          article_title?: parameters["rowFilter.books_articles.article_title"];
+          /** Article sequence */
+          sequence?: parameters["rowFilter.books_articles.sequence"];
+          /** Filtering Columns */
+          select?: parameters["select"];
+          /** Ordering */
+          order?: parameters["order"];
+          /** Limiting and Pagination */
+          offset?: parameters["offset"];
+          /** Limiting and Pagination */
+          limit?: parameters["limit"];
+        };
+        header: {
+          /** Limiting and Pagination */
+          Range?: parameters["range"];
+          /** Limiting and Pagination */
+          "Range-Unit"?: parameters["rangeUnit"];
+          /** Preference */
+          Prefer?: parameters["preferCount"];
+        };
+      };
+      responses: {
+        /** OK */
+        200: {
+          schema: definitions["books_articles"][];
+        };
+        /** Partial Content */
+        206: unknown;
+      };
+    };
+    post: {
+      parameters: {
+        body: {
+          /** books_articles */
+          books_articles?: definitions["books_articles"];
+        };
+        query: {
+          /** Filtering Columns */
+          select?: parameters["select"];
+        };
+        header: {
+          /** Preference */
+          Prefer?: parameters["preferReturn"];
+        };
+      };
+      responses: {
+        /** Created */
+        201: unknown;
+      };
+    };
+    delete: {
+      parameters: {
+        query: {
+          id?: parameters["rowFilter.books_articles.id"];
+          created_at?: parameters["rowFilter.books_articles.created_at"];
+          updated_at?: parameters["rowFilter.books_articles.updated_at"];
+          books_subheadings_fk?: parameters["rowFilter.books_articles.books_subheadings_fk"];
+          /** Article content in hindi */
+          article_hindi?: parameters["rowFilter.books_articles.article_hindi"];
+          /** Article content in english */
+          article_english?: parameters["rowFilter.books_articles.article_english"];
+          /** Article content in audio */
+          article_audio_link?: parameters["rowFilter.books_articles.article_audio_link"];
+          created_by?: parameters["rowFilter.books_articles.created_by"];
+          /** Title of article */
+          article_title?: parameters["rowFilter.books_articles.article_title"];
+          /** Article sequence */
+          sequence?: parameters["rowFilter.books_articles.sequence"];
+        };
+        header: {
+          /** Preference */
+          Prefer?: parameters["preferReturn"];
+        };
+      };
+      responses: {
+        /** No Content */
+        204: never;
+      };
+    };
+    patch: {
+      parameters: {
+        query: {
+          id?: parameters["rowFilter.books_articles.id"];
+          created_at?: parameters["rowFilter.books_articles.created_at"];
+          updated_at?: parameters["rowFilter.books_articles.updated_at"];
+          books_subheadings_fk?: parameters["rowFilter.books_articles.books_subheadings_fk"];
+          /** Article content in hindi */
+          article_hindi?: parameters["rowFilter.books_articles.article_hindi"];
+          /** Article content in english */
+          article_english?: parameters["rowFilter.books_articles.article_english"];
+          /** Article content in audio */
+          article_audio_link?: parameters["rowFilter.books_articles.article_audio_link"];
+          created_by?: parameters["rowFilter.books_articles.created_by"];
+          /** Title of article */
+          article_title?: parameters["rowFilter.books_articles.article_title"];
+          /** Article sequence */
+          sequence?: parameters["rowFilter.books_articles.sequence"];
+        };
+        body: {
+          /** books_articles */
+          books_articles?: definitions["books_articles"];
+        };
+        header: {
+          /** Preference */
+          Prefer?: parameters["preferReturn"];
+        };
+      };
+      responses: {
+        /** No Content */
+        204: never;
+      };
+    };
+  };
+  "/books_board_or_university": {
+    get: {
+      parameters: {
+        query: {
+          id?: parameters["rowFilter.books_board_or_university.id"];
+          created_at?: parameters["rowFilter.books_board_or_university.created_at"];
+          updated_at?: parameters["rowFilter.books_board_or_university.updated_at"];
+          name?: parameters["rowFilter.books_board_or_university.name"];
+          /** Filtering Columns */
+          select?: parameters["select"];
+          /** Ordering */
+          order?: parameters["order"];
+          /** Limiting and Pagination */
+          offset?: parameters["offset"];
+          /** Limiting and Pagination */
+          limit?: parameters["limit"];
+        };
+        header: {
+          /** Limiting and Pagination */
+          Range?: parameters["range"];
+          /** Limiting and Pagination */
+          "Range-Unit"?: parameters["rangeUnit"];
+          /** Preference */
+          Prefer?: parameters["preferCount"];
+        };
+      };
+      responses: {
+        /** OK */
+        200: {
+          schema: definitions["books_board_or_university"][];
+        };
+        /** Partial Content */
+        206: unknown;
+      };
+    };
+    post: {
+      parameters: {
+        body: {
+          /** books_board_or_university */
+          books_board_or_university?: definitions["books_board_or_university"];
+        };
+        query: {
+          /** Filtering Columns */
+          select?: parameters["select"];
+        };
+        header: {
+          /** Preference */
+          Prefer?: parameters["preferReturn"];
+        };
+      };
+      responses: {
+        /** Created */
+        201: unknown;
+      };
+    };
+    delete: {
+      parameters: {
+        query: {
+          id?: parameters["rowFilter.books_board_or_university.id"];
+          created_at?: parameters["rowFilter.books_board_or_university.created_at"];
+          updated_at?: parameters["rowFilter.books_board_or_university.updated_at"];
+          name?: parameters["rowFilter.books_board_or_university.name"];
+        };
+        header: {
+          /** Preference */
+          Prefer?: parameters["preferReturn"];
+        };
+      };
+      responses: {
+        /** No Content */
+        204: never;
+      };
+    };
+    patch: {
+      parameters: {
+        query: {
+          id?: parameters["rowFilter.books_board_or_university.id"];
+          created_at?: parameters["rowFilter.books_board_or_university.created_at"];
+          updated_at?: parameters["rowFilter.books_board_or_university.updated_at"];
+          name?: parameters["rowFilter.books_board_or_university.name"];
+        };
+        body: {
+          /** books_board_or_university */
+          books_board_or_university?: definitions["books_board_or_university"];
+        };
+        header: {
+          /** Preference */
+          Prefer?: parameters["preferReturn"];
+        };
+      };
+      responses: {
+        /** No Content */
+        204: never;
+      };
+    };
+  };
+  "/books_class": {
+    get: {
+      parameters: {
+        query: {
+          id?: parameters["rowFilter.books_class.id"];
+          created_at?: parameters["rowFilter.books_class.created_at"];
+          updated_at?: parameters["rowFilter.books_class.updated_at"];
+          class?: parameters["rowFilter.books_class.class"];
+          /** Filtering Columns */
+          select?: parameters["select"];
+          /** Ordering */
+          order?: parameters["order"];
+          /** Limiting and Pagination */
+          offset?: parameters["offset"];
+          /** Limiting and Pagination */
+          limit?: parameters["limit"];
+        };
+        header: {
+          /** Limiting and Pagination */
+          Range?: parameters["range"];
+          /** Limiting and Pagination */
+          "Range-Unit"?: parameters["rangeUnit"];
+          /** Preference */
+          Prefer?: parameters["preferCount"];
+        };
+      };
+      responses: {
+        /** OK */
+        200: {
+          schema: definitions["books_class"][];
+        };
+        /** Partial Content */
+        206: unknown;
+      };
+    };
+    post: {
+      parameters: {
+        body: {
+          /** books_class */
+          books_class?: definitions["books_class"];
+        };
+        query: {
+          /** Filtering Columns */
+          select?: parameters["select"];
+        };
+        header: {
+          /** Preference */
+          Prefer?: parameters["preferReturn"];
+        };
+      };
+      responses: {
+        /** Created */
+        201: unknown;
+      };
+    };
+    delete: {
+      parameters: {
+        query: {
+          id?: parameters["rowFilter.books_class.id"];
+          created_at?: parameters["rowFilter.books_class.created_at"];
+          updated_at?: parameters["rowFilter.books_class.updated_at"];
+          class?: parameters["rowFilter.books_class.class"];
+        };
+        header: {
+          /** Preference */
+          Prefer?: parameters["preferReturn"];
+        };
+      };
+      responses: {
+        /** No Content */
+        204: never;
+      };
+    };
+    patch: {
+      parameters: {
+        query: {
+          id?: parameters["rowFilter.books_class.id"];
+          created_at?: parameters["rowFilter.books_class.created_at"];
+          updated_at?: parameters["rowFilter.books_class.updated_at"];
+          class?: parameters["rowFilter.books_class.class"];
+        };
+        body: {
+          /** books_class */
+          books_class?: definitions["books_class"];
+        };
+        header: {
+          /** Preference */
+          Prefer?: parameters["preferReturn"];
+        };
+      };
+      responses: {
+        /** No Content */
+        204: never;
+      };
+    };
+  };
+  "/books_headings": {
+    get: {
+      parameters: {
+        query: {
+          id?: parameters["rowFilter.books_headings.id"];
+          created_at?: parameters["rowFilter.books_headings.created_at"];
+          updated_at?: parameters["rowFilter.books_headings.updated_at"];
+          heading?: parameters["rowFilter.books_headings.heading"];
+          books_fk?: parameters["rowFilter.books_headings.books_fk"];
+          sequence?: parameters["rowFilter.books_headings.sequence"];
+          /** Filtering Columns */
+          select?: parameters["select"];
+          /** Ordering */
+          order?: parameters["order"];
+          /** Limiting and Pagination */
+          offset?: parameters["offset"];
+          /** Limiting and Pagination */
+          limit?: parameters["limit"];
+        };
+        header: {
+          /** Limiting and Pagination */
+          Range?: parameters["range"];
+          /** Limiting and Pagination */
+          "Range-Unit"?: parameters["rangeUnit"];
+          /** Preference */
+          Prefer?: parameters["preferCount"];
+        };
+      };
+      responses: {
+        /** OK */
+        200: {
+          schema: definitions["books_headings"][];
+        };
+        /** Partial Content */
+        206: unknown;
+      };
+    };
+    post: {
+      parameters: {
+        body: {
+          /** books_headings */
+          books_headings?: definitions["books_headings"];
+        };
+        query: {
+          /** Filtering Columns */
+          select?: parameters["select"];
+        };
+        header: {
+          /** Preference */
+          Prefer?: parameters["preferReturn"];
+        };
+      };
+      responses: {
+        /** Created */
+        201: unknown;
+      };
+    };
+    delete: {
+      parameters: {
+        query: {
+          id?: parameters["rowFilter.books_headings.id"];
+          created_at?: parameters["rowFilter.books_headings.created_at"];
+          updated_at?: parameters["rowFilter.books_headings.updated_at"];
+          heading?: parameters["rowFilter.books_headings.heading"];
+          books_fk?: parameters["rowFilter.books_headings.books_fk"];
+          sequence?: parameters["rowFilter.books_headings.sequence"];
+        };
+        header: {
+          /** Preference */
+          Prefer?: parameters["preferReturn"];
+        };
+      };
+      responses: {
+        /** No Content */
+        204: never;
+      };
+    };
+    patch: {
+      parameters: {
+        query: {
+          id?: parameters["rowFilter.books_headings.id"];
+          created_at?: parameters["rowFilter.books_headings.created_at"];
+          updated_at?: parameters["rowFilter.books_headings.updated_at"];
+          heading?: parameters["rowFilter.books_headings.heading"];
+          books_fk?: parameters["rowFilter.books_headings.books_fk"];
+          sequence?: parameters["rowFilter.books_headings.sequence"];
+        };
+        body: {
+          /** books_headings */
+          books_headings?: definitions["books_headings"];
+        };
+        header: {
+          /** Preference */
+          Prefer?: parameters["preferReturn"];
+        };
+      };
+      responses: {
+        /** No Content */
+        204: never;
+      };
+    };
+  };
+  "/books_publication": {
+    get: {
+      parameters: {
+        query: {
+          id?: parameters["rowFilter.books_publication.id"];
+          created_at?: parameters["rowFilter.books_publication.created_at"];
+          updated_at?: parameters["rowFilter.books_publication.updated_at"];
+          publication_name?: parameters["rowFilter.books_publication.publication_name"];
+          /** Filtering Columns */
+          select?: parameters["select"];
+          /** Ordering */
+          order?: parameters["order"];
+          /** Limiting and Pagination */
+          offset?: parameters["offset"];
+          /** Limiting and Pagination */
+          limit?: parameters["limit"];
+        };
+        header: {
+          /** Limiting and Pagination */
+          Range?: parameters["range"];
+          /** Limiting and Pagination */
+          "Range-Unit"?: parameters["rangeUnit"];
+          /** Preference */
+          Prefer?: parameters["preferCount"];
+        };
+      };
+      responses: {
+        /** OK */
+        200: {
+          schema: definitions["books_publication"][];
+        };
+        /** Partial Content */
+        206: unknown;
+      };
+    };
+    post: {
+      parameters: {
+        body: {
+          /** books_publication */
+          books_publication?: definitions["books_publication"];
+        };
+        query: {
+          /** Filtering Columns */
+          select?: parameters["select"];
+        };
+        header: {
+          /** Preference */
+          Prefer?: parameters["preferReturn"];
+        };
+      };
+      responses: {
+        /** Created */
+        201: unknown;
+      };
+    };
+    delete: {
+      parameters: {
+        query: {
+          id?: parameters["rowFilter.books_publication.id"];
+          created_at?: parameters["rowFilter.books_publication.created_at"];
+          updated_at?: parameters["rowFilter.books_publication.updated_at"];
+          publication_name?: parameters["rowFilter.books_publication.publication_name"];
+        };
+        header: {
+          /** Preference */
+          Prefer?: parameters["preferReturn"];
+        };
+      };
+      responses: {
+        /** No Content */
+        204: never;
+      };
+    };
+    patch: {
+      parameters: {
+        query: {
+          id?: parameters["rowFilter.books_publication.id"];
+          created_at?: parameters["rowFilter.books_publication.created_at"];
+          updated_at?: parameters["rowFilter.books_publication.updated_at"];
+          publication_name?: parameters["rowFilter.books_publication.publication_name"];
+        };
+        body: {
+          /** books_publication */
+          books_publication?: definitions["books_publication"];
+        };
+        header: {
+          /** Preference */
+          Prefer?: parameters["preferReturn"];
+        };
+      };
+      responses: {
+        /** No Content */
+        204: never;
+      };
+    };
+  };
+  "/books_subheadings": {
+    get: {
+      parameters: {
+        query: {
+          /**
+           * let { data: subheadings, error } = await supabase
+           *   .from('subheadings')
+           *   .select('idmmmm')
+           */
+          id?: parameters["rowFilter.books_subheadings.id"];
+          created_at?: parameters["rowFilter.books_subheadings.created_at"];
+          updated_at?: parameters["rowFilter.books_subheadings.updated_at"];
+          subheading?: parameters["rowFilter.books_subheadings.subheading"];
+          books_headings_fk?: parameters["rowFilter.books_subheadings.books_headings_fk"];
+          sequence?: parameters["rowFilter.books_subheadings.sequence"];
+          /** Filtering Columns */
+          select?: parameters["select"];
+          /** Ordering */
+          order?: parameters["order"];
+          /** Limiting and Pagination */
+          offset?: parameters["offset"];
+          /** Limiting and Pagination */
+          limit?: parameters["limit"];
+        };
+        header: {
+          /** Limiting and Pagination */
+          Range?: parameters["range"];
+          /** Limiting and Pagination */
+          "Range-Unit"?: parameters["rangeUnit"];
+          /** Preference */
+          Prefer?: parameters["preferCount"];
+        };
+      };
+      responses: {
+        /** OK */
+        200: {
+          schema: definitions["books_subheadings"][];
+        };
+        /** Partial Content */
+        206: unknown;
+      };
+    };
+    post: {
+      parameters: {
+        body: {
+          /** books_subheadings */
+          books_subheadings?: definitions["books_subheadings"];
+        };
+        query: {
+          /** Filtering Columns */
+          select?: parameters["select"];
+        };
+        header: {
+          /** Preference */
+          Prefer?: parameters["preferReturn"];
+        };
+      };
+      responses: {
+        /** Created */
+        201: unknown;
+      };
+    };
+    delete: {
+      parameters: {
+        query: {
+          /**
+           * let { data: subheadings, error } = await supabase
+           *   .from('subheadings')
+           *   .select('idmmmm')
+           */
+          id?: parameters["rowFilter.books_subheadings.id"];
+          created_at?: parameters["rowFilter.books_subheadings.created_at"];
+          updated_at?: parameters["rowFilter.books_subheadings.updated_at"];
+          subheading?: parameters["rowFilter.books_subheadings.subheading"];
+          books_headings_fk?: parameters["rowFilter.books_subheadings.books_headings_fk"];
+          sequence?: parameters["rowFilter.books_subheadings.sequence"];
+        };
+        header: {
+          /** Preference */
+          Prefer?: parameters["preferReturn"];
+        };
+      };
+      responses: {
+        /** No Content */
+        204: never;
+      };
+    };
+    patch: {
+      parameters: {
+        query: {
+          /**
+           * let { data: subheadings, error } = await supabase
+           *   .from('subheadings')
+           *   .select('idmmmm')
+           */
+          id?: parameters["rowFilter.books_subheadings.id"];
+          created_at?: parameters["rowFilter.books_subheadings.created_at"];
+          updated_at?: parameters["rowFilter.books_subheadings.updated_at"];
+          subheading?: parameters["rowFilter.books_subheadings.subheading"];
+          books_headings_fk?: parameters["rowFilter.books_subheadings.books_headings_fk"];
+          sequence?: parameters["rowFilter.books_subheadings.sequence"];
+        };
+        body: {
+          /** books_subheadings */
+          books_subheadings?: definitions["books_subheadings"];
+        };
+        header: {
+          /** Preference */
+          Prefer?: parameters["preferReturn"];
+        };
+      };
+      responses: {
+        /** No Content */
+        204: never;
+      };
+    };
+  };
   "/countries": {
     get: {
       parameters: {
@@ -114,6 +975,414 @@ export interface paths {
         body: {
           /** countries */
           countries?: definitions["countries"];
+        };
+        header: {
+          /** Preference */
+          Prefer?: parameters["preferReturn"];
+        };
+      };
+      responses: {
+        /** No Content */
+        204: never;
+      };
+    };
+  };
+  "/current_affair": {
+    get: {
+      parameters: {
+        query: {
+          id?: parameters["rowFilter.current_affair.id"];
+          created_at?: parameters["rowFilter.current_affair.created_at"];
+          update_at?: parameters["rowFilter.current_affair.update_at"];
+          name?: parameters["rowFilter.current_affair.name"];
+          /** Filtering Columns */
+          select?: parameters["select"];
+          /** Ordering */
+          order?: parameters["order"];
+          /** Limiting and Pagination */
+          offset?: parameters["offset"];
+          /** Limiting and Pagination */
+          limit?: parameters["limit"];
+        };
+        header: {
+          /** Limiting and Pagination */
+          Range?: parameters["range"];
+          /** Limiting and Pagination */
+          "Range-Unit"?: parameters["rangeUnit"];
+          /** Preference */
+          Prefer?: parameters["preferCount"];
+        };
+      };
+      responses: {
+        /** OK */
+        200: {
+          schema: definitions["current_affair"][];
+        };
+        /** Partial Content */
+        206: unknown;
+      };
+    };
+    post: {
+      parameters: {
+        body: {
+          /** current_affair */
+          current_affair?: definitions["current_affair"];
+        };
+        query: {
+          /** Filtering Columns */
+          select?: parameters["select"];
+        };
+        header: {
+          /** Preference */
+          Prefer?: parameters["preferReturn"];
+        };
+      };
+      responses: {
+        /** Created */
+        201: unknown;
+      };
+    };
+    delete: {
+      parameters: {
+        query: {
+          id?: parameters["rowFilter.current_affair.id"];
+          created_at?: parameters["rowFilter.current_affair.created_at"];
+          update_at?: parameters["rowFilter.current_affair.update_at"];
+          name?: parameters["rowFilter.current_affair.name"];
+        };
+        header: {
+          /** Preference */
+          Prefer?: parameters["preferReturn"];
+        };
+      };
+      responses: {
+        /** No Content */
+        204: never;
+      };
+    };
+    patch: {
+      parameters: {
+        query: {
+          id?: parameters["rowFilter.current_affair.id"];
+          created_at?: parameters["rowFilter.current_affair.created_at"];
+          update_at?: parameters["rowFilter.current_affair.update_at"];
+          name?: parameters["rowFilter.current_affair.name"];
+        };
+        body: {
+          /** current_affair */
+          current_affair?: definitions["current_affair"];
+        };
+        header: {
+          /** Preference */
+          Prefer?: parameters["preferReturn"];
+        };
+      };
+      responses: {
+        /** No Content */
+        204: never;
+      };
+    };
+  };
+  "/current_affair_headings": {
+    get: {
+      parameters: {
+        query: {
+          id?: parameters["rowFilter.current_affair_headings.id"];
+          created_at?: parameters["rowFilter.current_affair_headings.created_at"];
+          updated_at?: parameters["rowFilter.current_affair_headings.updated_at"];
+          heading?: parameters["rowFilter.current_affair_headings.heading"];
+          current_affair_fk?: parameters["rowFilter.current_affair_headings.current_affair_fk"];
+          sequence?: parameters["rowFilter.current_affair_headings.sequence"];
+          /** Filtering Columns */
+          select?: parameters["select"];
+          /** Ordering */
+          order?: parameters["order"];
+          /** Limiting and Pagination */
+          offset?: parameters["offset"];
+          /** Limiting and Pagination */
+          limit?: parameters["limit"];
+        };
+        header: {
+          /** Limiting and Pagination */
+          Range?: parameters["range"];
+          /** Limiting and Pagination */
+          "Range-Unit"?: parameters["rangeUnit"];
+          /** Preference */
+          Prefer?: parameters["preferCount"];
+        };
+      };
+      responses: {
+        /** OK */
+        200: {
+          schema: definitions["current_affair_headings"][];
+        };
+        /** Partial Content */
+        206: unknown;
+      };
+    };
+    post: {
+      parameters: {
+        body: {
+          /** current_affair_headings */
+          current_affair_headings?: definitions["current_affair_headings"];
+        };
+        query: {
+          /** Filtering Columns */
+          select?: parameters["select"];
+        };
+        header: {
+          /** Preference */
+          Prefer?: parameters["preferReturn"];
+        };
+      };
+      responses: {
+        /** Created */
+        201: unknown;
+      };
+    };
+    delete: {
+      parameters: {
+        query: {
+          id?: parameters["rowFilter.current_affair_headings.id"];
+          created_at?: parameters["rowFilter.current_affair_headings.created_at"];
+          updated_at?: parameters["rowFilter.current_affair_headings.updated_at"];
+          heading?: parameters["rowFilter.current_affair_headings.heading"];
+          current_affair_fk?: parameters["rowFilter.current_affair_headings.current_affair_fk"];
+          sequence?: parameters["rowFilter.current_affair_headings.sequence"];
+        };
+        header: {
+          /** Preference */
+          Prefer?: parameters["preferReturn"];
+        };
+      };
+      responses: {
+        /** No Content */
+        204: never;
+      };
+    };
+    patch: {
+      parameters: {
+        query: {
+          id?: parameters["rowFilter.current_affair_headings.id"];
+          created_at?: parameters["rowFilter.current_affair_headings.created_at"];
+          updated_at?: parameters["rowFilter.current_affair_headings.updated_at"];
+          heading?: parameters["rowFilter.current_affair_headings.heading"];
+          current_affair_fk?: parameters["rowFilter.current_affair_headings.current_affair_fk"];
+          sequence?: parameters["rowFilter.current_affair_headings.sequence"];
+        };
+        body: {
+          /** current_affair_headings */
+          current_affair_headings?: definitions["current_affair_headings"];
+        };
+        header: {
+          /** Preference */
+          Prefer?: parameters["preferReturn"];
+        };
+      };
+      responses: {
+        /** No Content */
+        204: never;
+      };
+    };
+  };
+  "/current_affair_subheadings": {
+    get: {
+      parameters: {
+        query: {
+          /**
+           * let { data: subheadings, error } = await supabase
+           *   .from('subheadings')
+           *   .select('idmmmm')
+           */
+          id?: parameters["rowFilter.current_affair_subheadings.id"];
+          created_at?: parameters["rowFilter.current_affair_subheadings.created_at"];
+          updated_at?: parameters["rowFilter.current_affair_subheadings.updated_at"];
+          subheading?: parameters["rowFilter.current_affair_subheadings.subheading"];
+          current_affair_headings_fk?: parameters["rowFilter.current_affair_subheadings.current_affair_headings_fk"];
+          sequence?: parameters["rowFilter.current_affair_subheadings.sequence"];
+          /** Filtering Columns */
+          select?: parameters["select"];
+          /** Ordering */
+          order?: parameters["order"];
+          /** Limiting and Pagination */
+          offset?: parameters["offset"];
+          /** Limiting and Pagination */
+          limit?: parameters["limit"];
+        };
+        header: {
+          /** Limiting and Pagination */
+          Range?: parameters["range"];
+          /** Limiting and Pagination */
+          "Range-Unit"?: parameters["rangeUnit"];
+          /** Preference */
+          Prefer?: parameters["preferCount"];
+        };
+      };
+      responses: {
+        /** OK */
+        200: {
+          schema: definitions["current_affair_subheadings"][];
+        };
+        /** Partial Content */
+        206: unknown;
+      };
+    };
+    post: {
+      parameters: {
+        body: {
+          /** current_affair_subheadings */
+          current_affair_subheadings?: definitions["current_affair_subheadings"];
+        };
+        query: {
+          /** Filtering Columns */
+          select?: parameters["select"];
+        };
+        header: {
+          /** Preference */
+          Prefer?: parameters["preferReturn"];
+        };
+      };
+      responses: {
+        /** Created */
+        201: unknown;
+      };
+    };
+    delete: {
+      parameters: {
+        query: {
+          /**
+           * let { data: subheadings, error } = await supabase
+           *   .from('subheadings')
+           *   .select('idmmmm')
+           */
+          id?: parameters["rowFilter.current_affair_subheadings.id"];
+          created_at?: parameters["rowFilter.current_affair_subheadings.created_at"];
+          updated_at?: parameters["rowFilter.current_affair_subheadings.updated_at"];
+          subheading?: parameters["rowFilter.current_affair_subheadings.subheading"];
+          current_affair_headings_fk?: parameters["rowFilter.current_affair_subheadings.current_affair_headings_fk"];
+          sequence?: parameters["rowFilter.current_affair_subheadings.sequence"];
+        };
+        header: {
+          /** Preference */
+          Prefer?: parameters["preferReturn"];
+        };
+      };
+      responses: {
+        /** No Content */
+        204: never;
+      };
+    };
+    patch: {
+      parameters: {
+        query: {
+          /**
+           * let { data: subheadings, error } = await supabase
+           *   .from('subheadings')
+           *   .select('idmmmm')
+           */
+          id?: parameters["rowFilter.current_affair_subheadings.id"];
+          created_at?: parameters["rowFilter.current_affair_subheadings.created_at"];
+          updated_at?: parameters["rowFilter.current_affair_subheadings.updated_at"];
+          subheading?: parameters["rowFilter.current_affair_subheadings.subheading"];
+          current_affair_headings_fk?: parameters["rowFilter.current_affair_subheadings.current_affair_headings_fk"];
+          sequence?: parameters["rowFilter.current_affair_subheadings.sequence"];
+        };
+        body: {
+          /** current_affair_subheadings */
+          current_affair_subheadings?: definitions["current_affair_subheadings"];
+        };
+        header: {
+          /** Preference */
+          Prefer?: parameters["preferReturn"];
+        };
+      };
+      responses: {
+        /** No Content */
+        204: never;
+      };
+    };
+  };
+  "/current_affair_tag": {
+    get: {
+      parameters: {
+        query: {
+          id?: parameters["rowFilter.current_affair_tag.id"];
+          created_at?: parameters["rowFilter.current_affair_tag.created_at"];
+          tag_name?: parameters["rowFilter.current_affair_tag.tag_name"];
+          /** Filtering Columns */
+          select?: parameters["select"];
+          /** Ordering */
+          order?: parameters["order"];
+          /** Limiting and Pagination */
+          offset?: parameters["offset"];
+          /** Limiting and Pagination */
+          limit?: parameters["limit"];
+        };
+        header: {
+          /** Limiting and Pagination */
+          Range?: parameters["range"];
+          /** Limiting and Pagination */
+          "Range-Unit"?: parameters["rangeUnit"];
+          /** Preference */
+          Prefer?: parameters["preferCount"];
+        };
+      };
+      responses: {
+        /** OK */
+        200: {
+          schema: definitions["current_affair_tag"][];
+        };
+        /** Partial Content */
+        206: unknown;
+      };
+    };
+    post: {
+      parameters: {
+        body: {
+          /** current_affair_tag */
+          current_affair_tag?: definitions["current_affair_tag"];
+        };
+        query: {
+          /** Filtering Columns */
+          select?: parameters["select"];
+        };
+        header: {
+          /** Preference */
+          Prefer?: parameters["preferReturn"];
+        };
+      };
+      responses: {
+        /** Created */
+        201: unknown;
+      };
+    };
+    delete: {
+      parameters: {
+        query: {
+          id?: parameters["rowFilter.current_affair_tag.id"];
+          created_at?: parameters["rowFilter.current_affair_tag.created_at"];
+          tag_name?: parameters["rowFilter.current_affair_tag.tag_name"];
+        };
+        header: {
+          /** Preference */
+          Prefer?: parameters["preferReturn"];
+        };
+      };
+      responses: {
+        /** No Content */
+        204: never;
+      };
+    };
+    patch: {
+      parameters: {
+        query: {
+          id?: parameters["rowFilter.current_affair_tag.id"];
+          created_at?: parameters["rowFilter.current_affair_tag.created_at"];
+          tag_name?: parameters["rowFilter.current_affair_tag.tag_name"];
+        };
+        body: {
+          /** current_affair_tag */
+          current_affair_tag?: definitions["current_affair_tag"];
         };
         header: {
           /** Preference */
@@ -1243,6 +2512,198 @@ export interface paths {
       };
     };
   };
+  "/subjects": {
+    get: {
+      parameters: {
+        query: {
+          id?: parameters["rowFilter.subjects.id"];
+          created_at?: parameters["rowFilter.subjects.created_at"];
+          updated_at?: parameters["rowFilter.subjects.updated_at"];
+          /** name of subject */
+          subject_name?: parameters["rowFilter.subjects.subject_name"];
+          /** Filtering Columns */
+          select?: parameters["select"];
+          /** Ordering */
+          order?: parameters["order"];
+          /** Limiting and Pagination */
+          offset?: parameters["offset"];
+          /** Limiting and Pagination */
+          limit?: parameters["limit"];
+        };
+        header: {
+          /** Limiting and Pagination */
+          Range?: parameters["range"];
+          /** Limiting and Pagination */
+          "Range-Unit"?: parameters["rangeUnit"];
+          /** Preference */
+          Prefer?: parameters["preferCount"];
+        };
+      };
+      responses: {
+        /** OK */
+        200: {
+          schema: definitions["subjects"][];
+        };
+        /** Partial Content */
+        206: unknown;
+      };
+    };
+    post: {
+      parameters: {
+        body: {
+          /** subjects */
+          subjects?: definitions["subjects"];
+        };
+        query: {
+          /** Filtering Columns */
+          select?: parameters["select"];
+        };
+        header: {
+          /** Preference */
+          Prefer?: parameters["preferReturn"];
+        };
+      };
+      responses: {
+        /** Created */
+        201: unknown;
+      };
+    };
+    delete: {
+      parameters: {
+        query: {
+          id?: parameters["rowFilter.subjects.id"];
+          created_at?: parameters["rowFilter.subjects.created_at"];
+          updated_at?: parameters["rowFilter.subjects.updated_at"];
+          /** name of subject */
+          subject_name?: parameters["rowFilter.subjects.subject_name"];
+        };
+        header: {
+          /** Preference */
+          Prefer?: parameters["preferReturn"];
+        };
+      };
+      responses: {
+        /** No Content */
+        204: never;
+      };
+    };
+    patch: {
+      parameters: {
+        query: {
+          id?: parameters["rowFilter.subjects.id"];
+          created_at?: parameters["rowFilter.subjects.created_at"];
+          updated_at?: parameters["rowFilter.subjects.updated_at"];
+          /** name of subject */
+          subject_name?: parameters["rowFilter.subjects.subject_name"];
+        };
+        body: {
+          /** subjects */
+          subjects?: definitions["subjects"];
+        };
+        header: {
+          /** Preference */
+          Prefer?: parameters["preferReturn"];
+        };
+      };
+      responses: {
+        /** No Content */
+        204: never;
+      };
+    };
+  };
+  "/tree": {
+    get: {
+      parameters: {
+        query: {
+          id?: parameters["rowFilter.tree.id"];
+          letter?: parameters["rowFilter.tree.letter"];
+          path?: parameters["rowFilter.tree.path"];
+          /** Filtering Columns */
+          select?: parameters["select"];
+          /** Ordering */
+          order?: parameters["order"];
+          /** Limiting and Pagination */
+          offset?: parameters["offset"];
+          /** Limiting and Pagination */
+          limit?: parameters["limit"];
+        };
+        header: {
+          /** Limiting and Pagination */
+          Range?: parameters["range"];
+          /** Limiting and Pagination */
+          "Range-Unit"?: parameters["rangeUnit"];
+          /** Preference */
+          Prefer?: parameters["preferCount"];
+        };
+      };
+      responses: {
+        /** OK */
+        200: {
+          schema: definitions["tree"][];
+        };
+        /** Partial Content */
+        206: unknown;
+      };
+    };
+    post: {
+      parameters: {
+        body: {
+          /** tree */
+          tree?: definitions["tree"];
+        };
+        query: {
+          /** Filtering Columns */
+          select?: parameters["select"];
+        };
+        header: {
+          /** Preference */
+          Prefer?: parameters["preferReturn"];
+        };
+      };
+      responses: {
+        /** Created */
+        201: unknown;
+      };
+    };
+    delete: {
+      parameters: {
+        query: {
+          id?: parameters["rowFilter.tree.id"];
+          letter?: parameters["rowFilter.tree.letter"];
+          path?: parameters["rowFilter.tree.path"];
+        };
+        header: {
+          /** Preference */
+          Prefer?: parameters["preferReturn"];
+        };
+      };
+      responses: {
+        /** No Content */
+        204: never;
+      };
+    };
+    patch: {
+      parameters: {
+        query: {
+          id?: parameters["rowFilter.tree.id"];
+          letter?: parameters["rowFilter.tree.letter"];
+          path?: parameters["rowFilter.tree.path"];
+        };
+        body: {
+          /** tree */
+          tree?: definitions["tree"];
+        };
+        header: {
+          /** Preference */
+          Prefer?: parameters["preferReturn"];
+        };
+      };
+      responses: {
+        /** No Content */
+        204: never;
+      };
+    };
+  };
   "/userfiles": {
     get: {
       parameters: {
@@ -1336,13 +2797,13 @@ export interface paths {
       };
     };
   };
-  "/rpc/getsyllabuss": {
+  "/rpc/getSyllabusFromBookIdRightJoinToGetAllHeading": {
     post: {
       parameters: {
         body: {
           args: {
             /** Format: bigint */
-            paper_idd: number;
+            bookid: number;
           };
         };
         header: {
@@ -1356,13 +2817,13 @@ export interface paths {
       };
     };
   };
-  "/rpc/getsyllabussss": {
+  "/rpc/getSyllabusFromPaperId": {
     post: {
       parameters: {
         body: {
           args: {
             /** Format: bigint */
-            paper_idd: number;
+            paperid: number;
           };
         };
         header: {
@@ -1376,113 +2837,13 @@ export interface paths {
       };
     };
   };
-  "/rpc/getsyllabusssss": {
+  "/rpc/getSyllabusFromBookId": {
     post: {
       parameters: {
         body: {
           args: {
             /** Format: bigint */
-            paper_idd: number;
-          };
-        };
-        header: {
-          /** Preference */
-          Prefer?: parameters["preferParams"];
-        };
-      };
-      responses: {
-        /** OK */
-        200: unknown;
-      };
-    };
-  };
-  "/rpc/getsyllabussssd": {
-    post: {
-      parameters: {
-        body: {
-          args: {
-            /** Format: bigint */
-            paper_idd: number;
-          };
-        };
-        header: {
-          /** Preference */
-          Prefer?: parameters["preferParams"];
-        };
-      };
-      responses: {
-        /** OK */
-        200: unknown;
-      };
-    };
-  };
-  "/rpc/getsyllabusdd": {
-    post: {
-      parameters: {
-        body: {
-          args: {
-            /** Format: bigint */
-            paper_idd: number;
-          };
-        };
-        header: {
-          /** Preference */
-          Prefer?: parameters["preferParams"];
-        };
-      };
-      responses: {
-        /** OK */
-        200: unknown;
-      };
-    };
-  };
-  "/rpc/getsyllabusd": {
-    post: {
-      parameters: {
-        body: {
-          args: {
-            /** Format: bigint */
-            paper_idd: number;
-          };
-        };
-        header: {
-          /** Preference */
-          Prefer?: parameters["preferParams"];
-        };
-      };
-      responses: {
-        /** OK */
-        200: unknown;
-      };
-    };
-  };
-  "/rpc/getsyllabusddd": {
-    post: {
-      parameters: {
-        body: {
-          args: {
-            /** Format: bigint */
-            headingid: number;
-          };
-        };
-        header: {
-          /** Preference */
-          Prefer?: parameters["preferParams"];
-        };
-      };
-      responses: {
-        /** OK */
-        200: unknown;
-      };
-    };
-  };
-  "/rpc/getsyllabusss": {
-    post: {
-      parameters: {
-        body: {
-          args: {
-            /** Format: integer */
-            paper_idd: number;
+            bookid: number;
           };
         };
         header: {
@@ -1518,6 +2879,26 @@ export interface paths {
       };
     };
   };
+  "/rpc/get_syllabus_from_id": {
+    post: {
+      parameters: {
+        body: {
+          args: {
+            /** Format: bigint */
+            paperid: number;
+          };
+        };
+        header: {
+          /** Preference */
+          Prefer?: parameters["preferParams"];
+        };
+      };
+      responses: {
+        /** OK */
+        200: unknown;
+      };
+    };
+  };
   "/rpc/fn_list": {
     post: {
       parameters: {
@@ -1538,13 +2919,75 @@ export interface paths {
       };
     };
   };
-  "/rpc/getsyllabus": {
+  "/rpc/getSharedNotesListBySubheading": {
     post: {
       parameters: {
         body: {
           args: {
-            /** Format: integer */
-            paper_idd: number;
+            /** Format: text */
+            sharedwith: string;
+            /** Format: bigint */
+            subheadingid: number;
+          };
+        };
+        header: {
+          /** Preference */
+          Prefer?: parameters["preferParams"];
+        };
+      };
+      responses: {
+        /** OK */
+        200: unknown;
+      };
+    };
+  };
+  "/rpc/getPublicNotesListBySubheading": {
+    post: {
+      parameters: {
+        body: {
+          args: {
+            /** Format: bigint */
+            subheadingid: number;
+          };
+        };
+        header: {
+          /** Preference */
+          Prefer?: parameters["preferParams"];
+        };
+      };
+      responses: {
+        /** OK */
+        200: unknown;
+      };
+    };
+  };
+  "/rpc/get_syllabus_from_paperidd": {
+    post: {
+      parameters: {
+        body: {
+          args: {
+            /** Format: bigint */
+            paperid: number;
+          };
+        };
+        header: {
+          /** Preference */
+          Prefer?: parameters["preferParams"];
+        };
+      };
+      responses: {
+        /** OK */
+        200: unknown;
+      };
+    };
+  };
+  "/rpc/get_syllabus_from_paperid": {
+    post: {
+      parameters: {
+        body: {
+          args: {
+            /** Format: bigint */
+            paperid: number;
           };
         };
         header: {
@@ -1561,6 +3004,280 @@ export interface paths {
 }
 
 export interface definitions {
+  books: {
+    /**
+     * Format: bigint
+     * @description Note:
+     * This is a Primary Key.<pk/>
+     */
+    id: number;
+    /**
+     * Format: timestamp with time zone
+     * @default now()
+     */
+    created_at?: string;
+    /**
+     * Format: timestamp with time zone
+     * @default now()
+     */
+    updated_at?: string;
+    /**
+     * Format: text
+     * @description name of book
+     */
+    book_name: string;
+    /**
+     * Format: bigint
+     * @description foreign key of subjects table
+     *
+     * Note:
+     * This is a Foreign Key to `subjects.id`.<fk table='subjects' column='id'/>
+     */
+    subject_fk: number;
+    /**
+     * Format: bigint
+     * @description Note:
+     * This is a Foreign Key to `books_class.id`.<fk table='books_class' column='id'/>
+     */
+    class_fk?: number;
+    /**
+     * Format: bigint
+     * @description Note:
+     * This is a Foreign Key to `books_board_or_university.id`.<fk table='books_board_or_university' column='id'/>
+     */
+    board_or_university_fk?: number;
+    /**
+     * Format: bigint
+     * @description Note:
+     * This is a Foreign Key to `books_publication.id`.<fk table='books_publication' column='id'/>
+     */
+    publication_fk?: number;
+  };
+  /** @description Record of article sharing */
+  books_article_sharing: {
+    /**
+     * Format: bigint
+     * @description Note:
+     * This is a Primary Key.<pk/>
+     */
+    id: number;
+    /**
+     * Format: timestamp with time zone
+     * @default now()
+     */
+    created_at?: string;
+    /**
+     * Format: timestamp with time zone
+     * @default now()
+     */
+    updated_at?: string;
+    /**
+     * Format: bigint
+     * @description Note:
+     * This is a Foreign Key to `books_subheadings.id`.<fk table='books_subheadings' column='id'/>
+     */
+    books_subheadings_fk: number;
+    /**
+     * Format: uuid
+     * @description Note:
+     * This is a Foreign Key to `profiles.id`.<fk table='profiles' column='id'/>
+     */
+    shared_by?: string;
+    /**
+     * Format: uuid
+     * @description Note:
+     * This is a Foreign Key to `profiles.id`.<fk table='profiles' column='id'/>
+     */
+    shared_with?: string;
+    /**
+     * Format: uuid
+     * @description owner of the shared article
+     *
+     * Note:
+     * This is a Foreign Key to `profiles.id`.<fk table='profiles' column='id'/>
+     */
+    owned_by: string;
+    /** Format: boolean */
+    ispublic?: boolean;
+  };
+  /** @description article inside a subheading of a book */
+  books_articles: {
+    /**
+     * Format: bigint
+     * @description Note:
+     * This is a Primary Key.<pk/>
+     */
+    id: number;
+    /**
+     * Format: timestamp with time zone
+     * @default now()
+     */
+    created_at?: string;
+    /**
+     * Format: timestamp with time zone
+     * @default now()
+     */
+    updated_at?: string;
+    /**
+     * Format: bigint
+     * @description Note:
+     * This is a Foreign Key to `books_subheadings.id`.<fk table='books_subheadings' column='id'/>
+     */
+    books_subheadings_fk: number;
+    /**
+     * Format: text
+     * @description Article content in hindi
+     */
+    article_hindi?: string;
+    /**
+     * Format: text
+     * @description Article content in english
+     */
+    article_english?: string;
+    /**
+     * Format: text
+     * @description Article content in audio
+     */
+    article_audio_link?: string;
+    /**
+     * Format: uuid
+     * @description Note:
+     * This is a Foreign Key to `profiles.id`.<fk table='profiles' column='id'/>
+     */
+    created_by: string;
+    /**
+     * Format: text
+     * @description Title of article
+     */
+    article_title: string;
+    /**
+     * Format: bigint
+     * @description Article sequence
+     */
+    sequence?: number;
+  };
+  books_board_or_university: {
+    /**
+     * Format: bigint
+     * @description Note:
+     * This is a Primary Key.<pk/>
+     */
+    id: number;
+    /**
+     * Format: timestamp with time zone
+     * @default now()
+     */
+    created_at?: string;
+    /**
+     * Format: timestamp with time zone
+     * @default now()
+     */
+    updated_at?: string;
+    /** Format: text */
+    name: string;
+  };
+  books_class: {
+    /**
+     * Format: bigint
+     * @description Note:
+     * This is a Primary Key.<pk/>
+     */
+    id: number;
+    /**
+     * Format: timestamp with time zone
+     * @default now()
+     */
+    created_at?: string;
+    /**
+     * Format: timestamp with time zone
+     * @default now()
+     */
+    updated_at?: string;
+    /** Format: text */
+    class: string;
+  };
+  books_headings: {
+    /**
+     * Format: bigint
+     * @description Note:
+     * This is a Primary Key.<pk/>
+     */
+    id: number;
+    /**
+     * Format: timestamp with time zone
+     * @default now()
+     */
+    created_at?: string;
+    /**
+     * Format: timestamp with time zone
+     * @default now()
+     */
+    updated_at?: string;
+    /** Format: text */
+    heading?: string;
+    /**
+     * Format: bigint
+     * @description Note:
+     * This is a Foreign Key to `books.id`.<fk table='books' column='id'/>
+     */
+    books_fk?: number;
+    /** Format: bigint */
+    sequence?: number;
+  };
+  books_publication: {
+    /**
+     * Format: bigint
+     * @description Note:
+     * This is a Primary Key.<pk/>
+     */
+    id: number;
+    /**
+     * Format: timestamp with time zone
+     * @default now()
+     */
+    created_at?: string;
+    /**
+     * Format: timestamp with time zone
+     * @default now()
+     */
+    updated_at?: string;
+    /** Format: text */
+    publication_name: string;
+  };
+  books_subheadings: {
+    /**
+     * Format: bigint
+     * @description
+     * let { data: subheadings, error } = await supabase
+     *   .from('subheadings')
+     *   .select('idmmmm')
+     *
+     *
+     * Note:
+     * This is a Primary Key.<pk/>
+     */
+    id: number;
+    /**
+     * Format: timestamp with time zone
+     * @default now()
+     */
+    created_at?: string;
+    /**
+     * Format: timestamp with time zone
+     * @default now()
+     */
+    updated_at?: string;
+    /** Format: text */
+    subheading?: string;
+    /**
+     * Format: bigint
+     * @description Note:
+     * This is a Foreign Key to `books_headings.id`.<fk table='books_headings' column='id'/>
+     */
+    books_headings_fk: number;
+    /** Format: bigint */
+    sequence?: number;
+  };
   /** @description Full list of countries. */
   countries: {
     /**
@@ -1601,6 +3318,103 @@ export interface definitions {
       | "Oceania"
       | "North America"
       | "South America";
+  };
+  current_affair: {
+    /**
+     * Format: bigint
+     * @description Note:
+     * This is a Primary Key.<pk/>
+     */
+    id: number;
+    /**
+     * Format: timestamp with time zone
+     * @default now()
+     */
+    created_at?: string;
+    /**
+     * Format: timestamp with time zone
+     * @default now()
+     */
+    update_at?: string;
+    /** Format: text */
+    name: string;
+  };
+  current_affair_headings: {
+    /**
+     * Format: bigint
+     * @description Note:
+     * This is a Primary Key.<pk/>
+     */
+    id: number;
+    /**
+     * Format: timestamp with time zone
+     * @default now()
+     */
+    created_at?: string;
+    /**
+     * Format: timestamp with time zone
+     * @default now()
+     */
+    updated_at?: string;
+    /** Format: text */
+    heading?: string;
+    /**
+     * Format: bigint
+     * @description Note:
+     * This is a Foreign Key to `current_affair.id`.<fk table='current_affair' column='id'/>
+     */
+    current_affair_fk?: number;
+    /** Format: bigint */
+    sequence?: number;
+  };
+  current_affair_subheadings: {
+    /**
+     * Format: bigint
+     * @description
+     * let { data: subheadings, error } = await supabase
+     *   .from('subheadings')
+     *   .select('idmmmm')
+     *
+     *
+     * Note:
+     * This is a Primary Key.<pk/>
+     */
+    id: number;
+    /**
+     * Format: timestamp with time zone
+     * @default now()
+     */
+    created_at?: string;
+    /**
+     * Format: timestamp with time zone
+     * @default now()
+     */
+    updated_at?: string;
+    /** Format: text */
+    subheading?: string;
+    /**
+     * Format: bigint
+     * @description Note:
+     * This is a Foreign Key to `current_affair_headings.id`.<fk table='current_affair_headings' column='id'/>
+     */
+    current_affair_headings_fk: number;
+    /** Format: bigint */
+    sequence?: number;
+  };
+  current_affair_tag: {
+    /**
+     * Format: bigint
+     * @description Note:
+     * This is a Primary Key.<pk/>
+     */
+    id: number;
+    /**
+     * Format: timestamp with time zone
+     * @default now()
+     */
+    created_at?: string;
+    /** Format: text */
+    tag_name: string;
   };
   exam: {
     /**
@@ -1972,6 +3786,42 @@ export interface definitions {
      */
     paper_id?: number;
   };
+  /** @description subject of books like hitory, science, general knowledge etc */
+  subjects: {
+    /**
+     * Format: bigint
+     * @description Note:
+     * This is a Primary Key.<pk/>
+     */
+    id: number;
+    /**
+     * Format: timestamp with time zone
+     * @default now()
+     */
+    created_at?: string;
+    /**
+     * Format: timestamp with time zone
+     * @default now()
+     */
+    updated_at?: string;
+    /**
+     * Format: text
+     * @description name of subject
+     */
+    subject_name: string;
+  };
+  tree: {
+    /**
+     * Format: integer
+     * @description Note:
+     * This is a Primary Key.<pk/>
+     */
+    id: number;
+    /** Format: character */
+    letter?: string;
+    /** Format: extensions.ltree */
+    path?: string;
+  };
   userfiles: {
     /**
      * Format: uuid
@@ -2023,6 +3873,152 @@ export interface parameters {
   offset: string;
   /** @description Limiting and Pagination */
   limit: string;
+  /** @description books */
+  "body.books": definitions["books"];
+  /** Format: bigint */
+  "rowFilter.books.id": string;
+  /** Format: timestamp with time zone */
+  "rowFilter.books.created_at": string;
+  /** Format: timestamp with time zone */
+  "rowFilter.books.updated_at": string;
+  /**
+   * Format: text
+   * @description name of book
+   */
+  "rowFilter.books.book_name": string;
+  /**
+   * Format: bigint
+   * @description foreign key of subjects table
+   */
+  "rowFilter.books.subject_fk": string;
+  /** Format: bigint */
+  "rowFilter.books.class_fk": string;
+  /** Format: bigint */
+  "rowFilter.books.board_or_university_fk": string;
+  /** Format: bigint */
+  "rowFilter.books.publication_fk": string;
+  /** @description books_article_sharing */
+  "body.books_article_sharing": definitions["books_article_sharing"];
+  /** Format: bigint */
+  "rowFilter.books_article_sharing.id": string;
+  /** Format: timestamp with time zone */
+  "rowFilter.books_article_sharing.created_at": string;
+  /** Format: timestamp with time zone */
+  "rowFilter.books_article_sharing.updated_at": string;
+  /** Format: bigint */
+  "rowFilter.books_article_sharing.books_subheadings_fk": string;
+  /** Format: uuid */
+  "rowFilter.books_article_sharing.shared_by": string;
+  /** Format: uuid */
+  "rowFilter.books_article_sharing.shared_with": string;
+  /**
+   * Format: uuid
+   * @description owner of the shared article
+   */
+  "rowFilter.books_article_sharing.owned_by": string;
+  /** Format: boolean */
+  "rowFilter.books_article_sharing.ispublic": string;
+  /** @description books_articles */
+  "body.books_articles": definitions["books_articles"];
+  /** Format: bigint */
+  "rowFilter.books_articles.id": string;
+  /** Format: timestamp with time zone */
+  "rowFilter.books_articles.created_at": string;
+  /** Format: timestamp with time zone */
+  "rowFilter.books_articles.updated_at": string;
+  /** Format: bigint */
+  "rowFilter.books_articles.books_subheadings_fk": string;
+  /**
+   * Format: text
+   * @description Article content in hindi
+   */
+  "rowFilter.books_articles.article_hindi": string;
+  /**
+   * Format: text
+   * @description Article content in english
+   */
+  "rowFilter.books_articles.article_english": string;
+  /**
+   * Format: text
+   * @description Article content in audio
+   */
+  "rowFilter.books_articles.article_audio_link": string;
+  /** Format: uuid */
+  "rowFilter.books_articles.created_by": string;
+  /**
+   * Format: text
+   * @description Title of article
+   */
+  "rowFilter.books_articles.article_title": string;
+  /**
+   * Format: bigint
+   * @description Article sequence
+   */
+  "rowFilter.books_articles.sequence": string;
+  /** @description books_board_or_university */
+  "body.books_board_or_university": definitions["books_board_or_university"];
+  /** Format: bigint */
+  "rowFilter.books_board_or_university.id": string;
+  /** Format: timestamp with time zone */
+  "rowFilter.books_board_or_university.created_at": string;
+  /** Format: timestamp with time zone */
+  "rowFilter.books_board_or_university.updated_at": string;
+  /** Format: text */
+  "rowFilter.books_board_or_university.name": string;
+  /** @description books_class */
+  "body.books_class": definitions["books_class"];
+  /** Format: bigint */
+  "rowFilter.books_class.id": string;
+  /** Format: timestamp with time zone */
+  "rowFilter.books_class.created_at": string;
+  /** Format: timestamp with time zone */
+  "rowFilter.books_class.updated_at": string;
+  /** Format: text */
+  "rowFilter.books_class.class": string;
+  /** @description books_headings */
+  "body.books_headings": definitions["books_headings"];
+  /** Format: bigint */
+  "rowFilter.books_headings.id": string;
+  /** Format: timestamp with time zone */
+  "rowFilter.books_headings.created_at": string;
+  /** Format: timestamp with time zone */
+  "rowFilter.books_headings.updated_at": string;
+  /** Format: text */
+  "rowFilter.books_headings.heading": string;
+  /** Format: bigint */
+  "rowFilter.books_headings.books_fk": string;
+  /** Format: bigint */
+  "rowFilter.books_headings.sequence": string;
+  /** @description books_publication */
+  "body.books_publication": definitions["books_publication"];
+  /** Format: bigint */
+  "rowFilter.books_publication.id": string;
+  /** Format: timestamp with time zone */
+  "rowFilter.books_publication.created_at": string;
+  /** Format: timestamp with time zone */
+  "rowFilter.books_publication.updated_at": string;
+  /** Format: text */
+  "rowFilter.books_publication.publication_name": string;
+  /** @description books_subheadings */
+  "body.books_subheadings": definitions["books_subheadings"];
+  /**
+   * Format: bigint
+   * @description
+   * let { data: subheadings, error } = await supabase
+   *   .from('subheadings')
+   *   .select('idmmmm')
+   */
+  "rowFilter.books_subheadings.id": string;
+  /** Format: timestamp with time zone */
+  "rowFilter.books_subheadings.created_at": string;
+  /** Format: timestamp with time zone */
+  "rowFilter.books_subheadings.updated_at": string;
+  /** Format: text */
+  "rowFilter.books_subheadings.subheading": string;
+  /** Format: bigint */
+  "rowFilter.books_subheadings.books_headings_fk": string;
+  /** Format: bigint */
+  "rowFilter.books_subheadings.sequence": string;
   /** @description countries */
   "body.countries": definitions["countries"];
   /** Format: bigint */
@@ -2049,6 +4045,58 @@ export interface parameters {
   "rowFilter.countries.local_name": string;
   /** Format: public.continents */
   "rowFilter.countries.continent": string;
+  /** @description current_affair */
+  "body.current_affair": definitions["current_affair"];
+  /** Format: bigint */
+  "rowFilter.current_affair.id": string;
+  /** Format: timestamp with time zone */
+  "rowFilter.current_affair.created_at": string;
+  /** Format: timestamp with time zone */
+  "rowFilter.current_affair.update_at": string;
+  /** Format: text */
+  "rowFilter.current_affair.name": string;
+  /** @description current_affair_headings */
+  "body.current_affair_headings": definitions["current_affair_headings"];
+  /** Format: bigint */
+  "rowFilter.current_affair_headings.id": string;
+  /** Format: timestamp with time zone */
+  "rowFilter.current_affair_headings.created_at": string;
+  /** Format: timestamp with time zone */
+  "rowFilter.current_affair_headings.updated_at": string;
+  /** Format: text */
+  "rowFilter.current_affair_headings.heading": string;
+  /** Format: bigint */
+  "rowFilter.current_affair_headings.current_affair_fk": string;
+  /** Format: bigint */
+  "rowFilter.current_affair_headings.sequence": string;
+  /** @description current_affair_subheadings */
+  "body.current_affair_subheadings": definitions["current_affair_subheadings"];
+  /**
+   * Format: bigint
+   * @description
+   * let { data: subheadings, error } = await supabase
+   *   .from('subheadings')
+   *   .select('idmmmm')
+   */
+  "rowFilter.current_affair_subheadings.id": string;
+  /** Format: timestamp with time zone */
+  "rowFilter.current_affair_subheadings.created_at": string;
+  /** Format: timestamp with time zone */
+  "rowFilter.current_affair_subheadings.updated_at": string;
+  /** Format: text */
+  "rowFilter.current_affair_subheadings.subheading": string;
+  /** Format: bigint */
+  "rowFilter.current_affair_subheadings.current_affair_headings_fk": string;
+  /** Format: bigint */
+  "rowFilter.current_affair_subheadings.sequence": string;
+  /** @description current_affair_tag */
+  "body.current_affair_tag": definitions["current_affair_tag"];
+  /** Format: bigint */
+  "rowFilter.current_affair_tag.id": string;
+  /** Format: timestamp with time zone */
+  "rowFilter.current_affair_tag.created_at": string;
+  /** Format: text */
+  "rowFilter.current_affair_tag.tag_name": string;
   /** @description exam */
   "body.exam": definitions["exam"];
   /** Format: bigint */
@@ -2243,6 +4291,27 @@ export interface parameters {
   "rowFilter.subheadings_view.heading_sequence": string;
   /** Format: bigint */
   "rowFilter.subheadings_view.paper_id": string;
+  /** @description subjects */
+  "body.subjects": definitions["subjects"];
+  /** Format: bigint */
+  "rowFilter.subjects.id": string;
+  /** Format: timestamp with time zone */
+  "rowFilter.subjects.created_at": string;
+  /** Format: timestamp with time zone */
+  "rowFilter.subjects.updated_at": string;
+  /**
+   * Format: text
+   * @description name of subject
+   */
+  "rowFilter.subjects.subject_name": string;
+  /** @description tree */
+  "body.tree": definitions["tree"];
+  /** Format: integer */
+  "rowFilter.tree.id": string;
+  /** Format: character */
+  "rowFilter.tree.letter": string;
+  /** Format: extensions.ltree */
+  "rowFilter.tree.path": string;
   /** @description userfiles */
   "body.userfiles": definitions["userfiles"];
   /** Format: uuid */

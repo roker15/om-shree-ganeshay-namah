@@ -75,16 +75,19 @@ const MobileNav = ({ onOpen, ...rest }: MobileProps) => {
         <LinkOverlay
           _hover={{
             background: "none",
-            color: "white",
+            // color: "white",
           }}
           href="/"
         >
           <Image
+            p="2"
+            // bg="blackAlpha.100"
             // priority={true}
             loading="eager"
             src="/logo-150x150.png"
             alt="Picture of the author"
-            boxSize={{ base: "35px", md: "50px" }}
+            w={{ base: "35px", md: "120px" }}
+            // w={{ base: "35px", md: "100px" }}
           />
         </LinkOverlay>
       </LinkBox>

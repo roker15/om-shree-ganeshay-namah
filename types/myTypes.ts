@@ -1,3 +1,5 @@
+import { definitions } from "./supabase";
+
 export type Exam = {
   id: number;
   created_at: string;
@@ -47,7 +49,7 @@ export type SharedPost = {
   created_at: string;
   updated_at: string;
   post_id: Post | number;
-  shared_with: Profile | string ;
+  shared_with: Profile | string;
   subheading_id: Subheading | number;
   is_public: boolean;
 };
@@ -84,4 +86,37 @@ export type SubheadingViews = {
   main_topic?: string;
   heading_sequence?: number;
   paper_id?: number;
+};
+export type Books = {
+  id: number;
+  created_at?: string | undefined;
+  updated_at?: string | undefined;
+  book_name: string;
+  subject_fk: number | definitions["subjects"];
+  class_fk?: number | definitions["books_class"] | undefined;
+  board_or_university_fk?: number | undefined;
+  publication_fk?: number | definitions["books_publication"] | undefined;
+};
+export type BookResponse = {
+  id: number;
+  book_name: string;
+  class_fk: {
+    id: number;
+    class: string;
+  };
+  subject_fk: {
+    id: number;
+    subject_name: string;
+  };
+  publication_fk?: number;
+};
+export type BookSyllabus = {
+  subheading_id: number;
+  subheading: string;
+  subheading_sequence: number;
+  heading_id: number;
+  heading: string;
+  heading_sequence: number;
+  book_id: number;
+  book_name: string;
 };

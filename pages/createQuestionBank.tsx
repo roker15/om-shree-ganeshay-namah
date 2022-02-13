@@ -11,8 +11,10 @@ import {
   AlertDialogOverlay,
   Badge,
   Center,
+  Checkbox,
   Circle,
   FormControl,
+  FormErrorMessage,
   FormLabel,
   HStack,
   Modal,
@@ -137,16 +139,17 @@ export default function App() {
 
   const onSubmit: SubmitHandler<IFormInput> = async (values) => {
     if (!isEditMode) {
-      const { data, error } = await supabase.from<QuestionBank>("questionbank").insert({
-        paper_id: values.paperId,
-        question_content: values.questionContent,
-        search_keys: values.searchKeys,
-        year: values.year,
-        sequence: values.sequence,
-        remark: values.remark,
-        created_by: userId,
-      });
-      mutate([`/upsc/${paperId}/${year}`]);
+      window.alert("value of check box is " + values.searchKeys + " " + values.year);
+      // const { data, error } = await supabase.from<QuestionBank>("questionbank").insert({
+      //   paper_id: values.paperId,
+      //   question_content: values.questionContent,
+      //   search_keys: values.searchKeys,
+      //   year: values.year,
+      //   sequence: values.sequence,
+      //   remark: values.remark,
+      //   created_by: userId,
+      // });
+      // mutate([`/upsc/${paperId}/${year}`]);
     } else {
       const { data, error } = await supabase
         .from<QuestionBank>("questionbank")
@@ -285,15 +288,15 @@ export default function App() {
           <br />
           {/* <br /> */}
 
-          <FormControl m="2">
+          <FormControl m="2" isInvalid={errors.paperId as any}>
             <FormLabel color="blue.600" htmlFor="paperId">
               Exam paper
             </FormLabel>
-            {errors?.paperId?.type === "required" && (
+            {/* {errors?.paperId?.type === "required" && (
               <Text fontSize="16px" color="#bf1650">
                 **This field is required
               </Text>
-            )}
+            )} */}
             <Select
               isDisabled={isEditMode}
               id="paperId"
@@ -313,23 +316,23 @@ export default function App() {
                 );
               })}
             </Select>
-            {/* <FormErrorMessage>{errors.paperId && errors.paperId.message}</FormErrorMessage> */}
+            <FormErrorMessage>{errors.paperId && errors.paperId.message}</FormErrorMessage>
           </FormControl>
 
-          <FormControl m="2">
+          <FormControl m="2" isInvalid={errors.questionContent as any}>
             <FormLabel color="blue.600" htmlFor="questionContent">
               Question content
             </FormLabel>
-            {errors?.questionContent?.type === "required" && (
+            {/* {errors?.questionContent?.type === "required" && (
               <Text fontSize="16px" color="#bf1650">
                 **This field is required
               </Text>
-            )}
+            )} */}
             <Controller
               name="questionContent"
               control={control}
               // defaultValue=""
-              rules={{ required: true }}
+              rules={{ required: { value: true, message: "This is required." } }}
               render={({ field }) => (
                 <Box>
                   <SunEditor
@@ -348,9 +351,10 @@ export default function App() {
                 </Box>
               )}
             />
+            <FormErrorMessage>{errors.questionContent && errors.questionContent.message}</FormErrorMessage>
           </FormControl>
 
-          <FormControl m="2" visibility="hidden" w="0.5" h="0.5">
+          {/* <FormControl m="2" visibility="hidden" w="0.5" h="0.5">
             <FormLabel color="blue.600" htmlFor="searchKeys">
               Search Keys
             </FormLabel>
@@ -360,10 +364,25 @@ export default function App() {
               </Text>
             )}
             <Input {...register("searchKeys", { required: false, maxLength: 200 })} />
+          </FormControl> */}
+
+          <FormControl isInvalid={errors.searchKeys as any}>
+            <FormLabel color="blue.600" htmlFor="searchKeys">
+              check box
+            </FormLabel>
+            <Checkbox value="sasuke" {...register("searchKeys", { required: true })}>
+              Sasuke
+            </Checkbox>
+            {errors?.searchKeys?.type === "required" && (
+              <Text fontSize="16px" color="#bf1650">
+                **This field is required
+              </Text>
+            )}
+            {/* <Input {...register("searchKeys", { required: false, maxLength: 200 })} /> */}
           </FormControl>
 
           <HStack>
-            <FormControl m="2">
+            <FormControl m="2" isInvalid={errors.year as any}>
               <FormLabel color="blue.600" htmlFor="year">
                 Question Year
               </FormLabel>
@@ -376,10 +395,10 @@ export default function App() {
                 placeholder="Year should be from 1995 to 2021"
                 isDisabled={isEditMode}
                 type="number"
-                {...register("year", {required:true, min: 1995, max: 2021 })}
+                {...register("year", { required: true, min: 1995, max: 2021 })}
               />
             </FormControl>
-            <FormControl m="2">
+            <FormControl m="2" isInvalid={errors.sequence as any}>
               <FormLabel color="blue.600" htmlFor="sequence">
                 Question sequence
               </FormLabel>
@@ -545,10 +564,7 @@ export default function App() {
         .delete()
         .match({ questionbank_id: questionId, subheading_id: syllabusId });
       if (data && data[0]) {
-        console.log("qlink array before delete.....", qlink);
-        console.log("questionid and subheading id ", questionId, syllabusId);
-        // let arr: SubheadingQuestionLink[];
-        const arr: SubheadingQuestionLink[] = qlink.filter((item) => item.subheading_id !== syllabusId);
+                const arr: SubheadingQuestionLink[] = qlink.filter((item) => item.subheading_id !== syllabusId);
 
         console.log("array after delete.....", arr);
         setQlink(arr);
@@ -580,7 +596,7 @@ export default function App() {
           Link Syllabus
         </Button>
 
-        <Modal onClose={onClose} finalFocusRef={btnRef}  isOpen={isOpen} scrollBehavior="outside">
+        <Modal onClose={onClose} finalFocusRef={btnRef} isOpen={isOpen} scrollBehavior="outside">
           <ModalOverlay />
           <ModalContent>
             <ModalHeader>Link Syllabus to Question</ModalHeader>

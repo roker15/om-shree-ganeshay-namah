@@ -41,7 +41,7 @@ import { useAuthContext } from "../state/Authcontext";
 import { usePostContext } from "../state/PostContext";
 import { Post, Profile, SharedPost } from "../types/myTypes";
 import { customToast } from "./CustomToast";
-import { MyDropzone } from "./MyDropzone";
+import { UiForImageUpload } from "./UiForImageUpload";
 
 // import SunEditor from "suneditor-react";
 const SunEditor = dynamic(() => import("suneditor-react"), {
@@ -120,9 +120,9 @@ const SunEditorForRendering: React.FC<Props> = ({ postId, isNew, postContent, ed
   const [editMode, setEditMode] = useState(editModeActive);
   const { currentSubheadingProps } = usePostContext();
   const { mutate } = useSWRConfig();
-  const editor = useRef<SunEditorCore>();
   const imageUploaderRef = useRef<HTMLDivElement>(null);
   // The sunEditor parameter will be set to the core suneditor instance when this function is called
+  const editor = useRef<SunEditorCore>();
   const getSunEditorInstance = (sunEditor: SunEditorCore) => {
     editor.current = sunEditor;
   };
@@ -438,27 +438,4 @@ const UiForSharing: React.FC<sharedProps> = ({ postId, subheadingId }) => {
   );
 };
 
-const UiForImageUpload = () => {
-  const { isOpen, onOpen, onClose } = useDisclosure();
 
-  return (
-    <>
-      <Button size="sm"variant="outline" color="blue.600"mt={3} onClick={onOpen}>
-        Upload Image
-      </Button>
-      <Modal  onClose={onClose} size={"2xl"} isOpen={isOpen}>
-        <ModalOverlay />
-        <ModalContent>
-          <ModalHeader fontSize="md"color="blue.600">Upload Images & Copy link to Insert Image in your Notes</ModalHeader>
-          <ModalCloseButton />
-          <ModalBody >
-            <MyDropzone />
-          </ModalBody>
-          <ModalFooter>
-            <Button onClick={onClose}>Close</Button>
-          </ModalFooter>
-        </ModalContent>
-      </Modal>
-    </>
-  );
-};

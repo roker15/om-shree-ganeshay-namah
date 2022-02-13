@@ -126,6 +126,17 @@ export async function getStaticPaths() {
   };
 }
 export const getStaticProps = async ({ params }: any) => {
+  //get whole syllabus
+
+  let { data: syllabus, error: syllabus_error } = await supabase
+    .rpc("getSyllabusFromPaperId", {
+      paperid: 1,
+    })
+    .eq("subid", 72);
+
+  if (syllabus_error) console.error(syllabus_error);
+  else console.log("syllabus is ", syllabus);
+
   // Make a request
   const { data, error } = await supabase
     .from<Headings>("headings")
