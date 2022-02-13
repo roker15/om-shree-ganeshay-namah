@@ -94,15 +94,16 @@ const MobileNav = ({ onOpen, ...rest }: MobileProps) => {
 
       <Heading as="h2" size="md" display={{ base: "none", md: "block" }}>
         Welcome to Jionote {" "} </Heading> <HStack spacing={{ base: "0", md: "6" }}> {!profile ? (
-          <Button
-            border="0px"
-            colorScheme="google"
-            leftIcon={<FaGoogle />}
-            variant="ghost"
-            onClick={() => signInWithgoogle(BASE_URL)}
-          >
-            Sign in
-          </Button>
+          <Box></Box>
+          // <Button
+          //   border="0px"
+          //   colorScheme="google"
+          //   leftIcon={<FaGoogle />}
+          //   variant="ghost"
+          //   onClick={() => signInWithgoogle(BASE_URL)}
+          // >
+          //   Sign in
+          // </Button>
         ) : (
           ""
         )}
