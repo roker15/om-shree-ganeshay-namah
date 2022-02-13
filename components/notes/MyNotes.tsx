@@ -1,6 +1,7 @@
 import {
   Box,
   Button,
+  Center,
   Checkbox,
   Flex,
   FormControl,
@@ -42,6 +43,7 @@ import { useAuthContext } from "../../state/Authcontext";
 import { definitions } from "../../types/supabase";
 import { customToast } from "../CustomToast";
 import DeleteConfirmation from "../syllabus/DeleteConfirmation";
+import { UiForImageUpload } from "../UiForImageUpload";
 interface Props {
   subheadingid: number | undefined;
   notesCreator: string | undefined;
@@ -179,7 +181,7 @@ const MyNotes: React.FC<Props> = ({ subheadingid, notesCreator, changeParentProp
             <ArticleForm subheadingid={subheadingid} formMode={"CREATING"} x={setIsArticleCreating}></ArticleForm>
           ) : null}
         </Box>
-        <Box display={profile?.id !== notesCreator? "none" : "undefined"}>
+        <Box display={profile?.id !== notesCreator ? "none" : "undefined"}>
           <Tooltip label="Create New Article in This Topic" fontSize="sm">
             <span>
               <IconButton
@@ -391,7 +393,12 @@ const SuneditorForNotesMaking: React.FC<SuneditorForNotesMakingProps> = ({ artic
   return (
     <Box spellcheck="false">
       {/* //use above attrivutes if you want to override spellcheck of browser */}
-      <Flex display={profile?.id !== article.created_by ? "none" : "undefined"} justifyContent="space-between">
+      <Flex
+        display={profile?.id !== article.created_by ? "none" : "undefined"}
+        justifyContent="space-between"
+        align="center"
+        // alignItems="center"
+      >
         <RadioGroup onChange={setEditorMode} value={editorMode}>
           <Stack direction="row">
             <Radio colorScheme="whatsapp" size="sm" value="READ">
@@ -406,7 +413,10 @@ const SuneditorForNotesMaking: React.FC<SuneditorForNotesMakingProps> = ({ artic
             </Radio>
           </Stack>
         </RadioGroup>
-        <HStack display={editorMode === "READ" ? "none" : "flex"}>
+        <Flex align="center"  display={editorMode === "READ" ? "none" : "flex"}>
+          <Box pb="3">
+            <UiForImageUpload />
+          </Box>
           <Button
             onClick={() => {
               updateArticleInDatabase(editor.current?.getContents(false));
@@ -429,7 +439,7 @@ const SuneditorForNotesMaking: React.FC<SuneditorForNotesMakingProps> = ({ artic
           >
             <Text casing={"capitalize"}>Autosave</Text>
           </Checkbox>
-        </HStack>
+        </Flex>
       </Flex>
 
       <EditorStyle title={editorMode === "READ" ? "READ" : "EDIT"}>
