@@ -413,7 +413,7 @@ const SuneditorForNotesMaking: React.FC<SuneditorForNotesMakingProps> = ({ artic
             </Radio>
           </Stack>
         </RadioGroup>
-        <Flex align="center"  display={editorMode === "READ" ? "none" : "flex"}>
+        <Flex align="center" display={editorMode === "READ" ? "none" : "flex"}>
           <Box pb="3">
             <UiForImageUpload />
           </Box>
@@ -458,13 +458,26 @@ const SuneditorForNotesMaking: React.FC<SuneditorForNotesMakingProps> = ({ artic
             placeholder: "**** Start Writing your notes here, we will save it automatically!!!",
             mode: "classic",
             katex: katex,
+            audioAccept: "*",
             paragraphStyles: [
               "spaced",
               {
                 name: "Box",
                 class: "seCustomClass",
               },
+              {
+                name: "Box1",
+                class: "seCustomClassw",
+              },
             ],
+            // textStyles: [
+            //   {
+            //     name: "Box2",
+            //     style: "chutiya",
+            //     tag: "bhai",
+            //     _class: "seCustomClassw",
+            //   },
+            // ],
             height: "100%",
             resizingBar: false,
             buttonList: sunEditorButtonList,
@@ -493,5 +506,15 @@ const EditorStyle = styled.div`
     background: #f1e0e0;
     padding: 5px;
     list-style-position: inside;
+    font-weight: 500;
+    color: #464242;
+  }
+  .seCustomClassw {
+    /* background: #f1e0e0; */
+    padding: 5px;
+    list-style-position: inside;
+    font-weight: 500;
+    /* color: #464242; */
+    text-shadow: 2px 2px 5px green;
   }
 `;
