@@ -37,7 +37,7 @@ import "suneditor/dist/css/suneditor.min.css"; // Import Sun Editor's CSS File
 import SunEditorCore from "suneditor/src/lib/core";
 import { useSWRConfig } from "swr";
 import { useGetUserArticles } from "../../customHookes/networkHooks";
-import { sunEditorButtonList, sunEditorfontList } from "../../lib/constants";
+import { colors, sunEditorButtonList, sunEditorfontList } from "../../lib/constants";
 import { supabase } from "../../lib/supabaseClient";
 import { useAuthContext } from "../../state/Authcontext";
 import { definitions } from "../../types/supabase";
@@ -332,6 +332,7 @@ type SuneditorForNotesMakingProps = {
 const SunEditor = dynamic(() => import("suneditor-react"), {
   ssr: false,
 });
+
 const SuneditorForNotesMaking: React.FC<SuneditorForNotesMakingProps> = ({ article, language }) => {
   const [editorMode, setEditorMode] = React.useState("READ");
   const [isAutosaveOn, setIsAutosaveOn] = React.useState(false);
@@ -391,7 +392,7 @@ const SuneditorForNotesMaking: React.FC<SuneditorForNotesMakingProps> = ({ artic
     }
   };
   return (
-    <Box spellcheck="false">
+    <Box spellCheck="false">
       {/* //use above attrivutes if you want to override spellcheck of browser */}
       <Flex
         display={profile?.id !== article.created_by ? "none" : "undefined"}
@@ -445,7 +446,7 @@ const SuneditorForNotesMaking: React.FC<SuneditorForNotesMakingProps> = ({ artic
       <EditorStyle title={editorMode === "READ" ? "READ" : "EDIT"}>
         <SunEditor
           getSunEditorInstance={getSunEditorInstance}
-          setDefaultStyle="font-family: arial; font-size: 16px;"
+          setDefaultStyle="font-family: arial; font-size: 14px;"
           hideToolbar={editorMode === "READ" ? true : false}
           defaultValue={language === "ENGLISH" ? article.article_english : article.article_hindi}
           // key={postId}
@@ -458,26 +459,49 @@ const SuneditorForNotesMaking: React.FC<SuneditorForNotesMakingProps> = ({ artic
             placeholder: "**** Start Writing your notes here, we will save it automatically!!!",
             mode: "classic",
             katex: katex,
-            audioAccept: "*",
+            colorList: colors ,
             paragraphStyles: [
               "spaced",
+              "neon",
               {
                 name: "Box",
-                class: "seCustomClass",
+                class: "__se__customClass1",
               },
               {
-                name: "Box1",
-                class: "seCustomClassw",
+                name: "ph22",
+                class: "seCustomClass2",
               },
             ],
-            // textStyles: [
-            //   {
-            //     name: "Box2",
-            //     style: "chutiya",
-            //     tag: "bhai",
-            //     _class: "seCustomClassw",
-            //   },
-            // ],
+            textStyles: [
+              "shadow",
+              "code",
+              "translucent",
+
+              {
+                name: "Highlighter 1",
+                style:
+                  "background-color:#FFFF88;padding: 1px;",
+                tag: "span",
+              },
+              {
+                name: "Highlighter 2",
+                style:
+                  "background-color:#CDEB8B;padding: 1px;",
+                tag: "span",
+              },
+              {
+                name: "Highlighter 3",
+                style:
+                  "background-color:#E1D5E7;padding: 1px;",
+                tag: "span",
+              },
+              {
+                name: "Highlighter 4",
+                style:
+                  "background-color:#E1D5E7;padding: 1px;padding-left: 1px",
+                tag: "p",
+              },
+            ],
             height: "100%",
             resizingBar: false,
             buttonList: sunEditorButtonList,
@@ -502,19 +526,42 @@ const EditorStyle = styled.div`
     border: ${(props) => (props.title === "READ" ? "none" : undefined)};
     /* border: "none"; */
   }
-  .seCustomClass {
-    background: #f1e0e0;
+  .__se__customClass1 {
+    /* background: #7e7575;
+    padding: 5px;
+    list-style-position: inside;
+    font-weight: 500;
+    color: #464242; */
+
+    background-color: #6e3c3c;
+    padding: 5px;
+    color: #464242;
+    list-style-position: inside;
+  }
+  .__se__customClass2 {
+    background-color: #f1e0e0;
     padding: 5px;
     list-style-position: inside;
     font-weight: 500;
     color: #464242;
-  }
-  .seCustomClassw {
-    /* background: #f1e0e0; */
-    padding: 5px;
-    list-style-position: inside;
-    font-weight: 500;
-    /* color: #464242; */
     text-shadow: 2px 2px 5px green;
   }
+  /* blockquote {
+    background: #f9f9f9;
+    border-left: 10px solid #ccc;
+    margin: 1.5em 10px;
+    padding: 0.5em 10px;
+    quotes: "\201C""\201D""\2018""\2019";
+  }
+  blockquote:before {
+    color: #ccc;
+    content: open-quote;
+    font-size: 4em;
+    line-height: 0.1em;
+    margin-right: 0.25em;
+    vertical-align: -0.4em;
+  }
+  blockquote p {
+    display: inline;
+  } */
 `;

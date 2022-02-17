@@ -83,7 +83,7 @@ const ManageNotes = () => {
         setIsPostPublic(false);
       }
     };
-    getIfThisTopicIsPublic();
+    selectedSubheading?.subheadingId && selectedSubheading?.creatorId ? getIfThisTopicIsPublic() : null;
   }, [selectedSubheading]);
 
   useEffect(() => {

@@ -49,7 +49,7 @@ export const sunEditorButtonList = [
     "link",
     "image",
     // "video",
-    "audio",
+    // "audio",
     "math",
     // "imageGallery",
     // "fullScreen",
@@ -102,4 +102,11 @@ export const sunEditorfontList = [
   // "Trebuchet MS",
   // "Open Sans",
   // "Roboto Slab",
+];
+export const colors:any = [
+  ["#E1D5E7", "#FFCC99", "#FFFF88", "#CDEB8B"],
+  ["#CCE5FF", "#EEEEEE", "#F9F7ED", "#FFCCCC"],
+  ["#F5F5F5", "#DAE8FC", "#D5E8D4", "#FFE6CC"],
+  ["#FFF2CC", "#F8CECC", "#E1D5E7", "#FFFFFF"],
+  ["#76608A", "#647687", "#F0A30A", "#008A00"],
 ];
