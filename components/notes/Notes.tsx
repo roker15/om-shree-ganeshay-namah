@@ -19,7 +19,7 @@ const Notes: React.FC<Props> = ({ subheadingid, notesCreator, changeParentProps 
   // };
 
   return (
-    <Box mx="2">
+    <Box mx="-1">
       <Box>
         <MyNotes
           subheadingid={subheadingid}

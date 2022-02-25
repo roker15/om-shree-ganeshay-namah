@@ -85,7 +85,7 @@ const MyNotes: React.FC<Props> = ({ subheadingid, notesCreator, changeParentProp
     }
   };
   return (
-    <Box mx="0">
+    <Box >
       {articles?.map((x) => {
         return (
           <Box key={x.id} mt="16">
@@ -148,10 +148,10 @@ const MyNotes: React.FC<Props> = ({ subheadingid, notesCreator, changeParentProp
                 <Tab>Hindi</Tab>
                 <Tab>English</Tab>
               </TabList>
-              <TabPanels>
-                <TabPanel>
+              <TabPanels >
+                <TabPanel pl="2" pr="-4">
                   {isArticleLoading ? (
-                    <Box padding="6" boxShadow="lg" bg="white">
+                    <Box  boxShadow="lg" bg="white">
                       <SkeletonCircle isLoaded={false} size="10" />
                       <SkeletonText isLoaded={false} noOfLines={4} spacing="4" />
                     </Box>
@@ -161,7 +161,7 @@ const MyNotes: React.FC<Props> = ({ subheadingid, notesCreator, changeParentProp
                 </TabPanel>
                 <TabPanel>
                   {isArticleLoading ? (
-                    <Box padding="6" boxShadow="lg" bg="white">
+                    <Box  boxShadow="lg" bg="white">
                       <SkeletonCircle isLoaded={false} size="10" />
                       <SkeletonText isLoaded={false} noOfLines={4} spacing="4" />
                     </Box>
@@ -516,6 +516,8 @@ const SuneditorForNotesMaking: React.FC<SuneditorForNotesMakingProps> = ({ artic
               },
             ],
             height: "100%",
+            width: "auto",
+            minWidth: "350px",
             resizingBar: false,
             buttonList: sunEditorButtonList,
             formats: ["p", "div", "h1", "h2", "h3"],
@@ -539,8 +541,10 @@ const EditorStyle = styled.div`
   .sun-editor {
     /* margin-top: -18px !important; */
     /* border: 1px solid blue; */
-    padding-left: -5px;
-    margin-left: -5px;
+    padding-left: -30px !important;
+    padding-right: -30px !important;
+    margin-left: -20px !important;
+    margin-right: 0px !important;
     border: ${(props) => (props.title === "READ" ? "none" : undefined)};
     /* border: "none"; */
     z-index: 2 !important;
