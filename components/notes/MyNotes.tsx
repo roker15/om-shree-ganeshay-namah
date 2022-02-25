@@ -533,6 +533,9 @@ const SuneditorForNotesMaking: React.FC<SuneditorForNotesMakingProps> = ({ artic
 };
 
 const EditorStyle = styled.div`
+  .sun-editor .se-dialog {
+    z-index: 2 !important; /* default value */
+  }
   .sun-editor {
     /* margin-top: -18px !important; */
     /* border: 1px solid blue; */
@@ -540,6 +543,7 @@ const EditorStyle = styled.div`
     margin-left: -5px;
     border: ${(props) => (props.title === "READ" ? "none" : undefined)};
     /* border: "none"; */
+    z-index: 2 !important;
   }
   .__se__customClass {
     /* background: #7e7575;
@@ -548,18 +552,18 @@ const EditorStyle = styled.div`
     font-weight: 500;
     color: #464242; */
 
-    background-color: #6e3c3c;
-    padding: 5px;
-    color: #464242;
+    background-color: #6e3c3c !important;
+    padding: 5px !important;
+    color: #464242 !important;
     /* list-style-position: inside; */
-    border: 1px solid blue;
+    border: 1px solid blue !important;
   }
   .__se__taggg {
-    background-color: #641717;
+    background-color: #641717 !important;
     padding: 5px;
     list-style-position: inside;
     font-weight: 500;
-    color: #464242;
+    color: #464242 !important;
     border: 1px solid blue;
     text-shadow: 2px 2px 5px green;
   }

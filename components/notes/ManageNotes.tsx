@@ -1,5 +1,29 @@
-import { Box, Button, Center, Flex, FormControl, FormLabel, Grid, GridItem, HStack, Switch, Text } from "@chakra-ui/react";
+import {
+  Box,
+  Button,
+  Center,
+  Drawer,
+  DrawerBody,
+  DrawerCloseButton,
+  DrawerContent,
+  DrawerFooter,
+  DrawerHeader,
+  DrawerOverlay,
+  Flex,
+  FormControl,
+  FormLabel,
+  Grid,
+  GridItem,
+  HStack,
+  IconButton,
+  Input,
+  Switch,
+  Text,
+  useDisclosure,
+} from "@chakra-ui/react";
 import React, { ChangeEvent, useEffect, useState } from "react";
+import { MdMenu, MdOutlineThumbUp } from "react-icons/md";
+import Sticky from "react-sticky-el";
 import { SharedNotesList } from "../../customHookes/networkHooks";
 import { BASE_URL } from "../../lib/constants";
 import { supabase } from "../../lib/supabaseClient";
@@ -120,7 +144,7 @@ const ManageNotes = () => {
 
   return (
     <div>
-      <Box px={{base:"0",sm:"2",md:"44"}} pb="8">
+      <Box px={{ base: "0", sm: "2", md: "44" }} pb="8">
         <BookFilter setParentProps={updateBookProps}></BookFilter>
         <Flex justifyContent="end" alignItems="center" mt="2">
           <HStack
@@ -153,6 +177,21 @@ const ManageNotes = () => {
             )}
           </HStack>
         </Flex>
+        <Sticky>
+          {/* <div style={{ zIndex : 2147483657}}> */}
+          <Flex justifyContent="space-between" display={{ base: "undefined", sm: "undefined", md: "none" }}>
+            <DrawerExample>
+              <SyllabusForNotes book={book} changeParentProps={changeSelectedSubheading}></SyllabusForNotes>
+            </DrawerExample>
+            <DrawerExample>
+              <SharedNotesPanel
+                subheadingid={selectedSubheading?.subheadingId}
+                changeParentProps={changeSelectedSharedNote}
+              ></SharedNotesPanel>
+            </DrawerExample>
+          </Flex>
+          {/* </div> */}
+        </Sticky>
       </Box>
       {/* <Flex my="16" justifyContent="flex-start"> */}
       {book ? (
@@ -216,3 +255,36 @@ const ManageNotes = () => {
 };
 
 export default ManageNotes;
+
+const DrawerExample: React.FC = ({ children }) => {
+  const { isOpen, onOpen, onClose } = useDisclosure();
+  const btnRef = React.useRef(null);
+
+  return (
+    <>
+      <Sticky>
+        <IconButton aria-label='syllabus' variant="outline" size="xs" icon={ <MdMenu/>}ref={btnRef} colorScheme="pink" onClick={onOpen}>
+            Open
+          </IconButton>
+      </Sticky>
+
+      <Drawer isOpen={isOpen} placement="left" onClose={onClose} finalFocusRef={btnRef}>
+        <DrawerOverlay />
+        <DrawerContent>
+          <DrawerCloseButton />
+          {/* <DrawerHeader>Create your account</DrawerHeader> */}
+
+          <DrawerBody>
+            {children}
+          </DrawerBody>
+
+          <DrawerFooter>
+            <Button variant="outline" mr={3} onClick={onClose}>
+              Cancel
+            </Button>
+          </DrawerFooter>
+        </DrawerContent>
+      </Drawer>
+    </>
+  );
+};
