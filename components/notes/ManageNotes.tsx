@@ -120,7 +120,7 @@ const ManageNotes = () => {
 
   return (
     <div>
-      <Box px="44" pb="8">
+      <Box px={{base:"0",sm:"2",md:"44"}} pb="8">
         <BookFilter setParentProps={updateBookProps}></BookFilter>
         <Flex justifyContent="end" alignItems="center" mt="2">
           <HStack
@@ -157,12 +157,18 @@ const ManageNotes = () => {
       {/* <Flex my="16" justifyContent="flex-start"> */}
       {book ? (
         <Grid templateColumns="repeat(10, 1fr)">
-          <GridItem scrollBehavior={"auto"} colSpan={2} bg="gray.50" p="2">
+          <GridItem
+            scrollBehavior={"auto"}
+            colSpan={{ base: 0, sm: 0, md: 2 }}
+            bg="gray.50"
+            p="2"
+            display={{ base: "none", sm: "none", md: "block" }}
+          >
             <Flex>
               <SyllabusForNotes book={book} changeParentProps={changeSelectedSubheading}></SyllabusForNotes>
             </Flex>
           </GridItem>
-          <GridItem colSpan={7} px="4">
+          <GridItem colSpan={{ base: 10, sm: 10, md: 7 }} px="4">
             {supabase.auth.session() ? (
               <Box>
                 <Center>
@@ -190,7 +196,12 @@ const ManageNotes = () => {
               </Center>
             )}
           </GridItem>
-          <GridItem colSpan={1} bg="gray.50" p="0.5">
+          <GridItem
+            colSpan={{ base: 0, sm: 0, md: 1 }}
+            bg="gray.50"
+            p="0.5"
+            display={{ base: "none", sm: "none", md: "block" }}
+          >
             <SharedNotesPanel
               subheadingid={selectedSubheading?.subheadingId}
               changeParentProps={changeSelectedSharedNote}

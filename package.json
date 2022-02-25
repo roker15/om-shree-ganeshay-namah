@@ -39,7 +39,7 @@
     "react-table": "^7.7.0",
     "styled-components": "^5.3.3",
     "suneditor": "^2.42.0",
-    "suneditor-react": "^3.3.1",
+    "suneditor-react": "^3.4.0",
     "swr": "^1.2.1",
     "uuid": "^8.3.2",
     "yarn": "^1.22.17"
@@ -53,7 +53,7 @@
     "@types/react-helmet": "^6.1.5",
     "@types/react-icons": "^3.0.0",
     "@types/react-table": "^7.7.9",
-    "@types/styled-components": "^5.1.22",
+    "@types/styled-components": "^5.1.23",
     "@types/uuid": "^8.3.4",
     "eslint": "8.6.0",
     "eslint-config-next": "12.0.8",

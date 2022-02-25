@@ -11,6 +11,7 @@ import {
   Input,
   Radio,
   RadioGroup,
+  Select,
   SkeletonCircle,
   SkeletonText,
   Stack,
@@ -84,14 +85,14 @@ const MyNotes: React.FC<Props> = ({ subheadingid, notesCreator, changeParentProp
     }
   };
   return (
-    <Box mx="2">
+    <Box mx="0">
       {articles?.map((x) => {
         return (
           <Box key={x.id} mt="16">
             <Flex role={"group"} align="center">
               {/* <Badge> */}
               <VStack>
-                <Text bg="green.50" p="2" as="label" fontSize="14px" casing="capitalize" align="left">
+                <Text bg="green.50" p="2" as="label" fontSize="16px" casing="capitalize" align="left">
                   {x.article_title}
                 </Text>
                 {isArticleCreating === "EDITING" && x.id === selectedArticleForEdit ? (
@@ -336,6 +337,7 @@ const SunEditor = dynamic(() => import("suneditor-react"), {
 const SuneditorForNotesMaking: React.FC<SuneditorForNotesMakingProps> = ({ article, language }) => {
   const [editorMode, setEditorMode] = React.useState("READ");
   const [isAutosaveOn, setIsAutosaveOn] = React.useState(false);
+  const [fontSize, setFontSize] = React.useState("font-family: arial; font-size: 14px;");
   const { profile } = useAuthContext();
   const editor = useRef<SunEditorCore>();
   const getSunEditorInstance = (sunEditor: SunEditorCore) => {
@@ -349,6 +351,7 @@ const SuneditorForNotesMaking: React.FC<SuneditorForNotesMakingProps> = ({ artic
   useEffect(() => {
     if (language === "HINDI" && article && article.article_hindi && editor.current && editor.current.core) {
       editor.current?.core.setContents(article.article_hindi);
+      // editor.current?.core.conten(article.article_hindi);
     }
     if (language === "ENGLISH" && article && article.article_english && editor.current && editor.current.core) {
       editor.current?.core.setContents(article.article_english);
@@ -415,9 +418,22 @@ const SuneditorForNotesMaking: React.FC<SuneditorForNotesMakingProps> = ({ artic
           </Stack>
         </RadioGroup>
         <Flex align="center" display={editorMode === "READ" ? "none" : "flex"}>
+          <Select
+            size="sm"
+            px="2"
+            placeholder="Font Size"
+            onChange={(e) => {
+              setFontSize(e.target.value);
+            }}
+          >
+            <option value="font-family: arial; font-size: 14px;">small</option>
+            <option value="font-family: arial; font-size: 16px;">medium</option>
+            <option value="font-family: arial; font-size: 20px;">large</option>
+          </Select>
           <Box pb="3">
             <UiForImageUpload />
           </Box>
+
           <Button
             onClick={() => {
               updateArticleInDatabase(editor.current?.getContents(false));
@@ -446,7 +462,7 @@ const SuneditorForNotesMaking: React.FC<SuneditorForNotesMakingProps> = ({ artic
       <EditorStyle title={editorMode === "READ" ? "READ" : "EDIT"}>
         <SunEditor
           getSunEditorInstance={getSunEditorInstance}
-          setDefaultStyle="font-family: arial; font-size: 14px;"
+          setDefaultStyle={fontSize}
           hideToolbar={editorMode === "READ" ? true : false}
           defaultValue={language === "ENGLISH" ? article.article_english : article.article_hindi}
           // key={postId}
@@ -459,17 +475,17 @@ const SuneditorForNotesMaking: React.FC<SuneditorForNotesMakingProps> = ({ artic
             placeholder: "**** Start Writing your notes here, we will save it automatically!!!",
             mode: "classic",
             katex: katex,
-            colorList: colors ,
+            colorList: colors,
             paragraphStyles: [
               "spaced",
-              "neon",
+              // "neon",
               {
                 name: "Box",
-                class: "__se__customClass1",
+                class: "__se__customClass",
               },
               {
                 name: "ph22",
-                class: "seCustomClass2",
+                class: "__se__taggg",
               },
             ],
             textStyles: [
@@ -479,27 +495,24 @@ const SuneditorForNotesMaking: React.FC<SuneditorForNotesMakingProps> = ({ artic
 
               {
                 name: "Highlighter 1",
-                style:
-                  "background-color:#FFFF88;padding: 1px;",
+                style: "background-color:#FFFF88;padding: 1px;",
                 tag: "span",
               },
               {
                 name: "Highlighter 2",
-                style:
-                  "background-color:#CDEB8B;padding: 1px;",
+                style: "background-color:#CDEB8B;padding: 1px;",
                 tag: "span",
               },
               {
                 name: "Highlighter 3",
-                style:
-                  "background-color:#E1D5E7;padding: 1px;",
+                style: "background-color:#E1D5E7;padding: 1px;",
                 tag: "span",
               },
               {
                 name: "Highlighter 4",
-                style:
-                  "background-color:#E1D5E7;padding: 1px;padding-left: 1px",
-                tag: "p",
+                // style: "background-color:#E1D5E7;padding: 1px;padding-left: 1px",
+                style: "background-color:#f7f3e2;padding: 1px;padding-left: 1px",
+                tag: "mark",
               },
             ],
             height: "100%",
@@ -523,10 +536,12 @@ const EditorStyle = styled.div`
   .sun-editor {
     /* margin-top: -18px !important; */
     /* border: 1px solid blue; */
+    padding-left: -5px;
+    margin-left: -5px;
     border: ${(props) => (props.title === "READ" ? "none" : undefined)};
     /* border: "none"; */
   }
-  .__se__customClass1 {
+  .__se__customClass {
     /* background: #7e7575;
     padding: 5px;
     list-style-position: inside;
@@ -536,14 +551,16 @@ const EditorStyle = styled.div`
     background-color: #6e3c3c;
     padding: 5px;
     color: #464242;
-    list-style-position: inside;
+    /* list-style-position: inside; */
+    border: 1px solid blue;
   }
-  .__se__customClass2 {
-    background-color: #f1e0e0;
+  .__se__taggg {
+    background-color: #641717;
     padding: 5px;
     list-style-position: inside;
     font-weight: 500;
     color: #464242;
+    border: 1px solid blue;
     text-shadow: 2px 2px 5px green;
   }
   /* blockquote {

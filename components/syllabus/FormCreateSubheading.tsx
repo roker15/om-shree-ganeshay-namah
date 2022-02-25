@@ -113,7 +113,7 @@ const FormCreateSubheading: React.FC<Props> = ({ x }) => {
     }
   }
 
-  if (!profile) {
+  if (profile) {
     return (
       <Container mt="2" maxW={{ base: "container.xl", md: "container.md" }}>
         <Text>{x?.book_name}</Text>

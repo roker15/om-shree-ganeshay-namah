@@ -87,6 +87,7 @@ export const sunEditorButtonList = [
 export const sunEditorfontList = [
   "Arial",
   "Comic Sans Ms",
+  "Tahoma",
   // "Bookman Old Style",
   // "Georgia",
   // "Calibri",

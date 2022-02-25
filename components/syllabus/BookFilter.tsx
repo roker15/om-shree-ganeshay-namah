@@ -67,7 +67,7 @@ const BookFilter: React.FC<{ setParentProps: (x: BookResponse | undefined) => vo
           variant={"filled"}
           size="sm"
           id="paper"
-          placeholder="Select Class  🥕"
+          placeholder="Select Class 🥕"
           onChange={(e) => {
             setSelectedClass(Number(e.target.value));
           }}
