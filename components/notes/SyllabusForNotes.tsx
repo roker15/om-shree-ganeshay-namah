@@ -25,7 +25,7 @@ const Syllabus: React.FC<Props> = ({ book, changeParentProps }) => {
       {book?.book_name ? (
         <Flex align="end">
           <Text as="b">
-            <Text as="u">{book?.book_name}</Text>
+            <Text >{book?.book_name}</Text>
           </Text>
         </Flex>
       ) : null}
@@ -37,7 +37,8 @@ const Syllabus: React.FC<Props> = ({ book, changeParentProps }) => {
             <Box key={key}>
               <Flex align="center" justifyContent="left" role="group" my="2">
                 <Text align="start" as="address" color=" #FF1493" casing="capitalize">
-                  {value[0].heading + " " + "(" + value[0].heading_sequence + ")"}
+                  {/* {value[0].heading + " " + "(" + value[0].heading_sequence + ")"} */}
+                  {value[0].heading }
                 </Text>
               </Flex>
               {value

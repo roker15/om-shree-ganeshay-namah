@@ -196,17 +196,22 @@ const ManageNotes = () => {
       {/* <Flex my="16" justifyContent="flex-start"> */}
       {book ? (
         <Grid templateColumns="repeat(10, 1fr)">
-          <GridItem
+          {/* <Sticky> */}
+
+          <GridItem 
             scrollBehavior={"auto"}
             colSpan={{ base: 0, sm: 0, md: 2 }}
-            bg="gray.50"
+            bg="orange.50"
             p="2"
             display={{ base: "none", sm: "none", md: "block" }}
           >
-            <Flex>
-              <SyllabusForNotes book={book} changeParentProps={changeSelectedSubheading}></SyllabusForNotes>
+            <Flex  >
+              {/* <Sticky> */}
+                <SyllabusForNotes book={book} changeParentProps={changeSelectedSubheading}></SyllabusForNotes>
+              {/* </Sticky> */}
             </Flex>
           </GridItem>
+          {/* </Sticky> */}
           <GridItem colSpan={{ base: 10, sm: 10, md: 7 }} px="4">
             {supabase.auth.session() ? (
               <Box>
@@ -237,7 +242,7 @@ const ManageNotes = () => {
           </GridItem>
           <GridItem
             colSpan={{ base: 0, sm: 0, md: 1 }}
-            bg="gray.50"
+            bg="orange.50"
             p="0.5"
             display={{ base: "none", sm: "none", md: "block" }}
           >
@@ -263,9 +268,17 @@ const DrawerExample: React.FC = ({ children }) => {
   return (
     <>
       <Sticky>
-        <IconButton aria-label='syllabus' variant="outline" size="xs" icon={ <MdMenu/>}ref={btnRef} colorScheme="pink" onClick={onOpen}>
-            Open
-          </IconButton>
+        <IconButton
+          aria-label="syllabus"
+          variant="outline"
+          size="xs"
+          icon={<MdMenu />}
+          ref={btnRef}
+          colorScheme="pink"
+          onClick={onOpen}
+        >
+          Open
+        </IconButton>
       </Sticky>
 
       <Drawer isOpen={isOpen} placement="left" onClose={onClose} finalFocusRef={btnRef}>
@@ -274,9 +287,7 @@ const DrawerExample: React.FC = ({ children }) => {
           <DrawerCloseButton />
           {/* <DrawerHeader>Create your account</DrawerHeader> */}
 
-          <DrawerBody>
-            {children}
-          </DrawerBody>
+          <DrawerBody>{children}</DrawerBody>
 
           <DrawerFooter>
             <Button variant="outline" mr={3} onClick={onClose}>

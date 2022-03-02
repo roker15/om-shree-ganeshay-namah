@@ -67,6 +67,7 @@ const BookFilter: React.FC<{ setParentProps: (x: BookResponse | undefined) => vo
           variant={"filled"}
           size="sm"
           id="paper"
+          bg={"orange.50"}
           placeholder="Select Class 🥕"
           onChange={(e) => {
             setSelectedClass(Number(e.target.value));
@@ -84,6 +85,7 @@ const BookFilter: React.FC<{ setParentProps: (x: BookResponse | undefined) => vo
           variant={"filled"}
           size="sm"
           id="paper"
+          bg={"orange.50"}
           placeholder="Select Subject 🍍"
           onChange={(e) => {
             setSelectedSubject(Number(e.target.value));
@@ -101,6 +103,7 @@ const BookFilter: React.FC<{ setParentProps: (x: BookResponse | undefined) => vo
           variant={"filled"}
           size="sm"
           id="paper"
+          bg={"orange.50"}
           placeholder="Select Book 🍎"
           onChange={(e) => {
             setParentProps!(data?.find((item) => item.id === Number(e.target.value)));

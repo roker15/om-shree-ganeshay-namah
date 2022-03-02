@@ -28,7 +28,7 @@ const SharedNotesPanel: React.FC<Props> = ({ subheadingid, changeParentProps }) 
   return (
     <Box>
       <VStack align="left">
-        <Text align="start" fontWeight="medium" fontSize="15px" p="0.5" bg="gray.100">
+        <Text align="start" fontWeight="medium" fontSize="15px" p="0.5" bg="orange.100">
           My notes
         </Text>
         <Text
@@ -40,7 +40,7 @@ const SharedNotesPanel: React.FC<Props> = ({ subheadingid, changeParentProps }) 
         >
           {/* {d?} */}
         </Text>
-        <Text align="start" fontWeight="medium" fontSize="15px" p="0.5" bg="gray.100">
+        <Text align="start" fontWeight="medium" fontSize="15px" p="0.5" bg="orange.100">
           Public Notes
         </Text>
         {publicNotes && publicNotes.length > 0 ? (
@@ -68,7 +68,7 @@ const SharedNotesPanel: React.FC<Props> = ({ subheadingid, changeParentProps }) 
           </Text>
         )}
         <VStack></VStack>
-        <Text align="start" p="0.5" bg="gray.100" fontWeight="medium" fontSize="15px">
+        <Text align="start" p="0.5" bg="orange.100" fontWeight="medium" fontSize="15px">
           Shared Notes
         </Text>
         {sharedNtoes && sharedNtoes.length > 0 ? (

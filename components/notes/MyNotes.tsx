@@ -92,8 +92,8 @@ const MyNotes: React.FC<Props> = ({ subheadingid, notesCreator, changeParentProp
             <Flex role={"group"} align="center">
               {/* <Badge> */}
               <VStack>
-                <Text bg="green.50" p="2" as="label" fontSize="16px" casing="capitalize" align="left">
-                  {x.article_title}
+                <Text bg="orange.100" p="2"  fontSize="16px" casing="capitalize" align="left">
+                 <Text as="b">Article Name :- </Text> {x.article_title}
                 </Text>
                 {isArticleCreating === "EDITING" && x.id === selectedArticleForEdit ? (
                   <ArticleForm
@@ -463,6 +463,7 @@ const SuneditorForNotesMaking: React.FC<SuneditorForNotesMakingProps> = ({ artic
         <SunEditor
           getSunEditorInstance={getSunEditorInstance}
           setDefaultStyle={fontSize}
+          // setDefaultStyle={font-family: ${fontFamily}; font-size: 14px;}
           hideToolbar={editorMode === "READ" ? true : false}
           defaultValue={language === "ENGLISH" ? article.article_english : article.article_hindi}
           // key={postId}
@@ -510,9 +511,9 @@ const SuneditorForNotesMaking: React.FC<SuneditorForNotesMakingProps> = ({ artic
               },
               {
                 name: "Highlighter 4",
-                // style: "background-color:#E1D5E7;padding: 1px;padding-left: 1px",
-                style: "background-color:#f7f3e2;padding: 1px;padding-left: 1px",
-                tag: "mark",
+                style: "background-color:#E1D5E7;padding: 1px;padding-left: 1px",
+                // style: "background-color:#f7f3e2;padding: 1px;padding-left: 1px",
+                tag: "p",
               },
             ],
             height: "100%",
@@ -522,6 +523,7 @@ const SuneditorForNotesMaking: React.FC<SuneditorForNotesMakingProps> = ({ artic
             buttonList: sunEditorButtonList,
             formats: ["p", "div", "h1", "h2", "h3"],
             font: sunEditorfontList,
+            
             fontSize: [12, 14, 16, 20],
             imageFileInput: false, //this disable image as file, only from url allowed
             imageSizeOnlyPercentage: false,
