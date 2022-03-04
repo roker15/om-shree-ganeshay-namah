@@ -45,6 +45,7 @@ import { definitions } from "../../types/supabase";
 import { customToast } from "../CustomToast";
 import DeleteConfirmation from "../syllabus/DeleteConfirmation";
 import { UiForImageUpload } from "../UiForImageUpload";
+// import "../../styles/suneditor.module.css";
 interface Props {
   subheadingid: number | undefined;
   notesCreator: string | undefined;
@@ -85,95 +86,99 @@ const MyNotes: React.FC<Props> = ({ subheadingid, notesCreator, changeParentProp
     }
   };
   return (
-    <Box >
-      {articles?.map((x) => {
-        return (
-          <Box key={x.id} mt="16">
-            <Flex role={"group"} align="center">
-              {/* <Badge> */}
-              <VStack>
-                <Text bg="orange.100" p="2"  fontSize="16px" casing="capitalize" align="left">
-                 <Text as="b">Article Name :- </Text> {x.article_title}
-                </Text>
-                {isArticleCreating === "EDITING" && x.id === selectedArticleForEdit ? (
-                  <ArticleForm
-                    subheadingid={subheadingid}
-                    articleId={x.id}
-                    formMode={"EDITING"}
-                    x={setIsArticleCreating}
-                  ></ArticleForm>
-                ) : null}
-              </VStack>
-              {/* </Badge> */}
-              <Box display={profile?.id !== notesCreator ? "none" : "undefined"}>
-                <IconButton
-                  display="none"
-                  _groupHover={{ display: "center" }}
-                  // _hover={{ color: "pink", fontSize: "22px" }}
-                  size="xs"
-                  // ml="2"
-                  borderRadius={"full"}
-                  variant="outline"
-                  colorScheme="whatsapp"
-                  aria-label="Call Sage"
-                  fontSize="20px"
-                  onClick={() => handleArticleEdit(x.id, false)}
-                  icon={<MdModeEdit />}
-                />
-                <IconButton
-                  display={isArticleCreating === "EDITING" && selectedArticleForEdit === x.id ? "undefined" : "none"}
-                  size="xs"
-                  ml="2"
-                  borderRadius={"full"}
-                  variant="outline"
-                  colorScheme="whatsapp"
-                  aria-label="Call Sage"
-                  fontSize="20px"
-                  onClick={() => handleArticleEdit(undefined, true)}
-                  icon={<MdCancel />}
-                />
-                <Box display="none" _groupHover={{ display: "center" }}>
-                  <DeleteConfirmation
-                    handleDelete={deleteArticle}
-                    dialogueHeader={"Are you sure to delete this Article?"}
-                    isDisabled={false}
-                    isIconButton={true}
-                    id={x.id}
-                  ></DeleteConfirmation>
+    <Box>
+      {articles
+        ?.sort((a, b) => a.sequence! - b.sequence!)
+        .map((x) => {
+          return (
+            <Box key={x.id} mt="16">
+              <Flex role={"group"} align="center">
+                {/* <Badge> */}
+                <VStack>
+                  <Text bg="orange.100" p="2" fontSize="16px" casing="capitalize" align="left">
+                    <Text as="b">Article Name :- </Text> {x.article_title}
+                  </Text>
+                  {isArticleCreating === "EDITING" && x.id === selectedArticleForEdit ? (
+                    <ArticleForm
+                      subheadingid={subheadingid}
+                      articleId={x.id}
+                      articleTitle={x.article_title}
+                      sequence={x.sequence}
+                      formMode={"EDITING"}
+                      x={setIsArticleCreating}
+                    ></ArticleForm>
+                  ) : null}
+                </VStack>
+                {/* </Badge> */}
+                <Box display={profile?.id !== notesCreator ? "none" : "undefined"}>
+                  <IconButton
+                    display="none"
+                    _groupHover={{ display: "center" }}
+                    // _hover={{ color: "pink", fontSize: "22px" }}
+                    size="xs"
+                    // ml="2"
+                    borderRadius={"full"}
+                    variant="outline"
+                    colorScheme="whatsapp"
+                    aria-label="Call Sage"
+                    fontSize="20px"
+                    onClick={() => handleArticleEdit(x.id, false)}
+                    icon={<MdModeEdit />}
+                  />
+                  <IconButton
+                    display={isArticleCreating === "EDITING" && selectedArticleForEdit === x.id ? "undefined" : "none"}
+                    size="xs"
+                    ml="2"
+                    borderRadius={"full"}
+                    variant="outline"
+                    colorScheme="whatsapp"
+                    aria-label="Call Sage"
+                    fontSize="20px"
+                    onClick={() => handleArticleEdit(undefined, true)}
+                    icon={<MdCancel />}
+                  />
+                  <Box display="none" _groupHover={{ display: "center" }}>
+                    <DeleteConfirmation
+                      handleDelete={deleteArticle}
+                      dialogueHeader={"Are you sure to delete this Article?"}
+                      isDisabled={false}
+                      isIconButton={true}
+                      id={x.id}
+                    ></DeleteConfirmation>
+                  </Box>
                 </Box>
-              </Box>
-            </Flex>
-            <Tabs size="md" colorScheme="whatsapp">
-              <TabList>
-                <Tab>Hindi</Tab>
-                <Tab>English</Tab>
-              </TabList>
-              <TabPanels >
-                <TabPanel pl="2" pr="-4">
-                  {isArticleLoading ? (
-                    <Box  boxShadow="lg" bg="white">
-                      <SkeletonCircle isLoaded={false} size="10" />
-                      <SkeletonText isLoaded={false} noOfLines={4} spacing="4" />
-                    </Box>
-                  ) : (
-                    <SuneditorForNotesMaking article={x} language={"HINDI"} />
-                  )}
-                </TabPanel>
-                <TabPanel>
-                  {isArticleLoading ? (
-                    <Box  boxShadow="lg" bg="white">
-                      <SkeletonCircle isLoaded={false} size="10" />
-                      <SkeletonText isLoaded={false} noOfLines={4} spacing="4" />
-                    </Box>
-                  ) : (
-                    <SuneditorForNotesMaking article={x} language={"ENGLISH"} />
-                  )}
-                </TabPanel>
-              </TabPanels>
-            </Tabs>
-          </Box>
-        );
-      })}
+              </Flex>
+              <Tabs size="md" colorScheme="whatsapp">
+                <TabList>
+                  <Tab>Hindi</Tab>
+                  <Tab>English</Tab>
+                </TabList>
+                <TabPanels>
+                  <TabPanel pl="2" pr="0.5">
+                    {isArticleLoading ? (
+                      <Box boxShadow="lg" bg="white">
+                        <SkeletonCircle isLoaded={false} size="10" />
+                        <SkeletonText isLoaded={false} noOfLines={4} spacing="4" />
+                      </Box>
+                    ) : (
+                      <SuneditorForNotesMaking article={x} language={"HINDI"} />
+                    )}
+                  </TabPanel>
+                  <TabPanel>
+                    {isArticleLoading ? (
+                      <Box boxShadow="lg" bg="white">
+                        <SkeletonCircle isLoaded={false} size="10" />
+                        <SkeletonText isLoaded={false} noOfLines={4} spacing="4" />
+                      </Box>
+                    ) : (
+                      <SuneditorForNotesMaking article={x} language={"ENGLISH"} />
+                    )}
+                  </TabPanel>
+                </TabPanels>
+              </Tabs>
+            </Box>
+          );
+        })}
       <Stack align="center" justifyContent="center" pb="16" direction={"row"}>
         <Box display={isArticleCreating === "NONE" ? "none" : "block"}>
           {/* {form()} */}
@@ -238,7 +243,15 @@ type ArticleFormProps = {
   x: React.Dispatch<React.SetStateAction<"CREATING" | "EDITING" | "NONE">>;
   setParentProps?: (x: string) => {};
 };
-const ArticleForm: React.FC<ArticleFormProps> = ({ subheadingid, formMode, articleId, setParentProps, x }) => {
+const ArticleForm: React.FC<ArticleFormProps> = ({
+  subheadingid,
+  formMode,
+  articleId,
+  articleTitle,
+  sequence,
+  setParentProps,
+  x,
+}) => {
   const [isLoading, setIsLoading] = useState();
   const { mutate } = useSWRConfig();
   const { profile } = useAuthContext();
@@ -246,7 +259,12 @@ const ArticleForm: React.FC<ArticleFormProps> = ({ subheadingid, formMode, artic
     register,
     handleSubmit,
     formState: { errors },
-  } = useForm<Inputs>();
+  } = useForm<Inputs>({
+    defaultValues: {
+      articleTitle: articleTitle,
+      sequence: sequence,
+    },
+  });
   const onSubmit: SubmitHandler<Inputs> = async (d) => {
     if (formMode === "CREATING") {
       const { data, error } = await supabase.from<definitions["books_articles"]>("books_articles").insert([
@@ -274,7 +292,7 @@ const ArticleForm: React.FC<ArticleFormProps> = ({ subheadingid, formMode, artic
     mutate([`/get-user-articles/${subheadingid}/${profile?.id}`]);
   };
   return (
-    <Box>
+    <Flex justify="space-between"  >
       <form onSubmit={handleSubmit(onSubmit)}>
         <FormControl p="2" isInvalid={errors.articleTitle as any}>
           <Input
@@ -293,15 +311,7 @@ const ArticleForm: React.FC<ArticleFormProps> = ({ subheadingid, formMode, artic
           />
           <FormErrorMessage>{errors.sequence && errors.sequence.message}</FormErrorMessage>
         </FormControl>
-        {/* <ButtonGroup variant="with-shadow" colorScheme="pink"> */}
-        {/* <IconButton
-            // borderRadius={"full"}
-            isLoading={isLoading}
-            type="submit"
-            aria-label="Search database"
-            icon={<MdDone />}
-            size="s"
-          /> */}
+
         <IconButton
           // _groupHover={{ size: "" }}
           // display={isArticleCreating === "CREATING" || !subheadingid ? "none" : "flex"}
@@ -322,7 +332,7 @@ const ArticleForm: React.FC<ArticleFormProps> = ({ subheadingid, formMode, artic
         />
         {/* </ButtonGroup> */}
       </form>
-    </Box>
+    </Flex>
   );
 };
 
@@ -523,7 +533,7 @@ const SuneditorForNotesMaking: React.FC<SuneditorForNotesMakingProps> = ({ artic
             buttonList: sunEditorButtonList,
             formats: ["p", "div", "h1", "h2", "h3"],
             font: sunEditorfontList,
-            
+
             fontSize: [12, 14, 16, 20],
             imageFileInput: false, //this disable image as file, only from url allowed
             imageSizeOnlyPercentage: false,
