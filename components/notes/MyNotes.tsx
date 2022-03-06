@@ -11,6 +11,7 @@ import {
   Input,
   Radio,
   RadioGroup,
+  Select,
   SkeletonCircle,
   SkeletonText,
   Stack,
@@ -37,13 +38,14 @@ import "suneditor/dist/css/suneditor.min.css"; // Import Sun Editor's CSS File
 import SunEditorCore from "suneditor/src/lib/core";
 import { useSWRConfig } from "swr";
 import { useGetUserArticles } from "../../customHookes/networkHooks";
-import { sunEditorButtonList, sunEditorfontList } from "../../lib/constants";
+import { colors, sunEditorButtonList, sunEditorfontList } from "../../lib/constants";
 import { supabase } from "../../lib/supabaseClient";
 import { useAuthContext } from "../../state/Authcontext";
 import { definitions } from "../../types/supabase";
 import { customToast } from "../CustomToast";
 import DeleteConfirmation from "../syllabus/DeleteConfirmation";
 import { UiForImageUpload } from "../UiForImageUpload";
+// import "../../styles/suneditor.module.css";
 interface Props {
   subheadingid: number | undefined;
   notesCreator: string | undefined;
@@ -84,95 +86,99 @@ const MyNotes: React.FC<Props> = ({ subheadingid, notesCreator, changeParentProp
     }
   };
   return (
-    <Box mx="2">
-      {articles?.map((x) => {
-        return (
-          <Box key={x.id} mt="16">
-            <Flex role={"group"} align="center">
-              {/* <Badge> */}
-              <VStack>
-                <Text bg="green.50" p="2" as="label" fontSize="14px" casing="capitalize" align="left">
-                  {x.article_title}
-                </Text>
-                {isArticleCreating === "EDITING" && x.id === selectedArticleForEdit ? (
-                  <ArticleForm
-                    subheadingid={subheadingid}
-                    articleId={x.id}
-                    formMode={"EDITING"}
-                    x={setIsArticleCreating}
-                  ></ArticleForm>
-                ) : null}
-              </VStack>
-              {/* </Badge> */}
-              <Box display={profile?.id !== notesCreator ? "none" : "undefined"}>
-                <IconButton
-                  display="none"
-                  _groupHover={{ display: "center" }}
-                  // _hover={{ color: "pink", fontSize: "22px" }}
-                  size="xs"
-                  // ml="2"
-                  borderRadius={"full"}
-                  variant="outline"
-                  colorScheme="whatsapp"
-                  aria-label="Call Sage"
-                  fontSize="20px"
-                  onClick={() => handleArticleEdit(x.id, false)}
-                  icon={<MdModeEdit />}
-                />
-                <IconButton
-                  display={isArticleCreating === "EDITING" && selectedArticleForEdit === x.id ? "undefined" : "none"}
-                  size="xs"
-                  ml="2"
-                  borderRadius={"full"}
-                  variant="outline"
-                  colorScheme="whatsapp"
-                  aria-label="Call Sage"
-                  fontSize="20px"
-                  onClick={() => handleArticleEdit(undefined, true)}
-                  icon={<MdCancel />}
-                />
-                <Box display="none" _groupHover={{ display: "center" }}>
-                  <DeleteConfirmation
-                    handleDelete={deleteArticle}
-                    dialogueHeader={"Are you sure to delete this Article?"}
-                    isDisabled={false}
-                    isIconButton={true}
-                    id={x.id}
-                  ></DeleteConfirmation>
+    <Box>
+      {articles
+        ?.sort((a, b) => a.sequence! - b.sequence!)
+        .map((x) => {
+          return (
+            <Box key={x.id} mt="16">
+              <Flex role={"group"} align="center">
+                {/* <Badge> */}
+                <VStack>
+                  <Text bg="orange.100" p="2" fontSize="16px" casing="capitalize" align="left">
+                    <Text as="b">Article Name :- </Text> {x.article_title}
+                  </Text>
+                  {isArticleCreating === "EDITING" && x.id === selectedArticleForEdit ? (
+                    <ArticleForm
+                      subheadingid={subheadingid}
+                      articleId={x.id}
+                      articleTitle={x.article_title}
+                      sequence={x.sequence}
+                      formMode={"EDITING"}
+                      x={setIsArticleCreating}
+                    ></ArticleForm>
+                  ) : null}
+                </VStack>
+                {/* </Badge> */}
+                <Box display={profile?.id !== notesCreator ? "none" : "undefined"}>
+                  <IconButton
+                    display="none"
+                    _groupHover={{ display: "center" }}
+                    // _hover={{ color: "pink", fontSize: "22px" }}
+                    size="xs"
+                    // ml="2"
+                    borderRadius={"full"}
+                    variant="outline"
+                    colorScheme="whatsapp"
+                    aria-label="Call Sage"
+                    fontSize="20px"
+                    onClick={() => handleArticleEdit(x.id, false)}
+                    icon={<MdModeEdit />}
+                  />
+                  <IconButton
+                    display={isArticleCreating === "EDITING" && selectedArticleForEdit === x.id ? "undefined" : "none"}
+                    size="xs"
+                    ml="2"
+                    borderRadius={"full"}
+                    variant="outline"
+                    colorScheme="whatsapp"
+                    aria-label="Call Sage"
+                    fontSize="20px"
+                    onClick={() => handleArticleEdit(undefined, true)}
+                    icon={<MdCancel />}
+                  />
+                  <Box display="none" _groupHover={{ display: "center" }}>
+                    <DeleteConfirmation
+                      handleDelete={deleteArticle}
+                      dialogueHeader={"Are you sure to delete this Article?"}
+                      isDisabled={false}
+                      isIconButton={true}
+                      id={x.id}
+                    ></DeleteConfirmation>
+                  </Box>
                 </Box>
-              </Box>
-            </Flex>
-            <Tabs size="md" colorScheme="whatsapp">
-              <TabList>
-                <Tab>Hindi</Tab>
-                <Tab>English</Tab>
-              </TabList>
-              <TabPanels>
-                <TabPanel>
-                  {isArticleLoading ? (
-                    <Box padding="6" boxShadow="lg" bg="white">
-                      <SkeletonCircle isLoaded={false} size="10" />
-                      <SkeletonText isLoaded={false} noOfLines={4} spacing="4" />
-                    </Box>
-                  ) : (
-                    <SuneditorForNotesMaking article={x} language={"HINDI"} />
-                  )}
-                </TabPanel>
-                <TabPanel>
-                  {isArticleLoading ? (
-                    <Box padding="6" boxShadow="lg" bg="white">
-                      <SkeletonCircle isLoaded={false} size="10" />
-                      <SkeletonText isLoaded={false} noOfLines={4} spacing="4" />
-                    </Box>
-                  ) : (
-                    <SuneditorForNotesMaking article={x} language={"ENGLISH"} />
-                  )}
-                </TabPanel>
-              </TabPanels>
-            </Tabs>
-          </Box>
-        );
-      })}
+              </Flex>
+              <Tabs size="md" colorScheme="whatsapp">
+                <TabList>
+                  <Tab>Hindi</Tab>
+                  <Tab>English</Tab>
+                </TabList>
+                <TabPanels>
+                  <TabPanel pl="2" pr="0.5">
+                    {isArticleLoading ? (
+                      <Box boxShadow="lg" bg="white">
+                        <SkeletonCircle isLoaded={false} size="10" />
+                        <SkeletonText isLoaded={false} noOfLines={4} spacing="4" />
+                      </Box>
+                    ) : (
+                      <SuneditorForNotesMaking article={x} language={"HINDI"} />
+                    )}
+                  </TabPanel>
+                  <TabPanel>
+                    {isArticleLoading ? (
+                      <Box boxShadow="lg" bg="white">
+                        <SkeletonCircle isLoaded={false} size="10" />
+                        <SkeletonText isLoaded={false} noOfLines={4} spacing="4" />
+                      </Box>
+                    ) : (
+                      <SuneditorForNotesMaking article={x} language={"ENGLISH"} />
+                    )}
+                  </TabPanel>
+                </TabPanels>
+              </Tabs>
+            </Box>
+          );
+        })}
       <Stack align="center" justifyContent="center" pb="16" direction={"row"}>
         <Box display={isArticleCreating === "NONE" ? "none" : "block"}>
           {/* {form()} */}
@@ -237,7 +243,15 @@ type ArticleFormProps = {
   x: React.Dispatch<React.SetStateAction<"CREATING" | "EDITING" | "NONE">>;
   setParentProps?: (x: string) => {};
 };
-const ArticleForm: React.FC<ArticleFormProps> = ({ subheadingid, formMode, articleId, setParentProps, x }) => {
+const ArticleForm: React.FC<ArticleFormProps> = ({
+  subheadingid,
+  formMode,
+  articleId,
+  articleTitle,
+  sequence,
+  setParentProps,
+  x,
+}) => {
   const [isLoading, setIsLoading] = useState();
   const { mutate } = useSWRConfig();
   const { profile } = useAuthContext();
@@ -245,7 +259,12 @@ const ArticleForm: React.FC<ArticleFormProps> = ({ subheadingid, formMode, artic
     register,
     handleSubmit,
     formState: { errors },
-  } = useForm<Inputs>();
+  } = useForm<Inputs>({
+    defaultValues: {
+      articleTitle: articleTitle,
+      sequence: sequence,
+    },
+  });
   const onSubmit: SubmitHandler<Inputs> = async (d) => {
     if (formMode === "CREATING") {
       const { data, error } = await supabase.from<definitions["books_articles"]>("books_articles").insert([
@@ -273,7 +292,7 @@ const ArticleForm: React.FC<ArticleFormProps> = ({ subheadingid, formMode, artic
     mutate([`/get-user-articles/${subheadingid}/${profile?.id}`]);
   };
   return (
-    <Box>
+    <Flex justify="space-between"  >
       <form onSubmit={handleSubmit(onSubmit)}>
         <FormControl p="2" isInvalid={errors.articleTitle as any}>
           <Input
@@ -292,15 +311,7 @@ const ArticleForm: React.FC<ArticleFormProps> = ({ subheadingid, formMode, artic
           />
           <FormErrorMessage>{errors.sequence && errors.sequence.message}</FormErrorMessage>
         </FormControl>
-        {/* <ButtonGroup variant="with-shadow" colorScheme="pink"> */}
-        {/* <IconButton
-            // borderRadius={"full"}
-            isLoading={isLoading}
-            type="submit"
-            aria-label="Search database"
-            icon={<MdDone />}
-            size="s"
-          /> */}
+
         <IconButton
           // _groupHover={{ size: "" }}
           // display={isArticleCreating === "CREATING" || !subheadingid ? "none" : "flex"}
@@ -321,7 +332,7 @@ const ArticleForm: React.FC<ArticleFormProps> = ({ subheadingid, formMode, artic
         />
         {/* </ButtonGroup> */}
       </form>
-    </Box>
+    </Flex>
   );
 };
 
@@ -332,9 +343,11 @@ type SuneditorForNotesMakingProps = {
 const SunEditor = dynamic(() => import("suneditor-react"), {
   ssr: false,
 });
+
 const SuneditorForNotesMaking: React.FC<SuneditorForNotesMakingProps> = ({ article, language }) => {
   const [editorMode, setEditorMode] = React.useState("READ");
   const [isAutosaveOn, setIsAutosaveOn] = React.useState(false);
+  const [fontSize, setFontSize] = React.useState("font-family: arial; font-size: 14px;");
   const { profile } = useAuthContext();
   const editor = useRef<SunEditorCore>();
   const getSunEditorInstance = (sunEditor: SunEditorCore) => {
@@ -348,6 +361,7 @@ const SuneditorForNotesMaking: React.FC<SuneditorForNotesMakingProps> = ({ artic
   useEffect(() => {
     if (language === "HINDI" && article && article.article_hindi && editor.current && editor.current.core) {
       editor.current?.core.setContents(article.article_hindi);
+      // editor.current?.core.conten(article.article_hindi);
     }
     if (language === "ENGLISH" && article && article.article_english && editor.current && editor.current.core) {
       editor.current?.core.setContents(article.article_english);
@@ -391,7 +405,7 @@ const SuneditorForNotesMaking: React.FC<SuneditorForNotesMakingProps> = ({ artic
     }
   };
   return (
-    <Box spellcheck="false">
+    <Box spellCheck="false">
       {/* //use above attrivutes if you want to override spellcheck of browser */}
       <Flex
         display={profile?.id !== article.created_by ? "none" : "undefined"}
@@ -413,10 +427,23 @@ const SuneditorForNotesMaking: React.FC<SuneditorForNotesMakingProps> = ({ artic
             </Radio>
           </Stack>
         </RadioGroup>
-        <Flex align="center"  display={editorMode === "READ" ? "none" : "flex"}>
+        <Flex align="center" display={editorMode === "READ" ? "none" : "flex"}>
+          <Select
+            size="sm"
+            px="2"
+            placeholder="Font Size"
+            onChange={(e) => {
+              setFontSize(e.target.value);
+            }}
+          >
+            <option value="font-family: arial; font-size: 14px;">small</option>
+            <option value="font-family: arial; font-size: 16px;">medium</option>
+            <option value="font-family: arial; font-size: 20px;">large</option>
+          </Select>
           <Box pb="3">
             <UiForImageUpload />
           </Box>
+
           <Button
             onClick={() => {
               updateArticleInDatabase(editor.current?.getContents(false));
@@ -445,7 +472,8 @@ const SuneditorForNotesMaking: React.FC<SuneditorForNotesMakingProps> = ({ artic
       <EditorStyle title={editorMode === "READ" ? "READ" : "EDIT"}>
         <SunEditor
           getSunEditorInstance={getSunEditorInstance}
-          setDefaultStyle="font-family: arial; font-size: 16px;"
+          setDefaultStyle={fontSize}
+          // setDefaultStyle={font-family: ${fontFamily}; font-size: 14px;}
           hideToolbar={editorMode === "READ" ? true : false}
           defaultValue={language === "ENGLISH" ? article.article_english : article.article_hindi}
           // key={postId}
@@ -458,18 +486,54 @@ const SuneditorForNotesMaking: React.FC<SuneditorForNotesMakingProps> = ({ artic
             placeholder: "**** Start Writing your notes here, we will save it automatically!!!",
             mode: "classic",
             katex: katex,
+            colorList: colors,
             paragraphStyles: [
               "spaced",
+              // "neon",
               {
                 name: "Box",
-                class: "seCustomClass",
+                class: "__se__customClass",
+              },
+              {
+                name: "ph22",
+                class: "__se__taggg",
+              },
+            ],
+            textStyles: [
+              "shadow",
+              "code",
+              "translucent",
+
+              {
+                name: "Highlighter 1",
+                style: "background-color:#FFFF88;padding: 1px;",
+                tag: "span",
+              },
+              {
+                name: "Highlighter 2",
+                style: "background-color:#CDEB8B;padding: 1px;",
+                tag: "span",
+              },
+              {
+                name: "Highlighter 3",
+                style: "background-color:#E1D5E7;padding: 1px;",
+                tag: "span",
+              },
+              {
+                name: "Highlighter 4",
+                style: "background-color:#E1D5E7;padding: 1px;padding-left: 1px",
+                // style: "background-color:#f7f3e2;padding: 1px;padding-left: 1px",
+                tag: "p",
               },
             ],
             height: "100%",
+            width: "auto",
+            minWidth: "350px",
             resizingBar: false,
             buttonList: sunEditorButtonList,
             formats: ["p", "div", "h1", "h2", "h3"],
             font: sunEditorfontList,
+
             fontSize: [12, 14, 16, 20],
             imageFileInput: false, //this disable image as file, only from url allowed
             imageSizeOnlyPercentage: false,
@@ -483,15 +547,58 @@ const SuneditorForNotesMaking: React.FC<SuneditorForNotesMakingProps> = ({ artic
 };
 
 const EditorStyle = styled.div`
+  .sun-editor .se-dialog {
+    z-index: 2 !important; /* default value */
+  }
   .sun-editor {
     /* margin-top: -18px !important; */
     /* border: 1px solid blue; */
+    padding-left: -30px !important;
+    padding-right: -30px !important;
+    margin-left: -20px !important;
+    margin-right: 0px !important;
     border: ${(props) => (props.title === "READ" ? "none" : undefined)};
     /* border: "none"; */
+    z-index: 2 !important;
   }
-  .seCustomClass {
-    background: #f1e0e0;
+  .__se__customClass {
+    /* background: #7e7575;
     padding: 5px;
     list-style-position: inside;
+    font-weight: 500;
+    color: #464242; */
+
+    background-color: #6e3c3c !important;
+    padding: 5px !important;
+    color: #464242 !important;
+    /* list-style-position: inside; */
+    border: 1px solid blue !important;
   }
+  .__se__taggg {
+    background-color: #641717 !important;
+    padding: 5px;
+    list-style-position: inside;
+    font-weight: 500;
+    color: #464242 !important;
+    border: 1px solid blue;
+    text-shadow: 2px 2px 5px green;
+  }
+  /* blockquote {
+    background: #f9f9f9;
+    border-left: 10px solid #ccc;
+    margin: 1.5em 10px;
+    padding: 0.5em 10px;
+    quotes: "\201C""\201D""\2018""\2019";
+  }
+  blockquote:before {
+    color: #ccc;
+    content: open-quote;
+    font-size: 4em;
+    line-height: 0.1em;
+    margin-right: 0.25em;
+    vertical-align: -0.4em;
+  }
+  blockquote p {
+    display: inline;
+  } */
 `;

@@ -1,5 +1,29 @@
-import { Box, Button, Center, Flex, FormControl, FormLabel, Grid, GridItem, HStack, Switch, Text } from "@chakra-ui/react";
+import {
+  Box,
+  Button,
+  Center,
+  Drawer,
+  DrawerBody,
+  DrawerCloseButton,
+  DrawerContent,
+  DrawerFooter,
+  DrawerHeader,
+  DrawerOverlay,
+  Flex,
+  FormControl,
+  FormLabel,
+  Grid,
+  GridItem,
+  HStack,
+  IconButton,
+  Input,
+  Switch,
+  Text,
+  useDisclosure,
+} from "@chakra-ui/react";
 import React, { ChangeEvent, useEffect, useState } from "react";
+import { MdMenu, MdOutlineThumbUp } from "react-icons/md";
+import Sticky from "react-sticky-el";
 import { SharedNotesList } from "../../customHookes/networkHooks";
 import { BASE_URL } from "../../lib/constants";
 import { supabase } from "../../lib/supabaseClient";
@@ -83,7 +107,7 @@ const ManageNotes = () => {
         setIsPostPublic(false);
       }
     };
-    getIfThisTopicIsPublic();
+    selectedSubheading?.subheadingId && selectedSubheading?.creatorId ? getIfThisTopicIsPublic() : null;
   }, [selectedSubheading]);
 
   useEffect(() => {
@@ -120,7 +144,7 @@ const ManageNotes = () => {
 
   return (
     <div>
-      <Box px="44" pb="8">
+      <Box px={{ base: "0", sm: "2", md: "44" }} pb="8">
         <BookFilter setParentProps={updateBookProps}></BookFilter>
         <Flex justifyContent="end" alignItems="center" mt="2">
           <HStack
@@ -153,16 +177,42 @@ const ManageNotes = () => {
             )}
           </HStack>
         </Flex>
+        <Sticky>
+          {/* <div style={{ zIndex : 2147483657}}> */}
+          <Flex justifyContent="space-between" display={{ base: "undefined", sm: "undefined", md: "none" }}>
+            <DrawerExample>
+              <SyllabusForNotes book={book} changeParentProps={changeSelectedSubheading}></SyllabusForNotes>
+            </DrawerExample>
+            <DrawerExample>
+              <SharedNotesPanel
+                subheadingid={selectedSubheading?.subheadingId}
+                changeParentProps={changeSelectedSharedNote}
+              ></SharedNotesPanel>
+            </DrawerExample>
+          </Flex>
+          {/* </div> */}
+        </Sticky>
       </Box>
       {/* <Flex my="16" justifyContent="flex-start"> */}
       {book ? (
         <Grid templateColumns="repeat(10, 1fr)">
-          <GridItem scrollBehavior={"auto"} colSpan={2} bg="gray.50" p="2">
-            <Flex>
-              <SyllabusForNotes book={book} changeParentProps={changeSelectedSubheading}></SyllabusForNotes>
+          {/* <Sticky> */}
+
+          <GridItem 
+            scrollBehavior={"auto"}
+            colSpan={{ base: 0, sm: 0, md: 2 }}
+            bg="orange.50"
+            p="2"
+            display={{ base: "none", sm: "none", md: "block" }}
+          >
+            <Flex  >
+              {/* <Sticky> */}
+                <SyllabusForNotes book={book} changeParentProps={changeSelectedSubheading}></SyllabusForNotes>
+              {/* </Sticky> */}
             </Flex>
           </GridItem>
-          <GridItem colSpan={7} px="4">
+          {/* </Sticky> */}
+          <GridItem colSpan={{ base: 10, sm: 10, md: 7 }} px="4">
             {supabase.auth.session() ? (
               <Box>
                 <Center>
@@ -190,7 +240,12 @@ const ManageNotes = () => {
               </Center>
             )}
           </GridItem>
-          <GridItem colSpan={1} bg="gray.50" p="0.5">
+          <GridItem
+            colSpan={{ base: 0, sm: 0, md: 1 }}
+            bg="orange.50"
+            p="0.5"
+            display={{ base: "none", sm: "none", md: "block" }}
+          >
             <SharedNotesPanel
               subheadingid={selectedSubheading?.subheadingId}
               changeParentProps={changeSelectedSharedNote}
@@ -205,3 +260,42 @@ const ManageNotes = () => {
 };
 
 export default ManageNotes;
+
+const DrawerExample: React.FC = ({ children }) => {
+  const { isOpen, onOpen, onClose } = useDisclosure();
+  const btnRef = React.useRef(null);
+
+  return (
+    <>
+      <Sticky>
+        <IconButton
+          aria-label="syllabus"
+          variant="outline"
+          size="xs"
+          icon={<MdMenu />}
+          ref={btnRef}
+          colorScheme="pink"
+          onClick={onOpen}
+        >
+          Open
+        </IconButton>
+      </Sticky>
+
+      <Drawer isOpen={isOpen} placement="left" onClose={onClose} finalFocusRef={btnRef}>
+        <DrawerOverlay />
+        <DrawerContent>
+          <DrawerCloseButton />
+          {/* <DrawerHeader>Create your account</DrawerHeader> */}
+
+          <DrawerBody>{children}</DrawerBody>
+
+          <DrawerFooter>
+            <Button variant="outline" mr={3} onClick={onClose}>
+              Cancel
+            </Button>
+          </DrawerFooter>
+        </DrawerContent>
+      </Drawer>
+    </>
+  );
+};

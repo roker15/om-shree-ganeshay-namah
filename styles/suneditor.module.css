@@ -1,0 +1,55 @@
+
+  .sun-editor .se-dialog {
+    z-index: 2 !important; /* default value */
+  }
+  .sun-editor {
+    /* margin-top: -18px !important; */
+    /* border: 1px solid blue; */
+    padding-left: -30px !important;
+    padding-right: -30px !important;
+    margin-left: -20px !important;
+    margin-right: 0px !important;
+    /* border: ${(props) => (props.title === "READ" ? "none" : undefined)}; */
+    /* border: "none"; */
+    z-index: 2 !important;
+  }
+  .__se__customClass {
+    /* background: #7e7575;
+    padding: 5px;
+    list-style-position: inside;
+    font-weight: 500;
+    color: #464242; */
+
+    background-color: #6e3c3c !important;
+    padding: 5px !important;
+    color: #464242 !important;
+    /* list-style-position: inside; */
+    border: 1px solid blue !important;
+  }
+  .__se__taggg {
+    background-color: #641717 !important;
+    padding: 5px;
+    list-style-position: inside;
+    font-weight: 500;
+    color: #464242 !important;
+    border: 1px solid blue;
+    text-shadow: 2px 2px 5px green;
+  }
+  /* blockquote {
+    background: #f9f9f9;
+    border-left: 10px solid #ccc;
+    margin: 1.5em 10px;
+    padding: 0.5em 10px;
+    quotes: "\201C""\201D""\2018""\2019";
+  }
+  blockquote:before {
+    color: #ccc;
+    content: open-quote;
+    font-size: 4em;
+    line-height: 0.1em;
+    margin-right: 0.25em;
+    vertical-align: -0.4em;
+  }
+  blockquote p {
+    display: inline;
+  } */

@@ -120,10 +120,10 @@ export function PostContextWrapper({ children }: { children: ReactNode }) {
     currentSubheadingProps: currentSubheadingProps,
     updateCurrentSubheadingProps: updateCurrentSubheadingProps
   };
-
+// this is used to set value
   return <PostContext.Provider value={sharedState}>{children}</PostContext.Provider>;
 }
-
+// this is for using inside components
 export function usePostContext() {
   return useContext(PostContext);
 }

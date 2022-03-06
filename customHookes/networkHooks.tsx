@@ -51,8 +51,8 @@ export function useGetSyllabusByBookId(bookId?: number) {
       }),
     {
       revalidateIfStale: true,
-      revalidateOnFocus: true,
-      revalidateOnReconnect: true,
+      revalidateOnFocus: false,
+      revalidateOnReconnect: false,
     }
   );
   data ? console.log("syllabus is ", data!.data) : console.log("data is is not available");
@@ -77,8 +77,8 @@ export function useGetPublicNotesListBySubheading(subheadingId?: number) {
         .neq("owned_by_userid", profile?.id as string),
     {
       revalidateIfStale: true,
-      revalidateOnFocus: true,
-      revalidateOnReconnect: true,
+      revalidateOnFocus: false,
+      revalidateOnReconnect: false,
     }
   );
   data ? console.log("syllabus is ", data!.data) : console.log("data is is not available");
@@ -103,8 +103,8 @@ export function useGetSharedNotesListBySubheading(subheadingId: number | undefin
       }),
     {
       revalidateIfStale: true,
-      revalidateOnFocus: true,
-      revalidateOnReconnect: true,
+      revalidateOnFocus: false,
+      revalidateOnReconnect: false,
     }
   );
   data ? console.log("syllabus is ", data!.data) : console.log("data is is not available");
@@ -140,8 +140,8 @@ export function useGetUserArticles(subheadingId: number | undefined, userid: str
         .eq("books_subheadings_fk", subheadingId),
     {
       revalidateIfStale: true,
-      revalidateOnFocus: true,
-      revalidateOnReconnect: true,
+      revalidateOnFocus: false,
+      revalidateOnReconnect: false,
     }
   );
   data ? console.log("articles are  ", data!.data) : console.log("articles available");

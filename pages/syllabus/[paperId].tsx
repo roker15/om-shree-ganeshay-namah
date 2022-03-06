@@ -44,36 +44,37 @@ const Syllabus: React.FC<ProfileListProps> = ({ array }) => {
           {array
             .sort((a, b) => a.name!.sequence! - b.name!.sequence!)
             .map((entry) => {
-              return (
-                <Tr key={entry.name?.id}>
-                  <Td value={entry.name?.main_topic}>{entry.name?.main_topic}</Td>
-                  <Td value={entry.name?.main_topic}>
-                    {entry
-                      .value!.sort((a, b) => a.sequence! - b.sequence!)
-                      .map((value) => (
-                        <Text mb={{ base: "2", md: "0" }} key={value.id}>
-                          <NextLink href={`/posts/${encodeURIComponent(value.id)}`} passHref>
-                            <Link
-                              onClick={() => {
-                                postContext.updateCurrentSubheadingId(value.id);
-                                postContext.updateCurrentHeadingId((value.main_topic_id as Headings).id);
-                                postContext.updateCurrentSubheading(value.topic as string);
-                                postContext.updateCurrentPapername(
-                                  ((value.main_topic_id as Headings).paper_id as Papers).paper_name as string
-                                );
-                                postContext.updateCurrentHeadingname((value.main_topic_id as Headings).main_topic as string);
-                                postContext.updateCurrentSubheadingProps(value.id, value.topic as string);
-                              }}
-                              disable="false"
-                              color="telegram.600"
-                            >
-                              {value.topic},
-                            </Link>
-                          </NextLink>
-                        </Text>
-                      ))}
-                  </Td>
-                </Tr>
+              return (<>
+              </>
+                // <Tr key={entry.name?.id}>
+                //   <Td value={entry.name?.main_topic}>{entry.name?.main_topic}</Td>
+                //   <Td value={entry.name?.main_topic}>
+                //     {entry
+                //       .value!.sort((a, b) => a.sequence! - b.sequence!)
+                //       .map((value) => (
+                //         <Text mb={{ base: "2", md: "0" }} key={value.id}>
+                //           <NextLink href={`/posts/${encodeURIComponent(value.id)}`} passHref>
+                //             <Link
+                //               onClick={() => {
+                //                 postContext.updateCurrentSubheadingId(value.id);
+                //                 postContext.updateCurrentHeadingId((value.main_topic_id as Headings).id);
+                //                 postContext.updateCurrentSubheading(value.topic as string);
+                //                 postContext.updateCurrentPapername(
+                //                   ((value.main_topic_id as Headings).paper_id as Papers).paper_name as string
+                //                 );
+                //                 postContext.updateCurrentHeadingname((value.main_topic_id as Headings).main_topic as string);
+                //                 postContext.updateCurrentSubheadingProps(value.id, value.topic as string);
+                //               }}
+                //               disable="false"
+                //               color="telegram.600"
+                //             >
+                //               {value.topic},
+                //             </Link>
+                //           </NextLink>
+                //         </Text>
+                //       ))}
+                //   </Td>
+                // </Tr>
               );
             })}
         </Tbody>
