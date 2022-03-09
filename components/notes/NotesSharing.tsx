@@ -1,4 +1,5 @@
 import {
+  Box,
   Button,
   ButtonGroup,
   Checkbox,
@@ -13,11 +14,19 @@ import {
   ModalFooter,
   ModalHeader,
   ModalOverlay,
+  Spinner,
+  Table,
+  Tbody,
+  Td,
   Text,
+  Tfoot,
+  Th,
+  Thead,
+  Tr,
   useDisclosure,
 } from "@chakra-ui/react";
 import React, { useEffect, useRef, useState } from "react";
-import { MdShare } from "react-icons/md";
+import { MdCancel, MdDelete, MdShare } from "react-icons/md";
 import { Profile } from "../../lib/constants";
 import { elog } from "../../lib/mylog";
 import { supabase } from "../../lib/supabaseClient";
@@ -179,28 +188,100 @@ export const NotesSharing: React.FC<sharedProps> = ({ subheadingId }) => {
               Cancel
             </Button>
           </ModalFooter>
+          <SharedList subheadingId={subheadingId}></SharedList>
         </ModalContent>
       </Modal>
     </>
   );
 };
 
-export const SharedList: React.FC<{ subheadingId: string }> = ({ subheadingId }) => {
+export const SharedList: React.FC<{ subheadingId: number }> = ({ subheadingId }) => {
   const { profile } = useAuthContext();
-  const [sharedlist, setSharedlist] = useState<definitions["books_article_sharing"]| undefined>();
+  const [sharedlist, setSharedlist] = useState<definitions["books_article_sharing"][] | undefined>();
 
   useEffect(() => {
     const getSharedList = async () => {
       const { data, error } = await supabase
         .from<definitions["books_article_sharing"]>("books_article_sharing")
-        .select("*")
+        .select(`*`)
         .match({ books_subheadings_fk: subheadingId, shared_by: profile?.id })
-        .neq("ispublic", true);
-      
+        .is("ispublic", null);
+
+      if (data) {
+        setSharedlist(data);
+      }
     };
     getSharedList();
   }, []);
-  return <div>NotesSharing</div>;
+
+  const handleEditCheckbox = async (sharingId: number, checkValue: boolean) => {
+    const { data, error } = await supabase
+      .from<definitions["books_article_sharing"]>("books_article_sharing")
+      .update({ allow_edit: checkValue })
+      .match({ id: sharingId });
+  };
+  const handleCopyCheckbox = async (sharingId: number, checkValue: boolean) => {
+    const { data, error } = await supabase
+      .from<definitions["books_article_sharing"]>("books_article_sharing")
+      .update({ allow_copy: checkValue })
+      .match({ id: sharingId });
+  };
+
+  return (
+    <>
+      <Table size="sm">
+        <Thead>
+          <Tr>
+            <Th>Email</Th>
+            <Th>Can Edit</Th>
+            <Th>Can Copy</Th>
+            <Th>Delete</Th>
+          </Tr>
+        </Thead>
+        {sharedlist ? (
+          <Tbody>
+            {sharedlist.map((x) => {
+              return (
+                <Tr key={x.id}>
+                  <Td>{x.sharedwith_email}</Td>
+                  <Td>
+                    {" "}
+                    <Checkbox
+                      colorScheme={"whatsapp"}
+                      textTransform={"capitalize"}
+                      ml="0"
+                      defaultIsChecked={x.allow_edit}
+                      onChange={(e) => handleEditCheckbox(x.id, e.target.checked)}
+                    >
+                      {/* Can Edit */}
+                    </Checkbox>
+                  </Td>
+                  <Td>
+                    {" "}
+                    <Checkbox
+                      colorScheme={"whatsapp"}
+                      textTransform={"capitalize"}
+                      ml="0"
+                      defaultIsChecked={x.allow_copy}
+                      onChange={(e) => handleCopyCheckbox(x.id, e.target.checked)}
+                    >
+                      {/* Can Edit */}
+                    </Checkbox>
+                  </Td>
+                  <Td>
+                    <IconButton variant="ghost" size="xs" colorScheme={"red"} icon={<MdCancel/>} aria-label={""}></IconButton>
+                  </Td>
+                </Tr>
+              );
+            })}
+            
+          </Tbody>
+        ) : (
+          <Spinner mx="50%" m="8"/>
+        )}
+      </Table>
+    </>
+  );
 };
 
 export default NotesSharing;
