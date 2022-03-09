@@ -24,7 +24,7 @@ const Notes: React.FC<Props> = ({ subheadingid, notesCreator, changeParentProps 
         <MyNotes
           subheadingid={subheadingid}
           changeParentProps={(): void => {
-            console.log("madarchod");
+            console.log("");
           }}
           notesCreator={notesCreator}
          

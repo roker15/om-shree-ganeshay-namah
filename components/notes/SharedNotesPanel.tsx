@@ -17,7 +17,6 @@ interface Props {
 const SharedNotesPanel: React.FC<Props> = ({ subheadingid, changeParentProps }) => {
   const { profile } = useAuthContext();
   const { data: sharedNtoes } = useGetSharedNotesListBySubheading(subheadingid, profile?.id);
-  console.log("subheading is ", subheadingid);
   const { data: publicNotes } = useGetPublicNotesListBySubheading(subheadingid);
   const [selectedSubheading, setSelectedSubheading] = useState(1000);
   // const handleSyllabusClick = (x: BookSyllabus) => {
@@ -73,17 +72,17 @@ const SharedNotesPanel: React.FC<Props> = ({ subheadingid, changeParentProps }) 
         </Text>
         {sharedNtoes && sharedNtoes.length > 0 ? (
           sharedNtoes!.map((x) => (
-            <Flex my="2" ml="4" key={x.subheading_id} role={"group"}>
-              {/* <Button variant="unstyled"> */}
+            <Flex my="2" ml="4" key={x.subheading_id} role={"group"} align="center">
+              <Avatar mx="2" size="2xs" src="https://bit.ly/broken-link" />
               <Text
+                as="label"
                 color={selectedSubheading === x.subheading_id ? "white" : "null"}
                 bg={selectedSubheading === x.subheading_id ? "green.400" : "null"}
-                onClick={() => changeParentProps(x)}
                 align="start"
-                px="2"
+                px="0.5"
                 casing="capitalize"
               >
-                <Link>{x.shared_by}</Link>
+                <Link onClick={() => changeParentProps(x)}>{x.shared_by}</Link>
               </Text>
               {/* </Button> */}
             </Flex>

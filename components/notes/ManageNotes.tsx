@@ -2,6 +2,7 @@ import {
   Box,
   Button,
   Center,
+  CircularProgress,
   Drawer,
   DrawerBody,
   DrawerCloseButton,
@@ -22,16 +23,18 @@ import {
   useDisclosure,
 } from "@chakra-ui/react";
 import React, { ChangeEvent, useEffect, useState } from "react";
-import { MdMenu, MdOutlineThumbUp } from "react-icons/md";
+import { MdMenu, MdOutlineThumbUp, MdShare } from "react-icons/md";
 import Sticky from "react-sticky-el";
 import { SharedNotesList } from "../../customHookes/networkHooks";
 import { BASE_URL } from "../../lib/constants";
+import { elog } from "../../lib/mylog";
 import { supabase } from "../../lib/supabaseClient";
 import { useAuthContext } from "../../state/Authcontext";
 import { BookResponse, BookSyllabus } from "../../types/myTypes";
 import { definitions } from "../../types/supabase";
 import BookFilter from "../syllabus/BookFilter";
 import Notes from "./Notes";
+import { NotesSharing } from "./NotesSharing";
 import SharedNotesPanel from "./SharedNotesPanel";
 import SyllabusForNotes from "./SyllabusForNotes";
 
@@ -52,12 +55,12 @@ const ManageNotes = () => {
     setSelectedSyllabus(x);
   };
   const changeSelectedSharedNote = (x: SharedNotesList) => {
-    // setselectedSharedNote(x);
     setSelectedSubheading({ subheadingId: x.subheading_id, creatorId: x.owned_by_userid });
   };
 
-  const updateSharingStatus = async (x: boolean) => {
-    if (x === true) {
+  const updateSharingStatus = async (shouldBePublic: boolean) => {
+    setIsPostPublic("loading");
+    if (shouldBePublic === true) {
       const { data, error } = await supabase.from<definitions["books_article_sharing"]>("books_article_sharing").insert([
         {
           books_subheadings_fk: selectedSubheading?.subheadingId,
@@ -66,10 +69,16 @@ const ManageNotes = () => {
           shared_by: profile?.id,
         },
       ]);
+      if (error) {
+        elog("ManageNotes->updateSharingStatuss", error.message);
+        return;
+      }
       if (data) {
         setIsPostPublic(true);
       }
-    } else if (x === false) {
+    }
+    if (shouldBePublic === false) {
+      setIsPostPublic("loading");
       const { data, error } = await supabase
         .from<definitions["books_article_sharing"]>("books_article_sharing")
         .delete()
@@ -79,6 +88,10 @@ const ManageNotes = () => {
           ispublic: true,
           shared_by: profile?.id,
         });
+      if (error) {
+        elog("ManageNotes->updateSharingStatuss", error.message);
+        return;
+      }
       if (data) {
         setIsPostPublic(false);
       }
@@ -86,8 +99,8 @@ const ManageNotes = () => {
   };
 
   useEffect(() => {
-    console.log("subheading change use effect being called");
     const getIfThisTopicIsPublic = async () => {
+      setIsPostPublic("loading");
       const { data, error } = await supabase
         .from<definitions["books_article_sharing"]>("books_article_sharing")
         .select(`*`)
@@ -96,10 +109,11 @@ const ManageNotes = () => {
           owned_by: selectedSubheading?.creatorId,
           ispublic: true,
         });
-
-      if (!data && !error) {
-        setIsPostPublic("loading");
+      if (error) {
+        elog("ManageNotes->useeffect", error.message);
+        return;
       }
+
       if (data && data.length !== 0) {
         setIsPostPublic(true);
       }
@@ -114,34 +128,6 @@ const ManageNotes = () => {
     setSelectedSubheading(undefined);
   }, [book]);
 
-  // useEffect(() => {
-  //   console.log("ispostpublic called and now useeffedct is being called");
-  //   const update = async () => {
-  //     if (isPostPublic === true) {
-  //       const { data, error } = await supabase.from<definitions["books_article_sharing"]>("books_article_sharing").insert([
-  //         {
-  //           books_subheadings_fk: selectedSubheading?.subheadingId,
-  //           owned_by: profile?.id,
-  //           ispublic: true,
-  //           shared_by: profile?.id,
-  //         },
-  //       ]);
-  //     } else if (isPostPublic === false) {
-  //       const { data, error } = await supabase
-  //         .from<definitions["books_article_sharing"]>("books_article_sharing")
-  //         .delete()
-  //         .match({
-  //           books_subheadings_fk: selectedSubheading?.subheadingId,
-  //           owned_by: profile?.id,
-  //           ispublic: true,
-  //           shared_by: profile?.id,
-  //         });
-  //     }
-  //   };
-
-  //   update();
-  // }, [isPostPublic]);
-
   return (
     <div>
       <Box px={{ base: "0", sm: "2", md: "44" }} pb="8">
@@ -154,27 +140,26 @@ const ManageNotes = () => {
             align="center"
             display={selectedSubheading?.creatorId !== profile?.id ? "none" : "undefined"}
           >
-            <Text justifyContent="center" as="label" htmlFor="email-alerts" mb="0" px="2" textTransform="capitalize">
-              {isPostPublic ? "Make Private" : "Make Public"}
-            </Text>
-            {/* <Switch
-              size="sm"
-              colorScheme="whatsapp"
-              // defaultChecked={isPostPublic}
-              isChecked={isPostPublic}
-              // onChange={(e: ChangeEvent<HTMLInputElement>) => updateSharingStatus(e.target.checked)}
-            /> */}
+            {selectedSubheading?.subheadingId ? (
+              <NotesSharing subheadingId={selectedSubheading?.subheadingId}></NotesSharing>
+            ) : null}
+
             {isPostPublic === "loading" ? (
-              <Box>Loading...</Box>
-            ) : (
-              <Switch
-                size="sm"
-                colorScheme="whatsapp"
-                // defaultChecked={isPostPublic}
-                isChecked={isPostPublic}
-                onChange={(e: ChangeEvent<HTMLInputElement>) => updateSharingStatus(e.target.checked)}
-              />
-            )}
+              <CircularProgress isIndeterminate size="20px" color="green.400" />
+            ) : selectedSubheading !== undefined ? (
+              <>
+                <Text justifyContent="center" as="label" htmlFor="email-alerts" mb="0" px="2" textTransform="capitalize">
+                  {isPostPublic ? "Make Private" : "Make Public"}
+                </Text>
+                <Switch
+                  size="sm"
+                  colorScheme="whatsapp"
+                  // defaultChecked={isPostPublic}
+                  isChecked={isPostPublic as boolean}
+                  onChange={(e: ChangeEvent<HTMLInputElement>) => updateSharingStatus(e.target.checked)}
+                />
+              </>
+            ) : null}
           </HStack>
         </Flex>
         <Sticky>
@@ -198,16 +183,16 @@ const ManageNotes = () => {
         <Grid templateColumns="repeat(10, 1fr)">
           {/* <Sticky> */}
 
-          <GridItem 
+          <GridItem
             scrollBehavior={"auto"}
             colSpan={{ base: 0, sm: 0, md: 2 }}
             bg="orange.50"
             p="2"
             display={{ base: "none", sm: "none", md: "block" }}
           >
-            <Flex  >
+            <Flex>
               {/* <Sticky> */}
-                <SyllabusForNotes book={book} changeParentProps={changeSelectedSubheading}></SyllabusForNotes>
+              <SyllabusForNotes book={book} changeParentProps={changeSelectedSubheading}></SyllabusForNotes>
               {/* </Sticky> */}
             </Flex>
           </GridItem>
@@ -224,7 +209,7 @@ const ManageNotes = () => {
                   <Notes
                     subheadingid={selectedSubheading?.subheadingId}
                     notesCreator={selectedSubheading?.creatorId}
-                    changeParentProps={() => console.log("madarchod")}
+                    changeParentProps={() => console.log("")}
                   ></Notes>{" "}
                 </Box>
               </Box>

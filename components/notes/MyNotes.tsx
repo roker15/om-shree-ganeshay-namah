@@ -39,6 +39,7 @@ import SunEditorCore from "suneditor/src/lib/core";
 import { useSWRConfig } from "swr";
 import { useGetUserArticles } from "../../customHookes/networkHooks";
 import { colors, sunEditorButtonList, sunEditorfontList } from "../../lib/constants";
+import { elog } from "../../lib/mylog";
 import { supabase } from "../../lib/supabaseClient";
 import { useAuthContext } from "../../state/Authcontext";
 import { definitions } from "../../types/supabase";
@@ -62,16 +63,17 @@ const MyNotes: React.FC<Props> = ({ subheadingid, notesCreator, changeParentProp
   const [selectedArticleForEdit, setSelectedArticleForEdit] = useState<number | undefined>();
   const [isArticleCreating, setIsArticleCreating] = useState<"CREATING" | "EDITING" | "NONE">("NONE");
   const { mutate } = useSWRConfig();
+  const SunEditor = dynamic(() => import("suneditor-react"), {
+    ssr: false,
+  });
 
-  // const handleSyllabusClick = (x: BookSyllabus) => {
-  //   setSelectedSubheading(x.subheading_id);
-  //   changeParentProps(x);
-  // };
-  // const [article, setArticle] = React.useState();
   const deleteArticle = async (id: number): Promise<void> => {
     const { data, error } = await supabase.from<definitions["books_articles"]>("books_articles").delete().eq("id", id);
+    if (error) {
+      elog("MyNotes->deleteArticle", error.message);
+      return;
+    }
     if (data) {
-      //   mutate(`/book_id_syllabus/${x?.book_id}`);
       mutate([`/get-user-articles/${subheadingid}/${profile?.id}`]);
     }
   };
@@ -87,6 +89,11 @@ const MyNotes: React.FC<Props> = ({ subheadingid, notesCreator, changeParentProp
   };
   return (
     <Box>
+      {/* <Box>
+        {articles && articles[0] && articles[1] ? (
+          <SunEditor defaultValue={articles![0].article_hindi! +" </p>"+ articles![1].article_hindi!} height="100%"></SunEditor>
+        ) : null}
+      </Box> */}
       {articles
         ?.sort((a, b) => a.sequence! - b.sequence!)
         .map((x) => {
@@ -275,7 +282,12 @@ const ArticleForm: React.FC<ArticleFormProps> = ({
           sequence: d.sequence,
         },
       ]);
+      if (error) {
+        elog("MyNotes->onSubmit", error.message);
+        return;
+      }
     }
+
     if (formMode === "EDITING") {
       const { data, error } = await supabase
         .from<definitions["books_articles"]>("books_articles")
@@ -287,12 +299,16 @@ const ArticleForm: React.FC<ArticleFormProps> = ({
           sequence: d.sequence,
         })
         .eq("id", articleId);
+      if (error) {
+        elog("MyNotes->onSubmit", error.message);
+        return;
+      }
     }
     x("NONE");
     mutate([`/get-user-articles/${subheadingid}/${profile?.id}`]);
   };
   return (
-    <Flex justify="space-between"  >
+    <Flex justify="space-between">
       <form onSubmit={handleSubmit(onSubmit)}>
         <FormControl p="2" isInvalid={errors.articleTitle as any}>
           <Input
@@ -387,21 +403,19 @@ const SuneditorForNotesMaking: React.FC<SuneditorForNotesMakingProps> = ({ artic
     updateArticleInDatabase(newcontent);
   };
   const updateArticleInDatabase = async (newcontent: string | undefined) => {
-    try {
-      const { data, error } = await supabase
-        .from<definitions["books_articles"]>("books_articles")
-        .update(language === "ENGLISH" ? { article_english: newcontent } : { article_hindi: newcontent })
-        .eq("id", article.id);
-      if (error) {
-        customToast({ title: "Post not updated error occurred", status: "error", isUpdating: false });
-      }
+    const { data, error } = await supabase
+      .from<definitions["books_articles"]>("books_articles")
+      .update(language === "ENGLISH" ? { article_english: newcontent } : { article_hindi: newcontent })
+      .eq("id", article.id);
+    if (error) {
+      customToast({ title: "Article not updated error occurred  " + error.message, status: "error", isUpdating: false });
+      elog("MyNotes->deleteArticle", error.message);
+      return;
+    }
 
-      if (data) {
-        customToast({ title: "Your changes have been saved...", status: "success", isUpdating: true });
-        // mutate(`/userpost/${currentSubheadingProps?.id}`);
-      }
-    } catch (error: any) {
-      customToast({ title: "Post not updated error occurred  " + error.message, status: "error", isUpdating: false });
+    if (data) {
+      customToast({ title: "Your changes have been saved...", status: "success", isUpdating: true });
+      
     }
   };
   return (

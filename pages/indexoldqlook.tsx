@@ -25,7 +25,7 @@ import CreateBookSyllabus from "../components/syllabus/CreateBookSyllabus";
 import { MyDropzone } from "../components/MyDropzone";
 import QuestionBanks from "../components/QuestionBank";
 import LayoutWithTopNavbar from "../layout/LayoutWithTopNavbar";
-import { myInfoLog } from "../lib/mylog";
+import { ilog } from "../lib/mylog";
 import { supabase } from "../lib/supabaseClient";
 import { useAuthContext } from "../state/Authcontext";
 import { useAppContext } from "../state/state";
@@ -53,7 +53,7 @@ const Home: React.FC<ProfileListProps> = ({ data }) => {
     appContext.setPaperId(event.target.value);
     const href = `/syllabus/${encodeURIComponent(event.target.value)}`;
     router.push(href);
-    myInfoLog("index->handlechange selected id is ", event.target.value);
+    ilog("index->handlechange selected id is ", event.target.value);
   };
   const { profile } = useAuthContext();
 

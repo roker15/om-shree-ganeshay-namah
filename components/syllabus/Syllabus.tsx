@@ -4,6 +4,7 @@ import React from "react";
 import { MdAdd, MdDelete, MdModeEdit } from "react-icons/md";
 import { mutate } from "swr";
 import { useGetSyllabusByBookId } from "../../customHookes/networkHooks";
+import { elog } from "../../lib/mylog";
 import { supabase } from "../../lib/supabaseClient";
 import { BookResponse, SubheadingQuestionLink } from "../../types/myTypes";
 import { definitions } from "../../types/supabase";
@@ -18,19 +19,23 @@ interface Props {
 const Syllabus: React.FC<Props> = ({ book, changeFormProps }) => {
   const { data } = useGetSyllabusByBookId(book ? book.id : undefined);
   const grouped1 = groupBy(data, (x) => [x.heading_sequence, x.heading_id, x.heading]);
-  console.log(console.log("syllabus group entries", Object.entries(grouped1)));
-  console.log(console.log("syllabus group", grouped1));
   const deleteHeading = async (id: number): Promise<void> => {
     const { data, error } = await supabase.from<definitions["books_headings"]>("books_headings").delete().eq("id", id);
+    if (error) {
+      elog("Syllabus->deleteHeading", error.message);
+      return;
+    }
     if (data) {
-      //   mutate(`/book_id_syllabus/${x?.book_id}`);
       mutate([`/book_id_syllabuss/${book?.id}`]);
     }
   };
   const deleteSubheading = async (id: number): Promise<void> => {
     const { data, error } = await supabase.from<definitions["books_subheadings"]>("books_subheadings").delete().eq("id", id);
+    if (error) {
+      elog("Syllabus->deleteSubheading", error.message);
+      return;
+    }
     if (data) {
-      //   mutate(`/book_id_syllabus/${x?.book_id}`);
       mutate([`/book_id_syllabuss/${book?.id}`]);
     }
   };
@@ -38,7 +43,9 @@ const Syllabus: React.FC<Props> = ({ book, changeFormProps }) => {
     <Box>
       {book?.book_name ? (
         <Flex align="end">
-          <Text as ="b"><Text as ="u">{book?.book_name}</Text></Text>
+          <Text as="b">
+            <Text as="u">{book?.book_name}</Text>
+          </Text>
           <Tooltip label="Create New heading" fontSize="sm">
             <IconButton
               // _groupHover={{ size: "" }}
@@ -73,33 +80,34 @@ const Syllabus: React.FC<Props> = ({ book, changeFormProps }) => {
             <Box key={key}>
               <Flex align="center" justifyContent="left" role="group" my="2">
                 <Text align="start" as="address" color=" #FF1493" casing="capitalize">
-                  {value[0].heading +" " +"(" + value[0].heading_sequence+")"  }
+                  {value[0].heading + " " + "(" + value[0].heading_sequence + ")"}
                 </Text>
                 {/* <Circle ml="2"  bg="green.100" color="pink"> */}
                 <HStack display="none" _groupHover={{ display: "inline" }}>
-                <Tooltip label="Create New Subheading under this heading" fontSize="sm">
-                  <IconButton
-                    // _groupHover={{ size: "" }}
-                    _hover={{ color: "pink", fontSize: "22px" }}
-                    size="xs"
-                    ml="2"
-                    borderRadius={"full"}
-                    variant="outline"
-                    colorScheme="pink"
-                    aria-label="Call Sage"
-                    fontSize="20px"
-                    onClick={() =>
-                      changeFormProps({
-                        formMode: "CREATE_SUBHEADING",
-                        book_id: book?.id,
-                        book_name: book?.book_name,
-                        heading_id: Number(key.split(",")[1]),
-                        heading: key.split(",")[2],
-                        heading_sequence: Number(key.split(",")[0]),
-                      })
-                    }
-                    icon={<MdAdd />}
-                  /></Tooltip>
+                  <Tooltip label="Create New Subheading under this heading" fontSize="sm">
+                    <IconButton
+                      // _groupHover={{ size: "" }}
+                      _hover={{ color: "pink", fontSize: "22px" }}
+                      size="xs"
+                      ml="2"
+                      borderRadius={"full"}
+                      variant="outline"
+                      colorScheme="pink"
+                      aria-label="Call Sage"
+                      fontSize="20px"
+                      onClick={() =>
+                        changeFormProps({
+                          formMode: "CREATE_SUBHEADING",
+                          book_id: book?.id,
+                          book_name: book?.book_name,
+                          heading_id: Number(key.split(",")[1]),
+                          heading: key.split(",")[2],
+                          heading_sequence: Number(key.split(",")[0]),
+                        })
+                      }
+                      icon={<MdAdd />}
+                    />
+                  </Tooltip>
                   {/* <IconButton
                     _hover={{ color: "pink", fontSize: "22px" }}
                     size="xs"
