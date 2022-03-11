@@ -58,7 +58,7 @@ export const NotesSharing: React.FC<sharedProps> = ({ subheadingId }) => {
       setIsLoading(false);
       return;
     }
-    const { data: profiles, error } = await supabase.from<Profile>("profiles").select("id,email").eq("email", inputEmail);
+    const { data: profiles, error } = await supabase.from<Profile>("profiles").select(`*`).eq("email", inputEmail);
     // .single();
     if (error) {
       setMessage("Something went wrong!");
@@ -86,9 +86,13 @@ export const NotesSharing: React.FC<sharedProps> = ({ subheadingId }) => {
             books_subheadings_fk: subheadingId,
             shared_with: profiles![0].id,
             sharedwith_email: profiles![0].email,
+            sharedwith_name: profiles![0].username,
+            sharedwith_avatar: profiles![0].avatar_url,
             owned_by: profile!.id,
-            shared_by: profile!.id,
             ownedby_email: profile!.email,
+            ownedby_name: profile?.username,
+            ownedby_avatar: profile?.avatar_url,
+            shared_by: profile!.id,
             allow_edit: canEdit,
             allow_copy: canCopy,
           });
@@ -128,10 +132,10 @@ export const NotesSharing: React.FC<sharedProps> = ({ subheadingId }) => {
         ></IconButton>
       </ButtonGroup>
 
-      <Modal initialFocusRef={initialRef} finalFocusRef={finalRef} isOpen={isOpen} onClose={onClose}>
+      <Modal size="xl" initialFocusRef={initialRef} finalFocusRef={finalRef} isOpen={isOpen} onClose={onClose}>
         <ModalOverlay />
         <ModalContent>
-          <ModalHeader>Share your post</ModalHeader>
+          <ModalHeader>Share this Topic</ModalHeader>
           {/* <div>
             {message}
           </div> */}
@@ -204,8 +208,8 @@ export const SharedList: React.FC<{ subheadingId: number }> = ({ subheadingId })
       const { data, error } = await supabase
         .from<definitions["books_article_sharing"]>("books_article_sharing")
         .select(`*`)
-        .match({ books_subheadings_fk: subheadingId, shared_by: profile?.id })
-        .is("ispublic", null);
+        .match({ books_subheadings_fk: subheadingId, shared_by: profile?.id,ispublic:false })
+        // .is("ispublic", null);
 
       if (data) {
         setSharedlist(data);
@@ -269,15 +273,20 @@ export const SharedList: React.FC<{ subheadingId: number }> = ({ subheadingId })
                     </Checkbox>
                   </Td>
                   <Td>
-                    <IconButton variant="ghost" size="xs" colorScheme={"red"} icon={<MdCancel/>} aria-label={""}></IconButton>
+                    <IconButton
+                      variant="ghost"
+                      size="sm"
+                      colorScheme={"red"}
+                      icon={<MdCancel />}
+                      aria-label={""}
+                    ></IconButton>
                   </Td>
                 </Tr>
               );
             })}
-            
           </Tbody>
         ) : (
-          <Spinner mx="50%" m="8"/>
+          <Spinner mx="50%" m="8" />
         )}
       </Table>
     </>

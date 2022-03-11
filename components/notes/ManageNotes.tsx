@@ -41,7 +41,17 @@ import SyllabusForNotes from "./SyllabusForNotes";
 const ManageNotes = () => {
   const [book, setBook] = useState<BookResponse | undefined>();
   const [selectedSubheading, setSelectedSubheading] = useState<
-    { subheadingId: number | undefined; creatorId: string | undefined } | undefined
+    | {
+        subheadingId: number | undefined;
+        creatorId: string | undefined;
+        isEditable: boolean | undefined;
+        isCopyable: boolean | undefined;
+        ownerEmail?: string | undefined;
+        ownerName?: string | undefined;
+        ownerAvatarUrl?: string | undefined;
+        isPublic?: boolean | undefined;
+      }
+    | undefined
   >();
   const [selectedSyllabus, setSelectedSyllabus] = useState<BookSyllabus>();
   const [isPostPublic, setIsPostPublic] = useState<boolean | "loading" | undefined>(undefined);
@@ -51,11 +61,16 @@ const ManageNotes = () => {
     // setSelectedSubheading(undefined); this id done in useeffect already
   };
   const changeSelectedSubheading = (x: BookSyllabus | undefined) => {
-    setSelectedSubheading({ subheadingId: x?.subheading_id, creatorId: profile?.id });
+    setSelectedSubheading({ subheadingId: x?.subheading_id, creatorId: profile?.id, isCopyable: false, isEditable: true });
     setSelectedSyllabus(x);
   };
-  const changeSelectedSharedNote = (x: SharedNotesList) => {
-    setSelectedSubheading({ subheadingId: x.subheading_id, creatorId: x.owned_by_userid });
+  const changeSelectedSharedNote = (x: definitions["books_article_sharing"]) => {
+    setSelectedSubheading({
+      subheadingId: x.books_subheadings_fk,
+      creatorId: x.owned_by,
+      isEditable: x.allow_edit,
+      isCopyable: x.allow_copy,
+    });
   };
 
   const updateSharingStatus = async (shouldBePublic: boolean) => {
@@ -65,6 +80,9 @@ const ManageNotes = () => {
         {
           books_subheadings_fk: selectedSubheading?.subheadingId,
           owned_by: profile?.id,
+          ownedby_email: profile?.email,
+          ownedby_name: profile?.username,
+          ownedby_avatar: profile?.avatar_url,
           ispublic: true,
           shared_by: profile?.id,
         },
@@ -133,6 +151,8 @@ const ManageNotes = () => {
       <Box px={{ base: "0", sm: "2", md: "44" }} pb="8">
         <BookFilter setParentProps={updateBookProps}></BookFilter>
         <Flex justifyContent="end" alignItems="center" mt="2">
+          <Text px="2">{selectedSubheading?.isCopyable ? "copy allow" : "copy not allow"}</Text>
+          <Text px="2">{selectedSubheading?.isEditable ? "Edit allow" : "Edit not allow"}</Text>
           <HStack
             borderRadius="full"
             // bg="gray.200"

@@ -144,6 +144,10 @@ export interface paths {
           allow_edit?: parameters["rowFilter.books_article_sharing.allow_edit"];
           sharedwith_email?: parameters["rowFilter.books_article_sharing.sharedwith_email"];
           ownedby_email?: parameters["rowFilter.books_article_sharing.ownedby_email"];
+          ownedby_name?: parameters["rowFilter.books_article_sharing.ownedby_name"];
+          ownedby_avatar?: parameters["rowFilter.books_article_sharing.ownedby_avatar"];
+          sharedwith_name?: parameters["rowFilter.books_article_sharing.sharedwith_name"];
+          sharedwith_avatar?: parameters["rowFilter.books_article_sharing.sharedwith_avatar"];
           /** Filtering Columns */
           select?: parameters["select"];
           /** Ordering */
@@ -208,6 +212,10 @@ export interface paths {
           allow_edit?: parameters["rowFilter.books_article_sharing.allow_edit"];
           sharedwith_email?: parameters["rowFilter.books_article_sharing.sharedwith_email"];
           ownedby_email?: parameters["rowFilter.books_article_sharing.ownedby_email"];
+          ownedby_name?: parameters["rowFilter.books_article_sharing.ownedby_name"];
+          ownedby_avatar?: parameters["rowFilter.books_article_sharing.ownedby_avatar"];
+          sharedwith_name?: parameters["rowFilter.books_article_sharing.sharedwith_name"];
+          sharedwith_avatar?: parameters["rowFilter.books_article_sharing.sharedwith_avatar"];
         };
         header: {
           /** Preference */
@@ -236,6 +244,10 @@ export interface paths {
           allow_edit?: parameters["rowFilter.books_article_sharing.allow_edit"];
           sharedwith_email?: parameters["rowFilter.books_article_sharing.sharedwith_email"];
           ownedby_email?: parameters["rowFilter.books_article_sharing.ownedby_email"];
+          ownedby_name?: parameters["rowFilter.books_article_sharing.ownedby_name"];
+          ownedby_avatar?: parameters["rowFilter.books_article_sharing.ownedby_avatar"];
+          sharedwith_name?: parameters["rowFilter.books_article_sharing.sharedwith_name"];
+          sharedwith_avatar?: parameters["rowFilter.books_article_sharing.sharedwith_avatar"];
         };
         body: {
           /** books_article_sharing */
@@ -3125,6 +3137,14 @@ export interface definitions {
     sharedwith_email?: string;
     /** Format: text */
     ownedby_email?: string;
+    /** Format: text */
+    ownedby_name?: string;
+    /** Format: text */
+    ownedby_avatar?: string;
+    /** Format: text */
+    sharedwith_name?: string;
+    /** Format: text */
+    sharedwith_avatar?: string;
   };
   /** @description article inside a subheading of a book */
   books_articles: {
@@ -3955,6 +3975,14 @@ export interface parameters {
   "rowFilter.books_article_sharing.sharedwith_email": string;
   /** Format: text */
   "rowFilter.books_article_sharing.ownedby_email": string;
+  /** Format: text */
+  "rowFilter.books_article_sharing.ownedby_name": string;
+  /** Format: text */
+  "rowFilter.books_article_sharing.ownedby_avatar": string;
+  /** Format: text */
+  "rowFilter.books_article_sharing.sharedwith_name": string;
+  /** Format: text */
+  "rowFilter.books_article_sharing.sharedwith_avatar": string;
   /** @description books_articles */
   "body.books_articles": definitions["books_articles"];
   /** Format: bigint */

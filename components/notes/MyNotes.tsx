@@ -30,7 +30,7 @@ import { debounce } from "lodash";
 import dynamic from "next/dynamic";
 import React, { ChangeEvent, useCallback, useEffect, useRef, useState } from "react";
 import { SubmitHandler, useForm } from "react-hook-form";
-import { MdAdd, MdCancel, MdDone, MdModeEdit } from "react-icons/md";
+import { MdAdd, MdCancel, MdDone, MdModeEdit, MdOutlineContentCopy } from "react-icons/md";
 import styled from "styled-components";
 // import SunEditor from "suneditor-react";
 import "suneditor/dist/css/suneditor.min.css"; // Import Sun Editor's CSS File
@@ -50,13 +50,15 @@ import { UiForImageUpload } from "../UiForImageUpload";
 interface Props {
   subheadingid: number | undefined;
   notesCreator: string | undefined;
+  isCopyable: boolean;
+  isEditable: boolean;
   changeParentProps: () => void;
 }
 type Inputs = {
   articleTitle: string;
   sequence: number;
 };
-const MyNotes: React.FC<Props> = ({ subheadingid, notesCreator, changeParentProps }) => {
+const MyNotes: React.FC<Props> = ({ subheadingid, notesCreator, changeParentProps, isCopyable, isEditable }) => {
   const { profile } = useAuthContext();
   const { data: articles, isLoading: isArticleLoading } = useGetUserArticles(subheadingid, notesCreator);
   const [isLoading, setIsLoading] = useState(false);
@@ -89,16 +91,22 @@ const MyNotes: React.FC<Props> = ({ subheadingid, notesCreator, changeParentProp
   };
   return (
     <Box>
-      {/* <Box>
-        {articles && articles[0] && articles[1] ? (
-          <SunEditor defaultValue={articles![0].article_hindi! +" </p>"+ articles![1].article_hindi!} height="100%"></SunEditor>
-        ) : null}
-      </Box> */}
       {articles
         ?.sort((a, b) => a.sequence! - b.sequence!)
         .map((x) => {
           return (
             <Box key={x.id} mt="16">
+              {isCopyable ? (
+                <IconButton
+                  size="xs"
+                  variant="ghost"
+                  colorScheme="whatsapp"
+                  aria-label="Call Sage"
+                  fontSize="20px"
+                  onClick={() => handleArticleEdit(x.id, false)}
+                  icon={<MdOutlineContentCopy />}
+                />
+              ) : null}
               <Flex role={"group"} align="center">
                 {/* <Badge> */}
                 <VStack>
@@ -168,7 +176,7 @@ const MyNotes: React.FC<Props> = ({ subheadingid, notesCreator, changeParentProp
                         <SkeletonText isLoaded={false} noOfLines={4} spacing="4" />
                       </Box>
                     ) : (
-                      <SuneditorForNotesMaking article={x} language={"HINDI"} />
+                      <SuneditorForNotesMaking article={x} language={"HINDI"} isEditable={isEditable} />
                     )}
                   </TabPanel>
                   <TabPanel>
@@ -178,7 +186,7 @@ const MyNotes: React.FC<Props> = ({ subheadingid, notesCreator, changeParentProp
                         <SkeletonText isLoaded={false} noOfLines={4} spacing="4" />
                       </Box>
                     ) : (
-                      <SuneditorForNotesMaking article={x} language={"ENGLISH"} />
+                      <SuneditorForNotesMaking article={x} language={"ENGLISH"} isEditable={isEditable} />
                     )}
                   </TabPanel>
                 </TabPanels>
@@ -355,6 +363,7 @@ const ArticleForm: React.FC<ArticleFormProps> = ({
 type SuneditorForNotesMakingProps = {
   article: definitions["books_articles"];
   language: "HINDI" | "ENGLISH";
+  isEditable: boolean;
 };
 const SunEditor = dynamic(() => import("suneditor-react"), {
   ssr: false,
@@ -415,7 +424,6 @@ const SuneditorForNotesMaking: React.FC<SuneditorForNotesMakingProps> = ({ artic
 
     if (data) {
       customToast({ title: "Your changes have been saved...", status: "success", isUpdating: true });
-      
     }
   };
   return (

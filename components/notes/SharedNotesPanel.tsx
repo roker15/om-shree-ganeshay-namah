@@ -8,10 +8,11 @@ import {
 } from "../../customHookes/networkHooks";
 import { useAuthContext } from "../../state/Authcontext";
 import { BookResponse, BookSyllabus } from "../../types/myTypes";
+import { definitions } from "../../types/supabase";
 
 interface Props {
   subheadingid: number | undefined;
-  changeParentProps: (x: SharedNotesList) => void;
+  changeParentProps: (x: definitions["books_article_sharing"]) => void;
 }
 
 const SharedNotesPanel: React.FC<Props> = ({ subheadingid, changeParentProps }) => {
@@ -46,17 +47,17 @@ const SharedNotesPanel: React.FC<Props> = ({ subheadingid, changeParentProps }) 
           publicNotes!.map((x) => (
             <Flex my="2" ml="2" key={x.id} role={"group"} align="center">
               {/* <Button variant="unstyled"> */}
-              <Avatar mx="2" size="2xs" src="https://bit.ly/broken-link" />
+              <Avatar mx="2" size="2xs" src={x.ownedby_avatar} />
               <Text
                 as="label"
                 casing="capitalize"
-                color={selectedSubheading === x.subheading_id ? "white" : "null"}
-                bg={selectedSubheading === x.subheading_id ? "green.400" : "null"}
+                color={selectedSubheading === x.books_subheadings_fk ? "white" : "null"}
+                bg={selectedSubheading === x.books_subheadings_fk ? "green.400" : "null"}
                 // onClick={() => changeParentProps(x)}
                 align="start"
                 px="0.5"
               >
-                <Link onClick={() => changeParentProps(x)}>{x.owned_by}</Link>
+                <Link onClick={() => changeParentProps(x)}>{x.ownedby_name}</Link>
               </Text>
               {/* </Button> */}
             </Flex>
@@ -72,17 +73,17 @@ const SharedNotesPanel: React.FC<Props> = ({ subheadingid, changeParentProps }) 
         </Text>
         {sharedNtoes && sharedNtoes.length > 0 ? (
           sharedNtoes!.map((x) => (
-            <Flex my="2" ml="4" key={x.subheading_id} role={"group"} align="center">
-              <Avatar mx="2" size="2xs" src="https://bit.ly/broken-link" />
+            <Flex my="2" ml="4" key={x.books_subheadings_fk} role={"group"} align="center">
+              <Avatar mx="2" size="2xs" src={x.ownedby_avatar} />
               <Text
                 as="label"
-                color={selectedSubheading === x.subheading_id ? "white" : "null"}
-                bg={selectedSubheading === x.subheading_id ? "green.400" : "null"}
+                color={selectedSubheading === x.books_subheadings_fk ? "white" : "null"}
+                bg={selectedSubheading === x.books_subheadings_fk ? "green.400" : "null"}
                 align="start"
                 px="0.5"
                 casing="capitalize"
               >
-                <Link onClick={() => changeParentProps(x)}>{x.shared_by}</Link>
+                <Link onClick={() => changeParentProps(x)}>{x.ownedby_name}</Link>
               </Text>
               {/* </Button> */}
             </Flex>

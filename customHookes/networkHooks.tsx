@@ -65,11 +65,16 @@ export function useGetPublicNotesListBySubheading(subheadingId?: number) {
   //This may be the proper way to use swr with supabase.
   //https://github.com/supabase/supabase/discussions/3145#discussioncomment-1426310
   const fetcher = async () =>
+    // await supabase
+    //   .rpc<SharedNotesList>("getPublicNotesListBySubheading", {
+    //     subheadingid: subheadingId,
+    //   })
+    //   .neq("owned_by_userid", profile?.id as string);
     await supabase
-      .rpc<SharedNotesList>("getPublicNotesListBySubheading", {
-        subheadingid: subheadingId,
-      })
-      .neq("owned_by_userid", profile?.id as string);
+      .from<definitions["books_article_sharing"]>("books_article_sharing")
+      .select(`*`)
+      .eq("books_subheadings_fk", subheadingId).eq("ispublic",true)
+      .neq("owned_by", profile?.id as string);
 
   const cacheOptions = {
     revalidateIfStale: true,
@@ -95,10 +100,16 @@ export function useGetSharedNotesListBySubheading(subheadingId: number | undefin
       ? null
       : [`/get-shared-notes-list-by-subheading/${subheadingId}/${userid}`],
     async () =>
-      await supabase.rpc<SharedNotesList>("getSharedNotesListBySubheading", {
-        subheadingid: subheadingId,
-        sharedwith: userid,
-      }),
+      // await supabase.rpc<SharedNotesList>("getSharedNotesListBySubheading", {
+      //   subheadingid: subheadingId,
+      //   sharedwith: userid,
+      // })
+      await supabase
+        .from<definitions["books_article_sharing"]>("books_article_sharing")
+        .select(`*`)
+        .eq("books_subheadings_fk", subheadingId)
+        .eq("shared_with", userid),
+
     {
       revalidateIfStale: true,
       revalidateOnFocus: false,
