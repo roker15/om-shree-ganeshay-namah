@@ -86,7 +86,7 @@ const MobileNav = ({ onOpen, ...rest }: MobileProps) => {
             loading="eager"
             src="/logo-150x150.png"
             alt="Picture of the author"
-            w={{ base: "35px", md: "120px" }}
+            w={{ base: "80px", md: "120px" }}
             // w={{ base: "35px", md: "100px" }}
           />
         </LinkOverlay>
