@@ -63,7 +63,13 @@ const ManageNotes = () => {
     // setSelectedSubheading(undefined); this id done in useeffect already
   };
   const changeSelectedSubheading = (x: BookSyllabus | undefined) => {
-    setSelectedSubheading({ subheadingId: x?.subheading_id, creatorId: profile?.id, isCopyable: false, isEditable: true });
+    setSelectedSubheading({
+      subheadingId: x?.subheading_id,
+      creatorId: profile?.id,
+      isCopyable: false,
+      isEditable: true,
+      ownerName: profile?.username,
+    });
     setSelectedSyllabus(x);
   };
   const changeSelectedSharedNote = (x: definitions["books_article_sharing"]) => {
@@ -72,6 +78,7 @@ const ManageNotes = () => {
       creatorId: x.owned_by,
       isEditable: x.allow_edit,
       isCopyable: x.allow_copy,
+      ownerName: x.ownedby_name,
     });
   };
 
@@ -200,12 +207,15 @@ const ManageNotes = () => {
                   isChecked={isPostCopiable}
                   onChange={(e) => handleCopyCheckbox(e.target.checked)}
                 >
-                  <Text textTransform="capitalize" as="label">Allow copy</Text>
+                  <Text textTransform="capitalize" as="label">
+                    Allow copy
+                  </Text>
                 </Checkbox>
               </Flex>
             ) : null}
           </HStack>
         </Flex>
+
         <Sticky>
           {/* <div style={{ zIndex : 2147483657}}> */}
           <Flex justifyContent="space-between" display={{ base: "undefined", sm: "undefined", md: "none" }}>
@@ -222,6 +232,7 @@ const ManageNotes = () => {
           {/* </div> */}
         </Sticky>
       </Box>
+
       {/* <Flex my="16" justifyContent="flex-start"> */}
       {book ? (
         <Grid templateColumns="repeat(10, 1fr)">
@@ -249,6 +260,13 @@ const ManageNotes = () => {
                     {!selectedSubheading ? "Select Topic From Syllabus" : selectedSyllabus?.subheading}
                   </Text>
                 </Center>
+                {selectedSubheading ? (
+                  <Box  mt="4" >
+                    <Text p="2" as="span" bg="blackAlpha.700" fontSize="14px"color="gray.100">
+                      {"Notes by : " + selectedSubheading?.ownerName}
+                    </Text>
+                  </Box>
+                ) : null}
                 <Box>
                   <Notes
                     subheadingid={selectedSubheading?.subheadingId}
