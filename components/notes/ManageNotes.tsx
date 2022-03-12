@@ -2,6 +2,7 @@ import {
   Box,
   Button,
   Center,
+  Checkbox,
   CircularProgress,
   Drawer,
   DrawerBody,
@@ -44,8 +45,8 @@ const ManageNotes = () => {
     | {
         subheadingId: number | undefined;
         creatorId: string | undefined;
-        isEditable: boolean| undefined;
-        isCopyable: boolean| undefined;
+        isEditable: boolean | undefined;
+        isCopyable: boolean | undefined;
         ownerEmail?: string | undefined;
         ownerName?: string | undefined;
         ownerAvatarUrl?: string | undefined;
@@ -55,6 +56,7 @@ const ManageNotes = () => {
   >();
   const [selectedSyllabus, setSelectedSyllabus] = useState<BookSyllabus>();
   const [isPostPublic, setIsPostPublic] = useState<boolean | "loading" | undefined>(undefined);
+  const [isPostCopiable, setIsPostCopiable] = useState<boolean | undefined>(undefined);
   const { signInWithgoogle, signOut, profile } = useAuthContext();
   const updateBookProps = (x: BookResponse | undefined) => {
     setBook(x);
@@ -112,6 +114,7 @@ const ManageNotes = () => {
       }
       if (data) {
         setIsPostPublic(false);
+        setIsPostCopiable(undefined);
       }
     }
   };
@@ -129,14 +132,16 @@ const ManageNotes = () => {
         });
       if (error) {
         elog("ManageNotes->useeffect", error.message);
+        setIsPostPublic(undefined);
         return;
       }
-
       if (data && data.length !== 0) {
         setIsPostPublic(true);
+        setIsPostCopiable(data[0].allow_copy);
       }
       if (data && data.length === 0) {
         setIsPostPublic(false);
+        setIsPostCopiable(undefined);
       }
     };
     selectedSubheading?.subheadingId && selectedSubheading?.creatorId ? getIfThisTopicIsPublic() : null;
@@ -146,17 +151,25 @@ const ManageNotes = () => {
     setSelectedSubheading(undefined);
   }, [book]);
 
+  const handleCopyCheckbox = async (checkValue: boolean) => {
+    const { data, error } = await supabase
+      .from<definitions["books_article_sharing"]>("books_article_sharing")
+      .update({ allow_copy: checkValue })
+      .match({ books_subheadings_fk: selectedSubheading?.subheadingId, ispublic: true, owned_by: profile!.id });
+    if (data && data.length !== 0) {
+      setIsPostCopiable(checkValue);
+    }
+  };
+
   return (
     <div>
       <Box px={{ base: "0", sm: "2", md: "44" }} pb="8">
         <BookFilter setParentProps={updateBookProps}></BookFilter>
-        <Flex justifyContent="end" alignItems="center" mt="2">
-          <Text px="2">{selectedSubheading?.isCopyable ? "copy allow" : "copy not allow"}</Text>
-          <Text px="2">{selectedSubheading?.isEditable ? "Edit allow" : "Edit not allow"}</Text>
+        <Flex justifyContent="end" alignItems="center" mt="4">
           <HStack
             borderRadius="full"
             // bg="gray.200"
-            p="1"
+            p="2"
             align="center"
             display={selectedSubheading?.creatorId !== profile?.id ? "none" : "undefined"}
           >
@@ -167,8 +180,8 @@ const ManageNotes = () => {
             {isPostPublic === "loading" ? (
               <CircularProgress isIndeterminate size="20px" color="green.400" />
             ) : selectedSubheading !== undefined ? (
-              <>
-                <Text justifyContent="center" as="label" htmlFor="email-alerts" mb="0" px="2" textTransform="capitalize">
+              <Flex justifyContent="end" alignItems="center">
+                <Text justifyContent="center" as="label" htmlFor="email-alerts" px="2" textTransform="capitalize">
                   {isPostPublic ? "Make Private" : "Make Public"}
                 </Text>
                 <Switch
@@ -178,7 +191,18 @@ const ManageNotes = () => {
                   isChecked={isPostPublic as boolean}
                   onChange={(e: ChangeEvent<HTMLInputElement>) => updateSharingStatus(e.target.checked)}
                 />
-              </>
+                <Checkbox
+                  size="sm"
+                  mx="4"
+                  display={isPostPublic ? "inline-flex" : "none"}
+                  colorScheme={"whatsapp"}
+                  textTransform={"capitalize"}
+                  isChecked={isPostCopiable}
+                  onChange={(e) => handleCopyCheckbox(e.target.checked)}
+                >
+                  <Text textTransform="capitalize" as="label">Allow copy</Text>
+                </Checkbox>
+              </Flex>
             ) : null}
           </HStack>
         </Flex>
