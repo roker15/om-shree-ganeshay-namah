@@ -44,8 +44,8 @@ const ManageNotes = () => {
     | {
         subheadingId: number | undefined;
         creatorId: string | undefined;
-        isEditable: boolean | undefined;
-        isCopyable: boolean | undefined;
+        isEditable: boolean| undefined;
+        isCopyable: boolean| undefined;
         ownerEmail?: string | undefined;
         ownerName?: string | undefined;
         ownerAvatarUrl?: string | undefined;
@@ -230,6 +230,8 @@ const ManageNotes = () => {
                     subheadingid={selectedSubheading?.subheadingId}
                     notesCreator={selectedSubheading?.creatorId}
                     changeParentProps={() => console.log("")}
+                    isCopyable={selectedSubheading?.isCopyable}
+                    isEditable={selectedSubheading?.isEditable}
                   ></Notes>{" "}
                 </Box>
               </Box>

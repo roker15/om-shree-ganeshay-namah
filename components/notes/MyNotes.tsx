@@ -50,8 +50,8 @@ import { UiForImageUpload } from "../UiForImageUpload";
 interface Props {
   subheadingid: number | undefined;
   notesCreator: string | undefined;
-  isCopyable: boolean;
-  isEditable: boolean;
+  isCopyable: boolean | undefined;
+  isEditable: boolean | undefined;
   changeParentProps: () => void;
 }
 type Inputs = {
@@ -61,10 +61,11 @@ type Inputs = {
 const MyNotes: React.FC<Props> = ({ subheadingid, notesCreator, changeParentProps, isCopyable, isEditable }) => {
   const { profile } = useAuthContext();
   const { data: articles, isLoading: isArticleLoading } = useGetUserArticles(subheadingid, notesCreator);
-  const [isLoading, setIsLoading] = useState(false);
+  const [isLoadingCopyButton, setIsLoadingCopyButton] = useState<boolean | undefined>(false);
   const [selectedArticleForEdit, setSelectedArticleForEdit] = useState<number | undefined>();
   const [isArticleCreating, setIsArticleCreating] = useState<"CREATING" | "EDITING" | "NONE">("NONE");
   const { mutate } = useSWRConfig();
+
   const SunEditor = dynamic(() => import("suneditor-react"), {
     ssr: false,
   });
@@ -89,6 +90,29 @@ const MyNotes: React.FC<Props> = ({ subheadingid, notesCreator, changeParentProp
       setIsArticleCreating("EDITING");
     }
   };
+
+  const copyArticleToNewUser = async (x: definitions["books_articles"]) => {
+    setIsLoadingCopyButton(true);
+    const { data, error } = await supabase.from<definitions["books_articles"]>("books_articles").insert({
+      books_subheadings_fk: x.books_subheadings_fk,
+      article_hindi: x.article_hindi,
+      article_english: x.article_english,
+      article_audio_link: x.article_audio_link,
+      created_by: profile?.id,
+      article_title: x.article_title,
+      sequence: x.sequence,
+      copied_from_articleid: x.id,
+      copied_from_userid: x.created_by,
+    });
+    if (error) {
+      elog("MyNotes->copyArticleToNewUser", error.message);
+      return;
+    }
+    if (data) {
+      customToast({ title: "Article copied, Check inside your notes", status: "success", isUpdating: false });
+    }
+    setIsLoadingCopyButton(false);
+  };
   return (
     <Box>
       {articles
@@ -103,7 +127,8 @@ const MyNotes: React.FC<Props> = ({ subheadingid, notesCreator, changeParentProp
                   colorScheme="whatsapp"
                   aria-label="Call Sage"
                   fontSize="20px"
-                  onClick={() => handleArticleEdit(x.id, false)}
+                  isLoading={isLoadingCopyButton}
+                  onClick={() => copyArticleToNewUser(x)}
                   icon={<MdOutlineContentCopy />}
                 />
               ) : null}
@@ -155,7 +180,7 @@ const MyNotes: React.FC<Props> = ({ subheadingid, notesCreator, changeParentProp
                   <Box display="none" _groupHover={{ display: "center" }}>
                     <DeleteConfirmation
                       handleDelete={deleteArticle}
-                      dialogueHeader={"Are you sure to delete this Article?"}
+                      dialogueHeader={"Delete this Article?"}
                       isDisabled={false}
                       isIconButton={true}
                       id={x.id}
@@ -363,13 +388,13 @@ const ArticleForm: React.FC<ArticleFormProps> = ({
 type SuneditorForNotesMakingProps = {
   article: definitions["books_articles"];
   language: "HINDI" | "ENGLISH";
-  isEditable: boolean;
+  isEditable: boolean | undefined;
 };
 const SunEditor = dynamic(() => import("suneditor-react"), {
   ssr: false,
 });
 
-const SuneditorForNotesMaking: React.FC<SuneditorForNotesMakingProps> = ({ article, language }) => {
+const SuneditorForNotesMaking: React.FC<SuneditorForNotesMakingProps> = ({ article, language, isEditable }) => {
   const [editorMode, setEditorMode] = React.useState("READ");
   const [isAutosaveOn, setIsAutosaveOn] = React.useState(false);
   const [fontSize, setFontSize] = React.useState("font-family: arial; font-size: 14px;");
@@ -430,7 +455,8 @@ const SuneditorForNotesMaking: React.FC<SuneditorForNotesMakingProps> = ({ artic
     <Box spellCheck="false">
       {/* //use above attrivutes if you want to override spellcheck of browser */}
       <Flex
-        display={profile?.id !== article.created_by ? "none" : "undefined"}
+        // display={profile?.id !== article.created_by ? "none" : "undefined"}
+        display={isEditable ? "undefined" : "none"}
         justifyContent="space-between"
         align="center"
         // alignItems="center"

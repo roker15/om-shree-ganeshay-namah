@@ -283,6 +283,8 @@ export interface paths {
           article_title?: parameters["rowFilter.books_articles.article_title"];
           /** Article sequence */
           sequence?: parameters["rowFilter.books_articles.sequence"];
+          copied_from_userid?: parameters["rowFilter.books_articles.copied_from_userid"];
+          copied_from_articleid?: parameters["rowFilter.books_articles.copied_from_articleid"];
           /** Filtering Columns */
           select?: parameters["select"];
           /** Ordering */
@@ -348,6 +350,8 @@ export interface paths {
           article_title?: parameters["rowFilter.books_articles.article_title"];
           /** Article sequence */
           sequence?: parameters["rowFilter.books_articles.sequence"];
+          copied_from_userid?: parameters["rowFilter.books_articles.copied_from_userid"];
+          copied_from_articleid?: parameters["rowFilter.books_articles.copied_from_articleid"];
         };
         header: {
           /** Preference */
@@ -377,6 +381,8 @@ export interface paths {
           article_title?: parameters["rowFilter.books_articles.article_title"];
           /** Article sequence */
           sequence?: parameters["rowFilter.books_articles.sequence"];
+          copied_from_userid?: parameters["rowFilter.books_articles.copied_from_userid"];
+          copied_from_articleid?: parameters["rowFilter.books_articles.copied_from_articleid"];
         };
         body: {
           /** books_articles */
@@ -3201,6 +3207,10 @@ export interface definitions {
      * @description Article sequence
      */
     sequence?: number;
+    /** Format: uuid */
+    copied_from_userid?: string;
+    /** Format: bigint */
+    copied_from_articleid?: number;
   };
   books_board_or_university: {
     /**
@@ -4020,6 +4030,10 @@ export interface parameters {
    * @description Article sequence
    */
   "rowFilter.books_articles.sequence": string;
+  /** Format: uuid */
+  "rowFilter.books_articles.copied_from_userid": string;
+  /** Format: bigint */
+  "rowFilter.books_articles.copied_from_articleid": string;
   /** @description books_board_or_university */
   "body.books_board_or_university": definitions["books_board_or_university"];
   /** Format: bigint */
