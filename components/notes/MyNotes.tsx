@@ -30,7 +30,7 @@ import { debounce } from "lodash";
 import dynamic from "next/dynamic";
 import React, { ChangeEvent, useCallback, useEffect, useRef, useState } from "react";
 import { SubmitHandler, useForm } from "react-hook-form";
-import { MdAdd, MdCancel, MdDone, MdModeEdit } from "react-icons/md";
+import { MdAdd, MdCancel, MdDone, MdModeEdit, MdOutlineContentCopy } from "react-icons/md";
 import styled from "styled-components";
 // import SunEditor from "suneditor-react";
 import "suneditor/dist/css/suneditor.min.css"; // Import Sun Editor's CSS File
@@ -39,6 +39,7 @@ import SunEditorCore from "suneditor/src/lib/core";
 import { useSWRConfig } from "swr";
 import { useGetUserArticles } from "../../customHookes/networkHooks";
 import { colors, sunEditorButtonList, sunEditorfontList } from "../../lib/constants";
+import { elog } from "../../lib/mylog";
 import { supabase } from "../../lib/supabaseClient";
 import { useAuthContext } from "../../state/Authcontext";
 import { definitions } from "../../types/supabase";
@@ -49,29 +50,33 @@ import { UiForImageUpload } from "../UiForImageUpload";
 interface Props {
   subheadingid: number | undefined;
   notesCreator: string | undefined;
+  isCopyable: boolean | undefined;
+  isEditable: boolean | undefined;
   changeParentProps: () => void;
 }
 type Inputs = {
   articleTitle: string;
   sequence: number;
 };
-const MyNotes: React.FC<Props> = ({ subheadingid, notesCreator, changeParentProps }) => {
+const MyNotes: React.FC<Props> = ({ subheadingid, notesCreator, changeParentProps, isCopyable, isEditable }) => {
   const { profile } = useAuthContext();
   const { data: articles, isLoading: isArticleLoading } = useGetUserArticles(subheadingid, notesCreator);
-  const [isLoading, setIsLoading] = useState(false);
+  const [isLoadingCopyButton, setIsLoadingCopyButton] = useState<boolean | undefined>(false);
   const [selectedArticleForEdit, setSelectedArticleForEdit] = useState<number | undefined>();
   const [isArticleCreating, setIsArticleCreating] = useState<"CREATING" | "EDITING" | "NONE">("NONE");
   const { mutate } = useSWRConfig();
 
-  // const handleSyllabusClick = (x: BookSyllabus) => {
-  //   setSelectedSubheading(x.subheading_id);
-  //   changeParentProps(x);
-  // };
-  // const [article, setArticle] = React.useState();
+  const SunEditor = dynamic(() => import("suneditor-react"), {
+    ssr: false,
+  });
+
   const deleteArticle = async (id: number): Promise<void> => {
     const { data, error } = await supabase.from<definitions["books_articles"]>("books_articles").delete().eq("id", id);
+    if (error) {
+      elog("MyNotes->deleteArticle", error.message);
+      return;
+    }
     if (data) {
-      //   mutate(`/book_id_syllabus/${x?.book_id}`);
       mutate([`/get-user-articles/${subheadingid}/${profile?.id}`]);
     }
   };
@@ -85,6 +90,29 @@ const MyNotes: React.FC<Props> = ({ subheadingid, notesCreator, changeParentProp
       setIsArticleCreating("EDITING");
     }
   };
+
+  const copyArticleToNewUser = async (x: definitions["books_articles"]) => {
+    setIsLoadingCopyButton(true);
+    const { data, error } = await supabase.from<definitions["books_articles"]>("books_articles").insert({
+      books_subheadings_fk: x.books_subheadings_fk,
+      article_hindi: x.article_hindi,
+      article_english: x.article_english,
+      article_audio_link: x.article_audio_link,
+      created_by: profile?.id,
+      article_title: x.article_title,
+      sequence: x.sequence,
+      copied_from_articleid: x.id,
+      copied_from_userid: x.created_by,
+    });
+    if (error) {
+      elog("MyNotes->copyArticleToNewUser", error.message);
+      return;
+    }
+    if (data) {
+      customToast({ title: "Article copied, Check inside your notes", status: "success", isUpdating: false });
+    }
+    setIsLoadingCopyButton(false);
+  };
   return (
     <Box>
       {articles
@@ -92,6 +120,18 @@ const MyNotes: React.FC<Props> = ({ subheadingid, notesCreator, changeParentProp
         .map((x) => {
           return (
             <Box key={x.id} mt="16">
+              {isCopyable ? (
+                <IconButton
+                  size="xs"
+                  variant="ghost"
+                  colorScheme="whatsapp"
+                  aria-label="Call Sage"
+                  fontSize="20px"
+                  isLoading={isLoadingCopyButton}
+                  onClick={() => copyArticleToNewUser(x)}
+                  icon={<MdOutlineContentCopy />}
+                />
+              ) : null}
               <Flex role={"group"} align="center">
                 {/* <Badge> */}
                 <VStack>
@@ -140,7 +180,7 @@ const MyNotes: React.FC<Props> = ({ subheadingid, notesCreator, changeParentProp
                   <Box display="none" _groupHover={{ display: "center" }}>
                     <DeleteConfirmation
                       handleDelete={deleteArticle}
-                      dialogueHeader={"Are you sure to delete this Article?"}
+                      dialogueHeader={"Delete this Article?"}
                       isDisabled={false}
                       isIconButton={true}
                       id={x.id}
@@ -161,7 +201,7 @@ const MyNotes: React.FC<Props> = ({ subheadingid, notesCreator, changeParentProp
                         <SkeletonText isLoaded={false} noOfLines={4} spacing="4" />
                       </Box>
                     ) : (
-                      <SuneditorForNotesMaking article={x} language={"HINDI"} />
+                      <SuneditorForNotesMaking article={x} language={"HINDI"} isEditable={isEditable} />
                     )}
                   </TabPanel>
                   <TabPanel>
@@ -171,7 +211,7 @@ const MyNotes: React.FC<Props> = ({ subheadingid, notesCreator, changeParentProp
                         <SkeletonText isLoaded={false} noOfLines={4} spacing="4" />
                       </Box>
                     ) : (
-                      <SuneditorForNotesMaking article={x} language={"ENGLISH"} />
+                      <SuneditorForNotesMaking article={x} language={"ENGLISH"} isEditable={isEditable} />
                     )}
                   </TabPanel>
                 </TabPanels>
@@ -275,7 +315,12 @@ const ArticleForm: React.FC<ArticleFormProps> = ({
           sequence: d.sequence,
         },
       ]);
+      if (error) {
+        elog("MyNotes->onSubmit", error.message);
+        return;
+      }
     }
+
     if (formMode === "EDITING") {
       const { data, error } = await supabase
         .from<definitions["books_articles"]>("books_articles")
@@ -287,12 +332,16 @@ const ArticleForm: React.FC<ArticleFormProps> = ({
           sequence: d.sequence,
         })
         .eq("id", articleId);
+      if (error) {
+        elog("MyNotes->onSubmit", error.message);
+        return;
+      }
     }
     x("NONE");
     mutate([`/get-user-articles/${subheadingid}/${profile?.id}`]);
   };
   return (
-    <Flex justify="space-between"  >
+    <Flex justify="space-between">
       <form onSubmit={handleSubmit(onSubmit)}>
         <FormControl p="2" isInvalid={errors.articleTitle as any}>
           <Input
@@ -339,12 +388,13 @@ const ArticleForm: React.FC<ArticleFormProps> = ({
 type SuneditorForNotesMakingProps = {
   article: definitions["books_articles"];
   language: "HINDI" | "ENGLISH";
+  isEditable: boolean | undefined;
 };
 const SunEditor = dynamic(() => import("suneditor-react"), {
   ssr: false,
 });
 
-const SuneditorForNotesMaking: React.FC<SuneditorForNotesMakingProps> = ({ article, language }) => {
+const SuneditorForNotesMaking: React.FC<SuneditorForNotesMakingProps> = ({ article, language, isEditable }) => {
   const [editorMode, setEditorMode] = React.useState("READ");
   const [isAutosaveOn, setIsAutosaveOn] = React.useState(false);
   const [fontSize, setFontSize] = React.useState("font-family: arial; font-size: 14px;");
@@ -387,28 +437,26 @@ const SuneditorForNotesMaking: React.FC<SuneditorForNotesMakingProps> = ({ artic
     updateArticleInDatabase(newcontent);
   };
   const updateArticleInDatabase = async (newcontent: string | undefined) => {
-    try {
-      const { data, error } = await supabase
-        .from<definitions["books_articles"]>("books_articles")
-        .update(language === "ENGLISH" ? { article_english: newcontent } : { article_hindi: newcontent })
-        .eq("id", article.id);
-      if (error) {
-        customToast({ title: "Post not updated error occurred", status: "error", isUpdating: false });
-      }
+    const { data, error } = await supabase
+      .from<definitions["books_articles"]>("books_articles")
+      .update(language === "ENGLISH" ? { article_english: newcontent } : { article_hindi: newcontent })
+      .eq("id", article.id);
+    if (error) {
+      customToast({ title: "Article not updated error occurred  " + error.message, status: "error", isUpdating: false });
+      elog("MyNotes->deleteArticle", error.message);
+      return;
+    }
 
-      if (data) {
-        customToast({ title: "Your changes have been saved...", status: "success", isUpdating: true });
-        // mutate(`/userpost/${currentSubheadingProps?.id}`);
-      }
-    } catch (error: any) {
-      customToast({ title: "Post not updated error occurred  " + error.message, status: "error", isUpdating: false });
+    if (data) {
+      customToast({ title: "Your changes have been saved...", status: "success", isUpdating: true });
     }
   };
   return (
     <Box spellCheck="false">
       {/* //use above attrivutes if you want to override spellcheck of browser */}
       <Flex
-        display={profile?.id !== article.created_by ? "none" : "undefined"}
+        // display={profile?.id !== article.created_by ? "none" : "undefined"}
+        display={isEditable ? "undefined" : "none"}
         justifyContent="space-between"
         align="center"
         // alignItems="center"

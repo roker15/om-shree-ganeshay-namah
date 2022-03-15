@@ -24,7 +24,7 @@ const Syllabus: React.FC<Props> = ({ book, changeParentProps }) => {
     <Box>
       {book?.book_name ? (
         <Flex align="end">
-          <Text as="b">
+          <Text bg="orange.100"as="b">
             <Text >{book?.book_name}</Text>
           </Text>
         </Flex>

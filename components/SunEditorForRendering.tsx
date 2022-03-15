@@ -35,7 +35,7 @@ import styled from "styled-components";
 import "suneditor/dist/css/suneditor.min.css"; // Import Sun Editor's CSS File
 import SunEditorCore from "suneditor/src/lib/core";
 import { useSWRConfig } from "swr";
-import { myErrorLog, myInfoLog } from "../lib/mylog";
+import { elog, ilog } from "../lib/mylog";
 import { supabase } from "../lib/supabaseClient";
 import { useAuthContext } from "../state/Authcontext";
 import { usePostContext } from "../state/PostContext";
@@ -111,8 +111,8 @@ const SunEditorForRendering: React.FC<Props> = ({ postId, isNew, postContent, ed
    * @type {React.MutableRefObject<SunEditor>} get type definitions for editor
    */
 
-  myInfoLog("SunEditorForRendering postContent is ", postContent);
-  myInfoLog("SunEditorForRendering ", "component is rendering");
+  ilog("SunEditorForRendering postContent is ", postContent);
+  ilog("SunEditorForRendering ", "component is rendering");
 
   const isPostNewRef = useRef(isNew);
   const isMountedRef = useRef(true);
@@ -176,7 +176,7 @@ const SunEditorForRendering: React.FC<Props> = ({ postId, isNew, postContent, ed
         },
       ]);
       if (error) {
-        myErrorLog("SunEditorForRendering", error.message);
+        elog("SunEditorForRendering", error.message);
         customToast({ title: "Post not created,error occurred", status: "error", isUpdating: false });
       }
       if (data) {
@@ -190,11 +190,11 @@ const SunEditorForRendering: React.FC<Props> = ({ postId, isNew, postContent, ed
     }
   };
   const updatePostInDatabase = async (newcontent: string, postId: number) => {
-    myInfoLog("SunEditorForRendering->updatepostindatabase", "method is called");
+    ilog("SunEditorForRendering->updatepostindatabase", "method is called");
     try {
       const { data, error } = await supabase.from<Post>("posts").update({ post: newcontent }).eq("id", postId);
       if (error) {
-        myErrorLog("SunEditorForRendering", error.message);
+        elog("SunEditorForRendering", error.message);
         customToast({ title: "Post not updated,error occurred", status: "error", isUpdating: false });
       }
 
@@ -279,7 +279,7 @@ interface sharedProps {
   postId: number;
   subheadingId: number;
 }
-const UiForSharing: React.FC<sharedProps> = ({ postId, subheadingId }) => {
+export const  UiForSharing: React.FC<sharedProps> = ({ postId, subheadingId }) => {
   const { isOpen, onOpen, onClose } = useDisclosure();
   const [inputEmail, setInputEmail] = React.useState("");
   const [message, setMessage] = React.useState("");

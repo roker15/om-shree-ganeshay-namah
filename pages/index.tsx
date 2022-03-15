@@ -4,7 +4,7 @@ import React, { useState } from "react";
 import ManageNotes from "../components/notes/ManageNotes";
 import CreateBookSyllabus from "../components/syllabus/CreateBookSyllabus";
 import LayoutWithTopNavbar from "../layout/LayoutWithTopNavbar";
-import { myInfoLog } from "../lib/mylog";
+import { ilog } from "../lib/mylog";
 import { supabase } from "../lib/supabaseClient";
 import { useAuthContext } from "../state/Authcontext";
 import { useAppContext } from "../state/state";

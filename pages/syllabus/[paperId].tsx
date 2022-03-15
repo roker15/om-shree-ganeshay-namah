@@ -136,7 +136,6 @@ export const getStaticProps = async ({ params }: any) => {
     .eq("subid", 72);
 
   if (syllabus_error) console.error(syllabus_error);
-  else console.log("syllabus is ", syllabus);
 
   // Make a request
   const { data, error } = await supabase

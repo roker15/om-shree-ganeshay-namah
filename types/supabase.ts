@@ -139,6 +139,15 @@ export interface paths {
           /** owner of the shared article */
           owned_by?: parameters["rowFilter.books_article_sharing.owned_by"];
           ispublic?: parameters["rowFilter.books_article_sharing.ispublic"];
+          /** allow others to copy */
+          allow_copy?: parameters["rowFilter.books_article_sharing.allow_copy"];
+          allow_edit?: parameters["rowFilter.books_article_sharing.allow_edit"];
+          sharedwith_email?: parameters["rowFilter.books_article_sharing.sharedwith_email"];
+          ownedby_email?: parameters["rowFilter.books_article_sharing.ownedby_email"];
+          ownedby_name?: parameters["rowFilter.books_article_sharing.ownedby_name"];
+          ownedby_avatar?: parameters["rowFilter.books_article_sharing.ownedby_avatar"];
+          sharedwith_name?: parameters["rowFilter.books_article_sharing.sharedwith_name"];
+          sharedwith_avatar?: parameters["rowFilter.books_article_sharing.sharedwith_avatar"];
           /** Filtering Columns */
           select?: parameters["select"];
           /** Ordering */
@@ -198,6 +207,15 @@ export interface paths {
           /** owner of the shared article */
           owned_by?: parameters["rowFilter.books_article_sharing.owned_by"];
           ispublic?: parameters["rowFilter.books_article_sharing.ispublic"];
+          /** allow others to copy */
+          allow_copy?: parameters["rowFilter.books_article_sharing.allow_copy"];
+          allow_edit?: parameters["rowFilter.books_article_sharing.allow_edit"];
+          sharedwith_email?: parameters["rowFilter.books_article_sharing.sharedwith_email"];
+          ownedby_email?: parameters["rowFilter.books_article_sharing.ownedby_email"];
+          ownedby_name?: parameters["rowFilter.books_article_sharing.ownedby_name"];
+          ownedby_avatar?: parameters["rowFilter.books_article_sharing.ownedby_avatar"];
+          sharedwith_name?: parameters["rowFilter.books_article_sharing.sharedwith_name"];
+          sharedwith_avatar?: parameters["rowFilter.books_article_sharing.sharedwith_avatar"];
         };
         header: {
           /** Preference */
@@ -221,6 +239,15 @@ export interface paths {
           /** owner of the shared article */
           owned_by?: parameters["rowFilter.books_article_sharing.owned_by"];
           ispublic?: parameters["rowFilter.books_article_sharing.ispublic"];
+          /** allow others to copy */
+          allow_copy?: parameters["rowFilter.books_article_sharing.allow_copy"];
+          allow_edit?: parameters["rowFilter.books_article_sharing.allow_edit"];
+          sharedwith_email?: parameters["rowFilter.books_article_sharing.sharedwith_email"];
+          ownedby_email?: parameters["rowFilter.books_article_sharing.ownedby_email"];
+          ownedby_name?: parameters["rowFilter.books_article_sharing.ownedby_name"];
+          ownedby_avatar?: parameters["rowFilter.books_article_sharing.ownedby_avatar"];
+          sharedwith_name?: parameters["rowFilter.books_article_sharing.sharedwith_name"];
+          sharedwith_avatar?: parameters["rowFilter.books_article_sharing.sharedwith_avatar"];
         };
         body: {
           /** books_article_sharing */
@@ -256,6 +283,8 @@ export interface paths {
           article_title?: parameters["rowFilter.books_articles.article_title"];
           /** Article sequence */
           sequence?: parameters["rowFilter.books_articles.sequence"];
+          copied_from_userid?: parameters["rowFilter.books_articles.copied_from_userid"];
+          copied_from_articleid?: parameters["rowFilter.books_articles.copied_from_articleid"];
           /** Filtering Columns */
           select?: parameters["select"];
           /** Ordering */
@@ -321,6 +350,8 @@ export interface paths {
           article_title?: parameters["rowFilter.books_articles.article_title"];
           /** Article sequence */
           sequence?: parameters["rowFilter.books_articles.sequence"];
+          copied_from_userid?: parameters["rowFilter.books_articles.copied_from_userid"];
+          copied_from_articleid?: parameters["rowFilter.books_articles.copied_from_articleid"];
         };
         header: {
           /** Preference */
@@ -350,6 +381,8 @@ export interface paths {
           article_title?: parameters["rowFilter.books_articles.article_title"];
           /** Article sequence */
           sequence?: parameters["rowFilter.books_articles.sequence"];
+          copied_from_userid?: parameters["rowFilter.books_articles.copied_from_userid"];
+          copied_from_articleid?: parameters["rowFilter.books_articles.copied_from_articleid"];
         };
         body: {
           /** books_articles */
@@ -2924,7 +2957,7 @@ export interface paths {
       parameters: {
         body: {
           args: {
-            /** Format: text */
+            /** Format: uuid */
             sharedwith: string;
             /** Format: bigint */
             subheadingid: number;
@@ -3099,6 +3132,25 @@ export interface definitions {
     owned_by: string;
     /** Format: boolean */
     ispublic?: boolean;
+    /**
+     * Format: boolean
+     * @description allow others to copy
+     */
+    allow_copy?: boolean;
+    /** Format: boolean */
+    allow_edit?: boolean;
+    /** Format: text */
+    sharedwith_email?: string;
+    /** Format: text */
+    ownedby_email?: string;
+    /** Format: text */
+    ownedby_name?: string;
+    /** Format: text */
+    ownedby_avatar?: string;
+    /** Format: text */
+    sharedwith_name?: string;
+    /** Format: text */
+    sharedwith_avatar?: string;
   };
   /** @description article inside a subheading of a book */
   books_articles: {
@@ -3155,6 +3207,10 @@ export interface definitions {
      * @description Article sequence
      */
     sequence?: number;
+    /** Format: uuid */
+    copied_from_userid?: string;
+    /** Format: bigint */
+    copied_from_articleid?: number;
   };
   books_board_or_university: {
     /**
@@ -3918,6 +3974,25 @@ export interface parameters {
   "rowFilter.books_article_sharing.owned_by": string;
   /** Format: boolean */
   "rowFilter.books_article_sharing.ispublic": string;
+  /**
+   * Format: boolean
+   * @description allow others to copy
+   */
+  "rowFilter.books_article_sharing.allow_copy": string;
+  /** Format: boolean */
+  "rowFilter.books_article_sharing.allow_edit": string;
+  /** Format: text */
+  "rowFilter.books_article_sharing.sharedwith_email": string;
+  /** Format: text */
+  "rowFilter.books_article_sharing.ownedby_email": string;
+  /** Format: text */
+  "rowFilter.books_article_sharing.ownedby_name": string;
+  /** Format: text */
+  "rowFilter.books_article_sharing.ownedby_avatar": string;
+  /** Format: text */
+  "rowFilter.books_article_sharing.sharedwith_name": string;
+  /** Format: text */
+  "rowFilter.books_article_sharing.sharedwith_avatar": string;
   /** @description books_articles */
   "body.books_articles": definitions["books_articles"];
   /** Format: bigint */
@@ -3955,6 +4030,10 @@ export interface parameters {
    * @description Article sequence
    */
   "rowFilter.books_articles.sequence": string;
+  /** Format: uuid */
+  "rowFilter.books_articles.copied_from_userid": string;
+  /** Format: bigint */
+  "rowFilter.books_articles.copied_from_articleid": string;
   /** @description books_board_or_university */
   "body.books_board_or_university": definitions["books_board_or_university"];
   /** Format: bigint */

@@ -39,10 +39,10 @@ export function customToast({ title, position, status, variant, duration, isClos
   }
   return toast({
     title,
-    position: "bottom",
+    position: "top",
     status,
     variant,
-    duration: 2000,
+    duration: 3000,
     isClosable,
   });
 }

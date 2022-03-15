@@ -1,7 +1,7 @@
 import useSWR from "swr";
 import { supabase } from "../lib/supabaseClient";
 import { useAuthContext } from "../state/Authcontext";
-import { BookResponse, BookSyllabus, Subheading } from "../types/myTypes";
+import { BookResponse } from "../types/myTypes";
 import { definitions } from "../types/supabase";
 
 export type SharedNotesList = {
@@ -14,7 +14,6 @@ export type SharedNotesList = {
 };
 
 export function useGetBooks(bookId?: number) {
-  console.log("usegetbooks getting called");
   const { data, error } = useSWR(
     bookId == undefined ? null : ["/publicationId", bookId],
     async () =>
@@ -32,7 +31,6 @@ export function useGetBooks(bookId?: number) {
       revalidateOnReconnect: false,
     }
   );
-  data ? console.log("subject is ", data!.data) : console.log("data is is not available");
   return {
     // sharedPost_SUP_ERR:data?.error,
     data: data?.data,
@@ -42,7 +40,6 @@ export function useGetBooks(bookId?: number) {
   };
 }
 export function useGetSyllabusByBookId(bookId?: number) {
-  console.log("usegetbooks getting called");
   const { data, error } = useSWR(
     bookId == undefined ? null : [`/book_id_syllabuss/${bookId}`],
     async () =>
@@ -55,7 +52,6 @@ export function useGetSyllabusByBookId(bookId?: number) {
       revalidateOnReconnect: false,
     }
   );
-  data ? console.log("syllabus is ", data!.data) : console.log("data is is not available");
   return {
     // sharedPost_SUP_ERR:data?.error,
     data: data?.data,
@@ -65,23 +61,31 @@ export function useGetSyllabusByBookId(bookId?: number) {
   };
 }
 export function useGetPublicNotesListBySubheading(subheadingId?: number) {
-  console.log("usegetbooks getting called");
   const { profile } = useAuthContext();
+  //This may be the proper way to use swr with supabase.
+  //https://github.com/supabase/supabase/discussions/3145#discussioncomment-1426310
+  const fetcher = async () =>
+    // await supabase
+    //   .rpc<SharedNotesList>("getPublicNotesListBySubheading", {
+    //     subheadingid: subheadingId,
+    //   })
+    //   .neq("owned_by_userid", profile?.id as string);
+    await supabase
+      .from<definitions["books_article_sharing"]>("books_article_sharing")
+      .select(`*`)
+      .eq("books_subheadings_fk", subheadingId).eq("ispublic",true)
+      .neq("owned_by", profile?.id as string);
+
+  const cacheOptions = {
+    revalidateIfStale: true,
+    revalidateOnFocus: false,
+    revalidateOnReconnect: false,
+  };
   const { data, error } = useSWR(
     subheadingId == undefined ? null : [`/get-public-notes-list-by-subheading/${subheadingId}`],
-    async () =>
-      await supabase
-        .rpc<SharedNotesList>("getPublicNotesListBySubheading", {
-          subheadingid: subheadingId,
-        })
-        .neq("owned_by_userid", profile?.id as string),
-    {
-      revalidateIfStale: true,
-      revalidateOnFocus: false,
-      revalidateOnReconnect: false,
-    }
+    fetcher,
+    cacheOptions
   );
-  data ? console.log("syllabus is ", data!.data) : console.log("data is is not available");
   return {
     // sharedPost_SUP_ERR:data?.error,
     data: data?.data,
@@ -91,23 +95,27 @@ export function useGetPublicNotesListBySubheading(subheadingId?: number) {
   };
 }
 export function useGetSharedNotesListBySubheading(subheadingId: number | undefined, userid: string | undefined) {
-  console.log("usegetbooks getting called");
   const { data, error } = useSWR(
     subheadingId == undefined || userid == undefined
       ? null
       : [`/get-shared-notes-list-by-subheading/${subheadingId}/${userid}`],
     async () =>
-      await supabase.rpc<SharedNotesList>("getSharedNotesListBySubheading", {
-        subheadingid: subheadingId,
-        sharedwith: userid,
-      }),
+      // await supabase.rpc<SharedNotesList>("getSharedNotesListBySubheading", {
+      //   subheadingid: subheadingId,
+      //   sharedwith: userid,
+      // })
+      await supabase
+        .from<definitions["books_article_sharing"]>("books_article_sharing")
+        .select(`*`)
+        .eq("books_subheadings_fk", subheadingId)
+        .eq("shared_with", userid),
+
     {
       revalidateIfStale: true,
       revalidateOnFocus: false,
       revalidateOnReconnect: false,
     }
   );
-  data ? console.log("syllabus is ", data!.data) : console.log("data is is not available");
   return {
     // sharedPost_SUP_ERR:data?.error,
     data: data?.data,
@@ -117,7 +125,6 @@ export function useGetSharedNotesListBySubheading(subheadingId: number | undefin
   };
 }
 export function useGetUserArticles(subheadingId: number | undefined, userid: string | undefined) {
-  console.log("get-user-articles is  getting called");
   const { data, error } = useSWR(
     subheadingId == undefined || userid === undefined ? null : [`/get-user-articles/${subheadingId}/${userid}`],
     async () =>
@@ -144,7 +151,6 @@ export function useGetUserArticles(subheadingId: number | undefined, userid: str
       revalidateOnReconnect: false,
     }
   );
-  data ? console.log("articles are  ", data!.data) : console.log("articles available");
   return {
     // sharedPost_SUP_ERR:data?.error,
     data: data?.data,

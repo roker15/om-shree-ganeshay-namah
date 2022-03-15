@@ -16,6 +16,7 @@ import * as React from "react";
 import { useEffect } from "react";
 import { useForm } from "react-hook-form";
 import { mutate } from "swr";
+import { elog } from "../../lib/mylog";
 import { supabase } from "../../lib/supabaseClient";
 import { definitions } from "../../types/supabase";
 import { FormProps } from "./CreateBookSyllabus";
@@ -38,8 +39,8 @@ const FormCreateHeading: React.FC<Props> = ({ x }) => {
 
   useEffect(() => {
     if (x && x?.formMode === "UPDATE_HEADING") {
-    //   setValue("heading", x.heading), { shouldValidate: true };;
-    //   setValue("sequence", x.heading_sequence, { shouldValidate: true });
+      //   setValue("heading", x.heading), { shouldValidate: true };;
+      //   setValue("sequence", x.heading_sequence, { shouldValidate: true });
       reset({
         heading: x.heading,
         sequence: x.heading_sequence,
@@ -54,7 +55,6 @@ const FormCreateHeading: React.FC<Props> = ({ x }) => {
 
   async function onSubmit(values: any) {
     if (x?.formMode === "CREATE_HEADING") {
-      console.log("form values are ", { values });
       const { data, error } = await supabase.from<definitions["books_headings"]>("books_headings").insert({
         books_fk: x?.book_id,
         heading: values.heading,
@@ -84,6 +84,11 @@ const FormCreateHeading: React.FC<Props> = ({ x }) => {
           sequence: values.sequence,
         })
         .eq("id", x.heading_id);
+      
+      if (error) {
+        elog("FormCreateHeading->onSubmit", error.message);
+        return;
+      }
       isSubmitting == false;
 
       if (data) {

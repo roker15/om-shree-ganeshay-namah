@@ -3,7 +3,7 @@ import { CircularProgress } from "@chakra-ui/progress";
 import { Session } from "@supabase/gotrue-js";
 import React, { createContext, useContext, useEffect, useState } from "react";
 import { Profile } from "../lib/constants";
-import { myInfoLog } from "../lib/mylog";
+import { elog, ilog } from "../lib/mylog";
 import { supabase } from "../lib/supabaseClient";
 interface AuthContextValues {
   signInWithgoogle: (redirectUrl: string) => void;
@@ -29,15 +29,6 @@ export const AuthProvider = ({ children }: any) => {
       setSession(session);
     });
     setSession(supabase.auth.session());
-
-    // window.onstorage = (e) => {
-    //   if (e.key === "supabase.auth.token") {
-    //     const newSession = JSON.parse(e.newValue!);
-    //     setSession(newSession?.currentSession);
-    //     setUser(session?.user ?? null);
-    //   }
-    // };
-    // cleanup the useEffect hook
     return () => {
       listener?.unsubscribe();
     };
@@ -46,7 +37,7 @@ export const AuthProvider = ({ children }: any) => {
   useEffect(() => {
     setLoading(true);
     if (session) {
-      myInfoLog("authcontext->getprofile-> place3--> session hai ", session);
+      ilog("authcontext->getprofile-> place3--> session hai ", session);
       const getProfile = async () => {
         try {
           //first check if user exist or not
@@ -70,6 +61,7 @@ export const AuthProvider = ({ children }: any) => {
                 avatar_url: user?.identities![0].identity_data.avatar_url,
               })
               .single();
+                        
             if (data) {
               setProfile(data);
             }
@@ -80,8 +72,7 @@ export const AuthProvider = ({ children }: any) => {
             }
           }
         } catch (error: any) {
-          // setProfile(null);
-          console.log("error", error.message);
+          elog("Authcontext--> useeffect",error.message);
         } finally {
           setLoading(false);
         }
@@ -89,7 +80,7 @@ export const AuthProvider = ({ children }: any) => {
       getProfile();
       // setLoading(false)
     } else {
-      myInfoLog("authcontext->getprofile-> place4--> session nahi hai", session);
+      ilog("authcontext->getprofile-> place4--> session nahi hai", session);
       setProfile(null);
       setLoading(false);
     }

@@ -7,10 +7,12 @@ import MyNotes from "./MyNotes";
 interface Props {
   subheadingid: number | undefined;
   notesCreator: string | undefined;
+  isCopyable: boolean| undefined;
+  isEditable: boolean| undefined;
   changeParentProps: () => void;
 }
 
-const Notes: React.FC<Props> = ({ subheadingid, notesCreator, changeParentProps }) => {
+const Notes: React.FC<Props> = ({ subheadingid, notesCreator, changeParentProps, isCopyable, isEditable }) => {
   const { profile } = useAuthContext();
   const { data: d } = useGetSharedNotesListBySubheading(subheadingid, profile?.id);
   // const handleSyllabusClick = (x: BookSyllabus) => {
@@ -24,10 +26,11 @@ const Notes: React.FC<Props> = ({ subheadingid, notesCreator, changeParentProps 
         <MyNotes
           subheadingid={subheadingid}
           changeParentProps={(): void => {
-            console.log("madarchod");
+            console.log("");
           }}
           notesCreator={notesCreator}
-         
+          isCopyable={isCopyable}
+          isEditable={isEditable}
         ></MyNotes>
       </Box>
     </Box>
