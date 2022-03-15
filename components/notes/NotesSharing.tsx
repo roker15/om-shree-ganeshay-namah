@@ -230,7 +230,20 @@ export const SharedList: React.FC<{ subheadingId: number }> = ({ subheadingId })
       .update({ allow_copy: checkValue })
       .match({ id: sharingId });
   };
-
+  const handleCancelSharing = async (sharingId: number) => {
+    const { data, error } = await supabase
+      .from<definitions["books_article_sharing"]>("books_article_sharing")
+      .delete()
+      .match({ id: sharingId });
+    if (error) {
+      elog("Notesharing-->handlecancelsharing", error.message);
+      return
+    }
+    if (data) {
+      sharedlist!.splice(sharedlist!.findIndex(item => item.id === sharingId),1)
+      setSharedlist([...sharedlist!])
+    }
+  };
   return (
     <>
       <Table size="sm">
@@ -279,6 +292,7 @@ export const SharedList: React.FC<{ subheadingId: number }> = ({ subheadingId })
                       colorScheme={"red"}
                       icon={<MdCancel />}
                       aria-label={""}
+                      onClick={() =>handleCancelSharing(x.id)}
                     ></IconButton>
                   </Td>
                 </Tr>
