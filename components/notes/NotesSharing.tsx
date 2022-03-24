@@ -74,7 +74,7 @@ export const NotesSharing: React.FC<sharedProps> = ({ subheadingId }) => {
       const { data: ispostexist, error: ispostexisterror } = await supabase
         .from<definitions["books_article_sharing"]>("books_article_sharing")
         .select(`*`)
-        .match({ books_subheadings_fk: subheadingId, shared_with: profiles![0].id });
+        .match({ books_subheadings_fk: subheadingId, shared_with: profiles![0].id, owned_by:profile?.id});
 
       if (ispostexist?.length != 0) {
         setMessage("This post is already shared with this user");
