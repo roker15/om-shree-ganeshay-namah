@@ -28,18 +28,7 @@ const SharedNotesPanel: React.FC<Props> = ({ subheadingid, changeParentProps }) 
   return (
     <Box>
       <VStack align="left">
-        <Text align="start" fontWeight="medium" fontSize="15px" p="0.5" bg="orange.100">
-          My notes
-        </Text>
-        <Text
-          // color={selectedSubheading === x.subheading_id ? "white" : "null"}
-          // bg={selectedSubheading === x.subheading_id ? "green.400" : "null"}
-          // onClick={() => changeParentProps(x)}
-          align="start"
-          casing="capitalize"
-        >
-          {/* {d?} */}
-        </Text>
+       
         <Text align="start" fontWeight="medium" fontSize="15px" p="0.5" bg="orange.100">
           Public Notes
         </Text>
@@ -73,7 +62,7 @@ const SharedNotesPanel: React.FC<Props> = ({ subheadingid, changeParentProps }) 
         </Text>
         {sharedNtoes && sharedNtoes.length > 0 ? (
           sharedNtoes!.map((x) => (
-            <Flex my="2" ml="4" key={x.books_subheadings_fk} role={"group"} align="center">
+            <Flex my="2" ml="4" key={x.id} role={"group"} align="center">
               <Avatar mx="2" size="2xs" src={x.ownedby_avatar} />
               <Text
                 as="label"
