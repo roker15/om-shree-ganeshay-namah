@@ -486,7 +486,7 @@ const SuneditorForNotesMaking: React.FC<SuneditorForNotesMakingProps> = ({ artic
           >
             <option value="font-family: arial; font-size: 14px;">small</option>
             <option value="font-family: arial; font-size: 16px;">medium</option>
-            <option value="font-family: arial; font-size: 20px;">large</option>
+            <option value="font-family: arial; font-size: 24px;">large</option>
           </Select>
           <Box pb="3">
             <UiForImageUpload />
