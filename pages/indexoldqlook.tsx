@@ -20,7 +20,6 @@ import {
 import { useRouter } from "next/dist/client/router";
 import React, { useEffect, useState } from "react";
 import BookFilter from "../components/syllabus/BookFilter";
-import BookList from "../components/syllabus/BookList";
 import CreateBookSyllabus from "../components/syllabus/CreateBookSyllabus";
 import { MyDropzone } from "../components/MyDropzone";
 import QuestionBanks from "../components/QuestionBank";
