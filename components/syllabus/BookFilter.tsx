@@ -114,7 +114,7 @@ const BookFilter: React.FC<{ setParentProps: (x: BookResponse | undefined) => vo
             //https://stackoverflow.com/questions/50501047/one-line-arrow-functions-without-braces-cant-have-a-semicolon
             return (
               <option key={x.id} value={x.id}>
-                {x.book_name + x.class_fk.class}
+                {x.book_name + " "+ x.class_fk.class}
               </option>
             );
           })}
