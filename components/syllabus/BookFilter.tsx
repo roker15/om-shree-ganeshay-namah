@@ -7,7 +7,7 @@ import Syllabus from "./Syllabus";
 const BookFilter: React.FC<{ setParentProps: (x: BookResponse | undefined) => void }> = ({ setParentProps }) => {
   const categories = [
     { id: "1", name: "NCERT" },
-    { id: "2", name: "IGNOU" },
+    { id: "6", name: "ICSE" },
   ];
   const [value, setValue] = React.useState("1");
   const { data } = useGetBooks(Number(value));
