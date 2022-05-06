@@ -9,8 +9,8 @@ const BookFilter: React.FC<{ setParentProps: (x: BookResponse | undefined) => vo
     { id: "1", name: "NCERT" },
     { id: "6", name: "ICSE" },
     // { id: "2", name: "IGNOU" },
-    { id: "4", name: "ENGINEERING" },
-    { id: "5", name: "MEDICAL" },
+    { id: "4", name: "Engineering" },
+    { id: "5", name: "Medical" },
   ];
   const [value, setValue] = React.useState("1");
   const { data } = useGetBooks(Number(value));
@@ -54,7 +54,7 @@ const BookFilter: React.FC<{ setParentProps: (x: BookResponse | undefined) => vo
 
     <Box>
       <RadioGroup onChange={setValue} value={value}>
-        <Stack direction="row">
+        <Stack direction={{base:"column", md:"row"}}>
           {categories.map((x) => {
             return (
               <Radio key={x.id} value={x.id} colorScheme="whatsapp">
