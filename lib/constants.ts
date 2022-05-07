@@ -49,7 +49,7 @@ export const sunEditorButtonList = [
     "link",
     "image",
     // "video",
-    // "audio",
+    "audio",
     "math",
     // "imageGallery",
     // "fullScreen",

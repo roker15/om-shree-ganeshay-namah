@@ -122,7 +122,7 @@ const FormCreateSubheading: React.FC<Props> = ({ x }) => {
       <Container mt="2" maxW={{ base: "container.xl", md: "container.md" }}>
         <Text>{x?.book_name}</Text>
         <Text>{x?.formMode}</Text>
-        <Text>{x?.book_id}</Text>
+        <Text>{x?.heading}</Text>
         <form onSubmit={handleSubmit(onSubmit)}>
           <VStack
             // divider={<StackDivider borderColor="gray.200" />}
@@ -175,7 +175,7 @@ const FormCreateSubheading: React.FC<Props> = ({ x }) => {
               <FormLabel color="blue.600" htmlFor="sequence">
                 Subheading Sequence
               </FormLabel>
-              <NumberInput alignSelf="start" min={1} max={100}>
+              <NumberInput alignSelf="start" min={1} max={600}>
                 <NumberInputField
                   id="sequence"
                   placeholder="Sequence"

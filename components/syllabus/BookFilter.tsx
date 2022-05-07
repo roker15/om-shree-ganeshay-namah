@@ -8,6 +8,9 @@ const BookFilter: React.FC<{ setParentProps: (x: BookResponse | undefined) => vo
   const categories = [
     { id: "1", name: "NCERT" },
     { id: "6", name: "ICSE" },
+    // { id: "2", name: "IGNOU" },
+    { id: "4", name: "Engineering" },
+    { id: "5", name: "Medical" },
   ];
   const [value, setValue] = React.useState("1");
   const { data } = useGetBooks(Number(value));
@@ -51,7 +54,7 @@ const BookFilter: React.FC<{ setParentProps: (x: BookResponse | undefined) => vo
 
     <Box>
       <RadioGroup onChange={setValue} value={value}>
-        <Stack direction="row">
+        <Stack direction={{base:"column", md:"row"}}>
           {categories.map((x) => {
             return (
               <Radio key={x.id} value={x.id} colorScheme="whatsapp">
@@ -76,7 +79,7 @@ const BookFilter: React.FC<{ setParentProps: (x: BookResponse | undefined) => vo
           {classList?.map((x) => {
             return (
               <option key={x.id} value={x.class_fk.id}>
-                {"Class " + x.class_fk.class}
+                {value === "1" ? "Class " + x.class_fk.class : x.class_fk.class}
               </option>
             );
           })}
@@ -114,7 +117,7 @@ const BookFilter: React.FC<{ setParentProps: (x: BookResponse | undefined) => vo
             //https://stackoverflow.com/questions/50501047/one-line-arrow-functions-without-braces-cant-have-a-semicolon
             return (
               <option key={x.id} value={x.id}>
-                {x.book_name + " "+ x.class_fk.class}
+                {value === "1" ? x.book_name +" "+ x.class_fk.class : x.book_name }
               </option>
             );
           })}
