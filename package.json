@@ -39,7 +39,7 @@
     "react-sticky-el": "^2.0.9",
     "react-table": "^7.7.0",
     "styled-components": "^5.3.3",
-    "suneditor": "^2.43.0",
+    "suneditor": "^2.43.6",
     "suneditor-react": "^3.4.0",
     "swr": "^1.2.1",
     "uuid": "^8.3.2",
