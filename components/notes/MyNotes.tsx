@@ -475,7 +475,7 @@ const SuneditorForNotesMaking: React.FC<SuneditorForNotesMakingProps> = ({ artic
             </Radio>
           </Stack>
         </RadioGroup>
-        <Flex align="center" display={editorMode === "READ" ? "none" : "flex"}>
+        <Flex align="center" direction={{base:"column",sm:"row"}} display={editorMode === "READ" ? "none" : "flex"}>
           <Select
             size="sm"
             px="2"
