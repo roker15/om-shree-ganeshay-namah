@@ -45,8 +45,8 @@ const Home: React.FC<ProfileListProps> = ({ data }) => {
   },[]);
   return (
     <Container maxW="full" px={{ base: "2", sm: "4", md: "8" }}>
-      <ManageNotes />
-      {/* <CreateBookSyllabus /> */}
+      {/* <ManageNotes /> */}
+      <CreateBookSyllabus />
     </Container>
   );
 };

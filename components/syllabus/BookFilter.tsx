@@ -1,4 +1,4 @@
-import { Box, Radio, RadioGroup, Select, Stack } from "@chakra-ui/react";
+import { Box, Radio, RadioGroup, Select, Stack, Text } from "@chakra-ui/react";
 import React, { useEffect } from "react";
 import { useGetBooks, useGetSyllabusByBookId } from "../../customHookes/networkHooks";
 import { BookResponse } from "../../types/myTypes";
@@ -11,6 +11,7 @@ const BookFilter: React.FC<{ setParentProps: (x: BookResponse | undefined) => vo
     // { id: "2", name: "IGNOU" },
     { id: "4", name: "Engineering" },
     { id: "5", name: "Medical" },
+    { id: "7", name: "Competitive exams" },
   ];
   const [value, setValue] = React.useState("1");
   const { data } = useGetBooks(Number(value));
@@ -54,11 +55,11 @@ const BookFilter: React.FC<{ setParentProps: (x: BookResponse | undefined) => vo
 
     <Box>
       <RadioGroup onChange={setValue} value={value}>
-        <Stack direction={{base:"column", md:"row"}}>
+        <Stack direction={{ base: "column", md: "row" }}>
           {categories.map((x) => {
             return (
               <Radio key={x.id} value={x.id} colorScheme="whatsapp">
-                {x.name}
+                <Text casing="capitalize">{x.name}</Text>
               </Radio>
             );
           })}
@@ -71,7 +72,7 @@ const BookFilter: React.FC<{ setParentProps: (x: BookResponse | undefined) => vo
           size="sm"
           id="paper"
           bg={"orange.50"}
-          placeholder="Select Class 🥕"
+          placeholder={value === "7" ? "Select Exam" : "Select Class/Course"}
           onChange={(e) => {
             setSelectedClass(Number(e.target.value));
           }}
@@ -89,7 +90,7 @@ const BookFilter: React.FC<{ setParentProps: (x: BookResponse | undefined) => vo
           size="sm"
           id="paper"
           bg={"orange.50"}
-          placeholder="Select Subject 🍍"
+          placeholder={value === "7" ? "Select Paper" :"Select Subject"}
           onChange={(e) => {
             setSelectedSubject(Number(e.target.value));
           }}
@@ -107,7 +108,7 @@ const BookFilter: React.FC<{ setParentProps: (x: BookResponse | undefined) => vo
           size="sm"
           id="paper"
           bg={"orange.50"}
-          placeholder="Select Book 🍎"
+          placeholder={value === "7" ? "Select Syllabus" :"Select Book"}
           onChange={(e) => {
             setParentProps!(data?.find((item) => item.id === Number(e.target.value)));
           }}
@@ -117,7 +118,7 @@ const BookFilter: React.FC<{ setParentProps: (x: BookResponse | undefined) => vo
             //https://stackoverflow.com/questions/50501047/one-line-arrow-functions-without-braces-cant-have-a-semicolon
             return (
               <option key={x.id} value={x.id}>
-                {value === "1" ? x.book_name +" "+ x.class_fk.class : x.book_name }
+                {value === "1" ? x.book_name + " " + x.class_fk.class : x.book_name}
               </option>
             );
           })}
