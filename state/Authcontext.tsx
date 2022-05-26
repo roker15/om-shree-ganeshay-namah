@@ -61,7 +61,7 @@ export const AuthProvider = ({ children }: any) => {
                 avatar_url: user?.identities![0].identity_data.avatar_url,
               })
               .single();
-                        
+
             if (data) {
               setProfile(data);
             }
@@ -72,7 +72,7 @@ export const AuthProvider = ({ children }: any) => {
             }
           }
         } catch (error: any) {
-          elog("Authcontext--> useeffect",error.message);
+          elog("Authcontext--> useeffect", error.message);
         } finally {
           setLoading(false);
         }
@@ -94,8 +94,6 @@ export const AuthProvider = ({ children }: any) => {
       },
       {
         redirectTo: redirectUrl,
-        // redirectTo: "http://localhost:3000",
-        // redirectTo: "https://om-shree-ganeshay-namah-git-development4-roker15.vercel.app",
       }
     );
   };

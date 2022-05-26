@@ -1,10 +1,9 @@
-import { Box, Container, Text, useColorMode, Image, Circle } from "@chakra-ui/react";
+import { Container, useColorMode } from "@chakra-ui/react";
 import { useRouter } from "next/dist/client/router";
 import React, { useEffect, useState } from "react";
 import ManageNotes from "../components/notes/ManageNotes";
 import CreateBookSyllabus from "../components/syllabus/CreateBookSyllabus";
 import LayoutWithTopNavbar from "../layout/LayoutWithTopNavbar";
-import { ilog } from "../lib/mylog";
 import { supabase } from "../lib/supabaseClient";
 import { useAuthContext } from "../state/Authcontext";
 import { useAppContext } from "../state/state";
@@ -17,13 +16,7 @@ type ProfileListProps = {
 };
 
 const Home: React.FC<ProfileListProps> = ({ data }) => {
-  const router = useRouter();
-  const appContext = useAppContext();
-  const { toggleColorMode } = useColorMode();
-  const [childData, setChildData] = useState<BookResponse | undefined>();
-
-  const { profile } = useAuthContext();
-
+  const router = useRouter(); 
   const navigateTo = (pathname: string) => {
     router.push({
       pathname: pathname,
@@ -48,12 +41,12 @@ const Home: React.FC<ProfileListProps> = ({ data }) => {
     }
   };
   useEffect(() => {
-    supabaseTest();
+    // supabaseTest();
   },[]);
   return (
     <Container maxW="full" px={{ base: "2", sm: "4", md: "8" }}>
-      <ManageNotes />
-      {/* <CreateBookSyllabus /> */}
+      {/* <ManageNotes /> */}
+      <CreateBookSyllabus />
     </Container>
   );
 };
