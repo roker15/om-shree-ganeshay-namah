@@ -42,6 +42,7 @@
     "suneditor": "^2.43.6",
     "suneditor-react": "^3.4.0",
     "swr": "^1.2.1",
+    "typewriter-effect": "^2.18.2",
     "uuid": "^8.3.2",
     "yarn": "^1.22.17"
   },
