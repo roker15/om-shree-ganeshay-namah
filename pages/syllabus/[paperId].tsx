@@ -44,7 +44,8 @@ const Syllabus: React.FC<ProfileListProps> = ({ array }) => {
           {array
             .sort((a, b) => a.name!.sequence! - b.name!.sequence!)
             .map((entry) => {
-              return (<></>
+              return (
+                <></>
 
               // <>
               //  <Tr key={entry.name?.id}>

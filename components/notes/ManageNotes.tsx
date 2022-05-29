@@ -33,6 +33,7 @@ import { supabase } from "../../lib/supabaseClient";
 import { useAuthContext } from "../../state/Authcontext";
 import { BookResponse, BookSyllabus } from "../../types/myTypes";
 import { definitions } from "../../types/supabase";
+import AnimatedText from "../AnimatedText";
 import BookFilter from "../syllabus/BookFilter";
 import Notes from "./Notes";
 import { NotesSharing } from "./NotesSharing";
@@ -301,7 +302,7 @@ const ManageNotes = () => {
             ></SharedNotesPanel>
           </GridItem>
         </Grid>
-      ) : null}
+      ) : <AnimatedText/>}
 
       {/* </Flex> */}
     </div>

@@ -1,6 +1,7 @@
 import { Container, useColorMode } from "@chakra-ui/react";
 import { useRouter } from "next/dist/client/router";
 import React, { useEffect, useState } from "react";
+import AnimatedText from "../components/AnimatedText";
 import ManageNotes from "../components/notes/ManageNotes";
 import CreateBookSyllabus from "../components/syllabus/CreateBookSyllabus";
 import LayoutWithTopNavbar from "../layout/LayoutWithTopNavbar";
@@ -45,8 +46,9 @@ const Home: React.FC<ProfileListProps> = ({ data }) => {
   },[]);
   return (
     <Container maxW="full" px={{ base: "2", sm: "4", md: "8" }}>
-      {/* <ManageNotes /> */}
-      <CreateBookSyllabus />
+      <ManageNotes />
+      {/* <AnimatedText/> */}
+      {/* <CreateBookSyllabus /> */}
     </Container>
   );
 };
