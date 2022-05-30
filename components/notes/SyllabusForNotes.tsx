@@ -3,7 +3,10 @@ import { groupBy } from "lodash";
 import React, { useEffect, useState } from "react";
 import { MdAdd, MdDelete, MdLightMode } from "react-icons/md";
 import { useGetSyllabusByBookId } from "../../customHookes/networkHooks";
+import { supabase } from "../../lib/supabaseClient";
+import { useAuthContext } from "../../state/Authcontext";
 import { BookResponse, BookSyllabus } from "../../types/myTypes";
+import { definitions } from "../../types/supabase";
 
 interface Props {
   book: BookResponse | undefined;
@@ -14,6 +17,7 @@ const Syllabus: React.FC<Props> = ({ book, changeParentProps }) => {
   const { data, isLoading } = useGetSyllabusByBookId(book ? book.id : undefined);
   const [toggle, setToogle] = useState(-100);
   const [selectedSubheading, setSelectedSubheading] = useState<number | undefined>();
+  const {profile} = useAuthContext();
   const grouped = groupBy(data, (x) => [x.heading_sequence, x.heading_id, x.heading]);
   const handleSyllabusClick = (x: BookSyllabus) => {
     setSelectedSubheading(x.subheading_id);
@@ -40,7 +44,7 @@ const Syllabus: React.FC<Props> = ({ book, changeParentProps }) => {
               <Flex align="baseline" justifyContent="left" role="group" my="2">
                 <IconButton
                   size="14px"
-                  color={toggle === value[0].heading_id ? "green.400":"green.400"}
+                  color={toggle === value[0].heading_id ? "green.400" : "green.400"}
                   variant="ghost"
                   mr="0.5"
                   mt="2"
@@ -60,6 +64,7 @@ const Syllabus: React.FC<Props> = ({ book, changeParentProps }) => {
                 .sort((a, b) => a.subheading_sequence - b.subheading_sequence)
                 .map((x) => (
                   <Flex
+                    alignItems="center"
                     my="2"
                     ml="4"
                     key={x.subheading_id}
@@ -71,7 +76,7 @@ const Syllabus: React.FC<Props> = ({ book, changeParentProps }) => {
                       color={selectedSubheading === x.subheading_id ? "white" : "null"}
                       bg={selectedSubheading === x.subheading_id ? "green.400" : "null"}
                       onClick={() => handleSyllabusClick(x)}
-                      align="start"
+                      // align="start"
                       casing="capitalize"
                       as="label"
                       fontSize="14px"
@@ -79,6 +84,7 @@ const Syllabus: React.FC<Props> = ({ book, changeParentProps }) => {
                       <Link>{x.subheading}</Link>
                     </Text>
                     {/* </Button> */}
+                    {profile && profile.id?<ArticleCounter a={x.subheading_id} b={profile.id}/>:null}
                   </Flex>
                 ))}
             </Box>
@@ -88,3 +94,21 @@ const Syllabus: React.FC<Props> = ({ book, changeParentProps }) => {
   );
 };
 export default Syllabus;
+
+export const ArticleCounter = ({ a, b }: { a: number; b: string }) => {
+  const [count, setCount] = useState<number | undefined>(undefined);
+  const getArticleCount = async () => {
+    const { data, error, count } = await supabase
+      .from<definitions["books_articles"]>("books_articles")
+      .select("*", { count: "exact", head: true })
+      .match({ books_subheadings_fk: a, created_by: b });
+    if (count) {
+      setCount(count);
+    }
+  };
+  useEffect(() => {
+    getArticleCount();
+  }, []);
+
+  return <Flex alignItems={"center"}  pl="2"><Text color="crimson" as="label">{count}</Text></Flex>;
+};
