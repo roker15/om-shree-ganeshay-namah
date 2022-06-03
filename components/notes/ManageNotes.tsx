@@ -184,36 +184,39 @@ const ManageNotes = () => {
             {selectedSubheading?.subheadingId ? (
               <NotesSharing subheadingId={selectedSubheading?.subheadingId}></NotesSharing>
             ) : null}
-
-            {isPostPublic === "loading" ? (
-              <CircularProgress isIndeterminate size="20px" color="green.400" />
-            ) : selectedSubheading !== undefined ? (
-              <Flex justifyContent="end" alignItems="center">
-                <Text justifyContent="center" as="label" htmlFor="email-alerts" px="2" textTransform="capitalize">
-                  {isPostPublic ? "Make Private" : "Make Public"}
-                </Text>
-                <Switch
-                  size="sm"
-                  colorScheme="whatsapp"
-                  // defaultChecked={isPostPublic}
-                  isChecked={isPostPublic as boolean}
-                  onChange={(e: ChangeEvent<HTMLInputElement>) => updateSharingStatus(e.target.checked)}
-                />
-                <Checkbox
-                  size="sm"
-                  mx="4"
-                  display={isPostPublic ? "inline-flex" : "none"}
-                  colorScheme={"whatsapp"}
-                  textTransform={"capitalize"}
-                  isChecked={isPostCopiable}
-                  onChange={(e) => handleCopyCheckbox(e.target.checked)}
-                >
-                  <Text textTransform="capitalize" as="label">
-                    Allow copy
+            <Flex h="6">
+              {isPostPublic === "loading" ? (
+                <CircularProgress isIndeterminate size="20px" color="green.400" />
+              ) : selectedSubheading !== undefined ? (
+                <Flex justifyContent="end" alignItems="center">
+                  {/* <Box bg="aqua"> */}
+                  <Text justifyContent="center" as="label" htmlFor="email-alerts" px="2" textTransform="capitalize">
+                    {isPostPublic ? "Make Private" : "Make Public"}
                   </Text>
-                </Checkbox>
-              </Flex>
-            ) : null}
+                  <Switch
+                    size="sm"
+                    colorScheme="whatsapp"
+                    // defaultChecked={isPostPublic}
+                    isChecked={isPostPublic as boolean}
+                    onChange={(e: ChangeEvent<HTMLInputElement>) => updateSharingStatus(e.target.checked)}
+                  />
+                  <Checkbox
+                    size="sm"
+                    mx="4"
+                    display={isPostPublic ? "inline-flex" : "none"}
+                    colorScheme={"whatsapp"}
+                    textTransform={"capitalize"}
+                    isChecked={isPostCopiable}
+                    onChange={(e) => handleCopyCheckbox(e.target.checked)}
+                  >
+                    <Text textTransform="capitalize" as="label">
+                      Allow copy
+                    </Text>
+                  </Checkbox>
+                  {/* </Box> */}
+                </Flex>
+              ) : null}
+            </Flex>
           </HStack>
         </Flex>
 
@@ -262,14 +265,15 @@ const ManageNotes = () => {
                   </Text>
                 </Center>
                 {selectedSubheading ? (
-                  <Box  mt="4" >
-                    <Text p="2" as="span" bg="blackAlpha.700" fontSize="14px"color="gray.100">
+                  <Box mt="4">
+                    <Text p="2" as="span" bg="blackAlpha.700" fontSize="14px" color="gray.100">
                       {"Notes by : " + selectedSubheading?.ownerName}
                     </Text>
                   </Box>
                 ) : null}
                 <Box>
                   <Notes
+                    subjectId={book.subject_fk.id}
                     subheadingid={selectedSubheading?.subheadingId}
                     notesCreator={selectedSubheading?.creatorId}
                     changeParentProps={() => console.log("")}
@@ -302,7 +306,9 @@ const ManageNotes = () => {
             ></SharedNotesPanel>
           </GridItem>
         </Grid>
-      ) : <AnimatedText/>}
+      ) : (
+        <AnimatedText />
+      )}
 
       {/* </Flex> */}
     </div>

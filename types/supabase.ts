@@ -285,6 +285,7 @@ export interface paths {
           sequence?: parameters["rowFilter.books_articles.sequence"];
           copied_from_userid?: parameters["rowFilter.books_articles.copied_from_userid"];
           copied_from_articleid?: parameters["rowFilter.books_articles.copied_from_articleid"];
+          current_affair_tags?: parameters["rowFilter.books_articles.current_affair_tags"];
           /** Filtering Columns */
           select?: parameters["select"];
           /** Ordering */
@@ -352,6 +353,7 @@ export interface paths {
           sequence?: parameters["rowFilter.books_articles.sequence"];
           copied_from_userid?: parameters["rowFilter.books_articles.copied_from_userid"];
           copied_from_articleid?: parameters["rowFilter.books_articles.copied_from_articleid"];
+          current_affair_tags?: parameters["rowFilter.books_articles.current_affair_tags"];
         };
         header: {
           /** Preference */
@@ -383,6 +385,7 @@ export interface paths {
           sequence?: parameters["rowFilter.books_articles.sequence"];
           copied_from_userid?: parameters["rowFilter.books_articles.copied_from_userid"];
           copied_from_articleid?: parameters["rowFilter.books_articles.copied_from_articleid"];
+          current_affair_tags?: parameters["rowFilter.books_articles.current_affair_tags"];
         };
         body: {
           /** books_articles */
@@ -3130,14 +3133,21 @@ export interface definitions {
      * This is a Foreign Key to `profiles.id`.<fk table='profiles' column='id'/>
      */
     owned_by: string;
-    /** Format: boolean */
+    /**
+     * Format: boolean
+     * @default false
+     */
     ispublic?: boolean;
     /**
      * Format: boolean
      * @description allow others to copy
+     * @default false
      */
     allow_copy?: boolean;
-    /** Format: boolean */
+    /**
+     * Format: boolean
+     * @default false
+     */
     allow_edit?: boolean;
     /** Format: text */
     sharedwith_email?: string;
@@ -3211,6 +3221,8 @@ export interface definitions {
     copied_from_userid?: string;
     /** Format: bigint */
     copied_from_articleid?: number;
+    /** Format: ARRAY */
+    current_affair_tags?: unknown[];
   };
   books_board_or_university: {
     /**
@@ -3545,7 +3557,10 @@ export interface definitions {
     updated_at?: string;
     /** Format: text */
     paper_name?: string;
-    /** Format: boolean */
+    /**
+     * Format: boolean
+     * @default false
+     */
     is_multiple_subjects?: boolean;
     /**
      * Format: bigint
@@ -4034,6 +4049,8 @@ export interface parameters {
   "rowFilter.books_articles.copied_from_userid": string;
   /** Format: bigint */
   "rowFilter.books_articles.copied_from_articleid": string;
+  /** Format: ARRAY */
+  "rowFilter.books_articles.current_affair_tags": string;
   /** @description books_board_or_university */
   "body.books_board_or_university": definitions["books_board_or_university"];
   /** Format: bigint */

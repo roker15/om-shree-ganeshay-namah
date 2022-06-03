@@ -73,7 +73,8 @@ export function useGetPublicNotesListBySubheading(subheadingId?: number) {
     await supabase
       .from<definitions["books_article_sharing"]>("books_article_sharing")
       .select(`*`)
-      .eq("books_subheadings_fk", subheadingId).eq("ispublic",true)
+      .eq("books_subheadings_fk", subheadingId)
+      .eq("ispublic", true)
       .neq("owned_by", profile?.id as string);
 
   const cacheOptions = {
@@ -140,7 +141,8 @@ export function useGetUserArticles(subheadingId: number | undefined, userid: str
           article_english,
           article_audio_link,
           created_by,
-          sequence
+          sequence,
+          current_affair_tags
     `
         )
         .eq("created_by", userid)
