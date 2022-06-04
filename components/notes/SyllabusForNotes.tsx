@@ -17,7 +17,7 @@ const Syllabus: React.FC<Props> = ({ book, changeParentProps }) => {
   const { data, isLoading } = useGetSyllabusByBookId(book ? book.id : undefined);
   const [toggle, setToogle] = useState(-100);
   const [selectedSubheading, setSelectedSubheading] = useState<number | undefined>();
-  const {profile} = useAuthContext();
+  const { profile } = useAuthContext();
   const grouped = groupBy(data, (x) => [x.heading_sequence, x.heading_id, x.heading]);
   const handleSyllabusClick = (x: BookSyllabus) => {
     setSelectedSubheading(x.subheading_id);
@@ -84,7 +84,7 @@ const Syllabus: React.FC<Props> = ({ book, changeParentProps }) => {
                       <Link>{x.subheading}</Link>
                     </Text>
                     {/* </Button> */}
-                    {profile && profile.id?<ArticleCounter a={x.subheading_id} b={profile.id}/>:null}
+                    {profile && profile.id ? <ArticleCounter subheadingId={x.subheading_id} creatorId={profile.id} /> : null}
                   </Flex>
                 ))}
             </Box>
@@ -95,13 +95,13 @@ const Syllabus: React.FC<Props> = ({ book, changeParentProps }) => {
 };
 export default Syllabus;
 
-export const ArticleCounter = ({ a, b }: { a: number; b: string }) => {
+export const ArticleCounter = ({ subheadingId, creatorId }: { subheadingId: number; creatorId: string }) => {
   const [count, setCount] = useState<number | undefined>(undefined);
   const getArticleCount = async () => {
     const { data, error, count } = await supabase
       .from<definitions["books_articles"]>("books_articles")
       .select("*", { count: "exact", head: true })
-      .match({ books_subheadings_fk: a, created_by: b });
+      .match({ books_subheadings_fk: subheadingId, created_by: creatorId });
     if (count) {
       setCount(count);
     }
@@ -110,5 +110,12 @@ export const ArticleCounter = ({ a, b }: { a: number; b: string }) => {
     getArticleCount();
   }, []);
 
-  return <Flex alignItems={"center"}  pl="2"><Text color="crimson" as="label">{count}</Text></Flex>;
+  return (
+    <Flex alignItems={"center"} pl="2">
+      <Text color="crimson" as="label">
+        {count}
+      </Text>
+    </Flex>
+  );
 };
+

@@ -31,9 +31,13 @@ import { BASE_URL } from "../../lib/constants";
 import { elog } from "../../lib/mylog";
 import { supabase } from "../../lib/supabaseClient";
 import { useAuthContext } from "../../state/Authcontext";
+import { useNoteContext } from "../../state/NoteContext";
 import { BookResponse, BookSyllabus } from "../../types/myTypes";
 import { definitions } from "../../types/supabase";
 import AnimatedText from "../AnimatedText";
+import ManageCurrentAffair from "../CurrentAffair/ManageCurrentAffair";
+import Tags from "../CurrentAffair/Tags";
+
 import BookFilter from "../syllabus/BookFilter";
 import Notes from "./Notes";
 import { NotesSharing } from "./NotesSharing";
@@ -41,6 +45,7 @@ import SharedNotesPanel from "./SharedNotesPanel";
 import SyllabusForNotes from "./SyllabusForNotes";
 
 const ManageNotes = () => {
+  const { isTagSearchActive } = useNoteContext();
   const [book, setBook] = useState<BookResponse | undefined>();
   const [selectedSubheading, setSelectedSubheading] = useState<
     | {
@@ -173,72 +178,81 @@ const ManageNotes = () => {
     <div>
       <Box px={{ base: "0", sm: "2", md: "44" }} pb="8">
         <BookFilter setParentProps={updateBookProps}></BookFilter>
-        <Flex justifyContent="end" alignItems="center" mt="4">
-          <HStack
-            borderRadius="full"
-            // bg="gray.200"
-            p="2"
-            align="center"
-            display={selectedSubheading?.creatorId !== profile?.id ? "none" : "undefined"}
-          >
-            {selectedSubheading?.subheadingId ? (
-              <NotesSharing subheadingId={selectedSubheading?.subheadingId}></NotesSharing>
-            ) : null}
-            <Flex h="6">
-              {isPostPublic === "loading" ? (
-                <CircularProgress isIndeterminate size="20px" color="green.400" />
-              ) : selectedSubheading !== undefined ? (
-                <Flex justifyContent="end" alignItems="center">
-                  {/* <Box bg="aqua"> */}
-                  <Text justifyContent="center" as="label" htmlFor="email-alerts" px="2" textTransform="capitalize">
-                    {isPostPublic ? "Make Private" : "Make Public"}
-                  </Text>
-                  <Switch
-                    size="sm"
-                    colorScheme="whatsapp"
-                    // defaultChecked={isPostPublic}
-                    isChecked={isPostPublic as boolean}
-                    onChange={(e: ChangeEvent<HTMLInputElement>) => updateSharingStatus(e.target.checked)}
-                  />
-                  <Checkbox
-                    size="sm"
-                    mx="4"
-                    display={isPostPublic ? "inline-flex" : "none"}
-                    colorScheme={"whatsapp"}
-                    textTransform={"capitalize"}
-                    isChecked={isPostCopiable}
-                    onChange={(e) => handleCopyCheckbox(e.target.checked)}
-                  >
-                    <Text textTransform="capitalize" as="label">
-                      Allow copy
-                    </Text>
-                  </Checkbox>
-                  {/* </Box> */}
-                </Flex>
-              ) : null}
-            </Flex>
-          </HStack>
-        </Flex>
 
-        <Sticky>
-          {/* <div style={{ zIndex : 2147483657}}> */}
-          <Flex justifyContent="space-between" display={{ base: "undefined", sm: "undefined", md: "none" }}>
-            <DrawerExample>
-              <SyllabusForNotes book={book} changeParentProps={changeSelectedSubheading}></SyllabusForNotes>
-            </DrawerExample>
-            <DrawerExample>
-              <SharedNotesPanel
-                subheadingid={selectedSubheading?.subheadingId}
-                changeParentProps={changeSelectedSharedNote}
-              ></SharedNotesPanel>
-            </DrawerExample>
-          </Flex>
-          {/* </div> */}
-        </Sticky>
+        {isTagSearchActive ? (
+          null
+        ) : (
+          <>
+            <Flex justifyContent="end" alignItems="center" mt="4">
+              <HStack
+                borderRadius="full"
+                // bg="gray.200"
+                p="2"
+                align="center"
+                display={selectedSubheading?.creatorId !== profile?.id ? "none" : "undefined"}
+              >
+                {selectedSubheading?.subheadingId ? (
+                  <NotesSharing subheadingId={selectedSubheading?.subheadingId}></NotesSharing>
+                ) : null}
+                <Flex h="6">
+                  {isPostPublic === "loading" ? (
+                    <CircularProgress isIndeterminate size="20px" color="green.400" />
+                  ) : selectedSubheading !== undefined ? (
+                    <Flex justifyContent="end" alignItems="center">
+                      {/* <Box bg="aqua"> */}
+                      <Text justifyContent="center" as="label" htmlFor="email-alerts" px="2" textTransform="capitalize">
+                        {isPostPublic ? "Make Private" : "Make Public"}
+                      </Text>
+                      <Switch
+                        size="sm"
+                        colorScheme="whatsapp"
+                        // defaultChecked={isPostPublic}
+                        isChecked={isPostPublic as boolean}
+                        onChange={(e: ChangeEvent<HTMLInputElement>) => updateSharingStatus(e.target.checked)}
+                      />
+                      <Checkbox
+                        size="sm"
+                        mx="4"
+                        display={isPostPublic ? "inline-flex" : "none"}
+                        colorScheme={"whatsapp"}
+                        textTransform={"capitalize"}
+                        isChecked={isPostCopiable}
+                        onChange={(e) => handleCopyCheckbox(e.target.checked)}
+                      >
+                        <Text textTransform="capitalize" as="label">
+                          Allow copy
+                        </Text>
+                      </Checkbox>
+                      {/* </Box> */}
+                    </Flex>
+                  ) : null}
+                </Flex>
+              </HStack>
+            </Flex>
+
+            <Sticky>
+              {/* <div style={{ zIndex : 2147483657}}> */}
+              <Flex justifyContent="space-between" display={{ base: "undefined", sm: "undefined", md: "none" }}>
+                <DrawerExample>
+                  <SyllabusForNotes book={book} changeParentProps={changeSelectedSubheading}></SyllabusForNotes>
+                </DrawerExample>
+                <DrawerExample>
+                  <SharedNotesPanel
+                    subheadingid={selectedSubheading?.subheadingId}
+                    changeParentProps={changeSelectedSharedNote}
+                  ></SharedNotesPanel>
+                </DrawerExample>
+              </Flex>
+              {/* </div> */}
+            </Sticky>
+          </>
+        )}
       </Box>
 
       {/* <Flex my="16" justifyContent="flex-start"> */}
-      {book ? (
+      {isTagSearchActive ? (
+        <div><ManageCurrentAffair></ManageCurrentAffair></div>
+      ) : book ? (
         <Grid templateColumns="repeat(10, 1fr)">
           {/* <Sticky> */}
 

@@ -48,6 +48,7 @@ import { colors, currentAffairTags, sunEditorButtonList, sunEditorfontList } fro
 import { elog } from "../../lib/mylog";
 import { supabase } from "../../lib/supabaseClient";
 import { useAuthContext } from "../../state/Authcontext";
+import { useNoteContext } from "../../state/NoteContext";
 import { definitions } from "../../types/supabase";
 import { customToast } from "../CustomToast";
 import DeleteConfirmation from "../syllabus/DeleteConfirmation";
@@ -74,7 +75,7 @@ const MyNotes: React.FC<Props> = ({ subjectId, subheadingid, notesCreator, chang
   const [selectedArticleForEdit, setSelectedArticleForEdit] = useState<number | undefined>();
   const [isArticleCreating, setIsArticleCreating] = useState<"CREATING" | "EDITING" | "NONE">("NONE");
   const { mutate } = useSWRConfig();
-
+  const { setIsTagSearchActive, setTagsArray, tagsArray } = useNoteContext();
   const SunEditor = dynamic(() => import("suneditor-react"), {
     ssr: false,
   });
@@ -154,9 +155,21 @@ const MyNotes: React.FC<Props> = ({ subjectId, subheadingid, notesCreator, chang
                             const element = currentAffairTags[index];
                             if (element.id == x1) {
                               return (
-                                <Tag key={element.id} onClick={() => alert(element.id)}bg="gray.50" px="1.5" fontWeight={"normal"} fontSize="xs" mx="2">
+                                <Button
+                                  size="xs"
+                                  key={element.id}
+                                  onClick={() => {
+                                    setIsTagSearchActive(true);
+                                    setTagsArray!([element.id])
+                                  }}
+                                  bg="gray.50"
+                                  px="1.5"
+                                  // fontWeight={"normal"}
+                                  // fontSize="xs"
+                                  mx="2"
+                                >
                                   {element.tag}
-                                </Tag>
+                                </Button>
                               );
                             }
                           }
@@ -467,7 +480,7 @@ const SunEditor = dynamic(() => import("suneditor-react"), {
   ssr: false,
 });
 
-const SuneditorForNotesMaking: React.FC<SuneditorForNotesMakingProps> = ({ article, language, isEditable }) => {
+export const SuneditorForNotesMaking: React.FC<SuneditorForNotesMakingProps> = ({ article, language, isEditable }) => {
   const [editorMode, setEditorMode] = React.useState("READ");
   const [isAutosaveOn, setIsAutosaveOn] = React.useState(false);
   const [fontSize, setFontSize] = React.useState("font-family: arial; font-size: 14px;");

@@ -1,6 +1,7 @@
 import useSWR from "swr";
 import { supabase } from "../lib/supabaseClient";
 import { useAuthContext } from "../state/Authcontext";
+import { useNoteContext } from "../state/NoteContext";
 import { BookResponse } from "../types/myTypes";
 import { definitions } from "../types/supabase";
 
@@ -156,6 +157,32 @@ export function useGetUserArticles(subheadingId: number | undefined, userid: str
   return {
     // sharedPost_SUP_ERR:data?.error,
     data: data?.data,
+    supError: data?.error,
+    isLoading: !error && !data,
+    swrError: error,
+  };
+}
+export function useGetUserArticlesFromTags(userid: string | undefined, tagsArray: number[] | undefined) {
+  const { data, error } = useSWR(
+    userid === undefined ? null : [`/get-user-articles-bytags/${userid}/${tagsArray}`],
+    async () =>
+      await supabase
+        .from<definitions["books_articles"]>("books_articles")
+        .select(`*`,{ count: 'exact' })
+        .eq("created_by", userid)
+        .contains("current_affair_tags", tagsArray as number[]),
+    {
+      revalidateIfStale: true,
+      revalidateOnFocus: false,
+      revalidateOnReconnect: false,
+    }
+  );
+  console.log("database call ja raha hai")
+  console.log(data?data!.data:"no data")
+  return {
+    // sharedPost_SUP_ERR:data?.error,
+    data: data?.data,
+    count:data?.count,
     supError: data?.error,
     isLoading: !error && !data,
     swrError: error,
