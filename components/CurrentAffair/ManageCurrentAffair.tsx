@@ -4,7 +4,8 @@ import { FiTrendingUp } from "react-icons/fi";
 import { useGetUserArticlesFromTags } from "../../customHookes/networkHooks";
 import { useAuthContext } from "../../state/Authcontext";
 import { useNoteContext } from "../../state/NoteContext";
-import { SuneditorForNotesMaking } from "../notes/MyNotes";
+import SuneditorForNotesMaking from "../editor/SuneditorForNotesMaking";
+
 import Tags from "./Tags";
 
 export default function ManageCurrentAffair() {
