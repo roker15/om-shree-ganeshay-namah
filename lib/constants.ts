@@ -2,9 +2,9 @@ export const NEXT_PUBLIC_SUPABASE_URL = process.env.NEXT_PUBLIC_SUPABASE_URL;
 export const NEXT_PUBLIC_SUPABASE_ANON_KEY = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY;
 // export const BASE_URL = "http://localhost:3000"
 // export const BASE_URL = "https://om-shree-ganeshay-namah-git-development4-roker15.vercel.app"
-export const BASE_URL = "http://localhost:3000";
+// export const BASE_URL = "http://localhost:3000";
 // export const BASE_URL = "https://qlook.in";
-// export const BASE_URL = "https://jionote.com";
+export const BASE_URL = "https://jionote.com";
 // export const BASE_URL = "https://om-shree-ganeshay-namah-git-development4-start-roker15.vercel.app/";
 
 // npx openapi-typescript https://hbvffqslxssdbkdxfqop.supabase.co/rest/v1/?apikey=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJyb2xlIjoiYW5vbiIsImlhdCI6MTYzMDIyNjQxOCwiZXhwIjoxOTQ1ODAyNDE4fQ.CCZ3y_Mzp5HjQJnuEXqL5Wq4tk2ZjZj97gVkODFYNh4 --output types/supabase.ts
@@ -118,6 +118,10 @@ export const currentAffairTags: { id: number; tag: string }[] = [
   { id: 6, tag: "National" },
   { id: 7, tag: "International" },
 
+  { id: 201, tag: "Previous year Questions ⭐" },
+  { id: 202, tag: "Model Questions" },
+
+
 
   { id: 8, tag: "Indian Heritage, Art and Culture ⭐" },
 
@@ -140,7 +144,8 @@ export const currentAffairTags: { id: number; tag: string }[] = [
   { id: 21, tag: "global groupings and agreements"},
   { id: 22, tag: "regional groupings and agreements"},
   { id: 23, tag: "Bilateral groupings and agreements"},
-  { id: 24, tag: "Important International institutions, agencies and fora- their structure, mandate"},
+  { id: 24, tag: "Important International institutions, agencies and fora- their structure, mandate" },
+  { id: 601, tag: "United Nations & specialized agencies" },
   
   
   { id: 25, tag: "Science & Technology ⭐" },

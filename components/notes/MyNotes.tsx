@@ -422,8 +422,8 @@ const ArticleForm: React.FC<ArticleFormProps> = ({
           <VStack py="4">
             <Text bg="orange.100" fontSize="xs">
               {" "}
-              # Select Tags from below. Tags marked ⭐ are main Topics, others are subtopics. All topics taken direcly from
-              UPSC notification
+              # Select Tags from below. Tags marked ⭐ are main Topics, others are subtopics. Topics taken from
+              UPSC notification. Some Extra Tags are for segregation purposes.
             </Text>
             <Grid templateColumns={{ base: "repeat(2, 1fr)", sm: "repeat(3, 1fr)" }} gap={"1"}>
               {currentAffairTags.map((value) => (
