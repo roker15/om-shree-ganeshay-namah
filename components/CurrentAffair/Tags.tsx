@@ -21,7 +21,7 @@ const Tags: React.FC<Props> = ({ book, changeParentProps }) => {
     <Box>
       <Flex flexDirection={"column"} maxW="400px">
         {currentAffairTags.map((value) => (
-          <Flex>
+          <Flex key={value.id}>
             <Checkbox
               px="2"
               colorScheme={"blue"}
