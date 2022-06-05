@@ -1,6 +1,7 @@
 import { Box, Radio, RadioGroup, Select, Stack, Text } from "@chakra-ui/react";
 import React, { useEffect } from "react";
 import { useGetBooks, useGetSyllabusByBookId } from "../../customHookes/networkHooks";
+import { useNoteContext } from "../../state/NoteContext";
 import { BookResponse } from "../../types/myTypes";
 import Syllabus from "./Syllabus";
 
@@ -21,6 +22,7 @@ const BookFilter: React.FC<{ setParentProps: (x: BookResponse | undefined) => vo
   const [subjectList, setSubjectList] = React.useState<BookResponse[] | null>([]);
   const [selectedSubject, setSelectedSubject] = React.useState<number | undefined>();
   const [bookList, setBookList] = React.useState<BookResponse[] | null>([]);
+  const { setIsTagSearchActive} = useNoteContext();
   useEffect(() => {
     setClassList(
       data
@@ -111,6 +113,7 @@ const BookFilter: React.FC<{ setParentProps: (x: BookResponse | undefined) => vo
           placeholder={value === "7" ? "Select Syllabus" :"Select Book"}
           onChange={(e) => {
             setParentProps!(data?.find((item) => item.id === Number(e.target.value)));
+            setIsTagSearchActive(false);
           }}
         >
           {bookList?.map((x) => {

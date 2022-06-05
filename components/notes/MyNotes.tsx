@@ -3,9 +3,12 @@ import {
   Button,
   Center,
   Checkbox,
+  Container,
+  Divider,
   Flex,
   FormControl,
   FormErrorMessage,
+  Grid,
   HStack,
   IconButton,
   Input,
@@ -14,15 +17,18 @@ import {
   Select,
   SkeletonCircle,
   SkeletonText,
+  Spacer,
   Stack,
   Tab,
   TabList,
   TabPanel,
   TabPanels,
   Tabs,
+  Tag,
   Text,
   Tooltip,
   VStack,
+  Wrap,
 } from "@chakra-ui/react";
 import katex from "katex";
 import "katex/dist/katex.min.css";
@@ -38,16 +44,18 @@ import "suneditor/dist/css/suneditor.min.css"; // Import Sun Editor's CSS File
 import SunEditorCore from "suneditor/src/lib/core";
 import { useSWRConfig } from "swr";
 import { useGetUserArticles } from "../../customHookes/networkHooks";
-import { colors, sunEditorButtonList, sunEditorfontList } from "../../lib/constants";
+import { colors, currentAffairTags, sunEditorButtonList, sunEditorfontList } from "../../lib/constants";
 import { elog } from "../../lib/mylog";
 import { supabase } from "../../lib/supabaseClient";
 import { useAuthContext } from "../../state/Authcontext";
+import { useNoteContext } from "../../state/NoteContext";
 import { definitions } from "../../types/supabase";
 import { customToast } from "../CustomToast";
 import DeleteConfirmation from "../syllabus/DeleteConfirmation";
 import { UiForImageUpload } from "../UiForImageUpload";
 // import "../../styles/suneditor.module.css";
 interface Props {
+  subjectId: number | undefined;
   subheadingid: number | undefined;
   notesCreator: string | undefined;
   isCopyable: boolean | undefined;
@@ -57,15 +65,17 @@ interface Props {
 type Inputs = {
   articleTitle: string;
   sequence: number;
+  tags: unknown[] | undefined;
+  // tags1: string | undefined;
 };
-const MyNotes: React.FC<Props> = ({ subheadingid, notesCreator, changeParentProps, isCopyable, isEditable }) => {
+const MyNotes: React.FC<Props> = ({ subjectId, subheadingid, notesCreator, changeParentProps, isCopyable, isEditable }) => {
   const { profile } = useAuthContext();
   const { data: articles, isLoading: isArticleLoading } = useGetUserArticles(subheadingid, notesCreator);
   const [isLoadingCopyButton, setIsLoadingCopyButton] = useState<boolean | undefined>(false);
   const [selectedArticleForEdit, setSelectedArticleForEdit] = useState<number | undefined>();
   const [isArticleCreating, setIsArticleCreating] = useState<"CREATING" | "EDITING" | "NONE">("NONE");
   const { mutate } = useSWRConfig();
-
+  const { setIsTagSearchActive, setTagsArray, tagsArray } = useNoteContext();
   const SunEditor = dynamic(() => import("suneditor-react"), {
     ssr: false,
   });
@@ -135,11 +145,41 @@ const MyNotes: React.FC<Props> = ({ subheadingid, notesCreator, changeParentProp
               <Flex role={"group"} align="center">
                 {/* <Badge> */}
                 <VStack>
-                  <Text bg="orange.100" p="2" fontSize="16px" casing="capitalize" align="left">
+                  <Text alignSelf={"baseline"} bg="orange.100" p="2" fontSize="16px" casing="capitalize" align="left">
                     <Text as="b">Article Name :- </Text> {x.article_title}
                   </Text>
+                  <Wrap spacing="5px">
+                    {x.current_affair_tags
+                      ? (x.current_affair_tags as number[]).map((x1) => {
+                          for (let index = 0; index < currentAffairTags.length; index++) {
+                            const element = currentAffairTags[index];
+                            if (element.id == x1) {
+                              return (
+                                <Button
+                                  size="xs"
+                                  key={element.id}
+                                  onClick={() => {
+                                    setIsTagSearchActive(true);
+                                    setTagsArray!([element.id])
+                                  }}
+                                  bg="gray.50"
+                                  px="1.5"
+                                  // fontWeight={"normal"}
+                                  // fontSize="xs"
+                                  mx="2"
+                                >
+                                  {element.tag}
+                                </Button>
+                              );
+                            }
+                          }
+                        })
+                      : null}
+                  </Wrap>
                   {isArticleCreating === "EDITING" && x.id === selectedArticleForEdit ? (
                     <ArticleForm
+                      tags={x.current_affair_tags}
+                      subjectId={subjectId}
                       subheadingid={subheadingid}
                       articleId={x.id}
                       articleTitle={x.article_title}
@@ -223,8 +263,13 @@ const MyNotes: React.FC<Props> = ({ subheadingid, notesCreator, changeParentProp
         <Box display={isArticleCreating === "NONE" ? "none" : "block"}>
           {/* {form()} */}
 
-          {isArticleCreating === "CREATING" ? (
-            <ArticleForm subheadingid={subheadingid} formMode={"CREATING"} x={setIsArticleCreating}></ArticleForm>
+          {isArticleCreating === "CREATING" && subheadingid ? (
+            <ArticleForm
+              subjectId={subjectId}
+              subheadingid={subheadingid}
+              formMode={"CREATING"}
+              x={setIsArticleCreating}
+            ></ArticleForm>
           ) : null}
         </Box>
         <Box display={profile?.id !== notesCreator ? "none" : "undefined"}>
@@ -253,7 +298,7 @@ const MyNotes: React.FC<Props> = ({ subheadingid, notesCreator, changeParentProp
         {/* <Tooltip label="Create New Article in This Topic" fontSize="sm"> */}
         <IconButton
           // _groupHover={{ size: "" }}
-          display={isArticleCreating === "CREATING" ? "flex" : "none"}
+          display={isArticleCreating === "CREATING" && subheadingid ? "flex" : "none"}
           _hover={{ color: " #FF1493" }}
           size="auto"
           ml="2"
@@ -275,6 +320,8 @@ const MyNotes: React.FC<Props> = ({ subheadingid, notesCreator, changeParentProp
 export default MyNotes;
 
 type ArticleFormProps = {
+  tags?: unknown[] | undefined;
+  subjectId: number | undefined;
   subheadingid: number | undefined;
   articleId?: number;
   articleTitle?: string;
@@ -284,6 +331,8 @@ type ArticleFormProps = {
   setParentProps?: (x: string) => {};
 };
 const ArticleForm: React.FC<ArticleFormProps> = ({
+  tags,
+  subjectId,
   subheadingid,
   formMode,
   articleId,
@@ -295,6 +344,7 @@ const ArticleForm: React.FC<ArticleFormProps> = ({
   const [isLoading, setIsLoading] = useState();
   const { mutate } = useSWRConfig();
   const { profile } = useAuthContext();
+  console.log("In article form" + tags);
   const {
     register,
     handleSubmit,
@@ -303,16 +353,20 @@ const ArticleForm: React.FC<ArticleFormProps> = ({
     defaultValues: {
       articleTitle: articleTitle,
       sequence: sequence,
+      // tags: [],
     },
   });
+
   const onSubmit: SubmitHandler<Inputs> = async (d) => {
     if (formMode === "CREATING") {
+      console.log("form data is", d);
       const { data, error } = await supabase.from<definitions["books_articles"]>("books_articles").insert([
         {
           article_title: d.articleTitle,
           created_by: profile?.id,
           books_subheadings_fk: subheadingid,
           sequence: d.sequence,
+          current_affair_tags: d.tags ? d.tags : [],
         },
       ]);
       if (error) {
@@ -330,6 +384,7 @@ const ArticleForm: React.FC<ArticleFormProps> = ({
           // created_by: profile?.id,
           // books_subheadings_fk: subheadingid,
           sequence: d.sequence,
+          current_affair_tags: d.tags ? d.tags : [],
         })
         .eq("id", articleId);
       if (error) {
@@ -341,25 +396,56 @@ const ArticleForm: React.FC<ArticleFormProps> = ({
     mutate([`/get-user-articles/${subheadingid}/${profile?.id}`]);
   };
   return (
-    <Flex justify="space-between">
+    <Flex justifyContent="center" alignItems={"center"}>
       <form onSubmit={handleSubmit(onSubmit)}>
-        <FormControl p="2" isInvalid={errors.articleTitle as any}>
-          <Input
-            focusBorderColor="lime"
-            placeholder="Article Title"
-            {...register("articleTitle", { required: "This is required" })}
-          />
-          <FormErrorMessage>{errors.articleTitle && errors.articleTitle.message}</FormErrorMessage>
-        </FormControl>
-        <FormControl p="2" isInvalid={errors.articleTitle as any}>
-          <Input
-            focusBorderColor="lime"
-            type="number"
-            placeholder="Article Sequence (10,20,30.. etc)"
-            {...register("sequence", { required: "This is required" })}
-          />
-          <FormErrorMessage>{errors.sequence && errors.sequence.message}</FormErrorMessage>
-        </FormControl>
+        <VStack alignItems={"center"}>
+          <FormControl p="2" isInvalid={errors.articleTitle as any} maxW="500px">
+            <Input
+              focusBorderColor="lime"
+              placeholder="Article Title"
+              {...register("articleTitle", { required: "This is required" })}
+            />
+            <FormErrorMessage>{errors.articleTitle && errors.articleTitle.message}</FormErrorMessage>
+          </FormControl>
+          <FormControl p="2" isInvalid={errors.articleTitle as any} maxW="500px">
+            <Input
+              focusBorderColor="lime"
+              type="number"
+              placeholder="Article Sequence (10,20,30.. etc)"
+              {...register("sequence", { required: "This is required" })}
+            />
+            <FormErrorMessage>{errors.sequence && errors.sequence.message}</FormErrorMessage>
+          </FormControl>
+        </VStack>
+
+        {subjectId === 60 ? (
+          <VStack py="4">
+            <Text bg="orange.100" fontSize="xs">
+              {" "}
+              # Select Tags from below. Tags marked ⭐ are main Topics, others are subtopics. Topics taken from
+              UPSC notification. Some Extra Tags are for segregation purposes.
+            </Text>
+            <Grid templateColumns={{ base: "repeat(2, 1fr)", sm: "repeat(3, 1fr)" }} gap={"1"}>
+              {currentAffairTags.map((value) => (
+                <>
+                  <Checkbox
+                    px="2"
+                    colorScheme={"blue"}
+                    defaultChecked={tags?.includes(value.id) ? true : false}
+                    size="sm"
+                    type="checkbox"
+                    value={value.id}
+                    {...register("tags")}
+                  >
+                    <Text casing="capitalize" as="label">
+                      {value.tag}
+                    </Text>
+                  </Checkbox>
+                </>
+              ))}
+            </Grid>
+          </VStack>
+        ) : null}
 
         <IconButton
           // _groupHover={{ size: "" }}
@@ -394,7 +480,7 @@ const SunEditor = dynamic(() => import("suneditor-react"), {
   ssr: false,
 });
 
-const SuneditorForNotesMaking: React.FC<SuneditorForNotesMakingProps> = ({ article, language, isEditable }) => {
+export const SuneditorForNotesMaking: React.FC<SuneditorForNotesMakingProps> = ({ article, language, isEditable }) => {
   const [editorMode, setEditorMode] = React.useState("READ");
   const [isAutosaveOn, setIsAutosaveOn] = React.useState(false);
   const [fontSize, setFontSize] = React.useState("font-family: arial; font-size: 14px;");
@@ -475,7 +561,7 @@ const SuneditorForNotesMaking: React.FC<SuneditorForNotesMakingProps> = ({ artic
             </Radio>
           </Stack>
         </RadioGroup>
-        <Flex align="center" direction={{base:"column",sm:"row"}} display={editorMode === "READ" ? "none" : "flex"}>
+        <Flex align="center" direction={{ base: "column", sm: "row" }} display={editorMode === "READ" ? "none" : "flex"}>
           <Select
             size="sm"
             px="2"

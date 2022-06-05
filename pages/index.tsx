@@ -7,6 +7,7 @@ import CreateBookSyllabus from "../components/syllabus/CreateBookSyllabus";
 import LayoutWithTopNavbar from "../layout/LayoutWithTopNavbar";
 import { supabase } from "../lib/supabaseClient";
 import { useAuthContext } from "../state/Authcontext";
+import { NoteContextWrapper } from "../state/NoteContext";
 import { useAppContext } from "../state/state";
 import { BookResponse, Papers } from "../types/myTypes";
 import PageWithLayoutType from "../types/pageWithLayout";
@@ -17,7 +18,7 @@ type ProfileListProps = {
 };
 
 const Home: React.FC<ProfileListProps> = ({ data }) => {
-  const router = useRouter(); 
+  const router = useRouter();
   const navigateTo = (pathname: string) => {
     router.push({
       pathname: pathname,
@@ -33,7 +34,7 @@ const Home: React.FC<ProfileListProps> = ({ data }) => {
          books_subheadings!inner(id,subheading)
   `
       )
-      .match({ "profiles.email": "buddyelusive@gmail.com","books_subheadings.id":24});
+      .match({ "profiles.email": "buddyelusive@gmail.com", "books_subheadings.id": 24 });
     if (error) {
       console.error("supabasetest error is " + error.message.toUpperCase);
     }
@@ -43,10 +44,12 @@ const Home: React.FC<ProfileListProps> = ({ data }) => {
   };
   useEffect(() => {
     // supabaseTest();
-  },[]);
+  }, []);
   return (
     <Container maxW="full" px={{ base: "2", sm: "4", md: "8" }}>
-      <ManageNotes />
+      <NoteContextWrapper>
+        <ManageNotes />
+      </NoteContextWrapper>
       {/* <AnimatedText/> */}
       {/* <CreateBookSyllabus /> */}
     </Container>

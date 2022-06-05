@@ -1,6 +1,7 @@
 import React, { useContext, createContext } from 'react';
 
 interface contextTypes {
+  
     // ...
 }
 
