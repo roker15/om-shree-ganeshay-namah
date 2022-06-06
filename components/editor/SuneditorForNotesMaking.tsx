@@ -1,4 +1,4 @@
-import { Box, Button, Checkbox, Flex, Radio, RadioGroup, Select, Stack, Text } from "@chakra-ui/react";
+import { Box, Button, Checkbox, Container, Flex, Radio, RadioGroup, Select, Stack, Text } from "@chakra-ui/react";
 import katex from "katex";
 import "katex/dist/katex.min.css";
 import { debounce } from "lodash";
@@ -84,155 +84,157 @@ const SuneditorForNotesMaking: React.FC<SuneditorForNotesMakingProps> = ({ artic
     }
 
     if (data) {
-      customToast({ title: "Your changes have been saved...", status: "success", isUpdating: true });
+      customToast({ title: "Updated...", status: "success", isUpdating: true });
     }
   };
+
   return (
-    <Box spellCheck="false">
-      {/* //use above attrivutes if you want to override spellcheck of browser */}
-      <Flex
-        // display={profile?.id !== article.created_by ? "none" : "undefined"}
-        display={isEditable ? "undefined" : "none"}
-        justifyContent="space-between"
-        align="center"
-        // alignItems="center"
-      >
-        <RadioGroup onChange={setEditorMode} value={editorMode}>
-          <Stack direction="row">
-            <Radio colorScheme="whatsapp" size="sm" value="READ">
-              <Text as="b" casing="capitalize">
-                Read
-              </Text>
-            </Radio>
-            <Radio colorScheme="pink" size="sm" value="EDIT">
-              <Text as="b" casing="capitalize">
-                Edit
-              </Text>
-            </Radio>
-          </Stack>
-        </RadioGroup>
-        <Flex align="center" direction={{ base: "column", sm: "row" }} display={editorMode === "READ" ? "none" : "flex"}>
-          <Select
-            size="sm"
-            px="2"
-            placeholder="Font Size"
-            onChange={(e) => {
-              setFontSize(e.target.value);
-            }}
-          >
-            <option value="font-family: arial; font-size: 14px;">small</option>
-            <option value="font-family: arial; font-size: 16px;">medium</option>
-            <option value="font-family: arial; font-size: 24px;">large</option>
-          </Select>
-          <Box pb="3">
-            <UiForImageUpload />
-          </Box>
+    <div>
+      <Box spellCheck="false">
+        {/* //use above attrivutes if you want to override spellcheck of browser */}
+        <Flex
+          // display={profile?.id !== article.created_by ? "none" : "undefined"}
+          display={isEditable ? "undefined" : "none"}
+          justifyContent="space-between"
+          align="center"
+          // alignItems="center"
+        >
+          <RadioGroup onChange={setEditorMode} value={editorMode}>
+            <Stack direction="row">
+              <Radio colorScheme="whatsapp" size="sm" value="READ">
+                <Text as="b" casing="capitalize">
+                  Read
+                </Text>
+              </Radio>
+              <Radio colorScheme="pink" size="sm" value="EDIT">
+                <Text as="b" casing="capitalize">
+                  Edit
+                </Text>
+              </Radio>
+            </Stack>
+          </RadioGroup>
+          <Flex align="center" direction={{ base: "column", sm: "row" }} display={editorMode === "READ" ? "none" : "flex"}>
+            <Select
+              size="sm"
+              px="2"
+              placeholder="Font Size"
+              onChange={(e) => {
+                setFontSize(e.target.value);
+              }}
+            >
+              <option value="font-family: arial; font-size: 14px;">small</option>
+              <option value="font-family: arial; font-size: 16px;">medium</option>
+              <option value="font-family: arial; font-size: 24px;">large</option>
+            </Select>
+            <Box pb="3">
+              <UiForImageUpload />
+            </Box>
 
-          <Button
-            onClick={() => {
-              updateArticleInDatabase(editor.current?.getContents(false));
-            }}
-            display={isAutosaveOn ? "none" : undefined}
-            size="sm"
-            // colorScheme="orange"
-            variant="ghost"
-          >
-            Save
-          </Button>
-          <Checkbox
-            colorScheme="whatsapp"
-            // color="gray.300"
-            borderColor="gray.300"
-            // isChecked={isAutosaveOn}
-            onChange={(e: ChangeEvent<HTMLInputElement>) => {
-              setIsAutosaveOn(e.target.checked);
-            }}
-          >
-            <Text casing={"capitalize"}>Autosave</Text>
-          </Checkbox>
+            <Button
+              onClick={() => {
+                updateArticleInDatabase(editor.current?.getContents(false));
+              }}
+              display={isAutosaveOn ? "none" : undefined}
+              size="sm"
+              // colorScheme="orange"
+              variant="ghost"
+            >
+              Save
+            </Button>
+            <Checkbox
+              colorScheme="whatsapp"
+              // color="gray.300"
+              borderColor="gray.300"
+              // isChecked={isAutosaveOn}
+              onChange={(e: ChangeEvent<HTMLInputElement>) => {
+                setIsAutosaveOn(e.target.checked);
+              }}
+            >
+              <Text casing={"capitalize"}>Autosave</Text>
+            </Checkbox>
+          </Flex>
         </Flex>
-      </Flex>
 
-      <EditorStyle title={editorMode === "READ" ? "READ" : "EDIT"}>
-        <SunEditor
-          getSunEditorInstance={getSunEditorInstance}
-          setDefaultStyle={fontSize}
-          // setDefaultStyle={font-family: ${fontFamily}; font-size: 14px;}
-          hideToolbar={editorMode === "READ" ? true : false}
-          defaultValue={language === "ENGLISH" ? article.article_english : article.article_hindi}
-          // key={postId}
+        <EditorStyle title={editorMode === "READ" ? "READ" : "EDIT"}>
+          {/* <Center> */}
 
-          onChange={handleOnChange}
-          readOnly={editorMode === "READ" ? true : false}
-          autoFocus={false}
-          // disable={editorMode === "READ" ? true : false}
-          setOptions={{
-            placeholder: "**** Start Writing your notes here, we will save it automatically!!!",
-            mode: "classic",
-            katex: katex,
-            colorList: colors,
-            paragraphStyles: [
-              "spaced",
-              // "neon",
-              {
-                name: "Box",
-                class: "__se__customClass",
-              },
-              {
-                name: "ph22",
-                class: "__se__taggg",
-              },
-            ],
-            textStyles: [
-              "shadow",
-              "code",
-              "translucent",
+          <SunEditor
+            getSunEditorInstance={getSunEditorInstance}
+            setDefaultStyle={fontSize}
+            // setDefaultStyle={font-family: ${fontFamily}; font-size: 14px;}
+            hideToolbar={editorMode === "READ" ? true : false}
+            defaultValue={language === "ENGLISH" ? article.article_english : article.article_hindi}
+            // key={postId}
 
-              {
-                name: "Highlighter 1",
-                style: "background-color:#FFFF88;padding: 1px;",
-                tag: "span",
-              },
-              {
-                name: "Highlighter 2",
-                style: "background-color:#CDEB8B;padding: 1px;",
-                tag: "span",
-              },
-              {
-                name: "Highlighter 3",
-                style: "background-color:#E1D5E7;padding: 1px;",
-                tag: "span",
-              },
-              {
-                name: "Highlighter 4",
-                style: "background-color:#E1D5E7;padding: 1px;padding-left: 1px",
-                // style: "background-color:#f7f3e2;padding: 1px;padding-left: 1px",
-                tag: "p",
-              },
-            ],
-            height: "100%",
-            width: "auto",
-            minWidth: "350px",
-            resizingBar: false,
-            buttonList: sunEditorButtonList,
-            formats: ["p", "div", "h1", "h2", "h3"],
-            font: sunEditorfontList,
+            onChange={handleOnChange}
+            readOnly={editorMode === "READ" ? true : false}
+            autoFocus={false}
+            // disable={editorMode === "READ" ? true : false}
+            setOptions={{
+              placeholder: "Start Typing",
+              mode: "classic",
+              katex: katex,
+              colorList: colors,
+              paragraphStyles: [
+                "spaced",
 
-            fontSize: [12, 14, 16, 20],
-            imageFileInput: false, //this disable image as file, only from url allowed
-            imageSizeOnlyPercentage: false,
-            // imageUrlInput: true,
-            // imageGalleryUrl: "www.qlook.com",
-          }}
-        />
-      </EditorStyle>
-    </Box>
+                {
+                  name: "Custom",
+                  class: "__se__customClass",
+                },
+              ],
+              textStyles: [
+                "shadow",
+                "code",
+                "translucent",
+
+                {
+                  name: "Highlighter 1",
+                  style: "background-color:#FFFF88;padding: 1px;",
+                  tag: "span",
+                },
+                {
+                  name: "Highlighter 4",
+                  style: "background-color:#E1D5E7;padding: 1px;padding-left: 1px",
+                  // style: "background-color:#f7f3e2;padding: 1px;padding-left: 1px",
+                  tag: "p",
+                },
+              ],
+              height: "100%",
+              width: "auto",
+              minWidth: "350px",
+              resizingBar: false,
+              buttonList: sunEditorButtonList,
+              formats: ["p", "div", "h1", "h2", "h3"],
+              font: sunEditorfontList,
+
+              fontSize: [12, 14, 16, 20],
+              imageFileInput: false, //this disable image as file, only from url allowed
+              imageSizeOnlyPercentage: true, //changed on 6 june
+              // imageUrlInput: true,
+              // imageGalleryUrl: "www.qlook.com",
+            }}
+          />
+
+          {/* </Center> */}
+        </EditorStyle>
+      </Box>
+    </div>
   );
 };
 export default SuneditorForNotesMaking;
-export const EditorStyle = styled.div`
 
- 
+export const Center = styled.div`
+  th,
+  td {
+    min-width: 250px;
+  }
+`;
+export const EditorStyle = styled.div`
+  th,
+  td {
+    min-width: 250px;
+  }
   .sun-editor {
     /* margin-top: -18px !important; */
     /* border: 1px solid blue; */
@@ -242,27 +244,15 @@ export const EditorStyle = styled.div`
     margin-right: 0px !important;
     border: ${(props) => (props.title === "READ" ? "none" : undefined)};
     /* border: "none"; */
-    z-index: 2 !important;
+    /* z-index: 2 !important; */
   }
-  .__se__customClass {
-    /* background: #7e7575;
-    padding: 5px;
-    list-style-position: inside;
-    font-weight: 500;
-    color: #464242; */
 
-    background-color: #6e3c3c !important;
-    padding: 5px !important;
-    color: #464242 !important;
-    /* list-style-position: inside; */
-    border: 1px solid blue !important;
-  }
-  .__se__taggg {
+  .__se__customClass {
     background-color: #641717 !important;
     padding: 5px;
     list-style-position: inside;
     font-weight: 500;
-    color: #464242 !important;
+    color: #d56c2a !important;
     border: 1px solid blue;
     text-shadow: 2px 2px 5px green;
   }
