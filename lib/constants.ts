@@ -103,8 +103,8 @@ export const sunEditorfontList = [
   // "Roboto Slab",
 ];
 export const colors: any = [
-  ["#E1D5E7", "#FFCC99", "#FFFF88", "#CDEB8B"],
-  ["#CCE5FF", "#EEEEEE", "#F9F7ED", "#FFCCCC"],
+  ["#0000FF", "#00FF00", "#993300", "#000080"],
+  ["#800000", "#E0E0E0", "#CC99FF", "#FFCCCC"],
   ["#F5F5F5", "#DAE8FC", "#D5E8D4", "#FFE6CC"],
   ["#FFF2CC", "#F8CECC", "#E1D5E7", "#FFFFFF"],
   ["#76608A", "#647687", "#F0A30A", "#008A00"],

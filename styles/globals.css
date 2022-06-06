@@ -1,7 +1,7 @@
 html,
 body {
-  --custom-font-family: -apple-system, BlinkMacSystemFont, Segoe UI, Roboto,
-    Oxygen, Ubuntu, Cantarell, Fira Sans, Droid Sans, Helvetica Neue, sans-serif;
+  --custom-font-family: -apple-system, BlinkMacSystemFont, Segoe UI, Roboto, Oxygen, Ubuntu, Cantarell, Fira Sans, Droid Sans,
+    Helvetica Neue, sans-serif;
   --custom-bg-color: rgb(255, 255, 255);
   --custom-panel-color: rgb(22, 7, 7);
   --custom-box-shadow: 0 2px 8px 0 rgba(0, 0, 0, 0.8);
@@ -36,30 +36,34 @@ h1 {
   font-size: xx-large !important;
   font-weight: 700 !important;
 }
-table,
+
+.sun-editor-editable table.se-table-size-auto {
+  min-width: 900px !important;
+}
+/* table,
 th,
 td {
   border: 1px;
-  border-bottom: 1px solid #ddd;
+  border-bottom: 1px solid rgb(220, 102, 5);
 }
 th,
 td {
   padding: 15px;
   text-align: left;
-}
+} */
 
-ol > li >ol>li {
+ol > li > ol > li {
   /* line-height: 50px;
   border-radius: 8px; */
   list-style-type: lower-alpha;
   /* color: #f4dfe8;
   margin-bottom: 10px; */
 }
-ol > li >ol>li >ol>li{
+ol > li > ol > li > ol > li {
   /* line-height: 50px;
   border-radius: 8px; */
   list-style-type: lower-roman;
-  font-weight: bold
+  font-weight: bold;
   /* color: #f4dfe8;
   margin-bottom: 10px; */
 }
@@ -333,9 +337,9 @@ input[disabled] {
 /* button style is cancelled by me */
 /* button,
 .button { */
-  /* color: var(--custom-color); */
-  /* border: var(--custom-border); */
-  /* background-color: var(--custom-bg-color);
+/* color: var(--custom-color); */
+/* border: var(--custom-border); */
+/* background-color: var(--custom-bg-color);
   display: inline-block;
   text-align: center;
   border-radius: var(--custom-border-radius);
@@ -373,7 +377,7 @@ button.primary,
   border-radius: var(--custom-border-radius);
   padding: var(--custom-spacing);
 }
-.css-gfh94v{
+.css-gfh94v {
   background: rgb(255, 255, 255) !important;
 }
 .avatar {
