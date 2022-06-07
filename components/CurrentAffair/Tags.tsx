@@ -1,6 +1,24 @@
-import { Box, Checkbox, Flex, Text } from "@chakra-ui/react";
+import {
+  Box,
+  Button,
+  Checkbox,
+  Drawer,
+  DrawerBody,
+  DrawerCloseButton,
+  DrawerContent,
+  DrawerFooter,
+  DrawerHeader,
+  DrawerOverlay,
+  Flex,
+  IconButton,
+  Input,
+  Text,
+  useDisclosure,
+} from "@chakra-ui/react";
 import { groupBy } from "lodash";
 import React, { useEffect, useState } from "react";
+import { MdMenu, MdMenuBook } from "react-icons/md";
+import Sticky from "react-sticky-el";
 import { useGetSyllabusByBookId } from "../../customHookes/networkHooks";
 import { currentAffairTags } from "../../lib/constants";
 import { supabase } from "../../lib/supabaseClient";
@@ -9,12 +27,7 @@ import { useNoteContext } from "../../state/NoteContext";
 import { BookResponse, BookSyllabus } from "../../types/myTypes";
 import { definitions } from "../../types/supabase";
 
-interface Props {
-  book?: BookResponse | undefined;
-  changeParentProps?: (x: BookSyllabus) => void;
-}
-
-const Tags: React.FC<Props> = ({ book, changeParentProps }) => {
+const Tags: React.FC = () => {
   const { tagsArray, setTagsArray } = useNoteContext();
   const { profile } = useAuthContext();
   return (
@@ -44,7 +57,6 @@ const Tags: React.FC<Props> = ({ book, changeParentProps }) => {
             <ArticleCounterByTag tagId={value.id} creatorId={profile?.id!} />
           </Flex>
         ))}
-        ;
       </Flex>
     </Box>
   );
@@ -75,3 +87,44 @@ export const ArticleCounterByTag = ({ tagId, creatorId }: { tagId: number; creat
     </Flex>
   );
 };
+
+export function TagsDrawer() {
+  const { isOpen, onOpen, onClose } = useDisclosure();
+  const btnRef = React.useRef(null);
+
+  return (
+    <>
+      <Sticky>
+        <IconButton
+          aria-label="syllabus"
+          variant="outline"
+          size="xs"
+          icon={<MdMenuBook />}
+          ref={btnRef}
+          colorScheme="Gray"
+          onClick={onOpen}
+        >
+          Open
+        </IconButton>
+      </Sticky>
+      <Drawer isOpen={isOpen} placement="right" onClose={onClose} finalFocusRef={btnRef}>
+        <DrawerOverlay />
+        <DrawerContent>
+          <DrawerCloseButton />
+          {/* <DrawerHeader>Create your account</DrawerHeader> */}
+
+          <DrawerBody>
+            <Tags></Tags>
+          </DrawerBody>
+
+          <DrawerFooter>
+            <Button variant="outline" mr={3} onClick={onClose}>
+              Close
+            </Button>
+            
+          </DrawerFooter>
+        </DrawerContent>
+      </Drawer>
+    </>
+  );
+}
