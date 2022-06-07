@@ -107,7 +107,7 @@ export function TagsDrawer() {
           Open
         </IconButton>
       </Sticky>
-      <Drawer isOpen={isOpen} placement="right" onClose={onClose} finalFocusRef={btnRef}>
+      <Drawer isOpen={isOpen} placement="left" onClose={onClose} finalFocusRef={btnRef}>
         <DrawerOverlay />
         <DrawerContent>
           <DrawerCloseButton />
