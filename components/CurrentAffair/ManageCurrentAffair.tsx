@@ -24,7 +24,7 @@ import { useAuthContext } from "../../state/Authcontext";
 import { useNoteContext } from "../../state/NoteContext";
 import SuneditorForNotesMaking from "../editor/SuneditorForNotesMaking";
 
-import Tags from "./Tags";
+import Tags, { TagsDrawer } from "./Tags";
 
 export default function ManageCurrentAffair() {
   const { profile } = useAuthContext();
@@ -38,6 +38,9 @@ export default function ManageCurrentAffair() {
 
   return (
     <div>
+      <Flex display={{ base: "block", sm: "block", md: "none" }}>
+        <TagsDrawer></TagsDrawer>
+      </Flex>
       <Wrap spacing="5px">
         {tagsArray
           ? tagsArray.map((x1) => {
@@ -71,11 +74,11 @@ export default function ManageCurrentAffair() {
               <Spinner ml="16" size={"xs"} colorScheme="gray" />
             </Box>
           ) : count && count == 999 ? (
-            <Box alignItems="center"w="131px" >
+            <Box alignItems="center" w="131px">
               <Tag bg="whatsapp.100">Select Some Tags</Tag>
             </Box>
           ) : (
-            <Box alignItems="center" w="131px" >
+            <Box alignItems="center" w="131px">
               <Tag bg="whatsapp.100">{count} Articles Found</Tag>
             </Box>
           )}
@@ -95,13 +98,13 @@ export default function ManageCurrentAffair() {
       )}
 
       <Grid templateColumns="repeat(5, 1fr)" gap={6}>
-        <GridItem colSpan={1} bg="orange.50">
+        <GridItem colSpan={{ base: 0, sm: 0, md: 1 }} display={{ base: "none", sm: "none", md: "block" }} bg="orange.50">
           <Tags></Tags>
         </GridItem>
         {swrError ? (
           elog("ManageCurrentAffair", swrError.message)
         ) : (
-          <GridItem colSpan={4} px={{ base: "0.5", sm: "0.5", md: "6" }}>
+          <GridItem colSpan={{ base: 5, sm: 5, md: 4 }} px={{ base: "0.5", sm: "0.5", md: "6" }}>
             {isArticleLoading ? (
               <div>loading...</div>
             ) : articles ? (
