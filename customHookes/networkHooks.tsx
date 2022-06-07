@@ -163,12 +163,22 @@ export function useGetUserArticles(subheadingId: number | undefined, userid: str
   };
 }
 export function useGetUserArticlesFromTags(userid: string | undefined, tagsArray: number[] | undefined) {
+  if (tagsArray  && tagsArray.length === 0) {
+    return {
+      // sharedPost_SUP_ERR:data?.error,
+      data: [],
+      count: 999,
+      supError: null,
+      isLoading: false,
+      swrError: null,
+    };
+  }
   const { data, error } = useSWR(
     userid === undefined ? null : [`/get-user-articles-bytags/${userid}/${tagsArray}`],
     async () =>
       await supabase
         .from<definitions["books_articles"]>("books_articles")
-        .select(`*`,{ count: 'exact' })
+        .select(`*`, { count: "exact" })
         .eq("created_by", userid)
         .contains("current_affair_tags", tagsArray as number[]),
     {
@@ -177,12 +187,12 @@ export function useGetUserArticlesFromTags(userid: string | undefined, tagsArray
       revalidateOnReconnect: false,
     }
   );
-  console.log("database call ja raha hai")
-  console.log(data?data!.data:"no data")
+  console.log("database call ja raha hai");
+  console.log(data ? data!.data : "no data");
   return {
     // sharedPost_SUP_ERR:data?.error,
     data: data?.data,
-    count:data?.count,
+    count: data?.count,
     supError: data?.error,
     isLoading: !error && !data,
     swrError: error,

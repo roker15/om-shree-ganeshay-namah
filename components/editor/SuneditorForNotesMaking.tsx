@@ -156,67 +156,65 @@ const SuneditorForNotesMaking: React.FC<SuneditorForNotesMakingProps> = ({ artic
         </Flex>
 
         <EditorStyle title={editorMode === "READ" ? "READ" : "EDIT"}>
-          {/* <Center> */}
+          <Center>
+            <SunEditor
+              getSunEditorInstance={getSunEditorInstance}
+              setDefaultStyle={fontSize}
+              // setDefaultStyle={font-family: ${fontFamily}; font-size: 14px;}
+              hideToolbar={editorMode === "READ" ? true : false}
+              defaultValue={language === "ENGLISH" ? article.article_english : article.article_hindi}
+              // key={postId}
 
-          <SunEditor
-            getSunEditorInstance={getSunEditorInstance}
-            setDefaultStyle={fontSize}
-            // setDefaultStyle={font-family: ${fontFamily}; font-size: 14px;}
-            hideToolbar={editorMode === "READ" ? true : false}
-            defaultValue={language === "ENGLISH" ? article.article_english : article.article_hindi}
-            // key={postId}
+              onChange={handleOnChange}
+              readOnly={editorMode === "READ" ? true : false}
+              autoFocus={false}
+              // disable={editorMode === "READ" ? true : false}
+              setOptions={{
+                placeholder: "Start Typing",
+                mode: "classic",
+                katex: katex,
+                colorList: colors,
+                paragraphStyles: [
+                  "spaced",
 
-            onChange={handleOnChange}
-            readOnly={editorMode === "READ" ? true : false}
-            autoFocus={false}
-            // disable={editorMode === "READ" ? true : false}
-            setOptions={{
-              placeholder: "Start Typing",
-              mode: "classic",
-              katex: katex,
-              colorList: colors,
-              paragraphStyles: [
-                "spaced",
+                //   {
+                //     name: "Custom",
+                //     class: "__se__customClass",
+                //   },
+                ],
+                textStyles: [
+                  "shadow",
+                  "code",
+                  "translucent",
 
-                {
-                  name: "Custom",
-                  class: "__se__customClass",
-                },
-              ],
-              textStyles: [
-                "shadow",
-                "code",
-                "translucent",
+                  {
+                    name: "Highlighter 1",
+                    style: "background-color:#FFFF88;padding: 1px;",
+                    tag: "span",
+                  },
+                  {
+                    name: "Highlighter 4",
+                    style: "background-color:#E1D5E7;padding: 1px;padding-left: 1px",
+                    // style: "background-color:#f7f3e2;padding: 1px;padding-left: 1px",
+                    tag: "p",
+                  },
+                ],
+                height: "100%",
+                width: "auto",
+                minWidth: "350px",
+                resizingBar: false,
+                buttonList: sunEditorButtonList,
+                formats: ["p", "div", "h1", "h2", "h3"],
+                font: sunEditorfontList,
 
-                {
-                  name: "Highlighter 1",
-                  style: "background-color:#FFFF88;padding: 1px;",
-                  tag: "span",
-                },
-                {
-                  name: "Highlighter 4",
-                  style: "background-color:#E1D5E7;padding: 1px;padding-left: 1px",
-                  // style: "background-color:#f7f3e2;padding: 1px;padding-left: 1px",
-                  tag: "p",
-                },
-              ],
-              height: "100%",
-              width: "auto",
-              minWidth: "350px",
-              resizingBar: false,
-              buttonList: sunEditorButtonList,
-              formats: ["p", "div", "h1", "h2", "h3"],
-              font: sunEditorfontList,
-
-              fontSize: [12, 14, 16, 20],
-              imageFileInput: false, //this disable image as file, only from url allowed
-              imageSizeOnlyPercentage: true, //changed on 6 june
-              // imageUrlInput: true,
-              // imageGalleryUrl: "www.qlook.com",
-            }}
-          />
-
-          {/* </Center> */}
+                fontSize: [12, 14, 16, 20],
+                imageFileInput: false, //this disable image as file, only from url allowed
+                imageSizeOnlyPercentage: true, //changed on 6 june
+                // imageUrlInput: true,
+                // imageGalleryUrl: "www.qlook.com",
+              }}
+            />
+          </Center>
         </EditorStyle>
       </Box>
     </div>
@@ -229,12 +227,18 @@ export const Center = styled.div`
   td {
     min-width: 250px;
   }
+  .__se__customClass {
+    display: inline-block;
+    width: 50px;
+    border: 1px solid #000;
+    text-align: center;
+  }
 `;
 export const EditorStyle = styled.div`
-  th,
+  /* th,
   td {
     min-width: 250px;
-  }
+  } */
   .sun-editor {
     /* margin-top: -18px !important; */
     /* border: 1px solid blue; */
@@ -247,15 +251,6 @@ export const EditorStyle = styled.div`
     /* z-index: 2 !important; */
   }
 
-  .__se__customClass {
-    background-color: #641717 !important;
-    padding: 5px;
-    list-style-position: inside;
-    font-weight: 500;
-    color: #d56c2a !important;
-    border: 1px solid blue;
-    text-shadow: 2px 2px 5px green;
-  }
   /* blockquote {
     background: #f9f9f9;
     border-left: 10px solid #ccc;
