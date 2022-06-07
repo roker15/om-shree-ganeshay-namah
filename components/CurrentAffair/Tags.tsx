@@ -24,7 +24,7 @@ const Tags: React.FC<Props> = ({ book, changeParentProps }) => {
           <Flex key={value.id}>
             <Checkbox
               px="2"
-              colorScheme={"blue"}
+              colorScheme={"gray"}
               isChecked={tagsArray?.includes(value.id) ? true : false}
               size="sm"
               type="checkbox"
