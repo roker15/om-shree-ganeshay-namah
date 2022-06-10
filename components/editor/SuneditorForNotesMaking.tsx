@@ -167,7 +167,7 @@ const SuneditorForNotesMaking: React.FC<SuneditorForNotesMakingProps> = ({ artic
               autoFocus={false}
               // disable={editorMode === "READ" ? true : false}
               setOptions={{
-                imageUploadUrl: "http://om-shree-ganeshay-namah-git-development4-start-roker15.vercel.app/api/uploadImage",
+                imageUploadUrl: "https://om-shree-ganeshay-namah-git-development4-start-roker15.vercel.app/api/uploadImage",
                 placeholder: "Start Typing",
                 mode: "classic",
                 katex: katex,
