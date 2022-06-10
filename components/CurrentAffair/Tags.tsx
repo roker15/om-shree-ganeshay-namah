@@ -34,7 +34,7 @@ const Tags: React.FC = () => {
     <Box>
       <Flex flexDirection={"column"} maxW="400px">
         {currentAffairTags.map((value) => (
-          <Flex>
+          <Flex key={value.id}>
             <Checkbox
               px="2"
               colorScheme={"gray"}
