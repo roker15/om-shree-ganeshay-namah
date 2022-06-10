@@ -10,5 +10,4 @@ const options = {
   persistSession: true,
   detectSessionInUrl: true,
 };
-export const supabase = createClient(NEXT_PUBLIC_SUPABASE_URL, NEXT_PUBLIC_SUPABASE_ANON_KEY, options
-);
+export const supabase = createClient(NEXT_PUBLIC_SUPABASE_URL, NEXT_PUBLIC_SUPABASE_ANON_KEY, options);

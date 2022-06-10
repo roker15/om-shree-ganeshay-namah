@@ -82,18 +82,20 @@ export default function ManageCurrentAffair() {
               <Tag bg="whatsapp.100">{count} Articles Found</Tag>
             </Box>
           )}
-          <Button
-            size="xs"
-            variant="outline"
-            px="1.5"
-            mx="2"
-            colorScheme={"green"}
-            onClick={() => {
-              setTagsArray!([]);
-            }}
-          >
-            Clear Tags
-          </Button>
+          {count && count == 999 ? null : (
+            <Button
+              size="xs"
+              variant="outline"
+              px="1.5"
+              mx="2"
+              colorScheme={"green"}
+              onClick={() => {
+                setTagsArray!([]);
+              }}
+            >
+              Clear Tags
+            </Button>
+          )}
         </Flex>
       )}
 

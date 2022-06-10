@@ -4,7 +4,7 @@ import "katex/dist/katex.min.css";
 import { debounce } from "lodash";
 import dynamic from "next/dynamic";
 import React, { ChangeEvent, useCallback, useEffect, useRef } from "react";
-
+import { v4 as uuid } from "uuid";
 import { colors, sunEditorButtonList, sunEditorfontList } from "../../lib/constants";
 import { elog } from "../../lib/mylog";
 import { supabase } from "../../lib/supabaseClient";
@@ -160,16 +160,14 @@ const SuneditorForNotesMaking: React.FC<SuneditorForNotesMakingProps> = ({ artic
             <SunEditor
               getSunEditorInstance={getSunEditorInstance}
               setDefaultStyle={fontSize}
-              // setDefaultStyle={font-family: ${fontFamily}; font-size: 14px;}
               hideToolbar={editorMode === "READ" ? true : false}
               defaultValue={language === "ENGLISH" ? article.article_english : article.article_hindi}
-              // key={postId}
-
               onChange={handleOnChange}
               readOnly={editorMode === "READ" ? true : false}
               autoFocus={false}
               // disable={editorMode === "READ" ? true : false}
               setOptions={{
+                imageUploadUrl : "http://localhost:3000/api/uploadImage",
                 placeholder: "Start Typing",
                 mode: "classic",
                 katex: katex,
@@ -177,10 +175,10 @@ const SuneditorForNotesMaking: React.FC<SuneditorForNotesMakingProps> = ({ artic
                 paragraphStyles: [
                   "spaced",
 
-                //   {
-                //     name: "Custom",
-                //     class: "__se__customClass",
-                //   },
+                  //   {
+                  //     name: "Custom",
+                  //     class: "__se__customClass",
+                  //   },
                 ],
                 textStyles: [
                   "shadow",
@@ -208,7 +206,7 @@ const SuneditorForNotesMaking: React.FC<SuneditorForNotesMakingProps> = ({ artic
                 font: sunEditorfontList,
 
                 fontSize: [12, 14, 16, 20],
-                imageFileInput: false, //this disable image as file, only from url allowed
+                imageFileInput: true, //this disable image as file, only from url allowed
                 imageSizeOnlyPercentage: true, //changed on 6 june
                 // imageUrlInput: true,
                 // imageGalleryUrl: "www.qlook.com",
@@ -235,38 +233,40 @@ export const Center = styled.div`
   }
 `;
 export const EditorStyle = styled.div`
-  /* th,
-  td {
-    min-width: 250px;
-  } */
   .sun-editor {
-    /* margin-top: -18px !important; */
-    /* border: 1px solid blue; */
     padding-left: -30px !important;
     padding-right: -30px !important;
     margin-left: -20px !important;
     margin-right: 0px !important;
     border: ${(props) => (props.title === "READ" ? "none" : undefined)};
-    /* border: "none"; */
-    /* z-index: 2 !important; */
   }
-
-  /* blockquote {
-    background: #f9f9f9;
-    border-left: 10px solid #ccc;
-    margin: 1.5em 10px;
-    padding: 0.5em 10px;
-    quotes: "\201C""\201D""\2018""\2019";
-  }
-  blockquote:before {
-    color: #ccc;
-    content: open-quote;
-    font-size: 4em;
-    line-height: 0.1em;
-    margin-right: 0.25em;
-    vertical-align: -0.4em;
-  }
-  blockquote p {
-    display: inline;
-  } */
 `;
+export const handleImageUploadBefore = async (files: FileList, info: Object, uploadHandler: Function) => {
+  let response = {};
+  for (var i = 0; i < files.length; i++) {
+    const filepath = uuid() + "-" + files[i].name;
+    const { data, error } = await supabase.storage.from("notes-images").upload(filepath, files[i], {
+      cacheControl: "3600",
+      upsert: true,
+    });
+    if (data) {
+      console.log("data is ", data.Key);
+      const { publicURL, error } = supabase.storage.from("notes-images").getPublicUrl(filepath);
+      console.log("public url is  ", publicURL);
+
+      response = {
+        result: [
+          {
+            url: publicURL,
+            name: files[i].name || "Imagem",
+            size: files[i].size,
+          },
+        ],
+      };
+    }
+
+    uploadHandler(response);
+    // if (mountedRef.current == true) {
+    //   setIsLoading(false);
+  }
+};
