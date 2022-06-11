@@ -23,6 +23,8 @@ type AppLayoutProps = {
 function MyApp({ Component, pageProps }: AppLayoutProps) {
 
   supabase.auth.onAuthStateChange((event, session) => {
+    console.log("authstate change",+session?.refresh_token!)
+
     fetch("/api/auth", {
       method: "POST",
       headers: new Headers({ "Content-Type": "application/json" }),

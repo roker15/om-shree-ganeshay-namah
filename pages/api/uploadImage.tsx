@@ -15,7 +15,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse,
   let publicurl = null;
   let name = null;
   // let
-  // supabase.auth.api.setAuthCookie(req, res)
+  supabase.auth.api.setAuthCookie(req, res)
   // Get our logged user
 
   const { user } = await supabase.auth.api.getUserByCookie(req);
@@ -66,7 +66,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse,
       });
     
     }
-      
+    return res.status(405).json({ message: 'Method not allowed.' });
   });
 
  
