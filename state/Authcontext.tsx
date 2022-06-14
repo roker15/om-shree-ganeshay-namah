@@ -1,10 +1,14 @@
 import { Center } from "@chakra-ui/layout";
 import { CircularProgress } from "@chakra-ui/progress";
-import { Session } from "@supabase/gotrue-js";
+import { Session } from "@supabase/supabase-js";
+import { supabaseClient } from "@supabase/auth-helpers-nextjs";
+import { useUser } from "@supabase/auth-helpers-react";
+import { Auth } from "@supabase/ui";
 import React, { createContext, useContext, useEffect, useState } from "react";
 import { Profile } from "../lib/constants";
 import { elog, ilog } from "../lib/mylog";
-import { supabase } from "../lib/supabaseClient";
+import { Container } from "@chakra-ui/react";
+// import { supabase } from "../lib/supabaseClient";
 interface AuthContextValues {
   signInWithgoogle: (redirectUrl: string) => void;
   signIn: (data: any) => void;
@@ -23,12 +27,14 @@ export const AuthProvider = ({ children }: any) => {
   const [loading, setLoading] = useState(true);
   const [session, setSession] = useState<Session | null>(null);
   const [profile, setProfile] = useState<Profile | null>(null);
+  const { user, error } = useUser();
 
   useEffect(() => {
-    const { data: listener } = supabase.auth.onAuthStateChange((_event, session) => {
+    const { data: listener } = supabaseClient.auth.onAuthStateChange((event, session) => {
+      alert(event)
       setSession(session);
     });
-    setSession(supabase.auth.session());
+    setSession(supabaseClient.auth.session());
     return () => {
       listener?.unsubscribe();
     };
@@ -36,22 +42,23 @@ export const AuthProvider = ({ children }: any) => {
 
   useEffect(() => {
     setLoading(true);
-    if (session) {
+    if (user) {
       ilog("authcontext->getprofile-> place3--> session hai ", session);
       const getProfile = async () => {
         try {
-          //first check if user exist or not
-          const { data: x, error: e } = await supabase
+          //first check if profile exist or not
+          const { data: x, error: e } = await supabaseClient
             .from<Profile>("profiles")
             .select()
-            .eq("id", session.user?.id!)
+            .eq("id", user?.id!)
             .single();
           if (x) {
+            console.log("profile data me hai")
             setProfile(x);
           } else {
             // .single();
-            const user = supabase.auth.user();
-            const { data, error } = await supabase
+            // const user = supabaseClient.auth.user();
+            const { data, error } = await supabaseClient
               .from<Profile>("profiles")
               .insert({
                 id: user!.id,
@@ -80,15 +87,15 @@ export const AuthProvider = ({ children }: any) => {
       getProfile();
       // setLoading(false)
     } else {
-      ilog("authcontext->getprofile-> place4--> session nahi hai", session);
+      ilog("authcontext->getprofile-> place4--> session nahi hai", user);
       setProfile(null);
       setLoading(false);
     }
-  }, [session]);
+  }, [user]);
 
   // create signUp, signIn, signOut functions
   const signUpUser = async (redirectUrl: string) => {
-    let { user, error } = await supabase.auth.signIn(
+    let { user, error } = await supabaseClient.auth.signIn(
       {
         provider: "google",
       },
@@ -102,21 +109,23 @@ export const AuthProvider = ({ children }: any) => {
     signInWithgoogle: (redirectUrl: string) => {
       signUpUser(redirectUrl);
     },
-    signIn: (data: any) => supabase.auth.signIn(data),
-    signOut: (data: any) => supabase.auth.signOut(),
+    signIn: (data: any) => supabaseClient.auth.signIn(data),
+    signOut: (data: any) => supabaseClient.auth.signOut(),
     profile: profile,
   };
 
   // use a provider to pass down the value
   return (
     <AuthContext.Provider value={value}>
-      {loading ? (
+      {children}
+      {/* {loading ? (
         <Center h="100vh">
           <CircularProgress isIndeterminate size="40px" thickness="8px" />
         </Center>
-      ) : (
+      ) :
+        (
         children
-      )}
+      )} */}
     </AuthContext.Provider>
   );
 };

@@ -1,4 +1,4 @@
-import { Session, User } from "@supabase/gotrue-js";
+import { User, Session } from "@supabase/supabase-js";
 import React, { useContext, useState, useEffect, createContext } from "react";
 import { Profile } from "../lib/constants";
 import { supabase } from "../lib/supabaseClient";

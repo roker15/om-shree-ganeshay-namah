@@ -3,7 +3,9 @@ import * as formidable from "formidable";
 import { Files } from "formidable";
 import { v4 as uuid } from "uuid";
 import error from "next/error";
-import { supabase } from "../../lib/supabaseClient";
+// import { supabase } from "../../lib/supabaseClient";
+import { useUser } from '@supabase/auth-helpers-react';
+import { supabaseClient,supabaseServerClient } from '@supabase/auth-helpers-nextjs';
 import fs from "fs";
 export const config = {
   api: {
@@ -14,29 +16,29 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse,
   let error1 = null;
   let publicurl = null;
   let name = null;
-  // let
-  supabase.auth.api.setAuthCookie(req, res)
-  // Get our logged user
+ console.log("req cookies is ", req.cookies)
 
-  const { user } = await supabase.auth.api.getUserByCookie(req);
+  const { user } = await supabaseClient.auth.api.getUserByCookie(req);
   if (user == null) {
     console.log("not user");
   } else {
-    console.log("user hai" + user.email);
+    console.log("user hai" + user);
   }
 
   const form = new formidable.IncomingForm({ keepExtensions: true });
-    form.parse(req, async (err, fields, files: Files) => {
-    console.log("bhai ye hai" + JSON.parse(JSON.stringify(files["file-0"]))[0].filepath);
+  form.parse(req, async (err, fields, files: Files) => {
+    const user = supabaseClient.auth.api.getUserByCookie(req)
+      console.log("inside upload image session is ",user);
+    // console.log("file received is ",JSON.stringify(files["file-0"])[0]);
     const user1 = JSON.parse(JSON.stringify(files["file-0"]))[0];
-    console.log("filepath: " + user1.filepath);
+    // console.log("filepath: " + user1.filepath);
     const rawData = fs.readFileSync(user1.filepath);
     if (err) {
       error1 = err;
     }
     const filepath = uuid() + "-" + user1.originalFilename;
     name = filepath;
-    const { data, error } = await supabase.storage.from("notes-images").upload(filepath, rawData, {
+    const { data, error } = await supabaseServerClient({req}).storage.from("notes-images").upload(filepath, rawData, {
       contentType: user1.mimetype,
       cacheControl: "3600",
       upsert: true,
@@ -46,7 +48,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse,
     }
     if (data) {
       console.log("data is ", data.Key);
-      const { publicURL, error } = supabase.storage.from("notes-images").getPublicUrl(filepath);
+      const { publicURL, error } = supabaseServerClient({req}).storage.from("notes-images").getPublicUrl(filepath);
       publicurl = publicURL;
       console.log("public url is  ", publicURL);
       //   if (publicURL && mountedRef.current == true) {
@@ -54,7 +56,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse,
       //   }
       
     
-      res.status(200).json({
+      return res.status(200).json({
         errorMessage: error,
         result: [
           {

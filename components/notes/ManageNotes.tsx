@@ -29,7 +29,9 @@ import Sticky from "react-sticky-el";
 import { SharedNotesList } from "../../customHookes/networkHooks";
 import { BASE_URL } from "../../lib/constants";
 import { elog } from "../../lib/mylog";
-import { supabase } from "../../lib/supabaseClient";
+// import { supabase } from "../../lib/supabaseClient";
+import { useUser } from "@supabase/auth-helpers-react";
+import { supabaseClient as supabase} from "@supabase/auth-helpers-nextjs";
 import { useAuthContext } from "../../state/Authcontext";
 import { useNoteContext } from "../../state/NoteContext";
 import { BookResponse, BookSyllabus } from "../../types/myTypes";
@@ -43,13 +45,13 @@ import Notes from "./Notes";
 import { NotesSharing } from "./NotesSharing";
 import SharedNotesPanel from "./SharedNotesPanel";
 import SyllabusForNotes from "./SyllabusForNotes";
-
 const ManageNotes = () => {
   const { isTagSearchActive } = useNoteContext();
+  const { user, error } = useUser();
   const [book, setBook] = useState<BookResponse | undefined>();
   const [selectedSubheading, setSelectedSubheading] = useState<
-    | {
-        subheadingId: number | undefined;
+  | {
+    subheadingId: number | undefined;
         creatorId: string | undefined;
         isEditable: boolean | undefined;
         isCopyable: boolean | undefined;
@@ -271,7 +273,7 @@ const ManageNotes = () => {
           </GridItem>
           {/* </Sticky> */}
           <GridItem colSpan={{ base: 10, sm: 10, md: 7 }} px="4">
-            {supabase.auth.session() ? (
+            {user ? (
               <Box>
                 <Center>
                   <Text fontSize="md" as="b" casing="capitalize">

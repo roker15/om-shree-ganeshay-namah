@@ -14,6 +14,8 @@ import ReactGA4 from "react-ga4";
 // Component style overrides
 import { theme } from "../theme/theme";
 import { supabase } from "../lib/supabaseClient";
+import { UserProvider } from '@supabase/auth-helpers-react';
+import { supabaseClient } from '@supabase/auth-helpers-nextjs';
 
 type AppLayoutProps = {
   Component: PageWithLayoutType;
@@ -21,51 +23,39 @@ type AppLayoutProps = {
 };
 
 function MyApp({ Component, pageProps }: AppLayoutProps) {
-
-  supabase.auth.onAuthStateChange((event, session) => {
-    console.log("authstate change",+session?.refresh_token!)
-
-    fetch("/api/auth", {
-      method: "POST",
-      headers: new Headers({ "Content-Type": "application/json" }),
-      credentials: "same-origin",
-      body: JSON.stringify({ event, session }),
-    })
+  
+  useEffect(() => {
+    ReactGA.initialize("UA-217198026-1");
+    ReactGA.pageview(window.location.pathname + window.location.search);
   });
-
-    useEffect(() => {
-      ReactGA.initialize("UA-217198026-1");
-      ReactGA.pageview(window.location.pathname + window.location.search);
-    });
-    const Layout = Component.layout || (({ children }) => <>{children}</>);
-    return (
-      <>
-        <Head>
-          <title>Jionote</title> <link rel="icon" type="image/png" sizes="32x32" href="/logo-150x150.png" />
-
-          {/* <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png" />
+  const Layout = Component.layout || (({ children }) => <>{children}</>);
+  return (
+    <>
+      <Head>
+        <title>Jionote</title> <link rel="icon" type="image/png" sizes="32x32" href="/logo-150x150.png" />
+        {/* <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png" />
           <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png" />
           <link rel="manifest" href="/site.webmanifest" />
           <link rel="mask-icon" href="/safari-pinned-tab.svg" color="#5bbad5" />
           <meta name="theme-color" content="#ffffff" /> */}
-        
-        
-        </Head>
-        <AuthProvider>
-          <AppContextWrapper>
-            <ChakraProvider theme={theme}>
-              <AuthProvider>
-                <PostContextWrapper>
-                  <Layout>
-                    <Component {...pageProps} />
-                  </Layout>
-                </PostContextWrapper>
-              </AuthProvider>
-            </ChakraProvider>
-          </AppContextWrapper>
+      </Head>
+      <UserProvider supabaseClient={supabaseClient}>
+      <AuthProvider>
+        <AppContextWrapper>
+          <ChakraProvider theme={theme}>
+            {/* <AuthProvider> */}
+              <PostContextWrapper>
+                <Layout>
+                  <Component {...pageProps} />
+                </Layout>
+              </PostContextWrapper>
+            {/* </AuthProvider> */}
+          </ChakraProvider>
+        </AppContextWrapper>
         </AuthProvider>
-      </>
-    );
-  }
+        </UserProvider>
+    </>
+  );
+}
 
 export default MyApp;
