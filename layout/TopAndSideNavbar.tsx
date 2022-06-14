@@ -231,7 +231,7 @@ const TopBar = ({ hideSidebar, setHideSidebar, onOpen, ...rest }: MobileProps) =
 
       {/* <Image  boxSize="50px" objectFit="fill" src="vercel.svg" alt="Segun Adebayo" /> */}
       <Text
-        isTruncated
+        // isTruncated
         // noOfLines={1}
         justifyContent={{ base: "space-between", md: "flex" }}
         align="left"

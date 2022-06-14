@@ -267,7 +267,7 @@ export const SharedList: React.FC<{ subheadingId: number }> = ({ subheadingId })
                       colorScheme={"whatsapp"}
                       textTransform={"capitalize"}
                       ml="0"
-                      defaultIsChecked={x.allow_edit}
+                      defaultChecked ={x.allow_edit}
                       onChange={(e) => handleEditCheckbox(x.id, e.target.checked)}
                     >
                       {/* Can Edit */}
@@ -279,7 +279,7 @@ export const SharedList: React.FC<{ subheadingId: number }> = ({ subheadingId })
                       colorScheme={"whatsapp"}
                       textTransform={"capitalize"}
                       ml="0"
-                      defaultIsChecked={x.allow_copy}
+                      defaultChecked ={x.allow_copy}
                       onChange={(e) => handleCopyCheckbox(x.id, e.target.checked)}
                     >
                       {/* Can Edit */}

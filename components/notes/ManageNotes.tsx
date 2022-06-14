@@ -31,7 +31,7 @@ import { BASE_URL } from "../../lib/constants";
 import { elog } from "../../lib/mylog";
 // import { supabase } from "../../lib/supabaseClient";
 import { useUser } from "@supabase/auth-helpers-react";
-import { supabaseClient as supabase} from "@supabase/auth-helpers-nextjs";
+import { supabaseClient as supabase } from "@supabase/auth-helpers-nextjs";
 import { useAuthContext } from "../../state/Authcontext";
 import { useNoteContext } from "../../state/NoteContext";
 import { BookResponse, BookSyllabus } from "../../types/myTypes";
@@ -50,8 +50,8 @@ const ManageNotes = () => {
   const { user, error } = useUser();
   const [book, setBook] = useState<BookResponse | undefined>();
   const [selectedSubheading, setSelectedSubheading] = useState<
-  | {
-    subheadingId: number | undefined;
+    | {
+        subheadingId: number | undefined;
         creatorId: string | undefined;
         isEditable: boolean | undefined;
         isCopyable: boolean | undefined;
@@ -181,9 +181,7 @@ const ManageNotes = () => {
       <Box px={{ base: "0", sm: "2", md: "44" }} pb="8">
         <BookFilter setParentProps={updateBookProps}></BookFilter>
 
-        {isTagSearchActive ? (
-          null
-        ) : (
+        {isTagSearchActive ? null : (
           <>
             <Flex justifyContent="end" alignItems="center" mt="4">
               <HStack
@@ -235,15 +233,17 @@ const ManageNotes = () => {
             <Sticky>
               {/* <div style={{ zIndex : 2147483657}}> */}
               <Flex justifyContent="space-between" display={{ base: "undefined", sm: "undefined", md: "none" }}>
-                <DrawerExample>
-                  <SyllabusForNotes book={book} changeParentProps={changeSelectedSubheading}></SyllabusForNotes>
-                </DrawerExample>
-                <DrawerExample>
-                  <SharedNotesPanel
-                    subheadingid={selectedSubheading?.subheadingId}
-                    changeParentProps={changeSelectedSharedNote}
-                  ></SharedNotesPanel>
-                </DrawerExample>
+                <>
+                  <DrawerExample>
+                    <SyllabusForNotes book={book} changeParentProps={changeSelectedSubheading}></SyllabusForNotes>
+                  </DrawerExample>
+                  <DrawerExample>
+                    <SharedNotesPanel
+                      subheadingid={selectedSubheading?.subheadingId}
+                      changeParentProps={changeSelectedSharedNote}
+                    ></SharedNotesPanel>
+                  </DrawerExample>
+                </>
               </Flex>
               {/* </div> */}
             </Sticky>
@@ -253,7 +253,9 @@ const ManageNotes = () => {
 
       {/* <Flex my="16" justifyContent="flex-start"> */}
       {isTagSearchActive ? (
-        <div><ManageCurrentAffair></ManageCurrentAffair></div>
+        <div>
+          <ManageCurrentAffair></ManageCurrentAffair>
+        </div>
       ) : book ? (
         <Grid templateColumns="repeat(10, 1fr)">
           {/* <Sticky> */}
@@ -333,7 +335,11 @@ const ManageNotes = () => {
 
 export default ManageNotes;
 
-const DrawerExample: React.FC = ({ children }) => {
+type HeaderProps = {
+  children: JSX.Element;
+};
+
+const DrawerExample = (props: HeaderProps ) => {
   const { isOpen, onOpen, onClose } = useDisclosure();
   const btnRef = React.useRef(null);
 
@@ -359,7 +365,7 @@ const DrawerExample: React.FC = ({ children }) => {
           <DrawerCloseButton />
           {/* <DrawerHeader>Create your account</DrawerHeader> */}
 
-          <DrawerBody>{children}</DrawerBody>
+          <DrawerBody>{props.children}</DrawerBody>
 
           <DrawerFooter>
             <Button variant="outline" mr={3} onClick={onClose}>

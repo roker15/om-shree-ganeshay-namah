@@ -10,13 +10,14 @@ import { elog } from "../../lib/mylog";
 import { supabase } from "../../lib/supabaseClient";
 import { useAuthContext } from "../../state/Authcontext";
 import { definitions } from "../../types/supabase";
-import { UiForImageUpload } from "../ContactMe";
+
 import { customToast } from "../CustomToast";
 // import SunEditor from "suneditor-react";
 import "suneditor/dist/css/suneditor.min.css"; // Import Sun Editor's CSS File
 // import SunEditor from "suneditor-react";
 import SunEditorCore from "suneditor/src/lib/core";
 import styled from "styled-components";
+import { UiForImageUpload } from "../UiForImageUpload";
 const SunEditor = dynamic(() => import("suneditor-react"), {
   ssr: false,
 });

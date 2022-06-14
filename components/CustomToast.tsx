@@ -1,7 +1,7 @@
 import { Badge, Button, Code, createStandaloneToast, Tag } from "@chakra-ui/react";
 import { MdMessage, MdShare } from "react-icons/md";
 
-const toast = createStandaloneToast();
+const { ToastContainer, toast } = createStandaloneToast()
 interface CustomtoastProps {
   title: string;
   position?: "bottom-right" | "top" | "top-right" | "top-left" | "bottom" | "bottom-right" | "bottom-left";
