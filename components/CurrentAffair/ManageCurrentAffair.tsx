@@ -38,6 +38,7 @@ export default function ManageCurrentAffair() {
 
   return (
     <div>
+    <Box>
       <Flex display={{ base: "block", sm: "block", md: "none" }}>
         <TagsDrawer></TagsDrawer>
       </Flex>
@@ -140,6 +141,7 @@ export default function ManageCurrentAffair() {
           </GridItem>
         )}
       </Grid>
-    </div>
-  );
+      </Box>
+      </div>
+  )
 }
