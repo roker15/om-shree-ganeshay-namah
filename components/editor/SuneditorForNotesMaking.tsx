@@ -39,7 +39,9 @@ const SuneditorForNotesMaking: React.FC<SuneditorForNotesMakingProps> = ({ artic
   const editor = useRef<SunEditorCore>();
   const getSunEditorInstance = (sunEditor: SunEditorCore) => {
     editor.current = sunEditor;
+   
   };
+  
   useEffect(() => {
     if (!isAutosaveOn) {
       debouncedFunctionRef.current = undefined;
