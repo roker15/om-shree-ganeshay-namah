@@ -1,14 +1,6 @@
 import {
-  Alert,
-  AlertDescription,
-  AlertIcon,
-  AlertTitle,
   Avatar,
-  Box,
-  BoxProps,
-  Button,
-  CloseButton,
-  Flex,
+  Box, Button, Flex,
   FlexProps,
   Heading,
   HStack,
@@ -23,23 +15,18 @@ import {
   Text,
   useColorModeValue,
   useDisclosure,
-  VStack,
+  VStack
 } from "@chakra-ui/react";
-import React, { ReactNode } from "react";
+import { ReactNode } from "react";
 import { FaGoogle } from "react-icons/fa";
 import { FiChevronDown } from "react-icons/fi";
-import useSWR from "swr";
-import { useAuthContext } from "../state/Authcontext";
-import { useAppContext } from "../state/state";
-import { supabase } from "../lib/supabaseClient";
-import { Subheading } from "../types/myTypes";
 import { BASE_URL } from "../lib/constants";
+import { useAuthContext } from "../state/Authcontext";
 
 // const LinkItems: Array<Subheading> = [];
 
 export default function TopNavbar({ children }: { children: ReactNode }) {
   const { isOpen, onOpen, onClose } = useDisclosure();
-  const shareContext = useAppContext();
 
   return (
     <Box minH="100vh" bg="white.500">

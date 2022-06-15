@@ -1,13 +1,9 @@
-import { Center } from "@chakra-ui/layout";
-import { CircularProgress } from "@chakra-ui/progress";
-import { Session } from "@supabase/supabase-js";
 import { supabaseClient } from "@supabase/auth-helpers-nextjs";
 import { useUser } from "@supabase/auth-helpers-react";
-import { Auth } from "@supabase/ui";
-import React, { createContext, useContext, useEffect, useState } from "react";
+import { Session } from "@supabase/supabase-js";
+import { createContext, useContext, useEffect, useState } from "react";
 import { Profile } from "../lib/constants";
 import { elog, ilog } from "../lib/mylog";
-import { Container } from "@chakra-ui/react";
 // import { supabase } from "../lib/supabaseClient";
 interface AuthContextValues {
   signInWithgoogle: (redirectUrl: string) => void;
@@ -29,16 +25,6 @@ export const AuthProvider = ({ children }: any) => {
   const [profile, setProfile] = useState<Profile | null>(null);
   const { user, error } = useUser();
 
-  useEffect(() => {
-    const { data: listener } = supabaseClient.auth.onAuthStateChange((event, session) => {
-      alert(event)
-      setSession(session);
-    });
-    setSession(supabaseClient.auth.session());
-    return () => {
-      listener?.unsubscribe();
-    };
-  }, []);
 
   useEffect(() => {
     setLoading(true);
@@ -49,7 +35,7 @@ export const AuthProvider = ({ children }: any) => {
           //first check if profile exist or not
           const { data: x, error: e } = await supabaseClient
             .from<Profile>("profiles")
-            .select()
+            .select('*')
             .eq("id", user?.id!)
             .single();
           if (x) {
@@ -118,14 +104,6 @@ export const AuthProvider = ({ children }: any) => {
   return (
     <AuthContext.Provider value={value}>
       {children}
-      {/* {loading ? (
-        <Center h="100vh">
-          <CircularProgress isIndeterminate size="40px" thickness="8px" />
-        </Center>
-      ) :
-        (
-        children
-      )} */}
     </AuthContext.Provider>
   );
 };

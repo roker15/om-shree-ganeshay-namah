@@ -170,7 +170,7 @@ const SuneditorForNotesMaking: React.FC<SuneditorForNotesMakingProps> = ({ artic
               setOptions={{
                 imageUploadUrl: "http://localhost:3000/api/uploadImage",
                 
-                placeholder: "Start Typing",
+                placeholder: "Click Edit and Start Typing",
                 mode: "classic",
                 katex: katex,
                 colorList: colors,
@@ -209,7 +209,8 @@ const SuneditorForNotesMaking: React.FC<SuneditorForNotesMakingProps> = ({ artic
 
                 fontSize: [12, 14, 16, 20],
                 imageFileInput: true, //this disable image as file, only from url allowed
-                imageSizeOnlyPercentage: true, //changed on 6 june
+                imageSizeOnlyPercentage: false, //changed on 6 june
+                
                 // imageUrlInput: true,
                 // imageGalleryUrl: "www.qlook.com",
               }}
@@ -243,32 +244,3 @@ export const EditorStyle = styled.div`
     border: ${(props) => (props.title === "READ" ? "none" : undefined)};
   }
 `;
-export const handleImageUploadBefore = async (files: FileList, info: Object, uploadHandler: Function) => {
-  let response = {};
-  for (var i = 0; i < files.length; i++) {
-    const filepath = uuid() + "-" + files[i].name;
-    const { data, error } = await supabase.storage.from("notes-images").upload(filepath, files[i], {
-      cacheControl: "3600",
-      upsert: true,
-    });
-    if (data) {
-      console.log("data is ", data.Key);
-      const { publicURL, error } = supabase.storage.from("notes-images").getPublicUrl(filepath);
-      console.log("public url is  ", publicURL);
-
-      response = {
-        result: [
-          {
-            url: publicURL,
-            name: files[i].name || "Imagem",
-            size: files[i].size,
-          },
-        ],
-      };
-    }
-
-    uploadHandler(response);
-    // if (mountedRef.current == true) {
-    //   setIsLoading(false);
-  }
-};
