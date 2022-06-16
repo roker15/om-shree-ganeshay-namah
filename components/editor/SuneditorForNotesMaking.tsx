@@ -180,12 +180,12 @@ const SuneditorForNotesMaking: React.FC<SuneditorForNotesMakingProps> = ({ artic
               autoFocus={false}
               // disable={editorMode === "READ" ? true : false}
               setOptions={{
-                imageUploadUrl: `${BASE_URL}/api/uploadImage`,
-
+                
                 placeholder: "Click Edit and Start Typing",
                 mode: "classic",
                 katex: katex,
                 colorList: colors,
+                imageUploadUrl: `${BASE_URL}/api/uploadImage`,
                 paragraphStyles: [
                   "spaced",
 
