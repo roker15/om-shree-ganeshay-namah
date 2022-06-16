@@ -39,9 +39,19 @@ const SuneditorForNotesMaking: React.FC<SuneditorForNotesMakingProps> = ({ artic
   const editor = useRef<SunEditorCore>();
   const getSunEditorInstance = (sunEditor: SunEditorCore) => {
     editor.current = sunEditor;
-   
   };
-  
+  // useEffect(() => {
+  //   console.log("");
+
+  //   return () => {
+  //     if (editor.current) {
+  //       editor.current.disable()
+  //       // alert("Editor hai")
+  //       // editor.current = undefined;
+  //     }
+  //   };
+  // }, []);
+
   useEffect(() => {
     if (!isAutosaveOn) {
       debouncedFunctionRef.current = undefined;
@@ -171,7 +181,7 @@ const SuneditorForNotesMaking: React.FC<SuneditorForNotesMakingProps> = ({ artic
               // disable={editorMode === "READ" ? true : false}
               setOptions={{
                 imageUploadUrl: "http://localhost:3000/api/uploadImage",
-                
+
                 placeholder: "Click Edit and Start Typing",
                 mode: "classic",
                 katex: katex,
@@ -212,7 +222,7 @@ const SuneditorForNotesMaking: React.FC<SuneditorForNotesMakingProps> = ({ artic
                 fontSize: [12, 14, 16, 20],
                 imageFileInput: true, //this disable image as file, only from url allowed
                 imageSizeOnlyPercentage: false, //changed on 6 june
-                
+
                 // imageUrlInput: true,
                 // imageGalleryUrl: "www.qlook.com",
               }}
