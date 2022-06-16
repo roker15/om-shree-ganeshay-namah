@@ -5,7 +5,7 @@ import { debounce } from "lodash";
 import dynamic from "next/dynamic";
 import React, { ChangeEvent, useCallback, useEffect, useRef } from "react";
 import { v4 as uuid } from "uuid";
-import { colors, sunEditorButtonList, sunEditorfontList } from "../../lib/constants";
+import { BASE_URL, colors, sunEditorButtonList, sunEditorfontList } from "../../lib/constants";
 import { elog } from "../../lib/mylog";
 import { supabase } from "../../lib/supabaseClient";
 import { useAuthContext } from "../../state/Authcontext";
@@ -180,7 +180,7 @@ const SuneditorForNotesMaking: React.FC<SuneditorForNotesMakingProps> = ({ artic
               autoFocus={false}
               // disable={editorMode === "READ" ? true : false}
               setOptions={{
-                imageUploadUrl: "http://localhost:3000/api/uploadImage",
+                imageUploadUrl: `${BASE_URL}/api/uploadImage`,
 
                 placeholder: "Click Edit and Start Typing",
                 mode: "classic",
