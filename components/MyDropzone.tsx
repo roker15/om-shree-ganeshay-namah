@@ -1,8 +1,4 @@
-import {
-  Box, Button, Center,
-  CircularProgress, Container, ListItem,
-  OrderedList, Text
-} from "@chakra-ui/react";
+import { Box, Button, Center, CircularProgress, Container, ListItem, OrderedList, Text } from "@chakra-ui/react";
 import copy from "copy-to-clipboard";
 import React, { useCallback, useEffect, useRef, useState } from "react";
 import { useDropzone } from "react-dropzone";
@@ -46,7 +42,7 @@ export function MyDropzone() {
       ))}
     </OrderedList>
   );
-  const onDrop = useCallback((acceptedFiles) => {
+  const onDrop = useCallback((acceptedFiles: File[]) => {
     console.log("accepted files are", acceptedFiles);
     setFilelist([]);
     setIsLoading(true);
@@ -76,14 +72,16 @@ export function MyDropzone() {
   const { getRootProps, getInputProps } = useDropzone({
     onDrop,
     maxFiles: 2,
-    accept: "image/jpeg, image/png",
+    accept: {
+      "image/jpeg": [],
+      "image/png": [],
+    },
     maxSize: 2000000,
   });
 
   return (
-      <Container w={{ base: "auto", md: "auto" }}>
-          
-      <Box  {...getRootProps()}>
+    <Container w={{ base: "auto", md: "auto" }}>
+      <Box {...getRootProps()}>
         <Center p="2" bg="blackAlpha.100" h="100px" color="blackAlpha.600">
           {/* <Spinner display={isLoading ? "block" : "none"}></Spinner> */}
           <CircularProgress display={isLoading ? "block" : "none"} isIndeterminate color="blue.300" />

@@ -4,19 +4,20 @@ import "katex/dist/katex.min.css";
 import { debounce } from "lodash";
 import dynamic from "next/dynamic";
 import React, { ChangeEvent, useCallback, useEffect, useRef } from "react";
-
-import { colors, sunEditorButtonList, sunEditorfontList } from "../../lib/constants";
+import { v4 as uuid } from "uuid";
+import { BASE_URL, colors, sunEditorButtonList, sunEditorfontList } from "../../lib/constants";
 import { elog } from "../../lib/mylog";
 import { supabase } from "../../lib/supabaseClient";
 import { useAuthContext } from "../../state/Authcontext";
 import { definitions } from "../../types/supabase";
-import { UiForImageUpload } from "../ContactMe";
+
 import { customToast } from "../CustomToast";
 // import SunEditor from "suneditor-react";
 import "suneditor/dist/css/suneditor.min.css"; // Import Sun Editor's CSS File
 // import SunEditor from "suneditor-react";
 import SunEditorCore from "suneditor/src/lib/core";
 import styled from "styled-components";
+import { UiForImageUpload } from "../UiForImageUpload";
 const SunEditor = dynamic(() => import("suneditor-react"), {
   ssr: false,
 });
@@ -39,6 +40,18 @@ const SuneditorForNotesMaking: React.FC<SuneditorForNotesMakingProps> = ({ artic
   const getSunEditorInstance = (sunEditor: SunEditorCore) => {
     editor.current = sunEditor;
   };
+  // useEffect(() => {
+  //   console.log("");
+
+  //   return () => {
+  //     if (editor.current) {
+  //       editor.current.disable()
+  //       // alert("Editor hai")
+  //       // editor.current = undefined;
+  //     }
+  //   };
+  // }, []);
+
   useEffect(() => {
     if (!isAutosaveOn) {
       debouncedFunctionRef.current = undefined;
@@ -113,7 +126,7 @@ const SuneditorForNotesMaking: React.FC<SuneditorForNotesMakingProps> = ({ artic
               </Radio>
             </Stack>
           </RadioGroup>
-          <Flex align="center" direction={{ base: "column", sm: "row" }} display={editorMode === "READ" ? "none" : "flex"}>
+          <Flex alignItems={"center"} pb="2"direction={{ base: "column", sm: "row" }} display={editorMode === "READ" ? "none" : "flex"}>
             <Select
               size="sm"
               px="2"
@@ -126,11 +139,11 @@ const SuneditorForNotesMaking: React.FC<SuneditorForNotesMakingProps> = ({ artic
               <option value="font-family: arial; font-size: 16px;">medium</option>
               <option value="font-family: arial; font-size: 24px;">large</option>
             </Select>
-            <Box pb="3">
+            {/* <Box pb="3">
               <UiForImageUpload />
-            </Box>
+            </Box> */}
 
-            <Button
+            {/* <Button
               onClick={() => {
                 updateArticleInDatabase(editor.current?.getContents(false));
               }}
@@ -140,7 +153,8 @@ const SuneditorForNotesMaking: React.FC<SuneditorForNotesMakingProps> = ({ artic
               variant="ghost"
             >
               Save
-            </Button>
+            </Button> */}
+
             <Checkbox
               colorScheme="whatsapp"
               // color="gray.300"
@@ -160,27 +174,30 @@ const SuneditorForNotesMaking: React.FC<SuneditorForNotesMakingProps> = ({ artic
             <SunEditor
               getSunEditorInstance={getSunEditorInstance}
               setDefaultStyle={fontSize}
-              // setDefaultStyle={font-family: ${fontFamily}; font-size: 14px;}
               hideToolbar={editorMode === "READ" ? true : false}
               defaultValue={language === "ENGLISH" ? article.article_english : article.article_hindi}
-              // key={postId}
-
               onChange={handleOnChange}
               readOnly={editorMode === "READ" ? true : false}
               autoFocus={false}
+              
               // disable={editorMode === "READ" ? true : false}
               setOptions={{
-                placeholder: "Start Typing",
+                callBackSave(contents, isChanged) {
+                  updateArticleInDatabase(contents);
+                },
+                // hideToolbar: true, // to be implemented
+                placeholder: "Click Edit and Start Typing",
                 mode: "classic",
                 katex: katex,
                 colorList: colors,
+                imageUploadUrl: `${BASE_URL}/api/uploadImage`,
                 paragraphStyles: [
                   "spaced",
 
-                //   {
-                //     name: "Custom",
-                //     class: "__se__customClass",
-                //   },
+                  //   {
+                  //     name: "Custom",
+                  //     class: "__se__customClass",
+                  //   },
                 ],
                 textStyles: [
                   "shadow",
@@ -208,8 +225,9 @@ const SuneditorForNotesMaking: React.FC<SuneditorForNotesMakingProps> = ({ artic
                 font: sunEditorfontList,
 
                 fontSize: [12, 14, 16, 20],
-                imageFileInput: false, //this disable image as file, only from url allowed
-                imageSizeOnlyPercentage: true, //changed on 6 june
+                imageFileInput: true, //this disable image as file, only from url allowed
+                imageSizeOnlyPercentage: false, //changed on 6 june
+
                 // imageUrlInput: true,
                 // imageGalleryUrl: "www.qlook.com",
               }}
@@ -235,38 +253,11 @@ export const Center = styled.div`
   }
 `;
 export const EditorStyle = styled.div`
-  /* th,
-  td {
-    min-width: 250px;
-  } */
   .sun-editor {
-    /* margin-top: -18px !important; */
-    /* border: 1px solid blue; */
     padding-left: -30px !important;
     padding-right: -30px !important;
     margin-left: -20px !important;
     margin-right: 0px !important;
     border: ${(props) => (props.title === "READ" ? "none" : undefined)};
-    /* border: "none"; */
-    /* z-index: 2 !important; */
   }
-
-  /* blockquote {
-    background: #f9f9f9;
-    border-left: 10px solid #ccc;
-    margin: 1.5em 10px;
-    padding: 0.5em 10px;
-    quotes: "\201C""\201D""\2018""\2019";
-  }
-  blockquote:before {
-    color: #ccc;
-    content: open-quote;
-    font-size: 4em;
-    line-height: 0.1em;
-    margin-right: 0.25em;
-    vertical-align: -0.4em;
-  }
-  blockquote p {
-    display: inline;
-  } */
 `;

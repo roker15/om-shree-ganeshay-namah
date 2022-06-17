@@ -1,15 +1,11 @@
-import { Container, useColorMode } from "@chakra-ui/react";
+import { Container } from "@chakra-ui/react";
 import { useRouter } from "next/dist/client/router";
-import React, { useEffect, useState } from "react";
-import AnimatedText from "../components/AnimatedText";
+import React, { useEffect } from "react";
 import ManageNotes from "../components/notes/ManageNotes";
-import CreateBookSyllabus from "../components/syllabus/CreateBookSyllabus";
 import LayoutWithTopNavbar from "../layout/LayoutWithTopNavbar";
 import { supabase } from "../lib/supabaseClient";
-import { useAuthContext } from "../state/Authcontext";
 import { NoteContextWrapper } from "../state/NoteContext";
-import { useAppContext } from "../state/state";
-import { BookResponse, Papers } from "../types/myTypes";
+import { Papers } from "../types/myTypes";
 import PageWithLayoutType from "../types/pageWithLayout";
 import { definitions } from "../types/supabase";
 

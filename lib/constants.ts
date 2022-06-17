@@ -1,11 +1,11 @@
 export const NEXT_PUBLIC_SUPABASE_URL = process.env.NEXT_PUBLIC_SUPABASE_URL;
 export const NEXT_PUBLIC_SUPABASE_ANON_KEY = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY;
-// export const BASE_URL = "http://localhost:3000"
+// export const BASE_URL = "http://localhost:3000";
 // export const BASE_URL = "https://om-shree-ganeshay-namah-git-development4-roker15.vercel.app"
 // export const BASE_URL = "http://localhost:3000";
 // export const BASE_URL = "https://qlook.in";
-export const BASE_URL = "https://jionote.com";
-// export const BASE_URL = "https://om-shree-ganeshay-namah-git-development4-start-roker15.vercel.app/";
+// export const BASE_URL = "https://jionote.com";
+export const BASE_URL = "https://om-shree-ganeshay-namah-git-dev-only-jionote-v1-roker15.vercel.app";
 
 // npx openapi-typescript https://hbvffqslxssdbkdxfqop.supabase.co/rest/v1/?apikey=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJyb2xlIjoiYW5vbiIsImlhdCI6MTYzMDIyNjQxOCwiZXhwIjoxOTQ1ODAyNDE4fQ.CCZ3y_Mzp5HjQJnuEXqL5Wq4tk2ZjZj97gVkODFYNh4 --output types/supabase.ts
 
@@ -57,7 +57,7 @@ export const sunEditorButtonList = [
     // "codeView",
     // "preview",
     "print",
-    // "save",
+    "save",
     // "template",
   ],
 ];
@@ -121,8 +121,6 @@ export const currentAffairTags: { id: number; tag: string }[] = [
   { id: 201, tag: "Previous year Questions ⭐" },
   { id: 202, tag: "Model Questions" },
 
-
-
   { id: 8, tag: "Indian Heritage, Art and Culture ⭐" },
 
   { id: 9, tag: "Polity & Governance ⭐" },
@@ -132,33 +130,30 @@ export const currentAffairTags: { id: number; tag: string }[] = [
   { id: 13, tag: "Constitutional posts and Bodies" },
   { id: 14, tag: "quasi-judicial bodies" },
 
-
   { id: 15, tag: "Social Issue & Social Justice ⭐" },
   { id: 16, tag: "Welfare schemes" },
   { id: 17, tag: "poverty and hunger" },
   { id: 18, tag: "Social Sector/Services relating to Health, Education, Human Resources" },
 
-
-  { id: 19, tag: "International Relations ⭐"},
-  { id: 20, tag: "India - neighborhood relations"},
-  { id: 21, tag: "global groupings and agreements"},
-  { id: 22, tag: "regional groupings and agreements"},
-  { id: 23, tag: "Bilateral groupings and agreements"},
+  { id: 19, tag: "International Relations ⭐" },
+  { id: 20, tag: "India - neighborhood relations" },
+  { id: 21, tag: "global groupings and agreements" },
+  { id: 22, tag: "regional groupings and agreements" },
+  { id: 23, tag: "Bilateral groupings and agreements" },
   { id: 24, tag: "Important International institutions, agencies and fora- their structure, mandate" },
   { id: 601, tag: "United Nations & specialized agencies" },
-  
-  
+
   { id: 25, tag: "Science & Technology ⭐" },
   { id: 26, tag: "New Technology" },
   { id: 27, tag: "indigenization of Technology" },
-  { id: 28, tag: "Defence"},
-  { id: 29, tag: "IT & Computers"},
+  { id: 28, tag: "Defence" },
+  { id: 29, tag: "IT & Computers" },
   { id: 30, tag: "Space" },
   { id: 31, tag: "Robitics" },
   { id: 32, tag: "Nano-Technology" },
   { id: 33, tag: "Bio-Tech" },
   { id: 34, tag: "Intellectual property rights" },
-  
+
   { id: 35, tag: "Indian Economy ⭐" },
   { id: 36, tag: "Inclusive growth" },
   { id: 37, tag: "Employment" },
@@ -169,8 +164,7 @@ export const currentAffairTags: { id: number; tag: string }[] = [
   { id: 42, tag: "PDS and food security" },
   { id: 43, tag: "Land reforms" },
   { id: 44, tag: "Infrastructure" },
-  
-  
+
   { id: 45, tag: "Biodiversity ⭐" },
 
   { id: 46, tag: "Ecology & Environment ⭐" },
@@ -185,12 +179,11 @@ export const currentAffairTags: { id: number; tag: string }[] = [
   { id: 54, tag: "Money Laundering" },
   { id: 55, tag: "Security forces and agencies" },
 
-
   { id: 56, tag: "Disaster Management ⭐" },
-  
- 
+
   { id: 57, tag: "Miscellaneous ⭐" },
   { id: 58, tag: "Sustainable Developement" },
   { id: 59, tag: "Bills/Acts" },
   { id: 60, tag: "Study/Survey/Report/Index" },
 ];
+

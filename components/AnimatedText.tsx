@@ -1,23 +1,64 @@
-import { Flex } from "@chakra-ui/react";
-import React from "react";
-import Typewriter from "typewriter-effect";
+import { Flex, Link, Tag, VStack, Text } from "@chakra-ui/react";
+import React, { useCallback, useState } from "react";
+import SimpleImageSlider from "react-simple-image-slider";
+
+const images = [
+  { url: "https://i.imgur.com/ac8opj9.png" },
+  { url: "https://i.imgur.com/KgGRcvk.png" },
+];
 
 const AnimatedText = () => {
-  return (
-    <Flex justifyContent="center">
-      <Typewriter
-        options={{
-          strings: [
-            '<span style="color: #434743; font-size:24px ;font-family: Comic Sans MS ;"> Create , Update and Organise NOTES online <span>',
+  const [imageDes, setImageDes] = useState("Create Notes");
+  const onClickBullets = useCallback((idx: number) => {
+    switch (idx) {
+      case 0:
+        setImageDes("Create & Edit notes Anytime");
+        break;
+      case 1:
+        setImageDes("Read notes");
+        break;
 
-            '<span style="color: #434743; font-size:24px ;font-family: Comic Sans MS ;" >Collaborate with Friends</span>',
-            '<span style="color: #434743; font-size:24px ;font-family: Comic Sans MS ;" >Share with WORLD </span>',
-          ],
-          autoStart: true,
-          loop: true,
-          delay: "natural",
-        }}
-      />
+      default:
+        break;
+    }
+    // alert(`[App onClickBullets] ${idx}`);
+  }, []);
+
+  const onStartSlide = useCallback((idx: number, length: number) => {
+    // alert(idx,length) 
+    switch (idx) {
+      case 1:
+        setImageDes("Create & Edit notes Anytime");
+        break;
+      case 2:
+        setImageDes("Read notes");
+        break;
+
+      default:
+        break;
+    }
+    // alert(`[App onClickBullets] ${idx}`);
+  }, []);
+ 
+  return (
+    <Flex justifyContent="center" py="2">
+      <VStack>
+        <Text p="0.5" px="6" fontSize="lg" bg="orange.300" color="white">{imageDes}</Text>
+        <div>
+          <SimpleImageSlider
+            onClickBullets={onClickBullets}
+            onStartSlide={onStartSlide}
+            width={896}
+            height={504}
+            images={images}
+            showBullets={true}
+            showNavs={true}
+            autoPlay={true}
+            autoPlayDelay={5.0}
+            navStyle={2}
+          />
+        </div>
+      </VStack>
     </Flex>
   );
 };
