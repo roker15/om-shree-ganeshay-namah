@@ -126,7 +126,7 @@ const SuneditorForNotesMaking: React.FC<SuneditorForNotesMakingProps> = ({ artic
               </Radio>
             </Stack>
           </RadioGroup>
-          <Flex align="center" direction={{ base: "column", sm: "row" }} display={editorMode === "READ" ? "none" : "flex"}>
+          <Flex alignItems={"center"} pb="2"direction={{ base: "column", sm: "row" }} display={editorMode === "READ" ? "none" : "flex"}>
             <Select
               size="sm"
               px="2"
@@ -139,11 +139,11 @@ const SuneditorForNotesMaking: React.FC<SuneditorForNotesMakingProps> = ({ artic
               <option value="font-family: arial; font-size: 16px;">medium</option>
               <option value="font-family: arial; font-size: 24px;">large</option>
             </Select>
-            <Box pb="3">
+            {/* <Box pb="3">
               <UiForImageUpload />
-            </Box>
+            </Box> */}
 
-            <Button
+            {/* <Button
               onClick={() => {
                 updateArticleInDatabase(editor.current?.getContents(false));
               }}
@@ -153,7 +153,8 @@ const SuneditorForNotesMaking: React.FC<SuneditorForNotesMakingProps> = ({ artic
               variant="ghost"
             >
               Save
-            </Button>
+            </Button> */}
+
             <Checkbox
               colorScheme="whatsapp"
               // color="gray.300"
@@ -178,9 +179,13 @@ const SuneditorForNotesMaking: React.FC<SuneditorForNotesMakingProps> = ({ artic
               onChange={handleOnChange}
               readOnly={editorMode === "READ" ? true : false}
               autoFocus={false}
+              
               // disable={editorMode === "READ" ? true : false}
               setOptions={{
-                
+                callBackSave(contents, isChanged) {
+                  updateArticleInDatabase(contents);
+                },
+                // hideToolbar: true, // to be implemented
                 placeholder: "Click Edit and Start Typing",
                 mode: "classic",
                 katex: katex,

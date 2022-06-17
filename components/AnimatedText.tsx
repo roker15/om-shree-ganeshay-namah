@@ -41,9 +41,9 @@ const AnimatedText = () => {
   }, []);
  
   return (
-    <Flex justifyContent="center" py="10px">
+    <Flex justifyContent="center" py="2">
       <VStack>
-        <Text as="u" fontSize="lg" color="green.400">{imageDes}</Text>
+        <Text p="0.5" px="6" fontSize="lg" bg="orange.300" color="white">{imageDes}</Text>
         <div>
           <SimpleImageSlider
             onClickBullets={onClickBullets}
@@ -55,6 +55,7 @@ const AnimatedText = () => {
             showNavs={true}
             autoPlay={true}
             autoPlayDelay={5.0}
+            navStyle={2}
           />
         </div>
       </VStack>

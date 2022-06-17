@@ -57,7 +57,7 @@ export const sunEditorButtonList = [
     // "codeView",
     // "preview",
     "print",
-    // "save",
+    "save",
     // "template",
   ],
 ];
