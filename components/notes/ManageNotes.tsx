@@ -4,6 +4,7 @@ import {
   Center,
   Checkbox,
   CircularProgress,
+  Container,
   Drawer,
   DrawerBody,
   DrawerCloseButton,
@@ -19,9 +20,11 @@ import {
   HStack,
   IconButton,
   Input,
+  Link,
   Switch,
   Text,
   useDisclosure,
+  VStack,
 } from "@chakra-ui/react";
 import React, { ChangeEvent, useEffect, useState } from "react";
 import { MdMenu, MdOutlineThumbUp, MdShare } from "react-icons/md";
@@ -36,7 +39,7 @@ import { useAuthContext } from "../../state/Authcontext";
 import { useNoteContext } from "../../state/NoteContext";
 import { BookResponse, BookSyllabus } from "../../types/myTypes";
 import { definitions } from "../../types/supabase";
-import AnimatedText from "../AnimatedText";
+import AnimatedText from "../ImageSlider";
 import ManageCurrentAffair from "../CurrentAffair/ManageCurrentAffair";
 import Tags from "../CurrentAffair/Tags";
 
@@ -45,6 +48,8 @@ import Notes from "./Notes";
 import { NotesSharing } from "./NotesSharing";
 import SharedNotesPanel from "./SharedNotesPanel";
 import SyllabusForNotes from "./SyllabusForNotes";
+import { ExternalLinkIcon } from "@chakra-ui/icons";
+import LandingPageTable from "../LandingPageTable";
 const ManageNotes = () => {
   const { isTagSearchActive } = useNoteContext();
   const { user, error } = useUser();
@@ -325,7 +330,10 @@ const ManageNotes = () => {
           </GridItem>
         </Grid>
       ) : (
-        <AnimatedText />
+        <VStack >
+          <LandingPageTable />
+          <AnimatedText />
+        </VStack>
       )}
 
       {/* </Flex> */}
@@ -339,7 +347,7 @@ type HeaderProps = {
   children: JSX.Element;
 };
 
-const DrawerExample = (props: HeaderProps ) => {
+const DrawerExample = (props: HeaderProps) => {
   const { isOpen, onOpen, onClose } = useDisclosure();
   const btnRef = React.useRef(null);
 

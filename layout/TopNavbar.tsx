@@ -1,10 +1,14 @@
+import { ExternalLinkIcon } from "@chakra-ui/icons";
 import {
   Avatar,
-  Box, Button, Flex,
+  Box,
+  Button,
+  Flex,
   FlexProps,
   Heading,
   HStack,
   Image,
+  Link,
   LinkBox,
   LinkOverlay,
   Menu,
@@ -15,10 +19,10 @@ import {
   Text,
   useColorModeValue,
   useDisclosure,
-  VStack
+  VStack,
 } from "@chakra-ui/react";
 import { ReactNode } from "react";
-import { FaGoogle } from "react-icons/fa";
+import { FaGoogle, FaWhatsapp } from "react-icons/fa";
 import { FiChevronDown } from "react-icons/fi";
 import { BASE_URL } from "../lib/constants";
 import { useAuthContext } from "../state/Authcontext";
@@ -78,10 +82,13 @@ const MobileNav = ({ onOpen, ...rest }: MobileProps) => {
           />
         </LinkOverlay>
       </LinkBox>
-
-      <Heading as="h2" size="md" display={{ base: "none", md: "block" }}>
-        Welcome to Jionote {" "} </Heading> <HStack spacing={{ base: "0", md: "6" }}> {!profile ? (
+      <Heading ml="16"as="em" size="md" color="blackAlpha.900" display={{ base: "none", md: "block" }}>
+        India's first Online 📝Notes making Platform{" "}
+      </Heading>{" "}
+      <HStack spacing={{ base: "0", md: "6" }}>
+        {!profile ? (
           <Box></Box>
+        ) : (
           // <Button
           //   border="0px"
           //   colorScheme="google"
@@ -91,14 +98,18 @@ const MobileNav = ({ onOpen, ...rest }: MobileProps) => {
           // >
           //   Sign in
           // </Button>
-        ) : (
           ""
         )}
         <Flex border="0px" alignItems={"center"}>
+          <HStack alignItems={"center"} mx="2" px="2" py="0.5" bg="green.300">
+            <Link color="white" href="https://chat.whatsapp.com/DzM1YQEp8Gn6EAwDAvPg4U" isExternal>
+              Join Whatsapp Group 
+            </Link>
+            <FaWhatsapp color="white"/>
+          </HStack>
           <Menu boundary="clippingParents">
             <MenuButton border="0px" py={2} transition="all 0.3s" _focus={{ boxShadow: "none" }}>
               <HStack>
-                
                 {!profile ? (
                   <Avatar size={"sm"} src="https://bit.ly/broken-link" />
                 ) : (
