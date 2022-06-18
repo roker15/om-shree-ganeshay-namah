@@ -1961,6 +1961,8 @@ export interface paths {
           paper_id?: parameters["rowFilter.questionbank.paper_id"];
           remark?: parameters["rowFilter.questionbank.remark"];
           created_by?: parameters["rowFilter.questionbank.created_by"];
+          /** foreign key to table books */
+          paper_id_new?: parameters["rowFilter.questionbank.paper_id_new"];
           /** Filtering Columns */
           select?: parameters["select"];
           /** Ordering */
@@ -2021,6 +2023,8 @@ export interface paths {
           paper_id?: parameters["rowFilter.questionbank.paper_id"];
           remark?: parameters["rowFilter.questionbank.remark"];
           created_by?: parameters["rowFilter.questionbank.created_by"];
+          /** foreign key to table books */
+          paper_id_new?: parameters["rowFilter.questionbank.paper_id_new"];
         };
         header: {
           /** Preference */
@@ -2045,6 +2049,8 @@ export interface paths {
           paper_id?: parameters["rowFilter.questionbank.paper_id"];
           remark?: parameters["rowFilter.questionbank.remark"];
           created_by?: parameters["rowFilter.questionbank.created_by"];
+          /** foreign key to table books */
+          paper_id_new?: parameters["rowFilter.questionbank.paper_id_new"];
         };
         body: {
           /** questionbank */
@@ -3663,6 +3669,14 @@ export interface definitions {
      * This is a Foreign Key to `profiles.id`.<fk table='profiles' column='id'/>
      */
     created_by?: string;
+    /**
+     * Format: bigint
+     * @description foreign key to table books
+     *
+     * Note:
+     * This is a Foreign Key to `books.id`.<fk table='books' column='id'/>
+     */
+    paper_id_new?: number;
   };
   questionbank_old: {
     /**
@@ -4289,6 +4303,11 @@ export interface parameters {
   "rowFilter.questionbank.remark": string;
   /** Format: uuid */
   "rowFilter.questionbank.created_by": string;
+  /**
+   * Format: bigint
+   * @description foreign key to table books
+   */
+  "rowFilter.questionbank.paper_id_new": string;
   /** @description questionbank_old */
   "body.questionbank_old": definitions["questionbank_old"];
   /** Format: bigint */

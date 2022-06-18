@@ -1,15 +1,21 @@
 import { supabase } from "../lib/supabaseClient";
 import { Headings, Papers, Post, QuestionBank, SharedPost, Subheading, SubheadingViews } from "../types/myTypes";
 import useSWR, { useSWRConfig } from "swr";
+import { definitions } from "../types/supabase";
 
-export function useGetExamPapers(id?: any) {
+export function useGetExamPapers(examId: number) {
   const { data, error } = useSWR(
     ["/upsc"],
     async () =>
-      await supabase.from<Papers>("papers").select(`
-  id,paper_name
+      await supabase
+        .from<definitions["books"]>("books")
+        .select(
+          `
+  id,book_name
   
- `)
+ `
+        )
+        .eq("class_fk", examId)
   );
 
   return {
@@ -38,7 +44,7 @@ export function useGetQuestionsByPaperidAndYear(paperId?: number, year?: number,
     shouldFetch && paperId && year ? [`/questions/${paperId}/${year}`] : null,
     async () =>
       await supabase
-        .from<QuestionBank>("questionbank")
+        .from<definitions["questionbank"]>("questionbank")
         .select(
           `
       id,
@@ -50,7 +56,7 @@ export function useGetQuestionsByPaperidAndYear(paperId?: number, year?: number,
       remark
  `
         )
-        .eq("paper_id", paperId)
+        .eq("paper_id_new", paperId)
         .eq("year", year),
     {
       revalidateOnFocus: false,

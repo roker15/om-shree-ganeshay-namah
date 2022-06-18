@@ -15,7 +15,8 @@ import {
   Wrap,
 } from "@chakra-ui/react";
 import React from "react";
-import { AspectRatio } from '@chakra-ui/react'
+import { AspectRatio } from "@chakra-ui/react";
+import QuestionBanks from "./QuestionBank";
 function LandingPageTable() {
   return (
     <Box maxW="4xl" pb="4">
@@ -23,7 +24,6 @@ function LandingPageTable() {
         Why you should make your notes online?
       </Text>
       <Table size="lg" variant="striped">
-
         <Tbody>
           <Tr>
             <Td>
@@ -70,7 +70,7 @@ function LandingPageTable() {
           </Tr>
         </Tbody>
       </Table>
-   
+      <QuestionBanks />
     </Box>
   );
 }
