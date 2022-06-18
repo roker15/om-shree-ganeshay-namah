@@ -33,7 +33,7 @@ export default function TopNavbar({ children }: { children: ReactNode }) {
   const { isOpen, onOpen, onClose } = useDisclosure();
 
   return (
-    <Box minH="100vh" bg="white.500">
+    <Box minH="100vh" bg="white">
       <MobileNav onOpen={onOpen} />
       {children}
     </Box>
@@ -43,6 +43,7 @@ export default function TopNavbar({ children }: { children: ReactNode }) {
 interface MobileProps extends FlexProps {
   onOpen: () => void;
 }
+
 
 const MobileNav = ({ onOpen, ...rest }: MobileProps) => {
   const { signInWithgoogle, signOut, profile } = useAuthContext();
@@ -76,84 +77,89 @@ const MobileNav = ({ onOpen, ...rest }: MobileProps) => {
             // priority={true}
             loading="eager"
             src="/logo-150x150.png"
-            alt="Picture of the author"
-            w={{ base: "80px", md: "120px" }}
+            alt="Logo"
+            w={{ base: "80px", md: "110px" }}
             // w={{ base: "35px", md: "100px" }}
           />
         </LinkOverlay>
       </LinkBox>
-      <Heading ml="16"as="em" size="md" color="blackAlpha.900" display={{ base: "none", md: "block" }}>
+      <Heading fontSize="xl" ml="16" as="em" size="md" color="blackAlpha.800" display={{ base: "none", md: "block" }}>
         India's first Online 📝Notes making Platform{" "}
       </Heading>{" "}
       <HStack spacing={{ base: "0", md: "6" }}>
         {!profile ? (
-          <Box></Box>
-        ) : (
-          // <Button
-          //   border="0px"
-          //   colorScheme="google"
-          //   leftIcon={<FaGoogle />}
-          //   variant="ghost"
-          //   onClick={() => signInWithgoogle(BASE_URL)}
-          // >
-          //   Sign in
-          // </Button>
-          ""
-        )}
-        <Flex border="0px" alignItems={"center"}>
-          <HStack alignItems={"center"} mx="2" px="2" py="0.5" bg="green.300">
-            <Link color="white" href="https://chat.whatsapp.com/DzM1YQEp8Gn6EAwDAvPg4U" isExternal>
-              Join Whatsapp Group 
-            </Link>
-            <FaWhatsapp color="white"/>
-          </HStack>
-          <Menu boundary="clippingParents">
-            <MenuButton border="0px" py={2} transition="all 0.3s" _focus={{ boxShadow: "none" }}>
-              <HStack>
-                {!profile ? (
-                  <Avatar size={"sm"} src="https://bit.ly/broken-link" />
-                ) : (
-                  <Avatar
-                    size={"sm"}
-                    src={
-                      profile.avatar_url // change this to url from database avatar
-                    }
-                  />
-                )}
-
-                <VStack display={{ base: "none", md: "flex" }} alignItems="flex-start" spacing="1px" ml="2">
-                  {profile ? <Text fontSize="sm">{profile?.username}</Text> : null}
-                  <Text fontSize="xs" color="gray.600">
-                    {/* Admin */}
-                  </Text>
-                </VStack>
-                <Box display={{ base: "none", md: "flex" }}>
-                  <FiChevronDown />
-                </Box>
-              </HStack>
-            </MenuButton>
-            <MenuList
+          <HStack>
+            {" "}
+            <Button
               border="0px"
-              bg={useColorModeValue("white", "gray.900")}
-              borderColor={useColorModeValue("gray.200", "gray.700")}
+              colorScheme="google"
+              leftIcon={<FaGoogle />}
+              variant="ghost"
+              onClick={() => signInWithgoogle(BASE_URL)}
             >
-              <MenuItem border="0px">Profile</MenuItem>
-              <MenuItem border="0px">Settings</MenuItem>
-              {profile ? (
-                <>
-                  {" "}
-                  <MenuDivider />
-                  <MenuItem border="0px" onClick={() => signOut("vv")}>
-                    Sign out
-                  </MenuItem>
-                </>
-              ) : (
-                ""
-              )}
-            </MenuList>
-          </Menu>
-        </Flex>
+              Sign in
+            </Button>
+            {JoinWhatsapp}
+          </HStack>
+        ) : (
+          <Flex border="0px" alignItems={"center"}>
+           {JoinWhatsapp}
+            <Menu boundary="clippingParents">
+              <MenuButton border="0px" py={2} transition="all 0.3s" _focus={{ boxShadow: "none" }}>
+                <HStack>
+                  {!profile ? (
+                    <Avatar size={"sm"} src="https://bit.ly/broken-link" />
+                  ) : (
+                    <Avatar
+                      size={"sm"}
+                      src={
+                        profile.avatar_url // change this to url from database avatar
+                      }
+                    />
+                  )}
+
+                  <VStack display={{ base: "none", md: "flex" }} alignItems="flex-start" spacing="1px" ml="2">
+                    {profile ? <Text fontSize="sm">{profile?.username}</Text> : null}
+                    <Text fontSize="xs" color="gray.600">
+                      {/* Admin */}
+                    </Text>
+                  </VStack>
+                  <Box display={{ base: "none", md: "flex" }}>
+                    <FiChevronDown />
+                  </Box>
+                </HStack>
+              </MenuButton>
+              <MenuList
+                border="0px"
+                bg={useColorModeValue("white", "gray.900")}
+                borderColor={useColorModeValue("gray.200", "gray.700")}
+              >
+                <MenuItem border="0px">Profile</MenuItem>
+                <MenuItem border="0px">Settings</MenuItem>
+                {profile ? (
+                  <>
+                    {" "}
+                    <MenuDivider />
+                    <MenuItem border="0px" onClick={() => signOut("vv")}>
+                      Sign out
+                    </MenuItem>
+                  </>
+                ) : (
+                  ""
+                )}
+              </MenuList>
+            </Menu>
+          </Flex>
+        )}
       </HStack>
     </Flex>
   );
 };
+
+
+const JoinWhatsapp = <HStack alignItems={"center"} mx="2" px="2" py="0.5" bg="green.300">
+  <Link color="white" href="https://chat.whatsapp.com/DzM1YQEp8Gn6EAwDAvPg4U" isExternal>
+    Join Whatsapp Group
+  </Link>
+  <FaWhatsapp color="white" />
+</HStack>;
