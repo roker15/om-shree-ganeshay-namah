@@ -219,8 +219,8 @@ const SuneditorForNotesMaking: React.FC<SuneditorForNotesMakingProps> = ({ artic
                 height: "100%",
                 width: "auto",
                 minWidth: "350px",
-                resizingBar: false,
                 buttonList: sunEditorButtonList,
+                resizingBar: false,
                 formats: ["p", "div", "h1", "h2", "h3"],
                 font: sunEditorfontList,
 

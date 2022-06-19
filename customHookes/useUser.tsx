@@ -52,7 +52,7 @@ export function useGetQuestionsByPaperidAndYear(paperId?: number, year?: number,
       search_keys,
       year,
       sequence,
-      paper_id,
+      paper_id_new,
       remark
  `
         )

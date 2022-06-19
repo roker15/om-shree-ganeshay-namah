@@ -1,22 +1,7 @@
 import {
-  TableContainer,
-  Text,
-  Table,
-  TableCaption,
-  Thead,
-  Tr,
-  Th,
-  Tbody,
-  Td,
-  Tfoot,
-  UnorderedList,
-  ListItem,
-  Box,
-  Wrap,
+  Box, ListItem, Table, Tbody,
+  Td, Text, Tr, UnorderedList
 } from "@chakra-ui/react";
-import React from "react";
-import { AspectRatio } from "@chakra-ui/react";
-import QuestionBanks from "./QuestionBank";
 function LandingPageTable() {
   return (
     <Box maxW="4xl" pb="4">
@@ -70,7 +55,6 @@ function LandingPageTable() {
           </Tr>
         </Tbody>
       </Table>
-      <QuestionBanks />
     </Box>
   );
 }
