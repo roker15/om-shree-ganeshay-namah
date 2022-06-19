@@ -1,5 +1,6 @@
-import { Container } from "@chakra-ui/react";
+import { Container, Flex, Text } from "@chakra-ui/react";
 import { useRouter } from "next/dist/client/router";
+import Link from "next/link";
 import React, { useEffect } from "react";
 import ManageNotes from "../components/notes/ManageNotes";
 import LayoutWithTopNavbar from "../layout/LayoutWithTopNavbar";
@@ -44,7 +45,16 @@ const Home: React.FC<ProfileListProps> = ({ data }) => {
   return (
     <Container maxW="full" px={{ base: "2", sm: "4", md: "8" }}>
       <NoteContextWrapper>
+        <Flex justifyContent="end">
+          <Text as="b">
+            Go to{" "}
+            <Link href="/questionBanks">
+              <a>Question Bank</a>
+            </Link>
+          </Text>
+        </Flex>
         <ManageNotes />
+       
       </NoteContextWrapper>
       {/* <AnimatedText/> */}
       {/* <CreateBookSyllabus /> */}

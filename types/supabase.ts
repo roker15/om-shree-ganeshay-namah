@@ -1947,6 +1947,102 @@ export interface paths {
       };
     };
   };
+  "/question_answer": {
+    get: {
+      parameters: {
+        query: {
+          id?: parameters["rowFilter.question_answer.id"];
+          created_at?: parameters["rowFilter.question_answer.created_at"];
+          question_id?: parameters["rowFilter.question_answer.question_id"];
+          answered_by?: parameters["rowFilter.question_answer.answered_by"];
+          /** Filtering Columns */
+          select?: parameters["select"];
+          /** Ordering */
+          order?: parameters["order"];
+          /** Limiting and Pagination */
+          offset?: parameters["offset"];
+          /** Limiting and Pagination */
+          limit?: parameters["limit"];
+        };
+        header: {
+          /** Limiting and Pagination */
+          Range?: parameters["range"];
+          /** Limiting and Pagination */
+          "Range-Unit"?: parameters["rangeUnit"];
+          /** Preference */
+          Prefer?: parameters["preferCount"];
+        };
+      };
+      responses: {
+        /** OK */
+        200: {
+          schema: definitions["question_answer"][];
+        };
+        /** Partial Content */
+        206: unknown;
+      };
+    };
+    post: {
+      parameters: {
+        body: {
+          /** question_answer */
+          question_answer?: definitions["question_answer"];
+        };
+        query: {
+          /** Filtering Columns */
+          select?: parameters["select"];
+        };
+        header: {
+          /** Preference */
+          Prefer?: parameters["preferReturn"];
+        };
+      };
+      responses: {
+        /** Created */
+        201: unknown;
+      };
+    };
+    delete: {
+      parameters: {
+        query: {
+          id?: parameters["rowFilter.question_answer.id"];
+          created_at?: parameters["rowFilter.question_answer.created_at"];
+          question_id?: parameters["rowFilter.question_answer.question_id"];
+          answered_by?: parameters["rowFilter.question_answer.answered_by"];
+        };
+        header: {
+          /** Preference */
+          Prefer?: parameters["preferReturn"];
+        };
+      };
+      responses: {
+        /** No Content */
+        204: never;
+      };
+    };
+    patch: {
+      parameters: {
+        query: {
+          id?: parameters["rowFilter.question_answer.id"];
+          created_at?: parameters["rowFilter.question_answer.created_at"];
+          question_id?: parameters["rowFilter.question_answer.question_id"];
+          answered_by?: parameters["rowFilter.question_answer.answered_by"];
+        };
+        body: {
+          /** question_answer */
+          question_answer?: definitions["question_answer"];
+        };
+        header: {
+          /** Preference */
+          Prefer?: parameters["preferReturn"];
+        };
+      };
+      responses: {
+        /** No Content */
+        204: never;
+      };
+    };
+  };
   "/questionbank": {
     get: {
       parameters: {
@@ -1961,6 +2057,8 @@ export interface paths {
           paper_id?: parameters["rowFilter.questionbank.paper_id"];
           remark?: parameters["rowFilter.questionbank.remark"];
           created_by?: parameters["rowFilter.questionbank.created_by"];
+          /** foreign key to table books */
+          paper_id_new?: parameters["rowFilter.questionbank.paper_id_new"];
           /** Filtering Columns */
           select?: parameters["select"];
           /** Ordering */
@@ -2021,6 +2119,8 @@ export interface paths {
           paper_id?: parameters["rowFilter.questionbank.paper_id"];
           remark?: parameters["rowFilter.questionbank.remark"];
           created_by?: parameters["rowFilter.questionbank.created_by"];
+          /** foreign key to table books */
+          paper_id_new?: parameters["rowFilter.questionbank.paper_id_new"];
         };
         header: {
           /** Preference */
@@ -2045,6 +2145,8 @@ export interface paths {
           paper_id?: parameters["rowFilter.questionbank.paper_id"];
           remark?: parameters["rowFilter.questionbank.remark"];
           created_by?: parameters["rowFilter.questionbank.created_by"];
+          /** foreign key to table books */
+          paper_id_new?: parameters["rowFilter.questionbank.paper_id_new"];
         };
         body: {
           /** questionbank */
@@ -3624,6 +3726,32 @@ export interface definitions {
     /** Format: text */
     email?: string;
   };
+  /** @description answer of question */
+  question_answer: {
+    /**
+     * Format: bigint
+     * @description Note:
+     * This is a Primary Key.<pk/>
+     */
+    id: number;
+    /**
+     * Format: timestamp with time zone
+     * @default now()
+     */
+    created_at?: string;
+    /**
+     * Format: bigint
+     * @description Note:
+     * This is a Foreign Key to `questionbank.id`.<fk table='questionbank' column='id'/>
+     */
+    question_id?: number;
+    /**
+     * Format: uuid
+     * @description Note:
+     * This is a Foreign Key to `profiles.id`.<fk table='profiles' column='id'/>
+     */
+    answered_by?: string;
+  };
   questionbank: {
     /**
      * Format: bigint
@@ -3663,6 +3791,14 @@ export interface definitions {
      * This is a Foreign Key to `profiles.id`.<fk table='profiles' column='id'/>
      */
     created_by?: string;
+    /**
+     * Format: bigint
+     * @description foreign key to table books
+     *
+     * Note:
+     * This is a Foreign Key to `books.id`.<fk table='books' column='id'/>
+     */
+    paper_id_new?: number;
   };
   questionbank_old: {
     /**
@@ -4267,6 +4403,16 @@ export interface parameters {
   "rowFilter.profiles.role": string;
   /** Format: text */
   "rowFilter.profiles.email": string;
+  /** @description question_answer */
+  "body.question_answer": definitions["question_answer"];
+  /** Format: bigint */
+  "rowFilter.question_answer.id": string;
+  /** Format: timestamp with time zone */
+  "rowFilter.question_answer.created_at": string;
+  /** Format: bigint */
+  "rowFilter.question_answer.question_id": string;
+  /** Format: uuid */
+  "rowFilter.question_answer.answered_by": string;
   /** @description questionbank */
   "body.questionbank": definitions["questionbank"];
   /** Format: bigint */
@@ -4289,6 +4435,11 @@ export interface parameters {
   "rowFilter.questionbank.remark": string;
   /** Format: uuid */
   "rowFilter.questionbank.created_by": string;
+  /**
+   * Format: bigint
+   * @description foreign key to table books
+   */
+  "rowFilter.questionbank.paper_id_new": string;
   /** @description questionbank_old */
   "body.questionbank_old": definitions["questionbank_old"];
   /** Format: bigint */
