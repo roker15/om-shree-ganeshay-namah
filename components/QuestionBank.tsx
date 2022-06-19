@@ -1,6 +1,7 @@
 import { Input } from "@chakra-ui/input";
 import { Box } from "@chakra-ui/layout";
-import { Center, FormControl, FormLabel, HStack, Select, Spinner, Text } from "@chakra-ui/react";
+import { Button, Center, FormControl, FormLabel, HStack, Select, Spinner, Text } from "@chakra-ui/react";
+import { useUser } from "@supabase/auth-helpers-react";
 import katex from "katex";
 import "katex/dist/katex.min.css";
 import dynamic from "next/dynamic";
@@ -9,8 +10,10 @@ import { useForm } from "react-hook-form";
 import styled from "styled-components";
 import "suneditor/dist/css/suneditor.min.css"; // Import Sun Editor's CSS File
 import { useGetExamPapers, useGetQuestionsByPaperidAndYear } from "../customHookes/useUser";
+import { supabase } from "../lib/supabaseClient";
 import { useAuthContext } from "../state/Authcontext";
 import { QuestionBank } from "../types/myTypes";
+import { definitions } from "../types/supabase";
 // import Suneditor from "../components/Suneditor";
 
 const SunEditor = dynamic(() => import("suneditor-react"), {
@@ -186,23 +189,52 @@ interface PropsQuestionBankEditor {
   x: QuestionBank;
 }
 const QuestionBankEditor: React.FunctionComponent<PropsQuestionBankEditor> = ({ x }) => {
-  
-  
+  const [isAnswerWritingOn, setAnswerWritingOn] = useState(false);
+  const { user, error } = useUser();
+  const getAnswer = async () => {
+    const { data, error } = await supabase
+      .from<definitions["question_answer"]>("question_answer")
+      .select(`*`)
+      .eq("question_id", x.id)
+      .eq("answered_by", user?.id);
+  };
+  const updateAnswer = async (answer: string) => {
+    const { data, error } = await supabase
+      .from<definitions["question_answer"]>("question_answer")
+      .update({
+        answer_english: answer,
+      })
+      .eq("question_id", x.id)
+      .eq("answered_by", user?.id);
+  };
+  const insertAnswer = async (answer: string) => {
+    const { data, error } = await supabase.from<definitions["question_answer"]>("question_answer").insert({
+      question_id: x.id,
+      answered_by: user?.id,
+      answer_english: answer,
+    });
+  };
+
   return (
-    <EditorStyle>
-      <SunEditor
-        //   setDefaultStyle="font-family: arial; font-size: 16px;"
-        setContents={x.question_content}
-        hideToolbar={true}
-        readOnly={true}
-        //   disable={true}
-        autoFocus={false}
-        setOptions={{
-          mode: "balloon",
-          katex: katex,
-          height: "100%",
-        }}
-      />
-    </EditorStyle>
+    <>
+      <EditorStyle>
+        <SunEditor
+          //   setDefaultStyle="font-family: arial; font-size: 16px;"
+          setContents={x.question_content}
+          hideToolbar={true}
+          readOnly={true}
+          //   disable={true}
+          autoFocus={false}
+          setOptions={{
+            mode: "balloon",
+            katex: katex,
+            height: "100%",
+          }}
+        />
+      </EditorStyle>
+      <Button variant="ghost" size="xs">
+        ✍🏻 Write Answer
+      </Button>
+    </>
   );
 };

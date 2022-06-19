@@ -1955,6 +1955,10 @@ export interface paths {
           created_at?: parameters["rowFilter.question_answer.created_at"];
           question_id?: parameters["rowFilter.question_answer.question_id"];
           answered_by?: parameters["rowFilter.question_answer.answered_by"];
+          /** Answer in hindi */
+          answer_hindi?: parameters["rowFilter.question_answer.answer_hindi"];
+          /** answer in english */
+          answer_english?: parameters["rowFilter.question_answer.answer_english"];
           /** Filtering Columns */
           select?: parameters["select"];
           /** Ordering */
@@ -2009,6 +2013,10 @@ export interface paths {
           created_at?: parameters["rowFilter.question_answer.created_at"];
           question_id?: parameters["rowFilter.question_answer.question_id"];
           answered_by?: parameters["rowFilter.question_answer.answered_by"];
+          /** Answer in hindi */
+          answer_hindi?: parameters["rowFilter.question_answer.answer_hindi"];
+          /** answer in english */
+          answer_english?: parameters["rowFilter.question_answer.answer_english"];
         };
         header: {
           /** Preference */
@@ -2027,6 +2035,10 @@ export interface paths {
           created_at?: parameters["rowFilter.question_answer.created_at"];
           question_id?: parameters["rowFilter.question_answer.question_id"];
           answered_by?: parameters["rowFilter.question_answer.answered_by"];
+          /** Answer in hindi */
+          answer_hindi?: parameters["rowFilter.question_answer.answer_hindi"];
+          /** answer in english */
+          answer_english?: parameters["rowFilter.question_answer.answer_english"];
         };
         body: {
           /** question_answer */
@@ -3751,6 +3763,16 @@ export interface definitions {
      * This is a Foreign Key to `profiles.id`.<fk table='profiles' column='id'/>
      */
     answered_by?: string;
+    /**
+     * Format: text
+     * @description Answer in hindi
+     */
+    answer_hindi?: string;
+    /**
+     * Format: text
+     * @description answer in english
+     */
+    answer_english?: string;
   };
   questionbank: {
     /**
@@ -4413,6 +4435,16 @@ export interface parameters {
   "rowFilter.question_answer.question_id": string;
   /** Format: uuid */
   "rowFilter.question_answer.answered_by": string;
+  /**
+   * Format: text
+   * @description Answer in hindi
+   */
+  "rowFilter.question_answer.answer_hindi": string;
+  /**
+   * Format: text
+   * @description answer in english
+   */
+  "rowFilter.question_answer.answer_english": string;
   /** @description questionbank */
   "body.questionbank": definitions["questionbank"];
   /** Format: bigint */
