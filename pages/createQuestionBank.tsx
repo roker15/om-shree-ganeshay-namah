@@ -223,7 +223,6 @@ const CreateQuestionBank: React.FC=() =>{
     setValue,
   ]);
   if (!user) {
-    console.log("session null hai bhai");
     // setEmail("")
     return (
       <div>
@@ -241,7 +240,6 @@ const CreateQuestionBank: React.FC=() =>{
         >
           Log In
         </Button>
-        <Text>{name}</Text>
       </div>
     );
   } else {

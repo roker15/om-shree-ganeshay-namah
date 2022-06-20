@@ -1,8 +1,11 @@
 import { Button, Container, Flex, Text } from "@chakra-ui/react";
+import { supabaseClient } from "@supabase/auth-helpers-nextjs";
+import { useUser } from "@supabase/auth-helpers-react";
 import Link from "next/link";
 import React, { useEffect } from "react";
 import QuestionBank from "../components/QuestionBank";
 import LayoutWithTopNavbar from "../layout/LayoutWithTopNavbar";
+import { BASE_URL } from "../lib/constants";
 import { NoteContextWrapper } from "../state/NoteContext";
 import { Papers } from "../types/myTypes";
 import PageWithLayoutType from "../types/pageWithLayout";
@@ -12,19 +15,45 @@ type ProfileListPropss = {
 };
 
 const QuestionBank1: React.FC<ProfileListPropss> = ({}) => {
-  //   const router = useRouter();
-  //   const navigateTo = (pathname: string) => {
-  //     router.push({
-  //       pathname: pathname,
-  //       // query: { postId: postId,subHeadingId:subHeadingId,isNew:isNew },
-  //     });
-  //   };
+  const { user, error } = useUser();
 
+  const signUpUser = async (email: string, role: string) => {
+    let { user, error } = await supabaseClient.auth.signIn(
+      {
+        provider: "google",
+      },
+      {
+        redirectTo: `${BASE_URL}/questionBanks`,
+      }
+    );
+  };
+  if (!user) {
+    console.log("session null hai bhai");
+    // setEmail("")
+    return (
+      <div>
+        Please login to view content
+        <Button
+          _active={{
+            border: "none",
+            bg: "#dddfe2",
+            transform: "scale(0.98)",
+            borderColor: "#bec3c9",
+          }}
+          variant=" outline"
+          color="violet"
+          onClick={() => signUpUser("hello", "hello")}
+        >
+          Log In
+        </Button>
+      </div>
+    );
+  }
   return (
     <Container maxW="6xl" px={{ base: "2", sm: "4", md: "16" }}>
       <NoteContextWrapper>
         <Flex justifyContent="space-between">
-          <Text >
+          <Text>
             <Link href="/" color="orange">
               <a>Home</a>
             </Link>
