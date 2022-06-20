@@ -3,6 +3,7 @@ import { useRouter } from "next/dist/client/router";
 import Link from "next/link";
 import React, { useEffect } from "react";
 import ManageNotes from "../components/notes/ManageNotes";
+import CreateBookSyllabus from "../components/syllabus/CreateBookSyllabus";
 import LayoutWithTopNavbar from "../layout/LayoutWithTopNavbar";
 import { supabase } from "../lib/supabaseClient";
 import { NoteContextWrapper } from "../state/NoteContext";
@@ -44,7 +45,7 @@ const Home: React.FC<ProfileListProps> = ({ data }) => {
   }, []);
   return (
     <Container maxW="full" px={{ base: "2", sm: "4", md: "8" }}>
-      <NoteContextWrapper>
+      {/* <NoteContextWrapper>
         <Flex justifyContent="end">
           <Text as="b">
             Go to{" "}
@@ -55,9 +56,9 @@ const Home: React.FC<ProfileListProps> = ({ data }) => {
         </Flex>
         <ManageNotes />
        
-      </NoteContextWrapper>
+      </NoteContextWrapper> */}
       {/* <AnimatedText/> */}
-      {/* <CreateBookSyllabus /> */}
+      <CreateBookSyllabus />
     </Container>
   );
 };

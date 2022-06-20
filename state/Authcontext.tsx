@@ -29,7 +29,7 @@ export const AuthProvider = ({ children }: any) => {
   useEffect(() => {
     setLoading(true);
     if (user) {
-      ilog("authcontext->getprofile-> place3--> session hai ", session);
+      ilog("authcontext->getprofile-> place3--> session hai ",user.user_metadata.avatar_url);
       const getProfile = async () => {
         try {
           //first check if profile exist or not
@@ -47,11 +47,13 @@ export const AuthProvider = ({ children }: any) => {
             const { data, error } = await supabaseClient
               .from<Profile>("profiles")
               .insert({
-                id: user!.id,
+                id: user.id,
                 role: "USER",
                 email: user?.email,
-                username: user?.identities![0].identity_data.full_name,
-                avatar_url: user?.identities![0].identity_data.avatar_url,
+                username: user.user_metadata.full_name,
+                avatar_url: user.user_metadata.avatar_url,
+                // avatar_url: user.identities[0].identity_data,
+                
               })
               .single();
 
