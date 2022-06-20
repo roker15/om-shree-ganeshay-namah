@@ -47,11 +47,11 @@ export const AuthProvider = ({ children }: any) => {
             const { data, error } = await supabaseClient
               .from<Profile>("profiles")
               .insert({
-                id: user!.id,
+                id: user.id,
                 role: "USER",
                 email: user?.email,
-                username: user?.identities![0].identity_data.full_name,
-                avatar_url: user?.identities![0].identity_data.avatar_url,
+                username: user.user_metadata.full_name,
+                avatar_url: user.user_metadata.avatar_url,
               })
               .single();
 
