@@ -254,10 +254,10 @@ export const Center = styled.div`
 `;
 export const EditorStyle = styled.div`
   .sun-editor {
-    padding-left: -30px !important;
+    /* padding-left: -30px !important;
     padding-right: -30px !important;
     margin-left: -20px !important;
-    margin-right: 0px !important;
+    margin-right: 0px !important; */
     border: ${(props) => (props.title === "READ" ? "none" : undefined)};
   }
 `;
