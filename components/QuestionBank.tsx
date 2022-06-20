@@ -1,16 +1,35 @@
+import { CheckCircleIcon, ViewOffIcon } from "@chakra-ui/icons";
 import { Input } from "@chakra-ui/input";
 import { Box } from "@chakra-ui/layout";
-import { Center, FormControl, FormLabel, HStack, Select, Spinner, Text } from "@chakra-ui/react";
+import {
+  Button,
+  Center,
+  Flex,
+  FormControl,
+  FormLabel, Radio,
+  RadioGroup,
+  Select,
+  Spinner,
+  Stack,
+  Text
+} from "@chakra-ui/react";
+import { useUser } from "@supabase/auth-helpers-react";
 import katex from "katex";
 import "katex/dist/katex.min.css";
 import dynamic from "next/dynamic";
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import { useForm } from "react-hook-form";
 import styled from "styled-components";
 import "suneditor/dist/css/suneditor.min.css"; // Import Sun Editor's CSS File
+import SunEditorCore from "suneditor/src/lib/core";
 import { useGetExamPapers, useGetQuestionsByPaperidAndYear } from "../customHookes/useUser";
+import { BASE_URL, colors, sunEditorButtonList, sunEditorfontList } from "../lib/constants";
+import { supabase } from "../lib/supabaseClient";
 import { useAuthContext } from "../state/Authcontext";
 import { QuestionBank } from "../types/myTypes";
+import { definitions } from "../types/supabase";
+import { customToast } from "./CustomToast";
+import { EditorStyle } from "./editor/SuneditorForNotesMaking";
 // import Suneditor from "../components/Suneditor";
 
 const SunEditor = dynamic(() => import("suneditor-react"), {
@@ -177,32 +196,180 @@ const CustomFormLabel: React.FC<{ text: string; htmlfor: string }> = ({ text, ht
 //     </Box>
 //   );
 // }
-const EditorStyle = styled.div`
+const EditorStyle1 = styled.div`
   .sun-editor {
-    border: 0px solid blue;
+    border: 0px solid gray;
+    margin-top: 60px !important;
   }
 `;
 interface PropsQuestionBankEditor {
   x: QuestionBank;
 }
+
 const QuestionBankEditor: React.FunctionComponent<PropsQuestionBankEditor> = ({ x }) => {
-  
-  
+  const [isAnswerWritingOn, setAnswerWritingOn] = useState(false);
+  const [isAnswerExist, setAnswerExist] = useState(false);
+  const { user, error } = useUser();
+  const [value, setValue] = React.useState("READ");
+  const [answer, setAnswer] = useState<string | undefined>(undefined);
+  const editor = useRef<SunEditorCore>();
+  const getSunEditorInstance = (sunEditor: SunEditorCore) => {
+    editor.current = sunEditor;
+  };
+  const getAnswer = async () => {
+    setAnswerWritingOn(true);
+    const { data, error } = await supabase
+      .from<definitions["question_answer"]>("question_answer")
+      .select(`*`)
+      .eq("question_id", x.id)
+      .eq("answered_by", user?.id);
+    if (data && data.length > 0 && data[0].answer_english) {
+      editor.current?.core.setContents(data[0].answer_english);
+    } else {
+      setAnswer("");
+    }
+  };
+  const getAnswerCount = async () => {
+    const { data, error, count } = await supabase
+      .from<definitions["question_answer"]>("question_answer")
+      .select(`*`, { count: "exact", head: true })
+      .eq("question_id", x.id)
+      .eq("answered_by", user?.id);
+
+    if (count) {
+      setAnswerExist(true);
+    } else {
+      setAnswerExist(false);
+    }
+  };
+  const updateAnswer = async (answer: string) => {
+    const { data, error } = await supabase
+      .from<definitions["question_answer"]>("question_answer")
+      .update({
+        answer_english: answer,
+      })
+      .eq("question_id", x.id)
+      .eq("answered_by", user?.id);
+    if (data) {
+      customToast({ title: "Notes updated", status: "info" });
+    }
+    
+  };
+  const insertAnswer = async (answer: string) => {
+    const { data, error } = await supabase.from<definitions["question_answer"]>("question_answer").insert({
+      question_id: x.id,
+      answered_by: user?.id,
+      answer_english: answer,
+    });
+    if (data) {
+      setAnswerExist(true);
+      customToast({ title: "Notes saved", status: "info" });
+    }
+  };
+  const updateOrInsertAnswer = (content: string) => {
+    if (isAnswerExist) {
+      updateAnswer(content);
+    } else {
+      insertAnswer(content);
+    }
+  };
+  useEffect(() => {
+    getAnswerCount();
+  }, []);
+
   return (
-    <EditorStyle>
-      <SunEditor
-        //   setDefaultStyle="font-family: arial; font-size: 16px;"
-        setContents={x.question_content}
-        hideToolbar={true}
-        readOnly={true}
-        //   disable={true}
-        autoFocus={false}
-        setOptions={{
-          mode: "balloon",
-          katex: katex,
-          height: "100%",
-        }}
-      />
-    </EditorStyle>
+    <>
+      <EditorStyle1>
+        <SunEditor
+          //   setDefaultStyle="font-family: arial; font-size: 16px;"
+          setContents={x.question_content}
+          hideToolbar={true}
+          readOnly={true}
+          //   disable={true}
+          autoFocus={false}
+          setOptions={{
+            mode: "balloon",
+            katex: katex,
+            height: "100%",
+          }}
+        />
+      </EditorStyle1>
+      <Flex alignItems={"center"} ml="3" justifyContent="space-between">
+        <Flex alignItems={"center"}>
+        <Button
+          variant="ghost"
+          size="xs"
+          onClick={() => {
+            if (isAnswerWritingOn) {
+              setAnswerWritingOn(false);
+            } else {
+              getAnswer();
+            }
+          }}
+        >
+          {isAnswerWritingOn ? <ViewOffIcon w={"3.5"} h={3.5} color="red" /> : "✍🏻 Write/Edit Answer"}
+        </Button>
+
+        {isAnswerWritingOn && (
+          <RadioGroup ml="4" onChange={setValue} value={value}>
+            <Stack direction="row">
+              <Radio size="sm" name="1" colorScheme="linkedin" value="READ">
+                <Text casing="capitalize">Read</Text>
+              </Radio>
+              <Radio size="sm" name="1" colorScheme="telegram" value="EDIT">
+                <Text casing="capitalize">Edit</Text>
+              </Radio>
+            </Stack>
+          </RadioGroup>
+        )}
+      </Flex>
+        <Flex alignItems={"center"}>{isAnswerExist && <CheckCircleIcon w={4} h={4} ml="2" color="green" />}</Flex>
+      </Flex>
+      {isAnswerWritingOn && (
+        <EditorStyle title={value === "READ" ? "READ" : "EDIT"}>
+          <Box ml={{ base: "2", md: "10" }} p="2" bg="blue.50">
+            <SunEditor
+              setDefaultStyle="font-family: arial; font-size: 14px;"
+              defaultValue={answer}
+              getSunEditorInstance={getSunEditorInstance}
+              hideToolbar={value === "READ" ? true : false}
+              readOnly={value === "READ" ? true : false}
+              //   disable={true}
+              autoFocus={false}
+              setOptions={{
+                callBackSave(contents, isChanged) {
+                  updateOrInsertAnswer(contents);
+                },
+                placeholder: "Click here and Start Typing",
+                mode: "classic",
+                katex: katex,
+                colorList: colors,
+                imageUploadUrl: `${BASE_URL}/api/uploadImage`,
+                height: "100%",
+                width: "auto",
+                minWidth: "350px",
+                buttonList: sunEditorButtonList,
+                resizingBar: false,
+                formats: ["p", "div", "h1", "h2", "h3"],
+                font: sunEditorfontList,
+
+                fontSize: [12, 14, 16, 20],
+                imageFileInput: true, //this disable image as file, only from url allowed
+                imageSizeOnlyPercentage: false, //changed on 6 june
+              }}
+            />
+          </Box>
+        </EditorStyle>
+      )}
+    </>
   );
 };
+// export const EditorStyle = styled.div`
+//   .sun-editor {
+//     padding-left: -30px !important;
+//     padding-right: -30px !important;
+//     margin-left: -20px !important;
+//     margin-right: 0px !important;
+//     border: ${(props) => (props.title === "READ" ? "none" : undefined)};
+//   }
+// `;
