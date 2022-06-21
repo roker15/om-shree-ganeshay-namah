@@ -12,12 +12,12 @@ import {
   useToast,
   VStack,
 } from "@chakra-ui/react";
+import { supabaseClient } from "@supabase/auth-helpers-nextjs";
 import * as React from "react";
 import { useEffect } from "react";
 import { useForm } from "react-hook-form";
 import { mutate } from "swr";
 import { elog } from "../../lib/mylog";
-import { supabase } from "../../lib/supabaseClient";
 import { definitions } from "../../types/supabase";
 import { FormProps } from "./CreateBookSyllabus";
 
@@ -55,7 +55,7 @@ const FormCreateHeading: React.FC<Props> = ({ x }) => {
 
   async function onSubmit(values: any) {
     if (x?.formMode === "CREATE_HEADING") {
-      const { data, error } = await supabase.from<definitions["books_headings"]>("books_headings").insert({
+      const { data, error } = await supabaseClient.from<definitions["books_headings"]>("books_headings").insert({
         books_fk: x?.book_id,
         heading: values.heading,
         sequence: values.sequence,
@@ -77,7 +77,7 @@ const FormCreateHeading: React.FC<Props> = ({ x }) => {
     }
 
     if (x?.formMode === "UPDATE_HEADING") {
-      const { data, error } = await supabase
+      const { data, error } = await supabaseClient
         .from<definitions["books_headings"]>("books_headings")
         .update({
           heading: values.heading,

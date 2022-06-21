@@ -1,9 +1,9 @@
 import { Box, Flex, IconButton, Link, Text } from "@chakra-ui/react";
+import { supabaseClient } from "@supabase/auth-helpers-nextjs";
 import { groupBy } from "lodash";
 import React, { useEffect, useState } from "react";
 import { MdAdd, MdDelete, MdLightMode } from "react-icons/md";
 import { useGetSyllabusByBookId } from "../../customHookes/networkHooks";
-import { supabase } from "../../lib/supabaseClient";
 import { useAuthContext } from "../../state/Authcontext";
 import { BookResponse, BookSyllabus } from "../../types/myTypes";
 import { definitions } from "../../types/supabase";
@@ -98,7 +98,7 @@ export default Syllabus;
 export const ArticleCounter = ({ subheadingId, creatorId }: { subheadingId: number; creatorId: string }) => {
   const [count, setCount] = useState<number | undefined>(undefined);
   const getArticleCount = async () => {
-    const { data, error, count } = await supabase
+    const { data, error, count } = await supabaseClient
       .from<definitions["books_articles"]>("books_articles")
       .select("*", { count: "exact", head: true })
       .match({ books_subheadings_fk: subheadingId, created_by: creatorId });

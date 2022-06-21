@@ -6,13 +6,15 @@ import {
   Center,
   Flex,
   FormControl,
-  FormLabel, Radio,
+  FormLabel,
+  Radio,
   RadioGroup,
   Select,
   Spinner,
   Stack,
-  Text
+  Text,
 } from "@chakra-ui/react";
+import { supabaseClient } from "@supabase/auth-helpers-nextjs";
 import { useUser } from "@supabase/auth-helpers-react";
 import katex from "katex";
 import "katex/dist/katex.min.css";
@@ -24,7 +26,6 @@ import "suneditor/dist/css/suneditor.min.css"; // Import Sun Editor's CSS File
 import SunEditorCore from "suneditor/src/lib/core";
 import { useGetExamPapers, useGetQuestionsByPaperidAndYear } from "../customHookes/useUser";
 import { BASE_URL, colors, sunEditorButtonList, sunEditorfontList } from "../lib/constants";
-import { supabase } from "../lib/supabaseClient";
 import { useAuthContext } from "../state/Authcontext";
 import { QuestionBank } from "../types/myTypes";
 import { definitions } from "../types/supabase";
@@ -49,7 +50,7 @@ const QuestionBanks: React.FC = () => {
   const [year, setYear] = useState<number | undefined>(undefined);
   const [shouldfetch, setShouldfetch] = useState(false);
   const { examPapers, isLoading, isError } = useGetExamPapers(24);
-  const { questions } = useGetQuestionsByPaperidAndYear(paperId, year, shouldfetch);
+  const { questions, isLoading: isQuestionLoading } = useGetQuestionsByPaperidAndYear(paperId, year, shouldfetch);
 
   const { profile } = useAuthContext();
 
@@ -72,7 +73,6 @@ const QuestionBanks: React.FC = () => {
     return () => subscription.unsubscribe();
   }, [watch]);
 
-  console.log("session null  nahi hai bhai");
   return (
     <Box>
       <>
@@ -127,16 +127,16 @@ const QuestionBanks: React.FC = () => {
           </FormControl>
         </form>
         {year && year != undefined && paperId ? (
-          <Center mb="16">
+          <Center my="16">
             {" "}
             <Text as="u">
               Question Bank For Year <Text as="b"> {year}</Text> ({examPapers?.filter((x) => x.id == paperId)[0].book_name})
             </Text>
           </Center>
         ) : (
-          <Center mb="16">Select Paper and Mention year (1995-2021) to view question bank</Center>
+          <Center my="16">Select Paper and Mention year (1995-2021) to view question bank</Center>
         )}
-        {isLoading ? (
+        {isQuestionLoading ? (
           <Spinner size="100px" /> //this is not visible test it again
         ) : questions && questions.length != 0 ? (
           (questions as QuestionBank[])
@@ -144,7 +144,7 @@ const QuestionBanks: React.FC = () => {
             .map((x) => {
               return (
                 <Box key={x.id} mb="2">
-                  <QuestionBankEditor x={x} />
+                  <QuestionBankEditor x={x}  />
                 </Box>
               );
             })
@@ -174,28 +174,7 @@ const CustomFormLabel: React.FC<{ text: string; htmlfor: string }> = ({ text, ht
   );
 };
 
-// function questionBankEditor(x: QuestionBank): JSX.Element {
-//   return (
-//     <Box key={x.id} mb="2">
-//       <HStack></HStack>
-//       <EditorStyle>
-//         <SunEditor
-//           //   setDefaultStyle="font-family: arial; font-size: 16px;"
-//           setContents={x.question_content}
-//           hideToolbar={true}
-//           readOnly={true}
-//           //   disable={true}
-//           autoFocus={false}
-//           setOptions={{
-//             mode: "balloon",
-//             katex: katex,
-//             height: "100%",
-//           }}
-//         />
-//       </EditorStyle>
-//     </Box>
-//   );
-// }
+
 const EditorStyle1 = styled.div`
   .sun-editor {
     border: 0px solid gray;
@@ -206,31 +185,40 @@ interface PropsQuestionBankEditor {
   x: QuestionBank;
 }
 
-const QuestionBankEditor: React.FunctionComponent<PropsQuestionBankEditor> = ({ x }) => {
+const QuestionBankEditor: React.FunctionComponent<PropsQuestionBankEditor> = ({ x}) => {
   const [isAnswerWritingOn, setAnswerWritingOn] = useState(false);
   const [isAnswerExist, setAnswerExist] = useState(false);
   const { user, error } = useUser();
   const [value, setValue] = React.useState("READ");
+  const [showEditButton, setShowEditButton] = useState(false);
   const [answer, setAnswer] = useState<string | undefined>(undefined);
   const editor = useRef<SunEditorCore>();
+
+  useEffect(() => {
+    setShowEditButton(true);
+    return () => {
+      setShowEditButton(false);
+    };
+  }, []);
+ 
+
   const getSunEditorInstance = (sunEditor: SunEditorCore) => {
     editor.current = sunEditor;
   };
+
   const getAnswer = async () => {
     setAnswerWritingOn(true);
-    const { data, error } = await supabase
+    const { data, error } = await supabaseClient
       .from<definitions["question_answer"]>("question_answer")
       .select(`*`)
       .eq("question_id", x.id)
       .eq("answered_by", user?.id);
     if (data && data.length > 0 && data[0].answer_english) {
       editor.current?.core.setContents(data[0].answer_english);
-    } else {
-      setAnswer("");
     }
   };
   const getAnswerCount = async () => {
-    const { data, error, count } = await supabase
+    const { data, error, count } = await supabaseClient
       .from<definitions["question_answer"]>("question_answer")
       .select(`*`, { count: "exact", head: true })
       .eq("question_id", x.id)
@@ -243,7 +231,7 @@ const QuestionBankEditor: React.FunctionComponent<PropsQuestionBankEditor> = ({ 
     }
   };
   const updateAnswer = async (answer: string) => {
-    const { data, error } = await supabase
+    const { data, error } = await supabaseClient
       .from<definitions["question_answer"]>("question_answer")
       .update({
         answer_english: answer,
@@ -253,10 +241,9 @@ const QuestionBankEditor: React.FunctionComponent<PropsQuestionBankEditor> = ({ 
     if (data) {
       customToast({ title: "Notes updated", status: "info" });
     }
-    
   };
   const insertAnswer = async (answer: string) => {
-    const { data, error } = await supabase.from<definitions["question_answer"]>("question_answer").insert({
+    const { data, error } = await supabaseClient.from<definitions["question_answer"]>("question_answer").insert({
       question_id: x.id,
       answered_by: user?.id,
       answer_english: answer,
@@ -277,6 +264,7 @@ const QuestionBankEditor: React.FunctionComponent<PropsQuestionBankEditor> = ({ 
     getAnswerCount();
   }, []);
 
+  
   return (
     <>
       <EditorStyle1>
@@ -296,33 +284,37 @@ const QuestionBankEditor: React.FunctionComponent<PropsQuestionBankEditor> = ({ 
       </EditorStyle1>
       <Flex alignItems={"center"} ml="3" justifyContent="space-between">
         <Flex alignItems={"center"}>
-        <Button
-          variant="ghost"
-          size="xs"
-          onClick={() => {
-            if (isAnswerWritingOn) {
-              setAnswerWritingOn(false);
-            } else {
-              getAnswer();
-            }
-          }}
-        >
-          {isAnswerWritingOn ? <ViewOffIcon w={"3.5"} h={3.5} color="red" /> : "✍🏻 Write/Edit Answer"}
-        </Button>
+          <Button
+            variant="ghost"
+            size="xs"
+            onClick={() => {
+              if (isAnswerWritingOn) {
+                setAnswerWritingOn(false);
+              } else {
+                getAnswer();
+              }
+            }}
+          >
+            {isAnswerWritingOn ? (
+              <ViewOffIcon w={"3.5"} h={3.5} color="red" />
+            ) : showEditButton ? (
+              "✍🏻 Write/Edit Answer"
+            ) : null}
+          </Button>
 
-        {isAnswerWritingOn && (
-          <RadioGroup ml="4" onChange={setValue} value={value}>
-            <Stack direction="row">
-              <Radio size="sm" name="1" colorScheme="linkedin" value="READ">
-                <Text casing="capitalize">Read</Text>
-              </Radio>
-              <Radio size="sm" name="1" colorScheme="telegram" value="EDIT">
-                <Text casing="capitalize">Edit</Text>
-              </Radio>
-            </Stack>
-          </RadioGroup>
-        )}
-      </Flex>
+          {isAnswerWritingOn && (
+            <RadioGroup ml="4" onChange={setValue} value={value}>
+              <Stack direction="row">
+                <Radio size="sm" name="1" colorScheme="linkedin" value="READ">
+                  <Text casing="capitalize">Read</Text>
+                </Radio>
+                <Radio size="sm" name="1" colorScheme="telegram" value="EDIT">
+                  <Text casing="capitalize">Edit</Text>
+                </Radio>
+              </Stack>
+            </RadioGroup>
+          )}
+        </Flex>
         <Flex alignItems={"center"}>{isAnswerExist && <CheckCircleIcon w={4} h={4} ml="2" color="green" />}</Flex>
       </Flex>
       {isAnswerWritingOn && (
@@ -330,11 +322,11 @@ const QuestionBankEditor: React.FunctionComponent<PropsQuestionBankEditor> = ({ 
           <Box ml={{ base: "2", md: "10" }} p="2" bg="blue.50">
             <SunEditor
               setDefaultStyle="font-family: arial; font-size: 14px;"
-              defaultValue={answer}
+              // defaultValue={answer}
               getSunEditorInstance={getSunEditorInstance}
               hideToolbar={value === "READ" ? true : false}
               readOnly={value === "READ" ? true : false}
-              //   disable={true}
+              // disable={true}
               autoFocus={false}
               setOptions={{
                 callBackSave(contents, isChanged) {

@@ -1,11 +1,11 @@
 import { Box, Flex, HStack, IconButton, Text, Tooltip } from "@chakra-ui/react";
+import { supabaseClient } from "@supabase/auth-helpers-nextjs";
 import { groupBy } from "lodash";
 import React from "react";
 import { MdAdd, MdDelete, MdModeEdit } from "react-icons/md";
 import { mutate } from "swr";
 import { useGetSyllabusByBookId } from "../../customHookes/networkHooks";
 import { elog } from "../../lib/mylog";
-import { supabase } from "../../lib/supabaseClient";
 import { BookResponse, SubheadingQuestionLink } from "../../types/myTypes";
 import { definitions } from "../../types/supabase";
 import { FormProps } from "./CreateBookSyllabus";
@@ -20,7 +20,7 @@ const Syllabus: React.FC<Props> = ({ book, changeFormProps }) => {
   const { data } = useGetSyllabusByBookId(book ? book.id : undefined);
   const grouped1 = groupBy(data, (x) => [x.heading_sequence, x.heading_id, x.heading]);
   const deleteHeading = async (id: number): Promise<void> => {
-    const { data, error } = await supabase.from<definitions["books_headings"]>("books_headings").delete().eq("id", id);
+    const { data, error } = await supabaseClient.from<definitions["books_headings"]>("books_headings").delete().eq("id", id);
     if (error) {
       elog("Syllabus->deleteHeading", error.message);
       return;
@@ -30,7 +30,7 @@ const Syllabus: React.FC<Props> = ({ book, changeFormProps }) => {
     }
   };
   const deleteSubheading = async (id: number): Promise<void> => {
-    const { data, error } = await supabase.from<definitions["books_subheadings"]>("books_subheadings").delete().eq("id", id);
+    const { data, error } = await supabaseClient.from<definitions["books_subheadings"]>("books_subheadings").delete().eq("id", id);
     if (error) {
       elog("Syllabus->deleteSubheading", error.message);
       return;

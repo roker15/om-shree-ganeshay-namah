@@ -1,9 +1,9 @@
 import { Box, Button, Center, CircularProgress, Container, ListItem, OrderedList, Text } from "@chakra-ui/react";
+import { supabaseClient } from "@supabase/auth-helpers-nextjs";
 import copy from "copy-to-clipboard";
 import React, { useCallback, useEffect, useRef, useState } from "react";
 import { useDropzone } from "react-dropzone";
 import { v4 as uuid } from "uuid";
-import { supabase } from "../lib/supabaseClient";
 import { customToast } from "./CustomToast";
 
 export function MyDropzone() {
@@ -52,13 +52,13 @@ export function MyDropzone() {
     }
     acceptedFiles.forEach(async (file: File) => {
       const filepath = uuid() + "-" + file.name;
-      const { data, error } = await supabase.storage.from("notes-images").upload(filepath, file, {
+      const { data, error } = await supabaseClient.storage.from("notes-images").upload(filepath, file, {
         cacheControl: "3600",
         upsert: true,
       });
       if (data) {
         console.log("data is ", data.Key);
-        const { publicURL, error } = supabase.storage.from("notes-images").getPublicUrl(filepath);
+        const { publicURL, error } = supabaseClient.storage.from("notes-images").getPublicUrl(filepath);
         console.log("public url is  ", publicURL);
         if (publicURL && mountedRef.current == true) {
           setFilelist((oldArray) => [...oldArray, { file: file.name, link: publicURL }]);
