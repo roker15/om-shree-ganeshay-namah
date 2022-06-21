@@ -279,7 +279,7 @@ const QuestionBankEditor: React.FunctionComponent<PropsQuestionBankEditor> = ({ 
           autoFocus={false}
         
           setOptions={{
-            // mode: "balloon",
+            mode: "balloon", //this is just for stop flash of toolbar before hiding
             katex: katex,
             resizingBar: false,
             height: "100%",
