@@ -119,7 +119,8 @@ const CreateQuestionBank: React.FC=() =>{
         provider: "google",
       },
       {
-        redirectTo: `${BASE_URL}/createQuestionBank`,
+        // redirectTo: `${BASE_URL}/createQuestionBank`,
+        redirectTo: 'https://www.jionote.com/createQuestionBank',
     
       }
     );

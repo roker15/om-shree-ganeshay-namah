@@ -23,7 +23,8 @@ const QuestionBank1: React.FC<ProfileListPropss> = ({}) => {
         provider: "google",
       },
       {
-        redirectTo: `${BASE_URL}/questionBanks`,
+        // redirectTo: `${BASE_URL}/questionBanks`,
+        redirectTo: 'https://www.jionote.com/questionBanks',
       }
     );
   };
@@ -52,8 +53,8 @@ const QuestionBank1: React.FC<ProfileListPropss> = ({}) => {
   return (
     <Container maxW="6xl" px={{ base: "2", sm: "4", md: "16" }}>
       <NoteContextWrapper>
-        <Flex justifyContent="space-between">
-          <Text>
+        <Flex mt="2" justifyContent="space-between" direction={{base:"column",md:"row"}}>
+          <Text >
             <Link href="/" color="orange">
               <a>Home</a>
             </Link>
