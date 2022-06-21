@@ -215,7 +215,8 @@ const QuestionBankEditor: React.FunctionComponent<PropsQuestionBankEditor> = ({ 
       .eq("answered_by", user?.id);
     if (data && data.length > 0 && data[0].answer_english) {
       editor.current?.core.setContents(data[0].answer_english);
-    }
+    } 
+
   };
   const getAnswerCount = async () => {
     const { data, error, count } = await supabaseClient
@@ -270,14 +271,17 @@ const QuestionBankEditor: React.FunctionComponent<PropsQuestionBankEditor> = ({ 
       <EditorStyle1>
         <SunEditor
           //   setDefaultStyle="font-family: arial; font-size: 16px;"
-          setContents={x.question_content}
+          // setContents={x.question_content}
+          defaultValue={x.question_content}
           hideToolbar={true}
           readOnly={true}
           //   disable={true}
           autoFocus={false}
+        
           setOptions={{
-            mode: "balloon",
+            // mode: "balloon",
             katex: katex,
+            resizingBar: false,
             height: "100%",
           }}
         />
@@ -319,7 +323,7 @@ const QuestionBankEditor: React.FunctionComponent<PropsQuestionBankEditor> = ({ 
       </Flex>
       {isAnswerWritingOn && (
         <EditorStyle title={value === "READ" ? "READ" : "EDIT"}>
-          <Box ml={{ base: "2", md: "10" }} p="2" bg="blue.50">
+          <Box ml={{ base: "2", md: "10" }} p="0.5" bg="blue.50" borderRadius={"5px"}>
             <SunEditor
               setDefaultStyle="font-family: arial; font-size: 14px;"
               // defaultValue={answer}
