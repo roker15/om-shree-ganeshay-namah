@@ -188,6 +188,7 @@ const SuneditorForNotesMaking: React.FC<SuneditorForNotesMakingProps> = ({ artic
                 // hideToolbar: true, // to be implemented
                 placeholder: "Click Edit and Start Typing",
                 mode: "classic",
+                hideToolbar:true,
                 katex: katex,
                 colorList: colors,
                 imageUploadUrl: `${BASE_URL}/api/uploadImage`,

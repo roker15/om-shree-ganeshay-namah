@@ -277,6 +277,7 @@ const QuestionBankEditor: React.FunctionComponent<PropsQuestionBankEditor> = ({ 
           setOptions={{
             mode: "balloon", //this is just for stop flash of toolbar before hiding
             katex: katex,
+            hideToolbar:true,
             resizingBar: false,
             height: "100%",
           }}
@@ -332,7 +333,8 @@ const QuestionBankEditor: React.FunctionComponent<PropsQuestionBankEditor> = ({ 
                 callBackSave(contents, isChanged) {
                   updateOrInsertAnswer(contents);
                 },
-                placeholder: "Click here and Start Typing",
+                placeholder: "Click Edit above and Start Typing",
+                hideToolbar:true,
                 mode: "classic",
                 katex: katex,
                 colorList: colors,

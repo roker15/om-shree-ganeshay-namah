@@ -23,8 +23,9 @@ const QuestionBank1: React.FC<ProfileListPropss> = ({}) => {
         provider: "google",
       },
       {
-        // redirectTo: `${BASE_URL}/questionBanks`,
-        redirectTo: "https://www.jionote.com/questionBanks",
+        redirectTo: `${BASE_URL}/questionBanks`,
+        // redirectTo: "http://www.localhost:3000/questionBanks",
+        // redirectTo: "https://www.jionote.com/questionBanks",
       }
     );
   };
