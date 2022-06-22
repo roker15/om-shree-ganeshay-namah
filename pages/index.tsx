@@ -1,10 +1,10 @@
 import { Container, Flex, Text } from "@chakra-ui/react";
+import { supabaseClient } from "@supabase/auth-helpers-nextjs";
 import { useRouter } from "next/dist/client/router";
 import Link from "next/link";
 import React, { useEffect } from "react";
 import ManageNotes from "../components/notes/ManageNotes";
 import LayoutWithTopNavbar from "../layout/LayoutWithTopNavbar";
-import { supabase } from "../lib/supabaseClient";
 import { NoteContextWrapper } from "../state/NoteContext";
 import { Papers } from "../types/myTypes";
 import PageWithLayoutType from "../types/pageWithLayout";
@@ -23,7 +23,7 @@ const Home: React.FC<ProfileListProps> = ({ data }) => {
     });
   };
   const supabaseTest = async () => {
-    const { data, error } = await supabase
+    const { data, error } = await supabaseClient
       .from<definitions["books_article_sharing"]>("books_article_sharing")
       .select(
         `

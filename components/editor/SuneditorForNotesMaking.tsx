@@ -7,7 +7,6 @@ import React, { ChangeEvent, useCallback, useEffect, useRef } from "react";
 import { v4 as uuid } from "uuid";
 import { BASE_URL, colors, sunEditorButtonList, sunEditorfontList } from "../../lib/constants";
 import { elog } from "../../lib/mylog";
-import { supabase } from "../../lib/supabaseClient";
 import { useAuthContext } from "../../state/Authcontext";
 import { definitions } from "../../types/supabase";
 
@@ -18,6 +17,7 @@ import "suneditor/dist/css/suneditor.min.css"; // Import Sun Editor's CSS File
 import SunEditorCore from "suneditor/src/lib/core";
 import styled from "styled-components";
 import { UiForImageUpload } from "../UiForImageUpload";
+import { supabaseClient } from "@supabase/auth-helpers-nextjs";
 const SunEditor = dynamic(() => import("suneditor-react"), {
   ssr: false,
 });
@@ -86,7 +86,7 @@ const SuneditorForNotesMaking: React.FC<SuneditorForNotesMakingProps> = ({ artic
     updateArticleInDatabase(newcontent);
   };
   const updateArticleInDatabase = async (newcontent: string | undefined) => {
-    const { data, error } = await supabase
+    const { data, error } = await supabaseClient
       .from<definitions["books_articles"]>("books_articles")
       .update(language === "ENGLISH" ? { article_english: newcontent } : { article_hindi: newcontent })
       .eq("id", article.id);
@@ -175,7 +175,7 @@ const SuneditorForNotesMaking: React.FC<SuneditorForNotesMakingProps> = ({ artic
               getSunEditorInstance={getSunEditorInstance}
               setDefaultStyle={fontSize}
               hideToolbar={editorMode === "READ" ? true : false}
-              defaultValue={language === "ENGLISH" ? article.article_english : article.article_hindi}
+              // defaultValue={language === "ENGLISH" ? article.article_english : article.article_hindi}
               onChange={handleOnChange}
               readOnly={editorMode === "READ" ? true : false}
               autoFocus={false}

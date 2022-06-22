@@ -24,7 +24,7 @@ const QuestionBank1: React.FC<ProfileListPropss> = ({}) => {
       },
       {
         // redirectTo: `${BASE_URL}/questionBanks`,
-        redirectTo: 'https://www.jionote.com/questionBanks',
+        redirectTo: "https://www.jionote.com/questionBanks",
       }
     );
   };
@@ -53,18 +53,19 @@ const QuestionBank1: React.FC<ProfileListPropss> = ({}) => {
   return (
     <Container maxW="6xl" px={{ base: "2", sm: "4", md: "16" }}>
       <NoteContextWrapper>
-        <Flex mt="2" justifyContent="space-between" direction={{base:"column",md:"row"}}>
-          <Text >
-            <Link href="/" color="orange">
-              <a>Home</a>
-            </Link>
-          </Text>
-          <Text color="red">
-            Did you find your Question?{" "}
-            <Link href="/createQuestionBank">
-              <a>Submit new Question</a>
-            </Link>
-          </Text>
+        <Flex mt="2" justifyContent="space-between" direction={{ base: "column", md: "row" }}>
+          <Link href="/">
+            <a className="internal" style={{ color: "#5cb2eb" }}>
+              {" "}
+              Home
+            </a>
+          </Link>
+
+          <Link href="/createQuestionBank">
+            <a className="internal" style={{ color:  "#5cb2eb"  }}>
+              Create New Question
+            </a>
+          </Link>
         </Flex>
         <QuestionBank />
       </NoteContextWrapper>

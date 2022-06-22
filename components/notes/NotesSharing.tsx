@@ -25,11 +25,11 @@ import {
   Tr,
   useDisclosure,
 } from "@chakra-ui/react";
+import { supabaseClient } from "@supabase/auth-helpers-nextjs";
 import React, { useEffect, useRef, useState } from "react";
 import { MdCancel, MdDelete, MdShare } from "react-icons/md";
 import { Profile } from "../../lib/constants";
 import { elog } from "../../lib/mylog";
-import { supabase } from "../../lib/supabaseClient";
 import { useAuthContext } from "../../state/Authcontext";
 import { definitions } from "../../types/supabase";
 
@@ -58,7 +58,7 @@ export const NotesSharing: React.FC<sharedProps> = ({ subheadingId }) => {
       setIsLoading(false);
       return;
     }
-    const { data: profiles, error } = await supabase.from<Profile>("profiles").select(`*`).eq("email", inputEmail);
+    const { data: profiles, error } = await supabaseClient.from<Profile>("profiles").select(`*`).eq("email", inputEmail);
     // .single();
     if (error) {
       setMessage("Something went wrong!");
@@ -71,7 +71,7 @@ export const NotesSharing: React.FC<sharedProps> = ({ subheadingId }) => {
       setMessageColor("red");
     } else {
       setMessage("");
-      const { data: ispostexist, error: ispostexisterror } = await supabase
+      const { data: ispostexist, error: ispostexisterror } = await supabaseClient
         .from<definitions["books_article_sharing"]>("books_article_sharing")
         .select(`*`)
         .match({ books_subheadings_fk: subheadingId, shared_with: profiles![0].id, owned_by:profile?.id});
@@ -80,7 +80,7 @@ export const NotesSharing: React.FC<sharedProps> = ({ subheadingId }) => {
         setMessage("This post is already shared with this user");
         setMessageColor("red");
       } else {
-        const { data: sharedData, error } = await supabase
+        const { data: sharedData, error } = await supabaseClient
           .from<definitions["books_article_sharing"]>("books_article_sharing")
           .insert({
             books_subheadings_fk: subheadingId,
@@ -205,7 +205,7 @@ export const SharedList: React.FC<{ subheadingId: number }> = ({ subheadingId })
 
   useEffect(() => {
     const getSharedList = async () => {
-      const { data, error } = await supabase
+      const { data, error } = await supabaseClient
         .from<definitions["books_article_sharing"]>("books_article_sharing")
         .select(`*`)
         .match({ books_subheadings_fk: subheadingId, shared_by: profile?.id,ispublic:false })
@@ -219,19 +219,19 @@ export const SharedList: React.FC<{ subheadingId: number }> = ({ subheadingId })
   }, []);
 
   const handleEditCheckbox = async (sharingId: number, checkValue: boolean) => {
-    const { data, error } = await supabase
+    const { data, error } = await supabaseClient
       .from<definitions["books_article_sharing"]>("books_article_sharing")
       .update({ allow_edit: checkValue })
       .match({ id: sharingId });
   };
   const handleCopyCheckbox = async (sharingId: number, checkValue: boolean) => {
-    const { data, error } = await supabase
+    const { data, error } = await supabaseClient
       .from<definitions["books_article_sharing"]>("books_article_sharing")
       .update({ allow_copy: checkValue })
       .match({ id: sharingId });
   };
   const handleCancelSharing = async (sharingId: number) => {
-    const { data, error } = await supabase
+    const { data, error } = await supabaseClient
       .from<definitions["books_article_sharing"]>("books_article_sharing")
       .delete()
       .match({ id: sharingId });

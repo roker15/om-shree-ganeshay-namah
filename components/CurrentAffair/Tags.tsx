@@ -15,13 +15,13 @@ import {
   Text,
   useDisclosure,
 } from "@chakra-ui/react";
+import { supabaseClient } from "@supabase/auth-helpers-nextjs";
 import { groupBy } from "lodash";
 import React, { useEffect, useState } from "react";
 import { MdMenu, MdMenuBook } from "react-icons/md";
 import Sticky from "react-sticky-el";
 import { useGetSyllabusByBookId } from "../../customHookes/networkHooks";
 import { currentAffairTags } from "../../lib/constants";
-import { supabase } from "../../lib/supabaseClient";
 import { useAuthContext } from "../../state/Authcontext";
 import { useNoteContext } from "../../state/NoteContext";
 import { BookResponse, BookSyllabus } from "../../types/myTypes";
@@ -66,7 +66,7 @@ export default Tags;
 export const ArticleCounterByTag = ({ tagId, creatorId }: { tagId: number; creatorId: string }) => {
   const [count, setCount] = useState<number | undefined>(undefined);
   const getArticleCount = async () => {
-    const { data, error, count } = await supabase
+    const { data, error, count } = await supabaseClient
       .from<definitions["books_articles"]>("books_articles")
       .select("*", { count: "exact", head: true })
       .eq("created_by", creatorId)

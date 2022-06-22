@@ -1,52 +1,33 @@
 import {
   Box,
-  Button,
-  Center,
-  Checkbox,
-  Container,
-  Divider,
-  Flex,
+  Button, Checkbox, Flex,
   FormControl,
   FormErrorMessage,
-  Grid,
-  HStack,
-  IconButton,
-  Input,
-  Radio,
-  RadioGroup,
-  Select,
-  SkeletonCircle,
-  SkeletonText,
-  Spacer,
-  Stack,
+  Grid, IconButton,
+  Input, SkeletonCircle,
+  SkeletonText, Stack,
   Tab,
   TabList,
   TabPanel,
   TabPanels,
-  Tabs,
-  Tag,
-  Text,
+  Tabs, Text,
   Tooltip,
   VStack,
-  Wrap,
+  Wrap
 } from "@chakra-ui/react";
-import katex from "katex";
+import { supabaseClient } from "@supabase/auth-helpers-nextjs";
 import "katex/dist/katex.min.css";
-import { debounce } from "lodash";
 import dynamic from "next/dynamic";
-import React, { ChangeEvent, useCallback, useEffect, useRef, useState } from "react";
+import React, { useState } from "react";
 import { SubmitHandler, useForm } from "react-hook-form";
 import { MdAdd, MdCancel, MdDone, MdModeEdit, MdOutlineContentCopy } from "react-icons/md";
-import styled from "styled-components";
 // import SunEditor from "suneditor-react";
 import "suneditor/dist/css/suneditor.min.css"; // Import Sun Editor's CSS File
 // import SunEditor from "suneditor-react";
-import SunEditorCore from "suneditor/src/lib/core";
 import { useSWRConfig } from "swr";
 import { useGetUserArticles } from "../../customHookes/networkHooks";
-import { colors, currentAffairTags, sunEditorButtonList, sunEditorfontList } from "../../lib/constants";
+import { currentAffairTags } from "../../lib/constants";
 import { elog } from "../../lib/mylog";
-import { supabase } from "../../lib/supabaseClient";
 import { useAuthContext } from "../../state/Authcontext";
 import { useNoteContext } from "../../state/NoteContext";
 import { definitions } from "../../types/supabase";
@@ -54,7 +35,6 @@ import { customToast } from "../CustomToast";
 import SuneditorForNotesMaking from "../editor/SuneditorForNotesMaking";
 
 import DeleteConfirmation from "../syllabus/DeleteConfirmation";
-import { UiForImageUpload } from "../UiForImageUpload";
 // import "../../styles/suneditor.module.css";
 interface Props {
   subjectId: number | undefined;
@@ -83,7 +63,7 @@ const MyNotes: React.FC<Props> = ({ subjectId, subheadingid, notesCreator, chang
   });
 
   const deleteArticle = async (id: number): Promise<void> => {
-    const { data, error } = await supabase.from<definitions["books_articles"]>("books_articles").delete().eq("id", id);
+    const { data, error } = await supabaseClient.from<definitions["books_articles"]>("books_articles").delete().eq("id", id);
     if (error) {
       elog("MyNotes->deleteArticle", error.message);
       return;
@@ -105,7 +85,7 @@ const MyNotes: React.FC<Props> = ({ subjectId, subheadingid, notesCreator, chang
 
   const copyArticleToNewUser = async (x: definitions["books_articles"]) => {
     setIsLoadingCopyButton(true);
-    const { data, error } = await supabase.from<definitions["books_articles"]>("books_articles").insert({
+    const { data, error } = await supabaseClient.from<definitions["books_articles"]>("books_articles").insert({
       books_subheadings_fk: x.books_subheadings_fk,
       article_hindi: x.article_hindi,
       article_english: x.article_english,
@@ -362,7 +342,7 @@ const ArticleForm: React.FC<ArticleFormProps> = ({
   const onSubmit: SubmitHandler<Inputs> = async (d) => {
     if (formMode === "CREATING") {
       console.log("form data is", d);
-      const { data, error } = await supabase.from<definitions["books_articles"]>("books_articles").insert([
+      const { data, error } = await supabaseClient.from<definitions["books_articles"]>("books_articles").insert([
         {
           article_title: d.articleTitle,
           created_by: profile?.id,
@@ -378,7 +358,7 @@ const ArticleForm: React.FC<ArticleFormProps> = ({
     }
 
     if (formMode === "EDITING") {
-      const { data, error } = await supabase
+      const { data, error } = await supabaseClient
         .from<definitions["books_articles"]>("books_articles")
         .update({
           // id: articleId,

@@ -1,5 +1,5 @@
+import { supabaseClient } from "@supabase/auth-helpers-nextjs";
 import useSWR from "swr";
-import { supabase } from "../lib/supabaseClient";
 import { useAuthContext } from "../state/Authcontext";
 import { useNoteContext } from "../state/NoteContext";
 import { BookResponse } from "../types/myTypes";
@@ -18,7 +18,7 @@ export function useGetBooks(bookId?: number) {
   const { data, error } = useSWR(
     bookId == undefined ? null : ["/publicationId", bookId],
     async () =>
-      await supabase
+      await supabaseClient
         .from<BookResponse>("books")
         .select(
           `id,book_name,
@@ -44,7 +44,7 @@ export function useGetSyllabusByBookId(bookId?: number) {
   const { data, error } = useSWR(
     bookId == undefined ? null : [`/book_id_syllabuss/${bookId}`],
     async () =>
-      await supabase.rpc("getSyllabusFromBookIdRightJoinToGetAllHeading", {
+      await supabaseClient.rpc("getSyllabusFromBookIdRightJoinToGetAllHeading", {
         bookid: bookId,
       }),
     {
@@ -71,7 +71,7 @@ export function useGetPublicNotesListBySubheading(subheadingId?: number) {
     //     subheadingid: subheadingId,
     //   })
     //   .neq("owned_by_userid", profile?.id as string);
-    await supabase
+    await supabaseClient
       .from<definitions["books_article_sharing"]>("books_article_sharing")
       .select(`*`)
       .eq("books_subheadings_fk", subheadingId)
@@ -106,7 +106,7 @@ export function useGetSharedNotesListBySubheading(subheadingId: number | undefin
       //   subheadingid: subheadingId,
       //   sharedwith: userid,
       // })
-      await supabase
+      await supabaseClient
         .from<definitions["books_article_sharing"]>("books_article_sharing")
         .select(`*`)
         .eq("books_subheadings_fk", subheadingId)
@@ -130,7 +130,7 @@ export function useGetUserArticles(subheadingId: number | undefined, userid: str
   const { data, error } = useSWR(
     subheadingId == undefined || userid === undefined ? null : [`/get-user-articles/${subheadingId}/${userid}`],
     async () =>
-      await supabase
+      await supabaseClient
         .from<definitions["books_articles"]>("books_articles")
         .select(
           `id,
@@ -176,7 +176,7 @@ export function useGetUserArticlesFromTags(userid: string | undefined, tagsArray
   const { data, error } = useSWR(
     userid === undefined ? null : [`/get-user-articles-bytags/${userid}/${tagsArray}`],
     async () =>
-      await supabase
+      await supabaseClient
         .from<definitions["books_articles"]>("books_articles")
         .select(`*`, { count: "exact" })
         .eq("created_by", userid)

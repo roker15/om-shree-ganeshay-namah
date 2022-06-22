@@ -19,13 +19,13 @@ import {
   useToast,
   VStack,
 } from "@chakra-ui/react";
+import { supabaseClient } from "@supabase/auth-helpers-nextjs";
 import * as React from "react";
 import { useEffect } from "react";
 import { useForm } from "react-hook-form";
 import useSWR, { mutate } from "swr";
 import { useGetExamPapers } from "../../customHookes/useUser";
 import { elog } from "../../lib/mylog";
-import { supabase } from "../../lib/supabaseClient";
 import { useAuthContext } from "../../state/Authcontext";
 import { Headings } from "../../types/myTypes";
 import { definitions } from "../../types/supabase";
@@ -68,7 +68,7 @@ const FormCreateSubheading: React.FC<Props> = ({ x }) => {
 
   async function onSubmit(values: any) {
     if (x?.formMode === "CREATE_SUBHEADING") {
-      const { data, error } = await supabase.from<definitions["books_subheadings"]>("books_subheadings").insert({
+      const { data, error } = await supabaseClient.from<definitions["books_subheadings"]>("books_subheadings").insert({
         books_headings_fk: x?.heading_id,
         subheading: values.subheading,
         sequence: values.sequence,
@@ -90,7 +90,7 @@ const FormCreateSubheading: React.FC<Props> = ({ x }) => {
     }
 
     if (x?.formMode === "UPDATE_SUBHEADING") {
-      const { data, error } = await supabase
+      const { data, error } = await supabaseClient
         .from<definitions["books_subheadings"]>("books_subheadings")
         .update({
           subheading: values.subheading,
