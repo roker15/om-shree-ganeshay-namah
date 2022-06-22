@@ -22,7 +22,7 @@ import {
   VStack,
 } from "@chakra-ui/react";
 import { ReactNode } from "react";
-import { FaGoogle, FaWhatsapp } from "react-icons/fa";
+import { FaGoogle, FaTelegram, FaWhatsapp } from "react-icons/fa";
 import { FiChevronDown } from "react-icons/fi";
 import { BASE_URL } from "../lib/constants";
 import { useAuthContext } from "../state/Authcontext";
@@ -99,11 +99,11 @@ const MobileNav = ({ onOpen, ...rest }: MobileProps) => {
             >
               Sign in
             </Button>
-            {JoinWhatsapp}
+            {JoinTelegram}
           </HStack>
         ) : (
           <Flex border="0px" alignItems={"center"}>
-           {JoinWhatsapp}
+           {JoinTelegram}
             <Menu boundary="clippingParents">
               <MenuButton border="0px" py={2} transition="all 0.3s" _focus={{ boxShadow: "none" }}>
                 <HStack>
@@ -157,9 +157,8 @@ const MobileNav = ({ onOpen, ...rest }: MobileProps) => {
 };
 
 
-const JoinWhatsapp = <HStack alignItems={"center"} mx="2" px="2" py="0.5" bg="green.300">
-  <Link color="white" href="https://chat.whatsapp.com/DzM1YQEp8Gn6EAwDAvPg4U" isExternal>
-    Join Whatsapp Group
+const JoinTelegram = <HStack alignItems={"center"} mx="2" px="2" py="0.5" bg="telegram.300"> <Link color="white" href="https://t.me/+Rhiv7nfLc_pkZDM1" isExternal>
+    Join Telegram
   </Link>
-  <FaWhatsapp color="white" />
+  <FaTelegram color="white" />
 </HStack>;
