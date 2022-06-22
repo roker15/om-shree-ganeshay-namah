@@ -68,6 +68,7 @@ const QuestionBanks: React.FC = () => {
         setShouldfetch(true);
       } else {
         setYear(undefined);
+        setShouldfetch(false);
       }
     });
     return () => subscription.unsubscribe();
@@ -144,7 +145,7 @@ const QuestionBanks: React.FC = () => {
             .map((x) => {
               return (
                 <Box key={x.id} mb="2">
-                  <QuestionBankEditor x={x}  />
+                  <QuestionBankEditor x={x} y={false} />
                 </Box>
               );
             })
@@ -174,7 +175,6 @@ const CustomFormLabel: React.FC<{ text: string; htmlfor: string }> = ({ text, ht
   );
 };
 
-
 const EditorStyle1 = styled.div`
   .sun-editor {
     border: 0px solid gray;
@@ -183,24 +183,17 @@ const EditorStyle1 = styled.div`
 `;
 interface PropsQuestionBankEditor {
   x: QuestionBank;
+  y?: boolean;
 }
 
-const QuestionBankEditor: React.FunctionComponent<PropsQuestionBankEditor> = ({ x}) => {
+const QuestionBankEditor: React.FunctionComponent<PropsQuestionBankEditor> = ({ x, y }) => {
   const [isAnswerWritingOn, setAnswerWritingOn] = useState(false);
   const [isAnswerExist, setAnswerExist] = useState(false);
   const { user, error } = useUser();
   const [value, setValue] = React.useState("READ");
-  const [showEditButton, setShowEditButton] = useState(false);
+  const [showEditButton, setShowEditButton] = useState(y);
   const [answer, setAnswer] = useState<string | undefined>(undefined);
   const editor = useRef<SunEditorCore>();
-
-  useEffect(() => {
-    setShowEditButton(true);
-    return () => {
-      setShowEditButton(false);
-    };
-  }, []);
- 
 
   const getSunEditorInstance = (sunEditor: SunEditorCore) => {
     editor.current = sunEditor;
@@ -215,8 +208,7 @@ const QuestionBankEditor: React.FunctionComponent<PropsQuestionBankEditor> = ({ 
       .eq("answered_by", user?.id);
     if (data && data.length > 0 && data[0].answer_english) {
       editor.current?.core.setContents(data[0].answer_english);
-    } 
-
+    }
   };
   const getAnswerCount = async () => {
     const { data, error, count } = await supabaseClient
@@ -262,10 +254,15 @@ const QuestionBankEditor: React.FunctionComponent<PropsQuestionBankEditor> = ({ 
     }
   };
   useEffect(() => {
+    setShowEditButton(true);
+    // return () => {
+    //   setShowEditButton(false);
+    // };
+  }, []);
+  useEffect(() => {
     getAnswerCount();
   }, []);
 
-  
   return (
     <>
       <EditorStyle1>
@@ -277,7 +274,6 @@ const QuestionBankEditor: React.FunctionComponent<PropsQuestionBankEditor> = ({ 
           readOnly={true}
           //   disable={true}
           autoFocus={false}
-        
           setOptions={{
             mode: "balloon", //this is just for stop flash of toolbar before hiding
             katex: katex,
