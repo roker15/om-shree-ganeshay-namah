@@ -223,7 +223,7 @@ const MyNotes: React.FC<Props> = ({ subjectId, subheadingid, notesCreator, chang
                         <SkeletonText isLoaded={false} noOfLines={4} spacing="4" />
                       </Box>
                     ) : (
-                      <SuneditorForNotesMaking article={x} language={"HINDI"} isEditable={isEditable} />
+                      <SuneditorForNotesMaking article={x} language={"ENGLISH"} isEditable={isEditable} />
                     )}
                   </TabPanel>
                   <TabPanel>
@@ -233,7 +233,7 @@ const MyNotes: React.FC<Props> = ({ subjectId, subheadingid, notesCreator, chang
                         <SkeletonText isLoaded={false} noOfLines={4} spacing="4" />
                       </Box>
                     ) : (
-                      <SuneditorForNotesMaking article={x} language={"ENGLISH"} isEditable={isEditable} />
+                      <SuneditorForNotesMaking article={x} language={"HINDI"} isEditable={isEditable} />
                     )}
                   </TabPanel>
                 </TabPanels>
