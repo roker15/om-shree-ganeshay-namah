@@ -220,8 +220,8 @@ if (swrError) {
               </Flex>
               <Tabs size="md" colorScheme="whatsapp">
                 <TabList>
-                  <Tab>Hindi</Tab>
                   <Tab>English</Tab>
+                  <Tab>Hindi</Tab>
                 </TabList>
                 <TabPanels>
                   <TabPanel pl="2" pr="0.5">
@@ -231,7 +231,7 @@ if (swrError) {
                         <SkeletonText isLoaded={false} noOfLines={4} spacing="4" />
                       </Box>
                     ) : (
-                      <SuneditorForNotesMaking article={x} language={"HINDI"} isEditable={isEditable} />
+                      <SuneditorForNotesMaking article={x} language={"ENGLISH"} isEditable={isEditable} />
                     )}
                   </TabPanel>
                   <TabPanel>
@@ -241,7 +241,7 @@ if (swrError) {
                         <SkeletonText isLoaded={false} noOfLines={4} spacing="4" />
                       </Box>
                     ) : (
-                      <SuneditorForNotesMaking article={x} language={"ENGLISH"} isEditable={isEditable} />
+                      <SuneditorForNotesMaking article={x} language={"HINDI"} isEditable={isEditable} />
                     )}
                   </TabPanel>
                 </TabPanels>
