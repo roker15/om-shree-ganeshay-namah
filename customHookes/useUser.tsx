@@ -9,7 +9,7 @@ export function useGetExamPapers(examId: number) {
     book_name: string;
   }
   const { data, error } = useSWR(
-    ["/upsc"],
+    ["/upsc",examId],
     async () =>
       await supabaseClient
         .from<definitions["books"]>("books")
