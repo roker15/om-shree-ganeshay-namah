@@ -1,19 +1,25 @@
 import {
   Box,
-  Button, Checkbox, Flex,
+  Button,
+  Checkbox,
+  Flex,
   FormControl,
   FormErrorMessage,
-  Grid, IconButton,
-  Input, SkeletonCircle,
-  SkeletonText, Stack,
+  Grid,
+  IconButton,
+  Input,
+  SkeletonCircle,
+  SkeletonText,
+  Stack,
   Tab,
   TabList,
   TabPanel,
   TabPanels,
-  Tabs, Text,
+  Tabs,
+  Text,
   Tooltip,
   VStack,
-  Wrap
+  Wrap,
 } from "@chakra-ui/react";
 import { supabaseClient } from "@supabase/auth-helpers-nextjs";
 import "katex/dist/katex.min.css";
@@ -142,7 +148,7 @@ const MyNotes: React.FC<Props> = ({ subjectId, subheadingid, notesCreator, chang
                                   key={element.id}
                                   onClick={() => {
                                     setIsTagSearchActive(true);
-                                    setTagsArray!([element.id])
+                                    setTagsArray!([element.id]);
                                   }}
                                   bg="gray.50"
                                   px="1.5"
@@ -212,8 +218,8 @@ const MyNotes: React.FC<Props> = ({ subjectId, subheadingid, notesCreator, chang
               </Flex>
               <Tabs size="md" colorScheme="whatsapp">
                 <TabList>
-                  <Tab>Hindi</Tab>
                   <Tab>English</Tab>
+                  <Tab>Hindi</Tab>
                 </TabList>
                 <TabPanels>
                   <TabPanel pl="2" pr="0.5">
@@ -404,8 +410,8 @@ const ArticleForm: React.FC<ArticleFormProps> = ({
           <VStack py="4">
             <Text bg="orange.100" fontSize="xs">
               {" "}
-              # Select Tags from below. Tags marked ⭐ are main Topics, others are subtopics. Topics taken from
-              UPSC notification. Some Extra Tags are for segregation purposes.
+              # Select Tags from below. Tags marked ⭐ are main Topics, others are subtopics. Topics taken from UPSC
+              notification. Some Extra Tags are for segregation purposes.
             </Text>
             <Grid templateColumns={{ base: "repeat(2, 1fr)", sm: "repeat(3, 1fr)" }} gap={"1"}>
               {currentAffairTags.map((value) => (
