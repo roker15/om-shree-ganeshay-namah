@@ -49,7 +49,8 @@ const QuestionBanks: React.FC = () => {
   const [paperId, setPaperId] = useState<number | undefined>(undefined);
   const [year, setYear] = useState<number | undefined>(undefined);
   const [shouldfetch, setShouldfetch] = useState(false);
-  const { examPapers, isLoading, isError } = useGetExamPapers(24);
+  const [examId, setExamId] = useState("24");
+  const { examPapers, isLoading, isError } = useGetExamPapers(parseInt(examId));
   const { questions, isLoading: isQuestionLoading } = useGetQuestionsByPaperidAndYear(paperId, year, shouldfetch);
 
   const { profile } = useAuthContext();
@@ -77,6 +78,24 @@ const QuestionBanks: React.FC = () => {
   return (
     <Box>
       <>
+        <RadioGroup
+          ml="4"
+          onChange={(e) => {
+            setPaperId(undefined);
+            setYear(undefined);
+            setExamId(e);
+          }}
+          value={examId}
+        >
+          <Stack direction="row">
+            <Radio size="sm" name="1" colorScheme="linkedin" value="24">
+              <Text casing="capitalize">UPSC</Text>
+            </Radio>
+            <Radio size="sm" name="2" colorScheme="telegram" value="29">
+              <Text casing="capitalize">UPPSC PCS</Text>
+            </Radio>
+          </Stack>
+        </RadioGroup>
         <form>
           <br />
           <FormControl>
@@ -277,7 +296,7 @@ const QuestionBankEditor: React.FunctionComponent<PropsQuestionBankEditor> = ({ 
           setOptions={{
             mode: "balloon", //this is just for stop flash of toolbar before hiding
             katex: katex,
-            hideToolbar:true,
+            hideToolbar: true,
             resizingBar: false,
             height: "100%",
           }}
@@ -334,7 +353,7 @@ const QuestionBankEditor: React.FunctionComponent<PropsQuestionBankEditor> = ({ 
                   updateOrInsertAnswer(contents);
                 },
                 placeholder: "Click Edit above and Start Typing",
-                hideToolbar:true,
+                hideToolbar: true,
                 mode: "classic",
                 katex: katex,
                 colorList: colors,

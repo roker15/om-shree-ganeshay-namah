@@ -68,14 +68,15 @@ interface IFormInput {
 }
 
 const CreateQuestionBank: React.FC = () => {
+  const [examId, setExamId] = useState("24");
   const [paperId, setPaperId] = useState<number | undefined>(undefined);
   const [year, setYear] = useState<number | undefined>(undefined);
   const [shouldfetch, setShouldfetch] = useState(false);
   const [isEditMode, setIsEditMode] = useState(false);
-  const [userId, setUserId] = useState("");
   const { user, error } = useUser();
+  const [userId, setUserId] = useState("");
   const [currentEditQuestion, setCurrentEditQuestion] = useState<QuestionBank>();
-  const { examPapers, isLoading, isError } = useGetExamPapers(24);
+  const { examPapers, isLoading, isError } = useGetExamPapers(parseInt(examId));
   const [loading, setLoading] = useState(false);
   const {
     questions,
@@ -91,7 +92,11 @@ const CreateQuestionBank: React.FC = () => {
     } else {
       setUserId("");
     }
-  }, []);
+  }, [user]);
+  // useEffect(() => {
+  //   setPaperId(undefined);
+  //   setYear(undefined);
+  // }, [examId]);
   const signUpUser = async (email: string, role: string) => {
     let { user, error } = await supabaseClient.auth.signIn(
       {
@@ -117,6 +122,9 @@ const CreateQuestionBank: React.FC = () => {
         remark: values.remark,
         created_by: userId,
       });
+      if (error) {
+        alert(error.message);
+      }
       setLoading(false);
       mutate([`/questions/${paperId}/${year}`]);
     } else {
@@ -226,18 +234,33 @@ const CreateQuestionBank: React.FC = () => {
     console.log("session null  nahi hai bhai");
     return (
       <Box mx={{ base: "4", md: "28", lg: "52" }}>
+        <br />
+        <Center>
+          <Badge colorScheme="purple" fontSize="xl">
+            Create Questions
+          </Badge>
+        </Center>
+        <br />
+        <RadioGroup
+          ml="4"
+          onChange={(e) => {
+            setPaperId(undefined)
+            setYear(undefined)
+            setExamId(e);
+          }}
+          value={examId}
+        >
+          <Stack direction="row">
+            <Radio size="sm" name="1" colorScheme="linkedin" value="24">
+              <Text casing="capitalize">UPSC</Text>
+            </Radio>
+            <Radio size="sm" name="2" colorScheme="telegram" value="29">
+              <Text casing="capitalize">UPPSC PCS</Text>
+            </Radio>
+          </Stack>
+        </RadioGroup>
+
         <form onSubmit={handleSubmit(onSubmit)}>
-          {/* <br /> */}
-
-          <br />
-          <Center>
-            <Badge colorScheme="purple" fontSize="xl">
-              Create Questions
-            </Badge>
-          </Center>
-          <br />
-          {/* <br /> */}
-
           <FormControl m="2" isInvalid={errors.paperId as any}>
             <FormLabel color="blue.600" htmlFor="paperId">
               Exam paper
