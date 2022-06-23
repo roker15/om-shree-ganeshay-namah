@@ -175,7 +175,7 @@ const SuneditorForNotesMaking: React.FC<SuneditorForNotesMakingProps> = ({ artic
               getSunEditorInstance={getSunEditorInstance}
               setDefaultStyle={fontSize}
               hideToolbar={editorMode === "READ" ? true : false}
-              // defaultValue={language === "ENGLISH" ? article.article_english : article.article_hindi}
+              defaultValue={language === "ENGLISH" ? article.article_english : article.article_hindi}
               onChange={handleOnChange}
               readOnly={editorMode === "READ" ? true : false}
               autoFocus={false}

@@ -93,10 +93,6 @@ const CreateQuestionBank: React.FC = () => {
       setUserId("");
     }
   }, [user]);
-  // useEffect(() => {
-  //   setPaperId(undefined);
-  //   setYear(undefined);
-  // }, [examId]);
   const signUpUser = async (email: string, role: string) => {
     let { user, error } = await supabaseClient.auth.signIn(
       {

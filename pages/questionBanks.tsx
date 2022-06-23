@@ -63,7 +63,7 @@ const QuestionBank1: React.FC<ProfileListPropss> = ({}) => {
           </Link>
 
           <Link href="/createQuestionBank">
-            <a className="internal" style={{ color:  "#5cb2eb"  }}>
+            <a className="internal" style={{ color: "#5cb2eb" }}>
               Create New Question
             </a>
           </Link>

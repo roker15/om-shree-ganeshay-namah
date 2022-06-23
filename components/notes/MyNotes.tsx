@@ -1,19 +1,25 @@
 import {
   Box,
-  Button, Checkbox, Flex,
+  Button,
+  Checkbox,
+  Flex,
   FormControl,
   FormErrorMessage,
-  Grid, IconButton,
-  Input, SkeletonCircle,
-  SkeletonText, Stack,
+  Grid,
+  IconButton,
+  Input,
+  SkeletonCircle,
+  SkeletonText,
+  Stack,
   Tab,
   TabList,
   TabPanel,
   TabPanels,
-  Tabs, Text,
+  Tabs,
+  Text,
   Tooltip,
   VStack,
-  Wrap
+  Wrap,
 } from "@chakra-ui/react";
 import { supabaseClient } from "@supabase/auth-helpers-nextjs";
 import "katex/dist/katex.min.css";
@@ -52,7 +58,7 @@ type Inputs = {
 };
 const MyNotes: React.FC<Props> = ({ subjectId, subheadingid, notesCreator, changeParentProps, isCopyable, isEditable }) => {
   const { profile } = useAuthContext();
-  const { data: articles, isLoading: isArticleLoading } = useGetUserArticles(subheadingid, notesCreator);
+  const { data: articles, isLoading: isArticleLoading, swrError } = useGetUserArticles(subheadingid, notesCreator);
   const [isLoadingCopyButton, setIsLoadingCopyButton] = useState<boolean | undefined>(false);
   const [selectedArticleForEdit, setSelectedArticleForEdit] = useState<number | undefined>();
   const [isArticleCreating, setIsArticleCreating] = useState<"CREATING" | "EDITING" | "NONE">("NONE");
@@ -61,7 +67,9 @@ const MyNotes: React.FC<Props> = ({ subjectId, subheadingid, notesCreator, chang
   const SunEditor = dynamic(() => import("suneditor-react"), {
     ssr: false,
   });
-
+if (swrError) {
+  alert(swrError.message);
+}
   const deleteArticle = async (id: number): Promise<void> => {
     const { data, error } = await supabaseClient.from<definitions["books_articles"]>("books_articles").delete().eq("id", id);
     if (error) {
@@ -142,7 +150,7 @@ const MyNotes: React.FC<Props> = ({ subjectId, subheadingid, notesCreator, chang
                                   key={element.id}
                                   onClick={() => {
                                     setIsTagSearchActive(true);
-                                    setTagsArray!([element.id])
+                                    setTagsArray!([element.id]);
                                   }}
                                   bg="gray.50"
                                   px="1.5"
@@ -404,8 +412,8 @@ const ArticleForm: React.FC<ArticleFormProps> = ({
           <VStack py="4">
             <Text bg="orange.100" fontSize="xs">
               {" "}
-              # Select Tags from below. Tags marked ⭐ are main Topics, others are subtopics. Topics taken from
-              UPSC notification. Some Extra Tags are for segregation purposes.
+              # Select Tags from below. Tags marked ⭐ are main Topics, others are subtopics. Topics taken from UPSC
+              notification. Some Extra Tags are for segregation purposes.
             </Text>
             <Grid templateColumns={{ base: "repeat(2, 1fr)", sm: "repeat(3, 1fr)" }} gap={"1"}>
               {currentAffairTags.map((value) => (
