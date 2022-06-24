@@ -110,7 +110,12 @@ const SuneditorForNotesMaking: React.FC<SuneditorForNotesMakingProps> = ({ artic
               </Radio>
             </Stack>
           </RadioGroup>
-          <Flex alignItems={"center"} pb="2"direction={{ base: "column", sm: "row" }} display={editorMode === "READ" ? "none" : "flex"}>
+          <Flex
+            alignItems={"center"}
+            pb="2"
+            direction={{ base: "column", sm: "row" }}
+            display={editorMode === "READ" ? "none" : "flex"}
+          >
             <Select
               size="sm"
               px="2"
@@ -148,18 +153,18 @@ const SuneditorForNotesMaking: React.FC<SuneditorForNotesMakingProps> = ({ artic
               onChange={handleOnChange}
               readOnly={editorMode === "READ" ? true : false}
               autoFocus={false}
-              
               // disable={editorMode === "READ" ? true : false}
               setOptions={{
                 callBackSave(contents, isChanged) {
                   updateArticleInDatabase(contents);
                 },
                 // hideToolbar: true, // to be implemented
-                placeholder: `Click Edit and Start Typing Press Crtl + S to save your Notes.
-                 Or press "Save Button in Editor to Save your notes"`,
-                
+                placeholder: `Click Edit and Start Typing 
+                Press Crtl + S to save your Notes.
+                 Or press "Save" Button in Editor to Save your notes"`,
+
                 mode: "classic",
-                hideToolbar:true,
+                hideToolbar: true,
                 katex: katex,
                 colorList: colors,
                 imageUploadUrl: `${BASE_URL}/api/uploadImage`,
@@ -190,7 +195,7 @@ const SuneditorForNotesMaking: React.FC<SuneditorForNotesMakingProps> = ({ artic
                 ],
                 height: "100%",
                 width: "auto",
-                minWidth: "350px",
+                // minWidth: "350px",
                 buttonList: sunEditorButtonList,
                 resizingBar: false,
                 formats: ["p", "div", "h1", "h2", "h3"],
