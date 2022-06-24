@@ -1,10 +1,9 @@
-import { Box, Button, Checkbox, Container, Flex, Radio, RadioGroup, Select, Stack, Text } from "@chakra-ui/react";
+import { Box, Checkbox, Flex, Radio, RadioGroup, Select, Stack, Text } from "@chakra-ui/react";
 import katex from "katex";
 import "katex/dist/katex.min.css";
 import { debounce } from "lodash";
 import dynamic from "next/dynamic";
 import React, { ChangeEvent, useCallback, useEffect, useRef } from "react";
-import { v4 as uuid } from "uuid";
 import { BASE_URL, colors, sunEditorButtonList, sunEditorfontList } from "../../lib/constants";
 import { elog } from "../../lib/mylog";
 import { useAuthContext } from "../../state/Authcontext";
@@ -14,10 +13,9 @@ import { customToast } from "../CustomToast";
 // import SunEditor from "suneditor-react";
 import "suneditor/dist/css/suneditor.min.css"; // Import Sun Editor's CSS File
 // import SunEditor from "suneditor-react";
-import SunEditorCore from "suneditor/src/lib/core";
-import styled from "styled-components";
-import { UiForImageUpload } from "../UiForImageUpload";
 import { supabaseClient } from "@supabase/auth-helpers-nextjs";
+import styled from "styled-components";
+import SunEditorCore from "suneditor/src/lib/core";
 const SunEditor = dynamic(() => import("suneditor-react"), {
   ssr: false,
 });
@@ -33,24 +31,10 @@ const SuneditorForNotesMaking: React.FC<SuneditorForNotesMakingProps> = ({ artic
   const [isAutosaveOn, setIsAutosaveOn] = React.useState(false);
   const [fontSize, setFontSize] = React.useState("font-family: arial; font-size: 14px;");
   const { profile } = useAuthContext();
-  //   const SunEditor = dynamic(() => import("suneditor-react"), {
-  //     ssr: false,
-  //   });
   const editor = useRef<SunEditorCore>();
   const getSunEditorInstance = (sunEditor: SunEditorCore) => {
     editor.current = sunEditor;
   };
-  // useEffect(() => {
-  //   console.log("");
-
-  //   return () => {
-  //     if (editor.current) {
-  //       editor.current.disable()
-  //       // alert("Editor hai")
-  //       // editor.current = undefined;
-  //     }
-  //   };
-  // }, []);
 
   useEffect(() => {
     if (!isAutosaveOn) {
@@ -139,21 +123,6 @@ const SuneditorForNotesMaking: React.FC<SuneditorForNotesMakingProps> = ({ artic
               <option value="font-family: arial; font-size: 16px;">medium</option>
               <option value="font-family: arial; font-size: 24px;">large</option>
             </Select>
-            {/* <Box pb="3">
-              <UiForImageUpload />
-            </Box> */}
-
-            {/* <Button
-              onClick={() => {
-                updateArticleInDatabase(editor.current?.getContents(false));
-              }}
-              display={isAutosaveOn ? "none" : undefined}
-              size="sm"
-              // colorScheme="orange"
-              variant="ghost"
-            >
-              Save
-            </Button> */}
 
             <Checkbox
               colorScheme="whatsapp"
@@ -186,7 +155,10 @@ const SuneditorForNotesMaking: React.FC<SuneditorForNotesMakingProps> = ({ artic
                   updateArticleInDatabase(contents);
                 },
                 // hideToolbar: true, // to be implemented
-                placeholder: "Click Edit and Start Typing",
+                placeholder: `Click Edit and Start Typing
+                 Press Crtl + S to save your Notes.
+                 Or press "Save Button in Editor to Save your notes"`,
+                
                 mode: "classic",
                 hideToolbar:true,
                 katex: katex,

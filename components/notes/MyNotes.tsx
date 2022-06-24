@@ -67,9 +67,7 @@ const MyNotes: React.FC<Props> = ({ subjectId, subheadingid, notesCreator, chang
   const SunEditor = dynamic(() => import("suneditor-react"), {
     ssr: false,
   });
-if (swrError) {
-  alert(swrError.message);
-}
+
   const deleteArticle = async (id: number): Promise<void> => {
     const { data, error } = await supabaseClient.from<definitions["books_articles"]>("books_articles").delete().eq("id", id);
     if (error) {

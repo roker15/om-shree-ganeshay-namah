@@ -21,7 +21,6 @@ const Syllabus: React.FC<Props> = ({ book, changeParentProps }) => {
   const grouped = groupBy(data, (x) => [x.heading_sequence, x.heading_id, x.heading]);
 
   const handleSyllabusClick = (x: BookSyllabus) => {
-    alert(x.subheading_id)
     setSelectedSubheading(x.subheading_id);
     changeParentProps(x);
   };
