@@ -1,8 +1,8 @@
 import { useEffect, useState } from "react";
-import { supabase } from "../lib/supabaseClient";
 import { DEFAULT_AVATARS_BUCKET } from "../lib/constants";
 import Image from "next/image";
 import profilePic from "../public/loader.svg";
+import { supabaseClient } from "@supabase/auth-helpers-nextjs";
 
 export default function Avatar({ url, size }: { url: string | null; size: number }) {
   const [avatarUrl, setAvatarUrl] = useState<string>();
@@ -13,7 +13,7 @@ export default function Avatar({ url, size }: { url: string | null; size: number
 
   async function downloadImage(path: string) {
     try {
-      const { data, error } = await supabase.storage.from(DEFAULT_AVATARS_BUCKET).download(path);
+      const { data, error } = await supabaseClient.storage.from(DEFAULT_AVATARS_BUCKET).download(path);
       if (error) {
         throw error;
       }
