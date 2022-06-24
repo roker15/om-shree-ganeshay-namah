@@ -159,8 +159,8 @@ const SuneditorForNotesMaking: React.FC<SuneditorForNotesMakingProps> = ({ artic
                   updateArticleInDatabase(contents);
                 },
                 // hideToolbar: true, // to be implemented
-                placeholder: `Click Edit and Start Typing 
-                Press Crtl + S to save your Notes.
+                placeholder: `Step 1 - Click Edit and Start Typing 
+                Step 2 - Press "Crtl + S" to save your Notes (keep mouse cursor in Editor).
                  Or press "Save" Button in Editor to Save your notes"`,
 
                 mode: "classic",
