@@ -27,7 +27,7 @@ export const sunEditorButtonList = [
     "font",
     "fontSize",
     "formatBlock",
-    "paragraphStyle",
+    // "paragraphStyle",
     "blockquote",
     "bold",
     "underline",
@@ -49,7 +49,7 @@ export const sunEditorButtonList = [
     "link",
     "image",
     // "video",
-    "audio",
+    // "audio",
     "math",
     // "imageGallery",
     // "fullScreen",
@@ -61,26 +61,6 @@ export const sunEditorButtonList = [
     // "template",
   ],
 ];
-// export const sunEditorButtonList = [
-//   // ["undo", "redo"],
-//   ["font", "fontSize", "formatBlock"],
-//   [/*"paragraphStyle",*/ "blockquote"],
-//   ["bold", "underline", "italic", "strike", "subscript", "superscript"],
-//   ["fontColor", "hiliteColor", "textStyle"],
-//   ["removeFormat"],
-//   "/",
-//   ["outdent", "indent"],
-//   ["align", "horizontalRule", "list" /* "lineHeight"*/],
-//   ["table", "link", "image", /* "video","audio",*/ "math"],
-
-//   ["imageGallery"], // You must add the "imageGalleryUrl".
-//   // ["fullScreen" /*, "showBlocks", "codeView"*/],
-//   [
-//     // "preview",
-//     "print",
-//   ],
-//   ["save", "template"],
-// ];
 
 export const sunEditorfontList = [
   "Arial",
