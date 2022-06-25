@@ -62,8 +62,8 @@ function EditorForNotesMaking(props: editorProps): JSX.Element {
       getSunEditorInstance={props.getSunEditorInstance}
       setDefaultStyle={props.fontSize}
       hideToolbar={props.editorMode === "READ" ? true : false}
-      defaultValue={props.language === "ENGLISH" ? props.article.article_english : props.article.article_hindi}
-      // setContents={props.language === "ENGLISH" ? props.article.article_english : props.article.article_hindi}
+      // defaultValue={props.language === "ENGLISH" ? props.article.article_english : props.article.article_hindi}
+      setContents={props.language === "ENGLISH" ? props.article.article_english : props.article.article_hindi}
       // onChange={props.handleOnChange}
       readOnly={props.editorMode === "READ" ? true : false}
       autoFocus={false} // disable={editorMode === "READ" ? true : false}
@@ -112,15 +112,15 @@ const SuneditorForNotesMaking: React.FC<SuneditorForNotesMakingProps> = ({ artic
       debouncedFunctionRef.current = undefined;
     }
   });
-  useEffect(() => {
-    if (language === "HINDI" && article && article.article_hindi && editor.current && editor.current.core) {
-      editor.current?.core.setContents(article.article_hindi);
-      // editor.current?.core.conten(article.article_hindi);
-    }
-    if (language === "ENGLISH" && article && article.article_english && editor.current && editor.current.core) {
-      editor.current?.core.setContents(article.article_english);
-    }
-  }, [article, language]);
+  // useEffect(() => {
+  //   if (language === "HINDI" && article && article.article_hindi && editor.current && editor.current.core) {
+  //     editor.current?.core.setContents(article.article_hindi);
+  //     // editor.current?.core.conten(article.article_hindi);
+  //   }
+  //   if (language === "ENGLISH" && article && article.article_english && editor.current && editor.current.core) {
+  //     editor.current?.core.setContents(article.article_english);
+  //   }
+  // }, [article, language]);
 
   const debouncedFunctionRef = useRef<(newcontent: any) => void>();
   debouncedFunctionRef.current = debounce((newcontent: any) => createOrUpdatePost(newcontent), 5000);
