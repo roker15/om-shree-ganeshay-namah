@@ -120,7 +120,7 @@ const SuneditorForNotesMaking: React.FC<SuneditorForNotesMakingProps> = ({ artic
     if (language === "ENGLISH" && article && article.article_english && editor.current && editor.current.core) {
       editor.current?.core.setContents(article.article_english);
     }
-  }, []);
+  }, [article, language]);
 
   const debouncedFunctionRef = useRef<(newcontent: any) => void>();
   debouncedFunctionRef.current = debounce((newcontent: any) => createOrUpdatePost(newcontent), 5000);

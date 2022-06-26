@@ -229,19 +229,6 @@ const QuestionBankEditor: React.FunctionComponent<PropsQuestionBankEditor> = ({ 
     }
   };
 
-  const getAnswerCount = async () => {
-    const { data, error, count } = await supabaseClient
-      .from<definitions["question_answer"]>("question_answer")
-      .select(`*`, { count: "exact", head: true })
-      .eq("question_id", x.id)
-      .eq("answered_by", user?.id);
-
-    if (count) {
-      setAnswerExist(true);
-    } else {
-      setAnswerExist(false);
-    }
-  };
   const updateAnswer = async (answer: string) => {
     const { data, error } = await supabaseClient
       .from<definitions["question_answer"]>("question_answer")
@@ -275,9 +262,23 @@ const QuestionBankEditor: React.FunctionComponent<PropsQuestionBankEditor> = ({ 
   useEffect(() => {
     setShowEditButton(true);
   }, []);
+
   useEffect(() => {
+    const getAnswerCount = async () => {
+      const { data, error, count } = await supabaseClient
+        .from<definitions["question_answer"]>("question_answer")
+        .select(`*`, { count: "exact", head: true })
+        .eq("question_id", x.id)
+        .eq("answered_by", user?.id);
+
+      if (count) {
+        setAnswerExist(true);
+      } else {
+        setAnswerExist(false);
+      }
+    };
     getAnswerCount();
-  }, []);
+  }, [user?.id, x.id]);
 
   return (
     <>
@@ -360,7 +361,7 @@ const QuestionBankEditor: React.FunctionComponent<PropsQuestionBankEditor> = ({ 
                 resizingBar: false,
                 formats: ["p", "div", "h1", "h2", "h3"],
                 font: sunEditorfontList,
-
+                
                 fontSize: [12, 14, 16, 20],
                 imageFileInput: true, //this disable image as file, only from url allowed
                 imageSizeOnlyPercentage: false, //changed on 6 june

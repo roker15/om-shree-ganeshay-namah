@@ -1,20 +1,8 @@
-// {
-//   "extends": "next/core-web-vitals",
-//   "rules": {
-//     "react/display-name": "off",
-//     "react-hooks/exhaustive-deps": "warn" // <--- THIS IS THE NEW RULE
-//   }
-// }
-
-// added on 25 jun 22 because useeffect dependency array not working
 {
-  "plugins": [
-    // ...
-    "react-hooks"
-  ],
+  "extends": "next/core-web-vitals",
   "rules": {
-    // ...
-    "react-hooks/rules-of-hooks": "error",
-    "react-hooks/exhaustive-deps": "warn"
+    "react/display-name": "off",
+    "react-hooks/exhaustive-deps": "warn" // <--- THIS IS THE NEW RULE
   }
 }
+
