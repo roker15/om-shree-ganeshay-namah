@@ -180,7 +180,9 @@ export const currentAffairTags: { id: number; tag: string }[] = [
   { id: 55, tag: "Security forces and agencies" },
 
   { id: 56, tag: "Disaster Management ⭐" },
-
+  
+  { id: 501, tag: "Ethics ⭐" },
+  
   { id: 57, tag: "Miscellaneous ⭐" },
   { id: 58, tag: "Sustainable Developement" },
   { id: 59, tag: "Bills/Acts" },
