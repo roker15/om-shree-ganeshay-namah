@@ -1,3 +1,4 @@
+
 import {
   Box,
   Button,
@@ -64,9 +65,7 @@ const MyNotes: React.FC<Props> = ({ subjectId, subheadingid, notesCreator, chang
   const [isArticleCreating, setIsArticleCreating] = useState<"CREATING" | "EDITING" | "NONE">("NONE");
   const { mutate } = useSWRConfig();
   const { setIsTagSearchActive, setTagsArray, tagsArray } = useNoteContext();
-  const SunEditor = dynamic(() => import("suneditor-react"), {
-    ssr: false,
-  });
+
 
   const deleteArticle = async (id: number): Promise<void> => {
     const { data, error } = await supabaseClient.from<definitions["books_articles"]>("books_articles").delete().eq("id", id);
@@ -724,3 +723,4 @@ const ArticleForm: React.FC<ArticleFormProps> = ({
 //     display: inline;
 //   } */
 // `;
+

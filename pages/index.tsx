@@ -4,6 +4,7 @@ import { useRouter } from "next/dist/client/router";
 import Link from "next/link";
 import React, { useEffect } from "react";
 import ManageNotes from "../components/notes/ManageNotes";
+import CreateBookSyllabus from "../components/syllabus/CreateBookSyllabus";
 import LayoutWithTopNavbar from "../layout/LayoutWithTopNavbar";
 import { NoteContextWrapper } from "../state/NoteContext";
 import { Papers } from "../types/myTypes";

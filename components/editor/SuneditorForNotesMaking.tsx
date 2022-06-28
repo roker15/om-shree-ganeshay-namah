@@ -3,10 +3,8 @@ import { Box, Checkbox, Flex, Radio, RadioGroup, Select, Stack, Text } from "@ch
 import katex from "katex";
 import "katex/dist/katex.min.css";
 import { debounce } from "lodash";
-import dynamic from "next/dynamic";
 import React, { ChangeEvent, useCallback, useEffect, useRef } from "react";
-import { BASE_URL, colors, sunEditorButtonList, sunEditorfontList } from "../../lib/constants";
-import { elog } from "../../lib/mylog";
+import { BASE_URL, colors, SunEditor, sunEditorButtonList, sunEditorfontList } from "../../lib/constants";
 import { useAuthContext } from "../../state/Authcontext";
 import { definitions } from "../../types/supabase";
 
@@ -18,9 +16,6 @@ import { supabaseClient } from "@supabase/auth-helpers-nextjs";
 import styled from "styled-components";
 import SunEditorCore from "suneditor/src/lib/core";
 import { StringOrNumber } from "@chakra-ui/utils";
-const SunEditor = dynamic(() => import("suneditor-react"), {
-  ssr: false,
-});
 
 type SuneditorForNotesMakingProps = {
   article: definitions["books_articles"];
@@ -56,23 +51,21 @@ interface editorProps {
   updateArticleInDatabase: (arg0: string) => void;
 }
 
-function EditorForNotesMaking(props: editorProps): JSX.Element {
+function Editor(props: editorProps): JSX.Element {
   return (
     <SunEditor
       getSunEditorInstance={props.getSunEditorInstance}
       setDefaultStyle={props.fontSize}
       hideToolbar={props.editorMode === "READ" ? true : false}
-      // defaultValue={props.language === "ENGLISH" ? props.article.article_english : props.article.article_hindi}
-      setContents={props.language === "ENGLISH" ? props.article.article_english : props.article.article_hindi}
-      // onChange={props.handleOnChange}
+      defaultValue={props.language === "ENGLISH" ? props.article.article_english : props.article.article_hindi}
+      // setContents={props.language === "ENGLISH" ? props.article.article_english : props.article.article_hindi} //cause blank editor to render first and then put content, so creates flickering effect . so move to defaultValue
+      // onChange={props.handleOnChange} // required atuosave to work
       readOnly={props.editorMode === "READ" ? true : false}
       autoFocus={false} // disable={editorMode === "READ" ? true : false}
       setOptions={{
         callBackSave(contents, isChanged) {
           props.updateArticleInDatabase(contents);
         },
-
-        // hideToolbar: true, // to be implemented
         placeholder: `Step 1 - Click Edit and Start Typing 
                 Step 2 - Press "Crtl + S" to save your Notes (keep mouse cursor inside Editor).
                 Step 3 - You can also press "Save" Button in Editor to Save your notes"`,
@@ -97,21 +90,25 @@ function EditorForNotesMaking(props: editorProps): JSX.Element {
   );
 }
 
-const SuneditorForNotesMaking: React.FC<SuneditorForNotesMakingProps> = ({ article, language, isEditable }) => {
+const SuneditorForNotesMaking: React.FunctionComponent<SuneditorForNotesMakingProps> = ({
+  article,
+  language,
+  isEditable,
+}) => {
   const [editorMode, setEditorMode] = React.useState("READ");
-  const [isAutosaveOn, setIsAutosaveOn] = React.useState(false);
+  const [isAutosaveOn, setIsAutosaveOn] = React.useState(false); // for autosave to work
   const [fontSize, setFontSize] = React.useState("font-family: arial; font-size: 14px;");
   const { profile } = useAuthContext();
   const editor = useRef<SunEditorCore>();
   const getSunEditorInstance = (sunEditor: SunEditorCore) => {
     editor.current = sunEditor;
   };
-
-  useEffect(() => {
-    if (!isAutosaveOn) {
-      debouncedFunctionRef.current = undefined;
-    }
-  });
+  // This is for autosave to work
+  // useEffect(() => {
+  //   if (!isAutosaveOn) {
+  //     debouncedFunctionRef.current = undefined;
+  //   }
+  // });
   useEffect(() => {
     if (language === "HINDI" && article && article.article_hindi && editor.current && editor.current.core) {
       editor.current?.core.setContents(article.article_hindi);
@@ -131,11 +128,13 @@ const SuneditorForNotesMaking: React.FC<SuneditorForNotesMakingProps> = ({ artic
     // debounce((editorContent, postId) => createOrUpdatePost(editorContent, postId), 5000),
     // []
   );
-  // const handleOnChange = (editorContent: string) => {
-  //   if (editor.current?.core.hasFocus && debouncedFunctionRef.current) {
-  //     debouncedFunctionRef.current(editorContent);
-  //   }
-  // };
+
+  // this method is required for autosave to work not in use right now
+  const handleOnChange = (editorContent: string) => {
+    if (editor.current?.core.hasFocus && debouncedFunctionRef.current) {
+      debouncedFunctionRef.current(editorContent);
+    }
+  };
 
   const createOrUpdatePost = (newcontent: any) => {
     updateArticleInDatabase(newcontent);
@@ -143,14 +142,12 @@ const SuneditorForNotesMaking: React.FC<SuneditorForNotesMakingProps> = ({ artic
   const updateArticleInDatabase = async (newcontent: string | undefined) => {
     const { data, error } = await supabaseClient
       .from<definitions["books_articles"]>("books_articles")
-      .update(language === "ENGLISH" ? { article_english: newcontent} : { article_hindi: newcontent })
+      .update(language === "ENGLISH" ? { article_english: newcontent } : { article_hindi: newcontent })
       .eq("id", article.id);
     if (error) {
       customToast({ title: "Article not updated error occurred  " + error.message, status: "error", isUpdating: false });
-      elog("MyNotes->deleteArticle", error.message);
       return;
     }
-
     if (data) {
       customToast({ title: "Updated...", status: "success", isUpdating: true });
     }
@@ -176,7 +173,7 @@ const SuneditorForNotesMaking: React.FC<SuneditorForNotesMakingProps> = ({ artic
           >
             <FontOptions setFontSize={setFontSize}></FontOptions>
 
-            <Checkbox
+            {/* <Checkbox
               colorScheme="whatsapp"
               // color="gray.300"
               borderColor="gray.300"
@@ -186,13 +183,13 @@ const SuneditorForNotesMaking: React.FC<SuneditorForNotesMakingProps> = ({ artic
               }}
             >
               <Text casing={"capitalize"}>Autosave</Text>
-            </Checkbox>
+            </Checkbox> */}
           </Flex>
         </Flex>
 
         <EditorStyle title={editorMode === "READ" ? "READ" : "EDIT"}>
           <Center>
-            <EditorForNotesMaking
+            <Editor
               editorMode={editorMode}
               fontSize={fontSize}
               getSunEditorInstance={getSunEditorInstance}
@@ -200,7 +197,7 @@ const SuneditorForNotesMaking: React.FC<SuneditorForNotesMakingProps> = ({ artic
               updateArticleInDatabase={updateArticleInDatabase}
               article={article}
               language={language}
-            ></EditorForNotesMaking>
+            ></Editor>
           </Center>
         </EditorStyle>
       </Box>
