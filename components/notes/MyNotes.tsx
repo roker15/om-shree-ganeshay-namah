@@ -8,11 +8,9 @@ import {
   Grid,
   IconButton,
   Input,
-<<<<<<< HEAD
-=======
   Radio,
+
   RadioGroup,
->>>>>>> dev-only-jionote-v1
   SkeletonCircle,
   SkeletonText,
   Stack,
