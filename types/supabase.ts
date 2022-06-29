@@ -286,6 +286,8 @@ export interface paths {
           copied_from_userid?: parameters["rowFilter.books_articles.copied_from_userid"];
           copied_from_articleid?: parameters["rowFilter.books_articles.copied_from_articleid"];
           current_affair_tags?: parameters["rowFilter.books_articles.current_affair_tags"];
+          question_type?: parameters["rowFilter.books_articles.question_type"];
+          question_year?: parameters["rowFilter.books_articles.question_year"];
           /** Filtering Columns */
           select?: parameters["select"];
           /** Ordering */
@@ -354,6 +356,8 @@ export interface paths {
           copied_from_userid?: parameters["rowFilter.books_articles.copied_from_userid"];
           copied_from_articleid?: parameters["rowFilter.books_articles.copied_from_articleid"];
           current_affair_tags?: parameters["rowFilter.books_articles.current_affair_tags"];
+          question_type?: parameters["rowFilter.books_articles.question_type"];
+          question_year?: parameters["rowFilter.books_articles.question_year"];
         };
         header: {
           /** Preference */
@@ -386,6 +390,8 @@ export interface paths {
           copied_from_userid?: parameters["rowFilter.books_articles.copied_from_userid"];
           copied_from_articleid?: parameters["rowFilter.books_articles.copied_from_articleid"];
           current_affair_tags?: parameters["rowFilter.books_articles.current_affair_tags"];
+          question_type?: parameters["rowFilter.books_articles.question_type"];
+          question_year?: parameters["rowFilter.books_articles.question_year"];
         };
         body: {
           /** books_articles */
@@ -3337,6 +3343,10 @@ export interface definitions {
     copied_from_articleid?: number;
     /** Format: ARRAY */
     current_affair_tags?: unknown[];
+    /** Format: text */
+    question_type?: string;
+    /** Format: integer */
+    question_year?: number;
   };
   books_board_or_university: {
     /**
@@ -4209,6 +4219,10 @@ export interface parameters {
   "rowFilter.books_articles.copied_from_articleid": string;
   /** Format: ARRAY */
   "rowFilter.books_articles.current_affair_tags": string;
+  /** Format: text */
+  "rowFilter.books_articles.question_type": string;
+  /** Format: integer */
+  "rowFilter.books_articles.question_year": string;
   /** @description books_board_or_university */
   "body.books_board_or_university": definitions["books_board_or_university"];
   /** Format: bigint */
