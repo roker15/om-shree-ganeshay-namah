@@ -8,6 +8,11 @@ import {
   Grid,
   IconButton,
   Input,
+<<<<<<< HEAD
+=======
+  Radio,
+  RadioGroup,
+>>>>>>> dev-only-jionote-v1
   SkeletonCircle,
   SkeletonText,
   Stack,
@@ -54,19 +59,19 @@ type Inputs = {
   articleTitle: string;
   sequence: number;
   tags: unknown[] | undefined;
+  questionType: "MODEL" | "PREV" | "NONE" | undefined;
+  question_year: number | undefined;
+  isQuestion: boolean;
   // tags1: string | undefined;
 };
 const MyNotes: React.FC<Props> = ({ subjectId, subheadingid, notesCreator, changeParentProps, isCopyable, isEditable }) => {
   const { profile } = useAuthContext();
-  const { data: articles, isLoading: isArticleLoading } = useGetUserArticles(subheadingid, notesCreator);
+  const { data: articles, isLoading: isArticleLoading, swrError } = useGetUserArticles(subheadingid, notesCreator);
   const [isLoadingCopyButton, setIsLoadingCopyButton] = useState<boolean | undefined>(false);
   const [selectedArticleForEdit, setSelectedArticleForEdit] = useState<number | undefined>();
   const [isArticleCreating, setIsArticleCreating] = useState<"CREATING" | "EDITING" | "NONE">("NONE");
   const { mutate } = useSWRConfig();
   const { setIsTagSearchActive, setTagsArray, tagsArray } = useNoteContext();
-  const SunEditor = dynamic(() => import("suneditor-react"), {
-    ssr: false,
-  });
 
   const deleteArticle = async (id: number): Promise<void> => {
     const { data, error } = await supabaseClient.from<definitions["books_articles"]>("books_articles").delete().eq("id", id);
@@ -174,6 +179,8 @@ const MyNotes: React.FC<Props> = ({ subjectId, subheadingid, notesCreator, chang
                       sequence={x.sequence}
                       formMode={"EDITING"}
                       x={setIsArticleCreating}
+                      question_year={x.question_year}
+                      question_type={x.question_type}
                     ></ArticleForm>
                   ) : null}
                 </VStack>
@@ -257,6 +264,8 @@ const MyNotes: React.FC<Props> = ({ subjectId, subheadingid, notesCreator, chang
               subheadingid={subheadingid}
               formMode={"CREATING"}
               x={setIsArticleCreating}
+              question_year={undefined}
+              question_type={undefined}
             ></ArticleForm>
           ) : null}
         </Box>
@@ -314,6 +323,8 @@ type ArticleFormProps = {
   articleId?: number;
   articleTitle?: string;
   sequence?: number;
+  question_year: number | undefined;
+  question_type: string | undefined;
   formMode: "CREATING" | "EDITING";
   x: React.Dispatch<React.SetStateAction<"CREATING" | "EDITING" | "NONE">>;
   setParentProps?: (x: string) => {};
@@ -326,28 +337,36 @@ const ArticleForm: React.FC<ArticleFormProps> = ({
   articleId,
   articleTitle,
   sequence,
+  question_type,
+  question_year,
+
   setParentProps,
   x,
 }) => {
   const [isLoading, setIsLoading] = useState();
   const { mutate } = useSWRConfig();
   const { profile } = useAuthContext();
-  console.log("In article form" + tags);
   const {
     register,
+    watch,
     handleSubmit,
     formState: { errors },
   } = useForm<Inputs>({
     defaultValues: {
       articleTitle: articleTitle,
       sequence: sequence,
+      isQuestion: question_type === "MODEL" || question_type === "PREV",
+      questionType: question_type as "MODEL" | "PREV" | "NONE" | undefined,
+      question_year: question_year === 0 ? undefined : question_year,
       // tags: [],
     },
+    shouldUnregister: true,
   });
+  const watchQuestionType = watch("questionType");
+  const watchIsQuestion = watch("isQuestion");
 
   const onSubmit: SubmitHandler<Inputs> = async (d) => {
     if (formMode === "CREATING") {
-      console.log("form data is", d);
       const { data, error } = await supabaseClient.from<definitions["books_articles"]>("books_articles").insert([
         {
           article_title: d.articleTitle,
@@ -355,6 +374,8 @@ const ArticleForm: React.FC<ArticleFormProps> = ({
           books_subheadings_fk: subheadingid,
           sequence: d.sequence,
           current_affair_tags: d.tags ? d.tags : [],
+          question_type: d.questionType ? d.questionType : "NONE",
+          question_year: d.question_year ? d.question_year : 0,
         },
       ]);
       if (error) {
@@ -373,6 +394,8 @@ const ArticleForm: React.FC<ArticleFormProps> = ({
           // books_subheadings_fk: subheadingid,
           sequence: d.sequence,
           current_affair_tags: d.tags ? d.tags : [],
+          question_type: d.questionType ? d.questionType : "NONE",
+          question_year: d.question_year ? d.question_year : 0,
         })
         .eq("id", articleId);
       if (error) {
@@ -389,6 +412,7 @@ const ArticleForm: React.FC<ArticleFormProps> = ({
         <VStack alignItems={"center"}>
           <FormControl p="2" isInvalid={errors.articleTitle as any} maxW="500px">
             <Input
+              minW={"350px"}
               focusBorderColor="lime"
               placeholder="Article Title"
               {...register("articleTitle", { required: "This is required" })}
@@ -404,6 +428,44 @@ const ArticleForm: React.FC<ArticleFormProps> = ({
             />
             <FormErrorMessage>{errors.sequence && errors.sequence.message}</FormErrorMessage>
           </FormControl>
+          <Checkbox
+            colorScheme="red"
+            {...register("isQuestion")}
+            defaultChecked={question_type === "MODEL" || question_type === "PREV"}
+          >
+            <Text casing="capitalize">This is a Question</Text>
+          </Checkbox>
+          {watchIsQuestion && (
+            <Box>
+              <FormControl p="2" isInvalid={errors.questionType as any} maxW="500px" bg="gray.50">
+                <RadioGroup defaultValue={question_type}>
+                  <Radio
+                    {...register("questionType", { required: "This is required" })}
+                    value="MODEL"
+                    pr="16"
+                    colorScheme={"green"}
+                  >
+                    <Text casing="capitalize">Model Question</Text>
+                  </Radio>
+                  <Radio {...register("questionType", { required: "This is required" })} value="PREV" colorScheme={"green"}>
+                    <Text casing="capitalize">Previous year Question</Text>
+                  </Radio>
+                </RadioGroup>
+                <FormErrorMessage>{errors.questionType && errors.questionType.message}</FormErrorMessage>
+              </FormControl>
+              {watchQuestionType === "PREV" && (
+                <FormControl p="2" isInvalid={errors.question_year as any} maxW="500px">
+                  <Input
+                    focusBorderColor="lime"
+                    type="number"
+                    placeholder="Question year (1995-2022)"
+                    {...register("question_year", { required: true, min: 1995, max: 2022 })}
+                  />
+                  <FormErrorMessage>{errors.question_year && errors.question_year.message}</FormErrorMessage>
+                </FormControl>
+              )}
+            </Box>
+          )}
         </VStack>
 
         {subjectId === 60 ? (

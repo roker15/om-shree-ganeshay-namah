@@ -63,7 +63,7 @@ const QuestionBanks: React.FC = () => {
 
   React.useEffect(() => {
     const subscription = watch((value, { name, type }) => {
-      if (value.year && value.year < 2022 && value.year > 1994) {
+      if (value.year && value.year < 2022 && value.year > 1994 && value.paperId) {
         setPaperId(value.paperId);
         setYear(value.year);
         setShouldfetch(true);
@@ -211,7 +211,6 @@ const QuestionBankEditor: React.FunctionComponent<PropsQuestionBankEditor> = ({ 
   const { user, error } = useUser();
   const [value, setValue] = React.useState("READ");
   const [showEditButton, setShowEditButton] = useState(y);
-  const [answer, setAnswer] = useState<string | undefined>(undefined);
   const editor = useRef<SunEditorCore>();
 
   const getSunEditorInstance = (sunEditor: SunEditorCore) => {
@@ -229,19 +228,7 @@ const QuestionBankEditor: React.FunctionComponent<PropsQuestionBankEditor> = ({ 
       editor.current?.core.setContents(data[0].answer_english);
     }
   };
-  const getAnswerCount = async () => {
-    const { data, error, count } = await supabaseClient
-      .from<definitions["question_answer"]>("question_answer")
-      .select(`*`, { count: "exact", head: true })
-      .eq("question_id", x.id)
-      .eq("answered_by", user?.id);
 
-    if (count) {
-      setAnswerExist(true);
-    } else {
-      setAnswerExist(false);
-    }
-  };
   const updateAnswer = async (answer: string) => {
     const { data, error } = await supabaseClient
       .from<definitions["question_answer"]>("question_answer")
@@ -274,20 +261,29 @@ const QuestionBankEditor: React.FunctionComponent<PropsQuestionBankEditor> = ({ 
   };
   useEffect(() => {
     setShowEditButton(true);
-    // return () => {
-    //   setShowEditButton(false);
-    // };
   }, []);
+
   useEffect(() => {
+    const getAnswerCount = async () => {
+      const { data, error, count } = await supabaseClient
+        .from<definitions["question_answer"]>("question_answer")
+        .select(`*`, { count: "exact", head: true })
+        .eq("question_id", x.id)
+        .eq("answered_by", user?.id);
+
+      if (count) {
+        setAnswerExist(true);
+      } else {
+        setAnswerExist(false);
+      }
+    };
     getAnswerCount();
-  }, []);
+  }, [user?.id, x.id]);
 
   return (
     <>
       <EditorStyle1>
         <SunEditor
-          //   setDefaultStyle="font-family: arial; font-size: 16px;"
-          // setContents={x.question_content}
           defaultValue={x.question_content}
           hideToolbar={true}
           readOnly={true}
@@ -365,7 +361,7 @@ const QuestionBankEditor: React.FunctionComponent<PropsQuestionBankEditor> = ({ 
                 resizingBar: false,
                 formats: ["p", "div", "h1", "h2", "h3"],
                 font: sunEditorfontList,
-
+                
                 fontSize: [12, 14, 16, 20],
                 imageFileInput: true, //this disable image as file, only from url allowed
                 imageSizeOnlyPercentage: false, //changed on 6 june
@@ -377,12 +373,3 @@ const QuestionBankEditor: React.FunctionComponent<PropsQuestionBankEditor> = ({ 
     </>
   );
 };
-// export const EditorStyle = styled.div`
-//   .sun-editor {
-//     padding-left: -30px !important;
-//     padding-right: -30px !important;
-//     margin-left: -20px !important;
-//     margin-right: 0px !important;
-//     border: ${(props) => (props.title === "READ" ? "none" : undefined)};
-//   }
-// `;

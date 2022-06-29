@@ -1,12 +1,9 @@
-import { Box, Button, Checkbox, Container, Flex, Radio, RadioGroup, Select, Stack, Text } from "@chakra-ui/react";
+import { Box, Checkbox, Flex, Radio, RadioGroup, Select, Stack, Text } from "@chakra-ui/react";
 import katex from "katex";
 import "katex/dist/katex.min.css";
 import { debounce } from "lodash";
-import dynamic from "next/dynamic";
 import React, { ChangeEvent, useCallback, useEffect, useRef } from "react";
-import { v4 as uuid } from "uuid";
-import { BASE_URL, colors, sunEditorButtonList, sunEditorfontList } from "../../lib/constants";
-import { elog } from "../../lib/mylog";
+import { BASE_URL, colors, SunEditor, sunEditorButtonList, sunEditorfontList } from "../../lib/constants";
 import { useAuthContext } from "../../state/Authcontext";
 import { definitions } from "../../types/supabase";
 
@@ -14,13 +11,10 @@ import { customToast } from "../CustomToast";
 // import SunEditor from "suneditor-react";
 import "suneditor/dist/css/suneditor.min.css"; // Import Sun Editor's CSS File
 // import SunEditor from "suneditor-react";
-import SunEditorCore from "suneditor/src/lib/core";
-import styled from "styled-components";
-import { UiForImageUpload } from "../UiForImageUpload";
 import { supabaseClient } from "@supabase/auth-helpers-nextjs";
-const SunEditor = dynamic(() => import("suneditor-react"), {
-  ssr: false,
-});
+import styled from "styled-components";
+import SunEditorCore from "suneditor/src/lib/core";
+import { StringOrNumber } from "@chakra-ui/utils";
 
 type SuneditorForNotesMakingProps = {
   article: definitions["books_articles"];
@@ -28,35 +22,25 @@ type SuneditorForNotesMakingProps = {
   isEditable: boolean | undefined;
 };
 
-const SuneditorForNotesMaking: React.FC<SuneditorForNotesMakingProps> = ({ article, language, isEditable }) => {
+const SuneditorForNotesMaking: React.FunctionComponent<SuneditorForNotesMakingProps> = ({
+  article,
+  language,
+  isEditable,
+}) => {
   const [editorMode, setEditorMode] = React.useState("READ");
-  const [isAutosaveOn, setIsAutosaveOn] = React.useState(false);
+  // const [isAutosaveOn, setIsAutosaveOn] = React.useState(false); // for autosave to work
   const [fontSize, setFontSize] = React.useState("font-family: arial; font-size: 14px;");
   const { profile } = useAuthContext();
-  //   const SunEditor = dynamic(() => import("suneditor-react"), {
-  //     ssr: false,
-  //   });
   const editor = useRef<SunEditorCore>();
   const getSunEditorInstance = (sunEditor: SunEditorCore) => {
     editor.current = sunEditor;
   };
+  // This is for autosave to work
   // useEffect(() => {
-  //   console.log("");
-
-  //   return () => {
-  //     if (editor.current) {
-  //       editor.current.disable()
-  //       // alert("Editor hai")
-  //       // editor.current = undefined;
-  //     }
-  //   };
-  // }, []);
-
-  useEffect(() => {
-    if (!isAutosaveOn) {
-      debouncedFunctionRef.current = undefined;
-    }
-  });
+  //   if (!isAutosaveOn) {
+  //     debouncedFunctionRef.current = undefined;
+  //   }
+  // });
   useEffect(() => {
     if (language === "HINDI" && article && article.article_hindi && editor.current && editor.current.core) {
       editor.current?.core.setContents(article.article_hindi);
@@ -76,6 +60,8 @@ const SuneditorForNotesMaking: React.FC<SuneditorForNotesMakingProps> = ({ artic
     // debounce((editorContent, postId) => createOrUpdatePost(editorContent, postId), 5000),
     // []
   );
+
+  // this method is required for autosave to work not in use right now
   const handleOnChange = (editorContent: string) => {
     if (editor.current?.core.hasFocus && debouncedFunctionRef.current) {
       debouncedFunctionRef.current(editorContent);
@@ -92,10 +78,8 @@ const SuneditorForNotesMaking: React.FC<SuneditorForNotesMakingProps> = ({ artic
       .eq("id", article.id);
     if (error) {
       customToast({ title: "Article not updated error occurred  " + error.message, status: "error", isUpdating: false });
-      elog("MyNotes->deleteArticle", error.message);
       return;
     }
-
     if (data) {
       customToast({ title: "Updated...", status: "success", isUpdating: true });
     }
@@ -110,52 +94,17 @@ const SuneditorForNotesMaking: React.FC<SuneditorForNotesMakingProps> = ({ artic
           display={isEditable ? "undefined" : "none"}
           justifyContent="space-between"
           align="center"
-          // alignItems="center"
         >
-          <RadioGroup onChange={setEditorMode} value={editorMode}>
-            <Stack direction="row">
-              <Radio colorScheme="whatsapp" size="sm" value="READ">
-                <Text as="b" casing="capitalize">
-                  Read
-                </Text>
-              </Radio>
-              <Radio colorScheme="pink" size="sm" value="EDIT">
-                <Text as="b" casing="capitalize">
-                  Edit
-                </Text>
-              </Radio>
-            </Stack>
-          </RadioGroup>
-          <Flex alignItems={"center"} pb="2"direction={{ base: "column", sm: "row" }} display={editorMode === "READ" ? "none" : "flex"}>
-            <Select
-              size="sm"
-              px="2"
-              placeholder="Font Size"
-              onChange={(e) => {
-                setFontSize(e.target.value);
-              }}
-            >
-              <option value="font-family: arial; font-size: 14px;">small</option>
-              <option value="font-family: arial; font-size: 16px;">medium</option>
-              <option value="font-family: arial; font-size: 24px;">large</option>
-            </Select>
-            {/* <Box pb="3">
-              <UiForImageUpload />
-            </Box> */}
+          <ChangeEditorMode editorMode={editorMode} setEditorMode={setEditorMode}></ChangeEditorMode>
+          <Flex
+            alignItems={"center"}
+            pb="2"
+            direction={{ base: "column", sm: "row" }}
+            display={editorMode === "READ" ? "none" : "flex"}
+          >
+            <FontOptions setFontSize={setFontSize}></FontOptions>
 
-            {/* <Button
-              onClick={() => {
-                updateArticleInDatabase(editor.current?.getContents(false));
-              }}
-              display={isAutosaveOn ? "none" : undefined}
-              size="sm"
-              // colorScheme="orange"
-              variant="ghost"
-            >
-              Save
-            </Button> */}
-
-            <Checkbox
+            {/* <Checkbox
               colorScheme="whatsapp"
               // color="gray.300"
               borderColor="gray.300"
@@ -164,75 +113,22 @@ const SuneditorForNotesMaking: React.FC<SuneditorForNotesMakingProps> = ({ artic
                 setIsAutosaveOn(e.target.checked);
               }}
             >
-              <Text casing={"capitalize"}>Autosave</Text>
-            </Checkbox>
+            <Text casing={"capitalize"}>Autosave</Text>
+            </Checkbox> */}
           </Flex>
         </Flex>
 
         <EditorStyle title={editorMode === "READ" ? "READ" : "EDIT"}>
           <Center>
-            <SunEditor
+            <Editor
+              editorMode={editorMode}
+              fontSize={fontSize}
               getSunEditorInstance={getSunEditorInstance}
-              setDefaultStyle={fontSize}
-              hideToolbar={editorMode === "READ" ? true : false}
-              defaultValue={language === "ENGLISH" ? article.article_english : article.article_hindi}
-              onChange={handleOnChange}
-              readOnly={editorMode === "READ" ? true : false}
-              autoFocus={false}
-              
-              // disable={editorMode === "READ" ? true : false}
-              setOptions={{
-                callBackSave(contents, isChanged) {
-                  updateArticleInDatabase(contents);
-                },
-                // hideToolbar: true, // to be implemented
-                placeholder: "Click Edit and Start Typing",
-                mode: "classic",
-                hideToolbar:true,
-                katex: katex,
-                colorList: colors,
-                imageUploadUrl: `${BASE_URL}/api/uploadImage`,
-                paragraphStyles: [
-                  "spaced",
-
-                  //   {
-                  //     name: "Custom",
-                  //     class: "__se__customClass",
-                  //   },
-                ],
-                textStyles: [
-                  "shadow",
-                  "code",
-                  "translucent",
-
-                  {
-                    name: "Highlighter 1",
-                    style: "background-color:#FFFF88;padding: 1px;",
-                    tag: "span",
-                  },
-                  {
-                    name: "Highlighter 4",
-                    style: "background-color:#E1D5E7;padding: 1px;padding-left: 1px",
-                    // style: "background-color:#f7f3e2;padding: 1px;padding-left: 1px",
-                    tag: "p",
-                  },
-                ],
-                height: "100%",
-                width: "auto",
-                minWidth: "350px",
-                buttonList: sunEditorButtonList,
-                resizingBar: false,
-                formats: ["p", "div", "h1", "h2", "h3"],
-                font: sunEditorfontList,
-
-                fontSize: [12, 14, 16, 20],
-                imageFileInput: true, //this disable image as file, only from url allowed
-                imageSizeOnlyPercentage: false, //changed on 6 june
-
-                // imageUrlInput: true,
-                // imageGalleryUrl: "www.qlook.com",
-              }}
-            />
+              // handleOnChange={handleOnChange}
+              updateArticleInDatabase={updateArticleInDatabase}
+              article={article}
+              language={language}
+            ></Editor>
           </Center>
         </EditorStyle>
       </Box>
@@ -255,10 +151,111 @@ export const Center = styled.div`
 `;
 export const EditorStyle = styled.div`
   .sun-editor {
-    /* padding-left: -30px !important;
-    padding-right: -30px !important;
-    margin-left: -20px !important;
-    margin-right: 0px !important; */
     border: ${(props) => (props.title === "READ" ? "none" : undefined)};
   }
 `;
+
+function FontOptions(props: { setFontSize: (arg0: string) => void }) {
+  return (
+    <Select
+      size="sm"
+      px="2"
+      placeholder="Font Size"
+      onChange={(e) => {
+        props.setFontSize(e.target.value);
+      }}
+    >
+      <option value="font-family: arial; font-size: 14px;">small</option>
+      <option value="font-family: arial; font-size: 16px;">medium</option>
+      <option value="font-family: arial; font-size: 24px;">large</option>
+    </Select>
+  );
+}
+
+function ChangeEditorMode(props: {
+  setEditorMode: ((nextValue: string) => void) | undefined;
+  editorMode: StringOrNumber | undefined;
+}) {
+  return (
+    <RadioGroup onChange={props.setEditorMode} value={props.editorMode}>
+      <Stack direction="row">
+        <Radio colorScheme="whatsapp" size="sm" value="READ">
+          <Text as="b" casing="capitalize">
+            Read
+          </Text>
+        </Radio>
+        <Radio colorScheme="pink" size="sm" value="EDIT">
+          <Text as="b" casing="capitalize">
+            Edit
+          </Text>
+        </Radio>
+      </Stack>
+    </RadioGroup>
+  );
+}
+const textStyles = [
+  "shadow",
+  "code",
+  "translucent",
+
+  {
+    name: "Highlighter 1",
+    style: "background-color:#FFFF88;padding: 1px;",
+    tag: "span",
+  },
+  {
+    name: "Highlighter 2",
+    style: "background-color:#E1D5E7;padding: 1px;padding-left: 1px",
+    // style: "background-color:#f7f3e2;padding: 1px;padding-left: 1px",
+    tag: "p",
+  },
+];
+
+interface editorProps {
+  getSunEditorInstance: ((sunEditor: SunEditorCore) => void) | undefined;
+  fontSize: string | undefined;
+  editorMode: string;
+  language: "HINDI" | "ENGLISH";
+  article: definitions["books_articles"];
+  // handleOnChange: ((content: string) => void) | undefined;
+  updateArticleInDatabase: (arg0: string) => void;
+}
+
+function Editor(props: editorProps): JSX.Element {
+  return (
+    <SunEditor
+      getSunEditorInstance={props.getSunEditorInstance}
+      setDefaultStyle={props.fontSize}
+      hideToolbar={props.editorMode === "READ" ? true : false}
+      defaultValue={props.language === "ENGLISH" ? props.article.article_english : props.article.article_hindi}
+      // setContents={props.language === "ENGLISH" ? props.article.article_english : props.article.article_hindi} //cause blank editor to render first and then put content, so creates flickering effect . so move to defaultValue
+      // onChange={props.handleOnChange} // required atuosave to work
+      readOnly={props.editorMode === "READ" ? true : false}
+      autoFocus={false} // disable={editorMode === "READ" ? true : false}
+      setOptions={{
+        callBackSave(contents, isChanged) {
+          props.updateArticleInDatabase(contents);
+        },
+        placeholder: `Step 1 - Click Edit and Start Typing 
+                Step 2 - Press "Crtl + S" to save your Notes (keep mouse cursor inside Editor).
+                Step 3 - You can also press "Save" Button in Editor to Save your notes"`,
+        mode: "classic",
+        hideToolbar: true,
+        katex: katex,
+        colorList: colors,
+        imageUploadUrl: `${BASE_URL}/api/uploadImage`,
+        textStyles: textStyles,
+        height: "100%",
+        width: "auto",
+        minWidth: "350px",
+        minHeight: "100px",
+        buttonList: sunEditorButtonList,
+        resizingBar: false,
+        formats: ["p", "div", "h1", "h2", "h3"],
+        font: sunEditorfontList,
+        fontSize: [12, 14, 16, 20],
+        imageSizeOnlyPercentage: false, //changed on 6 june
+      }}
+    />
+  );
+}

@@ -43,6 +43,7 @@ const BookFilter: React.FC<{ setParentProps: (x: BookResponse | undefined) => vo
   }, [data, selectedClass]);
   useEffect(() => {
     setBookList(
+      
       data
         ? data.filter((x) => {
             //if we use curly braces then this is a block and return keyword used explicitly

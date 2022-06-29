@@ -1,3 +1,5 @@
+import dynamic from "next/dynamic";
+
 export const NEXT_PUBLIC_SUPABASE_URL = process.env.NEXT_PUBLIC_SUPABASE_URL;
 export const NEXT_PUBLIC_SUPABASE_ANON_KEY = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY;
 // export const BASE_URL = "http://www.localhost:3000";
@@ -5,12 +7,14 @@ export const NEXT_PUBLIC_SUPABASE_ANON_KEY = process.env.NEXT_PUBLIC_SUPABASE_AN
 // export const BASE_URL = "http://localhost:3000";
 // export const BASE_URL = "https://qlook.in";
 export const BASE_URL = "https://www.jionote.com";
-// export const BASE_URL = "https://www.om-shree-ganeshay-namah-git-dev-only-jionote-v1-roker15.vercel.app";
+// export const BASE_URL = "https://om-shree-ganeshay-namah-git-dev-only-jionote-v1-roker15.vercel.app";
 
 // npx openapi-typescript https://hbvffqslxssdbkdxfqop.supabase.co/rest/v1/?apikey=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJyb2xlIjoiYW5vbiIsImlhdCI6MTYzMDIyNjQxOCwiZXhwIjoxOTQ1ODAyNDE4fQ.CCZ3y_Mzp5HjQJnuEXqL5Wq4tk2ZjZj97gVkODFYNh4 --output types/supabase.ts
 
 export const DEFAULT_AVATARS_BUCKET = "avatars";
-
+export const SunEditor = dynamic(() => import("suneditor-react"), {
+  ssr: false,
+});
 export type Profile = {
   id: string;
   avatar_url: string;
@@ -27,7 +31,7 @@ export const sunEditorButtonList = [
     "font",
     "fontSize",
     "formatBlock",
-    "paragraphStyle",
+    // "paragraphStyle",
     "blockquote",
     "bold",
     "underline",
@@ -49,7 +53,7 @@ export const sunEditorButtonList = [
     "link",
     "image",
     // "video",
-    "audio",
+    // "audio",
     "math",
     // "imageGallery",
     // "fullScreen",
@@ -61,26 +65,6 @@ export const sunEditorButtonList = [
     // "template",
   ],
 ];
-// export const sunEditorButtonList = [
-//   // ["undo", "redo"],
-//   ["font", "fontSize", "formatBlock"],
-//   [/*"paragraphStyle",*/ "blockquote"],
-//   ["bold", "underline", "italic", "strike", "subscript", "superscript"],
-//   ["fontColor", "hiliteColor", "textStyle"],
-//   ["removeFormat"],
-//   "/",
-//   ["outdent", "indent"],
-//   ["align", "horizontalRule", "list" /* "lineHeight"*/],
-//   ["table", "link", "image", /* "video","audio",*/ "math"],
-
-//   ["imageGallery"], // You must add the "imageGalleryUrl".
-//   // ["fullScreen" /*, "showBlocks", "codeView"*/],
-//   [
-//     // "preview",
-//     "print",
-//   ],
-//   ["save", "template"],
-// ];
 
 export const sunEditorfontList = [
   "Arial",
@@ -182,7 +166,6 @@ export const currentAffairTags: { id: number; tag: string }[] = [
   { id: 56, tag: "Disaster Management ⭐" },
   
   { id: 501, tag: "Ethics ⭐" },
-  
   { id: 57, tag: "Miscellaneous ⭐" },
   { id: 58, tag: "Sustainable Developement" },
   { id: 59, tag: "Bills/Acts" },
