@@ -44,7 +44,6 @@ interface MobileProps extends FlexProps {
   onOpen: () => void;
 }
 
-
 const MobileNav = ({ onOpen, ...rest }: MobileProps) => {
   const { signInWithgoogle, signOut, profile } = useAuthContext();
   return (
@@ -55,10 +54,11 @@ const MobileNav = ({ onOpen, ...rest }: MobileProps) => {
       alignItems="center"
       // bg={useColorModeValue("#f8f6fa", "#e5e0f1")}
       bg="white"
-      borderBottomWidth="1px"
-      zIndex={1}
+      borderBottomWidth="0px"
+      zIndex={500}
       pos="sticky"
-      top={0}
+      mt={"0"}
+      boxShadow="sm"
       borderBottomColor={useColorModeValue("gray.200", "gray.700")}
       justifyContent={{ base: "space-between", md: "flex" }}
       {...rest}
@@ -84,7 +84,7 @@ const MobileNav = ({ onOpen, ...rest }: MobileProps) => {
         </LinkOverlay>
       </LinkBox>
       <Heading fontSize="xl" ml="16" as="em" size="md" color="blackAlpha.800" display={{ base: "none", md: "block" }}>
-        India's first Online 📝Notes making Platform{" "}
+        {`India's first Online 📝Notes making Platform`}
       </Heading>{" "}
       <HStack spacing={{ base: "0", md: "6" }}>
         {!profile ? (
@@ -103,7 +103,7 @@ const MobileNav = ({ onOpen, ...rest }: MobileProps) => {
           </HStack>
         ) : (
           <Flex border="0px" alignItems={"center"}>
-           {JoinTelegram}
+            {JoinTelegram}
             <Menu boundary="clippingParents">
               <MenuButton border="0px" py={2} transition="all 0.3s" _focus={{ boxShadow: "none" }}>
                 <HStack>
@@ -156,9 +156,12 @@ const MobileNav = ({ onOpen, ...rest }: MobileProps) => {
   );
 };
 
-
-const JoinTelegram = <HStack alignItems={"center"} mx="2" px="2" py="0.5" bg="telegram.300"> <Link color="white" href="https://t.me/+Rhiv7nfLc_pkZDM1" isExternal>
-    Join Telegram
-  </Link>
-  <FaTelegram color="white" />
-</HStack>;
+const JoinTelegram = (
+  <HStack alignItems={"center"} mx="2" px="2" py="0.5" bg="telegram.300">
+    {" "}
+    <Link color="white" href="https://t.me/+Rhiv7nfLc_pkZDM1" isExternal>
+      Join Telegram
+    </Link>
+    <FaTelegram color="white" />
+  </HStack>
+);

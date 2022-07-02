@@ -19,6 +19,7 @@ import {
   TabPanels,
   Tabs,
   Text,
+  Textarea,
   Tooltip,
   VStack,
   Wrap,
@@ -41,6 +42,7 @@ import { useNoteContext } from "../../state/NoteContext";
 import { definitions } from "../../types/supabase";
 import { customToast } from "../CustomToast";
 import SuneditorForNotesMaking from "../editor/SuneditorForNotesMaking";
+import ErrorBoundary from "../ErrorBoundary";
 
 import DeleteConfirmation from "../syllabus/DeleteConfirmation";
 // import "../../styles/suneditor.module.css";
@@ -233,7 +235,9 @@ const MyNotes: React.FC<Props> = ({ subjectId, subheadingid, notesCreator, chang
                         <SkeletonText isLoaded={false} noOfLines={4} spacing="4" />
                       </Box>
                     ) : (
-                      <SuneditorForNotesMaking article={x} language={"ENGLISH"} isEditable={isEditable} />
+                      <ErrorBoundary>
+                        <SuneditorForNotesMaking article={x} language={"ENGLISH"} isEditable={isEditable} />
+                      </ErrorBoundary>
                     )}
                   </TabPanel>
                   <TabPanel>
@@ -243,7 +247,9 @@ const MyNotes: React.FC<Props> = ({ subjectId, subheadingid, notesCreator, chang
                         <SkeletonText isLoaded={false} noOfLines={4} spacing="4" />
                       </Box>
                     ) : (
-                      <SuneditorForNotesMaking article={x} language={"HINDI"} isEditable={isEditable} />
+                      <ErrorBoundary>
+                        <SuneditorForNotesMaking article={x} language={"HINDI"} isEditable={isEditable} />
+                      </ErrorBoundary>
                     )}
                   </TabPanel>
                 </TabPanels>
@@ -406,9 +412,10 @@ const ArticleForm: React.FC<ArticleFormProps> = ({
   return (
     <Flex justifyContent="center" alignItems={"center"}>
       <form onSubmit={handleSubmit(onSubmit)}>
-        <VStack alignItems={"center"}>
+        <VStack alignItems={"center"} p="2">
           <FormControl p="2" isInvalid={errors.articleTitle as any} maxW="500px">
-            <Input
+            <Textarea
+              size="sm"
               minW={"350px"}
               focusBorderColor="lime"
               placeholder="Article Title"
@@ -418,6 +425,7 @@ const ArticleForm: React.FC<ArticleFormProps> = ({
           </FormControl>
           <FormControl p="2" isInvalid={errors.articleTitle as any} maxW="500px">
             <Input
+              size="sm"
               focusBorderColor="lime"
               type="number"
               placeholder="Article Sequence (10,20,30.. etc)"
@@ -426,6 +434,7 @@ const ArticleForm: React.FC<ArticleFormProps> = ({
             <FormErrorMessage>{errors.sequence && errors.sequence.message}</FormErrorMessage>
           </FormControl>
           <Checkbox
+            size="sm"
             colorScheme="red"
             {...register("isQuestion")}
             defaultChecked={question_type === "MODEL" || question_type === "PREV"}
@@ -435,11 +444,11 @@ const ArticleForm: React.FC<ArticleFormProps> = ({
           {watchIsQuestion && (
             <Box>
               <FormControl p="2" isInvalid={errors.questionType as any} maxW="500px" bg="gray.50">
-                <RadioGroup defaultValue={question_type}>
+                <RadioGroup defaultValue={question_type} size="sm">
                   <Radio
                     {...register("questionType", { required: "This is required" })}
                     value="MODEL"
-                    pr="16"
+                    pr="14"
                     colorScheme={"green"}
                   >
                     <Text casing="capitalize">Model Question</Text>
@@ -453,6 +462,7 @@ const ArticleForm: React.FC<ArticleFormProps> = ({
               {watchQuestionType === "PREV" && (
                 <FormControl p="2" isInvalid={errors.question_year as any} maxW="500px">
                   <Input
+                    size="sm"
                     focusBorderColor="lime"
                     type="number"
                     placeholder="Question year (1995-2022)"
@@ -517,269 +527,3 @@ const ArticleForm: React.FC<ArticleFormProps> = ({
     </Flex>
   );
 };
-
-// type SuneditorForNotesMakingProps = {
-//   article: definitions["books_articles"];
-//   language: "HINDI" | "ENGLISH";
-//   isEditable: boolean | undefined;
-// };
-// const SunEditor = dynamic(() => import("suneditor-react"), {
-//   ssr: false,
-// });
-
-// export const SuneditorForNotesMaking: React.FC<SuneditorForNotesMakingProps> = ({ article, language, isEditable }) => {
-//   const [editorMode, setEditorMode] = React.useState("READ");
-//   const [isAutosaveOn, setIsAutosaveOn] = React.useState(false);
-//   const [fontSize, setFontSize] = React.useState("font-family: arial; font-size: 14px;");
-//   const { profile } = useAuthContext();
-//   const editor = useRef<SunEditorCore>();
-//   const getSunEditorInstance = (sunEditor: SunEditorCore) => {
-//     editor.current = sunEditor;
-//   };
-//   useEffect(() => {
-//     if (!isAutosaveOn) {
-//       debouncedFunctionRef.current = undefined;
-//     }
-//   });
-//   useEffect(() => {
-//     if (language === "HINDI" && article && article.article_hindi && editor.current && editor.current.core) {
-//       editor.current?.core.setContents(article.article_hindi);
-//       // editor.current?.core.conten(article.article_hindi);
-//     }
-//     if (language === "ENGLISH" && article && article.article_english && editor.current && editor.current.core) {
-//       editor.current?.core.setContents(article.article_english);
-//     }
-//   }, [article, language]);
-
-//   const debouncedFunctionRef = useRef<(newcontent: any) => void>();
-//   debouncedFunctionRef.current = debounce((newcontent: any) => createOrUpdatePost(newcontent), 5000);
-//   const debouncedChange = useCallback(
-//     debounce((editorContent) => debouncedFunctionRef.current!(editorContent), 5000),
-//     []
-
-//     // debounce((editorContent, postId) => createOrUpdatePost(editorContent, postId), 5000),
-//     // []
-//   );
-//   const handleOnChange = (editorContent: string) => {
-//     if (editor.current?.core.hasFocus && debouncedFunctionRef.current) {
-//       debouncedFunctionRef.current(editorContent);
-//     }
-//   };
-
-//   const createOrUpdatePost = (newcontent: any) => {
-//     updateArticleInDatabase(newcontent);
-//   };
-//   const updateArticleInDatabase = async (newcontent: string | undefined) => {
-//     const { data, error } = await supabase
-//       .from<definitions["books_articles"]>("books_articles")
-//       .update(language === "ENGLISH" ? { article_english: newcontent } : { article_hindi: newcontent })
-//       .eq("id", article.id);
-//     if (error) {
-//       customToast({ title: "Article not updated error occurred  " + error.message, status: "error", isUpdating: false });
-//       elog("MyNotes->deleteArticle", error.message);
-//       return;
-//     }
-
-//     if (data) {
-//       customToast({ title: "Your changes have been saved...", status: "success", isUpdating: true });
-//     }
-//   };
-//   return (
-//     <Box spellCheck="false">
-//       {/* //use above attrivutes if you want to override spellcheck of browser */}
-//       <Flex
-//         // display={profile?.id !== article.created_by ? "none" : "undefined"}
-//         display={isEditable ? "undefined" : "none"}
-//         justifyContent="space-between"
-//         align="center"
-//         // alignItems="center"
-//       >
-//         <RadioGroup onChange={setEditorMode} value={editorMode}>
-//           <Stack direction="row">
-//             <Radio colorScheme="whatsapp" size="sm" value="READ">
-//               <Text as="b" casing="capitalize">
-//                 Read
-//               </Text>
-//             </Radio>
-//             <Radio colorScheme="pink" size="sm" value="EDIT">
-//               <Text as="b" casing="capitalize">
-//                 Edit
-//               </Text>
-//             </Radio>
-//           </Stack>
-//         </RadioGroup>
-//         <Flex align="center" direction={{ base: "column", sm: "row" }} display={editorMode === "READ" ? "none" : "flex"}>
-//           <Select
-//             size="sm"
-//             px="2"
-//             placeholder="Font Size"
-//             onChange={(e) => {
-//               setFontSize(e.target.value);
-//             }}
-//           >
-//             <option value="font-family: arial; font-size: 14px;">small</option>
-//             <option value="font-family: arial; font-size: 16px;">medium</option>
-//             <option value="font-family: arial; font-size: 24px;">large</option>
-//           </Select>
-//           <Box pb="3">
-//             <UiForImageUpload />
-//           </Box>
-
-//           <Button
-//             onClick={() => {
-//               updateArticleInDatabase(editor.current?.getContents(false));
-//             }}
-//             display={isAutosaveOn ? "none" : undefined}
-//             size="sm"
-//             // colorScheme="orange"
-//             variant="ghost"
-//           >
-//             Save
-//           </Button>
-//           <Checkbox
-//             colorScheme="whatsapp"
-//             // color="gray.300"
-//             borderColor="gray.300"
-//             // isChecked={isAutosaveOn}
-//             onChange={(e: ChangeEvent<HTMLInputElement>) => {
-//               setIsAutosaveOn(e.target.checked);
-//             }}
-//           >
-//             <Text casing={"capitalize"}>Autosave</Text>
-//           </Checkbox>
-//         </Flex>
-//       </Flex>
-
-//       <EditorStyle title={editorMode === "READ" ? "READ" : "EDIT"}>
-//         <SunEditor
-//           getSunEditorInstance={getSunEditorInstance}
-//           setDefaultStyle={fontSize}
-//           // setDefaultStyle={font-family: ${fontFamily}; font-size: 14px;}
-//           hideToolbar={editorMode === "READ" ? true : false}
-//           defaultValue={language === "ENGLISH" ? article.article_english : article.article_hindi}
-//           // key={postId}
-
-//           onChange={handleOnChange}
-//           readOnly={editorMode === "READ" ? true : false}
-//           autoFocus={false}
-//           // disable={editorMode === "READ" ? true : false}
-//           setOptions={{
-//             placeholder: "**** Start Writing your notes here, we will save it automatically!!!",
-//             mode: "classic",
-//             katex: katex,
-//             colorList: colors,
-//             paragraphStyles: [
-//               "spaced",
-//               // "neon",
-//               {
-//                 name: "Box",
-//                 class: "__se__customClass",
-//               },
-//               {
-//                 name: "ph22",
-//                 class: "__se__taggg",
-//               },
-//             ],
-//             textStyles: [
-//               "shadow",
-//               "code",
-//               "translucent",
-
-//               {
-//                 name: "Highlighter 1",
-//                 style: "background-color:#FFFF88;padding: 1px;",
-//                 tag: "span",
-//               },
-//               {
-//                 name: "Highlighter 2",
-//                 style: "background-color:#CDEB8B;padding: 1px;",
-//                 tag: "span",
-//               },
-//               {
-//                 name: "Highlighter 3",
-//                 style: "background-color:#E1D5E7;padding: 1px;",
-//                 tag: "span",
-//               },
-//               {
-//                 name: "Highlighter 4",
-//                 style: "background-color:#E1D5E7;padding: 1px;padding-left: 1px",
-//                 // style: "background-color:#f7f3e2;padding: 1px;padding-left: 1px",
-//                 tag: "p",
-//               },
-//             ],
-//             height: "100%",
-//             width: "auto",
-//             minWidth: "350px",
-//             resizingBar: false,
-//             buttonList: sunEditorButtonList,
-//             formats: ["p", "div", "h1", "h2", "h3"],
-//             font: sunEditorfontList,
-
-//             fontSize: [12, 14, 16, 20],
-//             imageFileInput: false, //this disable image as file, only from url allowed
-//             imageSizeOnlyPercentage: false,
-//             // imageUrlInput: true,
-//             // imageGalleryUrl: "www.qlook.com",
-//           }}
-//         />
-//       </EditorStyle>
-//     </Box>
-//   );
-// };
-
-// const  EditorStyle = styled.div`
-//   .sun-editor .se-dialog {
-//     z-index: 2 !important; /* default value */
-//   }
-//   .sun-editor {
-//     /* margin-top: -18px !important; */
-//     /* border: 1px solid blue; */
-//     padding-left: -30px !important;
-//     padding-right: -30px !important;
-//     margin-left: -20px !important;
-//     margin-right: 0px !important;
-//     border: ${(props) => (props.title === "READ" ? "none" : undefined)};
-//     /* border: "none"; */
-//     z-index: 2 !important;
-//   }
-//   .__se__customClass {
-//     /* background: #7e7575;
-//     padding: 5px;
-//     list-style-position: inside;
-//     font-weight: 500;
-//     color: #464242; */
-
-//     background-color: #6e3c3c !important;
-//     padding: 5px !important;
-//     color: #464242 !important;
-//     /* list-style-position: inside; */
-//     border: 1px solid blue !important;
-//   }
-//   .__se__taggg {
-//     background-color: #641717 !important;
-//     padding: 5px;
-//     list-style-position: inside;
-//     font-weight: 500;
-//     color: #464242 !important;
-//     border: 1px solid blue;
-//     text-shadow: 2px 2px 5px green;
-//   }
-//   /* blockquote {
-//     background: #f9f9f9;
-//     border-left: 10px solid #ccc;
-//     margin: 1.5em 10px;
-//     padding: 0.5em 10px;
-//     quotes: "\201C""\201D""\2018""\2019";
-//   }
-//   blockquote:before {
-//     color: #ccc;
-//     content: open-quote;
-//     font-size: 4em;
-//     line-height: 0.1em;
-//     margin-right: 0.25em;
-//     vertical-align: -0.4em;
-//   }
-//   blockquote p {
-//     display: inline;
-//   } */
-// `;

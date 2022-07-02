@@ -29,7 +29,7 @@ const Syllabus: React.FC<Props> = ({ book, changeParentProps }) => {
     setSelectedSubheading(undefined);
   }, [book]);
   return (
-    <Box>
+    <Box >
       {book?.book_name ? (
         <Flex align="end">
           <Text bg="orange.100" as="b">

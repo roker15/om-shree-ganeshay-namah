@@ -44,7 +44,7 @@ const Home: React.FC<ProfileListProps> = ({ data }) => {
     // supabaseTest();
   }, []);
   return (
-    <Container maxW="full" px={{ base: "2", sm: "4", md: "8" }}>
+    <Container maxW="full" px={{ base: "2", sm: "4", md: "2" ,lg:"8"}}>
       <NoteContextWrapper>
         <Flex justifyContent="end">
           <Text as="b">

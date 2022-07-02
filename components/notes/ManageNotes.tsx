@@ -180,10 +180,10 @@ const ManageNotes = () => {
       setIsPostCopiable(checkValue);
     }
   };
-
+  const [distractionOff, setDistractionOff] = useState(false);
   return (
     <div>
-      <Box px={{ base: "0", sm: "2", md: "44" }} pb="8">
+      <Box px={{ base: "0.5", sm: "0.5", md: "0.5", lg: "44" }} pb="8">
         <BookFilter setParentProps={updateBookProps}></BookFilter>
 
         {isTagSearchActive ? null : (
@@ -193,11 +193,14 @@ const ManageNotes = () => {
                 borderRadius="full"
                 // bg="gray.200"
                 p="2"
-                align="center"
+                alignItems="center"
                 display={selectedSubheading?.creatorId !== profile?.id ? "none" : "undefined"}
               >
                 {selectedSubheading?.subheadingId ? (
-                  <NotesSharing subheadingId={selectedSubheading?.subheadingId}></NotesSharing>
+                  <>
+                    <CustomCheckBox state={distractionOff} setState={setDistractionOff} label={"Hide right panel"} />
+                    <NotesSharing subheadingId={selectedSubheading?.subheadingId}></NotesSharing>
+                  </>
                 ) : null}
                 <Flex h="6">
                   {isPostPublic === "loading" ? (
@@ -268,7 +271,8 @@ const ManageNotes = () => {
           <GridItem
             scrollBehavior={"auto"}
             colSpan={{ base: 0, sm: 0, md: 2 }}
-            bg="orange.50"
+            // bg="orange.50"
+            boxShadow="md"
             p="2"
             display={{ base: "none", sm: "none", md: "block" }}
           >
@@ -279,7 +283,7 @@ const ManageNotes = () => {
             </Flex>
           </GridItem>
           {/* </Sticky> */}
-          <GridItem colSpan={{ base: 10, sm: 10, md: 7 }} px="4">
+          <GridItem colSpan={!distractionOff ? { base: 10, sm: 10, md: 7 } : { base: 10, sm: 10, md: 8 }} px="4">
             {user ? (
               <Box>
                 <Center>
@@ -317,10 +321,13 @@ const ManageNotes = () => {
               </Center>
             )}
           </GridItem>
+
           <GridItem
-            colSpan={{ base: 0, sm: 0, md: 1 }}
-            bg="orange.50"
+            colSpan={!distractionOff ? { base: 0, sm: 0, md: 1 } : { base: 0, sm: 0, md: 0 }}
+            // bg="orange.50"
+              boxShadow="md"
             p="0.5"
+            visibility={!distractionOff ? "visible" : "hidden"}
             display={{ base: "none", sm: "none", md: "block" }}
           >
             <SharedNotesPanel
@@ -330,7 +337,7 @@ const ManageNotes = () => {
           </GridItem>
         </Grid>
       ) : (
-        <VStack >
+        <VStack>
           <LandingPageTable />
           <AnimatedText />
         </VStack>
@@ -385,3 +392,19 @@ const DrawerExample = (props: HeaderProps) => {
     </>
   );
 };
+
+function CustomCheckBox(props: { label: string; state: boolean; setState: (arg: boolean) => void }) {
+  return (
+    <Checkbox
+      size="sm"
+      colorScheme="gray"
+      outlineColor={"red.600"}
+      isChecked={props.state}
+      onChange={(e) => props.setState(e.target.checked)}
+    >
+      <Text as="label" casing="capitalize">
+        {props.label}
+      </Text>
+    </Checkbox>
+  );
+}
