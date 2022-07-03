@@ -55,7 +55,7 @@ const ManageNotes = () => {
   const { isTagSearchActive } = useNoteContext();
   const { user, error } = useUser();
   // const [book, setBook] = useState<BookResponse | undefined>();
-  const [book, setBook] = useSessionStorage<BookResponse | undefined>("test-1",{id:20000});
+  const [book, setBook] = useSessionStorage<BookResponse | undefined>("test-1",undefined);
  
 
   const [selectedSubheading, setSelectedSubheading] = useState<
