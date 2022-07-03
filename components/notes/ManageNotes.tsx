@@ -55,20 +55,8 @@ const ManageNotes = () => {
   const { isTagSearchActive } = useNoteContext();
   const { user, error } = useUser();
   // const [book, setBook] = useState<BookResponse | undefined>();
-  const [book, setBook] = useSessionStorage<BookResponse | undefined>("test-key-2",{id:25000});
-  // const [selectedSubheading, setSelectedSubheading] = useSessionStorage<
-  //   | {
-  //       subheadingId: number | undefined;
-  //       creatorId: string | undefined;
-  //       isEditable: boolean | undefined;
-  //       isCopyable: boolean | undefined;
-  //       ownerEmail?: string | undefined;
-  //       ownerName?: string | undefined;
-  //       ownerAvatarUrl?: string | undefined;
-  //       isPublic?: boolean | undefined;
-  //     }
-  //   | undefined
-  // >("test-key", undefined);
+  const [book, setBook] = useSessionStorage<BookResponse | undefined>("test-1",{id:20000});
+ 
 
   const [selectedSubheading, setSelectedSubheading] = useState<
     | {

@@ -27,7 +27,7 @@ const BookFilter: React.FC<{ setParentProps: (x: BookResponse | undefined) => vo
     setClassList(
       data
         ? data.filter(
-            (v, i, a) => a.findIndex((t) => t.class_fk.id === v.class_fk.id && t.class_fk.class === v.class_fk.class) === i
+            (v, i, a) => a.findIndex((t) => t.class_fk!.id === v.class_fk!.id && t.class_fk!.class === v.class_fk!.class) === i
           )
         : null
     );
@@ -36,8 +36,8 @@ const BookFilter: React.FC<{ setParentProps: (x: BookResponse | undefined) => vo
     setSubjectList(
       data
         ? data
-            .filter((c) => c.class_fk.id === selectedClass)
-            .filter((v, i, a) => a.findIndex((t) => t.subject_fk.id === v.subject_fk.id) === i)
+            .filter((c) => c.class_fk!.id === selectedClass)
+            .filter((v, i, a) => a.findIndex((t) => t.subject_fk!.id === v.subject_fk!.id) === i)
         : null
     );
   }, [data, selectedClass]);
@@ -48,7 +48,7 @@ const BookFilter: React.FC<{ setParentProps: (x: BookResponse | undefined) => vo
         ? data.filter((x) => {
             //if we use curly braces then this is a block and return keyword used explicitly
             // remove braces, we can also then remove "return" because reuturn is implicit
-            return x.class_fk.id === selectedClass && x.subject_fk.id === selectedSubject;
+            return x.class_fk!.id === selectedClass && x.subject_fk!.id === selectedSubject;
           })
         : null
     );
@@ -82,8 +82,8 @@ const BookFilter: React.FC<{ setParentProps: (x: BookResponse | undefined) => vo
         >
           {classList?.map((x) => {
             return (
-              <option key={x.id} value={x.class_fk.id}>
-                {value === "1" ? "Class " + x.class_fk.class : x.class_fk.class}
+              <option key={x.id} value={x.class_fk!.id}>
+                {value === "1" ? "Class " + x.class_fk!.class : x.class_fk!.class}
               </option>
             );
           })}
@@ -100,8 +100,8 @@ const BookFilter: React.FC<{ setParentProps: (x: BookResponse | undefined) => vo
         >
           {subjectList?.map((x) => {
             return (
-              <option key={x.id} value={x.subject_fk.id}>
-                {x.subject_fk.subject_name}
+              <option key={x.id} value={x.subject_fk!.id}>
+                {x.subject_fk!.subject_name}
               </option>
             );
           })}
@@ -122,7 +122,7 @@ const BookFilter: React.FC<{ setParentProps: (x: BookResponse | undefined) => vo
             //https://stackoverflow.com/questions/50501047/one-line-arrow-functions-without-braces-cant-have-a-semicolon
             return (
               <option key={x.id} value={x.id}>
-                {value === "1" ? x.book_name + " " + x.class_fk.class : x.book_name}
+                {value === "1" ? x.book_name + " " + x.class_fk!.class : x.book_name}
               </option>
             );
           })}

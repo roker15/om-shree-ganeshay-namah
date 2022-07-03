@@ -3,7 +3,6 @@ import { supabaseClient } from "@supabase/auth-helpers-nextjs";
 import { groupBy } from "lodash";
 import React, { useEffect, useState } from "react";
 import { MdAdd, MdDelete, MdLightMode } from "react-icons/md";
-import { useSessionStorage } from "usehooks-ts";
 import { useGetSyllabusByBookId } from "../../customHookes/networkHooks";
 import { useAuthContext } from "../../state/Authcontext";
 import { BookResponse, BookSyllabus } from "../../types/myTypes";
@@ -17,8 +16,7 @@ interface Props {
 const Syllabus: React.FC<Props> = ({ book, changeParentProps }) => {
   const { data, isLoading } = useGetSyllabusByBookId(book ? book.id : undefined);
   const [toggle, setToogle] = useState(-100);
-  // const [selectedSubheading, setSelectedSubheading] = useState<number | undefined>();
-  const [selectedSubheading, setSelectedSubheading] = useSessionStorage<number | undefined>("test-key-3",25000);
+  const [selectedSubheading, setSelectedSubheading] = useState<number | undefined>();
   const { profile } = useAuthContext();
   const grouped = groupBy(data, (x) => [x.heading_sequence, x.heading_id, x.heading]);
 
