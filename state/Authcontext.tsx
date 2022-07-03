@@ -1,6 +1,7 @@
 import { supabaseClient } from "@supabase/auth-helpers-nextjs";
 import { useUser } from "@supabase/auth-helpers-react";
 import { createContext, useContext, useEffect, useState } from "react";
+import { useSessionStorage } from "usehooks-ts";
 import { Profile } from "../lib/constants";
 import { elog, ilog } from "../lib/mylog";
 // import { supabase } from "../lib/supabaseClient";
@@ -21,6 +22,7 @@ const AuthContext = createContext<AuthContextValues>({
 export const AuthProvider = ({ children }: any) => {
   const [loading, setLoading] = useState(true);
   const [profile, setProfile] = useState<Profile | null>(null);
+  // const [profile, setProfile] = useSessionStorage<Profile | null>("test-profile-key",null);
   const { user, error } = useUser();
 
 

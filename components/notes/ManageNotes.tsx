@@ -50,10 +50,26 @@ import SharedNotesPanel from "./SharedNotesPanel";
 import SyllabusForNotes from "./SyllabusForNotes";
 import { ExternalLinkIcon } from "@chakra-ui/icons";
 import LandingPageTable from "../LandingPageTable";
+import { useSessionStorage } from "usehooks-ts";
 const ManageNotes = () => {
   const { isTagSearchActive } = useNoteContext();
   const { user, error } = useUser();
-  const [book, setBook] = useState<BookResponse | undefined>();
+  // const [book, setBook] = useState<BookResponse | undefined>();
+  const [book, setBook] = useSessionStorage<BookResponse | undefined>("test-key-2",{id:25000});
+  // const [selectedSubheading, setSelectedSubheading] = useSessionStorage<
+  //   | {
+  //       subheadingId: number | undefined;
+  //       creatorId: string | undefined;
+  //       isEditable: boolean | undefined;
+  //       isCopyable: boolean | undefined;
+  //       ownerEmail?: string | undefined;
+  //       ownerName?: string | undefined;
+  //       ownerAvatarUrl?: string | undefined;
+  //       isPublic?: boolean | undefined;
+  //     }
+  //   | undefined
+  // >("test-key", undefined);
+
   const [selectedSubheading, setSelectedSubheading] = useState<
     | {
         subheadingId: number | undefined;
@@ -67,6 +83,7 @@ const ManageNotes = () => {
       }
     | undefined
   >();
+
   const [selectedSyllabus, setSelectedSyllabus] = useState<BookSyllabus>();
   const [isPostPublic, setIsPostPublic] = useState<boolean | "loading" | undefined>(undefined);
   const [isPostCopiable, setIsPostCopiable] = useState<boolean | undefined>(undefined);
@@ -167,9 +184,10 @@ const ManageNotes = () => {
     selectedSubheading?.subheadingId && selectedSubheading?.creatorId ? getIfThisTopicIsPublic() : null;
   }, [selectedSubheading]);
 
-  useEffect(() => {
-    setSelectedSubheading(undefined);
-  }, [book]);
+  // remvoed for local storage
+  // useEffect(() => {
+  //   setSelectedSubheading(undefined);
+  // }, [book, setSelectedSubheading]);
 
   const handleCopyCheckbox = async (checkValue: boolean) => {
     const { data, error } = await supabase
@@ -196,45 +214,49 @@ const ManageNotes = () => {
                 alignItems="center"
                 display={selectedSubheading?.creatorId !== profile?.id ? "none" : "undefined"}
               >
-                {selectedSubheading?.subheadingId ? (
+                {selectedSubheading?.subheadingId && (
                   <>
-                    <CustomCheckBox state={distractionOff} setState={setDistractionOff} label={"Hide right panel"} />
-                    <NotesSharing subheadingId={selectedSubheading?.subheadingId}></NotesSharing>
-                  </>
-                ) : null}
-                <Flex h="6">
-                  {isPostPublic === "loading" ? (
-                    <CircularProgress isIndeterminate size="20px" color="green.400" />
-                  ) : selectedSubheading !== undefined ? (
-                    <Flex justifyContent="end" alignItems="center">
-                      {/* <Box bg="aqua"> */}
-                      <Text justifyContent="center" as="label" htmlFor="email-alerts" px="2" textTransform="capitalize">
-                        {isPostPublic ? "Make Private" : "Make Public"}
-                      </Text>
-                      <Switch
-                        size="sm"
-                        colorScheme="whatsapp"
-                        // defaultChecked={isPostPublic}
-                        isChecked={isPostPublic as boolean}
-                        onChange={(e: ChangeEvent<HTMLInputElement>) => updateSharingStatus(e.target.checked)}
-                      />
-                      <Checkbox
-                        size="sm"
-                        mx="4"
-                        display={isPostPublic ? "inline-flex" : "none"}
-                        colorScheme={"whatsapp"}
-                        textTransform={"capitalize"}
-                        isChecked={isPostCopiable}
-                        onChange={(e) => handleCopyCheckbox(e.target.checked)}
-                      >
-                        <Text textTransform="capitalize" as="label">
-                          Allow copy
-                        </Text>
-                      </Checkbox>
-                      {/* </Box> */}
+                    <Box display={{ base: "none", sm: "none", md: "inline" }}>
+                      <CustomCheckBox state={distractionOff} setState={setDistractionOff} label={"Hide right panel"} />
+                    </Box>
+                    <Flex alignItems="center">
+                      <NotesSharing subheadingId={selectedSubheading?.subheadingId}></NotesSharing>
                     </Flex>
-                  ) : null}
-                </Flex>
+                    <Flex h="6">
+                      {isPostPublic === "loading" ? (
+                        <CircularProgress isIndeterminate size="20px" color="green.400" />
+                      ) : selectedSubheading !== undefined ? (
+                        <Flex justifyContent="end" alignItems="center">
+                          {/* <Box bg="aqua"> */}
+                          <Text justifyContent="center" as="label" htmlFor="email-alerts" px="2" textTransform="capitalize">
+                            {isPostPublic ? "Make Private" : "Make Public"}
+                          </Text>
+                          <Switch
+                            size="sm"
+                            colorScheme="whatsapp"
+                            // defaultChecked={isPostPublic}
+                            isChecked={isPostPublic as boolean}
+                            onChange={(e: ChangeEvent<HTMLInputElement>) => updateSharingStatus(e.target.checked)}
+                          />
+                          <Checkbox
+                            size="sm"
+                            mx="4"
+                            display={isPostPublic ? "inline-flex" : "none"}
+                            colorScheme={"whatsapp"}
+                            textTransform={"capitalize"}
+                            isChecked={isPostCopiable}
+                            onChange={(e) => handleCopyCheckbox(e.target.checked)}
+                          >
+                            <Text textTransform="capitalize" as="label">
+                              Allow copy
+                            </Text>
+                          </Checkbox>
+                          {/* </Box> */}
+                        </Flex>
+                      ) : null}
+                    </Flex>
+                  </>
+                )}
               </HStack>
             </Flex>
 
@@ -271,8 +293,7 @@ const ManageNotes = () => {
           <GridItem
             scrollBehavior={"auto"}
             colSpan={{ base: 0, sm: 0, md: 2 }}
-            // bg="orange.50"
-            boxShadow="md"
+            bg="orange.50"
             p="2"
             display={{ base: "none", sm: "none", md: "block" }}
           >
@@ -300,7 +321,7 @@ const ManageNotes = () => {
                 ) : null}
                 <Box>
                   <Notes
-                    subjectId={book.subject_fk.id}
+                    subjectId={book.subject_fk!.id}
                     subheadingid={selectedSubheading?.subheadingId}
                     notesCreator={selectedSubheading?.creatorId}
                     changeParentProps={() => console.log("")}
@@ -324,8 +345,7 @@ const ManageNotes = () => {
 
           <GridItem
             colSpan={!distractionOff ? { base: 0, sm: 0, md: 1 } : { base: 0, sm: 0, md: 0 }}
-            // bg="orange.50"
-              boxShadow="md"
+            bg="orange.50"
             p="0.5"
             visibility={!distractionOff ? "visible" : "hidden"}
             display={{ base: "none", sm: "none", md: "block" }}

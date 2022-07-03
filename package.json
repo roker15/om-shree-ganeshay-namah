@@ -48,6 +48,7 @@
     "suneditor": "^2.43.11",
     "suneditor-react": "^3.4.0",
     "swr": "^1.3.0",
+    "usehooks-ts": "^2.6.0",
     "uuid": "^8.3.2",
     "yarn": "^1.22.19"
   },

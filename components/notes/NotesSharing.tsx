@@ -74,7 +74,7 @@ export const NotesSharing: React.FC<sharedProps> = ({ subheadingId }) => {
       const { data: ispostexist, error: ispostexisterror } = await supabaseClient
         .from<definitions["books_article_sharing"]>("books_article_sharing")
         .select(`*`)
-        .match({ books_subheadings_fk: subheadingId, shared_with: profiles![0].id, owned_by:profile?.id});
+        .match({ books_subheadings_fk: subheadingId, shared_with: profiles![0].id, owned_by: profile?.id });
 
       if (ispostexist?.length != 0) {
         setMessage("This post is already shared with this user");
@@ -139,7 +139,7 @@ export const NotesSharing: React.FC<sharedProps> = ({ subheadingId }) => {
           {/* <div>
             {message}
           </div> */}
-          <Text ml="4" color={messageColor}>
+          <Text casing="capitalize" as="label" ml="4" color={messageColor}>
             {message}
             {message ? "..." : ""}
           </Text>
@@ -148,47 +148,51 @@ export const NotesSharing: React.FC<sharedProps> = ({ subheadingId }) => {
 
           <ModalBody pb={6}>
             <FormControl>
-              <FormLabel>Email of your friend</FormLabel>
+              {/* <FormLabel as="text">Email of Jionote User</FormLabel> */}
               <Input
+                size="sm"
+                py="4"
                 name="email"
                 value={inputEmail}
                 onChange={handleChange}
                 ref={initialRef as React.RefObject<HTMLInputElement>}
-                placeholder="First name"
+                placeholder="Email of Jionote User"
               />
               {/* <FormErrorMessage>{error}</FormErrorMessage> */}
             </FormControl>
 
             <Checkbox
+              size="sm"
               colorScheme={"whatsapp"}
               textTransform={"capitalize"}
               ml="0"
               onChange={(e) => setCanCopy(e.target.checked)}
             >
-              Can Edit
+              <Text as ="label" casing="capitalize">User Can edit</Text>
             </Checkbox>
             <Checkbox
+              size="sm"
               colorScheme={"whatsapp"}
               textTransform={"capitalize"}
               ml="6"
               onChange={(e) => setCanEdit(e.target.checked)}
             >
-              Can copy
+              <Text as ="label" casing="capitalize">User Can copy</Text>
             </Checkbox>
           </ModalBody>
 
           <ModalFooter>
             <Button
+              size="xs"
               isLoading={isLoading}
               colorScheme="whatsapp"
               leftIcon={<MdShare />}
               onClick={handleSharePost}
-              size="sm"
               mr={3}
             >
               Share
             </Button>
-            <Button colorScheme="whatsapp" variant="outline" size="sm" onClick={onClose}>
+            <Button colorScheme="whatsapp" variant="outline" size="xs" onClick={onClose}>
               Cancel
             </Button>
           </ModalFooter>
@@ -208,15 +212,15 @@ export const SharedList: React.FC<{ subheadingId: number }> = ({ subheadingId })
       const { data, error } = await supabaseClient
         .from<definitions["books_article_sharing"]>("books_article_sharing")
         .select(`*`)
-        .match({ books_subheadings_fk: subheadingId, shared_by: profile?.id,ispublic:false })
-        // .is("ispublic", null);
+        .match({ books_subheadings_fk: subheadingId, shared_by: profile?.id, ispublic: false });
+      // .is("ispublic", null);
 
       if (data) {
         setSharedlist(data);
       }
     };
     getSharedList();
-  }, []);
+  }, [profile?.id, subheadingId]);
 
   const handleEditCheckbox = async (sharingId: number, checkValue: boolean) => {
     const { data, error } = await supabaseClient
@@ -237,11 +241,14 @@ export const SharedList: React.FC<{ subheadingId: number }> = ({ subheadingId })
       .match({ id: sharingId });
     if (error) {
       elog("Notesharing-->handlecancelsharing", error.message);
-      return
+      return;
     }
     if (data) {
-      sharedlist!.splice(sharedlist!.findIndex(item => item.id === sharingId),1)
-      setSharedlist([...sharedlist!])
+      sharedlist!.splice(
+        sharedlist!.findIndex((item) => item.id === sharingId),
+        1
+      );
+      setSharedlist([...sharedlist!]);
     }
   };
   return (
@@ -267,7 +274,7 @@ export const SharedList: React.FC<{ subheadingId: number }> = ({ subheadingId })
                       colorScheme={"whatsapp"}
                       textTransform={"capitalize"}
                       ml="0"
-                      defaultChecked ={x.allow_edit}
+                      defaultChecked={x.allow_edit}
                       onChange={(e) => handleEditCheckbox(x.id, e.target.checked)}
                     >
                       {/* Can Edit */}
@@ -279,7 +286,7 @@ export const SharedList: React.FC<{ subheadingId: number }> = ({ subheadingId })
                       colorScheme={"whatsapp"}
                       textTransform={"capitalize"}
                       ml="0"
-                      defaultChecked ={x.allow_copy}
+                      defaultChecked={x.allow_copy}
                       onChange={(e) => handleCopyCheckbox(x.id, e.target.checked)}
                     >
                       {/* Can Edit */}
@@ -292,7 +299,7 @@ export const SharedList: React.FC<{ subheadingId: number }> = ({ subheadingId })
                       colorScheme={"red"}
                       icon={<MdCancel />}
                       aria-label={""}
-                      onClick={() =>handleCancelSharing(x.id)}
+                      onClick={() => handleCancelSharing(x.id)}
                     ></IconButton>
                   </Td>
                 </Tr>
