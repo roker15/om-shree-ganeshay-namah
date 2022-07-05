@@ -8,6 +8,7 @@ import PageWithLayoutType from "../types/pageWithLayout";
 import { theme } from "../theme/theme";
 import { UserProvider } from "@supabase/auth-helpers-react";
 import { supabaseClient } from "@supabase/auth-helpers-nextjs";
+import { NoteContextWrapper } from "../state/NoteContext";
 
 type AppLayoutProps = {
   Component: PageWithLayoutType;
@@ -27,11 +28,13 @@ function MyApp({ Component, pageProps }: AppLayoutProps) {
       </Head>
       <UserProvider supabaseClient={supabaseClient}>
         <AuthProvider>
-          <ChakraProvider theme={theme}>
-            <Layout>
-              <Component {...pageProps} />
-            </Layout>
-          </ChakraProvider>
+          <NoteContextWrapper>
+            <ChakraProvider theme={theme}>
+              <Layout>
+                <Component {...pageProps} />
+              </Layout>
+            </ChakraProvider>
+          </NoteContextWrapper>
         </AuthProvider>
       </UserProvider>
     </>

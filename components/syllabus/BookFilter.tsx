@@ -1,5 +1,6 @@
 import { Box, Radio, RadioGroup, Select, Stack, Text } from "@chakra-ui/react";
-import React, { useEffect } from "react";
+import router from "next/router";
+import React, { useEffect, useState } from "react";
 import { useGetBooks, useGetSyllabusByBookId } from "../../customHookes/networkHooks";
 import { useNoteContext } from "../../state/NoteContext";
 import { BookResponse } from "../../types/myTypes";
@@ -22,12 +23,21 @@ const BookFilter: React.FC<{ setParentProps: (x: BookResponse | undefined) => vo
   const [subjectList, setSubjectList] = React.useState<BookResponse[] | null>([]);
   const [selectedSubject, setSelectedSubject] = React.useState<number | undefined>();
   const [bookList, setBookList] = React.useState<BookResponse[] | null>([]);
-  const { setIsTagSearchActive} = useNoteContext();
+  const { setIsTagSearchActive, setBookResponse, bookResponse } = useNoteContext();
+  const [bookid, setBookid] = useState<string | undefined>();
+
+  useEffect(() => {
+    if (bookResponse && bookid) {
+      console.log("book response is ",JSON.stringify(bookResponse));
+      navigateTo(bookid, "hello");
+    }
+  },[bookResponse, bookid]);
   useEffect(() => {
     setClassList(
       data
         ? data.filter(
-            (v, i, a) => a.findIndex((t) => t.class_fk!.id === v.class_fk!.id && t.class_fk!.class === v.class_fk!.class) === i
+            (v, i, a) =>
+              a.findIndex((t) => t.class_fk!.id === v.class_fk!.id && t.class_fk!.class === v.class_fk!.class) === i
           )
         : null
     );
@@ -43,7 +53,6 @@ const BookFilter: React.FC<{ setParentProps: (x: BookResponse | undefined) => vo
   }, [data, selectedClass]);
   useEffect(() => {
     setBookList(
-      
       data
         ? data.filter((x) => {
             //if we use curly braces then this is a block and return keyword used explicitly
@@ -53,10 +62,21 @@ const BookFilter: React.FC<{ setParentProps: (x: BookResponse | undefined) => vo
         : null
     );
   }, [data, selectedClass, selectedSubject]);
+
+  const ROUTE_POST_ID = "/notes/[bookid]";
+  const navigateTo = (bookid: string, item: string) => {
+    router.push({
+      pathname: ROUTE_POST_ID,
+      query: { bookid, item },
+
+      // href:"www.localhost.com"
+    });
+  };
+
   return (
     // <Container maxW="container.lg" bg="pink">
 
-    <Box>
+    <Box minW="full">
       <RadioGroup onChange={setValue} value={value}>
         <Stack direction={{ base: "column", md: "row" }}>
           {categories.map((x) => {
@@ -93,7 +113,7 @@ const BookFilter: React.FC<{ setParentProps: (x: BookResponse | undefined) => vo
           size="sm"
           id="paper"
           bg={"orange.50"}
-          placeholder={value === "7" ? "Select Paper" :"Select Subject"}
+          placeholder={value === "7" ? "Select Paper" : "Select Subject"}
           onChange={(e) => {
             setSelectedSubject(Number(e.target.value));
           }}
@@ -111,10 +131,13 @@ const BookFilter: React.FC<{ setParentProps: (x: BookResponse | undefined) => vo
           size="sm"
           id="paper"
           bg={"orange.50"}
-          placeholder={value === "7" ? "Select Syllabus" :"Select Book"}
+          placeholder={value === "7" ? "Select Syllabus" : "Select Book"}
           onChange={(e) => {
+            setBookid(e.target.value);
+            setBookResponse(data?.find((item) => item.id === Number(e.target.value)));
             setParentProps!(data?.find((item) => item.id === Number(e.target.value)));
             setIsTagSearchActive(false);
+            // navigateTo(e.target.value, "hello");
           }}
         >
           {bookList?.map((x) => {

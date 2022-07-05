@@ -24,12 +24,39 @@ const Syllabus: React.FC<Props> = ({ book, changeParentProps }) => {
     setSelectedSubheading(x.subheading_id);
     changeParentProps(x);
   };
-// local storage test
-  // useEffect(() => {
-  //   setSelectedSubheading(undefined);
-  // }, [book]);
+  useEffect(() => {
+    setSelectedSubheading(undefined);
+  }, [book]);
+  
+  useEffect(() => {
+    const x = localStorage.getItem("selected-sub-syllabus");
+    if (x && x !== "undefined") {
+      const items = JSON.parse(x);
+      setSelectedSubheading(items);
+    }
+  }, []);
+  useEffect(() => {
+    const x = localStorage.getItem("toogle-syllabus");
+    if (x && x !== "undefined") {
+      const items = JSON.parse(x);
+      setToogle(items);
+    }
+  }, []);
+  useEffect(() => {
+    if (profile && profile.id && selectedSubheading) {
+      localStorage.setItem("selected-sub-syllabus", JSON.stringify(selectedSubheading));
+    }
+  }, [profile, selectedSubheading]);
+
+  useEffect(() => {
+    if (profile && profile.id && toggle && toggle !== -100) {
+      localStorage.setItem("toogle-syllabus", JSON.stringify(toggle));
+    }
+  }, [profile, toggle]);
+
+  
   return (
-    <Box >
+    <Box>
       {book?.book_name ? (
         <Flex align="end">
           <Text bg="orange.100" as="b">
@@ -120,4 +147,3 @@ export const ArticleCounter = ({ subheadingId, creatorId }: { subheadingId: numb
     </Flex>
   );
 };
-
