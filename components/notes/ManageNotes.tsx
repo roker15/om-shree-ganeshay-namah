@@ -1,10 +1,7 @@
 import {
   Box,
   Button,
-  Center,
-  Checkbox,
-  CircularProgress,
-  Drawer,
+  Center, Drawer,
   DrawerBody,
   DrawerCloseButton,
   DrawerContent,
@@ -14,25 +11,24 @@ import {
   Grid,
   GridItem,
   HStack,
-  IconButton,
-  Switch,
-  Text,
-  useDisclosure,
+  IconButton, Text,
+  useDisclosure
 } from "@chakra-ui/react";
-import React, { ChangeEvent, useEffect, useState } from "react";
+import React, { useEffect, useState } from "react";
 import { MdMenu } from "react-icons/md";
 import Sticky from "react-sticky-el";
-import { BASE_URL } from "../../lib/constants";
 import { elog } from "../../lib/mylog";
 // import { supabase } from "../../lib/supabaseClient";
 import { supabaseClient as supabase } from "@supabase/auth-helpers-nextjs";
 import { useUser } from "@supabase/auth-helpers-react";
 import { useAuthContext } from "../../state/Authcontext";
-import { BookResponse, BookSyllabus, Profile } from "../../types/myTypes";
+import { BookResponse, BookSyllabus } from "../../types/myTypes";
 import { definitions } from "../../types/supabase";
 import ManageCurrentAffair from "../CurrentAffair/ManageCurrentAffair";
 
 import { useNoteContext } from "../../state/NoteContext";
+import { CustomCheckBox, CustomCircularProgress, CustomLabelText, CustomSwitch } from "../CustomChakraUi";
+import { LoginCard } from "../LoginCard";
 import BookFilter from "../syllabus/BookFilter";
 import Notes from "./Notes";
 import { NotesSharing } from "./NotesSharing";
@@ -58,9 +54,9 @@ const ManageNotes: React.FunctionComponent = () => {
   const [selectedSubheading, setSelectedSubheading] = useState<SelectedSubheadingType | undefined>();
 
   const [selectedSyllabus, setSelectedSyllabus] = useState<BookSyllabus>();
-  const [isPostPublic, setIsPostPublic] = useState<boolean | "loading" | undefined>(undefined);
+  const [isPostPublic, setIsPostPublic] = useState<boolean | undefined>(undefined);
   const [isPostCopiable, setIsPostCopiable] = useState<boolean | undefined>(undefined);
-  const { signInWithgoogle, signOut, profile } = useAuthContext();
+  const {profile } = useAuthContext();
 
   useEffect(() => {
     const x = localStorage.getItem("book");
@@ -92,7 +88,7 @@ const ManageNotes: React.FunctionComponent = () => {
   useEffect(() => {
     localStorage.setItem("selected-subheading", JSON.stringify(selectedSubheading));
   }, [selectedSubheading]);
-  
+
   useEffect(() => {
     localStorage.setItem("selected-syllabus", JSON.stringify(selectedSyllabus));
   }, [selectedSyllabus]);
@@ -123,7 +119,7 @@ const ManageNotes: React.FunctionComponent = () => {
   };
 
   const updateSharingStatus = async (shouldBePublic: boolean) => {
-    setIsPostPublic("loading");
+    setIsPostPublic(undefined);
     if (shouldBePublic === true) {
       const { data, error } = await supabase.from<definitions["books_article_sharing"]>("books_article_sharing").insert([
         {
@@ -145,7 +141,7 @@ const ManageNotes: React.FunctionComponent = () => {
       }
     }
     if (shouldBePublic === false) {
-      setIsPostPublic("loading");
+      setIsPostPublic(undefined);
       const { data, error } = await supabase
         .from<definitions["books_article_sharing"]>("books_article_sharing")
         .delete()
@@ -168,7 +164,7 @@ const ManageNotes: React.FunctionComponent = () => {
 
   useEffect(() => {
     const getIfThisTopicIsPublic = async () => {
-      setIsPostPublic("loading");
+      setIsPostPublic(undefined);
       const { data, error } = await supabase
         .from<definitions["books_article_sharing"]>("books_article_sharing")
         .select(`*`)
@@ -275,13 +271,7 @@ const ManageNotes: React.FunctionComponent = () => {
               </Box>
             ) : (
               <Center mt="68" bg="gray.50" p="2">
-                <Text color="gray.600" fontSize="md" casing="capitalize">
-                  Your are not Logged In Please{" "}
-                  <Button colorScheme={"green"} variant="solid" onClick={() => signInWithgoogle(BASE_URL)}>
-                    Login
-                  </Button>{" "}
-                  To View Content
-                </Text>
+                <LoginCard />
               </Center>
             )}
           </GridItem>
@@ -351,26 +341,11 @@ const DrawerExample = (props: HeaderProps) => {
   );
 };
 
-function CustomCheckBox(props: { label: string; state: boolean; setState: (arg: boolean) => void }) {
-  return (
-    <Checkbox
-      size="sm"
-      colorScheme="gray"
-      outlineColor={"red.600"}
-      isChecked={props.state}
-      onChange={(e) => props.setState(e.target.checked)}
-    >
-      <Text as="label" casing="capitalize">
-        {props.label}
-      </Text>
-    </Checkbox>
-  );
-}
 type ToolbarProps = {
   selectedSubheading: SelectedSubheadingType;
   distractionOff: boolean;
   setDistractionOff: (arg: boolean) => void;
-  isPostPublic: string | boolean | undefined;
+  isPostPublic: boolean | undefined;
   updateSharingStatus: (arg0: boolean) => void;
   isPostCopiable: boolean | undefined;
   handleCopyCheckbox: (arg0: boolean) => void;
@@ -379,11 +354,7 @@ type ToolbarProps = {
 function Toolbar(props: ToolbarProps) {
   return (
     <Flex justifyContent="end" alignItems="center" mt="4">
-      <HStack
-        borderRadius="full" // bg="gray.200"
-        p="2"
-        alignItems="center"
-      >
+      <HStack spacing="5px">
         <>
           <Box
             display={{
@@ -392,43 +363,21 @@ function Toolbar(props: ToolbarProps) {
               md: "inline",
             }}
           >
-            <CustomCheckBox state={props.distractionOff} setState={props.setDistractionOff} label={"Hide right panel"} />
+            <CustomCheckBox state={props.distractionOff} changeState={props.setDistractionOff} label={"Hide right panel"} />
           </Box>
           <Flex alignItems="center">
             <NotesSharing subheadingId={props.selectedSubheading?.subheadingId!}></NotesSharing>
           </Flex>
-          <Flex h="6">
-            {props.isPostPublic === "loading" ? (
-              <CircularProgress isIndeterminate size="20px" color="green.400" />
-            ) : (
-              <Flex justifyContent="end" alignItems="center">
-                {/* <Box bg="aqua"> */}
-                <Text justifyContent="center" as="label" htmlFor="email-alerts" px="2" textTransform="capitalize">
-                  {props.isPostPublic ? "Make Private" : "Make Public"}
-                </Text>
-                <Switch
-                  size="sm"
-                  colorScheme="whatsapp" // defaultChecked={isPostPublic}
-                  isChecked={props.isPostPublic as boolean}
-                  onChange={(e: ChangeEvent<HTMLInputElement>) => props.updateSharingStatus(e.target.checked)}
-                />
-                <Checkbox
-                  size="sm"
-                  mx="4"
-                  display={props.isPostPublic ? "inline-flex" : "none"}
-                  colorScheme={"whatsapp"}
-                  textTransform={"capitalize"}
-                  isChecked={props.isPostCopiable}
-                  onChange={(e) => props.handleCopyCheckbox(e.target.checked)}
-                >
-                  <Text textTransform="capitalize" as="label">
-                    Allow copy
-                  </Text>
-                </Checkbox>
-                {/* </Box> */}
-              </Flex>
-            )}
-          </Flex>
+
+          {props.isPostPublic === undefined ? (
+            <CustomCircularProgress size="15px" />
+          ) : (
+            <HStack alignItems="center" spacing="5px">
+              <CustomLabelText label={props.isPostPublic ? "Make Private" : "Make Public"} />
+              <CustomSwitch state={props.isPostPublic} changeState={props.updateSharingStatus}></CustomSwitch>
+              <CustomCheckBox label={"Allow copy"} state={props.isPostCopiable!} changeState={props.handleCopyCheckbox} />
+            </HStack>
+          )}
         </>
       </HStack>
     </Flex>
