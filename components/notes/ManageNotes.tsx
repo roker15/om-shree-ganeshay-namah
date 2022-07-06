@@ -1,23 +1,10 @@
 import {
-  Box,
-  Button,
-  Center,
-  Drawer,
-  DrawerBody,
-  DrawerCloseButton,
-  DrawerContent,
-  DrawerFooter,
-  DrawerOverlay,
-  Flex,
+  Box, Center, Flex,
   Grid,
   GridItem,
-  HStack,
-  IconButton,
-  Text,
-  useDisclosure,
+  HStack, Text
 } from "@chakra-ui/react";
 import React, { useEffect, useState } from "react";
-import { MdMenu } from "react-icons/md";
 import Sticky from "react-sticky-el";
 import { elog } from "../../lib/mylog";
 // import { supabase } from "../../lib/supabaseClient";
@@ -29,7 +16,7 @@ import { definitions } from "../../types/supabase";
 import ManageCurrentAffair from "../CurrentAffair/ManageCurrentAffair";
 
 import { useNoteContext } from "../../state/NoteContext";
-import { CustomCheckBox, CustomCircularProgress, CustomLabelText, CustomSwitch, CustomDrawer } from "../CustomChakraUi";
+import { CustomCheckBox, CustomCircularProgress, CustomDrawer, CustomLabelText, CustomSwitch } from "../CustomChakraUi";
 import { LoginCard } from "../LoginCard";
 import BookFilter from "../syllabus/BookFilter";
 import Notes from "./Notes";
@@ -53,15 +40,15 @@ const ManageNotes: React.FunctionComponent = () => {
   const { user, error } = useUser();
   const { isTagSearchActive } = useNoteContext();
   const [book, setBook] = useState<BookResponse | undefined>();
-  const [selectedSubheading, setSelectedSubheading] = useState<SelectedSubheadingType | undefined>();
+  const [selectedNotesOwner, setSelectedNotesOwner] = useState<SelectedSubheadingType | undefined>();
 
-  const [selectedSyllabus, setSelectedSyllabus] = useState<BookSyllabus>();
+  const [selectedTopic, setSelectedTopic] = useState<BookSyllabus>();
   const [isPostPublic, setIsPostPublic] = useState<boolean | undefined>(undefined);
   const [isPostCopiable, setIsPostCopiable] = useState<boolean | undefined>(undefined);
   const { profile } = useAuthContext();
 
   useEffect(() => {
-    const x = localStorage.getItem("book");
+    const x = sessionStorage.getItem("book");
     if (x && x !== "undefined") {
       const items = JSON.parse(x);
       setBook(items);
@@ -69,49 +56,50 @@ const ManageNotes: React.FunctionComponent = () => {
   }, []);
 
   useEffect(() => {
-    const x1 = localStorage.getItem("selected-subheading");
-    if (x1 && x1 !== "undefined") {
-      const items1 = JSON.parse(x1);
-      setSelectedSubheading(items1);
+    const x = sessionStorage.getItem("selected-subheading");
+    if (x && x !== "undefined") {
+      const items1 = JSON.parse(x);
+      setSelectedNotesOwner(items1);
     }
   }, []);
   useEffect(() => {
-    const x1 = localStorage.getItem("selected-syllabus");
-    if (x1 && x1 !== "undefined") {
-      const items1 = JSON.parse(x1);
-      setSelectedSyllabus(items1);
+    const x = sessionStorage.getItem("selected-syllabus");
+    if (x && x !== "undefined") {
+      const items1 = JSON.parse(x);
+      setSelectedTopic(items1);
     }
   }, []);
 
   useEffect(() => {
-    localStorage.setItem("book", JSON.stringify(book));
+    sessionStorage.setItem("book", JSON.stringify(book));
   }, [book]);
 
   useEffect(() => {
-    localStorage.setItem("selected-subheading", JSON.stringify(selectedSubheading));
-  }, [selectedSubheading]);
+    sessionStorage.setItem("selected-subheading", JSON.stringify(selectedNotesOwner));
+  }, [selectedNotesOwner]);
 
   useEffect(() => {
-    localStorage.setItem("selected-syllabus", JSON.stringify(selectedSyllabus));
-  }, [selectedSyllabus]);
+    sessionStorage.setItem("selected-syllabus", JSON.stringify(selectedTopic));
+  }, [selectedTopic]);
 
   const updateBookProps = (x: BookResponse | undefined) => {
     setBook(x);
-    setSelectedSubheading(undefined); //reset selected subheading
+    setSelectedNotesOwner(undefined); //reset selected subheading
+    setSelectedTopic(undefined); //reset selected subheading
   };
 
   const changeSelectedSubheading = (x: BookSyllabus | undefined) => {
-    setSelectedSubheading({
+    setSelectedNotesOwner({
       subheadingId: x?.subheading_id,
       creatorId: profile?.id,
       isCopyable: false,
       isEditable: true,
       ownerName: profile?.username,
     });
-    setSelectedSyllabus(x);
+    setSelectedTopic(x);
   };
   const changeSelectedSharedNote = (x: definitions["books_article_sharing"]) => {
-    setSelectedSubheading({
+    setSelectedNotesOwner({
       subheadingId: x.books_subheadings_fk,
       creatorId: x.owned_by,
       isEditable: x.allow_edit,
@@ -125,7 +113,7 @@ const ManageNotes: React.FunctionComponent = () => {
     if (shouldBePublic === true) {
       const { data, error } = await supabase.from<definitions["books_article_sharing"]>("books_article_sharing").insert([
         {
-          books_subheadings_fk: selectedSubheading?.subheadingId,
+          books_subheadings_fk: selectedNotesOwner?.subheadingId,
           owned_by: profile?.id,
           ownedby_email: profile?.email,
           ownedby_name: profile?.username,
@@ -148,7 +136,7 @@ const ManageNotes: React.FunctionComponent = () => {
         .from<definitions["books_article_sharing"]>("books_article_sharing")
         .delete()
         .match({
-          books_subheadings_fk: selectedSubheading?.subheadingId,
+          books_subheadings_fk: selectedNotesOwner?.subheadingId,
           owned_by: profile?.id,
           ispublic: true,
           shared_by: profile?.id,
@@ -171,8 +159,8 @@ const ManageNotes: React.FunctionComponent = () => {
         .from<definitions["books_article_sharing"]>("books_article_sharing")
         .select(`*`)
         .match({
-          books_subheadings_fk: selectedSubheading?.subheadingId,
-          owned_by: selectedSubheading?.creatorId,
+          books_subheadings_fk: selectedNotesOwner?.subheadingId,
+          owned_by: selectedNotesOwner?.creatorId,
           ispublic: true,
         });
       if (error) {
@@ -189,14 +177,14 @@ const ManageNotes: React.FunctionComponent = () => {
         setIsPostCopiable(undefined);
       }
     };
-    selectedSubheading?.subheadingId && selectedSubheading?.creatorId ? getIfThisTopicIsPublic() : null;
-  }, [selectedSubheading]);
+    selectedNotesOwner?.subheadingId && selectedNotesOwner?.creatorId ? getIfThisTopicIsPublic() : null;
+  }, [selectedNotesOwner]);
 
   const handleCopyCheckbox = async (checkValue: boolean) => {
     const { data, error } = await supabase
       .from<definitions["books_article_sharing"]>("books_article_sharing")
       .update({ allow_copy: checkValue })
-      .match({ books_subheadings_fk: selectedSubheading?.subheadingId, ispublic: true, owned_by: profile!.id });
+      .match({ books_subheadings_fk: selectedNotesOwner?.subheadingId, ispublic: true, owned_by: profile!.id });
     if (data && data.length !== 0) {
       setIsPostCopiable(checkValue);
     }
@@ -217,9 +205,9 @@ const ManageNotes: React.FunctionComponent = () => {
       <Box px={{ base: "0.5", sm: "0.5", md: "0.5", lg: "44" }} pb="8">
         <BookFilter setParentProps={updateBookProps}></BookFilter>
 
-        {user && selectedSubheading && selectedSubheading.creatorId === profile?.id && (
+        {user && selectedNotesOwner && selectedNotesOwner.creatorId === profile?.id && (
           <Toolbar
-            selectedSubheading={selectedSubheading}
+            selectedSubheading={selectedNotesOwner}
             isPostPublic={isPostPublic}
             isPostCopiable={isPostCopiable}
             // profile={profile}
@@ -240,7 +228,7 @@ const ManageNotes: React.FunctionComponent = () => {
               </CustomDrawer>
               <CustomDrawer>
                 <SharedNotesPanel
-                  subheadingid={selectedSubheading?.subheadingId}
+                  subheadingid={selectedNotesOwner?.subheadingId}
                   changeParentProps={changeSelectedSharedNote}
                 ></SharedNotesPanel>
               </CustomDrawer>
@@ -267,24 +255,24 @@ const ManageNotes: React.FunctionComponent = () => {
               <Box>
                 <Center>
                   <Text fontSize="md" as="b" casing="capitalize">
-                    {!selectedSubheading ? "Select Topic From Syllabus" : selectedSyllabus?.subheading}
+                    {!selectedNotesOwner ? "Select Topic From Syllabus" : selectedTopic?.subheading}
                   </Text>
                 </Center>
-                {selectedSubheading && (
+                {selectedNotesOwner && (
                   <Box mt="4">
                     <Text p="2" as="span" bg="blackAlpha.700" fontSize="14px" color="gray.100">
-                      {"Notes by : " + selectedSubheading?.ownerName}
+                      {"Notes by : " + selectedNotesOwner?.ownerName}
                     </Text>
                   </Box>
                 )}
                 <Box>
                   <Notes
                     subjectId={book.subject_fk!.id}
-                    subheadingid={selectedSubheading?.subheadingId}
-                    notesCreator={selectedSubheading?.creatorId}
+                    subheadingid={selectedNotesOwner?.subheadingId}
+                    notesCreator={selectedNotesOwner?.creatorId}
                     changeParentProps={() => console.log("")}
-                    isCopyable={selectedSubheading?.isCopyable}
-                    isEditable={selectedSubheading?.isEditable}
+                    isCopyable={selectedNotesOwner?.isCopyable}
+                    isEditable={selectedNotesOwner?.isEditable}
                   ></Notes>{" "}
                 </Box>
               </Box>
@@ -303,7 +291,7 @@ const ManageNotes: React.FunctionComponent = () => {
             display={{ base: "none", sm: "none", md: "block" }}
           >
             <SharedNotesPanel
-              subheadingid={selectedSubheading?.subheadingId}
+              subheadingid={selectedNotesOwner?.subheadingId}
               changeParentProps={changeSelectedSharedNote}
             ></SharedNotesPanel>
           </GridItem>
