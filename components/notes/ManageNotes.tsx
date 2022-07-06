@@ -1,7 +1,8 @@
 import {
   Box,
   Button,
-  Center, Drawer,
+  Center,
+  Drawer,
   DrawerBody,
   DrawerCloseButton,
   DrawerContent,
@@ -11,8 +12,9 @@ import {
   Grid,
   GridItem,
   HStack,
-  IconButton, Text,
-  useDisclosure
+  IconButton,
+  Text,
+  useDisclosure,
 } from "@chakra-ui/react";
 import React, { useEffect, useState } from "react";
 import { MdMenu } from "react-icons/md";
@@ -27,7 +29,7 @@ import { definitions } from "../../types/supabase";
 import ManageCurrentAffair from "../CurrentAffair/ManageCurrentAffair";
 
 import { useNoteContext } from "../../state/NoteContext";
-import { CustomCheckBox, CustomCircularProgress, CustomLabelText, CustomSwitch } from "../CustomChakraUi";
+import { CustomCheckBox, CustomCircularProgress, CustomLabelText, CustomSwitch, CustomDrawer } from "../CustomChakraUi";
 import { LoginCard } from "../LoginCard";
 import BookFilter from "../syllabus/BookFilter";
 import Notes from "./Notes";
@@ -56,7 +58,7 @@ const ManageNotes: React.FunctionComponent = () => {
   const [selectedSyllabus, setSelectedSyllabus] = useState<BookSyllabus>();
   const [isPostPublic, setIsPostPublic] = useState<boolean | undefined>(undefined);
   const [isPostCopiable, setIsPostCopiable] = useState<boolean | undefined>(undefined);
-  const {profile } = useAuthContext();
+  const { profile } = useAuthContext();
 
   useEffect(() => {
     const x = localStorage.getItem("book");
@@ -228,8 +230,25 @@ const ManageNotes: React.FunctionComponent = () => {
           ></Toolbar>
         )}
       </Box>
-
-      {/* <Flex my="16" justifyContent="flex-start"> */}
+      {book && (
+        <Sticky>
+          <div style={{ zIndex : 2147483657}}>
+          <Flex justifyContent="space-between" display={{ base: "undefined", sm: "undefined", md: "none" }}>
+            <>
+              <CustomDrawer>
+                <SyllabusForNotes book={book} changeParentProps={changeSelectedSubheading}></SyllabusForNotes>
+              </CustomDrawer>
+              <CustomDrawer>
+                <SharedNotesPanel
+                  subheadingid={selectedSubheading?.subheadingId}
+                  changeParentProps={changeSelectedSharedNote}
+                ></SharedNotesPanel>
+              </CustomDrawer>
+            </>
+          </Flex>
+          </div>
+        </Sticky>
+      )}
       {book && (
         <Grid templateColumns="repeat(10, 1fr)">
           <GridItem
@@ -290,56 +309,11 @@ const ManageNotes: React.FunctionComponent = () => {
           </GridItem>
         </Grid>
       )}
-
-      {/* </Flex> */}
     </div>
   );
 };
 
 export default ManageNotes;
-
-type HeaderProps = {
-  children: JSX.Element;
-};
-
-const DrawerExample = (props: HeaderProps) => {
-  const { isOpen, onOpen, onClose } = useDisclosure();
-  const btnRef = React.useRef(null);
-
-  return (
-    <>
-      <Sticky>
-        <IconButton
-          aria-label="syllabus"
-          variant="outline"
-          size="xs"
-          icon={<MdMenu />}
-          ref={btnRef}
-          colorScheme="pink"
-          onClick={onOpen}
-        >
-          Open
-        </IconButton>
-      </Sticky>
-
-      <Drawer isOpen={isOpen} placement="left" onClose={onClose} finalFocusRef={btnRef}>
-        <DrawerOverlay />
-        <DrawerContent>
-          <DrawerCloseButton />
-          {/* <DrawerHeader>Create your account</DrawerHeader> */}
-
-          <DrawerBody>{props.children}</DrawerBody>
-
-          <DrawerFooter>
-            <Button variant="outline" mr={3} onClick={onClose}>
-              Cancel
-            </Button>
-          </DrawerFooter>
-        </DrawerContent>
-      </Drawer>
-    </>
-  );
-};
 
 type ToolbarProps = {
   selectedSubheading: SelectedSubheadingType;
