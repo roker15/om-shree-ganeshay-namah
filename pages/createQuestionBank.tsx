@@ -575,7 +575,7 @@ const CreateQuestionBank: React.FC = () => {
                             {console.log("qlink", qlink)}
                             {qlink.some((item) => item.subheading_id == x.subheading_id) ? (
                               <Button
-                                colorScheme="orange"
+                                colorScheme="brand"
                                 onClick={() => handleunlinkClick(questionId, x.subheading_id)}
                                 isLoading={isLoading}
                                 leftIcon={<MdLinkOff />}

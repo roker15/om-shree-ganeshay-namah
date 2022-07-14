@@ -53,12 +53,12 @@ const MobileNav = ({ onOpen, ...rest }: MobileProps) => {
       height="16"
       alignItems="center"
       // bg={useColorModeValue("#f8f6fa", "#e5e0f1")}
-      bg="white"
+      bg="#faf8f8"
       borderBottomWidth="0px"
       zIndex={500}
       pos="sticky"
       mt={"0"}
-      boxShadow="sm"
+      boxShadow="md"
       borderBottomColor={useColorModeValue("gray.200", "gray.700")}
       justifyContent={{ base: "space-between", md: "flex" }}
       {...rest}
@@ -88,19 +88,7 @@ const MobileNav = ({ onOpen, ...rest }: MobileProps) => {
       </Heading>{" "}
       <HStack spacing={{ base: "0", md: "6" }}>
         {!profile ? (
-          <HStack>
-            {" "}
-            <Button
-              border="0px"
-              colorScheme="google"
-              leftIcon={<FaGoogle />}
-              variant="ghost"
-              onClick={() => signInWithgoogle(BASE_URL)}
-            >
-              Sign in
-            </Button>
-            {JoinTelegram}
-          </HStack>
+          <HStack>{JoinTelegram}</HStack>
         ) : (
           <Flex border="0px" alignItems={"center"}>
             {JoinTelegram}
@@ -130,9 +118,9 @@ const MobileNav = ({ onOpen, ...rest }: MobileProps) => {
                 </HStack>
               </MenuButton>
               <MenuList
-                border="0px"
-                bg={useColorModeValue("white", "gray.900")}
-                borderColor={useColorModeValue("gray.200", "gray.700")}
+                border="1px"
+                bg={"pink.50"}
+                borderColor={"pink.100"}
               >
                 <MenuItem border="0px">Profile</MenuItem>
                 <MenuItem border="0px">Settings</MenuItem>

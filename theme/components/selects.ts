@@ -6,65 +6,65 @@ export const selects = {
   parts: ["field", "icon"],
   baseStyle: {
     field: {
-      bg: colors.brand.primary,
-      h: "102px",
-      fontSize: "xl",
-      px: "16px",
-      appearance: "none",
-      paddingBottom: "1px",
-      lineHeight: "xl",
-      "> option, > optgroup": {
-        bg: "white",
-        _hover: {
-          bg: "red.100",
-        },
-      },
+      bg: "brand.500",
+      px: "1000px",
+      // border: "4px solid",
       _hover: {
-        bg: colors.brand.secondary,
+        bg: "blue.50",
       },
     },
-    // icon: {
-    //   bg: "blue.50",
-    //   color: "blue.500",
-    // },
   },
-  // 2. We can add a new button size or extend existing
+
   sizes: {
     sm: {
-      field: { h: "32px", fontSize: "sm", px: "16px", fontWeight: "semibold",},
+      field: { h: "32px", fontSize: "sm", px: "16px", fontWeight: "semibold" },
     },
   },
   // 3. We can add a new visual variant
   variants: {
     light: {
       field: {
-        bg: "blue.800",
-        boxShadow: "0 0 2px 2px #efdfde",
+        // bg: "blue.800",
+        // boxShadow: "0 0 2px 2px #efdfde",
+        // _hover: {
+        //   bg: "blue.100",
+        //   boxShadow: "md",
+        // },
       },
     },
-    variant1: (props: any) => ({
-      bg: "#00008B",
-      color: "white",
-      _hover: {
-        bg: mode(darken("#00008B", -20), whiten("#00008B", 20))(props),
-        boxShadow: "md",
+    filled: (props: any) => ({
+      field: {
+        bg: "brand.50",
+        borderRadius:"full",
+        // color: "white",
+        _hover: {
+          bg: mode(darken("#00008B", -20), whiten("#00008B", 20))(props),
+          // color: "blue",
+          // boxShadow: "md",
+        },
       },
     }),
-    variantoutline: (props: any) => ({
-      bg: "transparent",
-      border: "1px solid",
-      borderColor: "#00008B",
-      color: "#00008B",
-      size: "sm",
-      transition: "transform .2s",
-      _hover: {
-        boxShadow: "md",
-        transform: "scale(1.2)",
+    outline: (props: any) => ({
+      field: {
+        bg: "transparent",
+        borderRadius:"full",
+        border: "1px solid",
+        borderColor: "brand.500",
+        color: "brand.800",
+        size: "sm",
+        transition: "transform .2s",
+        _hover: {
+          boxShadow: "md",
+          transform: "scale(1.002)",
+        },
       },
-    }),
-    // 4. We can override existing variants
-    solid: (props: any) => ({
-      bg: props.colorMode === "dark" ? "red.300" : "red.500",
     }),
   },
+  defaultProps: {
+    focusBorderColor: "brand.100",
+    variant: "outline",
+    size: "md",
+  },
+
+  // },
 };

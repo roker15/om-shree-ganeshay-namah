@@ -102,7 +102,7 @@ export default function ManageCurrentAffair() {
 
         <Grid templateColumns="repeat(5, 1fr)" gap={6}>
           <>
-            <GridItem colSpan={{ base: 0, sm: 0, md: 1 }} display={{ base: "none", sm: "none", md: "block" }} bg="orange.50">
+            <GridItem colSpan={{ base: 0, sm: 0, md: 1 }} display={{ base: "none", sm: "none", md: "block" }} bg="brand.50">
               <Tags></Tags>
             </GridItem>
             {swrError ? (
@@ -118,7 +118,7 @@ export default function ManageCurrentAffair() {
                         <VStack width="full">
                           <Text
                             alignSelf={"baseline"}
-                            bg="orange.100"
+                            bg="brand.100"
                             p="2"
                             fontSize="16px"
                             casing="capitalize"

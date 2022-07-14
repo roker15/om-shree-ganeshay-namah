@@ -26,12 +26,11 @@ const BookFilter: React.FC<{ setParentProps: (x: BookResponse | undefined) => vo
   const { setIsTagSearchActive, setBookResponse, bookResponse } = useNoteContext();
   const [bookid, setBookid] = useState<string | undefined>();
 
-  useEffect(() => {
-    if (bookResponse && bookid) {
-      console.log("book response is ",JSON.stringify(bookResponse));
-      navigateTo(bookid, "hello");
-    }
-  },[bookResponse, bookid]);
+  // useEffect(() => {
+  //   if (bookResponse && bookid) {
+  //     navigateTo(bookid);
+  //   }
+  // }, [bookResponse, bookid]);
   useEffect(() => {
     setClassList(
       data
@@ -64,37 +63,31 @@ const BookFilter: React.FC<{ setParentProps: (x: BookResponse | undefined) => vo
   }, [data, selectedClass, selectedSubject]);
 
   const ROUTE_POST_ID = "/notes/[bookid]";
-  const navigateTo = (bookid: string, item: string) => {
+  const navigateTo = (bookid: string) => {
     router.push({
       pathname: ROUTE_POST_ID,
-      query: { bookid, item },
+      query: { bookid},
 
       // href:"www.localhost.com"
     });
   };
 
   return (
-    // <Container maxW="container.lg" bg="pink">
-
     <Box minW="full">
       <RadioGroup onChange={setValue} value={value}>
         <Stack direction={{ base: "column", md: "row" }}>
           {categories.map((x) => {
             return (
-              <Radio key={x.id} value={x.id} colorScheme="whatsapp">
+              <Radio key={x.id} value={x.id} colorScheme="brand">
                 <Text casing="capitalize">{x.name}</Text>
               </Radio>
             );
           })}
         </Stack>
       </RadioGroup>
-      {/* use Stack instead of Hstack for responsivness */}
       <Stack direction={{ base: "column", md: "row" }}>
         <Select
-          variant={"filled"}
-          size="sm"
           id="paper"
-          bg={"orange.50"}
           placeholder={value === "7" ? "Select Exam" : "Select Class/Course"}
           onChange={(e) => {
             setSelectedClass(Number(e.target.value));
@@ -109,10 +102,7 @@ const BookFilter: React.FC<{ setParentProps: (x: BookResponse | undefined) => vo
           })}
         </Select>
         <Select
-          variant={"filled"}
-          size="sm"
           id="paper"
-          bg={"orange.50"}
           placeholder={value === "7" ? "Select Paper" : "Select Subject"}
           onChange={(e) => {
             setSelectedSubject(Number(e.target.value));
@@ -127,10 +117,7 @@ const BookFilter: React.FC<{ setParentProps: (x: BookResponse | undefined) => vo
           })}
         </Select>
         <Select
-          variant={"filled"}
-          size="sm"
           id="paper"
-          bg={"orange.50"}
           placeholder={value === "7" ? "Select Syllabus" : "Select Book"}
           onChange={(e) => {
             setBookid(e.target.value);
@@ -152,8 +139,6 @@ const BookFilter: React.FC<{ setParentProps: (x: BookResponse | undefined) => vo
         </Select>
       </Stack>
     </Box>
-
-    // </Container>
   );
 };
 export default BookFilter;

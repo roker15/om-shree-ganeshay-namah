@@ -1,11 +1,13 @@
-import { Container, Flex, Text } from "@chakra-ui/react";
+import { Box, Container, Flex, Text } from "@chakra-ui/react";
 import { supabaseClient } from "@supabase/auth-helpers-nextjs";
 import Link from "next/link";
 import router from "next/router";
 import React, { useEffect, useState } from "react";
+import { ChakraThemeTest } from "../components/ChakraThemeTest";
 import ImageSlider from "../components/ImageSlider";
 import LandingPageTable from "../components/LandingPageTable";
 import BookFilter from "../components/syllabus/BookFilter";
+import CreateBookSyllabus from "../components/syllabus/CreateBookSyllabus";
 import LayoutWithTopNavbar from "../layout/LayoutWithTopNavbar";
 import { BookResponse, Papers } from "../types/myTypes";
 import PageWithLayoutType from "../types/pageWithLayout";
@@ -46,8 +48,8 @@ const Home: React.FunctionComponent = () => {
 
   useEffect(() => {
     if (book) {
-      localStorage.setItem("book", JSON.stringify(book));
-      localStorage.setItem("selected-subheading", "undefined");
+      sessionStorage.setItem("book", JSON.stringify(book));
+      sessionStorage.setItem("selected-subheading", "undefined");
       navigateTo(book.id.toString(), "hello");
     }
   }, [book]);
@@ -64,8 +66,15 @@ const Home: React.FunctionComponent = () => {
       <Flex flexDirection="column" alignItems={"center"} flexWrap="nowrap">
         <BookFilter setParentProps={updateBookProps}></BookFilter>
         <br />
-        <LandingPageTable />
-        <ImageSlider />
+        <Box bg="#4078c0" display={{ base: "none", sm: "undefined" }}>
+          <LandingPageTable />
+        </Box>
+        <Box display={{ base: "none", sm: "undefined" }}>
+          <ImageSlider />
+        </Box>
+        <Box>
+          <ChakraThemeTest/>
+        </Box>
       </Flex>
     </Container>
   );

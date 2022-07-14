@@ -29,6 +29,7 @@ import "katex/dist/katex.min.css";
 import dynamic from "next/dynamic";
 import React, { useState } from "react";
 import { SubmitHandler, useForm } from "react-hook-form";
+import { IconType } from "react-icons";
 import { MdAdd, MdCancel, MdDone, MdModeEdit, MdOutlineContentCopy } from "react-icons/md";
 // import SunEditor from "suneditor-react";
 import "suneditor/dist/css/suneditor.min.css"; // Import Sun Editor's CSS File
@@ -63,6 +64,26 @@ type Inputs = {
   isQuestion: boolean;
   // tags1: string | undefined;
 };
+
+function CustomIconbutton(props: { handleArticleEdit: (arg0: any, arg1: boolean) => void; id: any; icon: IconType }) {
+  return (
+    <IconButton
+      display="none"
+      _groupHover={{
+        display: "center",
+      }} // _hover={{ color: "pink", fontSize: "22px" }}
+      size="xs" // ml="2"
+      borderRadius={"full"}
+      variant="outline"
+      colorScheme="whatsapp"
+      aria-label="Call Sage"
+      fontSize="20px"
+      onClick={() => props.handleArticleEdit(props.id, false)}
+      icon={<props.icon />}
+    />
+  );
+}
+
 const MyNotes: React.FC<Props> = ({ subjectId, subheadingid, notesCreator, changeParentProps, isCopyable, isEditable }) => {
   const { profile } = useAuthContext();
   const { data: articles, isLoading: isArticleLoading, swrError } = useGetUserArticles(subheadingid, notesCreator);
@@ -122,7 +143,7 @@ const MyNotes: React.FC<Props> = ({ subjectId, subheadingid, notesCreator, chang
         .map((x) => {
           return (
             <Box key={x.id} mt="16">
-              {isCopyable ? (
+              {isCopyable && (
                 <IconButton
                   size="xs"
                   variant="ghost"
@@ -133,11 +154,11 @@ const MyNotes: React.FC<Props> = ({ subjectId, subheadingid, notesCreator, chang
                   onClick={() => copyArticleToNewUser(x)}
                   icon={<MdOutlineContentCopy />}
                 />
-              ) : null}
+              )}
               <Flex role={"group"} align="center">
                 {/* <Badge> */}
                 <VStack>
-                  <Text alignSelf={"baseline"} bg="orange.100" p="2" fontSize="16px" casing="capitalize" align="left">
+                  <Text alignSelf={"baseline"} bg="brand.100" p="2" fontSize="16px" casing="capitalize" align="left">
                     <Text as="b">Article Name :- </Text> {x.article_title}
                   </Text>
                   <Wrap spacing="5px">
@@ -185,20 +206,7 @@ const MyNotes: React.FC<Props> = ({ subjectId, subheadingid, notesCreator, chang
                 </VStack>
                 {/* </Badge> */}
                 <Box display={profile?.id !== notesCreator ? "none" : "undefined"}>
-                  <IconButton
-                    display="none"
-                    _groupHover={{ display: "center" }}
-                    // _hover={{ color: "pink", fontSize: "22px" }}
-                    size="xs"
-                    // ml="2"
-                    borderRadius={"full"}
-                    variant="outline"
-                    colorScheme="whatsapp"
-                    aria-label="Call Sage"
-                    fontSize="20px"
-                    onClick={() => handleArticleEdit(x.id, false)}
-                    icon={<MdModeEdit />}
-                  />
+                  <CustomIconbutton handleArticleEdit={handleArticleEdit} id={x.id} icon={MdModeEdit}></CustomIconbutton>
                   <IconButton
                     display={isArticleCreating === "EDITING" && selectedArticleForEdit === x.id ? "undefined" : "none"}
                     size="xs"
@@ -477,7 +485,7 @@ const ArticleForm: React.FC<ArticleFormProps> = ({
 
         {subjectId === 60 ? (
           <VStack py="4">
-            <Text bg="orange.100" fontSize="xs">
+            <Text bg="brand.100" fontSize="xs">
               {" "}
               # Select Tags from below. Tags marked ⭐ are main Topics, others are subtopics. Topics taken from UPSC
               notification. Some Extra Tags are for segregation purposes.

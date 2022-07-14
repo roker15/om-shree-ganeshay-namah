@@ -61,7 +61,7 @@ const DeleteAlertDialogue = ({ handleDelete, dialogueHeader, isDisabled, isIconB
       <AlertDialog isOpen={isOpen} leastDestructiveRef={cancelRef} onClose={onClose}>
         <AlertDialogOverlay>
           <AlertDialogContent>
-            <AlertDialogHeader fontSize="lg" bg="orange.50" p="2" fontWeight="Bold" color="blackAlpha.600">
+            <AlertDialogHeader fontSize="lg" bg="brand.50" p="2" fontWeight="Bold" color="blackAlpha.600">
               {dialogueHeader}
             </AlertDialogHeader>
 

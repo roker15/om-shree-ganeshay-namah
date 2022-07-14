@@ -29,7 +29,7 @@ function MyApp({ Component, pageProps }: AppLayoutProps) {
       <UserProvider supabaseClient={supabaseClient}>
         <AuthProvider>
           <NoteContextWrapper>
-            <ChakraProvider theme={theme}>
+            <ChakraProvider theme={theme} >
               <Layout>
                 <Component {...pageProps} />
               </Layout>

@@ -1,4 +1,4 @@
-html,
+/* html,
 body {
   --custom-font-family: -apple-system, BlinkMacSystemFont, Segoe UI, Roboto, Oxygen, Ubuntu, Cantarell, Fira Sans, Droid Sans,
     Helvetica Neue, sans-serif;
@@ -16,15 +16,14 @@ body {
   margin: 0;
   font-family: var(--custom-font-family);
   background-color: var(--custom-bg-color);
-}
+} */
 
-* {
-  /* color: var(--custom-color);  this is done by me */
+/* * {
   font-family: var(--custom-font-family);
   box-sizing: border-box;
-}
+} */
 
-html,
+/* html,
 body,
 #__next {
   height: fit-content;
@@ -35,9 +34,9 @@ body,
 h1 {
   font-size: xx-large !important;
   font-weight: 700 !important;
-}
+} */
 
-.sun-editor-editable table.se-table-size-auto {
+/* .sun-editor-editable table.se-table-size-auto {
   min-width: 900px !important;
 }
 a.internal:link {
@@ -46,7 +45,7 @@ a.internal:link {
   border-radius: 5px;
   background: #f4eeeed6;
   margin-top: 2px;
-}
+} */
 /* table,
 th,
 td {
@@ -59,21 +58,7 @@ td {
   text-align: left;
 } */
 
-ol > li > ol > li {
-  /* line-height: 50px;
-  border-radius: 8px; */
-  list-style-type: lower-alpha;
-  /* color: #f4dfe8;
-  margin-bottom: 10px; */
-}
-ol > li > ol > li > ol > li {
-  /* line-height: 50px;
-  border-radius: 8px; */
-  list-style-type: lower-roman;
-  font-weight: bold;
-  /* color: #f4dfe8;
-  margin-bottom: 10px; */
-}
+
 /* tr:hover {background-color: yellow;} */
 /* Grid */
 
@@ -139,7 +124,7 @@ blockquote p {
   text-decoration: none !important;
 } */
 
-.container {
+/* .container {
   width: 100%;
   margin-left: auto;
   margin-right: auto;
@@ -152,8 +137,8 @@ blockquote p {
   float: left;
   margin: 0.5rem 2%;
   min-height: 0.125rem;
-}
-.col-1,
+} */
+/* .col-1,
 .col-2,
 .col-3,
 .col-4,
@@ -166,8 +151,8 @@ blockquote p {
 .col-11,
 .col-12 {
   width: 96%;
-}
-.col-1-sm {
+} */
+/* .col-1-sm {
   width: 4.33%;
 }
 .col-2-sm {
@@ -210,17 +195,16 @@ blockquote p {
 }
 .hidden-sm {
   display: none;
-}
+} */
 
-@media only screen and (min-width: 33.75em) {
-  /* 540px */
+/* @media only screen and (min-width: 33.75em) {
   .container {
     width: 100%;
   }
-}
+} */
 
-@media only screen and (min-width: 45em) {
-  /* 720px */
+/* @media only screen and (min-width: 45em) {
+  
   .col-1 {
     width: 4.33%;
   }
@@ -260,15 +244,14 @@ blockquote p {
   .hidden-sm {
     display: block;
   }
-}
+} */
 
-@media only screen and (min-width: 60em) {
-  /* 960px */
+/* @media only screen and (min-width: 60em) {
   .container {
     width: 100%;
     max-width: 60rem;
   }
-}
+} */
 
 /* Forms */
 
@@ -280,7 +263,7 @@ label {
   text-transform: uppercase;
 }
 
-input {
+/* input {
   width: 100%;
   border-radius: 5px;
   border: var(--custom-border);
@@ -292,11 +275,11 @@ input {
 
 input[disabled] {
   color: var(--custom-color-secondary);
-}
+} */
 
 /* Utils */
 
-.block {
+/* .block {
   display: block;
   width: 100%;
 }
@@ -318,8 +301,8 @@ input[disabled] {
 }
 .flex-end {
   justify-content: flex-end;
-}
-.flex-center {
+} */
+/* .flex-center {
   justify-content: center;
 }
 .items-center {
@@ -337,7 +320,7 @@ input[disabled] {
 }
 .opacity-half {
   opacity: 50%;
-}
+} */
 
 /* Button */
 
@@ -368,8 +351,8 @@ button {
   /* box-shadow:  rgba(0, 0, 255, .2); */
 }
 
-/* 
-button.primary,
+
+/* button.primary,
 .button.primary {
   background-color: var(--custom-color-brand); 
   border: 1px solid var(--custom-color-brand);
@@ -377,14 +360,14 @@ button.primary,
 
 /* Widgets */
 
-.card {
-  /* width: 100%; */
+/* .card {
+  width: 100%;
   display: block;
   border: var(--custom-border);
   border-radius: var(--custom-border-radius);
   padding: var(--custom-spacing);
-}
-.css-gfh94v {
+} */
+/* .css-gfh94v {
   background: rgb(255, 255, 255) !important;
 }
 .avatar {
@@ -399,9 +382,9 @@ button.primary,
   background-color: #333;
   border: 1px solid rgb(200, 200, 200);
   border-radius: 5px;
-}
+} */
 
-.footer {
+/* .footer {
   position: absolute;
   max-width: 100%;
   bottom: 0;
@@ -417,8 +400,8 @@ button.primary,
   display: flex;
   align-items: center;
   width: 100%;
-}
-.footer div > img {
+} */
+/* .footer div > img {
   height: 20px;
   margin-left: 10px;
 }
@@ -427,34 +410,34 @@ button.primary,
 }
 .footer > div:nth-child(2) {
   justify-content: left;
-}
+} */
 
 @media only screen and (min-width: 60em) {
   /* 960px */
-  .footer > div:first-child {
+  /* .footer > div:first-child {
     display: flex;
   }
   .footer > div:nth-child(2) {
     justify-content: center;
-  }
+  } */
 }
 
-@keyframes spin {
+/* @keyframes spin {
   from {
     transform: rotate(0deg);
   }
   to {
     transform: rotate(360deg);
   }
-}
+} */
 
-.mainHeader {
+/* .mainHeader {
   width: 100%;
   font-size: 1.3rem;
   margin-bottom: 20px;
-}
+} */
 
-.avatarPlaceholder {
+/* .avatarPlaceholder {
   border: var(--custom-border);
   border-radius: var(--custom-border-radius);
   width: 35px;
@@ -463,11 +446,11 @@ button.primary,
   display: flex;
   align-items: center;
   justify-content: center;
-}
+} */
 
 /* Auth */
 
-.auth-widget {
+/* .auth-widget {
   display: flex;
   flex-direction: column;
   gap: 20px;
@@ -491,11 +474,11 @@ button.primary,
   width: 17px;
   animation: spin 1s linear infinite;
   filter: invert(1);
-}
+} */
 
 /* Account */
 
-.account {
+/* .account {
   display: flex;
   flex-direction: column;
   gap: 20px;
@@ -509,11 +492,11 @@ button.primary,
 
 .account > * > .avatarField > .avatarContainer {
   margin-right: 20px;
-}
+} */
 
 /* Profile Card */
 
-.profileCard {
+/* .profileCard {
   border-radius: 5px;
   display: flex;
   border: var(--custom-border);
@@ -549,4 +532,31 @@ button.primary,
   color: var(--custom-color-brand);
   margin-bottom: 10px;
   text-decoration: none;
+} */
+width
+::-webkit-scrollbar {
+  width: 5px;
+}
+
+/* Track */
+::-webkit-scrollbar-track {
+  box-shadow: inset 0 0 5px rgb(230, 226, 226); 
+  border-radius: 10px;
+}
+ 
+/* Handle */
+::-webkit-scrollbar-thumb {
+  background: rgb(181, 178, 178); 
+  border-radius: 10px;
+}
+
+
+.showScrollOnHover::-webkit-scrollbar {
+  width: 0px;
+  /* background: transparent; */
+}
+
+.showScrollOnHover:hover::-webkit-scrollbar {
+  width: 5px;
+  /* background: red; */
 }
