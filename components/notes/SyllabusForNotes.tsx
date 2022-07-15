@@ -55,25 +55,23 @@ const Syllabus: React.FC<Props> = ({ book, changeParentProps }) => {
   }, [profile, toggle]);
 
   return (
-    <Box>
+    <Box pb="6">
       {book?.book_name && (
-        <Flex align="end">
-          <Text bg="brand.100" as="b">
-            <Text>{book?.book_name}</Text>
-          </Text>
+        <Flex bg="brand.100" p="2">
+          <Text as="b">{book?.book_name}</Text>
         </Flex>
       )}
 
-      <Box >
+      <Box>
         {isLoading && <Text>Loading...</Text>}
         {Object.entries(grouped)
           .sort((a, b) => Number(a[0].split(",")[0]) - Number(b[0].split(",")[0]))
           .map(([key, value]) => {
             return (
-              <Box key={key}>
+              <Box key={key} >
                 <Flex align="baseline" justifyContent="left" role="group" my="2">
                   <IconButton
-                    color={toggle === value[0].heading_id ? "brand.500" : "brand.500"}
+                    color={"brand.500"}
                     variant="icong"
                     aria-label="Call Sage"
                     onClick={() => {
@@ -92,18 +90,16 @@ const Syllabus: React.FC<Props> = ({ book, changeParentProps }) => {
                   .map((x) => (
                     <Flex
                       alignItems="center"
-                      my="2"
-                      ml="4"
+                      my="4"
+                      ml="6"
                       key={x.subheading_id}
-                      role={"group"}
+                      // role={"group"}
                       display={toggle === x.heading_id ? "flex" : "none"}
                     >
-                      {/* <Button variant="unstyled"> */}
                       <Text
-                        color={selectedSubheading === x.subheading_id ? "white" : "null"}
+                        color={selectedSubheading === x.subheading_id ? "white" : "gray.600"}
                         bg={selectedSubheading === x.subheading_id ? "brand.500" : "null"}
                         onClick={() => handleSyllabusClick(x)}
-                        // align="start"
                         casing="capitalize"
                         as="label"
                         fontSize="14px"
@@ -111,9 +107,7 @@ const Syllabus: React.FC<Props> = ({ book, changeParentProps }) => {
                         <Link>{x.subheading}</Link>
                       </Text>
                       {/* </Button> */}
-                      {profile && profile.id ? (
-                        <ArticleCounter subheadingId={x.subheading_id} creatorId={profile.id} />
-                      ) : null}
+                      {profile && profile.id && <ArticleCounter subheadingId={x.subheading_id} creatorId={profile.id} />}
                     </Flex>
                   ))}
               </Box>

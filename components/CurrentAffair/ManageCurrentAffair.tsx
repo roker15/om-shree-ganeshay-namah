@@ -42,7 +42,7 @@ export default function ManageCurrentAffair() {
         <Flex display={{ base: "block", sm: "block", md: "none" }}>
           <TagsDrawer></TagsDrawer>
         </Flex>
-        <Wrap spacing="5px">
+        <Wrap spacing="5px" mt="4">
           {tagsArray
             ? tagsArray.map((x1) => {
                 for (let index = 0; index < currentAffairTags.length; index++) {
@@ -129,15 +129,15 @@ export default function ManageCurrentAffair() {
 
                           <Tabs size="md" colorScheme="whatsapp" width="full">
                             <TabList>
-                              <Tab>Hindi</Tab>
                               <Tab>English</Tab>
+                              <Tab>Hindi</Tab>
                             </TabList>
                             <TabPanels>
                               <TabPanel pl="2" pr="0.5" width="full">
-                                <SuneditorForNotesMaking article={article} language={"HINDI"} isEditable={true} />
+                                <SuneditorForNotesMaking article={article} language={"ENGLISH"} isEditable={true} />
                               </TabPanel>
                               <TabPanel width="full">
-                                <SuneditorForNotesMaking article={article} language={"ENGLISH"} isEditable={true} />
+                                <SuneditorForNotesMaking article={article} language={"HINDI"} isEditable={true} />
                               </TabPanel>
                             </TabPanels>
                           </Tabs>
@@ -148,6 +148,7 @@ export default function ManageCurrentAffair() {
                 ) : null}
               </GridItem>
             )}
+            
           </>
         </Grid>
       </>

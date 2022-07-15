@@ -198,7 +198,7 @@ const ManageNotes: React.FunctionComponent = () => {
     return (
       <Box px={{ base: "0.5", sm: "0.5", md: "0.5", lg: "16" }} pb="8">
         <BookFilter setParentProps={updateBookProps}></BookFilter>
-        <ManageCurrentAffair></ManageCurrentAffair>)
+        <ManageCurrentAffair></ManageCurrentAffair>
       </Box>
     );
   }
@@ -246,7 +246,7 @@ const ManageNotes: React.FunctionComponent = () => {
             // scrollBehavior={"auto"}
             colSpan={{ base: 0, sm: 0, md: 2 }}
             bg="brand.50"
-            p="2"
+            // p="2"
             display={{ base: "none", sm: "none", md: "block" }}
           >
             <Flex>
