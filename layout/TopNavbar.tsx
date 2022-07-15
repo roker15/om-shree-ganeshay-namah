@@ -33,7 +33,7 @@ export default function TopNavbar({ children }: { children: ReactNode }) {
   const { isOpen, onOpen, onClose } = useDisclosure();
 
   return (
-    <Box minH="100vh" bg="white">
+    <Box minH="100vh" bg="white" w="100%">
       <MobileNav onOpen={onOpen} />
       {children}
     </Box>

@@ -1,3 +1,4 @@
+import { Box } from "@chakra-ui/react";
 import React from "react";
 import TopNavbar from "./TopNavbar";
 
@@ -9,12 +10,11 @@ const Layout: React.FunctionComponent<LayoutProps> = ({ children }) => {
   return (
     <>
       {/* <Simple> */}
-      <TopNavbar >
-        {children}
-      </TopNavbar >
+      <Box w={{base:"70vh",sm:"100%"}}>
+        <TopNavbar>{children}</TopNavbar>
+      </Box>
       {/* </Simple> */}
       {/* </Simple> */}
-     
     </>
   );
 };
