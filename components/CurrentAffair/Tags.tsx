@@ -97,7 +97,7 @@ export function TagsDrawer() {
       <Sticky>
         <IconButton
           aria-label="syllabus"
-          variant="outline"
+          variant="unstyled"
           size="xs"
           icon={<MdMenuBook />}
           ref={btnRef}
@@ -127,4 +127,10 @@ export function TagsDrawer() {
       </Drawer>
     </>
   );
+
+
+
+
+
+  
 }
