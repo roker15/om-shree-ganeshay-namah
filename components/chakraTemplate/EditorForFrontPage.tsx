@@ -81,7 +81,7 @@ function Editor(props: editorProps): JSX.Element {
       setOptions={{
         placeholder: "Try you content here, It's for demo purpose, data will not be saved",
         mode: "classic",
-        hideToolbar: true,
+        hideToolbar: false,
         katex: katex,
         colorList: colors,
         textStyles: textStyles,
