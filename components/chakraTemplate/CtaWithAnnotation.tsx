@@ -9,6 +9,17 @@ export default function CallToActionWithAnnotation() {
       </Head>
 
       <Container maxW={"5xl"}>
+        <Text
+          fontSize={{ base: "xl", md: "3xl" }}
+          fontFamily={"Caveat"}
+          position={"absolute"}
+          color="brand.500"
+          //   right={"-125px"}
+          //   top={"-15px"}
+            // transform={"rotate(10deg)"}
+        >
+          Most of the Toppers Manage 70% of their content Digitally
+        </Text>
         <Stack as={Box} textAlign={"center"} spacing={{ base: 8, md: 14 }} py={{ base: 20, md: 36 }}>
           <Heading fontWeight={700} fontSize={{ base: "2xl", sm: "4xl", md: "6xl" }} lineHeight={"110%"}>
             Prepare all your UPSC Notes Digitally at one place <br />
@@ -17,8 +28,8 @@ export default function CallToActionWithAnnotation() {
             </Text>
           </Heading>
           <Text color={"gray.500"}>
-            You study most of your content digitally. Then why not Complement your digital Study with Digital
-            notes making platform?
+            You study most of your content digitally. Then why not Complement your digital Study with Digital notes making
+            platform?
           </Text>
           <Stack direction={"column"} spacing={3} align={"center"} alignSelf={"center"} position={"relative"}>
             <Button

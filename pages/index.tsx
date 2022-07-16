@@ -71,19 +71,13 @@ const Home: React.FunctionComponent = () => {
       <EditorFeatures/>
       <CtaWithVideo />
       <QuestionDemo />
-      <SplitScreenWithImage />
+      {/* <SplitScreenWithImage /> */}
       <TwoColumn />
       {/* <CreateBookSyllabus /> */}
       <Flex flexDirection="column" alignItems={"center"} flexWrap="nowrap">
-        <BookFilter setParentProps={updateBookProps}></BookFilter>
+        {/* <BookFilter setParentProps={updateBookProps}></BookFilter> */}
         <br />
 
-        <Box bg="#4078c0" display={{ base: "none", sm: "undefined" }}>
-          <LandingPageTable />
-        </Box>
-        <Box display={{ base: "none", sm: "undefined" }}>
-          <ImageSlider />
-        </Box>
         <Box>{/* <ChakraThemeTest/> */}</Box>
       </Flex>
     </Container>

@@ -1,24 +1,34 @@
 import {
-    Container,
-    Stack,
-    Flex,
-    Box,
-    Heading,
-    Text,
-    Button,
-    Image,
-    Icon,
-    IconButton,
-    createIcon,
-    IconProps,
-    useColorModeValue,
-  } from '@chakra-ui/react';
+  Button, Container, createIcon, Flex, Heading, Icon, IconProps, Stack, Text
+} from '@chakra-ui/react';
+import router from 'next/router';
+import { useEffect, useState } from 'react';
 import { BookResponse } from '../../types/myTypes';
 import BookFilter from '../syllabus/BookFilter';
   
-  export default function CallToActionWithVideo() {
+export default function CallToActionWithVideo() {
+  const [book, setBook] = useState<BookResponse | undefined>(undefined);
+  const ROUTE_POST_ID = "/notes/[bookid]";
+  const navigateTo = (bookid: string) => {
+    router.push({
+      pathname: ROUTE_POST_ID,
+      query: { bookid },
+    });
+  };
+
+  useEffect(() => {
+    if (book) {
+      sessionStorage.setItem("book", JSON.stringify(book));
+      sessionStorage.setItem("selected-subheading", "undefined");
+      navigateTo(book.id.toString());
+    }
+  }, [book]);
+
+  const updateBookProps = (x: BookResponse | undefined) => {
+    setBook(x);
+  };
     return (
-      <Container maxW={'7xl'}>
+      <Container maxW={'6xl'}>
         <Stack
           align={'center'}
           spacing={{ base: 8, md: 10 }}
@@ -90,9 +100,7 @@ import BookFilter from '../syllabus/BookFilter';
               zIndex={-1}
               color={useColorModeValue('red.50', 'red.400')}
             /> */}
-            <BookFilter setParentProps={function (x: BookResponse | undefined): void {
-              throw new Error('Function not implemented.');
-            }} />
+            <BookFilter setParentProps={updateBookProps} />
             
             {/* <Box
               position={'relative'}
