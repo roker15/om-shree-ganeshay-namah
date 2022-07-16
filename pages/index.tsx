@@ -6,6 +6,7 @@ import React, { useEffect, useState } from "react";
 import CtaWithAnnotation from "../components/chakraTemplate/CtaWithAnnotation";
 import CtaWithVideo from "../components/chakraTemplate/CtaWithVideo";
 import EditorFeatures from "../components/chakraTemplate/EditorFeatures";
+import QuestionDemo from "../components/chakraTemplate/QuestionDemo";
 import SplitScreenWithImage from "../components/chakraTemplate/SplitScreenWithImage";
 import TwoColumn from "../components/chakraTemplate/TwoColumn";
 import { ChakraThemeTest } from "../components/ChakraThemeTest";
@@ -69,6 +70,7 @@ const Home: React.FunctionComponent = () => {
       <CtaWithAnnotation />
       <EditorFeatures/>
       <CtaWithVideo />
+      <QuestionDemo />
       <SplitScreenWithImage />
       <TwoColumn />
       {/* <CreateBookSyllabus /> */}
