@@ -67,10 +67,10 @@ const Home: React.FunctionComponent = () => {
     <Container minW="full"  px={{ base: "2", sm: "4", md: "2", lg: "8" }}>
       <GotoQuestion />
       <CtaWithAnnotation />
+      <EditorFeatures/>
       <CtaWithVideo />
       <SplitScreenWithImage />
       <TwoColumn />
-      <EditorFeatures/>
       {/* <CreateBookSyllabus /> */}
       <Flex flexDirection="column" alignItems={"center"} flexWrap="nowrap">
         <BookFilter setParentProps={updateBookProps}></BookFilter>

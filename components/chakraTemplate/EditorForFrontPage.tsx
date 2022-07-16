@@ -77,19 +77,19 @@ function Editor(props: editorProps): JSX.Element {
     <SunEditor
       getSunEditorInstance={props.getSunEditorInstance}
       setDefaultStyle="font-family: arial; font-size: 16px;"
-      defaultValue="Type of Content Here"
+      defaultValue={getEditorContent()}
       setOptions={{
-        placeholder: `Try you content here, It's for demo purpose, data will not be saved`,
+        placeholder: "Try you content here, It's for demo purpose, data will not be saved",
         mode: "classic",
         hideToolbar: true,
         katex: katex,
         colorList: colors,
         textStyles: textStyles,
         // height: "100%",
-        // width: "auto",
-        minWidth: "350px",
-        maxWidth: "650px",
-        minHeight: "300px",
+        width: "100vw",
+        minWidth: "auto",
+        // maxWidth: "750px",
+        minHeight: "400px",
         buttonList: sunEditorButtonList,
         resizingBar: false,
         // formats: ["p", "div", "h1", "h2", "h3"],
@@ -99,4 +99,18 @@ function Editor(props: editorProps): JSX.Element {
       }}
     />
   );
+}
+function getEditorContent(): string | undefined {
+  return `Write you content here, This for demo purpose, Your content will not be saved. In Actual Notes making, Content will be saved in cloud and Can be accessed from any device, anytime
+          <h2>Features :- </h2>
+          <ul>
+          <li>All basic colour and text formatting Support</li>
+          <li>Image Support</li>
+          <li>List Support</li>
+          <li>Maths/Equation Support</li>
+          <li>Table Support</li>
+          <li>Link/Hyperlink Support</li>
+          <li>PDF export and Print</li>
+        </ul>
+      `;
 }
