@@ -17,7 +17,7 @@ export default function CallToActionWithAnnotation() {
             </Text>
           </Heading>
           <Text color={"gray.500"}>
-            These days You study most of your content digitally. Then why not Complement your digital Study with Digital
+            You study most of your content digitally. Then why not Complement your digital Study with Digital
             notes making platform?
           </Text>
           <Stack direction={"column"} spacing={3} align={"center"} alignSelf={"center"} position={"relative"}>

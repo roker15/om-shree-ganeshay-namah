@@ -75,7 +75,7 @@ const BookFilter: React.FC<{ setParentProps: (x: BookResponse | undefined) => vo
   return (
     <Box minW="full">
       <RadioGroup onChange={setValue} value={value}>
-        <Stack direction={{ base: "column", md: "row" }}>
+        <Stack direction={{ base: "column", md: "column",lg: "row" }}>
           {categories.map((x) => {
             return (
               <Radio key={x.id} value={x.id} colorScheme="brand">
@@ -85,7 +85,7 @@ const BookFilter: React.FC<{ setParentProps: (x: BookResponse | undefined) => vo
           })}
         </Stack>
       </RadioGroup>
-      <Stack direction={{ base: "column", md: "row" }}>
+      <Stack direction={{ base: "column", md: "column",lg: "row" }}>
         <Select
           id="paper"
           placeholder={value === "7" ? "Select Exam" : "Select Class/Course"}

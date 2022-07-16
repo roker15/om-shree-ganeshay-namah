@@ -42,11 +42,11 @@ import BookFilter from '../syllabus/BookFilter';
                   bg: 'red.400',
                   zIndex: -1,
                 }}>
-                Prepare Current Affairs Notes Date wise &
+                All at One Place
               </Text>
               <br />
               <Text as={'span'} color={'orange.400'}>
-                Revise topic wise!
+                Select your Syllabus, And start making Notes
               </Text>
             </Heading>
             <Text color={'gray.500'}>

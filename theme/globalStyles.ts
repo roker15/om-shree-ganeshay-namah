@@ -1,6 +1,6 @@
 export const globalStyles = {
   body: {
-    bg: "red",
+    bg: "red.200",
     // color: "white",
   },
   i: {

@@ -70,8 +70,10 @@ const AnimatedText = () => {
           <SimpleImageSlider
             onClickBullets={onClickBullets}
             onStartSlide={onStartSlide}
-            width={896}
-            height={504}
+            // width={896}
+            // height={504}
+            width={700}
+            height={350}
             images={images}
             showBullets={true}
             showNavs={true}

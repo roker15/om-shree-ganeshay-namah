@@ -18,10 +18,10 @@ body {
   background-color: var(--custom-bg-color);
 } 
 
-/* * {
+ * {
   font-family: var(--custom-font-family);
   box-sizing: border-box;
-} */
+} 
 
  html,
 body,

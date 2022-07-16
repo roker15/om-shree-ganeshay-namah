@@ -5,6 +5,7 @@ import router from "next/router";
 import React, { useEffect, useState } from "react";
 import CtaWithAnnotation from "../components/chakraTemplate/CtaWithAnnotation";
 import CtaWithVideo from "../components/chakraTemplate/CtaWithVideo";
+import EditorFeatures from "../components/chakraTemplate/EditorFeatures";
 import SplitScreenWithImage from "../components/chakraTemplate/SplitScreenWithImage";
 import TwoColumn from "../components/chakraTemplate/TwoColumn";
 import { ChakraThemeTest } from "../components/ChakraThemeTest";
@@ -63,12 +64,13 @@ const Home: React.FunctionComponent = () => {
   };
 
   return (
-    <Box  px={{ base: "2", sm: "4", md: "2", lg: "28" }}>
+    <Container minW="full"  px={{ base: "2", sm: "4", md: "2", lg: "8" }}>
       <GotoQuestion />
       <CtaWithAnnotation />
       <CtaWithVideo />
       <SplitScreenWithImage />
       <TwoColumn />
+      <EditorFeatures/>
       {/* <CreateBookSyllabus /> */}
       <Flex flexDirection="column" alignItems={"center"} flexWrap="nowrap">
         <BookFilter setParentProps={updateBookProps}></BookFilter>
@@ -82,7 +84,7 @@ const Home: React.FunctionComponent = () => {
         </Box>
         <Box>{/* <ChakraThemeTest/> */}</Box>
       </Flex>
-    </Box>
+    </Container>
   );
 };
 
