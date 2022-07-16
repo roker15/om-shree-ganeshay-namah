@@ -10,7 +10,7 @@ const Layout: React.FunctionComponent<LayoutProps> = ({ children }) => {
   return (
     <>
       {/* <Simple> */}
-      <Box bg="blue.500" width="full">
+      <Box   bg="orange">
         <TopNavbar>{children}</TopNavbar>
       </Box>
       {/* </Simple> */}

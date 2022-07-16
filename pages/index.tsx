@@ -3,6 +3,10 @@ import { supabaseClient } from "@supabase/auth-helpers-nextjs";
 import Link from "next/link";
 import router from "next/router";
 import React, { useEffect, useState } from "react";
+import CtaWithAnnotation from "../components/chakraTemplate/CtaWithAnnotation";
+import CtaWithVideo from "../components/chakraTemplate/CtaWithVideo";
+import SplitScreenWithImage from "../components/chakraTemplate/SplitScreenWithImage";
+import TwoColumn from "../components/chakraTemplate/TwoColumn";
 import { ChakraThemeTest } from "../components/ChakraThemeTest";
 import ImageSlider from "../components/ImageSlider";
 import LandingPageTable from "../components/LandingPageTable";
@@ -39,10 +43,10 @@ const Home: React.FunctionComponent = () => {
   }, []);
 
   const ROUTE_POST_ID = "/notes/[bookid]";
-  const navigateTo = (bookid: string, item: string) => {
+  const navigateTo = (bookid: string) => {
     router.push({
       pathname: ROUTE_POST_ID,
-      query: { bookid, item },
+      query: { bookid },
     });
   };
 
@@ -50,7 +54,7 @@ const Home: React.FunctionComponent = () => {
     if (book) {
       sessionStorage.setItem("book", JSON.stringify(book));
       sessionStorage.setItem("selected-subheading", "undefined");
-      navigateTo(book.id.toString(), "hello");
+      navigateTo(book.id.toString());
     }
   }, [book]);
 
@@ -59,24 +63,26 @@ const Home: React.FunctionComponent = () => {
   };
 
   return (
-    <Container maxW="container.xl" px={{ base: "2", sm: "4", md: "2", lg: "8" }}>
+    <Box  px={{ base: "2", sm: "4", md: "2", lg: "28" }}>
       <GotoQuestion />
-
+      <CtaWithAnnotation />
+      <CtaWithVideo />
+      <SplitScreenWithImage />
+      <TwoColumn />
       {/* <CreateBookSyllabus /> */}
       <Flex flexDirection="column" alignItems={"center"} flexWrap="nowrap">
         <BookFilter setParentProps={updateBookProps}></BookFilter>
         <br />
+
         <Box bg="#4078c0" display={{ base: "none", sm: "undefined" }}>
           <LandingPageTable />
         </Box>
         <Box display={{ base: "none", sm: "undefined" }}>
           <ImageSlider />
         </Box>
-        <Box>
-          <ChakraThemeTest/>
-        </Box>
+        <Box>{/* <ChakraThemeTest/> */}</Box>
       </Flex>
-    </Container>
+    </Box>
   );
 };
 

@@ -8,14 +8,14 @@ import Syllabus from "./Syllabus";
 
 const BookFilter: React.FC<{ setParentProps: (x: BookResponse | undefined) => void }> = ({ setParentProps }) => {
   const categories = [
+    { id: "7", name: "Competitive exams" },
     { id: "1", name: "NCERT" },
     { id: "6", name: "ICSE" },
+    { id: "5", name: "Medical" },
     // { id: "2", name: "IGNOU" },
     { id: "4", name: "Engineering" },
-    { id: "5", name: "Medical" },
-    { id: "7", name: "Competitive exams" },
   ];
-  const [value, setValue] = React.useState("1");
+  const [value, setValue] = React.useState("7");
   const { data } = useGetBooks(Number(value));
   const { data: d } = useGetSyllabusByBookId(2);
   const [classList, setClassList] = React.useState<BookResponse[] | null>([]);

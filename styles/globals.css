@@ -1,4 +1,4 @@
-/* html,
+html,
 body {
   --custom-font-family: -apple-system, BlinkMacSystemFont, Segoe UI, Roboto, Oxygen, Ubuntu, Cantarell, Fira Sans, Droid Sans,
     Helvetica Neue, sans-serif;
@@ -16,14 +16,14 @@ body {
   margin: 0;
   font-family: var(--custom-font-family);
   background-color: var(--custom-bg-color);
-} */
+} 
 
 /* * {
   font-family: var(--custom-font-family);
   box-sizing: border-box;
 } */
 
-/* html,
+ html,
 body,
 #__next {
   height: fit-content;
@@ -31,10 +31,10 @@ body,
   overflow-x: hidden;
   overflow-y: visible;
 }
-h1 {
+/* h1 {
   font-size: xx-large !important;
   font-weight: 700 !important;
-} */
+}  */
 
 /* .sun-editor-editable table.se-table-size-auto {
   min-width: 900px !important;

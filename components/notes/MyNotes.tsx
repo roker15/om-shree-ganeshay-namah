@@ -142,7 +142,7 @@ const MyNotes: React.FC<Props> = ({ subjectId, subheadingid, notesCreator, chang
         ?.sort((a, b) => a.sequence! - b.sequence!)
         .map((x) => {
           return (
-            <Box key={x.id} mt="16">
+            <Box key={x.id} mt="16" >
               {isCopyable && (
                 <IconButton
                   size="xs"
@@ -155,13 +155,13 @@ const MyNotes: React.FC<Props> = ({ subjectId, subheadingid, notesCreator, chang
                   icon={<MdOutlineContentCopy />}
                 />
               )}
-              <Flex role={"group"} align="center">
+              <Flex role={"group"} align="center" >
                 {/* <Badge> */}
-                <VStack>
+                <VStack >
                   <Text alignSelf={"baseline"} bg="brand.100" p="2" fontSize="16px" casing="capitalize" align="left">
                     <Text as="b">Article Name :- </Text> {x.article_title}
                   </Text>
-                  <Wrap spacing="5px">
+                  <Wrap spacing="5px" >
                     {x.current_affair_tags
                       ? (x.current_affair_tags as number[]).map((x1) => {
                           for (let index = 0; index < currentAffairTags.length; index++) {
@@ -418,14 +418,14 @@ const ArticleForm: React.FC<ArticleFormProps> = ({
     mutate([`/get-user-articles/${subheadingid}/${profile?.id}`]);
   };
   return (
-    <Flex justifyContent="center" alignItems={"center"}>
+    <Flex justifyContent="center" alignItems={"center"} >
       <form onSubmit={handleSubmit(onSubmit)}>
         <VStack alignItems={"center"} p="2">
           <FormControl p="2" isInvalid={errors.articleTitle as any} maxW="500px">
             <Textarea
               size="sm"
-              minW={"350px"}
-              focusBorderColor="lime"
+              minW={{base:"300px",md:"500px"}}
+              focusBorderColor="brand.500"
               placeholder="Article Title"
               {...register("articleTitle", { required: "This is required" })}
             />
@@ -434,7 +434,7 @@ const ArticleForm: React.FC<ArticleFormProps> = ({
           <FormControl p="2" isInvalid={errors.articleTitle as any} maxW="500px">
             <Input
               size="sm"
-              focusBorderColor="lime"
+              focusBorderColor="brand.500"
               type="number"
               placeholder="Article Sequence (10,20,30.. etc)"
               {...register("sequence", { required: "This is required" })}
@@ -443,7 +443,7 @@ const ArticleForm: React.FC<ArticleFormProps> = ({
           </FormControl>
           <Checkbox
             size="sm"
-            colorScheme="red"
+            colorScheme="brand"
             {...register("isQuestion")}
             defaultChecked={question_type === "MODEL" || question_type === "PREV"}
           >
@@ -457,11 +457,11 @@ const ArticleForm: React.FC<ArticleFormProps> = ({
                     {...register("questionType", { required: "This is required" })}
                     value="MODEL"
                     pr="14"
-                    colorScheme={"green"}
+                    colorScheme={"brand"}
                   >
                     <Text casing="capitalize">Model Question</Text>
                   </Radio>
-                  <Radio {...register("questionType", { required: "This is required" })} value="PREV" colorScheme={"green"}>
+                  <Radio {...register("questionType", { required: "This is required" })} value="PREV" colorScheme={"brand"}>
                     <Text casing="capitalize">Previous year Question</Text>
                   </Radio>
                 </RadioGroup>
@@ -471,7 +471,7 @@ const ArticleForm: React.FC<ArticleFormProps> = ({
                 <FormControl p="2" isInvalid={errors.question_year as any} maxW="500px">
                   <Input
                     size="sm"
-                    focusBorderColor="lime"
+                    focusBorderColor="brand"
                     type="number"
                     placeholder="Question year (1995-2022)"
                     {...register("question_year", { required: true, min: 1995, max: 2022 })}
@@ -495,7 +495,7 @@ const ArticleForm: React.FC<ArticleFormProps> = ({
                 <>
                   <Checkbox
                     px="2"
-                    colorScheme={"blue"}
+                    colorScheme={"brand"}
                     defaultChecked={tags?.includes(value.id) ? true : false}
                     size="sm"
                     type="checkbox"
@@ -523,7 +523,7 @@ const ArticleForm: React.FC<ArticleFormProps> = ({
           isLoading={isLoading}
           borderRadius={"full"}
           variant="outline"
-          colorScheme="whatsapp"
+          colorScheme="brand"
           aria-label="Call Sage"
           fontSize="25px"
           w="35px"

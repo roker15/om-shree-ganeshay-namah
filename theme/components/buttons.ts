@@ -75,8 +75,8 @@ export const buttons = {
   
   // 6. We can overwrite defaultProps
   defaultProps: {
-    size: "xs", // default is md
-    colorScheme: "red", // default is gray
-    variant: "outline",
+    // size: "xs", // default is md
+    // colorScheme: "red", // default is gray
+    // variant: "outline",
   },
 };
