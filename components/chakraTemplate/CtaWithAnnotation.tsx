@@ -3,7 +3,7 @@ import { Box, Heading, Container, Text, Button, Stack, Icon, useColorModeValue, 
 import router from "next/router";
 
 export default function CallToActionWithAnnotation() {
-  const ROUTE_POST_ID = "/SyllabusSwitch";
+  const ROUTE_POST_ID = "/syllabusSwitch";
   const navigateTo = () => {
     router.push({
       pathname: ROUTE_POST_ID,
