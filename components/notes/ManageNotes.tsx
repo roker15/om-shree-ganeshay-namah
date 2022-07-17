@@ -26,6 +26,7 @@ import Notes from "./Notes";
 import { NotesSharing } from "./NotesSharing";
 import SharedNotesPanel from "./SharedNotesPanel";
 import SyllabusForNotes from "./SyllabusForNotes";
+import { BASE_URL } from "../../lib/constants";
 
 type SelectedNotesType = {
   subheadingId: number | undefined;
@@ -277,7 +278,7 @@ const ManageNotes: React.FunctionComponent = () => {
               </Box>
             ) : (
               <Center mt="68" bg="gray.50" p="2">
-                <LoginCard />
+                <LoginCard redirect={BASE_URL} />
               </Center>
             )}
           </GridItem>

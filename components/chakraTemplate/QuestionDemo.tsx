@@ -1,7 +1,14 @@
-import { Flex, Container,Image, Heading, Stack, Text, Button, Icon, IconProps, Box } from "@chakra-ui/react";
+import { Flex, Container, Image, Heading, Stack, Text, Button, Icon, IconProps, Box } from "@chakra-ui/react";
+import router from "next/router";
 import EditorForFrontPage from "./EditorForFrontPage";
 
 export default function CallToActionWithIllustration() {
+  const route = "/questionBanks";
+  const navigateTo = () => {
+    router.push({
+      pathname: route,
+    });
+  };
   return (
     <Container maxW={"5xl"}>
       <Stack textAlign={"center"} align={"center"} spacing={{ base: 8, md: 10 }} py={{ base: 20, md: 28 }}>
@@ -12,10 +19,18 @@ export default function CallToActionWithIllustration() {
           </Text>
         </Heading>
         <Text color={"gray.500"} maxW={"3xl"}>
-          Create Rich colourful Content and Save to our cloud, you can access your notes even after 10 years.
+          Practice you answer writing with previous year questions. You can edit and update your answer anytime. Keep
+          learning and Keep updating your answer till it gets perfect.
         </Text>
         <Stack spacing={6} direction={"row"}>
-          <Button rounded={"full"} px={6} colorScheme={"orange"} bg={"blue.400"} _hover={{ bg: "orange.500" }}>
+          <Button
+            rounded={"full"}
+            px={6}
+            colorScheme={"orange"}
+            bg={"blue.400"}
+            _hover={{ bg: "orange.500" }}
+            onClick={() => navigateTo()}
+          >
             Get started
           </Button>
           <Button rounded={"full"} px={6}>

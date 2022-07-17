@@ -13,8 +13,15 @@ import {
     IconProps,
     useColorModeValue,
   } from '@chakra-ui/react';
+import router from 'next/router';
   
-  export default function CallToActionWithVideo() {
+export default function CallToActionWithVideo() {
+  const ROUTE_POST_ID = "/reviseCurrentAffair";
+  const navigateTo = () => {
+    router.push({
+      pathname: ROUTE_POST_ID,
+    });
+  };
     return (
       <Container maxW={'6xl'}>
         <Stack
@@ -61,15 +68,16 @@ import {
                 colorScheme={'red'}
                 bg={'red.400'}
                 _hover={{ bg: 'red.500' }}>
-                Get started
+                Create Current Affair Notes
               </Button>
               <Button
                 rounded={'full'}
                 size={'lg'}
                 fontWeight={'normal'}
                 px={6}
+                onClick={()=>navigateTo()}
                 leftIcon={<PlayIcon h={4} w={4} color={'gray.300'} />}>
-                How It Works
+                Go to Rivision
               </Button>
             </Stack>
           </Stack>

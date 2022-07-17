@@ -158,7 +158,7 @@ const MyNotes: React.FC<Props> = ({ subjectId, subheadingid, notesCreator, chang
               <Flex role={"group"} align="center" >
                 {/* <Badge> */}
                 <VStack >
-                  <Text alignSelf={"baseline"} bg="brand.100" p="2" fontSize="16px" casing="capitalize" align="left">
+                  <Text alignSelf={"baseline"} bg="gray.50" p="2" fontSize="16px" casing="capitalize" align="left">
                     <Text as="b">Article Name :- </Text> {x.article_title}
                   </Text>
                   <Wrap spacing="5px" >

@@ -121,16 +121,16 @@ export const NotesSharing: React.FC<sharedProps> = ({ subheadingId }) => {
 
   return (
     <>
-      <ButtonGroup mb="" justifyContent="end" size="sm" isAttached variant="outline">
+      {/* <ButtonGroup mb="" justifyContent="end" size="sm" isAttached variant="outline"> */}
         <IconButton
           colorScheme="whatsapp"
           variant="ghost"
           size={"xs"}
           icon={<MdShare />}
           onClick={onOpen}
-          aria-label={""}
+          aria-label={"d"}
         ></IconButton>
-      </ButtonGroup>
+      {/* </ButtonGroup> */}
 
       <Modal size="xl" initialFocusRef={initialRef} finalFocusRef={finalRef} isOpen={isOpen} onClose={onClose}>
         <ModalOverlay />

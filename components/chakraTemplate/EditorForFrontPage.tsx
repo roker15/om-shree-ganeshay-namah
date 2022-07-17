@@ -101,7 +101,7 @@ function Editor(props: editorProps): JSX.Element {
   );
 }
 function getEditorContent(): string | undefined {
-  return `Write you content here, This for demo purpose, Your content will not be saved. In Actual Notes making, Content will be saved in cloud and Can be accessed from any device, anytime
+  return `Write you content here. This is Only for demo purpose, Your content will not be saved. In Actual Notes making, Content will be saved in cloud and Can be accessed from any device, anytime.
           <h2>Features :- </h2>
           <ul>
           <li>All basic colour and text formatting Support</li>

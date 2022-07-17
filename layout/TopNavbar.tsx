@@ -36,7 +36,7 @@ export default function TopNavbar({ children }: { children: ReactNode }) {
   return (
     //overflowx = hidden is because body was visible in mobile view. test is again and then
     // finalize
-    <Box minH="100vh" minW="full" bg="brand.50" >
+    <Box minH="100vh" minW="full" bg="#ffffff" >
       <MobileNav onOpen={onOpen} />
       {children}
     </Box>
@@ -56,12 +56,12 @@ const MobileNav = ({ onOpen, ...rest }: MobileProps) => {
       height="16"
       alignItems="center"
       // bg={useColorModeValue("#f8f6fa", "#e5e0f1")}
-      bg="#faf8f8"
+      // bg="#faf8f8"
       borderBottomWidth="0px"
       zIndex={500}
       pos="sticky"
       mt={"0"}
-      boxShadow="md"
+      // boxShadow="md"
       borderBottomColor={useColorModeValue("gray.200", "gray.700")}
       justifyContent={{ base: "space-between", md: "flex" }}
       {...rest}

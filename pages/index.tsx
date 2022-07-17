@@ -3,21 +3,16 @@ import { supabaseClient } from "@supabase/auth-helpers-nextjs";
 import Link from "next/link";
 import router from "next/router";
 import React, { useEffect, useState } from "react";
+import TwoColumn from "../components/chakraTemplate/All";
 import CtaWithAnnotation from "../components/chakraTemplate/CtaWithAnnotation";
-import CtaWithVideo from "../components/chakraTemplate/CtaWithVideo";
+import CtaWithVideo from "../components/chakraTemplate/CurrentAffair";
 import EditorFeatures from "../components/chakraTemplate/EditorFeatures";
 import QuestionDemo from "../components/chakraTemplate/QuestionDemo";
-import SplitScreenWithImage from "../components/chakraTemplate/SplitScreenWithImage";
-import TwoColumn from "../components/chakraTemplate/TwoColumn";
-import { ChakraThemeTest } from "../components/ChakraThemeTest";
-import ImageSlider from "../components/ImageSlider";
-import LandingPageTable from "../components/LandingPageTable";
-import BookFilter from "../components/syllabus/BookFilter";
-import CreateBookSyllabus from "../components/syllabus/CreateBookSyllabus";
 import LayoutWithTopNavbar from "../layout/LayoutWithTopNavbar";
-import { BookResponse, Papers } from "../types/myTypes";
+import { BookResponse } from "../types/myTypes";
 import PageWithLayoutType from "../types/pageWithLayout";
 import { definitions } from "../types/supabase";
+
 
 const Home: React.FunctionComponent = () => {
   const [book, setBook] = useState<BookResponse | undefined>(undefined);
@@ -66,11 +61,13 @@ const Home: React.FunctionComponent = () => {
 
   return (
     <Container minW="full"  px={{ base: "2", sm: "4", md: "2", lg: "8" }}>
+      {/* <FrequentHelp/> */}
       <GotoQuestion />
       <CtaWithAnnotation />
       <EditorFeatures/>
       <CtaWithVideo />
       <QuestionDemo />
+
       {/* <SplitScreenWithImage /> */}
       <TwoColumn />
       {/* <CreateBookSyllabus /> */}

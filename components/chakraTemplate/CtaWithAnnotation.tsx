@@ -1,7 +1,15 @@
 import Head from "next/head";
 import { Box, Heading, Container, Text, Button, Stack, Icon, useColorModeValue, createIcon } from "@chakra-ui/react";
+import router from "next/router";
 
 export default function CallToActionWithAnnotation() {
+  const ROUTE_POST_ID = "/SyllabusSwitch";
+  const navigateTo = () => {
+    router.push({
+      pathname: ROUTE_POST_ID,
+    });
+  };
+
   return (
     <>
       <Head>
@@ -9,15 +17,7 @@ export default function CallToActionWithAnnotation() {
       </Head>
 
       <Container maxW={"5xl"}>
-        <Text
-          fontSize={{ base: "xl", md: "3xl" }}
-          fontFamily={"Caveat"}
-          position={"absolute"}
-          color="brand.500"
-          //   right={"-125px"}
-          //   top={"-15px"}
-            // transform={"rotate(10deg)"}
-        >
+        <Text fontSize={{ base: "xl", md: "3xl" }} fontFamily={"Caveat"} position={"absolute"} color="brand.500">
           Most of the Toppers Manage 70% of their content Digitally
         </Text>
         <Stack as={Box} textAlign={"center"} spacing={{ base: 8, md: 14 }} py={{ base: 20, md: 36 }}>
@@ -40,32 +40,13 @@ export default function CallToActionWithAnnotation() {
               _hover={{
                 bg: "green.500",
               }}
+              onClick={() => navigateTo()}
             >
               Get Started
             </Button>
             <Button variant={"link"} colorScheme={"blue"} size={"sm"}>
               Learn more
             </Button>
-            <Box>
-              <Icon
-                as={Arrow}
-                color={useColorModeValue("gray.800", "gray.300")}
-                w={71}
-                position={"absolute"}
-                right={-71}
-                top={"10px"}
-              />
-              <Text
-                fontSize={"lg"}
-                fontFamily={"Caveat"}
-                position={"absolute"}
-                right={"-125px"}
-                top={"-15px"}
-                transform={"rotate(10deg)"}
-              >
-                Starting at $15/mo
-              </Text>
-            </Box>
           </Stack>
         </Stack>
       </Container>

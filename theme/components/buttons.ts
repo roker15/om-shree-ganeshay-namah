@@ -64,8 +64,8 @@ export const buttons = {
     // 4. We can override existing variants
     outline: (props: any) => ({
       transition: "transform .2s",
-      // color: "gray.500",
-      // bg: "gray.100",
+      color: "gray.500",
+      bg: "gray.100",
       _hover: {
         bg: props.colorMode === "dark" ? "red.300" : "red.500",
         color: "gray.800",
@@ -76,7 +76,7 @@ export const buttons = {
   // 6. We can overwrite defaultProps
   defaultProps: {
     // size: "xs", // default is md
-    // colorScheme: "red", // default is gray
+    // colorScheme: "brand", // default is gray
     // variant: "outline",
   },
 };

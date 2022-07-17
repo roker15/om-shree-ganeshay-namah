@@ -91,7 +91,7 @@ const Syllabus: React.FC<Props> = ({ book, changeParentProps }) => {
                     <Flex
                       alignItems="center"
                       my="4"
-                      ml="6"
+                      ml="10"
                       key={x.subheading_id}
                       // role={"group"}
                       display={toggle === x.heading_id ? "flex" : "none"}
@@ -135,8 +135,8 @@ export const ArticleCounter = ({ subheadingId, creatorId }: { subheadingId: numb
   }, []);
 
   return (
-    <Flex alignItems={"center"} pl="2">
-      <Text color="crimson" as="label">
+    <Flex alignItems={"center"} px="2">
+      <Text color="brand.500" as={"label" && "b"} fontSize="12px">
         {count}
       </Text>
     </Flex>
