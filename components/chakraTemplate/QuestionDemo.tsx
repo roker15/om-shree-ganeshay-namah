@@ -31,7 +31,7 @@ export default function CallToActionWithIllustration() {
             _hover={{ bg: "orange.500" }}
             onClick={() => navigateTo()}
           >
-            Get started
+            Practice Question-Answer
           </Button>
           <Button rounded={"full"} px={6}>
             Learn more

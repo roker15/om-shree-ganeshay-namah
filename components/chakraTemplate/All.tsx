@@ -78,7 +78,7 @@ export default function CallToActionWithVideo() {
             Content.
           </Text>
         </Stack>
-        <VStack spacing={"12"} flex={1}>
+        <VStack spacing={"12"} flex={1} w="full">
           {!user && (
             <>
               {" "}
@@ -86,7 +86,7 @@ export default function CallToActionWithVideo() {
               <Divider orientation="horizontal" />
             </>
           )}
-          <Flex flex={1} justify={"center"} align={"center"} position={"relative"} w={"full"}>
+          <Flex justify={"center"} align={"center"} position={"relative"} w={"full"}>
             <BookFilter setParentProps={updateBookProps} />
           </Flex>
         </VStack>
