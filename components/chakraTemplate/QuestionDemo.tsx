@@ -33,9 +33,9 @@ export default function CallToActionWithIllustration() {
           >
             Practice Question-Answer
           </Button>
-          <Button rounded={"full"} px={6}>
+          {/* <Button rounded={"full"} px={6}>
             Learn more
-          </Button>
+          </Button> */}
         </Stack>
         <Flex w={"full"}>
           <Box rounded={"2xl"} boxShadow={"2xl"}>
