@@ -6,8 +6,8 @@ export const NEXT_PUBLIC_SUPABASE_ANON_KEY = process.env.NEXT_PUBLIC_SUPABASE_AN
 // export const BASE_URL = "https://om-shree-ganeshay-namah-git-development4-roker15.vercel.app"
 // export const BASE_URL = "http://localhost:3000";
 // export const BASE_URL = "https://qlook.in";
-export const BASE_URL = "https://www.jionote.com";
-// export const BASE_URL = "https://om-shree-ganeshay-namah-git-dev-only-jionote-v1-roker15.vercel.app";
+// export const BASE_URL = "https://www.jionote.com";
+export const BASE_URL = "https://om-shree-ganeshay-namah-git-dev-only-jionote-v1-roker15.vercel.app";
 
 // npx openapi-typescript https://hbvffqslxssdbkdxfqop.supabase.co/rest/v1/?apikey=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJyb2xlIjoiYW5vbiIsImlhdCI6MTYzMDIyNjQxOCwiZXhwIjoxOTQ1ODAyNDE4fQ.CCZ3y_Mzp5HjQJnuEXqL5Wq4tk2ZjZj97gVkODFYNh4 --output types/supabase.ts
 
@@ -117,7 +117,9 @@ export const currentAffairTags: { id: number; tag: string }[] = [
   { id: 15, tag: "Social Issue & Social Justice ⭐" },
   { id: 16, tag: "Welfare schemes" },
   { id: 17, tag: "poverty and hunger" },
-  { id: 18, tag: "Social Sector/Services relating to Health, Education, Human Resources" },
+  { id: 18, tag: "Social Sector/Services relating to Health" },
+  { id: 181, tag: "Social Sector/Services relating to Education" },
+  { id: 182, tag: "Social Sector/Services relating to Human Resources" },
 
   { id: 19, tag: "International Relations ⭐" },
   { id: 20, tag: "India - neighborhood relations" },
