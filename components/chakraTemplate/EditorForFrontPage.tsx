@@ -86,7 +86,7 @@ function Editor(props: editorProps): JSX.Element {
         colorList: colors,
         textStyles: textStyles,
         // height: "100%",
-        width: "100vw",
+        // width: "100vw",
         minWidth: "auto",
         // maxWidth: "750px",
         minHeight: "400px",
