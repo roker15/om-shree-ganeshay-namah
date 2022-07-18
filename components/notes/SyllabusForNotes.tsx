@@ -24,74 +24,96 @@ const Syllabus: React.FC<Props> = ({ book, changeParentProps }) => {
     setSelectedSubheading(x.subheading_id);
     changeParentProps(x);
   };
-
   useEffect(() => {
     setSelectedSubheading(undefined);
   }, [book]);
+
+  useEffect(() => {
+    const x = localStorage.getItem("selected-sub-syllabus");
+    if (x && x !== "undefined") {
+      const items = JSON.parse(x);
+      setSelectedSubheading(items);
+    }
+  }, []);
+  useEffect(() => {
+    const x = localStorage.getItem("toogle-syllabus");
+    if (x && x !== "undefined") {
+      const items = JSON.parse(x);
+      setToogle(items);
+    }
+  }, []);
+  useEffect(() => {
+    if (profile && profile.id && selectedSubheading) {
+      localStorage.setItem("selected-sub-syllabus", JSON.stringify(selectedSubheading));
+    }
+  }, [profile, selectedSubheading]);
+
+  useEffect(() => {
+    if (profile && profile.id && toggle && toggle !== -100) {
+      localStorage.setItem("toogle-syllabus", JSON.stringify(toggle));
+    }
+  }, [profile, toggle]);
+
   return (
-    <Box>
-      {book?.book_name ? (
-        <Flex align="end">
-          <Text bg="orange.100" as="b">
-            <Text>{book?.book_name}</Text>
-          </Text>
+    <Box pb="6">
+      {book?.book_name && (
+        <Flex bg="brand.100" p="2">
+          <Text as="b">{book?.book_name}</Text>
         </Flex>
-      ) : null}
-      {isLoading ? <Text>Loading...</Text> : null}
-      {Object.entries(grouped)
-        .sort((a, b) => Number(a[0].split(",")[0]) - Number(b[0].split(",")[0]))
-        .map(([key, value]) => {
-          return (
-            <Box key={key}>
-              <Flex align="baseline" justifyContent="left" role="group" my="2">
-                <IconButton
-                  size="14px"
-                  color={toggle === value[0].heading_id ? "green.400" : "green.400"}
-                  variant="ghost"
-                  mr="0.5"
-                  mt="2"
-                  aria-label="Call Sage"
-                  onClick={() => {
-                    toggle === value[0].heading_id ? setToogle(-100) : setToogle(value[0].heading_id);
-                  }}
-                  fontSize="16px"
-                  icon={toggle === value[0].heading_id ? <MdLightMode /> : <MdAdd />}
-                />
-                <Text align="start" as="address" color=" #FF1493" casing="capitalize">
-                  {/* {value[0].heading + " " + "(" + value[0].heading_sequence + ")"} */}
-                  {value[0].heading}
-                </Text>
-              </Flex>
-              {value
-                .sort((a, b) => a.subheading_sequence - b.subheading_sequence)
-                .map((x) => (
-                  <Flex
-                    alignItems="center"
-                    my="2"
-                    ml="4"
-                    key={x.subheading_id}
-                    role={"group"}
-                    display={toggle === x.heading_id ? "flex" : "none"}
-                  >
-                    {/* <Button variant="unstyled"> */}
-                    <Text
-                      color={selectedSubheading === x.subheading_id ? "white" : "null"}
-                      bg={selectedSubheading === x.subheading_id ? "green.400" : "null"}
-                      onClick={() => handleSyllabusClick(x)}
-                      // align="start"
-                      casing="capitalize"
-                      as="label"
-                      fontSize="14px"
+      )}
+
+      <Box>
+        {isLoading && <Text>Loading...</Text>}
+        {Object.entries(grouped)
+          .sort((a, b) => Number(a[0].split(",")[0]) - Number(b[0].split(",")[0]))
+          .map(([key, value]) => {
+            return (
+              <Box key={key} >
+                <Flex align="baseline" justifyContent="left" role="group" my="2">
+                  <IconButton
+                    color={"brand.500"}
+                    variant="icong"
+                    aria-label="Call Sage"
+                    onClick={() => {
+                      toggle === value[0].heading_id ? setToogle(-100) : setToogle(value[0].heading_id);
+                    }}
+                    fontSize="16px"
+                    icon={toggle === value[0].heading_id ? <MdLightMode /> : <MdAdd />}
+                  />
+                  <Text align="start" as="address" color=" #FF1493" casing="capitalize">
+                    {/* {value[0].heading + " " + "(" + value[0].heading_sequence + ")"} */}
+                    {value[0].heading}
+                  </Text>
+                </Flex>
+                {value
+                  .sort((a, b) => a.subheading_sequence - b.subheading_sequence)
+                  .map((x) => (
+                    <Flex
+                      alignItems="center"
+                      my="4"
+                      ml="10"
+                      key={x.subheading_id}
+                      // role={"group"}
+                      display={toggle === x.heading_id ? "flex" : "none"}
                     >
-                      <Link>{x.subheading}</Link>
-                    </Text>
-                    {/* </Button> */}
-                    {profile && profile.id ? <ArticleCounter subheadingId={x.subheading_id} creatorId={profile.id} /> : null}
-                  </Flex>
-                ))}
-            </Box>
-          );
-        })}
+                      <Text
+                        color={selectedSubheading === x.subheading_id ? "white" : "gray.600"}
+                        bg={selectedSubheading === x.subheading_id ? "brand.500" : "null"}
+                        onClick={() => handleSyllabusClick(x)}
+                        casing="capitalize"
+                        as="label"
+                        fontSize="14px"
+                      >
+                        <Link>{x.subheading}</Link>
+                      </Text>
+                      {/* </Button> */}
+                      {profile && profile.id && <ArticleCounter subheadingId={x.subheading_id} creatorId={profile.id} />}
+                    </Flex>
+                  ))}
+              </Box>
+            );
+          })}
+      </Box>
     </Box>
   );
 };
@@ -113,11 +135,10 @@ export const ArticleCounter = ({ subheadingId, creatorId }: { subheadingId: numb
   }, []);
 
   return (
-    <Flex alignItems={"center"} pl="2">
-      <Text color="crimson" as="label">
+    <Flex alignItems={"center"} px="2">
+      <Text color="brand.500" as={"label" && "b"} fontSize="12px">
         {count}
       </Text>
     </Flex>
   );
 };
-

@@ -99,12 +99,12 @@ export type Books = {
 };
 export type BookResponse = {
   id: number;
-  book_name: string;
-  class_fk: {
+  book_name?: string;
+  class_fk?: {
     id: number;
     class: string;
   };
-  subject_fk: {
+  subject_fk?: {
     id: number;
     subject_name: string;
   };

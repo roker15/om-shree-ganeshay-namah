@@ -30,8 +30,6 @@ const QuestionBank1: React.FC<ProfileListPropss> = ({}) => {
     );
   };
   if (!user) {
-    console.log("session null hai bhai");
-    // setEmail("")
     return (
       <div>
         Please login to view content

@@ -63,15 +63,17 @@ const AnimatedText = () => {
   return (
     <Flex justifyContent="center" py="2" pb="16">
       <VStack>
-        <Text p="0.5" px="6" fontSize="lg" bg="orange.300" color="white">
+        <Text p="0.5" px="6" fontSize="lg" bg="brand.300" color="white">
           {imageDes}
         </Text>
-        <div>
+        <Flex>
           <SimpleImageSlider
             onClickBullets={onClickBullets}
             onStartSlide={onStartSlide}
-            width={896}
-            height={504}
+            // width={896}
+            // height={504}
+            width={700}
+            height={350}
             images={images}
             showBullets={true}
             showNavs={true}
@@ -82,7 +84,7 @@ const AnimatedText = () => {
             style={{ margin: '0 auto', marginTop: '5px',boxShadow: '0.5px 0.5px 1px 1px #ffceb4' }}
 
           />
-        </div>
+        </Flex>
       </VStack>
     </Flex>
   );

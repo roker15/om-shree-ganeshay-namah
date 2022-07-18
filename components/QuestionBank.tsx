@@ -19,6 +19,7 @@ import { useUser } from "@supabase/auth-helpers-react";
 import katex from "katex";
 import "katex/dist/katex.min.css";
 import dynamic from "next/dynamic";
+import Link from "next/link";
 import React, { useEffect, useRef, useState } from "react";
 import { useForm } from "react-hook-form";
 import styled from "styled-components";
@@ -146,6 +147,15 @@ const QuestionBanks: React.FC = () => {
             />
           </FormControl>
         </form>
+        <Text fontSize="xs" mt="2" p="2" bg="gray.100">
+          <Text as="b">Note :-</Text> Currently Only Geography, History & Sociology Questions are Available. We will keep on adding more.{" "}
+          <Text as="b">You can also Add question by going to </Text>{" "}
+          <Link href="/createQuestionBank">
+            <a className="internal" style={{ color: "#de378a" }}>
+              Create New Question
+            </a>
+          </Link>
+        </Text>
         {year && year != undefined && paperId ? (
           <Center my="16">
             {" "}
@@ -361,7 +371,7 @@ const QuestionBankEditor: React.FunctionComponent<PropsQuestionBankEditor> = ({ 
                 resizingBar: false,
                 formats: ["p", "div", "h1", "h2", "h3"],
                 font: sunEditorfontList,
-                
+
                 fontSize: [12, 14, 16, 20],
                 imageFileInput: true, //this disable image as file, only from url allowed
                 imageSizeOnlyPercentage: false, //changed on 6 june

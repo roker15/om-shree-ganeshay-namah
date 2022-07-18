@@ -65,19 +65,20 @@ export default Tags;
 
 export const ArticleCounterByTag = ({ tagId, creatorId }: { tagId: number; creatorId: string }) => {
   const [count, setCount] = useState<number | undefined>(undefined);
-  const getArticleCount = async () => {
-    const { data, error, count } = await supabaseClient
-      .from<definitions["books_articles"]>("books_articles")
-      .select("*", { count: "exact", head: true })
-      .eq("created_by", creatorId)
-      .contains("current_affair_tags", [tagId]);
-    if (count) {
-      setCount(count);
-    }
-  };
+
   useEffect(() => {
+    const getArticleCount = async () => {
+      const { data, error, count } = await supabaseClient
+        .from<definitions["books_articles"]>("books_articles")
+        .select("*", { count: "exact", head: true })
+        .eq("created_by", creatorId)
+        .contains("current_affair_tags", [tagId]);
+      if (count) {
+        setCount(count);
+      }
+    };
     getArticleCount();
-  }, []);
+  }, [creatorId, tagId]);
 
   return (
     <Flex alignItems={"center"} pl="2">
@@ -97,7 +98,7 @@ export function TagsDrawer() {
       <Sticky>
         <IconButton
           aria-label="syllabus"
-          variant="outline"
+          variant="unstyled"
           size="xs"
           icon={<MdMenuBook />}
           ref={btnRef}
@@ -121,7 +122,6 @@ export function TagsDrawer() {
             <Button variant="outline" mr={3} onClick={onClose}>
               Close
             </Button>
-            
           </DrawerFooter>
         </DrawerContent>
       </Drawer>

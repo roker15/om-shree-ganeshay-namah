@@ -223,39 +223,41 @@ interface editorProps {
 
 function Editor(props: editorProps): JSX.Element {
   return (
-    <SunEditor
-      getSunEditorInstance={props.getSunEditorInstance}
-      setDefaultStyle={props.fontSize}
-      hideToolbar={props.editorMode === "READ" ? true : false}
-      defaultValue={props.language === "ENGLISH" ? props.article.article_english : props.article.article_hindi}
-      // setContents={props.language === "ENGLISH" ? props.article.article_english : props.article.article_hindi} //cause blank editor to render first and then put content, so creates flickering effect . so move to defaultValue
-      // onChange={props.handleOnChange} // required atuosave to work
-      readOnly={props.editorMode === "READ" ? true : false}
-      autoFocus={false} // disable={editorMode === "READ" ? true : false}
-      setOptions={{
-        callBackSave(contents, isChanged) {
-          props.updateArticleInDatabase(contents);
-        },
-        placeholder: `Step 1 - Click Edit and Start Typing 
-                Step 2 - Press "Crtl + S" to save your Notes (keep mouse cursor inside Editor).
-                Step 3 - You can also press "Save" Button in Editor to Save your notes"`,
-        mode: "classic",
-        hideToolbar: true,
-        katex: katex,
-        colorList: colors,
-        imageUploadUrl: `${BASE_URL}/api/uploadImage`,
-        textStyles: textStyles,
-        height: "100%",
-        width: "auto",
-        minWidth: "350px",
-        minHeight: "100px",
-        buttonList: sunEditorButtonList,
-        resizingBar: false,
-        formats: ["p", "div", "h1", "h2", "h3"],
-        font: sunEditorfontList,
-        fontSize: [12, 14, 16, 20],
-        imageSizeOnlyPercentage: false, //changed on 6 june
-      }}
-    />
+    <Box boxShadow="none">
+      <SunEditor
+        getSunEditorInstance={props.getSunEditorInstance}
+        setDefaultStyle={props.fontSize}
+        hideToolbar={props.editorMode === "READ" ? true : false}
+        defaultValue={props.language === "ENGLISH" ? props.article.article_english : props.article.article_hindi}
+        // setContents={props.language === "ENGLISH" ? props.article.article_english : props.article.article_hindi} //cause blank editor to render first and then put content, so creates flickering effect . so move to defaultValue
+        // onChange={props.handleOnChange} // required atuosave to work
+        readOnly={props.editorMode === "READ" ? true : false}
+        autoFocus={false} // disable={editorMode === "READ" ? true : false}
+        setOptions={{
+          callBackSave(contents, isChanged) {
+            props.updateArticleInDatabase(contents);
+          },
+          placeholder: `Step 1 - Click Edit and Start Typing 
+        Step 2 - Press "Crtl + S" to save your Notes (keep mouse cursor inside Editor).
+        Step 3 - You can also press "Save" Button in Editor to Save your notes"`,
+          mode: "classic",
+          hideToolbar: true,
+          katex: katex,
+          colorList: colors,
+          imageUploadUrl: `${BASE_URL}/api/uploadImage`,
+          textStyles: textStyles,
+          height: "100%",
+          width: "auto",
+          minWidth: "350px",
+          minHeight: "100px",
+          buttonList: sunEditorButtonList,
+          resizingBar: false,
+          formats: ["p", "div", "h1", "h2", "h3"],
+          font: sunEditorfontList,
+          fontSize: [12, 14, 16, 20],
+          imageSizeOnlyPercentage: false, //changed on 6 june
+        }}
+      />
+    </Box>
   );
 }

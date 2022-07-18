@@ -42,7 +42,7 @@ export default function ManageCurrentAffair() {
         <Flex display={{ base: "block", sm: "block", md: "none" }}>
           <TagsDrawer></TagsDrawer>
         </Flex>
-        <Wrap spacing="5px">
+        <Wrap spacing="5px" mt="4">
           {tagsArray
             ? tagsArray.map((x1) => {
                 for (let index = 0; index < currentAffairTags.length; index++) {
@@ -102,7 +102,7 @@ export default function ManageCurrentAffair() {
 
         <Grid templateColumns="repeat(5, 1fr)" gap={6}>
           <>
-            <GridItem colSpan={{ base: 0, sm: 0, md: 1 }} display={{ base: "none", sm: "none", md: "block" }} bg="orange.50">
+            <GridItem colSpan={{ base: 0, sm: 0, md: 1 }} display={{ base: "none", sm: "none", md: "block" }} bg="brand.50">
               <Tags></Tags>
             </GridItem>
             {swrError ? (
@@ -118,7 +118,7 @@ export default function ManageCurrentAffair() {
                         <VStack width="full">
                           <Text
                             alignSelf={"baseline"}
-                            bg="orange.100"
+                            bg="brand.100"
                             p="2"
                             fontSize="16px"
                             casing="capitalize"
@@ -129,15 +129,15 @@ export default function ManageCurrentAffair() {
 
                           <Tabs size="md" colorScheme="whatsapp" width="full">
                             <TabList>
-                              <Tab>Hindi</Tab>
                               <Tab>English</Tab>
+                              <Tab>Hindi</Tab>
                             </TabList>
                             <TabPanels>
                               <TabPanel pl="2" pr="0.5" width="full">
-                                <SuneditorForNotesMaking article={article} language={"HINDI"} isEditable={true} />
+                                <SuneditorForNotesMaking article={article} language={"ENGLISH"} isEditable={true} />
                               </TabPanel>
                               <TabPanel width="full">
-                                <SuneditorForNotesMaking article={article} language={"ENGLISH"} isEditable={true} />
+                                <SuneditorForNotesMaking article={article} language={"HINDI"} isEditable={true} />
                               </TabPanel>
                             </TabPanels>
                           </Tabs>
@@ -148,6 +148,7 @@ export default function ManageCurrentAffair() {
                 ) : null}
               </GridItem>
             )}
+            
           </>
         </Grid>
       </>

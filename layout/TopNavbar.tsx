@@ -3,12 +3,13 @@ import {
   Avatar,
   Box,
   Button,
+  Container,
   Flex,
   FlexProps,
   Heading,
   HStack,
   Image,
-  Link,
+  Link as L,
   LinkBox,
   LinkOverlay,
   Menu,
@@ -21,6 +22,7 @@ import {
   useDisclosure,
   VStack,
 } from "@chakra-ui/react";
+import Link from "next/link";
 import { ReactNode } from "react";
 import { FaGoogle, FaTelegram, FaWhatsapp } from "react-icons/fa";
 import { FiChevronDown } from "react-icons/fi";
@@ -33,7 +35,9 @@ export default function TopNavbar({ children }: { children: ReactNode }) {
   const { isOpen, onOpen, onClose } = useDisclosure();
 
   return (
-    <Box minH="100vh" bg="white">
+    //overflowx = hidden is because body was visible in mobile view. test is again and then
+    // finalize
+    <Box minH="100vh" minW="full" bg="#ffffff">
       <MobileNav onOpen={onOpen} />
       {children}
     </Box>
@@ -44,7 +48,6 @@ interface MobileProps extends FlexProps {
   onOpen: () => void;
 }
 
-
 const MobileNav = ({ onOpen, ...rest }: MobileProps) => {
   const { signInWithgoogle, signOut, profile } = useAuthContext();
   return (
@@ -54,11 +57,12 @@ const MobileNav = ({ onOpen, ...rest }: MobileProps) => {
       height="16"
       alignItems="center"
       // bg={useColorModeValue("#f8f6fa", "#e5e0f1")}
-      bg="white"
-      borderBottomWidth="1px"
-      zIndex={1}
+      // bg="#faf8f8"
+      borderBottomWidth="0px"
+      zIndex={500}
       pos="sticky"
-      top={0}
+      mt={"0"}
+      // boxShadow="md"
       borderBottomColor={useColorModeValue("gray.200", "gray.700")}
       justifyContent={{ base: "space-between", md: "flex" }}
       {...rest}
@@ -83,27 +87,21 @@ const MobileNav = ({ onOpen, ...rest }: MobileProps) => {
           />
         </LinkOverlay>
       </LinkBox>
+      <Link href="/">
+        <a className="internal" style={{ color: "#2d2e2e", fontWeight: "bold" }}>
+          {" "}
+          Home
+        </a>
+      </Link>
       <Heading fontSize="xl" ml="16" as="em" size="md" color="blackAlpha.800" display={{ base: "none", md: "block" }}>
-        India's first Online 📝Notes making Platform{" "}
+        {`India's first Online 📝Notes making Platform`}
       </Heading>{" "}
       <HStack spacing={{ base: "0", md: "6" }}>
         {!profile ? (
-          <HStack>
-            {" "}
-            <Button
-              border="0px"
-              colorScheme="google"
-              leftIcon={<FaGoogle />}
-              variant="ghost"
-              onClick={() => signInWithgoogle(BASE_URL)}
-            >
-              Sign in
-            </Button>
-            {JoinTelegram}
-          </HStack>
+          <HStack>{JoinTelegram}</HStack>
         ) : (
           <Flex border="0px" alignItems={"center"}>
-           {JoinTelegram}
+            {JoinTelegram}
             <Menu boundary="clippingParents">
               <MenuButton border="0px" py={2} transition="all 0.3s" _focus={{ boxShadow: "none" }}>
                 <HStack>
@@ -129,11 +127,7 @@ const MobileNav = ({ onOpen, ...rest }: MobileProps) => {
                   </Box>
                 </HStack>
               </MenuButton>
-              <MenuList
-                border="0px"
-                bg={useColorModeValue("white", "gray.900")}
-                borderColor={useColorModeValue("gray.200", "gray.700")}
-              >
+              <MenuList border="1px" bg={"pink.50"} borderColor={"pink.100"}>
                 <MenuItem border="0px">Profile</MenuItem>
                 <MenuItem border="0px">Settings</MenuItem>
                 {profile ? (
@@ -156,9 +150,12 @@ const MobileNav = ({ onOpen, ...rest }: MobileProps) => {
   );
 };
 
-
-const JoinTelegram = <HStack alignItems={"center"} mx="2" px="2" py="0.5" bg="telegram.300"> <Link color="white" href="https://t.me/+Rhiv7nfLc_pkZDM1" isExternal>
-    Join Telegram
-  </Link>
-  <FaTelegram color="white" />
-</HStack>;
+const JoinTelegram = (
+  <HStack alignItems={"center"} mx="2" px="2" py="0.5" bg="telegram.300">
+    {" "}
+    <L color="white" href="https://t.me/+Rhiv7nfLc_pkZDM1" isExternal>
+      Join Telegram
+    </L>
+    <FaTelegram color="white" />
+  </HStack>
+);

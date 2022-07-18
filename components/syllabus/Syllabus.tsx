@@ -132,7 +132,7 @@ const Syllabus: React.FC<Props> = ({ book, changeFormProps }) => {
                     ml="2"
                     borderRadius={"full"}
                     variant="outline"
-                    colorScheme="orange"
+                    colorScheme="brand"
                     aria-label="Call Sage"
                     fontSize="20px"
                     onClick={() =>
@@ -171,7 +171,7 @@ const Syllabus: React.FC<Props> = ({ book, changeFormProps }) => {
                         ml="2"
                         borderRadius={"full"}
                         variant="outline"
-                        colorScheme="orange"
+                        colorScheme="brand"
                         aria-label="Call Sage"
                         fontSize="20px"
                         onClick={() =>
