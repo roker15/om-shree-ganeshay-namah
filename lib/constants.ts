@@ -117,7 +117,9 @@ export const currentAffairTags: { id: number; tag: string }[] = [
   { id: 15, tag: "Social Issue & Social Justice ⭐" },
   { id: 16, tag: "Welfare schemes" },
   { id: 17, tag: "poverty and hunger" },
-  { id: 18, tag: "Social Sector/Services relating to Health, Education, Human Resources" },
+  { id: 18, tag: "Social Sector/Services relating to Health" },
+  { id: 181, tag: "Social Sector/Services relating to Education" },
+  { id: 182, tag: "Social Sector/Services relating to Human Resources" },
 
   { id: 19, tag: "International Relations ⭐" },
   { id: 20, tag: "India - neighborhood relations" },
