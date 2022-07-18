@@ -1,11 +1,28 @@
-import { Button, Container, createIcon, Flex, Heading, Icon, IconProps, Stack, Text } from "@chakra-ui/react";
+import {
+  Button,
+  Container,
+  createIcon,
+  Divider,
+  Flex,
+  Heading,
+  Icon,
+  IconProps,
+  Stack,
+  StackDivider,
+  Text,
+  VStack,
+} from "@chakra-ui/react";
+import { useUser } from "@supabase/auth-helpers-react";
 import router from "next/router";
 import { useEffect, useState } from "react";
+import { BASE_URL } from "../../lib/constants";
 import { BookResponse } from "../../types/myTypes";
+import { LoginCard } from "../LoginCard";
 import BookFilter from "../syllabus/BookFilter";
 
 export default function CallToActionWithVideo() {
   const [book, setBook] = useState<BookResponse | undefined>(undefined);
+  const { user, error } = useUser();
   const ROUTE_POST_ID = "/notes/[bookid]";
   const navigateTo = (bookid: string) => {
     router.push({
@@ -57,13 +74,22 @@ export default function CallToActionWithVideo() {
             </Text>
           </Heading>
           <Text color={"gray.500"}>
-            Switch to Any Syllabus & Content Right from here. No need to navigate from page to page for different Syllabus & Content.
+            Switch to Any Syllabus & Content Right from here. No need to navigate from page to page for different Syllabus &
+            Content.
           </Text>
-          
         </Stack>
-        <Flex flex={1} justify={"center"} align={"center"} position={"relative"} w={"full"}>
-          <BookFilter setParentProps={updateBookProps} />
-        </Flex>
+        <VStack spacing={"12"} flex={1}>
+          {!user && (
+            <>
+              {" "}
+              <LoginCard redirect={`${BASE_URL}/syllabusSwitch`} />
+              <Divider orientation="horizontal" />
+            </>
+          )}
+          <Flex flex={1} justify={"center"} align={"center"} position={"relative"} w={"full"}>
+            <BookFilter setParentProps={updateBookProps} />
+          </Flex>
+        </VStack>
       </Stack>
     </Container>
   );

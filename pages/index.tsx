@@ -1,4 +1,4 @@
-import { Box, Container, Flex, Text } from "@chakra-ui/react";
+import { Box, Container, Flex, Text, VStack } from "@chakra-ui/react";
 import { supabaseClient } from "@supabase/auth-helpers-nextjs";
 import Link from "next/link";
 import router from "next/router";
@@ -12,7 +12,6 @@ import LayoutWithTopNavbar from "../layout/LayoutWithTopNavbar";
 import { BookResponse } from "../types/myTypes";
 import PageWithLayoutType from "../types/pageWithLayout";
 import { definitions } from "../types/supabase";
-
 
 const Home: React.FunctionComponent = () => {
   const [book, setBook] = useState<BookResponse | undefined>(undefined);
@@ -60,11 +59,11 @@ const Home: React.FunctionComponent = () => {
   };
 
   return (
-    <Container minW="full"  px={{ base: "2", sm: "4", md: "2", lg: "8" }}>
+    <Container minW="full" px={{ base: "2", sm: "4", md: "2", lg: "8" }}>
       {/* <FrequentHelp/> */}
       <GotoQuestion />
       <CtaWithAnnotation />
-      <EditorFeatures/>
+      <EditorFeatures />
       <CtaWithVideo />
       <QuestionDemo />
 
@@ -87,12 +86,18 @@ export default Home;
 function GotoQuestion() {
   return (
     <Flex justifyContent="end">
-      <Text as="b">
-        Go to{" "}
-        <Link href="/questionBanks">
-          <a>Question Bank</a>
-        </Link>
-      </Text>
+      <VStack justifyContent={"start"}>
+        <Text as="b">
+          <Link href="/questionBanks">
+            <a>Question Bank</a>
+          </Link>
+        </Text>
+        <Text as="b">
+          <Link href="/reviseCurrentAffair">
+            <a>Current Affair</a>
+          </Link>
+        </Text>
+      </VStack>
     </Flex>
   );
 }

@@ -9,7 +9,7 @@ import {
   Heading,
   HStack,
   Image,
-  Link,
+  Link as L,
   LinkBox,
   LinkOverlay,
   Menu,
@@ -22,6 +22,7 @@ import {
   useDisclosure,
   VStack,
 } from "@chakra-ui/react";
+import Link from "next/link";
 import { ReactNode } from "react";
 import { FaGoogle, FaTelegram, FaWhatsapp } from "react-icons/fa";
 import { FiChevronDown } from "react-icons/fi";
@@ -36,7 +37,7 @@ export default function TopNavbar({ children }: { children: ReactNode }) {
   return (
     //overflowx = hidden is because body was visible in mobile view. test is again and then
     // finalize
-    <Box minH="100vh" minW="full" bg="#ffffff" >
+    <Box minH="100vh" minW="full" bg="#ffffff">
       <MobileNav onOpen={onOpen} />
       {children}
     </Box>
@@ -86,6 +87,12 @@ const MobileNav = ({ onOpen, ...rest }: MobileProps) => {
           />
         </LinkOverlay>
       </LinkBox>
+      <Link href="/">
+        <a className="internal" style={{ color: "#2d2e2e", fontWeight: "bold" }}>
+          {" "}
+          Home
+        </a>
+      </Link>
       <Heading fontSize="xl" ml="16" as="em" size="md" color="blackAlpha.800" display={{ base: "none", md: "block" }}>
         {`India's first Online 📝Notes making Platform`}
       </Heading>{" "}
@@ -120,11 +127,7 @@ const MobileNav = ({ onOpen, ...rest }: MobileProps) => {
                   </Box>
                 </HStack>
               </MenuButton>
-              <MenuList
-                border="1px"
-                bg={"pink.50"}
-                borderColor={"pink.100"}
-              >
+              <MenuList border="1px" bg={"pink.50"} borderColor={"pink.100"}>
                 <MenuItem border="0px">Profile</MenuItem>
                 <MenuItem border="0px">Settings</MenuItem>
                 {profile ? (
@@ -150,9 +153,9 @@ const MobileNav = ({ onOpen, ...rest }: MobileProps) => {
 const JoinTelegram = (
   <HStack alignItems={"center"} mx="2" px="2" py="0.5" bg="telegram.300">
     {" "}
-    <Link color="white" href="https://t.me/+Rhiv7nfLc_pkZDM1" isExternal>
+    <L color="white" href="https://t.me/+Rhiv7nfLc_pkZDM1" isExternal>
       Join Telegram
-    </Link>
+    </L>
     <FaTelegram color="white" />
   </HStack>
 );

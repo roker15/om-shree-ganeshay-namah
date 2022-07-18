@@ -6,12 +6,19 @@ import { useAuthContext } from "../state/Authcontext";
 export const LoginCard = ({ redirect }: { redirect: string }) => {
   const { signInWithgoogle, signOut, profile } = useAuthContext();
   return (
-    <Text color="gray.600" fontSize="md" casing="capitalize">
-      Your are not Logged In Please{" "}
-      <Button colorScheme={"green"} variant="solid" onClick={() => signInWithgoogle(redirect)}>
-        Login
-      </Button>{" "}
-      To View Content
-    </Text>
+    <Button
+      colorScheme={"black"}
+      size="md"
+      px={10}
+      borderRadius="full"
+      variant="outline"
+      onClick={() => signInWithgoogle(redirect)}
+      _hover={{
+        bg: "gray.700",
+        color:"white"
+      }}
+    >
+      Login
+    </Button>
   );
 };

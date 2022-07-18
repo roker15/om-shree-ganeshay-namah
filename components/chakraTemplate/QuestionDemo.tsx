@@ -19,7 +19,7 @@ export default function CallToActionWithIllustration() {
           </Text>
         </Heading>
         <Text color={"gray.500"} maxW={"3xl"}>
-          Practice you answer writing with previous year questions. You can edit and update your answer anytime. Keep
+          Practice you answer writing with previous year questions.  Keep
           learning and Keep updating your answer till it gets perfect.
         </Text>
         <Stack spacing={6} direction={"row"}>
@@ -38,10 +38,14 @@ export default function CallToActionWithIllustration() {
           </Button>
         </Stack>
         <Flex w={"full"}>
-          <Box boxShadow="md">
+          <Box rounded={"2xl"} boxShadow={"2xl"}>
             <Image
-              alt={"Login Image"}
+              alt={"Question"}
               objectFit={"scale-down"}
+              fit={"cover"}
+              align={"center"}
+              w={"100%"}
+              h={"100%"}
               src={
                 // "https://hbvffqslxssdbkdxfqop.supabase.co/storage/v1/object/public/notes-images/2d0eb255-5b2e-4112-9260-3a3429858104-ed2.PNG"
                 "https://i.imgur.com/olC6Os3.png"

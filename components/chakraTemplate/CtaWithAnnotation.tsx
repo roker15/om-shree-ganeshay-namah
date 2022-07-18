@@ -1,8 +1,12 @@
 import Head from "next/head";
 import { Box, Heading, Container, Text, Button, Stack, Icon, useColorModeValue, createIcon } from "@chakra-ui/react";
 import router from "next/router";
+import { LoginCard } from "../LoginCard";
+import { BASE_URL } from "../../lib/constants";
+import { useUser } from "@supabase/auth-helpers-react";
 
 export default function CallToActionWithAnnotation() {
+  const { user, error } = useUser();
   const ROUTE_POST_ID = "/syllabusSwitch";
   const navigateTo = () => {
     router.push({
@@ -44,9 +48,7 @@ export default function CallToActionWithAnnotation() {
             >
               Get Started
             </Button>
-            <Button variant={"link"} colorScheme={"blue"} size={"sm"}>
-              Learn more
-            </Button>
+            {!user && <LoginCard redirect={BASE_URL} />}
           </Stack>
         </Stack>
       </Container>
