@@ -3,9 +3,6 @@ import dynamic from "next/dynamic";
 export const NEXT_PUBLIC_SUPABASE_URL = process.env.NEXT_PUBLIC_SUPABASE_URL;
 export const NEXT_PUBLIC_SUPABASE_ANON_KEY = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY;
 // export const BASE_URL = "http://www.localhost:3000";
-// export const BASE_URL = "https://om-shree-ganeshay-namah-git-development4-roker15.vercel.app"
-// export const BASE_URL = "http://localhost:3000";
-// export const BASE_URL = "https://qlook.in";
 export const BASE_URL = "https://www.jionote.com";
 // export const BASE_URL = "https://om-shree-ganeshay-namah-git-dev-only-jionote-v1-roker15.vercel.app";
 
@@ -170,6 +167,7 @@ export const currentAffairTags: { id: number; tag: string }[] = [
   { id: 501, tag: "Ethics ⭐" },
 
   { id: 57, tag: "Miscellaneous ⭐" },
+  { id: 571, tag: "Person in News" },
   { id: 58, tag: "Sustainable Developement" },
   { id: 59, tag: "Bills/Acts" },
   { id: 60, tag: "Study/Survey/Report/Index" },

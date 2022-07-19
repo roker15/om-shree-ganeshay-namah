@@ -12,12 +12,13 @@ export const globalStyles = {
   },
   // styles for the `a`
   a: {
-    color: "pink.500",
+    color: "pink.500" ,
     fontSize: "sm",
     _hover: {
-      // fontSize: "lg",
-      // textDecoration: "underline",
-      color: "brand.500",
+      // fontSize: "15px",
+      textDecoration: "underline",
+      // bg:"gray.50",
+      // color: "green.500",
     },
   },
 };

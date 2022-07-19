@@ -35,6 +35,7 @@ export default function CallToActionWithVideo() {
     if (book) {
       sessionStorage.setItem("book", JSON.stringify(book));
       sessionStorage.setItem("selected-subheading", "undefined");
+      sessionStorage.setItem("selected-syllabus", "undefined");
       navigateTo(book.id.toString());
     }
   }, [book]);

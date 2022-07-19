@@ -162,6 +162,7 @@ export function useGetUserArticlesFromTags(userid: string | undefined, tagsArray
       swrError: null,
     };
   }
+  // eslint-disable-next-line react-hooks/rules-of-hooks
   const { data, error } = useSWR(
     userid === undefined ? null : [`/get-user-articles-bytags/${userid}/${tagsArray}`],
     async () =>

@@ -18,7 +18,7 @@ import {
 import { supabaseClient } from "@supabase/auth-helpers-nextjs";
 import { groupBy } from "lodash";
 import React, { useEffect, useState } from "react";
-import { MdMenu, MdMenuBook } from "react-icons/md";
+import { MdMenu, MdMenuBook, MdOutlineMenu } from "react-icons/md";
 import Sticky from "react-sticky-el";
 import { useGetSyllabusByBookId } from "../../customHookes/networkHooks";
 import { currentAffairTags } from "../../lib/constants";
@@ -31,11 +31,12 @@ const Tags: React.FC = () => {
   const { tagsArray, setTagsArray } = useNoteContext();
   const { profile } = useAuthContext();
   return (
-    <Box>
-      <Flex flexDirection={"column"} maxW="400px">
+    <Box borderRight={"1px"} borderRightColor="gray.100">
+      <Flex flexDirection={"column"} maxW="400px" alignItems="start">
         {currentAffairTags.map((value) => (
-          <Flex key={value.id}>
+          <Flex key={value.id} >
             <Checkbox
+              alignItems="baseline"
               px="2"
               colorScheme={"gray"}
               isChecked={tagsArray?.includes(value.id) ? true : false}
@@ -81,7 +82,7 @@ export const ArticleCounterByTag = ({ tagId, creatorId }: { tagId: number; creat
   }, [creatorId, tagId]);
 
   return (
-    <Flex alignItems={"center"} pl="2">
+    <Flex alignItems={"center"} px="2">
       <Text color="crimson" as="label">
         {count}
       </Text>
@@ -98,14 +99,14 @@ export function TagsDrawer() {
       <Sticky>
         <IconButton
           aria-label="syllabus"
-          variant="unstyled"
-          size="xs"
-          icon={<MdMenuBook />}
+          variant="ghost"
+          size="md"
+          icon={<MdOutlineMenu />}
           ref={btnRef}
-          colorScheme="Gray"
+          colorScheme="pink"
           onClick={onOpen}
         >
-          Open
+          {/* Open */}
         </IconButton>
       </Sticky>
       <Drawer isOpen={isOpen} placement="left" onClose={onClose} finalFocusRef={btnRef}>

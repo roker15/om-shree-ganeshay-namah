@@ -1,4 +1,4 @@
-import { Box, Container, Flex, Text, VStack } from "@chakra-ui/react";
+import { Box, Container, Flex, HStack, Text, VStack } from "@chakra-ui/react";
 import { supabaseClient } from "@supabase/auth-helpers-nextjs";
 import Link from "next/link";
 import router from "next/router";
@@ -50,6 +50,7 @@ const Home: React.FunctionComponent = () => {
     if (book) {
       sessionStorage.setItem("book", JSON.stringify(book));
       sessionStorage.setItem("selected-subheading", "undefined");
+      sessionStorage.setItem("selected-syllabus", "undefined");
       navigateTo(book.id.toString());
     }
   }, [book]);
@@ -83,10 +84,10 @@ const Home: React.FunctionComponent = () => {
 (Home as PageWithLayoutType).layout = LayoutWithTopNavbar;
 export default Home;
 
-function GotoQuestion() {
+export function GotoQuestion() {
   return (
     <Flex justifyContent="end">
-      <VStack justifyContent={"start"}>
+      <HStack justifyContent={"start"}>
         <Text as="b">
           <Link href="/questionBanks">
             <a>Question Bank</a>
@@ -97,7 +98,7 @@ function GotoQuestion() {
             <a>Current Affair</a>
           </Link>
         </Text>
-      </VStack>
+      </HStack>
     </Flex>
   );
 }
