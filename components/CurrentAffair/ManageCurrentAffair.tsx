@@ -1,4 +1,6 @@
 import {
+  Alert,
+  AlertIcon,
   Box,
   Button,
   Flex,
@@ -26,6 +28,17 @@ import SuneditorForNotesMaking from "../editor/SuneditorForNotesMaking";
 
 import Tags, { TagsDrawer } from "./Tags";
 
+function InfoAlert({ info }: { info: string }) {
+  return (
+    <Alert status="info" colorScheme={"gray"} alignItems="start">
+      <AlertIcon />
+      {/* <Text as="p">{info}</Text> */}
+      <div style={{whiteSpace: 'pre-line'}}>{info}</div>
+      {/* {info} */}
+    </Alert>
+  );
+}
+
 export default function ManageCurrentAffair() {
   const { profile } = useAuthContext();
   const { tagsArray, setTagsArray } = useNoteContext();
@@ -43,7 +56,7 @@ export default function ManageCurrentAffair() {
           <TagsDrawer></TagsDrawer>
         </Flex>
         <Wrap spacing="5px" mt="4">
-          {tagsArray
+          {tagsArray && tagsArray.length > 0
             ? tagsArray.map((x1) => {
                 for (let index = 0; index < currentAffairTags.length; index++) {
                   const element = currentAffairTags[index];
@@ -105,25 +118,62 @@ export default function ManageCurrentAffair() {
             <GridItem colSpan={{ base: 0, sm: 0, md: 1 }} display={{ base: "none", sm: "none", md: "block" }} bg="brand.50">
               <Tags></Tags>
             </GridItem>
-            {swrError ? (
+
+            <GridItem colSpan={{ base: 5, sm: 5, md: 4 }} px={{ base: "0.5", sm: "0.5", md: "6" }}>
+              {tagsArray && tagsArray.length === 0 ? (
+                <InfoAlert info={"No Topic Selected, Please Select Some topics from Menu or Left Panel to see notes"} />
+              ) : swrError ? (
+                swrError.message
+              ) : isArticleLoading ? (
+                <div>loading...</div>
+              ) : articles && articles.length > 0 ? (
+                articles.map((article) => {
+                  return (
+                    <Flex key={article.id} pb="16">
+                      <VStack width="full">
+                        <Text alignSelf={"baseline"} bg="brand.100" p="2" fontSize="16px" casing="capitalize" align="left">
+                          <Text as="b">Article Name :- </Text> {article.article_title}
+                        </Text>
+
+                        <Tabs size="md" colorScheme="whatsapp" width="full">
+                          <TabList>
+                            <Tab>English</Tab>
+                            <Tab>Hindi</Tab>
+                          </TabList>
+                          <TabPanels>
+                            <TabPanel pl="2" pr="0.5" width="full">
+                              <SuneditorForNotesMaking article={article} language={"ENGLISH"} isEditable={true} />
+                            </TabPanel>
+                            <TabPanel width="full">
+                              <SuneditorForNotesMaking article={article} language={"HINDI"} isEditable={true} />
+                            </TabPanel>
+                          </TabPanels>
+                        </Tabs>
+                      </VStack>
+                    </Flex>
+                  );
+                })
+              ) : (
+                <InfoAlert
+                  info={"You don't have any notes in selected topic. Create some notes and come back again \n\n To create Notes :- \n\n 1. Select 'Current Affairs' from first dropdown. \n 2. Select 'Current affairs - 2022' from second dropdown.\n 3. Select 'Syllabus' from 3rd dropdown, this will open syllabus, where you can create notes by selecting topic. "}
+                />
+              )}
+            </GridItem>
+
+            {/* {tagsArray && tagsArray.length === 0 ? (
+              <div>No Topic Selected, Please Select Some topics to see notes</div>
+            ) : swrError ? (
               elog("ManageCurrentAffair", swrError.message)
             ) : (
               <GridItem colSpan={{ base: 5, sm: 5, md: 4 }} px={{ base: "0.5", sm: "0.5", md: "6" }}>
                 {isArticleLoading ? (
                   <div>loading...</div>
-                ) : articles ? (
+                ) : articles && articles.length > 0 ? (
                   articles.map((article) => {
                     return (
                       <Flex key={article.id} pb="16">
                         <VStack width="full">
-                          <Text
-                            alignSelf={"baseline"}
-                            bg="brand.100"
-                            p="2"
-                            fontSize="16px"
-                            casing="capitalize"
-                            align="left"
-                          >
+                          <Text alignSelf={"baseline"} bg="brand.100" p="2" fontSize="16px" casing="capitalize" align="left">
                             <Text as="b">Article Name :- </Text> {article.article_title}
                           </Text>
 
@@ -145,10 +195,11 @@ export default function ManageCurrentAffair() {
                       </Flex>
                     );
                   })
-                ) : null}
+                ) : (
+                  "Either you have not selected any Tags or you don't have any notes in selected tags. create some notes and come back"
+                )}
               </GridItem>
-            )}
-            
+            )} */}
           </>
         </Grid>
       </>

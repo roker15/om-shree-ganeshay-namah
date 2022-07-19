@@ -1,6 +1,7 @@
 import { Container, Flex, Text } from "@chakra-ui/react";
 import Link from "next/link";
 import { useRouter } from "next/router";
+import { GotoQuestion } from "..";
 import ManageNotes from "../../components/notes/ManageNotes";
 import LayoutWithTopNavbar from "../../layout/LayoutWithTopNavbar";
 import { NoteContextWrapper } from "../../state/NoteContext";
@@ -12,14 +13,7 @@ const Notes: React.FC = () => {
 
   return (
     <Container maxW="full" px={{ base: "2", sm: "4", md: "2", lg: "8" }}>
-      <Flex justifyContent="end">
-        <Text as="b">
-          Go to{" "}
-          <Link href="/questionBanks">
-            <a>Question Bank</a>
-          </Link>
-        </Text>
-      </Flex>
+      <GotoQuestion/>
       {/* <NoteContextWrapper> */}
         <ManageNotes />
       {/* </NoteContextWrapper> */}

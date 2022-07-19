@@ -27,6 +27,7 @@ import { NotesSharing } from "./NotesSharing";
 import SharedNotesPanel from "./SharedNotesPanel";
 import SyllabusForNotes from "./SyllabusForNotes";
 import { BASE_URL } from "../../lib/constants";
+import { GotoQuestion } from "../../pages";
 
 type SelectedNotesType = {
   subheadingId: number | undefined;
@@ -76,6 +77,8 @@ const ManageNotes: React.FunctionComponent = () => {
 
   useEffect(() => {
     sessionStorage.setItem("book", JSON.stringify(book));
+    sessionStorage.setItem("selected-subheading", "undefined");
+    sessionStorage.setItem("selected-syllabus", "undefined");
   }, [book]);
 
   useEffect(() => {
@@ -203,10 +206,9 @@ const ManageNotes: React.FunctionComponent = () => {
       </Box>
     );
   }
-
   return (
     <div>
-      <Box px={{ base: "0.5", sm: "0.5", md: "0.5", lg: "44" }} pb="8">
+      <Box px={{ base: "0.5", sm: "0.5", md: "0.5", lg: "44" }} pb="4">
         <BookFilter setParentProps={updateBookProps}></BookFilter>
 
         {user && selectedNotes && selectedNotes.creatorId === profile?.id && (
@@ -249,6 +251,8 @@ const ManageNotes: React.FunctionComponent = () => {
             bg="brand.50"
             // p="2"
             display={{ base: "none", sm: "none", md: "block" }}
+            borderRight="1px"
+            borderRightColor={"gray.100"}
           >
             <Flex>
               <SyllabusForNotes book={book} changeParentProps={changeSelectedSubheading}></SyllabusForNotes>
