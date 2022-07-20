@@ -147,7 +147,7 @@ export const CustomDrawerWithButton = (props: { children: React.ReactNode }) => 
 
   return (
     <>
-      <Button  variant ="link"ref={btnRef} onClick={onOpen} size="sm" colorScheme="purple">
+      <Button  variant ={{base:"link",md:"outline"}}ref={btnRef} onClick={onOpen} size="sm" colorScheme="blue">
         Change Syllabus
       </Button>
 
