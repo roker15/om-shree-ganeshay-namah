@@ -155,7 +155,7 @@ export default function ManageCurrentAffair() {
                 })
               ) : (
                 <InfoAlert
-                  info={"You don't have any notes in selected topic. Create some notes and come back again \n\n To create Notes :- \n\n 1. Click 'Change Syllabus' on Top \n1. Select 'Current Affairs' from first dropdown. \n 2. Select 'Current affairs - 2022' from second dropdown.\n 3. Select 'Syllabus' from 3rd dropdown, this will open syllabus, where you can create notes by selecting topic. "}
+                  info={"You don't have any notes in selected topic. Create some notes and come back again \n\n To create Notes :- \n\n 1. Click 'Change Syllabus' on Top \n2. Select 'Current Affairs' from first dropdown. \n 3. Select 'Current affairs - 2022' from second dropdown.\n .4 Select 'Syllabus' from 3rd dropdown, this will open syllabus, where you can create notes by selecting topic. "}
                 />
               )}
             </GridItem>
