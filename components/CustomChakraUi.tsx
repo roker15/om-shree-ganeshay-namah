@@ -141,3 +141,38 @@ export const CustomDrawer = (props: { children: React.ReactNode }) => {
     </>
   );
 };
+export const CustomDrawerWithButton = (props: { children: React.ReactNode }) => {
+  const { isOpen, onOpen, onClose } = useDisclosure();
+  const btnRef = React.useRef(null);
+
+  return (
+    <>
+      <Button  variant ="link"ref={btnRef} onClick={onOpen} size="sm" colorScheme="purple">
+        Change Syllabus
+      </Button>
+
+      <Drawer
+        isOpen={isOpen}
+        placement="left"
+        onClose={onClose}
+        finalFocusRef={btnRef}
+        size={{ base: "xs", sm: "sm", md: "md", lg: "lg" }}
+        
+      >
+        <DrawerOverlay />
+        <DrawerContent bg="blue.50">
+          <DrawerCloseButton />
+          {/* <DrawerHeader>Create your account</DrawerHeader> */}
+
+          <DrawerBody>{props.children}</DrawerBody>
+
+          <DrawerFooter>
+            <Button variant="outline" mr={3} onClick={onClose}>
+              Cancel
+            </Button>
+          </DrawerFooter>
+        </DrawerContent>
+      </Drawer>
+    </>
+  );
+};

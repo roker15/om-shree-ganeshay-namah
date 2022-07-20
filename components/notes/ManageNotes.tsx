@@ -19,6 +19,7 @@ import {
   CustomSwitch,
   BoldText,
   SpanTextWithBackground,
+  CustomDrawerWithButton,
 } from "../CustomChakraUi";
 import { LoginCard } from "../LoginCard";
 import BookFilter from "../syllabus/BookFilter";
@@ -208,9 +209,11 @@ const ManageNotes: React.FunctionComponent = () => {
   }
   return (
     <div>
-      <Box px={{ base: "0.5", sm: "0.5", md: "0.5", lg: "44" }} pb="4">
-        <BookFilter setParentProps={updateBookProps}></BookFilter>
-
+      <Flex justifyContent={"space-between" } align="center" pr="2">
+      
+        <CustomDrawerWithButton>
+          <BookFilter setParentProps={updateBookProps}></BookFilter>
+        </CustomDrawerWithButton>
         {user && selectedNotes && selectedNotes.creatorId === profile?.id && (
           <Toolbar
             selectedSubheading={selectedNotes}
@@ -223,6 +226,9 @@ const ManageNotes: React.FunctionComponent = () => {
             setDistractionOff={setDistractionOff}
           ></Toolbar>
         )}
+      </Flex>
+      <Box px={{ base: "0.5", sm: "0.5", md: "0.5", lg: "44" }} pb="4">
+        {/* <BookFilter setParentProps={updateBookProps}></BookFilter> */}
       </Box>
       {book && (
         <Sticky>
