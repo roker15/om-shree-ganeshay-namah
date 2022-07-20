@@ -1,8 +1,24 @@
-import { Box, Center } from "@chakra-ui/react";
+import {
+  Box,
+  Button,
+  Center,
+  Drawer,
+  DrawerBody,
+  DrawerCloseButton,
+  DrawerContent,
+  DrawerFooter,
+  DrawerOverlay,
+  Flex,
+  IconButton,
+  useDisclosure,
+} from "@chakra-ui/react";
 import { useUser } from "@supabase/auth-helpers-react";
 import router from "next/router";
 import React, { useEffect, useState } from "react";
+import { MdMenu } from "react-icons/md";
+import Sticky from "react-sticky-el";
 import ManageCurrentAffair from "../components/CurrentAffair/ManageCurrentAffair";
+import { CustomDrawerWithButton } from "../components/CustomChakraUi";
 import { LoginCard } from "../components/LoginCard";
 import BookFilter from "../components/syllabus/BookFilter";
 import LayoutWithTopNavbar from "../layout/LayoutWithTopNavbar";
@@ -38,7 +54,12 @@ const ReviseCurrentAffair: React.FunctionComponent = () => {
     <Box px={{ base: "0.5", sm: "0.5", md: "0.5", lg: "36" }} pb="8">
       {user ? (
         <>
-          <BookFilter setParentProps={updateBookProps}></BookFilter>
+          <Flex justifyContent={"end"} pr="2">
+            <CustomDrawerWithButton>
+              <BookFilter setParentProps={updateBookProps}></BookFilter>
+            </CustomDrawerWithButton>
+          </Flex>
+          {/* <BookFilter setParentProps={updateBookProps}></BookFilter> */}
           <ManageCurrentAffair></ManageCurrentAffair>
         </>
       ) : (
