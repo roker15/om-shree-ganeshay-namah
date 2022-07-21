@@ -28,7 +28,7 @@ import { NotesSharing } from "./NotesSharing";
 import SharedNotesPanel from "./SharedNotesPanel";
 import SyllabusForNotes from "./SyllabusForNotes";
 import { BASE_URL } from "../../lib/constants";
-import { GotoQuestion } from "../../pages";
+// import { GotoQuestion } from "../../pages";
 
 type SelectedNotesType = {
   subheadingId: number | undefined;
@@ -209,7 +209,7 @@ const ManageNotes: React.FunctionComponent = () => {
   }
   return (
     <div>
-      <Flex justifyContent={"space-between" } align="center" pr="2">
+      <Flex justifyContent={"space-between" } align="center" mt="6">
       
         <CustomDrawerWithButton>
           <BookFilter setParentProps={updateBookProps}></BookFilter>
@@ -325,7 +325,7 @@ type ToolbarProps = {
 
 function Toolbar(props: ToolbarProps) {
   return (
-    <Flex justifyContent="end" alignItems="center" mt="4">
+    <Flex justifyContent="end" alignItems="center" >
       <HStack spacing="5px">
         <>
           <Box

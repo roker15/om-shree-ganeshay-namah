@@ -1,6 +1,6 @@
 import { Box, Radio, RadioGroup, Select, Stack, Text } from "@chakra-ui/react";
 import router from "next/router";
-import React, { useEffect, useState } from "react";
+import React, { memo, useEffect, useState } from "react";
 import { useGetBooks, useGetSyllabusByBookId } from "../../customHookes/networkHooks";
 import { useNoteContext } from "../../state/NoteContext";
 import { BookResponse } from "../../types/myTypes";
@@ -141,4 +141,4 @@ const BookFilter: React.FC<{ setParentProps: (x: BookResponse | undefined) => vo
     </Box>
   );
 };
-export default BookFilter;
+export default memo(BookFilter);

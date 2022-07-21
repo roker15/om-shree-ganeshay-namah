@@ -12,7 +12,8 @@ export const globalStyles = {
   },
   // styles for the `a`
   a: {
-    color: "pink.500" ,
+    color: "gray.600",
+    // px:"2",
     fontSize: "sm",
     _hover: {
       // fontSize: "15px",

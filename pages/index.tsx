@@ -62,7 +62,7 @@ const Home: React.FunctionComponent = () => {
   return (
     <Container minW="full" px={{ base: "2", sm: "4", md: "2", lg: "8" }}>
       {/* <FrequentHelp/> */}
-      <GotoQuestion />
+      {/* <GotoQuestion /> */}
       <CtaWithAnnotation />
       <EditorFeatures />
       <CtaWithVideo />
@@ -84,21 +84,4 @@ const Home: React.FunctionComponent = () => {
 (Home as PageWithLayoutType).layout = LayoutWithTopNavbar;
 export default Home;
 
-export function GotoQuestion() {
-  return (
-    <Flex justifyContent="end">
-      <HStack justifyContent={"start"}>
-        <Text as="b">
-          <Link href="/questionBanks">
-            <a>Question Bank</a>
-          </Link>
-        </Text>
-        <Text as="b">
-          <Link href="/reviseCurrentAffair">
-            <a>Current Affair</a>
-          </Link>
-        </Text>
-      </HStack>
-    </Flex>
-  );
-}
+

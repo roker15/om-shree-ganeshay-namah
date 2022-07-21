@@ -17,12 +17,14 @@ import {
   MenuDivider,
   MenuItem,
   MenuList,
+  Stack,
   Text,
   useColorModeValue,
   useDisclosure,
   VStack,
 } from "@chakra-ui/react";
 import Link from "next/link";
+import { useRouter } from "next/router";
 import { ReactNode } from "react";
 import { FaGoogle, FaTelegram, FaWhatsapp } from "react-icons/fa";
 import { FiChevronDown } from "react-icons/fi";
@@ -67,35 +69,27 @@ const MobileNav = ({ onOpen, ...rest }: MobileProps) => {
       justifyContent={{ base: "space-between", md: "flex" }}
       {...rest}
     >
-      <LinkBox>
+      <LinkBox  alignItems="center" display={{ base: "none", sm: "flex" }}>
         <LinkOverlay
           _hover={{
             background: "none",
             // color: "white",
           }}
           href="/"
-        >
-          <Image
-            p="2"
-            // bg="blackAlpha.100"
-            // priority={true}
-            loading="eager"
-            src="/logo-150x150.png"
-            alt="Logo"
-            w={{ base: "80px", md: "110px" }}
-            // w={{ base: "35px", md: "100px" }}
-          />
-        </LinkOverlay>
+        ></LinkOverlay>
+        <Image
+          // p="2"
+          // bg="blackAlpha.100"
+          // priority={true}
+          loading="eager"
+          src="/logo-150x150.png"
+          alt="Logo"
+          w={{ base: "80px", md: "90px" }}
+          // w={{ base: "35px", md: "100px" }}
+        />
       </LinkBox>
-      <Link href="/">
-        <a className="internal" style={{ color: "#2d2e2e", fontWeight: "bold" }}>
-          {" "}
-          Home
-        </a>
-      </Link>
-      <Heading fontSize="xl" ml="16" as="em" size="md" color="blackAlpha.800" display={{ base: "none", md: "block" }}>
-        {`India's first Online 📝Notes making Platform`}
-      </Heading>{" "}
+      <GotoQuestion />
+
       <HStack spacing={{ base: "0", md: "6" }}>
         {!profile ? (
           <HStack>{JoinTelegram}</HStack>
@@ -159,3 +153,25 @@ const JoinTelegram = (
     <FaTelegram color="white" />
   </HStack>
 );
+export function GotoQuestion() {
+  const router = useRouter();
+  return (
+    <Stack direction={{ base: "column", sm: "row" }} justifyContent={"start"} spacing={{ base: "-0.5", sm: "6" }}>
+      <Text as="b" display={router.pathname === "/" ? "none" : ""}>
+        <Link href="/">
+          <a>Home</a>
+        </Link>
+      </Text>
+      <Text as="b" display={router.pathname === "/questionBanks" ? "none" : ""}>
+        <Link href="/questionBanks">
+          <a>Question Bank</a>
+        </Link>
+      </Text>
+      <Text as="b" display={router.pathname === "/reviseCurrentAffair" ? "none" : ""}>
+        <Link href="/reviseCurrentAffair">
+          <a>Current Affair</a>
+        </Link>
+      </Text>
+    </Stack>
+  );
+}

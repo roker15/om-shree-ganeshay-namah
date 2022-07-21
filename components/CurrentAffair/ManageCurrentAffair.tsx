@@ -135,7 +135,7 @@ export default function ManageCurrentAffair() {
                           <Text as="b">Article Name :- </Text> {article.article_title}
                         </Text>
 
-                        <Tabs size="md" colorScheme="whatsapp" width="full">
+                        <Tabs variant='solid-rounded' size="sm" colorScheme="gray" width="full">
                           <TabList>
                             <Tab>English</Tab>
                             <Tab>Hindi</Tab>
