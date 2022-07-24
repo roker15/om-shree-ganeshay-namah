@@ -16,12 +16,12 @@ export default function CallToActionWithAnnotation() {
 
   return (
     <>
-      <Container maxW={"5xl"}>
-        <Text fontSize={{ base: "xl", md: "3xl" }}  fontFamily={"fantasy"} position={"relative"} color="gray.400">
+      <Container maxW={"5xl"} bg="#f0f2f5" boxShadow="md" my="4" h="100vh">
+        <Text fontSize={{ base: "xl", md: "3xl" }}   position={"relative"} color="gray.400">
           Toppers Manage 70% of their content Digitally
         </Text>
-        <Text fontSize={{ base: "xl", md: "2xl" }}  fontFamily={"fantasy"} position={"relative"} color="blue.400">
-          7000+ UPSC candidate Using Jionote</Text>
+        <Text fontSize={{ base: "xl", md: "2xl" }}   position={"relative"} color="facebook.400">
+          7000+ UPSC Aspirants using Jionote</Text>
         <Stack as={Box} textAlign={"center"} spacing={{ base: 8, md: 14 }} py={{ base: 20, md: 36 }}>
           <Heading fontWeight={700} fontSize={{ base: "2xl", sm: "4xl", md: "6xl" }} lineHeight={"110%"}>
             Prepare all your UPSC Notes Digitally at one place <br />

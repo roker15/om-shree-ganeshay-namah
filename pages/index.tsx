@@ -7,6 +7,7 @@ import TwoColumn from "../components/chakraTemplate/All";
 import CtaWithAnnotation from "../components/chakraTemplate/CtaWithAnnotation";
 import CtaWithVideo from "../components/chakraTemplate/CurrentAffair";
 import EditorFeatures from "../components/chakraTemplate/EditorFeatures";
+import Landing from "../components/chakraTemplate/Landing";
 import QuestionDemo from "../components/chakraTemplate/QuestionDemo";
 import LayoutWithTopNavbar from "../layout/LayoutWithTopNavbar";
 import { BookResponse } from "../types/myTypes";
@@ -63,6 +64,7 @@ const Home: React.FunctionComponent = () => {
     <Container minW="full" px={{ base: "2", sm: "4", md: "2", lg: "8" }}>
       {/* <FrequentHelp/> */}
       {/* <GotoQuestion /> */}
+      <Landing/>
       <CtaWithAnnotation />
       <EditorFeatures />
       <CtaWithVideo />

@@ -7,16 +7,16 @@ export const LoginCard = ({ redirect }: { redirect: string }) => {
   const { signInWithgoogle, signOut, profile } = useAuthContext();
   return (
     <Button
-      colorScheme={"black"}
+      colorScheme={"green"}
       size="md"
       px={10}
       borderRadius="full"
-      variant="outline"
+      variant="solid"
       onClick={() => signInWithgoogle(redirect)}
-      _hover={{
-        bg: "gray.700",
-        color:"white"
-      }}
+      // _hover={{
+      //   bg: "gray.700",
+      //   color:"white"
+      // }}
     >
       Login
     </Button>
