@@ -66,16 +66,16 @@ const BookFilter: React.FC<{ setParentProps: (x: BookResponse | undefined) => vo
   const navigateTo = (bookid: string) => {
     router.push({
       pathname: ROUTE_POST_ID,
-      query: { bookid},
+      query: { bookid },
 
       // href:"www.localhost.com"
     });
   };
 
   return (
-    <Box minW="full" >
+    <Box minW="full">
       <RadioGroup onChange={setValue} value={value}>
-        <Stack direction={{ base: "column", md: "column",lg: "row" }}>
+        <Stack direction={{ base: "column", md: "column", lg: "row" }}>
           {categories.map((x) => {
             return (
               <Radio key={x.id} value={x.id} colorScheme="brand">
@@ -85,7 +85,7 @@ const BookFilter: React.FC<{ setParentProps: (x: BookResponse | undefined) => vo
           })}
         </Stack>
       </RadioGroup>
-      <Stack direction={{ base: "column", md: "column",lg: "row" }} py="4">
+      <Stack direction={{ base: "column", md: "column", lg: "row" }} py="4">
         <Select
           id="paper"
           placeholder={value === "7" ? "Select Exam" : "Select Class/Course"}
@@ -93,13 +93,17 @@ const BookFilter: React.FC<{ setParentProps: (x: BookResponse | undefined) => vo
             setSelectedClass(Number(e.target.value));
           }}
         >
-          {classList?.map((x) => {
-            return (
-              <option key={x.id} value={x.class_fk!.id}>
-                {value === "1" ? "Class " + x.class_fk!.class : x.class_fk!.class}
-              </option>
-            );
-          })}
+          {classList
+            ?.sort((a, b) => {
+              return a.class_fk!.class > b.class_fk!.class ? 1 : -1;
+            })
+            .map((x) => {
+              return (
+                <option key={x.id} value={x.class_fk!.id}>
+                  {value === "1" ? "Class " + x.class_fk!.class : x.class_fk!.class}
+                </option>
+              );
+            })}
         </Select>
         <Select
           id="paper"

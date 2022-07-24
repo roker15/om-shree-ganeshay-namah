@@ -65,13 +65,13 @@ const Home: React.FunctionComponent = () => {
       {/* <FrequentHelp/> */}
       {/* <GotoQuestion /> */}
       <Landing/>
-      <CtaWithAnnotation />
+      {/* <CtaWithAnnotation /> */}
       <EditorFeatures />
       <CtaWithVideo />
       <QuestionDemo />
 
       {/* <SplitScreenWithImage /> */}
-      <TwoColumn />
+      {/* <TwoColumn /> */}
       {/* <CreateBookSyllabus /> */}
       <Flex flexDirection="column" alignItems={"center"} flexWrap="nowrap">
         {/* <BookFilter setParentProps={updateBookProps}></BookFilter> */}

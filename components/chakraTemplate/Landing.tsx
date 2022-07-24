@@ -1,26 +1,11 @@
-import {
-  Container,
-  Stack,
-  Flex,
-  Box,
-  Heading,
-  Text,
-  Button,
-  Image,
-  Icon,
-  IconButton,
-  createIcon,
-  IconProps,
-  useColorModeValue,
-} from "@chakra-ui/react";
+import { Box, Button, Container, Flex, Heading, Stack, Text } from "@chakra-ui/react";
+import { useUser } from "@supabase/auth-helpers-react";
 import router from "next/router";
 import { BASE_URL } from "../../lib/constants";
 import { LoginCard } from "../LoginCard";
-import { useUser } from "@supabase/auth-helpers-react";
 export default function CallToActionWithVideo() {
   const { user, error } = useUser();
- 
-  const ROUTE_POST_ID = "/reviseCurrentAffair";
+
   const navigateTo = (path: string) => {
     router.push({
       pathname: path,
@@ -28,6 +13,12 @@ export default function CallToActionWithVideo() {
   };
   return (
     <Container maxW={"6xl"}>
+      <Text justifyContent={"center"} mt="6" fontSize={{ base: "xl", md: "2xl" }} fontStyle="initial" bg="green.400" color="gray.50" p="2">
+        Toppers Manage 70% of their content Digitally, How much You do?
+      </Text>
+      {/* <Text fontSize={{ base: "xl", md: "2xl" }} fontWeight="bold" position={"relative"} color="orange.400">
+        7000+ UPSC Aspirants using Jionote to Prepare their Notes
+      </Text> */}
       <Stack
         align={"center"}
         spacing={{ base: 8, md: 10 }}
@@ -50,16 +41,16 @@ export default function CallToActionWithVideo() {
                 zIndex: -1,
               }}
             >
-              Prepare all your UPSC Notes Digitally at one place
+              Prepare all Subjects UPSC Notes Digitally,
             </Text>
             <br />
             <Text as={"span"} color={"green.400"}>
               Exactly as per Syllabus
             </Text>
           </Heading>
-          <Text color={"gray.500"}>
-            Yes! We know you study currnet Affair date wise, but you prefer to revise Topic wise. We bring you exactly the
-            same.
+          <Text color={"gray.600"}>
+            You study most of your content digitally. Then why not Complement your digital Study with Digital notes making
+            platform?
           </Text>
           <Stack spacing={{ base: 4, sm: 6 }} direction={{ base: "column", sm: "row" }}>
             {!user && <LoginCard redirect={BASE_URL} />}
@@ -77,45 +68,60 @@ export default function CallToActionWithVideo() {
             /> */}
             <Stack spacing="10" py="16" px="8">
               <Button
-                  colorScheme={"black"}
-                  size="lg"
-                  px={10}
-                  borderRadius="full"
-                  variant="outline"
-                  _hover={{
-                    bg: "gray.700",
-                    color:"white"
-                  }}
+                colorScheme={"black"}
+                size="lg"
+                px={10}
+                borderRadius="full"
+                variant="outline"
+                _hover={{
+                  bg: "gray.700",
+                  color: "white",
+                }}
+                onClick={() => navigateTo("/syllabusSwitch")}
               >
                 Create Current Affair Notes
               </Button>
               <Button
-                 colorScheme={"black"}
-                 size="lg"
-                 px={10}
-                 borderRadius="full"
-                 variant="outline"
-                 _hover={{
-                   bg: "gray.700",
-                   color:"white"
-                 }}
-                onClick={() => navigateTo( "/reviseCurrentAffair")}
+                colorScheme={"black"}
+                size="lg"
+                px={10}
+                borderRadius="full"
+                variant="outline"
+                _hover={{
+                  bg: "gray.700",
+                  color: "white",
+                }}
+                onClick={() => navigateTo("/reviseCurrentAffair")}
               >
                 Read Current Affairs Notes
               </Button>
               <Button
-                  colorScheme={"black"}
-                  size="lg"
-                  px={10}
-                  borderRadius="full"
-                  variant="outline"
-                  _hover={{
-                    bg: "gray.700",
-                    color:"white"
-                  }}
+                colorScheme={"black"}
+                size="lg"
+                px={10}
+                borderRadius="full"
+                variant="outline"
+                _hover={{
+                  bg: "gray.700",
+                  color: "white",
+                }}
                 onClick={() => navigateTo("/questionBanks")}
               >
                 Practice Question-Answer
+              </Button>
+              <Button
+                colorScheme={"black"}
+                size="lg"
+                px={10}
+                borderRadius="full"
+                variant="outline"
+                _hover={{
+                  bg: "gray.700",
+                  color: "white",
+                }}
+                onClick={() => navigateTo("/questionBanks")}
+              >
+                Create All Notes
               </Button>
             </Stack>
           </Box>

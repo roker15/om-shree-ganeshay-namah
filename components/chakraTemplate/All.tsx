@@ -44,12 +44,12 @@ export default function CallToActionWithVideo() {
     setBook(x);
   };
   return (
-    <Container maxW={"6xl"}>
+    <Container maxW={"5xl"}>
       <Stack
-        align={"center"}
+        // align={"center"}
         spacing={{ base: 8, md: 10 }}
-        py={{ base: 20, md: 28 }}
-        direction={{ base: "column", md: "row" }}
+        // pt={{ base: 8, md: 8 }}
+        direction={{ base: "column", md: "column" }}
       >
         <Stack flex={1} spacing={{ base: 5, md: 10 }}>
           <Heading lineHeight={1.1} fontWeight={700} fontSize={{ base: "3xl", sm: "4xl", lg: "6xl" }}>
@@ -67,17 +67,17 @@ export default function CallToActionWithVideo() {
                 zIndex: -1,
               }}
             >
-              All at One Place
+           Select Syllabus,
             </Text>
             <br />
             <Text as={"span"} color={"orange.400"}>
-              Select your Syllabus, And start making Notes
+               And start making Notes
             </Text>
           </Heading>
-          <Text color={"gray.500"}>
+          {/* <Text color={"gray.500"}>
             Switch to Any Syllabus & Content Right from here. No need to navigate from page to page for different Syllabus &
             Content.
-          </Text>
+          </Text> */}
         </Stack>
         <VStack spacing={"12"} flex={1} w="full">
           {!user && (
