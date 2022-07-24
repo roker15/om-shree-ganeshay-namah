@@ -28,36 +28,7 @@ const SharedNotesPanel: React.FC<Props> = ({ subheadingid, changeParentProps }) 
   return (
     <Box>
       <VStack align="left">
-       
-        <Text align="start" fontWeight="medium" fontSize="15px" p="0.5" bg="brand.100">
-          Public Notes
-        </Text>
-        {publicNotes && publicNotes.length > 0 ? (
-          publicNotes!.map((x) => (
-            <Flex my="2" ml="2" key={x.id} role={"group"} align="center">
-              {/* <Button variant="unstyled"> */}
-              <Avatar mx="2" size="2xs" src={x.ownedby_avatar} />
-              <Text
-                as="label"
-                casing="capitalize"
-                color={selectedSubheading === x.books_subheadings_fk ? "white" : "null"}
-                bg={selectedSubheading === x.books_subheadings_fk ? "green.400" : "null"}
-                // onClick={() => changeParentProps(x)}
-                align="start"
-                px="0.5"
-              >
-                <Link onClick={() => changeParentProps(x)}>{x.ownedby_name}</Link>
-              </Text>
-              {/* </Button> */}
-            </Flex>
-          ))
-        ) : (
-          <Text px="2" as="label" casing="capitalize">
-            No Public notes on this topic
-          </Text>
-        )}
-        <VStack></VStack>
-        <Text align="start" p="0.5" bg="brand.100" fontWeight="medium" fontSize="15px">
+        <Text align="start" bg="brand.100" fontWeight="normal" p="2" borderTopRadius={"md"}>
           Shared Notes
         </Text>
         {sharedNtoes && sharedNtoes.length > 0 ? (
@@ -82,6 +53,34 @@ const SharedNotesPanel: React.FC<Props> = ({ subheadingid, changeParentProps }) 
             No shared notes with you on this topic
           </Text>
         )}
+        <Text align="start" fontWeight="normal"  bg="brand.100" p="2">
+          Public Notes
+        </Text>
+        {publicNotes && publicNotes.length > 0 ? (
+          publicNotes!.map((x) => (
+            <Flex my="2" key={x.id} role={"group"} align="center">
+              {/* <Button variant="unstyled"> */}
+              <Avatar mx="2" size="2xs" src={x.ownedby_avatar} />
+              <Text
+                as="label"
+                casing="capitalize"
+                color={selectedSubheading === x.books_subheadings_fk ? "white" : "null"}
+                bg={selectedSubheading === x.books_subheadings_fk ? "green.400" : "null"}
+                // onClick={() => changeParentProps(x)}
+                align="start"
+                px="0.5"
+              >
+                <Link onClick={() => changeParentProps(x)}>{x.ownedby_name}</Link>
+              </Text>
+              {/* </Button> */}
+            </Flex>
+          ))
+        ) : (
+          <Text as="label" px="2" casing="capitalize">
+            No Public notes on this topic
+          </Text>
+        )}
+
         <VStack></VStack>
       </VStack>
     </Box>

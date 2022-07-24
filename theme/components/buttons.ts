@@ -56,8 +56,8 @@ export const buttons = {
       // bg: "gray.100",
       _hover: {
         // bg: props.colorMode === "dark" ? "red.300" : "red.500",
-        color: "gray.800",
-        transform: "scale(1.5)",
+        // color: "gray.800",
+        // transform: "scale(1.5)",
       },
     }),
   },

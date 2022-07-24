@@ -54,11 +54,11 @@ const ReviseCurrentAffair: React.FunctionComponent = () => {
     <Box px={{ base: "0.5", sm: "0.5", md: "0.5", lg: "36" }} pb="8">
       {user ? (
         <>
-          <Flex justifyContent={"end"} pr="2">
+          {/* <Flex justifyContent={"end"} pr="2">
             <CustomDrawerWithButton>
               <BookFilter setParentProps={updateBookProps}></BookFilter>
             </CustomDrawerWithButton>
-          </Flex>
+          </Flex> */}
           {/* <BookFilter setParentProps={updateBookProps}></BookFilter> */}
           <ManageCurrentAffair></ManageCurrentAffair>
         </>

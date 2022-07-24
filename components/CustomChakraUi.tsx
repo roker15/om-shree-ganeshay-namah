@@ -72,7 +72,7 @@ export function CustomSwitch(props: { state: boolean; changeState: (arg0: boolea
   return (
     <Switch
       size="sm"
-      colorScheme="gray" // defaultChecked={isPostPublic}
+      colorScheme="green" // defaultChecked={isPostPublic}
       isChecked={props.state as boolean}
       onChange={(e: ChangeEvent<HTMLInputElement>) => props.changeState(e.target.checked)}
     />
@@ -147,20 +147,22 @@ export const CustomDrawerWithButton = (props: { children: React.ReactNode }) => 
 
   return (
     <>
-      <Button  variant ={{base:"link",md:"outline"}}ref={btnRef} onClick={onOpen} size="sm" colorScheme="blue">
-        Change Syllabus
+      <Button variant={"link"} ref={btnRef} onClick={onOpen} size="md" color="gray.600" _hover={{ textDecoration: "none" }}>
+        <Text fontWeight="hairline" fontFamily={"sans-serif"}>
+          Select Syllabus
+        </Text>
       </Button>
 
       <Drawer
+        preserveScrollBarGap={true} // content will flicker if not use it.
         isOpen={isOpen}
         placement="left"
         onClose={onClose}
         finalFocusRef={btnRef}
         size={{ base: "xs", sm: "sm", md: "md", lg: "lg" }}
-        
       >
         <DrawerOverlay />
-        <DrawerContent bg="blue.50">
+        <DrawerContent >
           <DrawerCloseButton />
           {/* <DrawerHeader>Create your account</DrawerHeader> */}
 

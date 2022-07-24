@@ -230,7 +230,7 @@ const MyNotes: React.FC<Props> = ({ subjectId, subheadingid, notesCreator, chang
                   </Box>
                 </Box>
               </Flex>
-              <Tabs variant='solid-rounded' size="sm" colorScheme="gray">
+              <Tabs variant='line' size="sm" colorScheme="gray">
                 <TabList>
                   <Tab>English</Tab>
                   <Tab>Hindi</Tab>

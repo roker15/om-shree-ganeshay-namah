@@ -17,14 +17,18 @@ import {
   VStack,
   Wrap,
 } from "@chakra-ui/react";
+import { supabaseClient } from "@supabase/auth-helpers-nextjs";
 import React from "react";
 import { FiTrendingUp } from "react-icons/fi";
+import { mutate } from "swr";
 import { useGetUserArticlesFromTags } from "../../customHookes/networkHooks";
 import { currentAffairTags } from "../../lib/constants";
 import { elog } from "../../lib/mylog";
 import { useAuthContext } from "../../state/Authcontext";
 import { useNoteContext } from "../../state/NoteContext";
+import { definitions } from "../../types/supabase";
 import SuneditorForNotesMaking from "../editor/SuneditorForNotesMaking";
+import DeleteConfirmation from "../syllabus/DeleteConfirmation";
 
 import Tags, { TagsDrawer } from "./Tags";
 
@@ -33,7 +37,7 @@ function InfoAlert({ info }: { info: string }) {
     <Alert status="info" colorScheme={"gray"} alignItems="start">
       <AlertIcon />
       {/* <Text as="p">{info}</Text> */}
-      <div style={{whiteSpace: 'pre-line'}}>{info}</div>
+      <div style={{ whiteSpace: "pre-line" }}>{info}</div>
       {/* {info} */}
     </Alert>
   );
@@ -48,6 +52,18 @@ export default function ManageCurrentAffair() {
     count,
     swrError,
   } = useGetUserArticlesFromTags(profile?.id, tagsArray);
+
+  const deleteArticle = async (id: number): Promise<void> => {
+    const { data, error } = await supabaseClient.from<definitions["books_articles"]>("books_articles").delete().eq("id", id);
+    if (error) {
+      elog("MyNotes->deleteArticle", error.message);
+      return;
+    }
+    if (data) {
+      mutate([`/get-user-articles-bytags/${profile?.id}/${tagsArray}`]);
+    }
+  };
+
 
   return (
     <Box>
@@ -129,13 +145,20 @@ export default function ManageCurrentAffair() {
               ) : articles && articles.length > 0 ? (
                 articles.map((article) => {
                   return (
-                    <Flex key={article.id} pb="16">
+                    <Flex key={article.id} pb="16" >
                       <VStack width="full">
+                        <Flex alignSelf="start" alignItems="center">
                         <Text alignSelf={"baseline"} bg="brand.100" p="2" fontSize="16px" casing="capitalize" align="left">
                           <Text as="b">Article Name :- </Text> {article.article_title}
                         </Text>
-
-                        <Tabs variant='solid-rounded' size="sm" colorScheme="gray" width="full">
+                        <DeleteConfirmation
+                          handleDelete={deleteArticle}
+                          dialogueHeader={"Delete this Article?"}
+                          isDisabled={false}
+                          isIconButton={true}
+                          id={article.id}
+                        ></DeleteConfirmation></Flex>
+                        <Tabs variant="line" size="sm" colorScheme="gray" width="full">
                           <TabList>
                             <Tab>English</Tab>
                             <Tab>Hindi</Tab>
@@ -155,7 +178,9 @@ export default function ManageCurrentAffair() {
                 })
               ) : (
                 <InfoAlert
-                  info={"You don't have any notes in selected topic. Create some notes and come back again \n\n To create Notes :- \n\n 1. Click 'Change Syllabus' on Top \n2. Select 'Current Affairs' from first dropdown. \n 3. Select 'Current affairs - 2022' from second dropdown.\n .4 Select 'Syllabus' from 3rd dropdown, this will open syllabus, where you can create notes by selecting topic. "}
+                  info={
+                    "You don't have any notes in selected topic. Create some notes and come back again \n\n To create Notes :- \n\n 1. Click 'Change Syllabus' on Top \n2. Select 'Current Affairs' from first dropdown. \n 3. Select 'Current affairs - 2022' from second dropdown.\n .4 Select 'Syllabus' from 3rd dropdown, this will open syllabus, where you can create notes by selecting topic. "
+                  }
                 />
               )}
             </GridItem>

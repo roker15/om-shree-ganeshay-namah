@@ -25,11 +25,14 @@ import {
 } from "@chakra-ui/react";
 import Link from "next/link";
 import { useRouter } from "next/router";
-import { ReactNode } from "react";
+import { ReactNode, useEffect, useState } from "react";
 import { FaGoogle, FaTelegram, FaWhatsapp } from "react-icons/fa";
 import { FiChevronDown } from "react-icons/fi";
+import { CustomDrawerWithButton } from "../components/CustomChakraUi";
+import BookFilter from "../components/syllabus/BookFilter";
 import { BASE_URL } from "../lib/constants";
 import { useAuthContext } from "../state/Authcontext";
+import { BookResponse } from "../types/myTypes";
 
 // const LinkItems: Array<Subheading> = [];
 
@@ -39,8 +42,10 @@ export default function TopNavbar({ children }: { children: ReactNode }) {
   return (
     //overflowx = hidden is because body was visible in mobile view. test is again and then
     // finalize
-    <Box minH="100vh" minW="full" bg="#ffffff">
+    <Box minW="fit-content" bg="#ffffff" overflow={"visible"}>
+      <Box h="16"></Box>
       <MobileNav onOpen={onOpen} />
+
       {children}
     </Box>
   );
@@ -59,17 +64,20 @@ const MobileNav = ({ onOpen, ...rest }: MobileProps) => {
       height="16"
       alignItems="center"
       // bg={useColorModeValue("#f8f6fa", "#e5e0f1")}
-      // bg="#faf8f8"
-      borderBottomWidth="0px"
-      zIndex={500}
-      pos="sticky"
-      mt={"0"}
+      bg="white"
+      borderBottomWidth="4px"
+      borderBottomColor={"gray.100"}
+      zIndex={"docked"}
+      pos="fixed"
+      top={"0"}
+      w="full"
+      alignSelf={"flex-start"}
       // boxShadow="md"
-      borderBottomColor={useColorModeValue("gray.200", "gray.700")}
+      // borderBottomColor={useColorModeValue("gray.200", "gray.700")}
       justifyContent={{ base: "space-between", md: "flex" }}
       {...rest}
     >
-      <LinkBox  alignItems="center" display={{ base: "none", sm: "flex" }}>
+      <LinkBox alignItems="center" display={{ base: "none", sm: "flex" }}>
         <LinkOverlay
           _hover={{
             background: "none",
@@ -155,23 +163,65 @@ const JoinTelegram = (
 );
 export function GotoQuestion() {
   const router = useRouter();
+  const [book, setBook] = useState<BookResponse | undefined>(undefined);
+  const ROUTE_POST_ID = "/notes/[bookid]";
+  const navigateTo = (bookid: string) => {
+    router.push({
+      pathname: ROUTE_POST_ID,
+      query: { bookid },
+    });
+  };
+
+  useEffect(() => {
+    if (book) {
+      sessionStorage.setItem("book", JSON.stringify(book));
+      sessionStorage.setItem("selected-subheading", "undefined");
+      sessionStorage.setItem("selected-syllabus", "undefined");
+      navigateTo(book.id.toString());
+    }
+  }, [book]);// do not bring navigate to dependency.. it brings infinite loop
+
+  const updateBookProps = (x: BookResponse | undefined) => {
+    setBook(x);
+  };
   return (
     <Stack direction={{ base: "column", sm: "row" }} justifyContent={"start"} spacing={{ base: "-0.5", sm: "6" }}>
-      <Text as="b" display={router.pathname === "/" ? "none" : ""}>
+      <Text
+        color="gray.600"
+        fontWeight="hairline"
+        fontFamily={"sans-serif"}
+        fontSize={{ base: "x-small", sm: "md" }}
+        display={router.pathname === "/" ? "none" : ""}
+        
+      >
         <Link href="/">
           <a>Home</a>
         </Link>
       </Text>
-      <Text as="b" display={router.pathname === "/questionBanks" ? "none" : ""}>
+      <Text
+        color="gray.600"
+        fontWeight="hairline"
+        fontFamily={"sans-serif"}
+        fontSize={{ base: "x-small", sm: "md" }}
+        display={router.pathname === "/questionBanks" ? "none" : ""}
+      >
         <Link href="/questionBanks">
           <a>Question Bank</a>
         </Link>
       </Text>
-      <Text as="b" display={router.pathname === "/reviseCurrentAffair" ? "none" : ""}>
+      <Text
+        fontWeight="hairline"
+        fontFamily={"sans-serif"}
+        fontSize={{ base: "x-small", sm: "md" }}
+        display={router.pathname === "/reviseCurrentAffair" ? "none" : ""}
+      >
         <Link href="/reviseCurrentAffair">
-          <a>Current Affair</a>
+          <a>Current Affairs</a>
         </Link>
       </Text>
+      <CustomDrawerWithButton>
+        <BookFilter setParentProps={updateBookProps}></BookFilter>
+      </CustomDrawerWithButton>
     </Stack>
   );
 }

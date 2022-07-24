@@ -141,4 +141,4 @@ const BookFilter: React.FC<{ setParentProps: (x: BookResponse | undefined) => vo
     </Box>
   );
 };
-export default memo(BookFilter);
+export default BookFilter;
