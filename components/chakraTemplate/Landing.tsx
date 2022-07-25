@@ -14,10 +14,7 @@ export default function CallToActionWithVideo() {
   return (
     <Box w="100wh" bg="white">
     <Container maxW={"6xl"}>
-      <Text justifyContent={"center"} mt="6" fontSize={{ base: "xl", md: "2xl" } } fontStyle="initial" bg="gray.600" color="gray.50" p="2" borderRadius={5}>
-        Toppers Manage 70% of their content Digitally, How much You do?
-        {/* 7000+ Students using Jionote to Create their Notes Digitially */}
-      </Text>
+     
       {/* <Text fontSize={{ base: "xl", md: "2xl" }} fontWeight="bold" position={"relative"} color="orange.400">
         7000+ UPSC Aspirants using Jionote to Prepare their Notes
       </Text> */}
