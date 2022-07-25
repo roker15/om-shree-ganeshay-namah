@@ -63,8 +63,9 @@ const MobileNav = ({ onOpen, ...rest }: MobileProps) => {
       // bg={useColorModeValue("#f8f6fa", "#e5e0f1")}
       bg="white"
       // bg="#f0f2f5"
-      borderBottomWidth="4px"
+      borderBottomWidth="0px"
       borderBottomColor={"gray.100"}
+      shadow="sm"
       zIndex={"docked"}
       pos="fixed"
       top={"0"}
@@ -93,7 +94,7 @@ const MobileNav = ({ onOpen, ...rest }: MobileProps) => {
             // bg="blackAlpha.100"
             // priority={true}
             loading="eager"
-            src="/logo-150x150.png"
+            src="/logo-blue.png"
             alt="Logo"
             w="90px"
             // w={{ base: "35px", md: "100px" }}

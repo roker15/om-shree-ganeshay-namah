@@ -13,7 +13,7 @@ export default function CallToActionWithVideo() {
   };
   return (
     <Container maxW={"6xl"}>
-      <Text justifyContent={"center"} mt="6" fontSize={{ base: "xl", md: "2xl" }} fontStyle="initial" bg="green.400" color="gray.50" p="2">
+      <Text justifyContent={"center"} mt="6" fontSize={{ base: "xl", md: "2xl" }} fontStyle="initial" bg="facebook.400" color="gray.50" p="2">
         Toppers Manage 70% of their content Digitally, How much You do?
       </Text>
       {/* <Text fontSize={{ base: "xl", md: "2xl" }} fontWeight="bold" position={"relative"} color="orange.400">
@@ -44,7 +44,7 @@ export default function CallToActionWithVideo() {
               Prepare all Subjects UPSC Notes Digitally,
             </Text>
             <br />
-            <Text as={"span"} color={"green.400"}>
+            <Text as={"span"} color={"facebook.300"}>
               Exactly as per Syllabus
             </Text>
           </Heading>
