@@ -204,7 +204,7 @@ export function GotoQuestion() {
     >
       <Text
         color="gray.800"
-        fontWeight="hairline"
+        fontWeight="semibold"
         fontSize={{ base: "small", sm: "md" }}
         display={router.pathname === "/" ? "none" : ""}
       >
@@ -214,7 +214,7 @@ export function GotoQuestion() {
       </Text>
       <Text
         color="gray.800"
-        fontWeight="hairline"
+        fontWeight="semibold"
         fontSize={{ base: "small", sm: "md" }}
         display={router.pathname === "/questionBanks" ? "none" : ""}
       >
@@ -224,7 +224,7 @@ export function GotoQuestion() {
       </Text>
       <Text
         color="gray.800"
-        fontWeight="hairline"
+        fontWeight="semibold"
         fontSize={{ base: "small", sm: "md" }}
         display={router.pathname === "/reviseCurrentAffair" ? "none" : ""}
       >
@@ -268,21 +268,21 @@ export function CustomMenu() {
       <MenuButton as={IconButton} aria-label="Options" icon={<HamburgerIcon />} variant="ghost" />
       <MenuList>
         <MenuItem minH="48px" display={router.pathname === "/" ? "none" : ""}>
-          <Text color="gray.800" fontWeight="hairline" fontSize={{ base: "small", sm: "md" }}>
+          <Text color="gray.800" fontWeight="semibold" fontSize={{ base: "small", sm: "md" }}>
             <Link href="/">
               <a>Home</a>
             </Link>
           </Text>
         </MenuItem>
         <MenuItem minH="48px" display={router.pathname === "/questionBanks" ? "none" : ""}>
-          <Text color="gray.800" fontWeight="hairline"  fontSize={{ base: "small", sm: "md" }}>
+          <Text color="gray.800" fontWeight="semibold"  fontSize={{ base: "small", sm: "md" }}>
             <Link href="/questionBanks">
               <a>Question Bank</a>
             </Link>
           </Text>
         </MenuItem>
         <MenuItem minH="48px" display={router.pathname === "/reviseCurrentAffair" ? "none" : ""}>
-          <Text color="gray.800" fontWeight="hairline"  fontSize={{ base: "small", sm: "md" }}>
+          <Text color="gray.800" fontWeight="semibold"  fontSize={{ base: "small", sm: "md" }}>
             <Link href="/reviseCurrentAffair">
               <a>Current Affairs</a>
             </Link>

@@ -152,7 +152,7 @@ export const CustomDrawerWithButton = (props: { children: React.ReactNode }) => 
       {/* <Button variant={"unstyled"} ref={btnRef} onClick={onOpen} size={{base:"sm",sm:"md"}}  color="gray.600" _hover={{ textDecoration: "none" }}> */}
       <Text
         as="button"
-        fontWeight="hairline"
+        fontWeight="semibold"
         fontSize={{ base: "small", sm: "md" }}
         ref={btnRef}
         onClick={onOpen}
