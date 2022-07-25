@@ -280,25 +280,23 @@ const MyNotes: React.FC<Props> = ({ subjectId, subheadingid, notesCreator, chang
             ></ArticleForm>
           ) : null}
         </Box>
-        <Box display={profile?.id !== notesCreator ? "none" : "undefined"}>
-          <Tooltip label="Create New Article in This Topic" fontSize="sm">
+        <Box display={profile?.id !== notesCreator ? "none" : "undefined"} >
+          <Tooltip label="Create New Notes in This Topic" fontSize="sm" >
             <span>
-              <IconButton
+              <Button mt="44"
                 // _groupHover={{ size: "" }}
                 display={isArticleCreating === "CREATING" || !subheadingid ? "none" : "flex"}
-                _hover={{ color: " #FF1493" }}
-                size="auto"
                 ml="2"
                 onClick={() => setIsArticleCreating("CREATING")}
-                borderRadius={"full"}
-                variant="outline"
-                colorScheme="whatsapp"
+                // borderRadius={"full"}
+                variant="solid"
+                size="lg"
+                colorScheme="gray"
                 aria-label="Call Sage"
-                fontSize="25px"
-                w="35px"
-                h="35px"
-                icon={<MdAdd />}
-              />
+                leftIcon={<MdAdd />}
+              >
+                Create Notes
+              </Button>
             </span>
           </Tooltip>
         </Box>
@@ -426,7 +424,7 @@ const ArticleForm: React.FC<ArticleFormProps> = ({
               size="sm"
               minW={{base:"300px",md:"500px"}}
               focusBorderColor="brand.500"
-              placeholder="Article Title"
+              placeholder="Notes Heading"
               {...register("articleTitle", { required: "This is required" })}
             />
             <FormErrorMessage>{errors.articleTitle && errors.articleTitle.message}</FormErrorMessage>
@@ -436,7 +434,7 @@ const ArticleForm: React.FC<ArticleFormProps> = ({
               size="sm"
               focusBorderColor="brand.500"
               type="number"
-              placeholder="Article Sequence (10,20,30.. etc)"
+              placeholder="Notes Sequence (1,2,3  ....)"
               {...register("sequence", { required: "This is required" })}
             />
             <FormErrorMessage>{errors.sequence && errors.sequence.message}</FormErrorMessage>
@@ -512,24 +510,22 @@ const ArticleForm: React.FC<ArticleFormProps> = ({
           </VStack>
         ) : null}
 
-        <IconButton
+        <Button
           // _groupHover={{ size: "" }}
           // display={isArticleCreating === "CREATING" || !subheadingid ? "none" : "flex"}
           // _hover={{ color: " #FF1493" }}
-          size="auto"
           m="2"
           // onClick={() => setIsArticleCreating("CREATING")}
           type="submit"
           isLoading={isLoading}
           borderRadius={"full"}
-          variant="outline"
-          colorScheme="brand"
+          variant="solid"
+          colorScheme="facebook"
           aria-label="Call Sage"
-          fontSize="25px"
-          w="35px"
-          h="35px"
-          icon={<MdDone />}
-        />
+          leftIcon={<MdDone />}
+        >
+          Done
+        </Button>
         {/* </ButtonGroup> */}
       </form>
     </Flex>
