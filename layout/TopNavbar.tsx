@@ -51,6 +51,7 @@ interface MobileProps extends FlexProps {
 }
 
 const MobileNav = ({ onOpen, ...rest }: MobileProps) => {
+  const [scrolling, setScrolling] = useState();
   const { signInWithgoogle, signOut, profile } = useAuthContext();
   return (
     <Flex
@@ -63,7 +64,7 @@ const MobileNav = ({ onOpen, ...rest }: MobileProps) => {
       // bg="#f0f2f5"
       borderBottomWidth="0px"
       borderBottomColor={"gray.100"}
-      shadow="sm"
+      // shadow="sm"
       zIndex={"docked"}
       pos="fixed"
       top={"0"}

@@ -4,7 +4,7 @@ import { BookResponse } from "../types/myTypes";
 export interface CurrentAppState {
   isTagSearchActive: boolean | undefined;
   setIsTagSearchActive: (tagSearchActive: boolean) => void;
-  tagsArray?: number[] | undefined;
+  tagsArray?: number[] ;
   setTagsArray?: (tags: number[]) => void;
   bookResponse: BookResponse | undefined;
   setBookResponse: Dispatch<SetStateAction<BookResponse | undefined>>;

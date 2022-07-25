@@ -18,7 +18,9 @@ import {
   Wrap,
 } from "@chakra-ui/react";
 import { supabaseClient } from "@supabase/auth-helpers-nextjs";
-import React from "react";
+import { useUser } from "@supabase/auth-helpers-react";
+import router from "next/router";
+import React, { useEffect, useState } from "react";
 import { FiTrendingUp } from "react-icons/fi";
 import { mutate } from "swr";
 import { useGetUserArticlesFromTags } from "../../customHookes/networkHooks";
@@ -26,15 +28,17 @@ import { currentAffairTags } from "../../lib/constants";
 import { elog } from "../../lib/mylog";
 import { useAuthContext } from "../../state/Authcontext";
 import { useNoteContext } from "../../state/NoteContext";
+import { BookResponse } from "../../types/myTypes";
 import { definitions } from "../../types/supabase";
 import SuneditorForNotesMaking from "../editor/SuneditorForNotesMaking";
+import BookFilter from "../syllabus/BookFilter";
 import DeleteConfirmation from "../syllabus/DeleteConfirmation";
 
 import Tags, { TagsDrawer } from "./Tags";
 
 function InfoAlert({ info }: { info: string }) {
   return (
-    <Alert status="info" colorScheme={"gray"} alignItems="start">
+    <Alert status="info" colorScheme={"cyan"} alignItems="start" variant="left-accent">
       <AlertIcon />
       {/* <Text as="p">{info}</Text> */}
       <div style={{ whiteSpace: "pre-line" }}>{info}</div>
@@ -52,6 +56,24 @@ export default function ManageCurrentAffair() {
     count,
     swrError,
   } = useGetUserArticlesFromTags(profile?.id, tagsArray);
+  const [book, setBook] = useState<BookResponse | undefined>();
+
+  const ROUTE_POST_ID = "/notes/[bookid]";
+  const navigateTo = (bookid: string) => {
+    router.push({
+      pathname: ROUTE_POST_ID,
+      query: { bookid },
+    });
+  };
+
+  useEffect(() => {
+    if (book) {
+      sessionStorage.setItem("book", JSON.stringify(book));
+      sessionStorage.setItem("selected-subheading", "undefined");
+      sessionStorage.setItem("selected-syllabus", "undefined");
+      navigateTo(book.id.toString());
+    }
+  }, [book]);
 
   const deleteArticle = async (id: number): Promise<void> => {
     const { data, error } = await supabaseClient.from<definitions["books_articles"]>("books_articles").delete().eq("id", id);
@@ -63,8 +85,9 @@ export default function ManageCurrentAffair() {
       mutate([`/get-user-articles-bytags/${profile?.id}/${tagsArray}`]);
     }
   };
-
-
+  const updateBookProps = (x: BookResponse | undefined) => {
+    setBook(x);
+  };
   return (
     <Box>
       <>
@@ -145,19 +168,20 @@ export default function ManageCurrentAffair() {
               ) : articles && articles.length > 0 ? (
                 articles.map((article) => {
                   return (
-                    <Flex key={article.id} pb="16" >
+                    <Flex key={article.id} pb="16">
                       <VStack width="full">
                         <Flex alignSelf="start" alignItems="center">
-                        <Text alignSelf={"baseline"} bg="brand.100" p="2" fontSize="16px" casing="capitalize" align="left">
-                          <Text as="b">Article Name :- </Text> {article.article_title}
-                        </Text>
-                        <DeleteConfirmation
-                          handleDelete={deleteArticle}
-                          dialogueHeader={"Delete this Article?"}
-                          isDisabled={false}
-                          isIconButton={true}
-                          id={article.id}
-                        ></DeleteConfirmation></Flex>
+                          <Text alignSelf={"baseline"} bg="brand.100" p="2" fontSize="16px" casing="capitalize" align="left">
+                            <Text as="b">Article Name :- </Text> {article.article_title}
+                          </Text>
+                          <DeleteConfirmation
+                            handleDelete={deleteArticle}
+                            dialogueHeader={"Delete this Article?"}
+                            isDisabled={false}
+                            isIconButton={true}
+                            id={article.id}
+                          ></DeleteConfirmation>
+                        </Flex>
                         <Tabs variant="line" size="sm" colorScheme="gray" width="full">
                           <TabList>
                             <Tab>English</Tab>
@@ -177,11 +201,16 @@ export default function ManageCurrentAffair() {
                   );
                 })
               ) : (
-                <InfoAlert
-                  info={
-                    "You don't have any notes in selected topic. Create some notes and come back again \n\n To create Notes :- \n\n 1. Click 'Change Syllabus' on Top \n2. Select 'Current Affairs' from first dropdown. \n 3. Select 'Current affairs - 2022' from second dropdown.\n .4 Select 'Syllabus' from 3rd dropdown, this will open syllabus, where you can create notes by selecting topic. "
-                  }
-                />
+                <>
+                  <InfoAlert
+                    info={
+                      "You don't have any notes in selected topics. Create some notes and come back again \n\n To create Notes :- \n\n Select 'Current Affairs' Syllabus from below.  "
+                    }
+                  />
+                  <Flex bg="gray.50" p="2" mt="2" justify={"center"} align={"center"} position={"relative"} w={"full"}>
+                    <BookFilter setParentProps={updateBookProps} />
+                  </Flex>
+                </>
               )}
             </GridItem>
 
