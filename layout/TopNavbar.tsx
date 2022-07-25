@@ -78,7 +78,7 @@ const MobileNav = ({ onOpen, ...rest }: MobileProps) => {
         <Box display={{ base: "block", md: "none" }}>
           <CustomMenu />
         </Box>
-        <Text display={{ base: "block", md: "none" }}>Jionote</Text>
+        <Text fontWeight="bold"display={{ base: "block", md: "none" }}>Jionote</Text>
         <LinkBox alignItems="center" display={{ base: "none", md: "flex" }}>
           <LinkOverlay
             _hover={{

@@ -111,20 +111,6 @@ export default function CallToActionWithVideo() {
               >
                 Practice Question-Answer
               </Button>
-              <Button
-                colorScheme={"black"}
-                size="lg"
-                px={10}
-                borderRadius="full"
-                variant="outline"
-                _hover={{
-                  bg: "gray.700",
-                  color: "white",
-                }}
-                onClick={() => navigateTo("/questionBanks")}
-              >
-                Create All Notes
-              </Button>
             </Stack>
           </Box>
         </Flex>
