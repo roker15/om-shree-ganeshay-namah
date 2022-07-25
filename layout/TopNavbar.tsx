@@ -76,7 +76,11 @@ const MobileNav = ({ onOpen, ...rest }: MobileProps) => {
       {...rest}
     >
       <HStack>
-        <LinkBox alignItems="center" display={{ base: "flex", sm: "flex" }}>
+        <Box display={{ base: "block", md: "none" }}>
+          <CustomMenu />
+        </Box>
+        <Text display={{ base: "block", md: "none" }}>Jionote</Text>
+        <LinkBox alignItems="center" display={{ base: "none", md: "flex" }}>
           <LinkOverlay
             _hover={{
               background: "none",
@@ -91,13 +95,10 @@ const MobileNav = ({ onOpen, ...rest }: MobileProps) => {
             loading="eager"
             src="/logo-150x150.png"
             alt="Logo"
-            w={{ base: "80px", md: "90px" }}
+            w="90px"
             // w={{ base: "35px", md: "100px" }}
           />
         </LinkBox>
-        <Box display={{ base: "block", md: "none" }}>
-          <CustomMenu />
-        </Box>
       </HStack>
       <Box display={{ base: "none", md: "block" }}>
         <GotoQuestion />
@@ -205,7 +206,7 @@ export function GotoQuestion() {
       <Text
         color="gray.600"
         fontWeight="semibold"
-        fontSize={{ base: "small", md: "small",lg:"md" }}
+        fontSize={{ base: "small", md: "small", lg: "md" }}
         display={router.pathname === "/" ? "none" : "block"}
       >
         <Link href="/">
@@ -215,7 +216,7 @@ export function GotoQuestion() {
       <Text
         color="gray.600"
         fontWeight="semibold"
-        fontSize={{ base: "small", md: "small",lg:"md" }}
+        fontSize={{ base: "small", md: "small", lg: "md" }}
         display={router.pathname === "/questionBanks" ? "none" : "block"}
       >
         <Link href="/questionBanks">
@@ -225,7 +226,7 @@ export function GotoQuestion() {
       <Text
         color="gray.600"
         fontWeight="semibold"
-        fontSize={{ base: "small", md: "small",lg:"md" }}
+        fontSize={{ base: "small", md: "small", lg: "md" }}
         display={router.pathname === "/reviseCurrentAffair" ? "none" : "block"}
       >
         <Link href="/reviseCurrentAffair">
@@ -268,21 +269,21 @@ export function CustomMenu() {
       <MenuButton as={IconButton} aria-label="Options" icon={<HamburgerIcon />} variant="ghost" />
       <MenuList>
         <MenuItem minH="48px" display={router.pathname === "/" ? "none" : ""}>
-          <Text color="gray.600" fontWeight="semibold"  fontSize={{ base: "small", md: "small",lg:"md" }}>
+          <Text color="gray.600" fontWeight="semibold" fontSize={{ base: "small", md: "small", lg: "md" }}>
             <Link href="/">
               <a>Home</a>
             </Link>
           </Text>
         </MenuItem>
         <MenuItem minH="48px" display={router.pathname === "/questionBanks" ? "none" : ""}>
-          <Text color="gray.600" fontWeight="semibold"  fontSize={{ base: "small", md: "small",lg:"md" }}>
+          <Text color="gray.600" fontWeight="semibold" fontSize={{ base: "small", md: "small", lg: "md" }}>
             <Link href="/questionBanks">
               <a>Question Bank</a>
             </Link>
           </Text>
         </MenuItem>
         <MenuItem minH="48px" display={router.pathname === "/reviseCurrentAffair" ? "none" : ""}>
-          <Text color="gray.600" fontWeight="semibold"  fontSize={{ base: "small", md: "small",lg:"md" }}>
+          <Text color="gray.600" fontWeight="semibold" fontSize={{ base: "small", md: "small", lg: "md" }}>
             <Link href="/reviseCurrentAffair">
               <a>Current Affairs</a>
             </Link>
