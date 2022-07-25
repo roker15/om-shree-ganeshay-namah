@@ -40,7 +40,7 @@ export default function CallToActionWithVideo() {
                 zIndex: -1,
               }}
             >
-              Prepare UPSC Notes Digitally,
+              Prepare Digital UPSC Notes
             </Text>
             <br />
             <Text as={"span"} color={"cornflowerblue"}>

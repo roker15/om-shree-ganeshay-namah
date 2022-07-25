@@ -160,7 +160,7 @@ export default function ManageCurrentAffair() {
 
             <GridItem colSpan={{ base: 5, sm: 5, md: 4 }} px={{ base: "0.5", sm: "0.5", md: "6" }}>
               {tagsArray && tagsArray.length === 0 ? (
-                <InfoAlert info={"No Topic Selected, Please Select Some topics from Menu or Left Panel to see notes"} />
+                <InfoAlert info={"No Topic Selected, Please Select Some topics from Tag Panel to see notes"} />
               ) : swrError ? (
                 swrError.message
               ) : isArticleLoading ? (

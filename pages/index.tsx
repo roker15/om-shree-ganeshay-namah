@@ -3,12 +3,14 @@ import { supabaseClient } from "@supabase/auth-helpers-nextjs";
 import Link from "next/link";
 import router from "next/router";
 import React, { useEffect, useState } from "react";
+import All from "../components/chakraTemplate/All";
 import TwoColumn from "../components/chakraTemplate/All";
 import CtaWithAnnotation from "../components/chakraTemplate/CtaWithAnnotation";
 import CtaWithVideo from "../components/chakraTemplate/CurrentAffair";
 import EditorFeatures from "../components/chakraTemplate/EditorFeatures";
 import Landing from "../components/chakraTemplate/Landing";
 import QuestionDemo from "../components/chakraTemplate/QuestionDemo";
+import SelectSyllabus from "../components/chakraTemplate/SelectSyllabus";
 import LayoutWithTopNavbar from "../layout/LayoutWithTopNavbar";
 import { BookResponse } from "../types/myTypes";
 import PageWithLayoutType from "../types/pageWithLayout";
@@ -64,11 +66,12 @@ const Home: React.FunctionComponent = () => {
     <Box minW="full" >
       {/* <FrequentHelp/> */}
       {/* <GotoQuestion /> */}
-      <Landing/>
+      <Landing />
+      <SelectSyllabus/>
       {/* <CtaWithAnnotation /> */}
-      <EditorFeatures />
+      {/* <EditorFeatures />
       <CtaWithVideo />
-      <QuestionDemo />
+      <QuestionDemo /> */}
 
       {/* <SplitScreenWithImage /> */}
       {/* <TwoColumn /> */}
