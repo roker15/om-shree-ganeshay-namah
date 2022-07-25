@@ -12,6 +12,7 @@ export default function CallToActionWithVideo() {
     });
   };
   return (
+    <Box w="100wh" bg="white">
     <Container maxW={"6xl"}>
       <Text justifyContent={"center"} mt="6" fontSize={{ base: "xl", md: "2xl" } } fontStyle="initial" bg="gray.600" color="gray.50" p="2" borderRadius={5}>
         Toppers Manage 70% of their content Digitally, How much You do?
@@ -27,7 +28,7 @@ export default function CallToActionWithVideo() {
         direction={{ base: "column", md: "row" }}
       >
         <Stack flex={1} spacing={{ base: 5, md: 10 }}>
-          <Heading lineHeight={1.1} fontWeight={700} fontSize={{ base: "3xl", sm: "4xl", lg: "6xl" }}>
+          <Heading lineHeight={1.1} fontWeight={"extrabold"} fontSize={{ base: "3xl", sm: "4xl", lg: "6xl" }}>
             <Text
               as={"span"}
               position={"relative"}
@@ -42,7 +43,7 @@ export default function CallToActionWithVideo() {
                 zIndex: -1,
               }}
             >
-              Prepare all Subjects UPSC Notes Digitally,
+              Prepare UPSC Notes Digitally,
             </Text>
             <br />
             <Text as={"span"} color={"cornflowerblue"}>
@@ -129,5 +130,6 @@ export default function CallToActionWithVideo() {
         </Flex>
       </Stack>
     </Container>
+    </Box>
   );
 }

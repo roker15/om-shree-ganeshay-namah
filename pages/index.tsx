@@ -61,7 +61,7 @@ const Home: React.FunctionComponent = () => {
   };
 
   return (
-    <Container minW="full" px={{ base: "2", sm: "4", md: "2", lg: "8" }}>
+    <Box minW="full" >
       {/* <FrequentHelp/> */}
       {/* <GotoQuestion /> */}
       <Landing/>
@@ -79,7 +79,7 @@ const Home: React.FunctionComponent = () => {
 
         <Box>{/* <ChakraThemeTest/> */}</Box>
       </Flex>
-    </Container>
+    </Box>
   );
 };
 
