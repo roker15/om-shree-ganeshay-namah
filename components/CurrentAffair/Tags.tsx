@@ -18,7 +18,7 @@ import {
 import { supabaseClient } from "@supabase/auth-helpers-nextjs";
 import { groupBy } from "lodash";
 import React, { useEffect, useState } from "react";
-import { MdMenu, MdMenuBook, MdOutlineMenu } from "react-icons/md";
+import { MdMenu, MdMenuBook, MdMenuOpen, MdOutlineMenu, MdSwitchRight } from "react-icons/md";
 import Sticky from "react-sticky-el";
 import { useGetSyllabusByBookId } from "../../customHookes/networkHooks";
 import { currentAffairTags } from "../../lib/constants";
@@ -97,17 +97,17 @@ export function TagsDrawer() {
   return (
     <>
       <Sticky>
-        <IconButton
+        <Button
           aria-label="syllabus"
           variant="ghost"
-          size="md"
-          icon={<MdOutlineMenu />}
+          size="sm"
+          leftIcon={<MdSwitchRight />}
           ref={btnRef}
-          colorScheme="pink"
+          colorScheme="gray"
           onClick={onOpen}
         >
-          {/* Open */}
-        </IconButton>
+          Open Tags
+        </Button>
       </Sticky>
       <Drawer isOpen={isOpen} placement="left" onClose={onClose} finalFocusRef={btnRef}>
         <DrawerOverlay />

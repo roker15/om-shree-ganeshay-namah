@@ -268,7 +268,7 @@ export function CustomMenu() {
   };
   return (
     <Menu>
-      <MenuButton as={IconButton} aria-label="Options" icon={<HamburgerIcon />} variant="outline" />
+      <MenuButton as={IconButton} aria-label="Options" icon={<HamburgerIcon />} variant="ghost" />
       <MenuList>
         <MenuItem minH="48px" display={router.pathname === "/" ? "none" : ""}>
           <Text color="gray.600" fontWeight="hairline" fontFamily={"sans-serif"} fontSize={{ base: "small", sm: "md" }}>

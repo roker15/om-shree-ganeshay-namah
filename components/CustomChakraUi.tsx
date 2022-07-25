@@ -150,9 +150,17 @@ export const CustomDrawerWithButton = (props: { children: React.ReactNode }) => 
   return (
     <>
       {/* <Button variant={"unstyled"} ref={btnRef} onClick={onOpen} size={{base:"sm",sm:"md"}}  color="gray.600" _hover={{ textDecoration: "none" }}> */}
-        <Text as="button" fontWeight="hairline" fontFamily={"sans-serif"} fontSize={{base:"small",sm:"md"}}  ref={btnRef} onClick={onOpen} color="gray.600">
-          Select Syllabus
-        </Text>
+      <Text
+        as="button"
+        fontWeight="hairline"
+        fontFamily={"sans-serif"}
+        fontSize={{ base: "small", sm: "md" }}
+        ref={btnRef}
+        onClick={onOpen}
+        color="gray.600"
+      >
+        Select Syllabus
+      </Text>
       {/* </Button> */}
 
       {/* <Text
@@ -176,7 +184,7 @@ export const CustomDrawerWithButton = (props: { children: React.ReactNode }) => 
         size={{ base: "xs", sm: "sm", md: "md", lg: "lg" }}
       >
         <DrawerOverlay />
-        <DrawerContent >
+        <DrawerContent>
           <DrawerCloseButton />
           {/* <DrawerHeader>Create your account</DrawerHeader> */}
 
