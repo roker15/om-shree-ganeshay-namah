@@ -13,8 +13,9 @@ export default function CallToActionWithVideo() {
   };
   return (
     <Container maxW={"6xl"}>
-      <Text justifyContent={"center"} mt="6" fontSize={{ base: "xl", md: "2xl" }} fontStyle="initial" bg="facebook.400" color="gray.50" p="2">
+      <Text justifyContent={"center"} mt="6" fontSize={{ base: "xl", md: "2xl" } } fontStyle="initial" bg="gray.600" color="gray.50" p="2" borderRadius={5}>
         Toppers Manage 70% of their content Digitally, How much You do?
+        {/* 7000+ Students using Jionote to Create their Notes Digitially */}
       </Text>
       {/* <Text fontSize={{ base: "xl", md: "2xl" }} fontWeight="bold" position={"relative"} color="orange.400">
         7000+ UPSC Aspirants using Jionote to Prepare their Notes
@@ -44,7 +45,7 @@ export default function CallToActionWithVideo() {
               Prepare all Subjects UPSC Notes Digitally,
             </Text>
             <br />
-            <Text as={"span"} color={"facebook.300"}>
+            <Text as={"span"} color={"cornflowerblue"}>
               Exactly as per Syllabus
             </Text>
           </Heading>
