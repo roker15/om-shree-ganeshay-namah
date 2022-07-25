@@ -149,31 +149,19 @@ export const CustomDrawerWithButton = (props: { children: React.ReactNode }) => 
 
   return (
     <>
-      {/* <Button variant={"unstyled"} ref={btnRef} onClick={onOpen} size={{base:"sm",sm:"md"}}  color="gray.600" _hover={{ textDecoration: "none" }}> */}
+      
       <Text
-        as="button"
         fontWeight="semibold"
-        fontSize={{ base: "small", sm: "md" }}
+        fontSize={{ base: "small", md: "small",lg:"md" }}
         ref={btnRef}
         onClick={onOpen}
         color="gray.600"
+        cursor={"pointer"}
+       
       >
-        Select Syllabus
+          Select Syllabus
       </Text>
-      {/* </Button> */}
-
-      {/* <Text
-        ref={btnRef} onClick={onOpen}
-        color="gray.600"
-        fontWeight="hairline"
-        fontFamily={"sans-serif"}
-        fontSize={{ base: "small", sm: "md" }}
-        // display={router.pathname === "/reviseCurrentAffair" ? "none" : ""}
-      >
-        <Link href="">
-          <a>Select Syllabus</a>
-        </Link>
-      </Text> */}
+    
       <Drawer
         preserveScrollBarGap={true} // content will flicker if not use it.
         isOpen={isOpen}

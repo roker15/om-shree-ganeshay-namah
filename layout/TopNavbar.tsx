@@ -76,7 +76,7 @@ const MobileNav = ({ onOpen, ...rest }: MobileProps) => {
       {...rest}
     >
       <HStack>
-        <LinkBox alignItems="center" display={{ base: "none", sm: "flex" }}>
+        <LinkBox alignItems="center" display={{ base: "flex", sm: "flex" }}>
           <LinkOverlay
             _hover={{
               background: "none",
@@ -193,20 +193,20 @@ export function GotoQuestion() {
     setBook(x);
   };
   return (
-    <Stack
+    <Flex
       direction={"row"}
       justifyContent={"center"}
       alignItems="left"
-      spacing={{ base: "1", md: "4" }}
-      divider={<StackDivider borderColor={{ base: "gray.50", sm: "white" }} />}
+      columnGap={{ base: "1", md: "6" }}
+      // divider={<StackDivider borderColor={{ base: "gray.50", sm: "white" }} />}
       borderColor="gray.200"
-      display={{ base: "none", sm: "undefined" }}
+      display={{ base: "none", sm: "flex" }}
     >
       <Text
         color="gray.600"
         fontWeight="semibold"
-        fontSize={{ base: "small", sm: "md" }}
-        display={router.pathname === "/" ? "none" : ""}
+        fontSize={{ base: "small", md: "small",lg:"md" }}
+        display={router.pathname === "/" ? "none" : "block"}
       >
         <Link href="/">
           <a>Home</a>
@@ -215,8 +215,8 @@ export function GotoQuestion() {
       <Text
         color="gray.600"
         fontWeight="semibold"
-        fontSize={{ base: "small", sm: "md" }}
-        display={router.pathname === "/questionBanks" ? "none" : ""}
+        fontSize={{ base: "small", md: "small",lg:"md" }}
+        display={router.pathname === "/questionBanks" ? "none" : "block"}
       >
         <Link href="/questionBanks">
           <a>Question Bank</a>
@@ -225,8 +225,8 @@ export function GotoQuestion() {
       <Text
         color="gray.600"
         fontWeight="semibold"
-        fontSize={{ base: "small", sm: "md" }}
-        display={router.pathname === "/reviseCurrentAffair" ? "none" : ""}
+        fontSize={{ base: "small", md: "small",lg:"md" }}
+        display={router.pathname === "/reviseCurrentAffair" ? "none" : "block"}
       >
         <Link href="/reviseCurrentAffair">
           <a>Current Affairs</a>
@@ -237,7 +237,7 @@ export function GotoQuestion() {
           <BookFilter setParentProps={updateBookProps}></BookFilter>
         </CustomDrawerWithButton>
       </Box>
-    </Stack>
+    </Flex>
   );
 }
 export function CustomMenu() {
@@ -268,21 +268,21 @@ export function CustomMenu() {
       <MenuButton as={IconButton} aria-label="Options" icon={<HamburgerIcon />} variant="ghost" />
       <MenuList>
         <MenuItem minH="48px" display={router.pathname === "/" ? "none" : ""}>
-          <Text color="gray.600" fontWeight="semibold" fontSize={{ base: "small", sm: "md" }}>
+          <Text color="gray.600" fontWeight="semibold"  fontSize={{ base: "small", md: "small",lg:"md" }}>
             <Link href="/">
               <a>Home</a>
             </Link>
           </Text>
         </MenuItem>
         <MenuItem minH="48px" display={router.pathname === "/questionBanks" ? "none" : ""}>
-          <Text color="gray.600" fontWeight="semibold"  fontSize={{ base: "small", sm: "md" }}>
+          <Text color="gray.600" fontWeight="semibold"  fontSize={{ base: "small", md: "small",lg:"md" }}>
             <Link href="/questionBanks">
               <a>Question Bank</a>
             </Link>
           </Text>
         </MenuItem>
         <MenuItem minH="48px" display={router.pathname === "/reviseCurrentAffair" ? "none" : ""}>
-          <Text color="gray.600" fontWeight="semibold"  fontSize={{ base: "small", sm: "md" }}>
+          <Text color="gray.600" fontWeight="semibold"  fontSize={{ base: "small", md: "small",lg:"md" }}>
             <Link href="/reviseCurrentAffair">
               <a>Current Affairs</a>
             </Link>
