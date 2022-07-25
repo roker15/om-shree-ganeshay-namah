@@ -9,10 +9,12 @@ import {
   DrawerFooter,
   DrawerOverlay,
   IconButton,
+  Link,
   Switch,
   Text,
   useDisclosure,
 } from "@chakra-ui/react";
+import router from "next/router";
 import React, { ChangeEvent } from "react";
 import { IconType } from "react-icons";
 import { MdMenu } from "react-icons/md";
@@ -147,12 +149,24 @@ export const CustomDrawerWithButton = (props: { children: React.ReactNode }) => 
 
   return (
     <>
-      <Button variant={"link"} ref={btnRef} onClick={onOpen} size="md" color="gray.600" _hover={{ textDecoration: "none" }}>
-        <Text fontWeight="hairline" fontFamily={"sans-serif"}>
+      {/* <Button variant={"unstyled"} ref={btnRef} onClick={onOpen} size={{base:"sm",sm:"md"}}  color="gray.600" _hover={{ textDecoration: "none" }}> */}
+        <Text as="button" fontWeight="hairline" fontFamily={"sans-serif"} fontSize={{base:"small",sm:"md"}}  ref={btnRef} onClick={onOpen} color="gray.600">
           Select Syllabus
         </Text>
-      </Button>
+      {/* </Button> */}
 
+      {/* <Text
+        ref={btnRef} onClick={onOpen}
+        color="gray.600"
+        fontWeight="hairline"
+        fontFamily={"sans-serif"}
+        fontSize={{ base: "small", sm: "md" }}
+        // display={router.pathname === "/reviseCurrentAffair" ? "none" : ""}
+      >
+        <Link href="">
+          <a>Select Syllabus</a>
+        </Link>
+      </Text> */}
       <Drawer
         preserveScrollBarGap={true} // content will flicker if not use it.
         isOpen={isOpen}
