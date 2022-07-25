@@ -283,7 +283,7 @@ const MyNotes: React.FC<Props> = ({ subjectId, subheadingid, notesCreator, chang
         <Box display={profile?.id !== notesCreator ? "none" : "undefined"} >
           <Tooltip label="Create New Notes in This Topic" fontSize="sm" >
             <span>
-              <Button mt="44"
+              <Button mt="28"
                 // _groupHover={{ size: "" }}
                 display={isArticleCreating === "CREATING" || !subheadingid ? "none" : "flex"}
                 ml="2"
@@ -518,7 +518,7 @@ const ArticleForm: React.FC<ArticleFormProps> = ({
           // onClick={() => setIsArticleCreating("CREATING")}
           type="submit"
           isLoading={isLoading}
-          borderRadius={"full"}
+          // borderRadius={"full"}
           variant="solid"
           colorScheme="facebook"
           aria-label="Call Sage"

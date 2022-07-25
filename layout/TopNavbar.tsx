@@ -264,13 +264,13 @@ export function CustomMenu() {
     setBook(x);
   };
   return (
-    <Menu>
+    <Menu >
       <MenuButton as={IconButton} aria-label="Options" icon={<HamburgerIcon />} variant="ghost" />
-      <MenuList>
+      <MenuList bg="gray.50">
         <MenuItem minH="48px" display={router.pathname === "/" ? "none" : ""}>
           <Text color="gray.600" fontWeight="semibold" fontSize={{ base: "small", md: "small", lg: "md" }}>
-            <Link href="/">
-              <a>Home</a>
+            <Link href="/" >
+              <a >Home</a>
             </Link>
           </Text>
         </MenuItem>
