@@ -48,9 +48,7 @@ export default function CallToActionWithVideo() {
             </Text>
           </Heading>
           <Text color={"gray.600"}>
-            You study most of your content digitally. Then why not Complement your digital Study with Digital notes making
-            platform?
-          </Text>
+            7000+ aspirants using Jionote</Text>
           <Stack spacing={{ base: 4, sm: 6 }} direction={{ base: "column", sm: "row" }}>
             {!user && <LoginCard redirect={BASE_URL} />}
           </Stack>
