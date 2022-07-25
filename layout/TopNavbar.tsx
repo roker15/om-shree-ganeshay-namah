@@ -203,9 +203,8 @@ export function GotoQuestion() {
       display={{ base: "none", sm: "undefined" }}
     >
       <Text
-        color="gray.600"
+        color="gray.800"
         fontWeight="hairline"
-        fontFamily={"sans-serif"}
         fontSize={{ base: "small", sm: "md" }}
         display={router.pathname === "/" ? "none" : ""}
       >
@@ -214,9 +213,8 @@ export function GotoQuestion() {
         </Link>
       </Text>
       <Text
-        color="gray.600"
+        color="gray.800"
         fontWeight="hairline"
-        fontFamily={"sans-serif"}
         fontSize={{ base: "small", sm: "md" }}
         display={router.pathname === "/questionBanks" ? "none" : ""}
       >
@@ -225,9 +223,8 @@ export function GotoQuestion() {
         </Link>
       </Text>
       <Text
-        color="gray.600"
+        color="gray.800"
         fontWeight="hairline"
-        fontFamily={"sans-serif"}
         fontSize={{ base: "small", sm: "md" }}
         display={router.pathname === "/reviseCurrentAffair" ? "none" : ""}
       >
@@ -271,21 +268,21 @@ export function CustomMenu() {
       <MenuButton as={IconButton} aria-label="Options" icon={<HamburgerIcon />} variant="ghost" />
       <MenuList>
         <MenuItem minH="48px" display={router.pathname === "/" ? "none" : ""}>
-          <Text color="gray.600" fontWeight="hairline" fontFamily={"sans-serif"} fontSize={{ base: "small", sm: "md" }}>
+          <Text color="gray.800" fontWeight="hairline" fontSize={{ base: "small", sm: "md" }}>
             <Link href="/">
               <a>Home</a>
             </Link>
           </Text>
         </MenuItem>
         <MenuItem minH="48px" display={router.pathname === "/questionBanks" ? "none" : ""}>
-          <Text color="gray.600" fontWeight="hairline" fontFamily={"sans-serif"} fontSize={{ base: "small", sm: "md" }}>
+          <Text color="gray.800" fontWeight="hairline"  fontSize={{ base: "small", sm: "md" }}>
             <Link href="/questionBanks">
               <a>Question Bank</a>
             </Link>
           </Text>
         </MenuItem>
         <MenuItem minH="48px" display={router.pathname === "/reviseCurrentAffair" ? "none" : ""}>
-          <Text color="gray.600" fontWeight="hairline" fontFamily={"sans-serif"} fontSize={{ base: "small", sm: "md" }}>
+          <Text color="gray.800" fontWeight="hairline"  fontSize={{ base: "small", sm: "md" }}>
             <Link href="/reviseCurrentAffair">
               <a>Current Affairs</a>
             </Link>
