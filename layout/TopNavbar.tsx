@@ -57,7 +57,7 @@ const MobileNav = ({ onOpen, ...rest }: MobileProps) => {
   return (
     <Flex
       // ml={{ base: 10, md: 60 }}
-      px={{ base: 4, md: 4 }}
+      px={{ base: "1", md: 4 }}
       height="16"
       alignItems="center"
       // bg={useColorModeValue("#f8f6fa", "#e5e0f1")}
