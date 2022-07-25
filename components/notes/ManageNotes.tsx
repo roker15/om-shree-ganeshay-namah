@@ -281,10 +281,10 @@ const ManageNotes: React.FunctionComponent = () => {
           <div>
             <Flex justifyContent="space-between" display={{ base: "undefined", sm: "undefined", md: "none" }}>
               <>
-                <CustomDrawer>
+                <CustomDrawer  buttonLabel={"Open Syllabus"}>
                   <SyllabusForNotes book={book} changeParentProps={changeSelectedSubheading}></SyllabusForNotes>
                 </CustomDrawer>
-                <CustomDrawer>
+                <CustomDrawer  buttonLabel={"Share Panel"}>
                   <SharedNotesPanel
                     subheadingid={selectedNotes?.subheadingId}
                     changeParentProps={changeSelectedSharedNote}

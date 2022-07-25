@@ -17,7 +17,7 @@ import {
 import router from "next/router";
 import React, { ChangeEvent } from "react";
 import { IconType } from "react-icons";
-import { MdMenu } from "react-icons/md";
+import { MdMenu, MdSwitchRight } from "react-icons/md";
 import Sticky from "react-sticky-el";
 
 export const CustomIconButton = (props: {
@@ -105,24 +105,24 @@ export function CustomCircularProgress(props: { size: string }) {
   return <CircularProgress isIndeterminate size={props.size} color="gray.400" />;
 }
 
-export const CustomDrawer = (props: { children: React.ReactNode }) => {
+export const CustomDrawer = (props: { children: React.ReactNode,buttonLabel:string }) => {
   const { isOpen, onOpen, onClose } = useDisclosure();
   const btnRef = React.useRef(null);
 
   return (
     <>
       <Sticky>
-        <IconButton
+      <Button
           aria-label="syllabus"
-          variant="outline"
-          size="xs"
-          icon={<MdMenu />}
+          variant="ghost"
+          size="sm"
+          leftIcon={<MdSwitchRight />}
           ref={btnRef}
-          colorScheme="pink"
+          colorScheme="gray"
           onClick={onOpen}
         >
-          Open
-        </IconButton>
+          {props.buttonLabel}
+        </Button>
       </Sticky>
 
       <Drawer isOpen={isOpen} placement="left" onClose={onClose} finalFocusRef={btnRef}>
