@@ -156,7 +156,7 @@ export const CustomDrawerWithButton = (props: { children: React.ReactNode }) => 
         fontSize={{ base: "small", sm: "md" }}
         ref={btnRef}
         onClick={onOpen}
-        color="gray.800"
+        color="gray.600"
       >
         Select Syllabus
       </Text>
