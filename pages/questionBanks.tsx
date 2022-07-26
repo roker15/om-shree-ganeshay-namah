@@ -1,8 +1,8 @@
-import { Button, Container, Flex, Text } from "@chakra-ui/react";
-import { supabaseClient } from "@supabase/auth-helpers-nextjs";
+import { Center, Container, Flex } from "@chakra-ui/react";
 import { useUser } from "@supabase/auth-helpers-react";
 import Link from "next/link";
-import React, { useEffect } from "react";
+import React from "react";
+import { LoginCard } from "../components/LoginCard";
 import QuestionBank from "../components/QuestionBank";
 import LayoutWithTopNavbar from "../layout/LayoutWithTopNavbar";
 import { BASE_URL } from "../lib/constants";
@@ -17,51 +17,19 @@ type ProfileListPropss = {
 const QuestionBank1: React.FC<ProfileListPropss> = ({}) => {
   const { user, error } = useUser();
 
-  const signUpUser = async (email: string, role: string) => {
-    let { user, error } = await supabaseClient.auth.signIn(
-      {
-        provider: "google",
-      },
-      {
-        redirectTo: `${BASE_URL}/questionBanks`,
-        // redirectTo: "http://www.localhost:3000/questionBanks",
-        // redirectTo: "https://www.jionote.com/questionBanks",
-      }
-    );
-  };
   if (!user) {
     return (
-      <div>
-        Please login to view content
-        <Button
-          _active={{
-            border: "none",
-            bg: "#dddfe2",
-            transform: "scale(0.98)",
-            borderColor: "#bec3c9",
-          }}
-          variant=" outline"
-          color="violet"
-          onClick={() => signUpUser("hello", "hello")}
-        >
-          Log In
-        </Button>
-      </div>
+      <Center py="28">
+        <LoginCard redirect={`${BASE_URL}/questionBanks`} />
+      </Center>
     );
   }
   return (
     <Container maxW="6xl" px={{ base: "2", sm: "4", md: "16" }}>
       <NoteContextWrapper>
-        <Flex mt="2" justifyContent="space-between" direction={{ base: "column", md: "row" }}>
-          <Link href="/">
-            <a className="internal" style={{ color: "#5cb2eb" }}>
-              {" "}
-              Home
-            </a>
-          </Link>
-
+        <Flex my="6" justifyContent="end" direction={{ base: "column", md: "row" }}>
           <Link href="/createQuestionBank">
-            <a className="internal" style={{ color: "#5cb2eb" }}>
+            <a className="internal" style={{ color: "#ffffff", background: "rgb(115, 176, 205)", padding: "4px" }}>
               Create New Question
             </a>
           </Link>

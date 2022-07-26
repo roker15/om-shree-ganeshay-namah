@@ -44,7 +44,7 @@ export default function CallToActionWithVideo() {
     setBook(x);
   };
   return (
-    <Container maxW={"5xl"} bg="gray.50" mb="48" py="4">
+    <Container maxW={"4xl"}  bg="gray.50" mb="48" py="4">
       <Stack
         // align={"center"}
         spacing={{ base: 8, md: 10 }}
@@ -74,19 +74,16 @@ export default function CallToActionWithVideo() {
                And start making Notes
             </Text>
           </Heading>
-          {/* <Text color={"gray.500"}>
-            Switch to Any Syllabus & Content Right from here. No need to navigate from page to page for different Syllabus &
-            Content.
-          </Text> */}
+        
         </Stack>
         <VStack spacing={"12"} flex={1} w="full">
-          {!user && (
+          {/* {!user && (
             <>
               {" "}
               <LoginCard redirect={`${BASE_URL}/syllabusSwitch`} />
               <Divider orientation="horizontal" />
             </>
-          )}
+          )} */}
           <Flex justify={"center"} align={"center"} position={"relative"} w={"full"}>
             <BookFilter setParentProps={updateBookProps} />
           </Flex>
