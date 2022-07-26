@@ -69,7 +69,7 @@ const Home: React.FunctionComponent = () => {
       <Landing />
       <Container
         maxW={"6xl"}
-        mb="80"
+        mb="60"
         // shadow={"sm"}
         // p={{ base: "2", md: "6", lg: "10" }}
         // border={"1px"}
