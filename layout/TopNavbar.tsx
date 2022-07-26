@@ -41,7 +41,7 @@ export default function TopNavbar({ children }: { children: ReactNode }) {
     // finalize
     <Box bg="white" overflow={"visible"}>
       <MobileNav onOpen={onOpen} />
-      <Box pt="16">{children}</Box>
+      <Box >{children}</Box>
     </Box>
   );
 }
@@ -65,8 +65,8 @@ const MobileNav = ({ onOpen, ...rest }: MobileProps) => {
       borderBottomWidth="0px"
       borderBottomColor={"gray.100"}
       // shadow="sm"
-      zIndex={"docked"}
-      pos="fixed"
+      // zIndex={"tooltip"}
+      // pos="fixed"
       top={"0"}
       w="full"
       alignSelf={"flex-start"}
