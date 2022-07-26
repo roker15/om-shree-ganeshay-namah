@@ -54,7 +54,7 @@ export default function CallToActionWithVideo() {
           </Stack>
         </Stack>
         <Flex flex={0.5} justify={"center"} align={"center"} position={"relative"} w={"full"} justifyContent={"center"}>
-          <Box position={"relative"} rounded={"2xl"} bg="#f0f2f5" boxShadow={"lg"} width={"full"} overflow={"hidden"}>
+          <Box position={"relative"} rounded={"2xl"} bg="#f0f2f5" boxShadow={"md"} width={"full"} overflow={"hidden"}>
             {/* <Image
               alt={"Hero Image"}
               fit={"cover"}
@@ -63,11 +63,12 @@ export default function CallToActionWithVideo() {
               h={"100%"}
               src={"https://i.imgur.com/A0VfjhR.jpeg"}
             /> */}
-            <Stack spacing="10" py="16" px="8">
+            <Stack spacing="10" py="16" px="8" align="center">
               <Button
                 colorScheme={"black"}
                 size="lg"
-                px={10}
+                  px={10}
+                  maxW="96"
                 borderRadius="full"
                 variant="outline"
                 _hover={{
@@ -81,7 +82,8 @@ export default function CallToActionWithVideo() {
               <Button
                 colorScheme={"black"}
                 size="lg"
-                px={10}
+                  px={10}
+                  maxW="96"
                 borderRadius="full"
                 variant="outline"
                 _hover={{
@@ -95,7 +97,8 @@ export default function CallToActionWithVideo() {
               <Button
                 colorScheme={"black"}
                 size="lg"
-                px={10}
+                  px={10}
+                  maxW="96"
                 borderRadius="full"
                 variant="outline"
                 _hover={{

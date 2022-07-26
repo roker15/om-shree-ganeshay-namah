@@ -69,7 +69,7 @@ const Home: React.FunctionComponent = () => {
       <Landing />
       <Container
         maxW={"6xl"}
-        mb="64"
+        mb={{base:"64",lg:"80"}}
        
         borderColor="gray.50"
       >
