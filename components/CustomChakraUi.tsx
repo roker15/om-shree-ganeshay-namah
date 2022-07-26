@@ -9,13 +9,15 @@ import {
   DrawerFooter,
   DrawerOverlay,
   IconButton,
+  Link,
   Switch,
   Text,
   useDisclosure,
 } from "@chakra-ui/react";
+import router from "next/router";
 import React, { ChangeEvent } from "react";
 import { IconType } from "react-icons";
-import { MdMenu } from "react-icons/md";
+import { MdMenu, MdSwitchRight } from "react-icons/md";
 import Sticky from "react-sticky-el";
 
 export const CustomIconButton = (props: {
@@ -72,7 +74,7 @@ export function CustomSwitch(props: { state: boolean; changeState: (arg0: boolea
   return (
     <Switch
       size="sm"
-      colorScheme="gray" // defaultChecked={isPostPublic}
+      colorScheme="green" // defaultChecked={isPostPublic}
       isChecked={props.state as boolean}
       onChange={(e: ChangeEvent<HTMLInputElement>) => props.changeState(e.target.checked)}
     />
@@ -103,24 +105,24 @@ export function CustomCircularProgress(props: { size: string }) {
   return <CircularProgress isIndeterminate size={props.size} color="gray.400" />;
 }
 
-export const CustomDrawer = (props: { children: React.ReactNode }) => {
+export const CustomDrawer = (props: { children: React.ReactNode,buttonLabel:string }) => {
   const { isOpen, onOpen, onClose } = useDisclosure();
   const btnRef = React.useRef(null);
 
   return (
     <>
       <Sticky>
-        <IconButton
+      <Button
           aria-label="syllabus"
-          variant="outline"
-          size="xs"
-          icon={<MdMenu />}
+          variant="ghost"
+          size="sm"
+          leftIcon={<MdSwitchRight />}
           ref={btnRef}
-          colorScheme="pink"
+          colorScheme="gray"
           onClick={onOpen}
         >
-          Open
-        </IconButton>
+          {props.buttonLabel}
+        </Button>
       </Sticky>
 
       <Drawer isOpen={isOpen} placement="left" onClose={onClose} finalFocusRef={btnRef}>
@@ -147,20 +149,29 @@ export const CustomDrawerWithButton = (props: { children: React.ReactNode }) => 
 
   return (
     <>
-      <Button  variant ={{base:"link",md:"outline"}}ref={btnRef} onClick={onOpen} size="sm" colorScheme="blue">
-        Change Syllabus
-      </Button>
-
+      
+      <Text
+        fontWeight="semibold"
+        fontSize={{ base: "small", md: "small",lg:"md" }}
+        ref={btnRef}
+        onClick={onOpen}
+        color="gray.600"
+        cursor={"pointer"}
+       
+      >
+          Select Syllabus
+      </Text>
+    
       <Drawer
+        preserveScrollBarGap={true} // content will flicker if not use it.
         isOpen={isOpen}
         placement="left"
         onClose={onClose}
         finalFocusRef={btnRef}
         size={{ base: "xs", sm: "sm", md: "md", lg: "lg" }}
-        
       >
         <DrawerOverlay />
-        <DrawerContent bg="blue.50">
+        <DrawerContent>
           <DrawerCloseButton />
           {/* <DrawerHeader>Create your account</DrawerHeader> */}
 

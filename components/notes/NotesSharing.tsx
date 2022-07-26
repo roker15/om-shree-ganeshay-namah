@@ -122,14 +122,17 @@ export const NotesSharing: React.FC<sharedProps> = ({ subheadingId }) => {
   return (
     <>
       {/* <ButtonGroup mb="" justifyContent="end" size="sm" isAttached variant="outline"> */}
-        <IconButton
-          colorScheme="whatsapp"
-          variant="ghost"
-          size={"xs"}
-          icon={<MdShare />}
-          onClick={onOpen}
-          aria-label={"d"}
-        ></IconButton>
+      <Button
+        // colorScheme="whatsapp"
+        variant="unstyled"
+        size={"xs"}
+        leftIcon={<MdShare />}
+        onClick={onOpen}
+        aria-label={"d"}
+        // ml="-1"
+      >
+        Share Notes{" "}
+      </Button>
       {/* </ButtonGroup> */}
 
       <Modal size="xl" initialFocusRef={initialRef} finalFocusRef={finalRef} isOpen={isOpen} onClose={onClose}>
@@ -168,7 +171,9 @@ export const NotesSharing: React.FC<sharedProps> = ({ subheadingId }) => {
               ml="0"
               onChange={(e) => setCanCopy(e.target.checked)}
             >
-              <Text as ="label" casing="capitalize">User Can edit</Text>
+              <Text as="label" casing="capitalize">
+                User Can edit
+              </Text>
             </Checkbox>
             <Checkbox
               size="sm"
@@ -177,7 +182,9 @@ export const NotesSharing: React.FC<sharedProps> = ({ subheadingId }) => {
               ml="6"
               onChange={(e) => setCanEdit(e.target.checked)}
             >
-              <Text as ="label" casing="capitalize">User Can copy</Text>
+              <Text as="label" casing="capitalize">
+                User Can copy
+              </Text>
             </Checkbox>
           </ModalBody>
 

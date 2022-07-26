@@ -9,7 +9,6 @@ import { theme } from "../theme/theme";
 import { UserProvider } from "@supabase/auth-helpers-react";
 import { supabaseClient } from "@supabase/auth-helpers-nextjs";
 import { NoteContextWrapper } from "../state/NoteContext";
-
 type AppLayoutProps = {
   Component: PageWithLayoutType;
   pageProps: any;

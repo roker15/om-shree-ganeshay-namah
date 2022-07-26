@@ -3,11 +3,14 @@ import { supabaseClient } from "@supabase/auth-helpers-nextjs";
 import Link from "next/link";
 import router from "next/router";
 import React, { useEffect, useState } from "react";
+import All from "../components/chakraTemplate/All";
 import TwoColumn from "../components/chakraTemplate/All";
 import CtaWithAnnotation from "../components/chakraTemplate/CtaWithAnnotation";
 import CtaWithVideo from "../components/chakraTemplate/CurrentAffair";
 import EditorFeatures from "../components/chakraTemplate/EditorFeatures";
+import Landing from "../components/chakraTemplate/Landing";
 import QuestionDemo from "../components/chakraTemplate/QuestionDemo";
+import SelectSyllabus from "../components/chakraTemplate/SelectSyllabus";
 import LayoutWithTopNavbar from "../layout/LayoutWithTopNavbar";
 import { BookResponse } from "../types/myTypes";
 import PageWithLayoutType from "../types/pageWithLayout";
@@ -60,45 +63,29 @@ const Home: React.FunctionComponent = () => {
   };
 
   return (
-    <Container minW="full" px={{ base: "2", sm: "4", md: "2", lg: "8" }}>
+    <Box minW="full">
       {/* <FrequentHelp/> */}
-      <GotoQuestion />
-      <CtaWithAnnotation />
-      <EditorFeatures />
+      {/* <GotoQuestion /> */}
+      <Landing />
+      <Container
+        maxW={"6xl"}
+        mb={{base:"64",lg:"80"}}
+       
+        borderColor="gray.50"
+      >
+        <SelectSyllabus />
+      </Container>
+      {/* <CtaWithAnnotation /> */}
+      {/* <EditorFeatures />
       <CtaWithVideo />
-      <QuestionDemo />
+      <QuestionDemo /> */}
 
       {/* <SplitScreenWithImage /> */}
-      <TwoColumn />
+      {/* <TwoColumn /> */}
       {/* <CreateBookSyllabus /> */}
-      <Flex flexDirection="column" alignItems={"center"} flexWrap="nowrap">
-        {/* <BookFilter setParentProps={updateBookProps}></BookFilter> */}
-        <br />
-
-        <Box>{/* <ChakraThemeTest/> */}</Box>
-      </Flex>
-    </Container>
+    </Box>
   );
 };
 
 (Home as PageWithLayoutType).layout = LayoutWithTopNavbar;
 export default Home;
-
-export function GotoQuestion() {
-  return (
-    <Flex justifyContent="end">
-      <HStack justifyContent={"start"}>
-        <Text as="b">
-          <Link href="/questionBanks">
-            <a>Question Bank</a>
-          </Link>
-        </Text>
-        <Text as="b">
-          <Link href="/reviseCurrentAffair">
-            <a>Current Affair</a>
-          </Link>
-        </Text>
-      </HStack>
-    </Flex>
-  );
-}

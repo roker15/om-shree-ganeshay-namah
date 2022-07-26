@@ -14,10 +14,10 @@ export default function CallToActionWithIllustration() {
     });
   };
   return (
-    <Container maxW={"5xl"}>
+    <Container maxW={"5xl"}  my="4">
       <Stack textAlign={"center"} align={"center"} spacing={{ base: 8, md: 10 }} py={{ base: 20, md: 28 }}>
         <Heading fontWeight={600} fontSize={{ base: "3xl", sm: "4xl", md: "6xl" }} lineHeight={"110%"}>
-          Modern Text Editor <br />
+          Modern Text Editor To <br />
           <Text as={"span"} color={"orange.400"}>
             Create Concise and beautiful Notes
           </Text>

@@ -132,9 +132,7 @@ export function useGetUserArticles(subheadingId: number | undefined, userid: str
     async () =>
       await supabaseClient
         .from<definitions["books_articles"]>("books_articles")
-        .select(
-          `*`
-        )
+        .select(`*`)
         .eq("created_by", userid)
         .eq("books_subheadings_fk", subheadingId),
     {
@@ -152,19 +150,8 @@ export function useGetUserArticles(subheadingId: number | undefined, userid: str
   };
 }
 export function useGetUserArticlesFromTags(userid: string | undefined, tagsArray: number[] | undefined) {
-  if (tagsArray  && tagsArray.length === 0) {
-    return {
-      // sharedPost_SUP_ERR:data?.error,
-      data: [],
-      count: 999,
-      supError: null,
-      isLoading: false,
-      swrError: null,
-    };
-  }
-  // eslint-disable-next-line react-hooks/rules-of-hooks
   const { data, error } = useSWR(
-    userid === undefined ? null : [`/get-user-articles-bytags/${userid}/${tagsArray}`],
+    userid === undefined || tagsArray!.length === 0 ? null : [`/get-user-articles-bytags/${userid}/${tagsArray}`],
     async () =>
       await supabaseClient
         .from<definitions["books_articles"]>("books_articles")
@@ -179,6 +166,18 @@ export function useGetUserArticlesFromTags(userid: string | undefined, tagsArray
   );
   console.log("database call ja raha hai");
   console.log(data ? data!.data : "no data");
+  
+  if (tagsArray && tagsArray.length === 0) {
+    return {
+      // sharedPost_SUP_ERR:data?.error,
+      data: [],
+      count: 999,
+      supError: null,
+      isLoading: false,
+      swrError: null,
+    };
+  }
+
   return {
     // sharedPost_SUP_ERR:data?.error,
     data: data?.data,

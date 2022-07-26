@@ -1,6 +1,7 @@
 export const globalStyles = {
   body: {
     bg: "red.200",
+    // minH: "300vh"
     // color: "white",
   },
   i: {
@@ -12,11 +13,12 @@ export const globalStyles = {
   },
   // styles for the `a`
   a: {
-    color: "pink.500" ,
-    fontSize: "sm",
+    // color: "gray.600",
+    // px:"2",
+    // fontSize: "sm",
     _hover: {
       // fontSize: "15px",
-      textDecoration: "underline",
+      // textDecoration: "underline",
       // bg:"gray.50",
       // color: "green.500",
     },

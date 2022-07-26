@@ -39,7 +39,8 @@ const DeleteAlertDialogue = ({ handleDelete, dialogueHeader, isDisabled, isIconB
           ml="2"
           borderRadius={"full"}
           variant="outline"
-          colorScheme="whatsapp"
+          colorScheme="red"
+          // color="red.200"
           aria-label="Call Sage"
           fontSize="20px"
           onClick={() => setIsOpen(true)}
@@ -61,17 +62,17 @@ const DeleteAlertDialogue = ({ handleDelete, dialogueHeader, isDisabled, isIconB
       <AlertDialog isOpen={isOpen} leastDestructiveRef={cancelRef} onClose={onClose}>
         <AlertDialogOverlay>
           <AlertDialogContent>
-            <AlertDialogHeader fontSize="lg" bg="brand.50" p="2" fontWeight="Bold" color="blackAlpha.600">
+            <AlertDialogHeader p="2" bg="gray.100" >
               {dialogueHeader}
             </AlertDialogHeader>
 
-            <AlertDialogBody>Are you sure?  You can`t undo this action afterwards.</AlertDialogBody>
+            <AlertDialogBody py="8">Are you sure?  You can`t undo this action afterwards.</AlertDialogBody>
 
             <AlertDialogFooter>
-              <Button colorScheme="blackAlpha" ref={cancelRef} size="sm" onClick={onClose}>
+              <Button  ref={cancelRef} size="sm" onClick={onClose}>
                 Cancel
               </Button>
-              <Button colorScheme="red" variant="outline" size="sm" onClick={() => confirmDelete()} ml={3}>
+              <Button colorScheme="red"  size="sm" onClick={() => confirmDelete()} ml={3}>
                 Delete
               </Button>
             </AlertDialogFooter>

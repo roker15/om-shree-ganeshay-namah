@@ -55,10 +55,10 @@ const Syllabus: React.FC<Props> = ({ book, changeParentProps }) => {
   }, [profile, toggle]);
 
   return (
-      <Box pb="6">
+      <Box pb="6" minW="full">
         {book?.book_name && (
-          <Flex bg="brand.100" p="2">
-            <Text as="b">{book?.book_name}</Text>
+          <Flex bg="brand.100" p="2" borderTopRadius="md" >
+            <Text fontWeight={"normal"} casing={"capitalize"}>{book?.book_name}</Text>
           </Flex>
         )}
 
@@ -80,7 +80,7 @@ const Syllabus: React.FC<Props> = ({ book, changeParentProps }) => {
                       fontSize="16px"
                       icon={toggle === value[0].heading_id ? <MdLightMode /> : <MdAdd />}
                     />
-                    <Text align="start" as="address" color=" #FF1493" casing="capitalize">
+                    <Text align="start" as="address" color=" #FF1493" casing="capitalize"  pr="1">
                       {/* {value[0].heading + " " + "(" + value[0].heading_sequence + ")"} */}
                       {value[0].heading}
                     </Text>
@@ -92,6 +92,7 @@ const Syllabus: React.FC<Props> = ({ book, changeParentProps }) => {
                         alignItems="center"
                         my="4"
                         ml="10"
+                       
                         key={x.subheading_id}
                         // role={"group"}
                         display={toggle === x.heading_id ? "flex" : "none"}
