@@ -67,7 +67,14 @@ const Home: React.FunctionComponent = () => {
       {/* <FrequentHelp/> */}
       {/* <GotoQuestion /> */}
       <Landing />
-      <Container maxW={"6xl"} mb="48" shadow={"sm"} p="10" border={"1px"} borderColor="gray.50">
+      <Container
+        maxW={"6xl"}
+        mb="48"
+        shadow={"sm"}
+        p={{ base: "2", md: "6", lg: "10" }}
+        border={"1px"}
+        borderColor="gray.50"
+      >
         <SelectSyllabus />
       </Container>
       {/* <CtaWithAnnotation /> */}
@@ -78,7 +85,6 @@ const Home: React.FunctionComponent = () => {
       {/* <SplitScreenWithImage /> */}
       {/* <TwoColumn /> */}
       {/* <CreateBookSyllabus /> */}
-    
     </Box>
   );
 };
