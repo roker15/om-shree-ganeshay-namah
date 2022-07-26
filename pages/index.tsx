@@ -69,10 +69,8 @@ const Home: React.FunctionComponent = () => {
       <Landing />
       <Container
         maxW={"6xl"}
-        mb="60"
-        // shadow={"sm"}
-        // p={{ base: "2", md: "6", lg: "10" }}
-        // border={"1px"}
+        mb="64"
+       
         borderColor="gray.50"
       >
         <SelectSyllabus />
