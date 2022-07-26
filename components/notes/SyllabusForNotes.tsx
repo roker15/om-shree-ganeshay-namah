@@ -55,9 +55,9 @@ const Syllabus: React.FC<Props> = ({ book, changeParentProps }) => {
   }, [profile, toggle]);
 
   return (
-      <Box pb="6">
+      <Box pb="6" minW="full">
         {book?.book_name && (
-          <Flex bg="brand.100" p="2" borderTopRadius="md">
+          <Flex bg="brand.100" p="2" borderTopRadius="md" >
             <Text fontWeight={"normal"} casing={"capitalize"}>{book?.book_name}</Text>
           </Flex>
         )}

@@ -204,7 +204,7 @@ export default function ManageCurrentAffair() {
                 <>
                   <InfoAlert
                     info={
-                      "You don't have any notes in selected topics. Create some notes and come back again \n\n To create Notes :- \n\n Select 'Current Affairs' Syllabus from below.  "
+                      "You don't have any notes in selected topics. Create some notes and come back again \n\n To create Notes :- \n\n Select   'Current Affairs'   Syllabus from below.  "
                     }
                   />
                   <Flex bg="gray.50" p="2" mt="2" justify={"center"} align={"center"} position={"relative"} w={"full"}>

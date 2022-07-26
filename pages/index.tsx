@@ -63,11 +63,13 @@ const Home: React.FunctionComponent = () => {
   };
 
   return (
-    <Box minW="full" >
+    <Box minW="full">
       {/* <FrequentHelp/> */}
       {/* <GotoQuestion /> */}
       <Landing />
-      <SelectSyllabus/>
+      <Container maxW={"6xl"} mb="48" shadow={"sm"} p="10" border={"1px"} borderColor="gray.50">
+        <SelectSyllabus />
+      </Container>
       {/* <CtaWithAnnotation /> */}
       {/* <EditorFeatures />
       <CtaWithVideo />
@@ -76,17 +78,10 @@ const Home: React.FunctionComponent = () => {
       {/* <SplitScreenWithImage /> */}
       {/* <TwoColumn /> */}
       {/* <CreateBookSyllabus /> */}
-      <Flex flexDirection="column" alignItems={"center"} flexWrap="nowrap">
-        {/* <BookFilter setParentProps={updateBookProps}></BookFilter> */}
-        <br />
-
-        <Box>{/* <ChakraThemeTest/> */}</Box>
-      </Flex>
+    
     </Box>
   );
 };
 
 (Home as PageWithLayoutType).layout = LayoutWithTopNavbar;
 export default Home;
-
-
