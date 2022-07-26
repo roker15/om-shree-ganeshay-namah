@@ -44,7 +44,7 @@ export default function CallToActionWithVideo() {
     setBook(x);
   };
   return (
-    <Container maxW={"4xl"}  bg="gray.50" >
+    <Container maxW={"4xl"}  bg="gray.50" p="2">
       <Stack
         // align={"center"}
         spacing={{ base: 8, md: 10 }}
