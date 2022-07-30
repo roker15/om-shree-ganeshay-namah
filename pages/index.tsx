@@ -63,7 +63,7 @@ const Home: React.FunctionComponent = () => {
   };
 
   return (
-    <Box minW="full">
+    <Box minW="full" >
       {/* <FrequentHelp/> */}
       {/* <GotoQuestion /> */}
       <Landing />
