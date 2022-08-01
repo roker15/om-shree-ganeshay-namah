@@ -66,7 +66,7 @@ export default function CallToActionWithVideo() {
           <Flex alignItems={"center"}>
             <a
               // href="https://telegram.me/share/url?url=https://www.jionote.com/&text=visit"
-              href={`tg://msg_url?url=${encodeduri}&text=${encodedtext}`}
+              href={`https://t.me/share/url?url=${encodeduri}&text=${encodedtext}`}
              
               rel="nofollow noopener noreferrer"
               target="_blank"
