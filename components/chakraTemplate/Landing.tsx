@@ -7,6 +7,10 @@ import { BASE_URL } from "../../lib/constants";
 import { LoginCard } from "../LoginCard";
 export default function CallToActionWithVideo() {
   const { user, error } = useUser();
+  let uri = "https://www.jionote.com/";
+  let encodeduri = encodeURIComponent(uri);
+  let text = "visit us";
+  let encodedtext = encodeURIComponent(text);
 
   const navigateTo = (path: string) => {
     router.push({
@@ -61,7 +65,9 @@ export default function CallToActionWithVideo() {
           </Flex>
           <Flex alignItems={"center"}>
             <a
-              href="https://telegram.me/share/url?url=https://www.jionote.com & text=Visit"
+              // href="https://telegram.me/share/url?url=https://www.jionote.com/&text=visit"
+              href={`tg://msg_url?url=${encodeduri}&text=${encodedtext}`}
+             
               rel="nofollow noopener noreferrer"
               target="_blank"
               className="share-icon"
@@ -70,6 +76,7 @@ export default function CallToActionWithVideo() {
               Share via Telegram
             </a>
           </Flex>
+         
         </Stack>
         <Flex flex={1} justify={"center"} align={"center"} position={"relative"} w={"full"}>
           <Stack spacing="10" py="16" px="8" align="center" bg="#f0f2f5" borderRadius={"lg"} shadow={"lg"}>
