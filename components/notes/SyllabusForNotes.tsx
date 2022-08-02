@@ -55,68 +55,74 @@ const Syllabus: React.FC<Props> = ({ book, changeParentProps }) => {
   }, [profile, toggle]);
 
   return (
-      <Box pb="6" minW="full">
-        {book?.book_name && (
-          <Flex bg="brand.100" p="2" borderTopRadius="md" >
-            <Text fontWeight={"normal"} casing={"capitalize"}>{book?.book_name}</Text>
-          </Flex>
-        )}
+    <Box pb="6" minW="full">
+      {book?.book_name && (
+        <Flex bg="brand.100" p="2" borderTopRadius="md">
+          <Text fontWeight={"normal"} casing={"capitalize"}>
+            {book?.book_name}
+          </Text>
+        </Flex>
+      )}
 
-        <Box>
-          {isLoading && <Text>Loading...</Text>}
-          {Object.entries(grouped)
-            .sort((a, b) => Number(a[0].split(",")[0]) - Number(b[0].split(",")[0]))
-            .map(([key, value]) => {
-              return (
-                <Box key={key}>
-                  <Flex align="baseline" justifyContent="left" role="group" my="2">
-                    <IconButton
-                      color={"brand.500"}
-                      variant="icong"
-                      aria-label="Call Sage"
-                      onClick={() => {
-                        toggle === value[0].heading_id ? setToogle(-100) : setToogle(value[0].heading_id);
-                      }}
-                      fontSize="16px"
-                      icon={toggle === value[0].heading_id ? <MdLightMode /> : <MdAdd />}
-                    />
-                    <Text align="start" as="address" color=" #FF1493" casing="capitalize"  pr="1">
-                      {/* {value[0].heading + " " + "(" + value[0].heading_sequence + ")"} */}
-                      {value[0].heading}
-                    </Text>
-                  </Flex>
-                  {value
-                    .sort((a, b) => a.subheading_sequence - b.subheading_sequence)
-                    .map((x) => (
-                      <Flex
-                        alignItems="center"
-                        my="4"
-                        ml="10"
-                       
-                        key={x.subheading_id}
-                        // role={"group"}
-                        display={toggle === x.heading_id ? "flex" : "none"}
+      <Box>
+        {isLoading && <Text>Loading...</Text>}
+        {Object.entries(grouped)
+          .sort((a, b) => Number(a[0].split(",")[0]) - Number(b[0].split(",")[0]))
+          .map(([key, value]) => {
+            return (
+              <Box key={key}>
+                <Flex
+                  align="baseline"
+                  justifyContent="left"
+                  role="group"
+                  my="2"
+                  onClick={() => {
+                    toggle === value[0].heading_id ? setToogle(-100) : setToogle(value[0].heading_id);
+                  }}
+                  _hover={{cursor:"pointer"}}
+                >
+                  <IconButton
+                    color={"brand.500"}
+                    variant="icong"
+                    aria-label="Call Sage"
+                    fontSize="16px"
+                    icon={toggle === value[0].heading_id ? <MdLightMode /> : <MdAdd />}
+                  />
+                  <Text align="start" as="address" color=" #FF1493" casing="capitalize" pr="1">
+                    {/* {value[0].heading + " " + "(" + value[0].heading_sequence + ")"} */}
+                    {value[0].heading}
+                  </Text>
+                </Flex>
+                {value
+                  .sort((a, b) => a.subheading_sequence - b.subheading_sequence)
+                  .map((x) => (
+                    <Flex
+                      alignItems="center"
+                      my="4"
+                      ml="10"
+                      key={x.subheading_id}
+                      // role={"group"}
+                      display={toggle === x.heading_id ? "flex" : "none"}
+                    >
+                      <Text
+                        color={selectedSubheading === x.subheading_id ? "white" : "gray.600"}
+                        bg={selectedSubheading === x.subheading_id ? "brand.500" : "null"}
+                        onClick={() => handleSyllabusClick(x)}
+                        casing="capitalize"
+                        as="label"
+                        fontSize="14px"
                       >
-                        <Text
-                          color={selectedSubheading === x.subheading_id ? "white" : "gray.600"}
-                          bg={selectedSubheading === x.subheading_id ? "brand.500" : "null"}
-                          onClick={() => handleSyllabusClick(x)}
-                          casing="capitalize"
-                          as="label"
-                          fontSize="14px"
-                        >
-                          <Link>{x.subheading}</Link>
-                        </Text>
-                        {/* </Button> */}
-                        {profile && profile.id && <ArticleCounter subheadingId={x.subheading_id} creatorId={profile.id} />}
-                      </Flex>
-                    ))}
-                </Box>
-              );
-            })}
-        </Box>
+                        <Link>{x.subheading}</Link>
+                      </Text>
+                      {/* </Button> */}
+                      {profile && profile.id && <ArticleCounter subheadingId={x.subheading_id} creatorId={profile.id} />}
+                    </Flex>
+                  ))}
+              </Box>
+            );
+          })}
       </Box>
-    
+    </Box>
   );
 };
 export default Syllabus;

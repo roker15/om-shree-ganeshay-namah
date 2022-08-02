@@ -1,10 +1,16 @@
-import { Box, Button, Container, Flex, Heading, Stack, Text } from "@chakra-ui/react";
+import { Box, Button, Container, Flex, Heading, Icon, Stack, Text } from "@chakra-ui/react";
 import { useUser } from "@supabase/auth-helpers-react";
 import router from "next/router";
+import { FaTelegram, FaWhatsapp } from "react-icons/fa";
+import { MdSettings } from "react-icons/md";
 import { BASE_URL } from "../../lib/constants";
 import { LoginCard } from "../LoginCard";
 export default function CallToActionWithVideo() {
   const { user, error } = useUser();
+  let uri = "https://www.jionote.com/";
+  let encodeduri = encodeURIComponent(uri);
+  let text = "Prepare Digital UPSC Notes";
+  let encodedtext = encodeURIComponent(text);
 
   const navigateTo = (path: string) => {
     router.push({
@@ -12,19 +18,15 @@ export default function CallToActionWithVideo() {
     });
   };
   return (
-    <Box w="100wh" bg="white">
-    <Container maxW={"6xl"}>
-     
-      {/* <Text fontSize={{ base: "xl", md: "2xl" }} fontWeight="bold" position={"relative"} color="orange.400">
-        7000+ UPSC Aspirants using Jionote to Prepare their Notes
-      </Text> */}
+    // <Box w="100wh" bg="red">
+    <Container maxW={"6xl"} px="8">
       <Stack
-        align={"center"}
+        // alignItems={"center"}
         spacing={{ base: 8, md: 10 }}
         py={{ base: "16", md: 24 }}
         direction={{ base: "column", md: "row" }}
       >
-        <Stack flex={1} spacing={{ base: 5, md: 10 }}>
+        <Stack flex={3} spacing={{ base: 5, md: 10 }}>
           <Heading lineHeight={1.1} fontWeight={"extrabold"} fontSize={{ base: "3xl", sm: "4xl", lg: "6xl" }}>
             <Text
               as={"span"}
@@ -36,7 +38,6 @@ export default function CallToActionWithVideo() {
                 position: "absolute",
                 bottom: 1,
                 left: 0,
-                bg: "red.400",
                 zIndex: -1,
               }}
             >
@@ -47,73 +48,87 @@ export default function CallToActionWithVideo() {
               Exactly as per Syllabus
             </Text>
           </Heading>
-          <Text color={"gray.600"}>
-            7000+ aspirants using Jionote</Text>
+          <Text color={"gray.600"}>7000+ aspirants using Jionote</Text>
           <Stack spacing={{ base: 4, sm: 6 }} direction={{ base: "column", sm: "row" }}>
             {!user && <LoginCard redirect={BASE_URL} />}
           </Stack>
-        </Stack>
-        <Flex flex={0.5} justify={"center"} align={"center"} position={"relative"} w={"full"} justifyContent={"center"}>
-          <Box position={"relative"} rounded={"2xl"} bg="#f0f2f5" boxShadow={"md"} width={"full"} overflow={"hidden"}>
-            {/* <Image
-              alt={"Hero Image"}
-              fit={"cover"}
-              align={"center"}
-              w={"100%"}
-              h={"100%"}
-              src={"https://i.imgur.com/A0VfjhR.jpeg"}
-            /> */}
-            <Stack spacing="10" py="16" px="8" align="center">
-              <Button
-                colorScheme={"black"}
-                size="lg"
-                  px={10}
-                  maxW="96"
-                borderRadius="full"
-                variant="outline"
-                _hover={{
-                  bg: "gray.700",
-                  color: "white",
-                }}
-                onClick={() => navigateTo("/syllabusSwitch")}
+          <Box>
+            <Flex alignItems={"center"}>
+              <Icon as={FaWhatsapp} color="whatsapp.500" m="2" />
+              <a
+                href="https://web.whatsapp.com/send?text= Prepare Digital UPSC Notes https://www.jionote.com"
+                rel="nofollow noopener noreferrer"
+                target="_blank"
+                className="share-icon"
               >
-                Create Current Affair Notes
-              </Button>
-              <Button
-                colorScheme={"black"}
-                size="lg"
-                  px={10}
-                  maxW="96"
-                borderRadius="full"
-                variant="outline"
-                _hover={{
-                  bg: "gray.700",
-                  color: "white",
-                }}
-                onClick={() => navigateTo("/reviseCurrentAffair")}
+                Invite Friends via Whatsapp
+              </a>
+            </Flex>
+            <Flex alignItems={"center"}  >
+              <Icon as={FaTelegram} color="telegram.500" m="2" />
+              <a
+                // href="https://telegram.me/share/url?url=https://www.jionote.com/&text=visit"
+                href={`https://telegram.me/share/url?url=${encodeduri}&text=${encodedtext}`}
+                rel="nofollow noopener noreferrer"
+                target="_blank"
+                className="share-icon"
               >
-                Read Current Affairs Notes
-              </Button>
-              <Button
-                colorScheme={"black"}
-                size="lg"
-                  px={10}
-                  maxW="96"
-                borderRadius="full"
-                variant="outline"
-                _hover={{
-                  bg: "gray.700",
-                  color: "white",
-                }}
-                onClick={() => navigateTo("/questionBanks")}
-              >
-                Practice Question-Answer
-              </Button>
-            </Stack>
+                Invite Friends via Telegram
+              </a>
+            </Flex>
           </Box>
+        </Stack>
+        <Flex flex={1} justify={"center"} align={"center"} position={"relative"} w={"full"}>
+          <Stack spacing="10" py="16" px="8" align="center" bg="#f0f2f5" borderRadius={"lg"} shadow={"lg"}>
+            <Button
+              colorScheme={"black"}
+              size="lg"
+              // px={10}
+              // maxW="96"
+              borderRadius="full"
+              variant="outline"
+              _hover={{
+                bg: "gray.700",
+                color: "white",
+              }}
+              onClick={() => navigateTo("/syllabusSwitch")}
+            >
+              Create Current Affair Notes
+            </Button>
+            <Button
+              colorScheme={"black"}
+              size="lg"
+              // px={10}
+              // maxW="96"
+              borderRadius="full"
+              variant="outline"
+              _hover={{
+                bg: "gray.700",
+                color: "white",
+              }}
+              onClick={() => navigateTo("/reviseCurrentAffair")}
+            >
+              Read Current Affairs Notes
+            </Button>
+            <Button
+              colorScheme={"black"}
+              size="lg"
+              // px={10}
+              // maxW="96"
+              borderRadius="full"
+              variant="outline"
+              _hover={{
+                bg: "gray.700",
+                color: "white",
+              }}
+              onClick={() => navigateTo("/questionBanks")}
+            >
+              Practice Question-Answer
+            </Button>
+          </Stack>
         </Flex>
       </Stack>
     </Container>
-    </Box>
+    //  </Box>
   );
 }
