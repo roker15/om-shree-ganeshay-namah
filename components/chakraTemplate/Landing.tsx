@@ -56,7 +56,8 @@ export default function CallToActionWithVideo() {
             <Flex alignItems={"center"}>
               <Icon as={FaWhatsapp} color="whatsapp.500" m="2" />
               <a
-                href="https://web.whatsapp.com/send?text= Prepare Digital UPSC Notes https://www.jionote.com"
+                // href="https://web.whatsapp.com/send?text= Prepare Digital UPSC Notes https://www.jionote.com"
+                href="https://api.whatsapp.com/send?text= Prepare Digital UPSC Notes https://www.jionote.com"
                 rel="nofollow noopener noreferrer"
                 target="_blank"
                 className="share-icon"
