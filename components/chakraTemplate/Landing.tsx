@@ -1,16 +1,34 @@
-import { Box, Button, Container, Flex, Heading, Icon, Stack, Text } from "@chakra-ui/react";
+import { Box, Button, Container, Flex, Heading, Icon, Stack, Text, useBreakpointValue } from "@chakra-ui/react";
 import { useUser } from "@supabase/auth-helpers-react";
 import router from "next/router";
+import { useEffect } from "react";
 import { FaTelegram, FaWhatsapp } from "react-icons/fa";
 import { MdSettings } from "react-icons/md";
 import { BASE_URL } from "../../lib/constants";
 import { LoginCard } from "../LoginCard";
 export default function CallToActionWithVideo() {
   const { user, error } = useUser();
+
+  const whatsappuri = useBreakpointValue(
+    {
+      base: "https://api.whatsapp.com/send?text= Prepare Digital UPSC Notes https://www.jionote.com",
+      lg: "https://web.whatsapp.com/send?text= Prepare Digital UPSC Notes https://www.jionote.com",
+    },
+    {
+      // Breakpoint to use when mediaqueries cannot be used, such as in server-side rendering
+      // (Defaults to 'base')
+      fallback: "base",
+    }
+  );
+
   let uri = "https://www.jionote.com/";
   let encodeduri = encodeURIComponent(uri);
   let text = "Prepare Digital UPSC Notes";
   let encodedtext = encodeURIComponent(text);
+  useEffect(() => {
+    console.log(whatsappuri);
+    // supabaseTest();
+  }, [whatsappuri]);
 
   const navigateTo = (path: string) => {
     router.push({
@@ -56,8 +74,9 @@ export default function CallToActionWithVideo() {
             <Flex alignItems={"center"}>
               <Icon as={FaWhatsapp} color="whatsapp.500" m="2" />
               <a
-                // href="https://web.whatsapp.com/send?text= Prepare Digital UPSC Notes https://www.jionote.com"
-                href="https://api.whatsapp.com/send?text= Prepare Digital UPSC Notes https://www.jionote.com"
+                href={whatsappuri}
+                // href="https://api.whatsapp.com/send?text= Prepare Digital UPSC Notes https://www.jionote.com"
+                // href="https://wa.me/?text= Prepare Digital UPSsC Notes https://www.jionote.com"
                 rel="nofollow noopener noreferrer"
                 target="_blank"
                 className="share-icon"
@@ -65,7 +84,7 @@ export default function CallToActionWithVideo() {
                 Invite Friends via Whatsapp
               </a>
             </Flex>
-            <Flex alignItems={"center"}  >
+            <Flex alignItems={"center"}>
               <Icon as={FaTelegram} color="telegram.500" m="2" />
               <a
                 // href="https://telegram.me/share/url?url=https://www.jionote.com/&text=visit"
