@@ -1,4 +1,4 @@
-import { Box, Container, Flex, HStack, Text, VStack } from "@chakra-ui/react";
+import { Box, Container, Flex, HStack, Text, useBreakpointValue, VStack } from "@chakra-ui/react";
 import { supabaseClient } from "@supabase/auth-helpers-nextjs";
 import { useUser } from "@supabase/auth-helpers-react";
 import Link from "next/link";
@@ -20,6 +20,14 @@ import PageWithLayoutType from "../types/pageWithLayout";
 import { definitions } from "../types/supabase";
 
 const Home: React.FunctionComponent = () => {
+
+ 
+
+
+
+
+
+
   const [book, setBook] = useState<BookResponse | undefined>(undefined);
   const { profile } = useAuthContext();
   const { user, error } = useUser();
