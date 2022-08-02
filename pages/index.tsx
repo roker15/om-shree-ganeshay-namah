@@ -1,5 +1,6 @@
 import { Box, Container, Flex, HStack, Text, VStack } from "@chakra-ui/react";
 import { supabaseClient } from "@supabase/auth-helpers-nextjs";
+import { useUser } from "@supabase/auth-helpers-react";
 import Link from "next/link";
 import router from "next/router";
 import React, { useEffect, useState } from "react";
@@ -11,14 +12,17 @@ import EditorFeatures from "../components/chakraTemplate/EditorFeatures";
 import Landing from "../components/chakraTemplate/Landing";
 import QuestionDemo from "../components/chakraTemplate/QuestionDemo";
 import SelectSyllabus from "../components/chakraTemplate/SelectSyllabus";
+import CreateBookSyllabus from "../components/syllabus/CreateBookSyllabus";
 import LayoutWithTopNavbar from "../layout/LayoutWithTopNavbar";
+import { useAuthContext } from "../state/Authcontext";
 import { BookResponse } from "../types/myTypes";
 import PageWithLayoutType from "../types/pageWithLayout";
 import { definitions } from "../types/supabase";
 
 const Home: React.FunctionComponent = () => {
   const [book, setBook] = useState<BookResponse | undefined>(undefined);
-
+  const { profile } = useAuthContext();
+  const { user, error } = useUser();
   const supabaseTest = async () => {
     const { data, error } = await supabaseClient
       .from<definitions["books_article_sharing"]>("books_article_sharing")
@@ -63,26 +67,28 @@ const Home: React.FunctionComponent = () => {
   };
 
   return (
-    <Box minW="full" >
+    <Box minW="full">
       {/* <FrequentHelp/> */}
       {/* <GotoQuestion /> */}
       <Landing />
-      <Container
-        maxW={"6xl"}
-        mb={{base:"64",lg:"80"}}
-       
-        borderColor="gray.50"
-      >
+      <Container maxW={"6xl"} mb={{ base: "64", lg: "80" }} borderColor="gray.50">
         <SelectSyllabus />
+        {user && profile?.role === "ADMIN" && (
+          <Box m="8">
+            <Link href="/manageSyllabus">
+              <a style={{ color: "black", fontSize: "20px", border: "1px solid", padding: "5px" ,borderRadius:"5px" }}>
+                Manage syllabus
+              </a>
+            </Link>
+          </Box>
+        )}{" "}
       </Container>
       {/* <CtaWithAnnotation /> */}
       {/* <EditorFeatures />
       <CtaWithVideo />
       <QuestionDemo /> */}
-
       {/* <SplitScreenWithImage /> */}
       {/* <TwoColumn /> */}
-      {/* <CreateBookSyllabus /> */}
     </Box>
   );
 };

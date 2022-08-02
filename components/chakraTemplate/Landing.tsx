@@ -9,7 +9,7 @@ export default function CallToActionWithVideo() {
   const { user, error } = useUser();
   let uri = "https://www.jionote.com/";
   let encodeduri = encodeURIComponent(uri);
-  let text = "visit us";
+  let text = "Prepare Digital UPSC Notes";
   let encodedtext = encodeURIComponent(text);
 
   const navigateTo = (path: string) => {
@@ -52,31 +52,31 @@ export default function CallToActionWithVideo() {
           <Stack spacing={{ base: 4, sm: 6 }} direction={{ base: "column", sm: "row" }}>
             {!user && <LoginCard redirect={BASE_URL} />}
           </Stack>
-          <Flex alignItems={"center"}>
-            <a
-              href="https://web.whatsapp.com/send?text= Prepare Digital UPSC Notes https://www.jionote.com"
-              rel="nofollow noopener noreferrer"
-              target="_blank"
-              className="share-icon"
-            >
-              <Icon as={FaWhatsapp} color="whatsapp.500" />
-              Share via Whatsapp
-            </a>
-          </Flex>
-          <Flex alignItems={"center"}>
-            <a
-              // href="https://telegram.me/share/url?url=https://www.jionote.com/&text=visit"
-              href={`https://telegram.me/share/url?url=${encodeduri}&text=${encodedtext}`}
-             
-              rel="nofollow noopener noreferrer"
-              target="_blank"
-              className="share-icon"
-            >
-              <Icon as={FaTelegram} color="telegram.500" />
-              Share via Telegram
-            </a>
-          </Flex>
-         
+          <Box>
+            <Flex alignItems={"center"}>
+              <Icon as={FaWhatsapp} color="whatsapp.500" m="2" />
+              <a
+                href="https://web.whatsapp.com/send?text= Prepare Digital UPSC Notes https://www.jionote.com"
+                rel="nofollow noopener noreferrer"
+                target="_blank"
+                className="share-icon"
+              >
+                Invite Friends via Whatsapp
+              </a>
+            </Flex>
+            <Flex alignItems={"center"}  >
+              <Icon as={FaTelegram} color="telegram.500" m="2" />
+              <a
+                // href="https://telegram.me/share/url?url=https://www.jionote.com/&text=visit"
+                href={`https://telegram.me/share/url?url=${encodeduri}&text=${encodedtext}`}
+                rel="nofollow noopener noreferrer"
+                target="_blank"
+                className="share-icon"
+              >
+                Invite Friends via Telegram
+              </a>
+            </Flex>
+          </Box>
         </Stack>
         <Flex flex={1} justify={"center"} align={"center"} position={"relative"} w={"full"}>
           <Stack spacing="10" py="16" px="8" align="center" bg="#f0f2f5" borderRadius={"lg"} shadow={"lg"}>
