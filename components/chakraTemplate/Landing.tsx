@@ -71,11 +71,11 @@ export default function CallToActionWithVideo() {
             {!user && <LoginCard redirect={BASE_URL} />}
           </Stack>
           <Box>
-            <Flex alignItems={"center"}>
+            <Flex alignItems={"center"} border="0px" borderRadius="5px" bg="blue.50" width="240px" p="1" my="2" _hover={{background: "cyan.100"}}>
               <Icon as={FaWhatsapp} color="whatsapp.500" m="2" />
               <a
                 href={whatsappuri}
-                // href="https://api.whatsapp.com/send?text= Prepare Digital UPSC Notes https://www.jionote.com"
+                
                 // href="https://wa.me/?text= Prepare Digital UPSsC Notes https://www.jionote.com"
                 rel="nofollow noopener noreferrer"
                 target="_blank"
@@ -84,7 +84,7 @@ export default function CallToActionWithVideo() {
                 Invite Friends via Whatsapp
               </a>
             </Flex>
-            <Flex alignItems={"center"}>
+            <Flex alignItems={"center"} border="0px" borderRadius="5px" bg="blue.50" width="240px" p="1" my="2"  _hover={{background: "cyan.100"}}>
               <Icon as={FaTelegram} color="telegram.500" m="2" />
               <a
                 // href="https://telegram.me/share/url?url=https://www.jionote.com/&text=visit"
