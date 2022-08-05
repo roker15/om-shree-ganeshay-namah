@@ -30,7 +30,7 @@ import { FiTrendingUp } from "react-icons/fi";
 import { mutate } from "swr";
 import { useGetUserArticlesFromTags } from "../../customHookes/networkHooks";
 import { currentAffairTags } from "../../lib/constants";
-import { elog } from "../../lib/mylog";
+import { elog, sentenseCase } from "../../lib/mylog";
 import { useAuthContext } from "../../state/Authcontext";
 import { useNoteContext } from "../../state/NoteContext";
 import { BookResponse } from "../../types/myTypes";
@@ -276,19 +276,4 @@ export default function ManageCurrentAffair() {
     </Box>
   );
 }
-function sentenseCase(text: string) {
-  var string = "hi all, this is derp. thank you all to answer my query.";
-  var n = text.split(".");
-  var vfinal = "";
-  for (let i = 0; i < n.length; i++) {
-    var spaceput = "";
-    var spaceCount = n[i].replace(/^(\s*).*$/, "$1").length;
-    n[i] = n[i].replace(/^\s+/, "");
-    var newstring = n[i].charAt(+n[i]).toUpperCase() + n[i].slice(1);
-    for (let j = 0; j < spaceCount; j++) spaceput = spaceput + " ";
-    vfinal = vfinal + spaceput + newstring + ".";
-  }
-  vfinal = vfinal.substring(0, vfinal.length - 1);
-  return vfinal;
-  // alert(vfinal);
-}
+
