@@ -37,7 +37,7 @@ import "suneditor/dist/css/suneditor.min.css"; // Import Sun Editor's CSS File
 import { useSWRConfig } from "swr";
 import { useGetUserArticles } from "../../customHookes/networkHooks";
 import { currentAffairTags } from "../../lib/constants";
-import { elog } from "../../lib/mylog";
+import { elog, sentenseCase } from "../../lib/mylog";
 import { useAuthContext } from "../../state/Authcontext";
 import { useNoteContext } from "../../state/NoteContext";
 import { definitions } from "../../types/supabase";
@@ -158,8 +158,8 @@ const MyNotes: React.FC<Props> = ({ subjectId, subheadingid, notesCreator, chang
               <Flex role={"group"} align="center" >
                 {/* <Badge> */}
                 <VStack >
-                  <Text alignSelf={"baseline"} bg="gray.50" p="2" fontSize="16px" casing="capitalize" align="left">
-                    <Text as="b">Article Name :- </Text> {x.article_title}
+                  <Text alignSelf={"baseline"} bg="gray.50" p="2" fontSize="16px" lineHeight={"tall"} align="left" >
+                    <Text as="b">Article Name :- </Text> {sentenseCase(x.article_title)}
                   </Text>
                   <Wrap spacing="5px" >
                     {x.current_affair_tags
