@@ -1,19 +1,11 @@
-import { Box, Container, Flex, HStack, Text, useBreakpointValue, VStack } from "@chakra-ui/react";
+import { Box, Container } from "@chakra-ui/react";
 import { supabaseClient } from "@supabase/auth-helpers-nextjs";
 import { useUser } from "@supabase/auth-helpers-react";
 import Link from "next/link";
 import router from "next/router";
 import React, { useEffect, useState } from "react";
-import All from "../components/chakraTemplate/All";
-import TwoColumn from "../components/chakraTemplate/All";
-import CtaWithAnnotation from "../components/chakraTemplate/CtaWithAnnotation";
-import CtaWithVideo from "../components/chakraTemplate/CurrentAffair";
-import EditorFeatures from "../components/chakraTemplate/EditorFeatures";
 import Landing from "../components/chakraTemplate/Landing";
-import QuestionDemo from "../components/chakraTemplate/QuestionDemo";
 import SelectSyllabus from "../components/chakraTemplate/SelectSyllabus";
-import Pagination from "../components/CurrentAffair/Pagination";
-import CreateBookSyllabus from "../components/syllabus/CreateBookSyllabus";
 import LayoutWithTopNavbar from "../layout/LayoutWithTopNavbar";
 import { useAuthContext } from "../state/Authcontext";
 import { BookResponse } from "../types/myTypes";
@@ -91,7 +83,6 @@ const Home: React.FunctionComponent = () => {
             </Link>
           </Box>
         )}{" "}
-        <Pagination/>
       </Container>
       {/* <CtaWithAnnotation /> */}
       {/* <EditorFeatures />
