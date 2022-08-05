@@ -164,8 +164,6 @@ export function useGetUserArticlesFromTags(userid: string | undefined, tagsArray
       revalidateOnReconnect: false,
     }
   );
-  console.log("database call ja raha hai");
-  console.log(data ? data!.data : "no data");
   
   if (tagsArray && tagsArray.length === 0) {
     return {

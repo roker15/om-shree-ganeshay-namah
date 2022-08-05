@@ -12,6 +12,7 @@ import EditorFeatures from "../components/chakraTemplate/EditorFeatures";
 import Landing from "../components/chakraTemplate/Landing";
 import QuestionDemo from "../components/chakraTemplate/QuestionDemo";
 import SelectSyllabus from "../components/chakraTemplate/SelectSyllabus";
+import Pagination from "../components/CurrentAffair/Pagination";
 import CreateBookSyllabus from "../components/syllabus/CreateBookSyllabus";
 import LayoutWithTopNavbar from "../layout/LayoutWithTopNavbar";
 import { useAuthContext } from "../state/Authcontext";
@@ -90,6 +91,7 @@ const Home: React.FunctionComponent = () => {
             </Link>
           </Box>
         )}{" "}
+        <Pagination/>
       </Container>
       {/* <CtaWithAnnotation /> */}
       {/* <EditorFeatures />

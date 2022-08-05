@@ -1,4 +1,9 @@
 import {
+  Accordion,
+  AccordionButton,
+  AccordionIcon,
+  AccordionItem,
+  AccordionPanel,
   Alert,
   AlertIcon,
   Box,
@@ -158,7 +163,7 @@ export default function ManageCurrentAffair() {
               <Tags></Tags>
             </GridItem>
 
-            <GridItem colSpan={{ base: 5, sm: 5, md: 4 }} px={{ base: "0.5", sm: "0.5", md: "6" }}>
+            <GridItem colSpan={{ base: 5, sm: 5, md: 4 }} px={{ base: "0.5", sm: "0.5", md: "0.5" }}>
               {tagsArray && tagsArray.length === 0 ? (
                 <InfoAlert info={"No Topic Selected, Please Select Some topics from Tag Panel to see notes"} />
               ) : swrError ? (
@@ -166,72 +171,37 @@ export default function ManageCurrentAffair() {
               ) : isArticleLoading ? (
                 <div>loading...</div>
               ) : articles && articles.length > 0 ? (
-                articles.map((article) => {
-                  return (
-                    <Flex key={article.id} pb="16">
-                      <VStack width="full">
-                        <Flex alignSelf="start" alignItems="center">
-                          <Text alignSelf={"baseline"} bg="brand.100" p="2" fontSize="16px" casing="capitalize" align="left">
-                            <Text as="b">Article Name :- </Text> {article.article_title}
-                          </Text>
-                          <DeleteConfirmation
-                            handleDelete={deleteArticle}
-                            dialogueHeader={"Delete this Article?"}
-                            isDisabled={false}
-                            isIconButton={true}
-                            id={article.id}
-                          ></DeleteConfirmation>
-                        </Flex>
-                        <Tabs variant="line" size="sm" colorScheme="gray" width="full">
-                          <TabList>
-                            <Tab>English</Tab>
-                            <Tab>Hindi</Tab>
-                          </TabList>
-                          <TabPanels>
-                            <TabPanel pl="2" pr="0.5" width="full">
-                              <SuneditorForNotesMaking article={article} language={"ENGLISH"} isEditable={true} />
-                            </TabPanel>
-                            <TabPanel width="full">
-                              <SuneditorForNotesMaking article={article} language={"HINDI"} isEditable={true} />
-                            </TabPanel>
-                          </TabPanels>
-                        </Tabs>
-                      </VStack>
-                    </Flex>
-                  );
-                })
-              ) : (
-                <>
-                  <InfoAlert
-                    info={
-                      "You don't have any notes in selected topics. Create some notes and come back again \n\n To create Notes :- \n\n Select   'Current Affairs'   Syllabus from below.  "
-                    }
-                  />
-                  <Flex bg="gray.50" p="2" mt="2" justify={"center"} align={"center"} position={"relative"} w={"full"}>
-                    <BookFilter setParentProps={updateBookProps} />
-                  </Flex>
-                </>
-              )}
-            </GridItem>
-
-            {/* {tagsArray && tagsArray.length === 0 ? (
-              <div>No Topic Selected, Please Select Some topics to see notes</div>
-            ) : swrError ? (
-              elog("ManageCurrentAffair", swrError.message)
-            ) : (
-              <GridItem colSpan={{ base: 5, sm: 5, md: 4 }} px={{ base: "0.5", sm: "0.5", md: "6" }}>
-                {isArticleLoading ? (
-                  <div>loading...</div>
-                ) : articles && articles.length > 0 ? (
-                  articles.map((article) => {
+                <Accordion allowMultiple>
+                  {articles.map((article) => {
                     return (
-                      <Flex key={article.id} pb="16">
-                        <VStack width="full">
-                          <Text alignSelf={"baseline"} bg="brand.100" p="2" fontSize="16px" casing="capitalize" align="left">
-                            <Text as="b">Article Name :- </Text> {article.article_title}
-                          </Text>
-
-                          <Tabs size="md" colorScheme="whatsapp" width="full">
+                      <AccordionItem key={article.id} borderTopWidth="0px" borderBottomWidth="0px">
+                        {/* <Flex pb="16"> */}
+                        {/* <VStack width="full"> */}
+                        <AccordionButton _expanded={{ bg: "gray.100" }}>
+                          <Box flex="1" textAlign="left">
+                            <Flex alignSelf="start" alignItems="center">
+                              <Text
+                                alignSelf={"baseline"}
+                                // bg="brand.100"
+                                p="2"
+                                fontSize="16px"
+                                align="left"
+                              >
+                                <Text as="b">Article Name :- </Text> {sentenseCase(article.article_title)}
+                              </Text>
+                              <DeleteConfirmation
+                                handleDelete={deleteArticle}
+                                dialogueHeader={"Delete this Article?"}
+                                isDisabled={false}
+                                isIconButton={true}
+                                id={article.id}
+                              ></DeleteConfirmation>
+                            </Flex>
+                          </Box>
+                          <AccordionIcon />
+                        </AccordionButton>
+                        <AccordionPanel pb={4} borderTopWidth="0px" borderBottomWidth="0px">
+                          <Tabs variant="line" size="sm" colorScheme="gray" width="full">
                             <TabList>
                               <Tab>English</Tab>
                               <Tab>Hindi</Tab>
@@ -245,18 +215,80 @@ export default function ManageCurrentAffair() {
                               </TabPanel>
                             </TabPanels>
                           </Tabs>
-                        </VStack>
-                      </Flex>
+                        </AccordionPanel>
+                        {/* </VStack> */}
+                        {/* </Flex> */}
+                      </AccordionItem>
                     );
-                  })
-                ) : (
-                  "Either you have not selected any Tags or you don't have any notes in selected tags. create some notes and come back"
-                )}
-              </GridItem>
-            )} */}
+                  })}
+                </Accordion>
+              ) : (
+                // articles.map((article) => {
+                //   return (
+                //     <Flex key={article.id} pb="16">
+                //       <VStack width="full">
+                //         <Flex alignSelf="start" alignItems="center">
+                //           <Text alignSelf={"baseline"} bg="brand.100" p="2" fontSize="16px" casing="capitalize" align="left">
+                //             <Text as="b">Article Name :- </Text> {article.article_title}
+                //           </Text>
+                //           <DeleteConfirmation
+                //             handleDelete={deleteArticle}
+                //             dialogueHeader={"Delete this Article?"}
+                //             isDisabled={false}
+                //             isIconButton={true}
+                //             id={article.id}
+                //           ></DeleteConfirmation>
+                //         </Flex>
+                //         <Tabs variant="line" size="sm" colorScheme="gray" width="full">
+                //           <TabList>
+                //             <Tab>English</Tab>
+                //             <Tab>Hindi</Tab>
+                //           </TabList>
+                //           <TabPanels>
+                //             <TabPanel pl="2" pr="0.5" width="full">
+                //               <SuneditorForNotesMaking article={article} language={"ENGLISH"} isEditable={true} />
+                //             </TabPanel>
+                //             <TabPanel width="full">
+                //               <SuneditorForNotesMaking article={article} language={"HINDI"} isEditable={true} />
+                //             </TabPanel>
+                //           </TabPanels>
+                //         </Tabs>
+                //       </VStack>
+                //     </Flex>
+                //   );
+                // })
+
+                <>
+                  <InfoAlert
+                    info={
+                      "You don't have any notes in selected topics. Create some notes and come back again \n\n To create Notes :- \n\n Select   'Current Affairs'   Syllabus from below.  "
+                    }
+                  />
+                  <Flex bg="gray.50" p="2" mt="2" justify={"center"} align={"center"} position={"relative"} w={"full"}>
+                    <BookFilter setParentProps={updateBookProps} />
+                  </Flex>
+                </>
+              )}
+            </GridItem>
           </>
         </Grid>
       </>
     </Box>
   );
+}
+function sentenseCase(text: string) {
+  var string = "hi all, this is derp. thank you all to answer my query.";
+  var n = text.split(".");
+  var vfinal = "";
+  for (let i = 0; i < n.length; i++) {
+    var spaceput = "";
+    var spaceCount = n[i].replace(/^(\s*).*$/, "$1").length;
+    n[i] = n[i].replace(/^\s+/, "");
+    var newstring = n[i].charAt(+n[i]).toUpperCase() + n[i].slice(1);
+    for (let j = 0; j < spaceCount; j++) spaceput = spaceput + " ";
+    vfinal = vfinal + spaceput + newstring + ".";
+  }
+  vfinal = vfinal.substring(0, vfinal.length - 1);
+  return vfinal;
+  // alert(vfinal);
 }
