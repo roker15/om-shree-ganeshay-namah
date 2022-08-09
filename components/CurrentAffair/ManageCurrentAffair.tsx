@@ -158,7 +158,7 @@ export default function ManageCurrentAffair() {
           </Flex>
         )}
 
-        <Grid templateColumns="repeat(5, 1fr)" gap={6}>
+        <Grid templateColumns="repeat(5, 1fr)" gap={"1.5"}>
           <>
             <GridItem colSpan={{ base: 0, sm: 0, md: 1 }} display={{ base: "none", sm: "none", md: "block" }} bg="brand.50">
               <Tags></Tags>
@@ -175,50 +175,57 @@ export default function ManageCurrentAffair() {
                 <Accordion allowMultiple>
                   {articles.map((article) => {
                     return (
-                      <AccordionItem key={article.id} borderTopWidth="0px" borderBottomWidth="0px">
+                      <AccordionItem key={article.id} borderTopWidth="0px" borderBottomWidth="0px" my="2">
                         {({ isExpanded }) => (
                           <>
                             {/* <Flex pb="16"> */}
                             {/* <VStack width="full"> */}
-                            <AccordionButton _expanded={{ bg: "gray.100" }}>
+                           <Flex>
+                            <DeleteConfirmation
+                              handleDelete={deleteArticle}
+                              dialogueHeader={"Delete this Article?"}
+                              isDisabled={false}
+                              isIconButton={true}
+                              id={article.id}
+                            ></DeleteConfirmation>
+                            <AccordionButton bg="gray.50" _expanded={{ bg: "blackAlpha.50" }}>
                               <Box flex="1" textAlign="left">
                                 <Flex alignSelf="start" alignItems="center">
                                   <Text
                                     alignSelf={"baseline"}
                                     // bg="brand.100"
-                                    p="2"
+                                    p="0.5"
                                     fontSize="16px"
                                     align="left"
                                   >
                                     <Text as="b">Article Name :- </Text> {sentenseCase(article.article_title)}
                                   </Text>
-                                  <DeleteConfirmation
-                                    handleDelete={deleteArticle}
-                                    dialogueHeader={"Delete this Article?"}
-                                    isDisabled={false}
-                                    isIconButton={true}
-                                    id={article.id}
-                                  ></DeleteConfirmation>
                                 </Flex>
                               </Box>
                               <AccordionIcon />
                             </AccordionButton>
+                            </Flex>
                             <AccordionPanel pb={4} borderTopWidth="0px" borderBottomWidth="0px">
-                              {isExpanded && 
-                              <Tabs variant="line" size="sm" colorScheme="gray" width="full">
-                                <TabList>
-                                  <Tab>English</Tab>
-                                  <Tab>Hindi</Tab>
-                                </TabList>
-                                <TabPanels>
-                                  <TabPanel pl="2" pr="0.5" width="full">
-                                    <SuneditorForNotesMakingg article1={article.id} language={"ENGLISH"} isEditable={true} />
-                                  </TabPanel>
-                                  <TabPanel width="full">
-                                    <SuneditorForNotesMakingg article1={article.id} language={"HINDI"} isEditable={true} />
-                                  </TabPanel>
-                                </TabPanels>
-                              </Tabs>}
+                              {isExpanded && (
+                                <Tabs variant="line" size="sm" colorScheme="gray" width="full">
+                                  <TabList>
+                                    <Tab>English</Tab>
+                                    <Tab>Hindi</Tab>
+                                  </TabList>
+                                  <TabPanels>
+                                    <TabPanel pl="2" pr="0.5" width="full">
+                                      <SuneditorForNotesMakingg
+                                        article1={article.id}
+                                        language={"ENGLISH"}
+                                        isEditable={true}
+                                      />
+                                    </TabPanel>
+                                    <TabPanel width="full">
+                                      <SuneditorForNotesMakingg article1={article.id} language={"HINDI"} isEditable={true} />
+                                    </TabPanel>
+                                  </TabPanels>
+                                </Tabs>
+                              )}
                             </AccordionPanel>
                             {/* </VStack> */}
                             {/* </Flex> */}
