@@ -36,6 +36,7 @@ import { useNoteContext } from "../../state/NoteContext";
 import { BookResponse } from "../../types/myTypes";
 import { definitions } from "../../types/supabase";
 import SuneditorForNotesMaking from "../editor/SuneditorForNotesMaking";
+import SuneditorForNotesMakingg from "../editor/SuneditorForNotesMakingg";
 import BookFilter from "../syllabus/BookFilter";
 import DeleteConfirmation from "../syllabus/DeleteConfirmation";
 
@@ -175,89 +176,59 @@ export default function ManageCurrentAffair() {
                   {articles.map((article) => {
                     return (
                       <AccordionItem key={article.id} borderTopWidth="0px" borderBottomWidth="0px">
-                        {/* <Flex pb="16"> */}
-                        {/* <VStack width="full"> */}
-                        <AccordionButton _expanded={{ bg: "gray.100" }}>
-                          <Box flex="1" textAlign="left">
-                            <Flex alignSelf="start" alignItems="center">
-                              <Text
-                                alignSelf={"baseline"}
-                                // bg="brand.100"
-                                p="2"
-                                fontSize="16px"
-                                align="left"
-                              >
-                                <Text as="b">Article Name :- </Text> {sentenseCase(article.article_title)}
-                              </Text>
-                              <DeleteConfirmation
-                                handleDelete={deleteArticle}
-                                dialogueHeader={"Delete this Article?"}
-                                isDisabled={false}
-                                isIconButton={true}
-                                id={article.id}
-                              ></DeleteConfirmation>
-                            </Flex>
-                          </Box>
-                          <AccordionIcon />
-                        </AccordionButton>
-                        <AccordionPanel pb={4} borderTopWidth="0px" borderBottomWidth="0px">
-                          <Tabs variant="line" size="sm" colorScheme="gray" width="full">
-                            <TabList>
-                              <Tab>English</Tab>
-                              <Tab>Hindi</Tab>
-                            </TabList>
-                            <TabPanels>
-                              <TabPanel pl="2" pr="0.5" width="full">
-                                <SuneditorForNotesMaking article={article} language={"ENGLISH"} isEditable={true} />
-                              </TabPanel>
-                              <TabPanel width="full">
-                                <SuneditorForNotesMaking article={article} language={"HINDI"} isEditable={true} />
-                              </TabPanel>
-                            </TabPanels>
-                          </Tabs>
-                        </AccordionPanel>
-                        {/* </VStack> */}
-                        {/* </Flex> */}
+                        {({ isExpanded }) => (
+                          <>
+                            {/* <Flex pb="16"> */}
+                            {/* <VStack width="full"> */}
+                            <AccordionButton _expanded={{ bg: "gray.100" }}>
+                              <Box flex="1" textAlign="left">
+                                <Flex alignSelf="start" alignItems="center">
+                                  <Text
+                                    alignSelf={"baseline"}
+                                    // bg="brand.100"
+                                    p="2"
+                                    fontSize="16px"
+                                    align="left"
+                                  >
+                                    <Text as="b">Article Name :- </Text> {sentenseCase(article.article_title)}
+                                  </Text>
+                                  <DeleteConfirmation
+                                    handleDelete={deleteArticle}
+                                    dialogueHeader={"Delete this Article?"}
+                                    isDisabled={false}
+                                    isIconButton={true}
+                                    id={article.id}
+                                  ></DeleteConfirmation>
+                                </Flex>
+                              </Box>
+                              <AccordionIcon />
+                            </AccordionButton>
+                            <AccordionPanel pb={4} borderTopWidth="0px" borderBottomWidth="0px">
+                              {isExpanded && 
+                              <Tabs variant="line" size="sm" colorScheme="gray" width="full">
+                                <TabList>
+                                  <Tab>English</Tab>
+                                  <Tab>Hindi</Tab>
+                                </TabList>
+                                <TabPanels>
+                                  <TabPanel pl="2" pr="0.5" width="full">
+                                    <SuneditorForNotesMakingg article1={article.id} language={"ENGLISH"} isEditable={true} />
+                                  </TabPanel>
+                                  <TabPanel width="full">
+                                    <SuneditorForNotesMakingg article1={article.id} language={"HINDI"} isEditable={true} />
+                                  </TabPanel>
+                                </TabPanels>
+                              </Tabs>}
+                            </AccordionPanel>
+                            {/* </VStack> */}
+                            {/* </Flex> */}
+                          </>
+                        )}
                       </AccordionItem>
                     );
                   })}
                 </Accordion>
               ) : (
-                // articles.map((article) => {
-                //   return (
-                //     <Flex key={article.id} pb="16">
-                //       <VStack width="full">
-                //         <Flex alignSelf="start" alignItems="center">
-                //           <Text alignSelf={"baseline"} bg="brand.100" p="2" fontSize="16px" casing="capitalize" align="left">
-                //             <Text as="b">Article Name :- </Text> {article.article_title}
-                //           </Text>
-                //           <DeleteConfirmation
-                //             handleDelete={deleteArticle}
-                //             dialogueHeader={"Delete this Article?"}
-                //             isDisabled={false}
-                //             isIconButton={true}
-                //             id={article.id}
-                //           ></DeleteConfirmation>
-                //         </Flex>
-                //         <Tabs variant="line" size="sm" colorScheme="gray" width="full">
-                //           <TabList>
-                //             <Tab>English</Tab>
-                //             <Tab>Hindi</Tab>
-                //           </TabList>
-                //           <TabPanels>
-                //             <TabPanel pl="2" pr="0.5" width="full">
-                //               <SuneditorForNotesMaking article={article} language={"ENGLISH"} isEditable={true} />
-                //             </TabPanel>
-                //             <TabPanel width="full">
-                //               <SuneditorForNotesMaking article={article} language={"HINDI"} isEditable={true} />
-                //             </TabPanel>
-                //           </TabPanels>
-                //         </Tabs>
-                //       </VStack>
-                //     </Flex>
-                //   );
-                // })
-
                 <>
                   <InfoAlert
                     info={
@@ -276,4 +247,3 @@ export default function ManageCurrentAffair() {
     </Box>
   );
 }
-
