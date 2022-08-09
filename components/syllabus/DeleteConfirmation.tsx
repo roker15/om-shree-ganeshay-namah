@@ -33,6 +33,20 @@ const DeleteAlertDialogue = ({ handleDelete, dialogueHeader, isDisabled, isIconB
   return (
     <>
       {isIconButton ? (
+        <IconButton
+          // _hover={{ color: "pink", fontSize: "22px" }}
+          size="md"
+          ml="2"
+          borderRadius={"full"}
+          variant="ghost"
+          colorScheme="red"
+          // color="red.200"
+          aria-label="Call Sage"
+          // fontSize="20px"
+          onClick={() => setIsOpen(true)}
+          icon={<MdDelete />}
+        />
+      ) : (
         <Button
           // _hover={{ color: "pink", fontSize: "22px" }}
           size="sm"
@@ -46,34 +60,25 @@ const DeleteAlertDialogue = ({ handleDelete, dialogueHeader, isDisabled, isIconB
           leftIcon={<MdDelete />}
           onClick={() => setIsOpen(true)}
           // icon={<MdDelete />}
-        >Delete</Button>
-      ) : (
-        <Button
-          colorScheme="whatsapp"
-          isDisabled={isDisabled}
-          leftIcon={<MdDelete />}
-          variant="ghost"
-          size="xs"
-          onClick={() => setIsOpen(true)}
         >
-          {dialogueHeader}
+          Delete
         </Button>
       )}
 
       <AlertDialog isOpen={isOpen} leastDestructiveRef={cancelRef} onClose={onClose}>
         <AlertDialogOverlay>
           <AlertDialogContent>
-            <AlertDialogHeader p="2" bg="gray.100" >
+            <AlertDialogHeader p="2" bg="gray.100">
               {dialogueHeader}
             </AlertDialogHeader>
 
-            <AlertDialogBody py="8">Are you sure?  You can`t undo this action afterwards.</AlertDialogBody>
+            <AlertDialogBody py="8">Are you sure? You can`t undo this action afterwards.</AlertDialogBody>
 
             <AlertDialogFooter>
-              <Button  ref={cancelRef} size="sm" onClick={onClose}>
+              <Button ref={cancelRef} size="sm" onClick={onClose}>
                 Cancel
               </Button>
-              <Button colorScheme="red"  size="sm" onClick={() => confirmDelete()} ml={3}>
+              <Button colorScheme="red" size="sm" onClick={() => confirmDelete()} ml={3}>
                 Delete
               </Button>
             </AlertDialogFooter>
