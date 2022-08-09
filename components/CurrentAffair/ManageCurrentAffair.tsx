@@ -36,6 +36,7 @@ import { useNoteContext } from "../../state/NoteContext";
 import { BookResponse } from "../../types/myTypes";
 import { definitions } from "../../types/supabase";
 import SuneditorForNotesMaking from "../editor/SuneditorForNotesMaking";
+import SuneditorForNotesMakingg from "../editor/SuneditorForNotesMakingg";
 import BookFilter from "../syllabus/BookFilter";
 import DeleteConfirmation from "../syllabus/DeleteConfirmation";
 
@@ -211,10 +212,10 @@ export default function ManageCurrentAffair() {
                                 </TabList>
                                 <TabPanels>
                                   <TabPanel pl="2" pr="0.5" width="full">
-                                    <SuneditorForNotesMaking article={article} language={"ENGLISH"} isEditable={true} />
+                                    <SuneditorForNotesMakingg article1={article.id} language={"ENGLISH"} isEditable={true} />
                                   </TabPanel>
                                   <TabPanel width="full">
-                                    <SuneditorForNotesMaking article={article} language={"HINDI"} isEditable={true} />
+                                    <SuneditorForNotesMakingg article1={article.id} language={"HINDI"} isEditable={true} />
                                   </TabPanel>
                                 </TabPanels>
                               </Tabs>}

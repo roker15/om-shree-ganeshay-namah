@@ -1,4 +1,9 @@
+import { HamburgerIcon, AddIcon, ExternalLinkIcon, RepeatIcon, EditIcon } from "@chakra-ui/icons";
 import {
+  Accordion,
+  AccordionButton,
+  AccordionItem,
+  AccordionPanel,
   Box,
   Button,
   Checkbox,
@@ -8,6 +13,10 @@ import {
   Grid,
   IconButton,
   Input,
+  Menu,
+  MenuButton,
+  MenuItem,
+  MenuList,
   Radio,
   RadioGroup,
   SkeletonCircle,
@@ -30,7 +39,8 @@ import dynamic from "next/dynamic";
 import React, { useState } from "react";
 import { SubmitHandler, useForm } from "react-hook-form";
 import { IconType } from "react-icons";
-import { MdAdd, MdCancel, MdDone, MdModeEdit, MdOutlineContentCopy } from "react-icons/md";
+import { FaDotCircle } from "react-icons/fa";
+import { MdAdd, MdCancel, MdDone, MdModeEdit, MdOutlineContentCopy, MdOutlineMenu, MdOutlineMenuOpen } from "react-icons/md";
 // import SunEditor from "suneditor-react";
 import "suneditor/dist/css/suneditor.min.css"; // Import Sun Editor's CSS File
 // import SunEditor from "suneditor-react";
@@ -137,58 +147,116 @@ const MyNotes: React.FC<Props> = ({ subjectId, subheadingid, notesCreator, chang
     setIsLoadingCopyButton(false);
   };
   return (
-    <Box>
-      {articles
-        ?.sort((a, b) => a.sequence! - b.sequence!)
-        .map((x) => {
-          return (
-            <Box key={x.id} mt="16" >
-              {isCopyable && (
-                <IconButton
-                  size="xs"
-                  variant="ghost"
-                  colorScheme="whatsapp"
-                  aria-label="Call Sage"
-                  fontSize="20px"
-                  isLoading={isLoadingCopyButton}
-                  onClick={() => copyArticleToNewUser(x)}
-                  icon={<MdOutlineContentCopy />}
-                />
-              )}
-              <Flex role={"group"} align="center" >
-                {/* <Badge> */}
-                <VStack >
-                  <Text alignSelf={"baseline"} bg="gray.50" p="2" fontSize="16px" lineHeight={"tall"} align="left" >
-                    <Text as="b">Article Name :- </Text> {sentenseCase(x.article_title)}
-                  </Text>
-                  <Wrap spacing="5px" >
-                    {x.current_affair_tags
-                      ? (x.current_affair_tags as number[]).map((x1) => {
-                          for (let index = 0; index < currentAffairTags.length; index++) {
-                            const element = currentAffairTags[index];
-                            if (element.id == x1) {
-                              return (
-                                <Button
-                                  size="xs"
-                                  key={element.id}
-                                  onClick={() => {
-                                    setIsTagSearchActive(true);
-                                    setTagsArray!([element.id]);
-                                  }}
-                                  bg="gray.50"
-                                  px="1.5"
-                                  // fontWeight={"normal"}
-                                  // fontSize="xs"
-                                  mx="2"
-                                >
-                                  {element.tag}
-                                </Button>
-                              );
-                            }
-                          }
-                        })
-                      : null}
-                  </Wrap>
+    <Box mt="16">
+      <Accordion allowMultiple>
+        {articles
+          ?.sort((a, b) => a.sequence! - b.sequence!)
+          .map((x) => {
+            return (
+              <AccordionItem key={x.id} borderTopWidth="0px" borderBottomWidth="0px">
+                <Box key={x.id}>
+                  {isCopyable && (
+                    <IconButton
+                      size="xs"
+                      variant="ghost"
+                      colorScheme="whatsapp"
+                      aria-label="Call Sage"
+                      fontSize="20px"
+                      isLoading={isLoadingCopyButton}
+                      onClick={() => copyArticleToNewUser(x)}
+                      icon={<MdOutlineContentCopy />}
+                    />
+                  )}
+                  <Flex>
+                    <Menu>
+                      <MenuButton as={IconButton} aria-label="Options" icon={<MdOutlineMenuOpen />} variant="link" />
+                      <MenuList>
+                        <MenuItem icon={<EditIcon />} onClick={() => handleArticleEdit(x.id, false)}>
+                          Edit Notes Heading
+                        </MenuItem>
+                        <MenuItem icon={<ExternalLinkIcon />} onClick={() => handleArticleEdit(undefined, true)}>
+                          Cancel Edit
+                        </MenuItem>
+
+                        <MenuItem>
+                          <DeleteConfirmation
+                            handleDelete={deleteArticle}
+                            dialogueHeader={"Delete this Article?"}
+                            isDisabled={false}
+                            isIconButton={true}
+                            id={x.id}
+                          ></DeleteConfirmation>
+                        </MenuItem>
+                      </MenuList>
+                    </Menu>
+                    <AccordionButton _expanded={{ bg: "gray.100" }}>
+                      <Text alignSelf={"baseline"} bg="gray.50" p="2" fontSize="16px" lineHeight={"tall"} align="left">
+                        <Text as="b">Article Name :- </Text> {sentenseCase(x.article_title)}
+                      </Text>
+                      <Flex role={"group"} align="center">
+                        {/* <Badge> */}
+                        <VStack>
+                          <Wrap spacing="5px">
+                            {x.current_affair_tags
+                              ? (x.current_affair_tags as number[]).map((x1) => {
+                                  for (let index = 0; index < currentAffairTags.length; index++) {
+                                    const element = currentAffairTags[index];
+                                    if (element.id == x1) {
+                                      return (
+                                        <Button
+                                          size="xs"
+                                          key={element.id}
+                                          onClick={() => {
+                                            setIsTagSearchActive(true);
+                                            setTagsArray!([element.id]);
+                                          }}
+                                          bg="gray.50"
+                                          px="1.5"
+                                          // fontWeight={"normal"}
+                                          // fontSize="xs"
+                                          mx="2"
+                                        >
+                                          {element.tag}
+                                        </Button>
+                                      );
+                                    }
+                                  }
+                                })
+                              : null}
+                          </Wrap>
+                        </VStack>
+                        {/* </Badge> */}
+                        {/* <Box display={profile?.id !== notesCreator ? "none" : "undefined"}>
+                        <CustomIconbutton
+                          handleArticleEdit={handleArticleEdit}
+                          id={x.id}
+                          icon={MdModeEdit}
+                        ></CustomIconbutton>
+                        <IconButton
+                          display={isArticleCreating === "EDITING" && selectedArticleForEdit === x.id ? "undefined" : "none"}
+                          size="xs"
+                          ml="2"
+                          borderRadius={"full"}
+                          variant="outline"
+                          colorScheme="blue"
+                          aria-label="Call Sage"
+                          fontSize="20px"
+                          onClick={() => handleArticleEdit(undefined, true)}
+                          icon={<MdCancel />}
+                        />
+                        <Box display="none" _groupHover={{ display: "center" }}>
+                          <DeleteConfirmation
+                            handleDelete={deleteArticle}
+                            dialogueHeader={"Delete this Article?"}
+                            isDisabled={false}
+                            isIconButton={true}
+                            id={x.id}
+                          ></DeleteConfirmation>
+                        </Box>
+                      </Box> */}
+                      </Flex>
+                    </AccordionButton>
+                  </Flex>
                   {isArticleCreating === "EDITING" && x.id === selectedArticleForEdit ? (
                     <ArticleForm
                       tags={x.current_affair_tags}
@@ -203,68 +271,31 @@ const MyNotes: React.FC<Props> = ({ subjectId, subheadingid, notesCreator, chang
                       question_type={x.question_type}
                     ></ArticleForm>
                   ) : null}
-                </VStack>
-                {/* </Badge> */}
-                <Box display={profile?.id !== notesCreator ? "none" : "undefined"}>
-                  <CustomIconbutton handleArticleEdit={handleArticleEdit} id={x.id} icon={MdModeEdit}></CustomIconbutton>
-                  <IconButton
-                    display={isArticleCreating === "EDITING" && selectedArticleForEdit === x.id ? "undefined" : "none"}
-                    size="xs"
-                    ml="2"
-                    borderRadius={"full"}
-                    variant="outline"
-                    colorScheme="whatsapp"
-                    aria-label="Call Sage"
-                    fontSize="20px"
-                    onClick={() => handleArticleEdit(undefined, true)}
-                    icon={<MdCancel />}
-                  />
-                  <Box display="none" _groupHover={{ display: "center" }}>
-                    <DeleteConfirmation
-                      handleDelete={deleteArticle}
-                      dialogueHeader={"Delete this Article?"}
-                      isDisabled={false}
-                      isIconButton={true}
-                      id={x.id}
-                    ></DeleteConfirmation>
-                  </Box>
+                  <AccordionPanel pb={4} borderTopWidth="0px" borderBottomWidth="0px">
+                    <Tabs variant="line" size="sm" colorScheme="gray">
+                      <TabList>
+                        <Tab>English</Tab>
+                        <Tab>Hindi</Tab>
+                      </TabList>
+                      <TabPanels>
+                        <TabPanel pl="2" pr="0.5">
+                          <ErrorBoundary>
+                            <SuneditorForNotesMaking article={x} language={"ENGLISH"} isEditable={isEditable} />
+                          </ErrorBoundary>
+                        </TabPanel>
+                        <TabPanel>
+                          <ErrorBoundary>
+                            <SuneditorForNotesMaking article={x} language={"HINDI"} isEditable={isEditable} />
+                          </ErrorBoundary>
+                        </TabPanel>
+                      </TabPanels>
+                    </Tabs>
+                  </AccordionPanel>
                 </Box>
-              </Flex>
-              <Tabs variant='line' size="sm" colorScheme="gray">
-                <TabList>
-                  <Tab>English</Tab>
-                  <Tab>Hindi</Tab>
-                </TabList>
-                <TabPanels>
-                  <TabPanel pl="2" pr="0.5">
-                    {isArticleLoading ? (
-                      <Box boxShadow="lg" bg="white">
-                        <SkeletonCircle isLoaded={false} size="10" />
-                        <SkeletonText isLoaded={false} noOfLines={4} spacing="4" />
-                      </Box>
-                    ) : (
-                      <ErrorBoundary>
-                        <SuneditorForNotesMaking article={x} language={"ENGLISH"} isEditable={isEditable} />
-                      </ErrorBoundary>
-                    )}
-                  </TabPanel>
-                  <TabPanel>
-                    {isArticleLoading ? (
-                      <Box boxShadow="lg" bg="white">
-                        <SkeletonCircle isLoaded={false} size="10" />
-                        <SkeletonText isLoaded={false} noOfLines={4} spacing="4" />
-                      </Box>
-                    ) : (
-                      <ErrorBoundary>
-                        <SuneditorForNotesMaking article={x} language={"HINDI"} isEditable={isEditable} />
-                      </ErrorBoundary>
-                    )}
-                  </TabPanel>
-                </TabPanels>
-              </Tabs>
-            </Box>
-          );
-        })}
+              </AccordionItem>
+            );
+          })}
+      </Accordion>
       <Stack align="center" justifyContent="center" pb="16" direction={"row"}>
         <Box display={isArticleCreating === "NONE" ? "none" : "block"}>
           {/* {form()} */}
@@ -280,10 +311,11 @@ const MyNotes: React.FC<Props> = ({ subjectId, subheadingid, notesCreator, chang
             ></ArticleForm>
           ) : null}
         </Box>
-        <Box display={profile?.id !== notesCreator ? "none" : "undefined"} >
-          <Tooltip label="Create New Notes in This Topic" fontSize="sm" >
+        <Box display={profile?.id !== notesCreator ? "none" : "undefined"}>
+          <Tooltip label="Create New Notes in This Topic" fontSize="sm">
             <span>
-              <Button mt="28"
+              <Button
+                mt="28"
                 // _groupHover={{ size: "" }}
                 display={isArticleCreating === "CREATING" || !subheadingid ? "none" : "flex"}
                 ml="2"
@@ -416,13 +448,13 @@ const ArticleForm: React.FC<ArticleFormProps> = ({
     mutate([`/get-user-articles/${subheadingid}/${profile?.id}`]);
   };
   return (
-    <Flex justifyContent="center" alignItems={"center"} >
+    <Flex justifyContent="center" alignItems={"center"}>
       <form onSubmit={handleSubmit(onSubmit)}>
         <VStack alignItems={"center"} p="2">
           <FormControl p="2" isInvalid={errors.articleTitle as any} maxW="500px">
             <Textarea
               size="sm"
-              minW={{base:"300px",md:"500px"}}
+              minW={{ base: "300px", md: "500px" }}
               focusBorderColor="brand.500"
               placeholder="Notes Heading"
               {...register("articleTitle", { required: "This is required" })}

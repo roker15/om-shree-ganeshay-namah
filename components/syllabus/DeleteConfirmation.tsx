@@ -33,19 +33,20 @@ const DeleteAlertDialogue = ({ handleDelete, dialogueHeader, isDisabled, isIconB
   return (
     <>
       {isIconButton ? (
-        <IconButton
+        <Button
           // _hover={{ color: "pink", fontSize: "22px" }}
-          size="xs"
-          ml="2"
-          borderRadius={"full"}
-          variant="outline"
-          colorScheme="red"
+          size="sm"
+          ml="-4"
+          // borderRadius={"full"}
+          variant="ghost"
+          // colorScheme="red"
           // color="red.200"
           aria-label="Call Sage"
-          fontSize="20px"
+          // fontSize="20px"
+          leftIcon={<MdDelete />}
           onClick={() => setIsOpen(true)}
-          icon={<MdDelete />}
-        />
+          // icon={<MdDelete />}
+        >Delete</Button>
       ) : (
         <Button
           colorScheme="whatsapp"
