@@ -153,7 +153,7 @@ const MyNotes: React.FC<Props> = ({ subjectId, subheadingid, notesCreator, chang
           ?.sort((a, b) => a.sequence! - b.sequence!)
           .map((x) => {
             return (
-              <AccordionItem key={x.id} borderTopWidth="0px" borderBottomWidth="0px">
+              <AccordionItem key={x.id} borderTopWidth="0px" borderBottomWidth="0px" my="1.5">
                 <Box key={x.id}>
                   {isCopyable && (
                     <IconButton
@@ -168,30 +168,31 @@ const MyNotes: React.FC<Props> = ({ subjectId, subheadingid, notesCreator, chang
                     />
                   )}
                   <Flex>
-                    
-                    <Menu  >
-                      <MenuButton as={IconButton} aria-label="Options" icon={<MdOutlineMenuOpen />} variant="link" />
-                      <MenuList>
-                        <MenuItem icon={<EditIcon />} onClick={() => handleArticleEdit(x.id, false)}>
-                          Edit Notes Heading
-                        </MenuItem>
-                        <MenuItem icon={<ExternalLinkIcon />} onClick={() => handleArticleEdit(undefined, true)}>
-                          Cancel Edit
-                        </MenuItem>
+                    <Box display={profile?.id !== notesCreator ? "none" : "undefined"}>
+                      <Menu>
+                        <MenuButton as={IconButton} aria-label="Options" icon={<MdOutlineMenuOpen />} variant="link" />
+                        <MenuList>
+                          <MenuItem icon={<EditIcon />} onClick={() => handleArticleEdit(x.id, false)}>
+                            Edit Notes Heading
+                          </MenuItem>
+                          <MenuItem icon={<ExternalLinkIcon />} onClick={() => handleArticleEdit(undefined, true)}>
+                            Cancel Edit
+                          </MenuItem>
 
-                        <MenuItem>
-                          <DeleteConfirmation
-                            handleDelete={deleteArticle}
-                            dialogueHeader={"Delete this Article?"}
-                            isDisabled={false}
-                            isIconButton={true}
-                            id={x.id}
-                          ></DeleteConfirmation>
-                        </MenuItem>
-                      </MenuList>
-                    </Menu>
-                    <AccordionButton _expanded={{ bg: "gray.100" }}>
-                      <Text alignSelf={"baseline"} bg="gray.50" p="2" fontSize="16px" lineHeight={"tall"} align="left">
+                          <MenuItem>
+                            <DeleteConfirmation
+                              handleDelete={deleteArticle}
+                              dialogueHeader={"Delete this Article?"}
+                              isDisabled={false}
+                              isIconButton={true}
+                              id={x.id}
+                            ></DeleteConfirmation>
+                          </MenuItem>
+                        </MenuList>
+                      </Menu>
+                    </Box>
+                    <AccordionButton bg="gray.50" _expanded={{ bg: "blackAlpha.50" }}>
+                      <Text alignSelf={"baseline"}  p="2" fontSize="16px" lineHeight={"tall"} align="left">
                         <Text as="b">Article Name :- </Text> {sentenseCase(x.article_title)}
                       </Text>
                       <Flex role={"group"} align="center">
