@@ -168,7 +168,8 @@ const MyNotes: React.FC<Props> = ({ subjectId, subheadingid, notesCreator, chang
                     />
                   )}
                   <Flex>
-                    <Menu>
+                    
+                    <Menu  >
                       <MenuButton as={IconButton} aria-label="Options" icon={<MdOutlineMenuOpen />} variant="link" />
                       <MenuList>
                         <MenuItem icon={<EditIcon />} onClick={() => handleArticleEdit(x.id, false)}>
