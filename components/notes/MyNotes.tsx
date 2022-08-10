@@ -191,44 +191,44 @@ const MyNotes: React.FC<Props> = ({ subjectId, subheadingid, notesCreator, chang
                         </MenuList>
                       </Menu>
                     </Box>
-                    <AccordionButton bg="gray.50" _expanded={{ bg: "blackAlpha.50" }}>
-                      <Text alignSelf={"baseline"}  p="2" fontSize="16px" lineHeight={"tall"} align="left">
-                        <Text as="b">Article Name :- </Text> {sentenseCase(x.article_title)}
-                      </Text>
-                      <Flex role={"group"} align="center">
-                        {/* <Badge> */}
-                        <VStack>
-                          <Wrap spacing="5px">
-                            {x.current_affair_tags
-                              ? (x.current_affair_tags as number[]).map((x1) => {
-                                  for (let index = 0; index < currentAffairTags.length; index++) {
-                                    const element = currentAffairTags[index];
-                                    if (element.id == x1) {
-                                      return (
-                                        <Button
-                                          size="xs"
-                                          key={element.id}
-                                          onClick={() => {
-                                            setIsTagSearchActive(true);
-                                            setTagsArray!([element.id]);
-                                          }}
-                                          bg="gray.50"
-                                          px="1.5"
-                                          // fontWeight={"normal"}
-                                          // fontSize="xs"
-                                          mx="2"
-                                        >
-                                          {element.tag}
-                                        </Button>
-                                      );
-                                    }
-                                  }
-                                })
-                              : null}
-                          </Wrap>
-                        </VStack>
-                        {/* </Badge> */}
-                        {/* <Box display={profile?.id !== notesCreator ? "none" : "undefined"}>
+                    <VStack w="full" align="left" mb="6">
+                      <Wrap spacing="5px">
+                        {x.current_affair_tags
+                          ? (x.current_affair_tags as number[]).map((x1) => {
+                              for (let index = 0; index < currentAffairTags.length; index++) {
+                                const element = currentAffairTags[index];
+                                if (element.id == x1) {
+                                  return (
+                                    <Button
+                                      size="xs"
+                                      key={element.id}
+                                      onClick={() => {
+                                        setIsTagSearchActive(true);
+                                        setTagsArray!([element.id]);
+                                      }}
+                                      bg="gray.100"
+                                      px="1.5"
+                                      // fontWeight={"normal"}
+                                      // fontSize="xs"
+                                      mx="2"
+                                    >
+                                      {element.tag}
+                                    </Button>
+                                  );
+                                }
+                              }
+                            })
+                          : null}
+                      </Wrap>
+                      <AccordionButton bg="gray.50" _expanded={{ bg: "gray.100" }}>
+                        <Text alignSelf={"baseline"} p="2" fontSize="16px" lineHeight={"tall"} align="left">
+                          <Text as="b">Article Name :- </Text> {sentenseCase(x.article_title)}
+                        </Text>
+                        <Flex role={"group"} align="center">
+                          {/* <Badge> */}
+
+                          {/* </Badge> */}
+                          {/* <Box display={profile?.id !== notesCreator ? "none" : "undefined"}>
                         <CustomIconbutton
                           handleArticleEdit={handleArticleEdit}
                           id={x.id}
@@ -256,8 +256,9 @@ const MyNotes: React.FC<Props> = ({ subjectId, subheadingid, notesCreator, chang
                           ></DeleteConfirmation>
                         </Box>
                       </Box> */}
-                      </Flex>
-                    </AccordionButton>
+                        </Flex>
+                      </AccordionButton>
+                    </VStack>
                   </Flex>
                   {isArticleCreating === "EDITING" && x.id === selectedArticleForEdit ? (
                     <ArticleForm
