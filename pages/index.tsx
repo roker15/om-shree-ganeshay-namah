@@ -6,6 +6,7 @@ import router from "next/router";
 import React, { useEffect, useState } from "react";
 import Landing from "../components/chakraTemplate/Landing";
 import SelectSyllabus from "../components/chakraTemplate/SelectSyllabus";
+import { UserTrack } from "../components/dashboard/UserTrack";
 import LayoutWithTopNavbar from "../layout/LayoutWithTopNavbar";
 import { useAuthContext } from "../state/Authcontext";
 import { BookResponse } from "../types/myTypes";
@@ -75,12 +76,13 @@ const Home: React.FunctionComponent = () => {
       <Container maxW={"6xl"} mb={{ base: "64", lg: "80" }} borderColor="gray.50">
         <SelectSyllabus />
         {user && profile?.role === "ADMIN" && (
-          <Box m="8">
+          <Box m="8" w="full">
             <Link href="/manageSyllabus">
               <a style={{ color: "black", fontSize: "20px", border: "1px solid", padding: "5px" ,borderRadius:"5px" }}>
                 Manage syllabus
               </a>
             </Link>
+            <UserTrack/>
           </Box>
         )}{" "}
       </Container>
