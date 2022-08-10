@@ -39,8 +39,8 @@ const DeleteAlertDialogue = ({ handleDelete, dialogueHeader, isDisabled, isIconB
           ml="2"
           borderRadius={"full"}
           variant="ghost"
-          // colorScheme="red"
-          // color="red.200"
+          // colorScheme="gray"
+          color="gray.500"
           aria-label="Call Sage"
           // fontSize="20px"
           onClick={() => setIsOpen(true)}
