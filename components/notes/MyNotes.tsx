@@ -2,6 +2,7 @@ import { HamburgerIcon, AddIcon, ExternalLinkIcon, RepeatIcon, EditIcon } from "
 import {
   Accordion,
   AccordionButton,
+  AccordionIcon,
   AccordionItem,
   AccordionPanel,
   Box,
@@ -153,7 +154,12 @@ const MyNotes: React.FC<Props> = ({ subjectId, subheadingid, notesCreator, chang
           ?.sort((a, b) => a.sequence! - b.sequence!)
           .map((x) => {
             return (
-              <AccordionItem key={x.id} borderTopWidth="0px" borderBottomWidth="0px" my="1.5">
+              <AccordionItem
+                key={x.id}
+                borderTopWidth="0px"
+                borderBottomWidth="0px"
+                my={x.current_affair_tags && x.current_affair_tags.length > 0 ? "6" : "2"}
+              >
                 <Box key={x.id}>
                   {isCopyable && (
                     <IconButton
@@ -167,7 +173,7 @@ const MyNotes: React.FC<Props> = ({ subjectId, subheadingid, notesCreator, chang
                       icon={<MdOutlineContentCopy />}
                     />
                   )}
-                  <Flex>
+                  <Flex alignItems="left">
                     <Box display={profile?.id !== notesCreator ? "none" : "undefined"}>
                       <Menu>
                         <MenuButton as={IconButton} aria-label="Options" icon={<MdOutlineMenuOpen />} variant="link" />
@@ -191,72 +197,46 @@ const MyNotes: React.FC<Props> = ({ subjectId, subheadingid, notesCreator, chang
                         </MenuList>
                       </Menu>
                     </Box>
-                    <VStack w="full" align="left" mb="6">
-                      <Wrap spacing="5px">
-                        {x.current_affair_tags
-                          ? (x.current_affair_tags as number[]).map((x1) => {
-                              for (let index = 0; index < currentAffairTags.length; index++) {
-                                const element = currentAffairTags[index];
-                                if (element.id == x1) {
-                                  return (
-                                    <Button
-                                      size="xs"
-                                      key={element.id}
-                                      onClick={() => {
-                                        setIsTagSearchActive(true);
-                                        setTagsArray!([element.id]);
-                                      }}
-                                      bg="gray.100"
-                                      px="1.5"
-                                      // fontWeight={"normal"}
-                                      // fontSize="xs"
-                                      mx="2"
-                                    >
-                                      {element.tag}
-                                    </Button>
-                                  );
-                                }
+                    <VStack w="full" justifyContent="center" alignItems="left">
+                      {x.current_affair_tags && x.current_affair_tags.length > 0 ? (
+                        <Wrap spacing="5px">
+                          {(x.current_affair_tags as number[]).map((x1) => {
+                            for (let index = 0; index < currentAffairTags.length; index++) {
+                              const element = currentAffairTags[index];
+                              if (element.id == x1) {
+                                return (
+                                  <Button
+                                    size="xs"
+                                    key={element.id}
+                                    // onClick={() => {
+                                    //   setIsTagSearchActive(true);
+                                    //   setTagsArray!([element.id]);
+                                    // }}
+                                    bg="telegram.50"
+                                    px="1.5"
+                                    // fontWeight={"normal"}
+                                    // fontSize="xs"
+                                    mx="2"
+                                  >
+                                    {element.tag}
+                                  </Button>
+                                );
                               }
-                            })
-                          : null}
-                      </Wrap>
-                      <AccordionButton bg="gray.50" _expanded={{ bg: "gray.100" }}>
-                        <Text alignSelf={"baseline"} p="2" fontSize="16px" lineHeight={"tall"} align="left">
+                            }
+                          })}
+                        </Wrap>
+                      ) : null}
+                      <AccordionButton
+                        bg="gray.50"
+                        _expanded={{ bg: "gray.100" }}
+                        justifyContent="space-between"
+                        alignItems={"center"}
+                        alignSelf="self-start"
+                      >
+                        <Text p="1" fontSize="16px" lineHeight={"tall"} align="start">
                           <Text as="b">Article Name :- </Text> {sentenseCase(x.article_title)}
                         </Text>
-                        <Flex role={"group"} align="center">
-                          {/* <Badge> */}
-
-                          {/* </Badge> */}
-                          {/* <Box display={profile?.id !== notesCreator ? "none" : "undefined"}>
-                        <CustomIconbutton
-                          handleArticleEdit={handleArticleEdit}
-                          id={x.id}
-                          icon={MdModeEdit}
-                        ></CustomIconbutton>
-                        <IconButton
-                          display={isArticleCreating === "EDITING" && selectedArticleForEdit === x.id ? "undefined" : "none"}
-                          size="xs"
-                          ml="2"
-                          borderRadius={"full"}
-                          variant="outline"
-                          colorScheme="blue"
-                          aria-label="Call Sage"
-                          fontSize="20px"
-                          onClick={() => handleArticleEdit(undefined, true)}
-                          icon={<MdCancel />}
-                        />
-                        <Box display="none" _groupHover={{ display: "center" }}>
-                          <DeleteConfirmation
-                            handleDelete={deleteArticle}
-                            dialogueHeader={"Delete this Article?"}
-                            isDisabled={false}
-                            isIconButton={true}
-                            id={x.id}
-                          ></DeleteConfirmation>
-                        </Box>
-                      </Box> */}
-                        </Flex>
+                        <AccordionIcon />
                       </AccordionButton>
                     </VStack>
                   </Flex>
