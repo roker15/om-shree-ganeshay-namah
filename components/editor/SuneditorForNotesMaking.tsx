@@ -205,7 +205,7 @@ const textStyles = [
   },
   {
     name: "Highlighter 2",
-    style: "background-color:#E1D5E7;padding: 1px;padding-left: 1px",
+    style: "background-color:#E2E8F0;padding: 1px;padding-left: 1px",
     // style: "background-color:#f7f3e2;padding: 1px;padding-left: 1px",
     tag: "p",
   },
