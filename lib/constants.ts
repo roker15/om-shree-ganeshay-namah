@@ -20,6 +20,7 @@ export type Profile = {
   updated_at: string;
   role: string;
   email: string;
+  last_login: string;
 };
 export const sunEditorButtonList = [
   [

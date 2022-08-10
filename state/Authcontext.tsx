@@ -23,22 +23,25 @@ export const AuthProvider = ({ children }: any) => {
   const [profile, setProfile] = useState<Profile | null>(null);
   const { user, error } = useUser();
 
-
   useEffect(() => {
     setLoading(true);
     if (user) {
-      ilog("authcontext->getprofile-> place3--> session hai ",user.user_metadata.avatar_url);
       const getProfile = async () => {
         try {
           //first check if profile exist or not
           const { data: x, error: e } = await supabaseClient
             .from<Profile>("profiles")
-            .select('*')
+            .select("*")
             .eq("id", user?.id!)
             .single();
           if (x) {
-            console.log("profile data me hai")
+            const d = new Date();
+            let text = d.toISOString();
             setProfile(x);
+            const { data, error } = await supabaseClient
+              .from<Profile>("profiles")
+              .update({ last_login: text })
+              .match({ id: user.id });
           } else {
             // .single();
             // const user = supabaseClient.auth.user();
@@ -51,7 +54,6 @@ export const AuthProvider = ({ children }: any) => {
                 username: user.user_metadata.full_name,
                 avatar_url: user.user_metadata.avatar_url,
                 // avatar_url: user.identities[0].identity_data,
-                
               })
               .single();
 
@@ -101,11 +103,7 @@ export const AuthProvider = ({ children }: any) => {
   };
 
   // use a provider to pass down the value
-  return (
-    <AuthContext.Provider value={value}>
-      {children}
-    </AuthContext.Provider>
-  );
+  return <AuthContext.Provider value={value}>{children}</AuthContext.Provider>;
 };
 
 // export the useAuth hook
