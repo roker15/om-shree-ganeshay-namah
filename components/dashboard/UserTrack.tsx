@@ -1,4 +1,4 @@
-import { Divider, Flex, SimpleGrid, Text, VStack } from "@chakra-ui/react";
+import { Box, Divider, Flex, SimpleGrid, Text, VStack } from "@chakra-ui/react";
 import { supabaseClient } from "@supabase/auth-helpers-nextjs";
 import { useState, useEffect } from "react";
 import { Profile } from "../../lib/constants";
@@ -25,10 +25,10 @@ export const UserTrack = () => {
       {users?.map((x) => {
         return (
           <>
-            <Flex key={x.id} justifyContent="space-between" w="full" px="16">
-              <Text w="250px">{x.username}</Text>
-              <Text w="250px">{x.email}</Text>
-              <Text w="200px">{isoToLocaldate(x.last_login)}</Text>
+            <Flex key={x.id}  w="full" px="16" wrap={"wrap"}>
+              <Box w="340px"><Text >{x.username}</Text></Box>
+              <Box w="340px"><Text w="250px">{x.email}</Text></Box>
+              <Box w="250px"><Text w="200px">{isoToLocaldate(x.last_login)}</Text></Box>
             </Flex>
             <Divider />
           </>
