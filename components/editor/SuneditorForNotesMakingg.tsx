@@ -87,7 +87,7 @@ const SuneditorForNotesMaking: React.FunctionComponent<SuneditorForNotesMakingPr
               getSunEditorInstance={getSunEditorInstance}
               // handleOnChange={handleOnChange}
               updateArticleInDatabase={updateArticleInDatabase}
-              article={article!}
+              article={article! }
               language={language}
             ></Editor>
           </Centerr>
