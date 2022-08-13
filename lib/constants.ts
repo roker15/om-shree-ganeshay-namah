@@ -86,7 +86,7 @@ export const sunEditorfontList = [
 ];
 export const colors: any = [
   ["#F25022", "#7FBA00", "#00A4EF", "#FFB900"],
-  ["#800000", "#E0E0E0", "#CC99FF", "#FFCCCC"],
+  ["#737373", "#E0E0E0", "#CC99FF", "#FFCCCC"],
   ["#F5F5F5", "#DAE8FC", "#D5E8D4", "#FFE6CC"],
   ["#FFF2CC", "#F8CECC", "#E1D5E7", "#FFFFFF"],
   ["#76608A", "#647687", "#F0A30A", "#008A00"],
