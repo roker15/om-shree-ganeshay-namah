@@ -132,7 +132,7 @@ export function useGetUserArticles(subheadingId: number | undefined, userid: str
     async () =>
       await supabaseClient
         .from<definitions["books_articles"]>("books_articles")
-        .select(`*`)
+        .select(`id,updated_at,article_title`)
         .eq("created_by", userid)
         .eq("books_subheadings_fk", subheadingId),
     {
