@@ -1,4 +1,4 @@
-import { Box, Button, Container, Flex, Heading, Icon, Stack, Text, useBreakpointValue } from "@chakra-ui/react";
+import { Box, Button, Container, Flex, Heading, Icon, Link, Stack, Text, useBreakpointValue } from "@chakra-ui/react";
 import { useUser } from "@supabase/auth-helpers-react";
 import router from "next/router";
 import { useEffect } from "react";
@@ -67,15 +67,29 @@ export default function CallToActionWithVideo() {
             </Text>
           </Heading>
           <Text color={"gray.600"}>7000+ aspirants using Jionote</Text>
+          <Text fontWeight={"extrabold"} fontSize={{ base: "2xl", sm: "3xl", lg: "4xl" }}>
+            Not Sure How to Use?{" "}
+            <Link isExternal color="teal.400" href="https://youtu.be/XD3Rr1nLTkY">
+              Watch Demo Video
+            </Link>
+          </Text>
           <Stack spacing={{ base: 4, sm: 6 }} direction={{ base: "column", sm: "row" }}>
             {!user && <LoginCard redirect={BASE_URL} />}
           </Stack>
           <Box>
-            <Flex alignItems={"center"} border="0px" borderRadius="5px" bg="blue.50" width="240px" p="1" my="2" _hover={{background: "cyan.100"}}>
+            <Flex
+              alignItems={"center"}
+              border="0px"
+              borderRadius="5px"
+              bg="blue.50"
+              width="240px"
+              p="1"
+              my="2"
+              _hover={{ background: "cyan.100" }}
+            >
               <Icon as={FaWhatsapp} color="whatsapp.500" m="2" />
               <a
                 href={whatsappuri}
-                
                 // href="https://wa.me/?text= Prepare Digital UPSsC Notes https://www.jionote.com"
                 rel="nofollow noopener noreferrer"
                 target="_blank"
@@ -84,7 +98,16 @@ export default function CallToActionWithVideo() {
                 Invite Friends via Whatsapp
               </a>
             </Flex>
-            <Flex alignItems={"center"} border="0px" borderRadius="5px" bg="blue.50" width="240px" p="1" my="2"  _hover={{background: "cyan.100"}}>
+            <Flex
+              alignItems={"center"}
+              border="0px"
+              borderRadius="5px"
+              bg="blue.50"
+              width="240px"
+              p="1"
+              my="2"
+              _hover={{ background: "cyan.100" }}
+            >
               <Icon as={FaTelegram} color="telegram.500" m="2" />
               <a
                 // href="https://telegram.me/share/url?url=https://www.jionote.com/&text=visit"
