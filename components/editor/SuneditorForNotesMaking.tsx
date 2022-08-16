@@ -248,7 +248,7 @@ function Editor(props: editorProps): JSX.Element {
           textStyles: textStyles,
           height: "100%",
           width: "auto",
-          minWidth: "350px",
+          minWidth: "auto",
           minHeight: "100px",
           buttonList: sunEditorButtonList,
           resizingBar: false,
