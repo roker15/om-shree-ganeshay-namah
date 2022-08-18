@@ -254,19 +254,19 @@ const MyNotes: React.FC<Props> = ({ subjectId, subheadingid, notesCreator, chang
                       question_type={x.question_type}
                     ></ArticleForm>
                   ) : null}
-                  <AccordionPanel pb={4} borderTopWidth="0px" borderBottomWidth="0px">
-                    <Tabs variant="line" size="sm" colorScheme="gray">
+                  <AccordionPanel  pb={4} borderTopWidth="0px" borderBottomWidth="0px" px="0">
+                    <Tabs variant="line" size="sm" colorScheme="gray" >
                       <TabList>
                         <Tab>English</Tab>
                         <Tab>Hindi</Tab>
                       </TabList>
                       <TabPanels>
-                        <TabPanel pl="2" pr="0.5">
+                        <TabPanel pl="0" pr="0">
                           <ErrorBoundary>
                             <SuneditorForNotesMaking article={x} language={"ENGLISH"} isEditable={isEditable} />
                           </ErrorBoundary>
                         </TabPanel>
-                        <TabPanel>
+                        <TabPanel pl="0" pr="0">
                           <ErrorBoundary>
                             <SuneditorForNotesMaking article={x} language={"HINDI"} isEditable={isEditable} />
                           </ErrorBoundary>

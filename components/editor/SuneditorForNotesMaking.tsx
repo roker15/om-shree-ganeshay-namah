@@ -89,7 +89,7 @@ const SuneditorForNotesMaking: React.FunctionComponent<SuneditorForNotesMakingPr
     <div>
       <Box spellCheck="false">
         {/* //use above attrivutes if you want to override spellcheck of browser */}
-        <Flex
+        <Flex 
           // display={profile?.id !== article.created_by ? "none" : "undefined"}
           display={isEditable ? "undefined" : "none"}
           justifyContent="space-between"
@@ -223,7 +223,7 @@ interface editorProps {
 
 function Editor(props: editorProps): JSX.Element {
   return (
-    <Box boxShadow="none">
+    <Box boxShadow="none" >
       <SunEditor
         getSunEditorInstance={props.getSunEditorInstance}
         setDefaultStyle={props.fontSize}
