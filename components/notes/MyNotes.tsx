@@ -256,7 +256,7 @@ const MyNotes: React.FC<Props> = ({ subjectId, subheadingid, notesCreator, chang
                         question_type={x.question_type}
                       ></ArticleForm>
                     ) : null}
-                    <AccordionPanel pb={4} borderTopWidth="0px" borderBottomWidth="0px">
+                    <AccordionPanel pb={4} borderTopWidth="0px" borderBottomWidth="0px" px="0">
                     {isExpanded && (
                       <Tabs variant="line" size="sm" colorScheme="gray">
                         <TabList>
