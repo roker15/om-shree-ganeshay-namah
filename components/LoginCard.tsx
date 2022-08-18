@@ -1,6 +1,4 @@
-import { Button, Text } from "@chakra-ui/react";
-import { ReactNode } from "react";
-import { BASE_URL } from "../lib/constants";
+import { Button } from "@chakra-ui/react";
 import { useAuthContext } from "../state/Authcontext";
 
 export const LoginCard = ({ redirect }: { redirect: string }) => {
@@ -13,10 +11,6 @@ export const LoginCard = ({ redirect }: { redirect: string }) => {
       borderRadius="full"
       variant="solid"
       onClick={() => signInWithgoogle(redirect)}
-      // _hover={{
-      //   bg: "gray.700",
-      //   color:"white"
-      // }}
     >
       Login
     </Button>
