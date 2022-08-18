@@ -205,7 +205,7 @@ export default function ManageCurrentAffair() {
                               <AccordionIcon />
                             </AccordionButton>
                             </Flex>
-                            <AccordionPanel pb={4} borderTopWidth="0px" borderBottomWidth="0px">
+                            <AccordionPanel pb={4} borderTopWidth="0px" borderBottomWidth="0px" px={{ base: 0, lg: "4" }}>
                               {isExpanded && (
                                 <Tabs variant="line" size="sm" colorScheme="gray" width="full">
                                   <TabList>
@@ -213,14 +213,14 @@ export default function ManageCurrentAffair() {
                                     <Tab>Hindi</Tab>
                                   </TabList>
                                   <TabPanels>
-                                    <TabPanel pl="2" pr="0.5" width="full">
+                                    <TabPanel px={{ base: 0, lg: "4" }} width="full">
                                       <SuneditorForNotesMakingg
                                         article1={article.id}
                                         language={"ENGLISH"}
                                         isEditable={true}
                                       />
                                     </TabPanel>
-                                    <TabPanel width="full">
+                                    <TabPanel px={{ base: 0, lg: "4" }} width="full">
                                       <SuneditorForNotesMakingg article1={article.id} language={"HINDI"} isEditable={true} />
                                     </TabPanel>
                                   </TabPanels>
