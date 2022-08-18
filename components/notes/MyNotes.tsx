@@ -256,28 +256,27 @@ const MyNotes: React.FC<Props> = ({ subjectId, subheadingid, notesCreator, chang
                         question_type={x.question_type}
                       ></ArticleForm>
                     ) : null}
-                    <AccordionPanel pb={4} borderTopWidth="0px" borderBottomWidth="0px" px="0">
-                    {isExpanded && (
-                      <Tabs variant="line" size="sm" colorScheme="gray">
-                        <TabList>
-                          <Tab>English</Tab>
-                          <Tab>Hindi</Tab>
-                        </TabList>
-                        <TabPanels>
-                          <TabPanel pl="0" pr="0">
-                            <ErrorBoundary>
-                              <SuneditorForNotesMakingg article1={x.id} language={"ENGLISH"} isEditable={isEditable} />
-                            </ErrorBoundary>
-                          </TabPanel>
-                          <TabPanel pl="0" pr="0">
-                            <ErrorBoundary>
-                              <SuneditorForNotesMakingg article1={x.id} language={"HINDI"} isEditable={isEditable} />
-                            </ErrorBoundary>
-                          </TabPanel>
-                        </TabPanels>
-                      </Tabs>
-
-)}
+                    <AccordionPanel pb={4} borderTopWidth="0px" borderBottomWidth="0px" px={{ base: 0, lg: "4" }}>
+                      {isExpanded && (
+                        <Tabs variant="line" size="sm" colorScheme="gray">
+                          <TabList>
+                            <Tab>English</Tab>
+                            <Tab>Hindi</Tab>
+                          </TabList>
+                          <TabPanels>
+                            <TabPanel px={{ base: 0, lg: "4" }}>
+                              <ErrorBoundary>
+                                <SuneditorForNotesMakingg article1={x.id} language={"ENGLISH"} isEditable={isEditable} />
+                              </ErrorBoundary>
+                            </TabPanel>
+                            <TabPanel px={{ base: 0, lg: "4" }}>
+                              <ErrorBoundary>
+                                <SuneditorForNotesMakingg article1={x.id} language={"HINDI"} isEditable={isEditable} />
+                              </ErrorBoundary>
+                            </TabPanel>
+                          </TabPanels>
+                        </Tabs>
+                      )}
                     </AccordionPanel>
                   </Box>
                 )}
