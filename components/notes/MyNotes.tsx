@@ -54,6 +54,7 @@ import { useNoteContext } from "../../state/NoteContext";
 import { definitions } from "../../types/supabase";
 import { customToast } from "../CustomToast";
 import SuneditorForNotesMaking from "../editor/SuneditorForNotesMaking";
+import SuneditorForNotesMakingg from "../editor/SuneditorForNotesMakingg";
 import ErrorBoundary from "../ErrorBoundary";
 
 import DeleteConfirmation from "../syllabus/DeleteConfirmation";
@@ -103,7 +104,7 @@ const MyNotes: React.FC<Props> = ({ subjectId, subheadingid, notesCreator, chang
   const [isArticleCreating, setIsArticleCreating] = useState<"CREATING" | "EDITING" | "NONE">("NONE");
   const { mutate } = useSWRConfig();
   const { setIsTagSearchActive, setTagsArray, tagsArray } = useNoteContext();
-
+  // const { article, isError, isLoading } = useGetArticleById(article1);
   const deleteArticle = async (id: number): Promise<void> => {
     const { data, error } = await supabaseClient.from<definitions["books_articles"]>("books_articles").delete().eq("id", id);
     if (error) {
@@ -160,68 +161,71 @@ const MyNotes: React.FC<Props> = ({ subjectId, subheadingid, notesCreator, chang
                 borderBottomWidth="0px"
                 my={x.current_affair_tags && x.current_affair_tags.length > 0 ? "6" : "2"}
               >
-                <Box key={x.id}>
-                  {isCopyable && (
-                    <IconButton
-                      size="xs"
-                      variant="ghost"
-                      colorScheme="whatsapp"
-                      aria-label="Call Sage"
-                      fontSize="20px"
-                      isLoading={isLoadingCopyButton}
-                      onClick={() => copyArticleToNewUser(x)}
-                      icon={<MdOutlineContentCopy />}
-                    />
-                  )}
-                  <Flex alignItems="left">
-                    <Box display={profile?.id !== notesCreator ? "none" : "undefined"}>
-                      <Menu>
-                        <MenuButton as={IconButton} aria-label="Options" icon={<MdOutlineMenuOpen />} variant="link" />
-                        <MenuList>
-                          <MenuItem icon={<EditIcon />} onClick={() => handleArticleEdit(x.id, false)}>
-                            Edit Notes Heading
-                          </MenuItem>
-                          <MenuItem icon={<ExternalLinkIcon />} onClick={() => handleArticleEdit(undefined, true)}>
-                            Cancel Edit
-                          </MenuItem>
+                {({ isExpanded }) => (
+                  <Box key={x.id}>
+                    {isCopyable && (
+                      <IconButton
+                        size="xs"
+                        variant="ghost"
+                        colorScheme="whatsapp"
+                        aria-label="Call Sage"
+                        fontSize="20px"
+                        isLoading={isLoadingCopyButton}
+                        onClick={() => copyArticleToNewUser(x)}
+                        icon={<MdOutlineContentCopy />}
+                      />
+                    )}
+                    <Flex alignItems="left">
+                      <Box display={profile?.id !== notesCreator ? "none" : "undefined"}>
+                        <Menu>
+                          <MenuButton as={IconButton} aria-label="Options" icon={<MdOutlineMenuOpen />} variant="link" />
+                          <MenuList>
+                            <MenuItem icon={<EditIcon />} onClick={() => handleArticleEdit(x.id, false)}>
+                              Edit Notes Heading
+                            </MenuItem>
+                            <MenuItem icon={<ExternalLinkIcon />} onClick={() => handleArticleEdit(undefined, true)}>
+                              Cancel Edit
+                            </MenuItem>
 
-                          <MenuItem>
-                            <DeleteConfirmation
-                              handleDelete={deleteArticle}
-                              dialogueHeader={"Delete this Article?"}
-                              isDisabled={false}
-                              isIconButton={false}
-                              id={x.id}
-                            ></DeleteConfirmation>
-                          </MenuItem>
-                        </MenuList>
-                      </Menu>
-                    </Box>
-                    <VStack w="full" justifyContent="center" alignItems="left">
-                      {x.current_affair_tags && x.current_affair_tags.length > 0 ? (
-                        <Wrap spacing="5px">
-                          {(x.current_affair_tags as number[]).map((x1) => {
-                            for (let index = 0; index < currentAffairTags.length; index++) {
-                              const element = currentAffairTags[index];
-                              if (element.id == x1) {
-                                return (
-                                  <Button
-                                    size="xs"
-                                    key={element.id}
-                                    // onClick={() => {
-                                    //   setIsTagSearchActive(true);
-                                    //   setTagsArray!([element.id]);
-                                    // }}
-                                    bg="telegram.50"
-                                    px="1.5"
-                                    // fontWeight={"normal"}
-                                    // fontSize="xs"
-                                    mx="2"
-                                  >
-                                    {element.tag}
-                                  </Button>
-                                );
+                            <MenuItem>
+                              <DeleteConfirmation
+                                handleDelete={deleteArticle}
+                                dialogueHeader={"Delete this Article?"}
+                                isDisabled={false}
+                                isIconButton={false}
+                                id={x.id}
+                              ></DeleteConfirmation>
+                            </MenuItem>
+                          </MenuList>
+                        </Menu>
+                      </Box>
+                      <VStack w="full" justifyContent="center" alignItems="left">
+                        {x.current_affair_tags && x.current_affair_tags.length > 0 ? (
+                          <Wrap spacing="5px">
+                            {(x.current_affair_tags as number[]).map((x1) => {
+                              for (let index = 0; index < currentAffairTags.length; index++) {
+                                const element = currentAffairTags[index];
+                                if (element.id == x1) {
+                                  return (
+                                    <Button
+                                      size="xs"
+                                      key={element.id}
+                                      // onClick={() => {
+                                      //   setIsTagSearchActive(true);
+                                      //   setTagsArray!([element.id]);
+                                      // }}
+                                      bg="telegram.50"
+                                      px="1.5"
+                                      // fontWeight={"normal"}
+                                      // fontSize="xs"
+                                      mx="2"
+                                    >
+                                      {element.tag}
+                                    </Button>
+                                  );
+                                }
                               }
+<<<<<<< HEAD
                             }
                           })}
                         </Wrap>
@@ -275,6 +279,63 @@ const MyNotes: React.FC<Props> = ({ subjectId, subheadingid, notesCreator, chang
                     </Tabs>
                   </AccordionPanel>
                 </Box>
+=======
+                            })}
+                          </Wrap>
+                        ) : null}
+                        <AccordionButton
+                          bg="gray.50"
+                          _expanded={{ bg: "gray.100" }}
+                          justifyContent="space-between"
+                          alignItems={"center"}
+                          alignSelf="self-start"
+                        >
+                          <Text p="1" fontSize="16px" lineHeight={"tall"} align="start">
+                            <Text as="b">Article Name :- </Text> {sentenseCase(x.article_title)}
+                          </Text>
+                          <AccordionIcon />
+                        </AccordionButton>
+                      </VStack>
+                    </Flex>
+                    {isArticleCreating === "EDITING" && x.id === selectedArticleForEdit ? (
+                      <ArticleForm
+                        tags={x.current_affair_tags}
+                        subjectId={subjectId}
+                        subheadingid={subheadingid}
+                        articleId={x.id}
+                        articleTitle={x.article_title}
+                        sequence={x.sequence}
+                        formMode={"EDITING"}
+                        x={setIsArticleCreating}
+                        question_year={x.question_year}
+                        question_type={x.question_type}
+                      ></ArticleForm>
+                    ) : null}
+                    <AccordionPanel pb={4} borderTopWidth="0px" borderBottomWidth="0px" px={{ base: 0, lg: "4" }}>
+                      {isExpanded && (
+                        <Tabs variant="line" size="sm" colorScheme="gray">
+                          <TabList>
+                            <Tab>English</Tab>
+                            <Tab>Hindi</Tab>
+                          </TabList>
+                          <TabPanels>
+                            <TabPanel px={{ base: 0, lg: "4" }}>
+                              <ErrorBoundary>
+                                <SuneditorForNotesMakingg article1={x.id} language={"ENGLISH"} isEditable={isEditable} />
+                              </ErrorBoundary>
+                            </TabPanel>
+                            <TabPanel px={{ base: 0, lg: "4" }}>
+                              <ErrorBoundary>
+                                <SuneditorForNotesMakingg article1={x.id} language={"HINDI"} isEditable={isEditable} />
+                              </ErrorBoundary>
+                            </TabPanel>
+                          </TabPanels>
+                        </Tabs>
+                      )}
+                    </AccordionPanel>
+                  </Box>
+                )}
+>>>>>>> dev-only-jionote-v1
               </AccordionItem>
             );
           })}

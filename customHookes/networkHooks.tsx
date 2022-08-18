@@ -132,7 +132,7 @@ export function useGetUserArticles(subheadingId: number | undefined, userid: str
     async () =>
       await supabaseClient
         .from<definitions["books_articles"]>("books_articles")
-        .select(`*`)
+        .select(`id,updated_at,article_title`)
         .eq("created_by", userid)
         .eq("books_subheadings_fk", subheadingId),
     {
@@ -155,7 +155,7 @@ export function useGetUserArticlesFromTags(userid: string | undefined, tagsArray
     async () =>
       await supabaseClient
         .from<definitions["books_articles"]>("books_articles")
-        .select(`*`, { count: "exact" })
+        .select(`id,updated_at,article_title`, { count: "exact" })
         .eq("created_by", userid)
         .contains("current_affair_tags", tagsArray as number[]),
     {
@@ -164,7 +164,7 @@ export function useGetUserArticlesFromTags(userid: string | undefined, tagsArray
       revalidateOnReconnect: false,
     }
   );
-  
+
   if (tagsArray && tagsArray.length === 0) {
     return {
       // sharedPost_SUP_ERR:data?.error,
@@ -183,5 +183,23 @@ export function useGetUserArticlesFromTags(userid: string | undefined, tagsArray
     supError: data?.error,
     isLoading: !error && !data,
     swrError: error,
+  };
+}
+export function useGetArticleById(id: number) {
+  const fetcher = async () =>
+    await supabaseClient
+      .from<definitions["books_articles"]>("books_articles")
+      .throwOnError() // supabase does not throw error by default, swr error works only when fetcher throws it.
+      .select(`*`)
+      .eq("id", id)
+      .limit(1)
+      .single();
+
+  const { data, error } = useSWR(`/api/usergetarticlebyid/${id}`, fetcher);
+
+  return {
+    article: data?.data,
+    isLoading: !error && !data,
+    isError: error,
   };
 }
