@@ -311,7 +311,7 @@ const ManageNotes: React.FunctionComponent = () => {
               <SyllabusForNotes book={book} changeParentProps={changeSelectedSubheading}></SyllabusForNotes>
             </Flex>
           </GridItem>
-          <GridItem colSpan={!distractionOff ? { base: 10, sm: 10, md: 7 } : { base: 10, sm: 10, md: 8 }} px={{ base: 0, sm: 0, md: 4 }}>
+          <GridItem colSpan={!distractionOff ? { base: 10, sm: 10, md: 7 } : { base: 10, sm: 10, md: 8 }} px={{ base: 0, sm: 0, md: 2, lg:4 }}>
             {user ? (
               <Box>
                 <Center>
