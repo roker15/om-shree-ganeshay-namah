@@ -225,61 +225,6 @@ const MyNotes: React.FC<Props> = ({ subjectId, subheadingid, notesCreator, chang
                                   );
                                 }
                               }
-<<<<<<< HEAD
-                            }
-                          })}
-                        </Wrap>
-                      ) : null}
-                      <AccordionButton
-                        bg="gray.50"
-                        _expanded={{ bg: "gray.100" }}
-                        justifyContent="space-between"
-                        alignItems={"center"}
-                        alignSelf="self-start"
-                      >
-                        <Text p="1" fontSize="16px" lineHeight={"tall"} align="start">
-                          <Text as="b">Article Name :- </Text> {sentenseCase(x.article_title)}
-                        </Text>
-                        <AccordionIcon />
-                      </AccordionButton>
-                    </VStack>
-                  </Flex>
-                  {isArticleCreating === "EDITING" && x.id === selectedArticleForEdit ? (
-                    <ArticleForm
-                      tags={x.current_affair_tags}
-                      subjectId={subjectId}
-                      subheadingid={subheadingid}
-                      articleId={x.id}
-                      articleTitle={x.article_title}
-                      sequence={x.sequence}
-                      formMode={"EDITING"}
-                      x={setIsArticleCreating}
-                      question_year={x.question_year}
-                      question_type={x.question_type}
-                    ></ArticleForm>
-                  ) : null}
-                  <AccordionPanel  pb={4} borderTopWidth="0px" borderBottomWidth="0px" px="0">
-                    <Tabs variant="line" size="sm" colorScheme="gray" >
-                      <TabList>
-                        <Tab>English</Tab>
-                        <Tab>Hindi</Tab>
-                      </TabList>
-                      <TabPanels>
-                        <TabPanel pl="0" pr="0">
-                          <ErrorBoundary>
-                            <SuneditorForNotesMaking article={x} language={"ENGLISH"} isEditable={isEditable} />
-                          </ErrorBoundary>
-                        </TabPanel>
-                        <TabPanel pl="0" pr="0">
-                          <ErrorBoundary>
-                            <SuneditorForNotesMaking article={x} language={"HINDI"} isEditable={isEditable} />
-                          </ErrorBoundary>
-                        </TabPanel>
-                      </TabPanels>
-                    </Tabs>
-                  </AccordionPanel>
-                </Box>
-=======
                             })}
                           </Wrap>
                         ) : null}
@@ -335,7 +280,6 @@ const MyNotes: React.FC<Props> = ({ subjectId, subheadingid, notesCreator, chang
                     </AccordionPanel>
                   </Box>
                 )}
->>>>>>> dev-only-jionote-v1
               </AccordionItem>
             );
           })}
