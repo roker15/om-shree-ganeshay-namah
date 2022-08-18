@@ -264,12 +264,12 @@ const MyNotes: React.FC<Props> = ({ subjectId, subheadingid, notesCreator, chang
                           <Tab>Hindi</Tab>
                         </TabList>
                         <TabPanels>
-                          <TabPanel pl="2" pr="0.5">
+                          <TabPanel pl="0" pr="0">
                             <ErrorBoundary>
                               <SuneditorForNotesMakingg article1={x.id} language={"ENGLISH"} isEditable={isEditable} />
                             </ErrorBoundary>
                           </TabPanel>
-                          <TabPanel>
+                          <TabPanel pl="0" pr="0">
                             <ErrorBoundary>
                               <SuneditorForNotesMakingg article1={x.id} language={"HINDI"} isEditable={isEditable} />
                             </ErrorBoundary>
