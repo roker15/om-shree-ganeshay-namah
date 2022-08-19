@@ -210,11 +210,11 @@ const MyNotes: React.FC<Props> = ({ subjectId, subheadingid, notesCreator, chang
                                     <Button
                                       size="xs"
                                       key={element.id}
-                                      // onClick={() => {
-                                      //   setIsTagSearchActive(true);
-                                      //   setTagsArray!([element.id]);
-                                      // }}
-                                      bg="telegram.50"
+                                      onClick={() => {
+                                        setIsTagSearchActive(true);
+                                        setTagsArray!([element.id]);
+                                      }}
+                                      bg="white"
                                       px="1.5"
                                       // fontWeight={"normal"}
                                       // fontSize="xs"
