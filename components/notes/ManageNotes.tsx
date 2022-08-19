@@ -1,15 +1,9 @@
 import {
-  Box,
-  Button,
-  Center,
-  Divider,
-  Flex,
+  Box, Center, Flex,
   Grid,
   GridItem,
   HStack,
-  IconButton,
-  Menu,
-  Popover,
+  IconButton, Popover,
   PopoverArrow,
   PopoverBody,
   PopoverCloseButton,
@@ -17,9 +11,7 @@ import {
   PopoverHeader,
   PopoverTrigger,
   Stack,
-  StackDivider,
-  Text,
-  VStack,
+  StackDivider
 } from "@chakra-ui/react";
 import React, { useEffect, useState } from "react";
 import Sticky from "react-sticky-el";
@@ -32,26 +24,20 @@ import { BookResponse, BookSyllabus } from "../../types/myTypes";
 import { definitions } from "../../types/supabase";
 import ManageCurrentAffair from "../CurrentAffair/ManageCurrentAffair";
 
+import { useRouter } from "next/router";
+import { FaEllipsisH } from "react-icons/fa";
+import { BASE_URL } from "../../lib/constants";
 import { useNoteContext } from "../../state/NoteContext";
 import {
-  CustomCheckBox,
+  BoldText, CustomCheckBox,
   CustomCircularProgress,
-  CustomDrawer,
-  LabelText,
-  CustomSwitch,
-  BoldText,
-  SpanTextWithBackground,
-  CustomDrawerWithButton,
+  CustomDrawer, CustomSwitch, LabelText, SpanTextWithBackground
 } from "../CustomChakraUi";
 import { LoginCard } from "../LoginCard";
-import BookFilter from "../syllabus/BookFilter";
 import Notes from "./Notes";
 import { NotesSharing } from "./NotesSharing";
 import SharedNotesPanel from "./SharedNotesPanel";
 import SyllabusForNotes from "./SyllabusForNotes";
-import { BASE_URL } from "../../lib/constants";
-import { useRouter } from "next/router";
-import { FaEllipsisH } from "react-icons/fa";
 // import { GotoQuestion } from "../../pages";
 
 type SelectedNotesType = {
