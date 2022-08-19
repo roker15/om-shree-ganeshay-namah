@@ -3,7 +3,7 @@ import Head from "next/head";
 import React, { useEffect } from "react";
 import ReactGA from "react-ga";
 import { AuthProvider } from "../state/Authcontext";
-// import "../styles/globals.css";
+import "../styles/globals.css";
 import PageWithLayoutType from "../types/pageWithLayout";
 import { theme } from "../theme/theme";
 import { UserProvider } from "@supabase/auth-helpers-react";
