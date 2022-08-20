@@ -265,7 +265,7 @@ const ManageNotes: React.FunctionComponent = () => {
       {book && (
         <Sticky>
           <div>
-            <Flex justifyContent="space-between" display={{ base: "undefined", sm: "undefined", md: "none" }}>
+            <Flex justifyContent="space-between" display={{ base: "undefined", sm: "undefined", md: "undefined",lg:"none" }}>
               <>
                 <CustomDrawer  buttonLabel={"Open Syllabus"}>
                   <SyllabusForNotes book={book} changeParentProps={changeSelectedSubheading}></SyllabusForNotes>
@@ -285,10 +285,10 @@ const ManageNotes: React.FunctionComponent = () => {
         <Grid templateColumns="repeat(10, 1fr)">
           <GridItem
             // scrollBehavior={"auto"}
-            colSpan={{ base: 0, sm: 0, md: 2 }}
+            colSpan={{ base: 0, sm: 0, md: 0, lg:2 }}
             bg="brand.50"
             // p="2"
-            display={{ base: "none", sm: "none", md: "block" }}
+            display={{ base: "none", sm: "none", md: "none",lg:"block" }}
             borderRight="1px"
             borderRightColor={"gray.100"}
             borderRightRadius="md"
@@ -297,7 +297,7 @@ const ManageNotes: React.FunctionComponent = () => {
               <SyllabusForNotes book={book} changeParentProps={changeSelectedSubheading}></SyllabusForNotes>
             </Flex>
           </GridItem>
-          <GridItem colSpan={!distractionOff ? { base: 10, sm: 10, md: 7 } : { base: 10, sm: 10, md: 8 }} px="0" >
+          <GridItem colSpan={!distractionOff ? { base: 10, sm: 10, md: 7 } : { base: 10, sm: 10, md: 8 }} px={{ base: 0, sm: 0, md: 4 }}>
             {user ? (
               <Box>
                 <Center>
@@ -327,10 +327,10 @@ const ManageNotes: React.FunctionComponent = () => {
           </GridItem>
 
           <GridItem
-            colSpan={!distractionOff ? { base: 0, sm: 0, md: 1 } : { base: 0, sm: 0, md: 0 }}
+            colSpan={!distractionOff ? { base: 0, sm: 0, md: 0 , lg:1} : { base: 0, sm: 0, md: 0, lg: 0}}
             bg="brand.50"
             visibility={!distractionOff ? "visible" : "hidden"}
-            display={{ base: "none", sm: "none", md: "block" }}
+            display={{ base: "none", sm: "none", md: "none",lg:"block" }}
             borderLeft="1px"
             borderLeftColor={"gray.100"}
             borderLeftRadius="md"
