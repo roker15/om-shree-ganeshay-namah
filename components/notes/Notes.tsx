@@ -22,8 +22,8 @@ const Notes: React.FC<Props> = ({ subjectId,subheadingid, notesCreator, changePa
   // };
 
   return (
-    <Box >
-      <Box>
+    <Box  >
+      <Box >
         <MyNotes
           subjectId={subjectId }
           subheadingid={subheadingid}

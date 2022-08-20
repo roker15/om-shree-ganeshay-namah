@@ -1,4 +1,4 @@
-import { HamburgerIcon, AddIcon, ExternalLinkIcon, RepeatIcon, EditIcon } from "@chakra-ui/icons";
+import { EditIcon, ExternalLinkIcon } from "@chakra-ui/icons";
 import {
   Accordion,
   AccordionButton,
@@ -19,10 +19,7 @@ import {
   MenuItem,
   MenuList,
   Radio,
-  RadioGroup,
-  SkeletonCircle,
-  SkeletonText,
-  Stack,
+  RadioGroup, Stack,
   Tab,
   TabList,
   TabPanel,
@@ -32,16 +29,14 @@ import {
   Textarea,
   Tooltip,
   VStack,
-  Wrap,
+  Wrap
 } from "@chakra-ui/react";
 import { supabaseClient } from "@supabase/auth-helpers-nextjs";
 import "katex/dist/katex.min.css";
-import dynamic from "next/dynamic";
 import React, { useState } from "react";
 import { SubmitHandler, useForm } from "react-hook-form";
 import { IconType } from "react-icons";
-import { FaDotCircle } from "react-icons/fa";
-import { MdAdd, MdCancel, MdDone, MdModeEdit, MdOutlineContentCopy, MdOutlineMenu, MdOutlineMenuOpen } from "react-icons/md";
+import { MdAdd, MdCancel, MdDone, MdOutlineContentCopy, MdOutlineMenuOpen } from "react-icons/md";
 // import SunEditor from "suneditor-react";
 import "suneditor/dist/css/suneditor.min.css"; // Import Sun Editor's CSS File
 // import SunEditor from "suneditor-react";
@@ -53,7 +48,6 @@ import { useAuthContext } from "../../state/Authcontext";
 import { useNoteContext } from "../../state/NoteContext";
 import { definitions } from "../../types/supabase";
 import { customToast } from "../CustomToast";
-import SuneditorForNotesMaking from "../editor/SuneditorForNotesMaking";
 import SuneditorForNotesMakingg from "../editor/SuneditorForNotesMakingg";
 import ErrorBoundary from "../ErrorBoundary";
 
@@ -149,8 +143,8 @@ const MyNotes: React.FC<Props> = ({ subjectId, subheadingid, notesCreator, chang
     setIsLoadingCopyButton(false);
   };
   return (
-    <Box mt="16">
-      <Accordion allowMultiple>
+    <Box mt="16" >
+      <Accordion allowMultiple >
         {articles
           ?.sort((a, b) => a.sequence! - b.sequence!)
           .map((x) => {
@@ -159,6 +153,7 @@ const MyNotes: React.FC<Props> = ({ subjectId, subheadingid, notesCreator, chang
                 key={x.id}
                 borderTopWidth="0px"
                 borderBottomWidth="0px"
+               
                 my={x.current_affair_tags && x.current_affair_tags.length > 0 ? "6" : "2"}
               >
                 {({ isExpanded }) => (
