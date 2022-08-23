@@ -38,7 +38,7 @@ export default function CallToActionWithVideo() {
   };
   return (
     // <Box w="100wh" bg="red">
-    <Container maxW={"6xl"} px="8">
+    <Container maxW={"6xl"} px={{ base: "2", md: "8" }}>
       {/* <Stack
         // alignItems={"center"}
         spacing={{ base: 8, md: 10 }}
@@ -71,7 +71,7 @@ export default function CallToActionWithVideo() {
         <br />
         <br />
         {/* <Box> */}
-          <SelectSyllabus />
+        <SelectSyllabus />
         {/* </Box> */}
         <br />
         <br />
