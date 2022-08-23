@@ -169,7 +169,7 @@ export const NotesSharing: React.FC<sharedProps> = ({ subheadingId }) => {
               colorScheme={"whatsapp"}
               textTransform={"capitalize"}
               ml="0"
-              onChange={(e) => setCanCopy(e.target.checked)}
+              onChange={(e) => setCanEdit(e.target.checked)}
             >
               <Text as="label" casing="capitalize">
                 User Can edit
@@ -180,7 +180,7 @@ export const NotesSharing: React.FC<sharedProps> = ({ subheadingId }) => {
               colorScheme={"whatsapp"}
               textTransform={"capitalize"}
               ml="6"
-              onChange={(e) => setCanEdit(e.target.checked)}
+              onChange={(e) => setCanCopy(e.target.checked)}
             >
               <Text as="label" casing="capitalize">
                 User Can copy
