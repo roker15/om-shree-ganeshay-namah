@@ -1,26 +1,11 @@
 import {
-  Box,
-  Button,
-  Center,
-  Drawer,
-  DrawerBody,
-  DrawerCloseButton,
-  DrawerContent,
-  DrawerFooter,
-  DrawerOverlay,
-  Flex,
-  IconButton,
-  useDisclosure,
+  Box, Center
 } from "@chakra-ui/react";
 import { useUser } from "@supabase/auth-helpers-react";
 import router from "next/router";
 import React, { useEffect, useState } from "react";
-import { MdMenu } from "react-icons/md";
-import Sticky from "react-sticky-el";
 import ManageCurrentAffair from "../components/CurrentAffair/ManageCurrentAffair";
-import { CustomDrawerWithButton } from "../components/CustomChakraUi";
 import { LoginCard } from "../components/LoginCard";
-import BookFilter from "../components/syllabus/BookFilter";
 import LayoutWithTopNavbar from "../layout/LayoutWithTopNavbar";
 import { BASE_URL } from "../lib/constants";
 import { BookResponse } from "../types/myTypes";
