@@ -77,13 +77,7 @@ export default function CallToActionWithVideo() {
         
         </Stack>
         <VStack spacing={"12"} flex={1} w="full">
-          {/* {!user && (
-            <>
-              {" "}
-              <LoginCard redirect={`${BASE_URL}/syllabusSwitch`} />
-              <Divider orientation="horizontal" />
-            </>
-          )} */}
+          
           <Flex justify={"center"} align={"center"} position={"relative"} w={"full"}>
             <BookFilter setParentProps={updateBookProps} />
           </Flex>

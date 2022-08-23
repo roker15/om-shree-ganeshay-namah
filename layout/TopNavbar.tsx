@@ -137,7 +137,7 @@ const MobileNav = ({ onOpen, ...rest }: MobileProps) => {
                   </Box>
                 </HStack>
               </MenuButton>
-              <MenuList border="1px" bg={"pink.50"} borderColor={"pink.100"}>
+              <MenuList border="1px" bg={"gray.50"} borderColor={"gray.100"}>
                 <MenuItem border="0px">Profile</MenuItem>
                 <MenuItem border="0px">Settings</MenuItem>
                 {profile ? (
