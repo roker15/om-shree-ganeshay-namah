@@ -168,6 +168,7 @@ export const currentAffairTags: { id: number; tag: string }[] = [
   { id: 501, tag: "Ethics ⭐" },
   { id: 57, tag: "Miscellaneous ⭐" },
   { id: 571, tag: "Person in News" },
+  { id: 572, tag: "Geography" },
   { id: 58, tag: "Sustainable Developement" },
   { id: 59, tag: "Bills/Acts" },
   { id: 60, tag: "Study/Survey/Report/Index" },
