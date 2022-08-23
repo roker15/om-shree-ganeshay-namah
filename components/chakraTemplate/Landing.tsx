@@ -39,6 +39,13 @@ export default function CallToActionWithVideo() {
   return (
     // <Box w="100wh" bg="red">
     <Container maxW={"6xl"} px={{ base: "2", md: "8" }}>
+      {!user && (
+          <>
+            {" "}
+            {/* <br /> */}
+            <LoginCard redirect={BASE_URL} />
+          </>
+        )}
       {/* <Stack
         // alignItems={"center"}
         spacing={{ base: 8, md: 10 }}
@@ -46,6 +53,7 @@ export default function CallToActionWithVideo() {
         direction={{ base: "column", md: "row" }}
       > */}
       <Stack flex={3} spacing={{ base: "2", md: 2 }} py={{ base: "16", md: 16 }} alignItems={"center"}>
+      
         <Heading lineHeight={1} fontWeight={"extrabold"} fontSize={{ base: "3xl", sm: "4xl", lg: "4xl" }}>
           <Text
             as={"span"}
@@ -63,11 +71,8 @@ export default function CallToActionWithVideo() {
             Prepare Digital UPSC Notes
           </Text>
         </Heading>
-        <Heading lineHeight={1.3} fontWeight={"light"} fontSize={{ base: "2xl", sm: "4xl", lg: "2xl" }}>
-          {/* <Text as={"span"} color={"gray"}>
-          💻 As per Syllabus 🖱️
-          </Text> */}
-        </Heading>
+
+       
         <br />
         <br />
         {/* <Box> */}
@@ -82,9 +87,9 @@ export default function CallToActionWithVideo() {
             Watch Demo Video
           </Link>
         </Text>
-        <Stack spacing={{ base: 4, sm: 6 }} direction={{ base: "column", sm: "row" }}>
-          {!user && <LoginCard redirect={BASE_URL} />}
-        </Stack>
+        {/* <Stack spacing={{ base: 4, sm: 6 }} direction={{ base: "column", sm: "row" }}> */}
+
+        {/* </Stack> */}
         <Box>
           <Flex
             alignItems={"center"}
