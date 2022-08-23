@@ -40,11 +40,11 @@ export default function CallToActionWithVideo() {
     // <Box w="100wh" bg="red">
     <Container maxW={"6xl"} px={{ base: "2", md: "8" }}>
       {!user && (
-          <>
+          <Flex justifyContent={"end"}>
             {" "}
             {/* <br /> */}
             <LoginCard redirect={BASE_URL} />
-          </>
+          </Flex>
         )}
       {/* <Stack
         // alignItems={"center"}
