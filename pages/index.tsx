@@ -14,14 +14,6 @@ import PageWithLayoutType from "../types/pageWithLayout";
 import { definitions } from "../types/supabase";
 
 const Home: React.FunctionComponent = () => {
-
- 
-
-
-
-
-
-
   const [book, setBook] = useState<BookResponse | undefined>(undefined);
   const { profile } = useAuthContext();
   const { user, error } = useUser();
@@ -78,11 +70,12 @@ const Home: React.FunctionComponent = () => {
         {user && profile?.role === "ADMIN" && (
           <Box m="8" w="full">
             <Link href="/manageSyllabus">
-              <a style={{ color: "black", fontSize: "20px", border: "1px solid", padding: "5px" ,borderRadius:"5px" }}>
-                Manage syllabus
-              </a>
+              <a>Manage syllabus</a>
             </Link>
-            <UserTrack/>
+            <Link href="/dna">
+              <a>Current</a>
+            </Link>
+            <UserTrack />
           </Box>
         )}{" "}
       </Container>
