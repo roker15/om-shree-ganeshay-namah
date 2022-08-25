@@ -46,6 +46,7 @@ function SomePage({ data, d }: hi) {
           <Box key={x.id}>
             <SunEditor
               defaultValue={x.article_english}
+              readOnly={true}
               setOptions={{
                 mode: "classic",
                 katex: katex,
@@ -53,6 +54,7 @@ function SomePage({ data, d }: hi) {
                 buttonList: sunEditorButtonList,
                 resizingBar: false,
                 hideToolbar: true,
+
                 formats: ["p", "div", "h1", "h2", "h3"],
               }}
               placeholder="Type Question here"
