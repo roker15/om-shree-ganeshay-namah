@@ -5,14 +5,21 @@ import katex from "katex";
 import "katex/dist/katex.min.css";
 import "suneditor/dist/css/suneditor.min.css";
 import { sunEditorButtonList } from "../lib/constants";
-import { Suspense } from "react";
+import { supabaseClient, supabaseServerClient, getUser } from "@supabase/auth-helpers-nextjs";
+import { definitions } from "../types/supabase";
+import { GetServerSideProps } from "next/types";
+import { Container } from "@chakra-ui/react";
 
 const SunEditor = dynamic(() => import("suneditor-react"), {
   ssr: false,
 });
-
-function SomePage(props: any) {
+interface hi {
+  data: definitions["books_articles"][];
+  d: number;
+}
+function SomePage({ data, d }: hi) {
   const router = useRouter();
+  // console.log(data.id+"{}"+d);
   // Call this function whenever you want to
   // refresh props!
   const refreshData = () => {
@@ -31,31 +38,47 @@ function SomePage(props: any) {
     }
   }
   return (
-    <Box>
+    <Container maxW="4xl">
       {" "}
-      current welcome
-     
-        <Box>
-          <SunEditor
-            setOptions={{
-              mode: "classic",
-              katex: katex,
-              height: "100%",
-              buttonList: sunEditorButtonList,
-              resizingBar: false,
-              formats: ["p", "div", "h1", "h2", "h3"],
-            }}
-            placeholder="Type Question here"
-            setContents={"hello"}
-          />
-        </Box>
-    </Box>
+      {/* current welcome {props.data[0].id} */}
+      {data.map((x) => {
+        return (
+          <Box key={x.id}>
+            <SunEditor
+              defaultValue={x.article_english}
+              setOptions={{
+                mode: "classic",
+                katex: katex,
+                height: "100%",
+                buttonList: sunEditorButtonList,
+                resizingBar: false,
+                hideToolbar: true,
+                formats: ["p", "div", "h1", "h2", "h3"],
+              }}
+              placeholder="Type Question here"
+              // setContents={"hello"}
+            />
+          </Box>
+        );
+      })}
+    </Container>
   );
 }
 export default SomePage;
-export async function getServerSideProps(context: any) {
+
+export const getServerSideProps: GetServerSideProps = async (context) => {
   // Database logic here
+  const { user } = await getUser(context);
+  console.log("user is " + user?.id);
+  const { data } = await supabaseServerClient(context)
+    .from<definitions["books_articles"]>("books_articles")
+    .select("*")
+    .eq("created_by", user?.id)
+    .limit(10);
+  // .single();
+  // console.log("article is " + data?.id);
+  const d = 5;
   return {
-    props: {}, // will be passed to the page component as props
+    props: { data, d }, // will be passed to the page component as props
   };
-}
+};
