@@ -96,7 +96,7 @@ export const getServerSideProps: GetServerSideProps = async (context) => {
     .from<definitions["books_articles"]>("books_articles")
     .select("*")
     .eq("created_by", user?.id)
-    .limit(70);
+    .limit(10);
   // .single();
   // console.log("article is " + data?.id);
   const d = 5;
