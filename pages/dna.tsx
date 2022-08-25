@@ -34,7 +34,7 @@ function SomePage(props: any) {
     <Box>
       {" "}
       current welcome
-      <Suspense fallback={`Loadingggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggg...`}>
+     
         <Box>
           <SunEditor
             setOptions={{
@@ -49,7 +49,6 @@ function SomePage(props: any) {
             setContents={"hello"}
           />
         </Box>
-      </Suspense>
     </Box>
   );
 }
