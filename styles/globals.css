@@ -52,6 +52,22 @@ button {
   /* box-shadow:  rgba(0, 0, 255, .2); */
 }
 
+ td, th {
+  border: 1px solid #ddd;
+  padding: 8px;
+}
+
+tr:nth-child(even){background-color: #f2f2f2;}
+
+tr:hover {background-color: #ddd;}
+
+th {
+  padding-top: 12px;
+  padding-bottom: 12px;
+  text-align: left;
+  background-color: #d4e9f5;
+  color: rgb(53, 48, 48);
+}
 
 
 

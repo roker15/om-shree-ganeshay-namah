@@ -1,7 +1,7 @@
 import { Box } from "@chakra-ui/layout";
 import dynamic from "next/dynamic";
 import { useRouter } from "next/router";
-import katex from "katex";
+// import katex from "katex";
 import "katex/dist/katex.min.css";
 import "suneditor/dist/css/suneditor.min.css";
 import { sunEditorButtonList } from "../lib/constants";
@@ -9,10 +9,13 @@ import { supabaseClient, supabaseServerClient, getUser } from "@supabase/auth-he
 import { definitions } from "../types/supabase";
 import { GetServerSideProps } from "next/types";
 import { Container } from "@chakra-ui/react";
+// import DOMPurify from "dompurify";
+import DOMPurify from "isomorphic-dompurify";
 
-const SunEditor = dynamic(() => import("suneditor-react"), {
-  ssr: false,
-});
+import parse from "html-react-parser";
+// const SunEditor = dynamic(() => import("suneditor-react"), {
+//   ssr: false,
+// });
 interface hi {
   data: definitions["books_articles"][];
   d: number;
@@ -44,7 +47,7 @@ function SomePage({ data, d }: hi) {
       {data.map((x) => {
         return (
           <Box key={x.id}>
-            <SunEditor
+            {/* <SunEditor
               defaultValue={x.article_english}
               readOnly={true}
               setOptions={{
@@ -59,7 +62,24 @@ function SomePage({ data, d }: hi) {
               }}
               placeholder="Type Question here"
               // setContents={"hello"}
-            />
+            /> */}
+
+            {x.article_english
+              ? parse(
+                  DOMPurify.sanitize(
+                    x.article_english!,
+
+                    {
+                      USE_PROFILES: { svg: true, html: true },
+                      // CUSTOM_ELEMENT_HANDLING: {
+                      //   tagNameCheck: /^se-/, // no custom elements are allowed
+                      //   attributeNameCheck: null, // default / standard attribute allow-list is used
+                      //   allowCustomizedBuiltInElements: false, // no customized built-ins allowed
+                      // },
+                    }
+                  )
+                )
+              : "hello"}
           </Box>
         );
       })}
@@ -76,7 +96,7 @@ export const getServerSideProps: GetServerSideProps = async (context) => {
     .from<definitions["books_articles"]>("books_articles")
     .select("*")
     .eq("created_by", user?.id)
-    .limit(30);
+    .limit(70);
   // .single();
   // console.log("article is " + data?.id);
   const d = 5;
