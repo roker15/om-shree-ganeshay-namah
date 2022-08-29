@@ -185,10 +185,9 @@ const MyNotes: React.FC<Props> = ({ subjectId, subheadingid, notesCreator, chang
                               <DeleteConfirmation
                                 handleDelete={deleteArticle}
                                 dialogueHeader={"Delete this Article?"}
-                                isDisabled={false}
                                 isIconButton={false}
                                 id={x.id}
-                              ></DeleteConfirmation>
+                                display={undefined}                              ></DeleteConfirmation>
                             </MenuItem>
                           </MenuList>
                         </Menu>

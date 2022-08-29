@@ -16,12 +16,12 @@ interface AlertdialogueProps {
   handleDelete: (id: number) => Promise<void>;
   //   x: QuestionBank;
   dialogueHeader: string;
-  isDisabled: boolean;
+  display: "none" | undefined;
   isIconButton: boolean;
   id: number;
 }
 
-const DeleteAlertDialogue = ({ handleDelete, dialogueHeader, isDisabled, isIconButton, id }: AlertdialogueProps) => {
+const DeleteAlertDialogue = ({ handleDelete, dialogueHeader, display, isIconButton, id }: AlertdialogueProps) => {
   const [isOpen, setIsOpen] = React.useState(false);
   const onClose = () => setIsOpen(false);
   const cancelRef = React.useRef(null);
@@ -39,6 +39,7 @@ const DeleteAlertDialogue = ({ handleDelete, dialogueHeader, isDisabled, isIconB
           ml="2"
           borderRadius={"full"}
           variant="ghost"
+          display={display}
           // colorScheme="gray"
           color="gray.500"
           aria-label="Call Sage"
@@ -53,6 +54,7 @@ const DeleteAlertDialogue = ({ handleDelete, dialogueHeader, isDisabled, isIconB
           ml="-4"
           // borderRadius={"full"}
           variant="ghost"
+          display={display}
           // colorScheme="red"
           // color="red.200"
           aria-label="Call Sage"

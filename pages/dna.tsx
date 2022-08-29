@@ -1,34 +1,32 @@
 import { Box } from "@chakra-ui/layout";
 import {
-  Button,
-  Text,
-  Container,
-  Heading,
   Accordion,
   AccordionButton,
   AccordionIcon,
   AccordionItem,
   AccordionPanel,
+  Button,
+  Center,
+  Checkbox,
+  Container,
   Flex,
+  FormControl,
+  FormErrorMessage,
+  Grid,
+  GridItem,
+  HStack,
+  Input,
+  Radio,
+  RadioGroup,
   Tab,
   TabList,
   TabPanel,
   TabPanels,
   Tabs,
-  SimpleGrid,
-  Grid,
-  GridItem,
-  VStack,
-  Checkbox,
-  FormControl,
-  FormErrorMessage,
-  Input,
-  Radio,
-  RadioGroup,
+  Text,
   Textarea,
-  Center,
+  VStack,
   Wrap,
-  HStack,
 } from "@chakra-ui/react";
 import { supabaseClient } from "@supabase/auth-helpers-nextjs";
 import katex from "katex";
@@ -39,28 +37,31 @@ import { currentAffairTags, sunEditorButtonList } from "../lib/constants";
 import { definitions } from "../types/supabase";
 // import DOMPurify from "dompurify";
 import { useUser } from "@supabase/auth-helpers-react";
-import { useEffect, useRef, useState } from "react";
+import { useState } from "react";
+import { SubmitHandler, useForm } from "react-hook-form";
 import { MdAdd, MdCancel, MdDone, MdFileCopy, MdModeEdit } from "react-icons/md";
-import { elog, sentenseCase } from "../lib/mylog";
-import { customToast } from "../components/CustomToast";
-import { BookResponse, BookSyllabus } from "../types/myTypes";
 import SyllabusForCurrentAffairs from "../components/CurrentAffair/SyllabusForCurrentAffairs";
-import { useForm, SubmitHandler } from "react-hook-form";
-import { useSWRConfig } from "swr";
-import { useAuthContext } from "../state/Authcontext";
-import { useGetCurrentAffairs } from "../customHookes/networkHooks";
+import { customToast } from "../components/CustomToast";
 import DeleteConfirmation from "../components/syllabus/DeleteConfirmation";
+import { useGetCurrentAffairs } from "../customHookes/networkHooks";
 import LayoutWithTopNavbar from "../layout/LayoutWithTopNavbar";
+import { elog, sentenseCase } from "../lib/mylog";
+import { useAuthContext } from "../state/Authcontext";
+import { BookResponse, BookSyllabus } from "../types/myTypes";
 import PageWithLayoutType from "../types/pageWithLayout";
 const SunEditor = dynamic(() => import("suneditor-react"), {
   ssr: false,
 });
 
 function SuneditorSimple(props: {
-  id: number;
-  content: string;
+  article: definitions["books_articles"];
+  content: string | undefined;
+  canCopy: boolean;
+  userrole: string;
+  isAdminNotes: boolean;
   language: "HINDI" | "ENG";
   saveCallback: (id: number, content: string, language: "ENG" | "HINDI") => void;
+  copyCallback: (x: definitions["books_articles"]) => void;
 }) {
   const [readMode, setReadMode] = useState<boolean>(true);
   return (
@@ -68,6 +69,7 @@ function SuneditorSimple(props: {
       <Flex justifyContent="space-between">
         <Button
           size="xs"
+          visibility={props.isAdminNotes && props.userrole !== "ADMIN" ? "hidden" : "visible"}
           leftIcon={<MdModeEdit />}
           onClick={() => {
             setReadMode(!readMode);
@@ -78,9 +80,10 @@ function SuneditorSimple(props: {
         <Button
           size="xs"
           ml="2"
+          display={props.canCopy ? undefined : "none"}
           leftIcon={<MdFileCopy />}
           onClick={() => {
-            setReadMode(!readMode);
+            props.copyCallback(props.article);
           }}
         >
           Copy this Note
@@ -93,7 +96,7 @@ function SuneditorSimple(props: {
         readOnly={readMode}
         setOptions={{
           callBackSave(contents, isChanged) {
-            props.saveCallback(props.id, contents, props.language);
+            props.saveCallback(props.article.id, contents, props.language);
           },
           mode: "classic",
           katex: katex,
@@ -124,6 +127,30 @@ const CurrentAffair: React.FC = () => {
   };
   const changeParentProps = () => {
     mutate();
+  };
+  const handleCopyNotes = async (d: definitions["books_articles"]) => {
+    const { data, error } = await supabaseClient.from<definitions["books_articles"]>("books_articles").insert([
+      {
+        article_title: d.article_title,
+        article_english: d.article_english,
+        article_hindi: d.article_hindi,
+        created_by: profile?.id,
+        books_subheadings_fk: d.books_subheadings_fk,
+        sequence: d.sequence,
+        current_affair_tags: d.current_affair_tags,
+        question_type: d.question_type,
+        question_year: d.question_year,
+        copied_from_articleid: d.copied_from_articleid,
+        copied_from_userid: d.copied_from_userid,
+      },
+    ]);
+    if (error) {
+      elog("MyNotes->onSubmit", error.message);
+      return;
+    }
+    if (data) {
+      customToast({ title: "Article copied, Check inside your Private notes", status: "success", isUpdating: false });
+    }
   };
   const saveArticle = async (id: number, content: string, language: string) => {
     const { data, error } = await supabaseClient
@@ -179,15 +206,15 @@ const CurrentAffair: React.FC = () => {
               setIsAdminNotes(!isAdminNotes);
             }}
           >
-            {isAdminNotes ? "Switch to Personal Notes" : "Switch to Official Notes"}
+            {isAdminNotes ? "Switch to Your Private Notes" : "Switch to Official Notes"}
           </Button>{" "}
         </GridItem>
-        <GridItem colSpan={1} >
+        <GridItem colSpan={1}>
           <Box height="full" w="52">
             <SyllabusForCurrentAffairs book={book} changeParentProps={setSyllabus} />
           </Box>
         </GridItem>
-        <GridItem colSpan={4} >
+        <GridItem colSpan={4}>
           <Center>
             {" "}
             <Text fontWeight="bold" color="gray.600" justifySelf="center" p="2" mb="2">
@@ -196,7 +223,7 @@ const CurrentAffair: React.FC = () => {
           </Center>
           <VStack spellCheck="false" alignItems="start" visibility={selectedSyllabus === undefined ? "hidden" : undefined}>
             <Accordion allowMultiple width={"full"}>
-              {data?.map((x: any) => {
+              {data?.map((x:any) => {
                 return (
                   <AccordionItem key={x.id} borderTopWidth="0px" borderBottomWidth="0px" mb="6">
                     {({ isExpanded }) => (
@@ -250,7 +277,7 @@ const CurrentAffair: React.FC = () => {
                             <DeleteConfirmation
                               handleDelete={deleteArticle}
                               dialogueHeader={"Delete this Article?"}
-                              isDisabled={false}
+                              display={isAdminNotes && profile?.role !== "ADMIN" ? "none" : undefined}
                               isIconButton={true}
                               id={x.id}
                             ></DeleteConfirmation>
@@ -273,18 +300,26 @@ const CurrentAffair: React.FC = () => {
                             <TabPanels>
                               <TabPanel px={{ base: 0, lg: "4" }} width="full">
                                 <SuneditorSimple
-                                  id={x.id}
+                                  article={x}
                                   content={x.article_english}
                                   saveCallback={saveArticle}
                                   language={"ENG"}
+                                  userrole={profile?.role!}
+                                  isAdminNotes={isAdminNotes}
+                                  canCopy={x.created_by.id !== user?.id}
+                                  copyCallback={handleCopyNotes}
                                 ></SuneditorSimple>
                               </TabPanel>
                               <TabPanel px={{ base: 0, lg: "4" }} width="full">
                                 <SuneditorSimple
-                                  id={x.id}
+                                  article={x}
                                   content={x.article_hindi}
                                   saveCallback={saveArticle}
                                   language={"HINDI"}
+                                  userrole={profile?.role!}
+                                  isAdminNotes={isAdminNotes}
+                                  canCopy={x.created_by.id !== user?.id}
+                                  copyCallback={handleCopyNotes}
                                 ></SuneditorSimple>
                               </TabPanel>
                             </TabPanels>
@@ -299,7 +334,7 @@ const CurrentAffair: React.FC = () => {
             <Button
               // mb="48"
               // _groupHover={{ size: "" }}
-              display={profile?.role !== "ADMIN" && isAdminNotes ? "none" : undefined}
+              display={!profile || isAdminNotes ? "none" : undefined}
               ml="2"
               onClick={() => {
                 setArticleFormMode(articleFormMode !== "NONE" ? "NONE" : "CREATING");
@@ -312,10 +347,7 @@ const CurrentAffair: React.FC = () => {
             >
               {articleFormMode !== "NONE" ? "Cancel" : "Create Notes"}
             </Button>
-            <br />
-            <br />
-            <br />
-            <br />
+
             <Box display={articleFormMode === "NONE" ? "none" : undefined}>
               <ArticleForm
                 subjectId={undefined}
@@ -326,6 +358,10 @@ const CurrentAffair: React.FC = () => {
                 setParentProps={changeParentProps}
               />
             </Box>
+            <br />
+            <br />
+            <br />
+            <br />
           </VStack>
         </GridItem>
       </Grid>
@@ -375,7 +411,6 @@ const ArticleForm: React.FC<ArticleFormProps> = ({
   x,
 }) => {
   const [isLoading, setIsLoading] = useState();
-  const { mutate } = useSWRConfig();
   const { profile } = useAuthContext();
   const {
     register,

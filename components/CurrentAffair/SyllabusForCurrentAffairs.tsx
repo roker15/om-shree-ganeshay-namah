@@ -106,7 +106,7 @@ const Syllabus: React.FC<Props> = ({ book, changeParentProps }) => {
                     >
                       <Text
                         color={selectedSubheading === x.subheading_id ? "white" : "gray.600"}
-                        bg={selectedSubheading === x.subheading_id ? "brand.500" : "null"}
+                        bg={selectedSubheading === x.subheading_id ? "brand.500" : undefined}
                         onClick={() => handleSyllabusClick(x)}
                         casing="capitalize"
                         as="label"
