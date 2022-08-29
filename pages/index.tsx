@@ -73,8 +73,18 @@ const Home: React.FunctionComponent = () => {
               <a>Manage syllabus</a>
             </Link>
             <Link href="/dna">
-              <a>Current</a>
+              <a>Current Affair 22-23</a>
             </Link>
+            <button
+              className="pushable"
+              onClick={() => {
+                router.push("/dna");
+              }}
+            > 
+              <span className="shadow"></span>
+              <span className="edge"></span>
+              <span className="front">Current Affair 22-23 </span>
+            </button>
             <UserTrack />
           </Box>
         )}{" "}
