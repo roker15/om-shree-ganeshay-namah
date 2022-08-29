@@ -30,7 +30,10 @@ const Syllabus: React.FC<Props> = ({ book, changeFormProps }) => {
     }
   };
   const deleteSubheading = async (id: number): Promise<void> => {
-    const { data, error } = await supabaseClient.from<definitions["books_subheadings"]>("books_subheadings").delete().eq("id", id);
+    const { data, error } = await supabaseClient
+      .from<definitions["books_subheadings"]>("books_subheadings")
+      .delete()
+      .eq("id", id);
     if (error) {
       elog("Syllabus->deleteSubheading", error.message);
       return;
@@ -122,9 +125,9 @@ const Syllabus: React.FC<Props> = ({ book, changeFormProps }) => {
                   <DeleteAlertDialogue
                     isIconButton={true}
                     dialogueHeader={"Delete Heading"}
-                    isDisabled={false}
                     id={Number(key.split(",")[1])}
                     handleDelete={deleteHeading}
+                    display={undefined}
                   />
                   <IconButton
                     _hover={{ color: "pink", fontSize: "22px" }}
@@ -161,9 +164,9 @@ const Syllabus: React.FC<Props> = ({ book, changeFormProps }) => {
                       <DeleteAlertDialogue
                         isIconButton={true}
                         dialogueHeader={"Delete Subheading"}
-                        isDisabled={false}
                         id={x.subheading_id}
                         handleDelete={deleteSubheading}
+                        display={undefined}
                       />
                       <IconButton
                         _hover={{ color: "pink", fontSize: "22px" }}
