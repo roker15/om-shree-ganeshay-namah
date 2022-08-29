@@ -86,7 +86,7 @@ function SuneditorSimple(props: {
             props.copyCallback(props.article);
           }}
         >
-          Copy this Note
+          Copy this Note to Your Account
         </Button>
       </Flex>
       <SunEditor
@@ -113,13 +113,18 @@ function SuneditorSimple(props: {
 
 const CurrentAffair: React.FC = () => {
   // const [data, setData] = useState<definitions["books_articles"][] | undefined>(undefined);
-  const [language, setLangauge] = useState<"ENG" | "HINDI">("ENG");
-  const [isAdminNotes, setIsAdminNotes] = useState<boolean>(true);
+  const { user } = useUser();
   const { profile } = useAuthContext();
+  const [language, setLangauge] = useState<"ENG" | "HINDI">("ENG");
+  const [book, setBook] = useState<BookResponse>({
+    id: 125,
+    book_name: "News and PIB",
+  });
+
+  const [isAdminNotes, setIsAdminNotes] = useState<boolean>(true);
   const [articleFormMode, setArticleFormMode] = useState<"CREATING" | "EDITING" | "NONE">("NONE");
   const [selectedSyllabus, setSelectedSyllabus] = useState<BookSyllabus | undefined>();
 
-  const { user } = useUser();
   const { data, mutate } = useGetCurrentAffairs(isAdminNotes, selectedSyllabus?.subheading_id!, user?.id!);
 
   const handleTabsChange = (index: any) => {
@@ -180,10 +185,6 @@ const CurrentAffair: React.FC = () => {
     setSelectedSyllabus(x);
   };
 
-  const book: BookResponse = {
-    id: 125,
-    book_name: "News and PIB",
-  };
   return (
     <Container maxW="7xl" py="2">
       <Grid templateColumns="repeat(5, 1fr)" rowGap={2}>
@@ -223,7 +224,7 @@ const CurrentAffair: React.FC = () => {
           </Center>
           <VStack spellCheck="false" alignItems="start" visibility={selectedSyllabus === undefined ? "hidden" : undefined}>
             <Accordion allowMultiple width={"full"}>
-              {data?.map((x:any) => {
+              {data?.map((x: any) => {
                 return (
                   <AccordionItem key={x.id} borderTopWidth="0px" borderBottomWidth="0px" mb="6">
                     {({ isExpanded }) => (

@@ -40,41 +40,42 @@ export default function CallToActionWithVideo() {
     // <Box w="100wh" bg="red">
     <Container maxW={"6xl"} px={{ base: "2", md: "8" }}>
       {!user && (
-          <Flex justifyContent={"end"}>
-            {" "}
-            {/* <br /> */}
-            <LoginCard redirect={BASE_URL} />
-          </Flex>
-        )}
+        <Flex justifyContent={"end"}>
+          {" "}
+          {/* <br /> */}
+          <LoginCard redirect={BASE_URL} />
+        </Flex>
+      )}
       {/* <Stack
         // alignItems={"center"}
         spacing={{ base: 8, md: 10 }}
         py={{ base: "16", md: 24 }}
         direction={{ base: "column", md: "row" }}
       > */}
+      <Heading
+        lineHeight={1}
+        fontWeight={"extrabold"}
+        fontSize={{ base: "3xl", sm: "4xl", lg: "4xl" }}
+        // transform={"rotate(-20deg)"}
+        // mb="24"
+      >
+        <Text as={"span"}>Prepare Digital UPSC Notes</Text>
+      </Heading>
       <Stack flex={3} spacing={{ base: "2", md: 2 }} py={{ base: "16", md: 16 }} alignItems={"center"}>
-      
-        <Heading lineHeight={1} fontWeight={"extrabold"} fontSize={{ base: "3xl", sm: "4xl", lg: "4xl" }}>
-          <Text
-            as={"span"}
-            // position={"relative"}
-            // _after={{
-            //   content: "''",
-            //   width: "full",
-            //   height: "30%",
-            //   position: "absolute",
-            //   bottom: 1,
-            //   left: 0,
-            //   zIndex: -1,
-            // }}
-          >
-            Prepare Digital UPSC Notes
-          </Text>
-        </Heading>
+        <button
+          className="pushable"
+          onClick={() => {
+            router.push("/dna");
+          }}
+        >
+          <span className="shadow"></span>
+          <span className="edge"></span>
+          <span className="front">Current Affair 22-23 </span>
+        </button>
 
-       
         <br />
         <br />
+
         {/* <Box> */}
         <SelectSyllabus />
         {/* </Box> */}
@@ -90,7 +91,7 @@ export default function CallToActionWithVideo() {
         {/* <Stack spacing={{ base: 4, sm: 6 }} direction={{ base: "column", sm: "row" }}> */}
 
         {/* </Stack> */}
-        <Box>
+        {/* <Box>
           <Flex
             alignItems={"center"}
             border="1px"
@@ -135,7 +136,7 @@ export default function CallToActionWithVideo() {
               Invite Friends via Telegram
             </a>
           </Flex>
-        </Box>
+        </Box> */}
       </Stack>
       {/* <Flex flex={1} justify={"center"} align={"center"} position={"relative"} w={"full"}>
           <SelectSyllabus />

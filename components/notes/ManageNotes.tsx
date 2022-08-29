@@ -60,7 +60,7 @@ const ManageNotes: React.FunctionComponent = () => {
   const [bookid, setBookid] = useState<number | undefined>();
   const [selectedNotes, setSelectedNotes] = useState<SelectedNotesType | undefined>();
 
-  const [selectedTopic, setSelectedTopic] = useState<BookSyllabus>();
+  const [selectedTopic, setSelectedTopic] = useState<BookSyllabus|undefined>();
   const [isPostPublic, setIsPostPublic] = useState<boolean | undefined>(undefined);
   const [isPostCopiable, setIsPostCopiable] = useState<boolean | undefined>(undefined);
   const { profile } = useAuthContext();

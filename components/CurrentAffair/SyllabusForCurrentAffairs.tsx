@@ -53,11 +53,13 @@ const Syllabus: React.FC<Props> = ({ book, changeParentProps }) => {
       localStorage.setItem("toogle-syllabus", JSON.stringify(toggle));
     }
   }, [profile, toggle]);
-
+  // useEffect(() => {
+  //   alert("sub heading is "+selectedSubheading);
+  // });
   return (
-    <Box pb="6" minW="full" >
+    <Box pb="6" minW="full">
       {book?.book_name && (
-        <Flex bg="brand.100" p="2" borderTopRadius="md" >
+        <Flex bg="brand.100" p="2" borderTopRadius="md">
           <Text fontWeight={"normal"} casing={"capitalize"}>
             {book?.book_name}
           </Text>
@@ -79,7 +81,7 @@ const Syllabus: React.FC<Props> = ({ book, changeParentProps }) => {
                   onClick={() => {
                     toggle === value[0].heading_id ? setToogle(-100) : setToogle(value[0].heading_id);
                   }}
-                  _hover={{cursor:"pointer"}}
+                  _hover={{ cursor: "pointer" }}
                 >
                   <IconButton
                     color={"brand.500"}
@@ -106,7 +108,7 @@ const Syllabus: React.FC<Props> = ({ book, changeParentProps }) => {
                     >
                       <Text
                         color={selectedSubheading === x.subheading_id ? "white" : "gray.600"}
-                        bg={selectedSubheading === x.subheading_id ? "brand.500" : undefined}
+                        bg={selectedSubheading === x.subheading_id ? "brand.500" : "white"}
                         onClick={() => handleSyllabusClick(x)}
                         casing="capitalize"
                         as="label"
