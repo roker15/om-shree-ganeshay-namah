@@ -29,6 +29,7 @@
     "framer-motion": "^6",
     "fs": "^0.0.1-security",
     "html-react-parser": "^1.4.14",
+    "isomorphic-dompurify": "^0.22.0",
     "katex": "^0.16.0",
     "lodash": "^4.17.21",
     "next": "^12.1.6",

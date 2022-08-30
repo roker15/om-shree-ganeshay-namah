@@ -180,30 +180,30 @@ export default function ManageCurrentAffair() {
                           <>
                             {/* <Flex pb="16"> */}
                             {/* <VStack width="full"> */}
-                           <Flex>
-                            <DeleteConfirmation
-                              handleDelete={deleteArticle}
-                              dialogueHeader={"Delete this Article?"}
-                              isDisabled={false}
-                              isIconButton={true}
-                              id={article.id}
-                            ></DeleteConfirmation>
-                            <AccordionButton bg="gray.50" _expanded={{ bg: "blackAlpha.50" }}>
-                              <Box flex="1" textAlign="left">
-                                <Flex alignSelf="start" alignItems="center">
-                                  <Text
-                                    alignSelf={"baseline"}
-                                    // bg="brand.100"
-                                    p="0.5"
-                                    fontSize="16px"
-                                    align="left"
-                                  >
-                                    <Text as="b">Article Name :- </Text> {sentenseCase(article.article_title)}
-                                  </Text>
-                                </Flex>
-                              </Box>
-                              <AccordionIcon />
-                            </AccordionButton>
+                            <Flex>
+                              <DeleteConfirmation
+                                handleDelete={deleteArticle}
+                                dialogueHeader={"Delete this Article?"}
+                                isIconButton={true}
+                                id={article.id}
+                                display={undefined}
+                              ></DeleteConfirmation>
+                              <AccordionButton bg="gray.50" _expanded={{ bg: "blackAlpha.50" }}>
+                                <Box flex="1" textAlign="left">
+                                  <Flex alignSelf="start" alignItems="center">
+                                    <Text
+                                      alignSelf={"baseline"}
+                                      // bg="brand.100"
+                                      p="0.5"
+                                      fontSize="16px"
+                                      align="left"
+                                    >
+                                      <Text as="b">Article Name :- </Text> {sentenseCase(article.article_title)}
+                                    </Text>
+                                  </Flex>
+                                </Box>
+                                <AccordionIcon />
+                              </AccordionButton>
                             </Flex>
                             <AccordionPanel pb={4} borderTopWidth="0px" borderBottomWidth="0px" px={{ base: 0, lg: "4" }}>
                               {isExpanded && (

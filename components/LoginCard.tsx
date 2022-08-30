@@ -5,7 +5,7 @@ export const LoginCard = ({ redirect }: { redirect: string }) => {
   const { signInWithgoogle, signOut, profile } = useAuthContext();
   return (
     <Button
-      colorScheme={"gray"}
+      colorScheme={"telegram"}
       size="md"
       px={10}
       borderRadius="full"
