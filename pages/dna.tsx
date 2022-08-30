@@ -392,7 +392,7 @@ const CurrentAffair: React.FC = () => {
               // colorScheme="gray"
               leftIcon={articleFormMode !== "NONE" ? <MdCancel /> : <MdAdd />}
             >
-              {articleFormMode !== "NONE" ? "Cancel" : "Create Notes"}
+              {articleFormMode !== "NONE" ? "Cancel" : "Create New Notes"}
             </Button>
             {!user && (
               <Center w="full" p="16">
