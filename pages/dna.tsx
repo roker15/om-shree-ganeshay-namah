@@ -9,6 +9,13 @@ import {
   Center,
   Checkbox,
   Container,
+  Drawer,
+  DrawerBody,
+  DrawerCloseButton,
+  DrawerContent,
+  DrawerFooter,
+  DrawerHeader,
+  DrawerOverlay,
   Flex,
   FormControl,
   FormErrorMessage,
@@ -32,6 +39,7 @@ import {
   Tabs,
   Text,
   Textarea,
+  useDisclosure,
   VStack,
   Wrap,
 } from "@chakra-ui/react";
@@ -57,6 +65,7 @@ import { useAuthContext } from "../state/Authcontext";
 import { BookResponse, BookSyllabus } from "../types/myTypes";
 import PageWithLayoutType from "../types/pageWithLayout";
 import { LoginCard } from "../components/LoginCard";
+import React from "react";
 const SunEditor = dynamic(() => import("suneditor-react"), {
   ssr: false,
 });
@@ -198,13 +207,13 @@ const CurrentAffair: React.FC = () => {
   };
 
   return (
-    <Container maxW="7xl" py="2" px={{base:"0.5",md:"2",lg:"4"}}>
+    <Container maxW="7xl" py="2" px={{ base: "0.5", md: "2", lg: "4" }}>
       {!user && (
-        <Flex justifyContent="end" mb ="8">
+        <Flex justifyContent="end" mb="8">
           <LoginCard redirect={`${BASE_URL}/dna`} />
         </Flex>
       )}
-      <Grid templateColumns="repeat(5, 1fr)" column={2} rowGap={2} >
+      <Grid templateColumns="repeat(5, 1fr)" column={2} rowGap={2}>
         <GridItem colSpan={[0, 0, 0, 1]} display={["none", "none", "none", "block"]}></GridItem>
         <GridItem colSpan={[5, 5, 5, 4]}>
           {" "}
@@ -219,7 +228,7 @@ const CurrentAffair: React.FC = () => {
           </Button>{" "} */}
           <HStack>
             <Box display={["block", "block", "block", "none"]}>
-              <Popover>
+              {/* <Popover>
                 <PopoverTrigger>
                   <Button size={{ base: "sm", sm: "sm", md: "md" }}>Syllabus</Button>
                 </PopoverTrigger>
@@ -231,7 +240,8 @@ const CurrentAffair: React.FC = () => {
                     <SyllabusForCurrentAffairs book={book} changeParentProps={setSyllabus} />
                   </PopoverBody>
                 </PopoverContent>
-              </Popover>
+              </Popover> */}
+              <SyllabusDrawer book={book} changeParentProps={setSyllabus} />
             </Box>
             <Button
               size={{ base: "sm", sm: "sm", md: "md" }}
@@ -614,6 +624,42 @@ const ArticleForm: React.FC<ArticleFormProps> = ({
         </Button>
       </form>
     </Flex>
+  );
+};
+
+interface Props {
+  book: BookResponse | undefined;
+  changeParentProps: (x: BookSyllabus) => void;
+}
+
+const SyllabusDrawer: React.FC<Props> = ({ book, changeParentProps }) => {
+  const { isOpen, onOpen, onClose } = useDisclosure();
+  const btnRef = React.useRef(null);
+
+  return (
+    <>
+      <Button size={{ base: "sm", sm: "sm", md: "md" }} ref={btnRef} colorScheme="teal" onClick={onOpen}>
+        Syllabus
+      </Button>
+      <Drawer isOpen={isOpen} placement="left" onClose={onClose} finalFocusRef={btnRef}>
+        <DrawerOverlay />
+        <DrawerContent>
+          <DrawerCloseButton />
+          <DrawerHeader>Create your account</DrawerHeader>
+
+          <DrawerBody>
+            <SyllabusForCurrentAffairs book={book} changeParentProps={changeParentProps} />
+          </DrawerBody>
+
+          <DrawerFooter>
+            <Button variant="outline" mr={3} onClick={onClose}>
+              Cancel
+            </Button>
+            <Button colorScheme="blue">Save</Button>
+          </DrawerFooter>
+        </DrawerContent>
+      </Drawer>
+    </>
   );
 };
 
