@@ -166,8 +166,8 @@ const CurrentAffair: React.FC = () => {
         current_affair_tags: d.current_affair_tags,
         question_type: d.question_type,
         question_year: d.question_year,
-        copied_from_articleid: d.copied_from_articleid,
-        copied_from_userid: d.copied_from_userid,
+        copied_from_articleid: d.id,
+        copied_from_userid: d.created_by,
       },
     ]);
     if (error) {
