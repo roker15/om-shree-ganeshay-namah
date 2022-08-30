@@ -16,6 +16,13 @@ import {
   GridItem,
   HStack,
   Input,
+  Popover,
+  PopoverArrow,
+  PopoverBody,
+  PopoverCloseButton,
+  PopoverContent,
+  PopoverHeader,
+  PopoverTrigger,
   Radio,
   RadioGroup,
   Tab,
@@ -33,7 +40,7 @@ import katex from "katex";
 import "katex/dist/katex.min.css";
 import dynamic from "next/dynamic";
 import "suneditor/dist/css/suneditor.min.css";
-import { currentAffairTags, sunEditorButtonList } from "../lib/constants";
+import { BASE_URL, currentAffairTags, sunEditorButtonList } from "../lib/constants";
 import { definitions } from "../types/supabase";
 // import DOMPurify from "dompurify";
 import { useUser } from "@supabase/auth-helpers-react";
@@ -49,6 +56,7 @@ import { elog, sentenseCase } from "../lib/mylog";
 import { useAuthContext } from "../state/Authcontext";
 import { BookResponse, BookSyllabus } from "../types/myTypes";
 import PageWithLayoutType from "../types/pageWithLayout";
+import { LoginCard } from "../components/LoginCard";
 const SunEditor = dynamic(() => import("suneditor-react"), {
   ssr: false,
 });
@@ -134,6 +142,10 @@ const CurrentAffair: React.FC = () => {
     mutate();
   };
   const handleCopyNotes = async (d: definitions["books_articles"]) => {
+    if (!user) {
+      customToast({ title: "Please Login to use this feature", status: "error", isUpdating: false });
+      return;
+    }
     const { data, error } = await supabaseClient.from<definitions["books_articles"]>("books_articles").insert([
       {
         article_title: d.article_title,
@@ -186,10 +198,15 @@ const CurrentAffair: React.FC = () => {
   };
 
   return (
-    <Container maxW="7xl" py="2">
-      <Grid templateColumns="repeat(5, 1fr)" rowGap={2}>
-        <GridItem colSpan={1}></GridItem>
-        <GridItem colSpan={4}>
+    <Container maxW="7xl" py="2" px={{base:"0.5",md:"2",lg:"4"}}>
+      {!user && (
+        <Flex justifyContent="end">
+          <LoginCard redirect={`${BASE_URL}/dna`} />
+        </Flex>
+      )}
+      <Grid templateColumns="repeat(5, 1fr)" column={2} rowGap={2} >
+        <GridItem colSpan={[0, 0, 0, 1]} display={["none", "none", "none", "block"]}></GridItem>
+        <GridItem colSpan={[5, 5, 5, 4]}>
           {" "}
           {/* <Button
             colorScheme="telegram"
@@ -200,22 +217,41 @@ const CurrentAffair: React.FC = () => {
           >
             {language === "ENG" ? "Switch to Hindi" : "Switch to English"}
           </Button>{" "} */}
-          <Button
-            colorScheme="telegram"
-            onClick={() => {
-              // setData(data);
-              setIsAdminNotes(!isAdminNotes);
-            }}
-          >
-            {isAdminNotes ? "Switch to Your Private Notes" : "Switch to Official Notes"}
-          </Button>{" "}
+          <HStack>
+            <Box display={["block", "block", "block", "none"]}>
+              <Popover>
+                <PopoverTrigger>
+                  <Button size={{ base: "sm", sm: "sm", md: "md" }}>Syllabus</Button>
+                </PopoverTrigger>
+                <PopoverContent>
+                  <PopoverArrow />
+                  <PopoverCloseButton />
+                  <PopoverHeader>Select Date</PopoverHeader>
+                  <PopoverBody>
+                    <SyllabusForCurrentAffairs book={book} changeParentProps={setSyllabus} />
+                  </PopoverBody>
+                </PopoverContent>
+              </Popover>
+            </Box>
+            <Button
+              size={{ base: "sm", sm: "sm", md: "md" }}
+              display={selectedSyllabus ? undefined : "none"}
+              colorScheme="telegram"
+              onClick={() => {
+                // setData(data);
+                setIsAdminNotes(!isAdminNotes);
+              }}
+            >
+              {isAdminNotes ? "Switch to Your Private Notes" : "Switch to Official Notes"}
+            </Button>{" "}
+          </HStack>
         </GridItem>
-        <GridItem colSpan={1}>
+        <GridItem colSpan={[0, 0, 0, 1]} display={["none", "none", "none", "block"]}>
           <Box height="full" w="52">
             <SyllabusForCurrentAffairs book={book} changeParentProps={setSyllabus} />
           </Box>
         </GridItem>
-        <GridItem colSpan={4}>
+        <GridItem colSpan={[5, 5, 5, 4]}>
           <Center>
             {" "}
             <Text fontWeight="bold" color="gray.600" justifySelf="center" p="2" mb="2">
@@ -348,6 +384,11 @@ const CurrentAffair: React.FC = () => {
             >
               {articleFormMode !== "NONE" ? "Cancel" : "Create Notes"}
             </Button>
+            {!user && (
+              <Box p="16">
+                <LoginCard redirect={`${BASE_URL}/dna`} />
+              </Box>
+            )}
 
             <Box display={articleFormMode === "NONE" ? "none" : undefined}>
               <ArticleForm

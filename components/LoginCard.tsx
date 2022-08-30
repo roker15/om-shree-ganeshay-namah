@@ -5,11 +5,11 @@ export const LoginCard = ({ redirect }: { redirect: string }) => {
   const { signInWithgoogle, signOut, profile } = useAuthContext();
   return (
     <Button
-      colorScheme={"gray"}
+      colorScheme={"facebook"}
       size="md"
       px={10}
-      borderRadius="full"
-      variant="outline"
+      borderRadius="none"
+      variant="solid"
       onClick={() => signInWithgoogle(redirect)}
     >
       Login
