@@ -212,7 +212,7 @@ export function useGetCurrentAffairs(isAdminNotes: boolean, subheadingId: number
       .or("role.eq.ADMIN, role.eq.MODERATOR", { foreignTable: "profiles" })
 
       .eq("books_subheadings_fk", subheadingId)
-      .limit(10);
+      // .limit(10);
   
   const fetcher2 = async () =>
     await supabaseClient
@@ -222,7 +222,7 @@ export function useGetCurrentAffairs(isAdminNotes: boolean, subheadingId: number
       .match({ created_by: userId })
 
       .eq("books_subheadings_fk", subheadingId)
-      .limit(10);
+      // .limit(10);
 
   const { data, error, mutate } = useSWR(
     `/api/useGetCurrentAffairs/${isAdminNotes}/${subheadingId}/${userId}`,

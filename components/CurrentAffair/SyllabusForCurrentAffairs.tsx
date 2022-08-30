@@ -7,7 +7,7 @@ import { useGetSyllabusByBookId } from "../../customHookes/networkHooks";
 import { useAuthContext } from "../../state/Authcontext";
 import { BookResponse, BookSyllabus } from "../../types/myTypes";
 import { definitions } from "../../types/supabase";
-
+import useSWR from "swr";
 interface Props {
   book: BookResponse | undefined;
   changeParentProps: (x: BookSyllabus) => void;
@@ -131,24 +131,44 @@ export default Syllabus;
 
 export const ArticleCounter = ({ subheadingId, creatorId }: { subheadingId: number; creatorId: string }) => {
   const [count, setCount] = useState<number | undefined>(undefined);
-  const getArticleCount = async () => {
-    const { data, error, count } = await supabaseClient
+  // const getArticleCount = async () => {
+  //   const { data, error, count } = await supabaseClient
+  //     .from<definitions["books_articles"]>("books_articles")
+  //     .select("*", { count: "exact", head: true })
+  //     .match({ books_subheadings_fk: subheadingId, created_by: creatorId });
+  //   if (count) {
+  //     setCount(count);
+  //   }
+  // };
+  const getArticleCount = async () =>
+    await supabaseClient
       .from<definitions["books_articles"]>("books_articles")
+      .throwOnError()
       .select("*", { count: "exact", head: true })
       .match({ books_subheadings_fk: subheadingId, created_by: creatorId });
-    if (count) {
-      setCount(count);
-    }
-  };
-  useEffect(() => {
-    getArticleCount();
-  }, []);
+
+  // const fetcher = async (id) =>
+  //   await supabaseClient
+  //     .from<definitions["books_articles"]>("books_articles")
+  //     .throwOnError() // supabase does not throw error by default, swr error works only when fetcher throws it.
+  //     .select(`*`)
+  //     .eq("id", id)
+  //     .limit(1)
+  //     .single();
+
+  const { data, error } = useSWR(`/api/usergetarticlebyid/${subheadingId}/${creatorId}`, getArticleCount);
+
+  // useEffect(() => {
+  //   getArticleCount();
+  // }, []);
 
   return (
     <Flex alignItems={"center"} px="2">
-      <Text color="brand.500" as={"label" && "b"} fontSize="12px">
-        {count}
-      </Text>
+      {(data && data.count && data!.count! > 0) && (
+        <Text color="brand.500" as={"label" && "b"} fontSize="12px">
+          {data?.count}
+        </Text>
+      )}
     </Flex>
   );
 };
