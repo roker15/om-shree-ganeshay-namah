@@ -305,7 +305,7 @@ const CurrentAffair: React.FC = () => {
                             </Wrap>
                           ) : null}
                           <HStack w="full">
-                            <AccordionButton bg="gray.100" _expanded={{ bg: "blackAlpha.200" }}>
+                            <AccordionButton bg="gray.100" _expanded={{ bg: "gray.200" }}>
                               <Box flex="1" textAlign="left">
                                 <Flex alignSelf="start" alignItems="center">
                                   <Text
