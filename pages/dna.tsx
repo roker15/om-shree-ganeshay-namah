@@ -200,7 +200,7 @@ const CurrentAffair: React.FC = () => {
   return (
     <Container maxW="7xl" py="2" px={{base:"0.5",md:"2",lg:"4"}}>
       {!user && (
-        <Flex justifyContent="end">
+        <Flex justifyContent="end" mb ="8">
           <LoginCard redirect={`${BASE_URL}/dna`} />
         </Flex>
       )}
@@ -385,9 +385,9 @@ const CurrentAffair: React.FC = () => {
               {articleFormMode !== "NONE" ? "Cancel" : "Create Notes"}
             </Button>
             {!user && (
-              <Box p="16">
+              <Center w="full" p="16">
                 <LoginCard redirect={`${BASE_URL}/dna`} />
-              </Box>
+              </Center>
             )}
 
             <Box display={articleFormMode === "NONE" ? "none" : undefined}>
