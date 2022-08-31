@@ -204,16 +204,17 @@ export function useGetArticleById(id: number) {
   };
 }
 export function useGetCurrentAffairs(isAdminNotes: boolean, subheadingId: number, userId: string) {
-  const fetcher1 = async () =>
+  const fetcher1 = async () => 
     await supabaseClient
       .from<definitions["books_articles"]>("books_articles")
       .select("*, created_by!inner(*),profiles(role)")
 
       .or("role.eq.ADMIN, role.eq.MODERATOR", { foreignTable: "profiles" })
 
-      .eq("books_subheadings_fk", subheadingId)
-      // .limit(10);
-  
+      .eq("books_subheadings_fk", subheadingId);
+ 
+  // .limit(10);
+
   const fetcher2 = async () =>
     await supabaseClient
       .from<definitions["books_articles"]>("books_articles")
@@ -221,8 +222,8 @@ export function useGetCurrentAffairs(isAdminNotes: boolean, subheadingId: number
 
       .match({ created_by: userId })
 
-      .eq("books_subheadings_fk", subheadingId)
-      // .limit(10);
+      .eq("books_subheadings_fk", subheadingId);
+  // .limit(10);
 
   const { data, error, mutate } = useSWR(
     `/api/useGetCurrentAffairs/${isAdminNotes}/${subheadingId}/${userId}`,
