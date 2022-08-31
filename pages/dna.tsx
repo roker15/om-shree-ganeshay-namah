@@ -66,6 +66,7 @@ import { BookResponse, BookSyllabus } from "../types/myTypes";
 import PageWithLayoutType from "../types/pageWithLayout";
 import { LoginCard } from "../components/LoginCard";
 import React from "react";
+import { InfoAlert } from "../components/CurrentAffair/ManageCurrentAffair";
 const SunEditor = dynamic(() => import("suneditor-react"), {
   ssr: false,
 });
@@ -142,7 +143,11 @@ const CurrentAffair: React.FC = () => {
   const [articleFormMode, setArticleFormMode] = useState<"CREATING" | "EDITING" | "NONE">("NONE");
   const [selectedSyllabus, setSelectedSyllabus] = useState<BookSyllabus | undefined>();
 
-  const { data, mutate } = useGetCurrentAffairs(isAdminNotes, selectedSyllabus?.subheading_id!, user?.id!);
+  const { data, mutate, isError, isLoading } = useGetCurrentAffairs(
+    isAdminNotes,
+    selectedSyllabus?.subheading_id!,
+    user?.id!
+  );
 
   const handleTabsChange = (index: any) => {
     setLangauge(index === 0 ? "ENG" : "HINDI");
@@ -217,30 +222,8 @@ const CurrentAffair: React.FC = () => {
         <GridItem colSpan={[0, 0, 0, 1]} display={["none", "none", "none", "block"]}></GridItem>
         <GridItem colSpan={[5, 5, 5, 4]}>
           {" "}
-          {/* <Button
-            colorScheme="telegram"
-            onClick={() => {
-              // setData(data);
-              setLangauge(language === "ENG" ? "HINDI" : "ENG");
-            }}
-          >
-            {language === "ENG" ? "Switch to Hindi" : "Switch to English"}
-          </Button>{" "} */}
           <HStack>
             <Box display={["block", "block", "block", "none"]}>
-              {/* <Popover>
-                <PopoverTrigger>
-                  <Button size={{ base: "sm", sm: "sm", md: "md" }}>Syllabus</Button>
-                </PopoverTrigger>
-                <PopoverContent>
-                  <PopoverArrow />
-                  <PopoverCloseButton />
-                  <PopoverHeader>Select Date</PopoverHeader>
-                  <PopoverBody>
-                    <SyllabusForCurrentAffairs book={book} changeParentProps={setSyllabus} />
-                  </PopoverBody>
-                </PopoverContent>
-              </Popover> */}
               <SyllabusDrawer book={book} changeParentProps={setSyllabus} />
             </Box>
             <Button
@@ -268,6 +251,16 @@ const CurrentAffair: React.FC = () => {
               {selectedSyllabus === undefined ? "Select Date to View Content" : selectedSyllabus.subheading}
             </Text>
           </Center>
+          {isLoading && (
+            <Center mt="8" w="full">
+              {" "}
+              Please wait, Loading...
+            </Center>
+          )}
+          {data && data.length == 0 && (
+            <Center mt="8" w="full">
+              <InfoAlert info={"No notes found. We are Covering from 1-Jun onwards."} /> </Center>
+          )}
           <VStack spellCheck="false" alignItems="start" visibility={selectedSyllabus === undefined ? "hidden" : undefined}>
             <Accordion allowMultiple width={"full"}>
               {data?.map((x: any) => {
@@ -599,7 +592,7 @@ const ArticleForm: React.FC<ArticleFormProps> = ({
           </Text>
           <Grid templateColumns={{ base: "repeat(2, 1fr)", sm: "repeat(3, 1fr)" }} gap={"1"}>
             {currentAffairTags.map((value) => (
-              <>
+              <Box key={value.id}>
                 <Checkbox
                   px="2"
                   colorScheme={"brand"}
@@ -613,7 +606,7 @@ const ArticleForm: React.FC<ArticleFormProps> = ({
                     {value.tag}
                   </Text>
                 </Checkbox>
-              </>
+              </Box>
             ))}
           </Grid>
         </VStack>

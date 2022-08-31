@@ -140,7 +140,7 @@ export const ArticleCounter = ({ subheadingId, creatorId }: { subheadingId: numb
   //     setCount(count);
   //   }
   // };
-  const getArticleCount = async () =>
+  const getArticleCount = async (subheadingId: any, creatorId: any) =>
     await supabaseClient
       .from<definitions["books_articles"]>("books_articles")
       .throwOnError()
@@ -156,12 +156,16 @@ export const ArticleCounter = ({ subheadingId, creatorId }: { subheadingId: numb
   //     .limit(1)
   //     .single();
 
-  const { data, error } = useSWR(`/api/usergetarticlebyid/${subheadingId}/${creatorId}`, getArticleCount);
+  const { data, error } = useSWR(`/api/usergetarticlecountbyid/${subheadingId}/${creatorId}`, getArticleCount);
 
   // useEffect(() => {
   //   getArticleCount();
   // }, []);
 
+  if (error) {
+    // alert("error is "+error.message)
+    console.log(error)
+  }
   return (
     <Flex alignItems={"center"} px="2">
       {(data && data.count && data!.count! > 0) && (

@@ -42,9 +42,9 @@ import DeleteConfirmation from "../syllabus/DeleteConfirmation";
 
 import Tags, { TagsDrawer } from "./Tags";
 
-function InfoAlert({ info }: { info: string }) {
+export function InfoAlert({ info }: { info: string }) {
   return (
-    <Alert status="info" colorScheme={"cyan"} alignItems="start" variant="left-accent">
+    <Alert status="info" colorScheme={"gray"} alignItems="start" variant="left-accent">
       <AlertIcon />
       {/* <Text as="p">{info}</Text> */}
       <div style={{ whiteSpace: "pre-line" }}>{info}</div>
