@@ -251,7 +251,7 @@ const CurrentAffair: React.FC = () => {
               {selectedSyllabus === undefined ? "Select Date to View Content" : selectedSyllabus.subheading}
             </Text>
           </Center>
-          {isLoading && (
+          {(isLoading && selectedSyllabus) && (
             <Center mt="8" w="full">
               {" "}
               Please wait, Loading...
@@ -259,7 +259,8 @@ const CurrentAffair: React.FC = () => {
           )}
           {data && data.length == 0 && (
             <Center mt="8" w="full">
-              <InfoAlert info={"No notes found. We are Covering from 1-Jun onwards."} /> </Center>
+              <InfoAlert info={"No notes found. We are Covering from 1-Jun onwards."} />{" "}
+            </Center>
           )}
           <VStack spellCheck="false" alignItems="start" visibility={selectedSyllabus === undefined ? "hidden" : undefined}>
             <Accordion allowMultiple width={"full"}>
@@ -648,7 +649,6 @@ const SyllabusDrawer: React.FC<Props> = ({ book, changeParentProps }) => {
             <Button variant="outline" mr={3} onClick={onClose}>
               Cancel
             </Button>
-            <Button colorScheme="blue">Save</Button>
           </DrawerFooter>
         </DrawerContent>
       </Drawer>

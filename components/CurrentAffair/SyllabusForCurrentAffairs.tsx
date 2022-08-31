@@ -131,7 +131,7 @@ const Syllabus: React.FC<Props> = ({ book, changeParentProps }) => {
 };
 export default Syllabus;
 
-export const ArticleCounter = React.memo(({ subheadingId, creatorId }: { subheadingId: number; creatorId: string }) => {
+export const ArticleCounter = ({ subheadingId, creatorId }: { subheadingId: number; creatorId: string }) => {
   const getArticleCount = async () =>
     await supabaseClient
       .from<definitions["books_articles"]>("books_articles")
@@ -155,4 +155,4 @@ export const ArticleCounter = React.memo(({ subheadingId, creatorId }: { subhead
       </Text>
     </Flex>
   );
-});
+};
