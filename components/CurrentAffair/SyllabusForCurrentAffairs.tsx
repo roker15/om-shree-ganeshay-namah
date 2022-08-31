@@ -117,7 +117,7 @@ const Syllabus: React.FC<Props> = ({ book, changeParentProps }) => {
                         <Link>{x.subheading}</Link>
                       </Text>
                       {/* </Button> */}
-                      {profile && profile.id && <ArticleCounter subheadingId={x.subheading_id} creatorId={profile.id} />}
+                      {(profile && profile.id && toggle === x.heading_id) && <ArticleCounter subheadingId={x.subheading_id} creatorId={profile.id} />}
                     </Flex>
                   ))}
               </Box>
@@ -140,7 +140,7 @@ export const ArticleCounter = ({ subheadingId, creatorId }: { subheadingId: numb
   //     setCount(count);
   //   }
   // };
-  const getArticleCount = async (subheadingId: any, creatorId: any) =>
+  const getArticleCount = async () =>
     await supabaseClient
       .from<definitions["books_articles"]>("books_articles")
       .throwOnError()
