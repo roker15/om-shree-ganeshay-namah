@@ -42,13 +42,13 @@ export function useGetBooks(bookId?: number) {
 }
 export function useGetSyllabusByBookId(bookId?: number) {
   const { data, error } = useSWR(
-    bookId == undefined ? null : [`/book_id_syllabuss/${bookId}`],
+    bookId == undefined ? null : [`/use-get-syllabus-by-bookid/${bookId}`],
     async () =>
       await supabaseClient.rpc("getSyllabusFromBookIdRightJoinToGetAllHeading", {
         bookid: bookId,
       }),
     {
-      revalidateIfStale: true,
+      revalidateIfStale: false,
       revalidateOnFocus: false,
       revalidateOnReconnect: false,
     }

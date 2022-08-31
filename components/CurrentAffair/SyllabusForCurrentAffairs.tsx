@@ -117,7 +117,9 @@ const Syllabus: React.FC<Props> = ({ book, changeParentProps }) => {
                         <Link>{x.subheading}</Link>
                       </Text>
                       {/* </Button> */}
-                      {/* {(profile && profile.id && toggle === x.heading_id) && <ArticleCounter subheadingId={x.subheading_id} creatorId={profile.id} />} */}
+                      {profile && profile.id && toggle === x.heading_id && (
+                        <ArticleCounter subheadingId={x.subheading_id} creatorId={profile.id} />
+                      )}
                     </Flex>
                   ))}
               </Box>
@@ -129,17 +131,7 @@ const Syllabus: React.FC<Props> = ({ book, changeParentProps }) => {
 };
 export default Syllabus;
 
-export const ArticleCounter = ({ subheadingId, creatorId }: { subheadingId: number; creatorId: string }) => {
-  const [count, setCount] = useState<number | undefined>(undefined);
-  // const getArticleCount = async () => {
-  //   const { data, error, count } = await supabaseClient
-  //     .from<definitions["books_articles"]>("books_articles")
-  //     .select("*", { count: "exact", head: true })
-  //     .match({ books_subheadings_fk: subheadingId, created_by: creatorId });
-  //   if (count) {
-  //     setCount(count);
-  //   }
-  // };
+export const ArticleCounter = React.memo(({ subheadingId, creatorId }: { subheadingId: number; creatorId: string }) => {
   const getArticleCount = async () =>
     await supabaseClient
       .from<definitions["books_articles"]>("books_articles")
@@ -147,35 +139,20 @@ export const ArticleCounter = ({ subheadingId, creatorId }: { subheadingId: numb
       .select("*", { count: "exact", head: true })
       .match({ books_subheadings_fk: subheadingId, created_by: creatorId });
 
-  // const fetcher = async (id) =>
-  //   await supabaseClient
-  //     .from<definitions["books_articles"]>("books_articles")
-  //     .throwOnError() // supabase does not throw error by default, swr error works only when fetcher throws it.
-  //     .select(`*`)
-  //     .eq("id", id)
-  //     .limit(1)
-  //     .single();
-
   const { data, error } = useSWR(
     creatorId ? `/api/usergetarticlecountbyid/${subheadingId}/${creatorId}` : null,
     getArticleCount
   );
 
-  // useEffect(() => {
-  //   getArticleCount();
-  // }, []);
-
   if (error) {
     // alert("error is "+error.message)
-    console.log(error);
+    console.log("counter error " + error);
   }
   return (
     <Flex alignItems={"center"} px="2">
-      {data && data.count && data!.count! > 0 && (
-        <Text color="brand.500" as={"label" && "b"} fontSize="12px">
-          {data?.count}
-        </Text>
-      )}
+      <Text color="brand.500" as={"label" && "b"} fontSize="12px">
+        {data && data.count && data.count !== 0 ? data?.count : ""}
+      </Text>
     </Flex>
   );
-};
+});
