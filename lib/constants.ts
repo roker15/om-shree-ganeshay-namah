@@ -166,6 +166,7 @@ export const currentAffairTags: { id: number; tag: string }[] = [
   { id: 56, tag: "Disaster Management ⭐" },
   
   { id: 501, tag: "Ethics ⭐" },
+
   { id: 57, tag: "Miscellaneous ⭐" },
   { id: 571, tag: "Person in News" },
   { id: 572, tag: "Geography" },

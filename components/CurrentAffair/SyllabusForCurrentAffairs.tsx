@@ -117,7 +117,7 @@ const Syllabus: React.FC<Props> = ({ book, changeParentProps }) => {
                         <Link>{x.subheading}</Link>
                       </Text>
                       {/* </Button> */}
-                      {(profile && profile.id && toggle === x.heading_id) && <ArticleCounter subheadingId={x.subheading_id} creatorId={profile.id} />}
+                      {/* {(profile && profile.id && toggle === x.heading_id) && <ArticleCounter subheadingId={x.subheading_id} creatorId={profile.id} />} */}
                     </Flex>
                   ))}
               </Box>
@@ -156,7 +156,10 @@ export const ArticleCounter = ({ subheadingId, creatorId }: { subheadingId: numb
   //     .limit(1)
   //     .single();
 
-  const { data, error } = useSWR(`/api/usergetarticlecountbyid/${subheadingId}/${creatorId}`, getArticleCount);
+  const { data, error } = useSWR(
+    creatorId ? `/api/usergetarticlecountbyid/${subheadingId}/${creatorId}` : null,
+    getArticleCount
+  );
 
   // useEffect(() => {
   //   getArticleCount();
@@ -164,11 +167,11 @@ export const ArticleCounter = ({ subheadingId, creatorId }: { subheadingId: numb
 
   if (error) {
     // alert("error is "+error.message)
-    console.log(error)
+    console.log(error);
   }
   return (
     <Flex alignItems={"center"} px="2">
-      {(data && data.count && data!.count! > 0) && (
+      {data && data.count && data!.count! > 0 && (
         <Text color="brand.500" as={"label" && "b"} fontSize="12px">
           {data?.count}
         </Text>
