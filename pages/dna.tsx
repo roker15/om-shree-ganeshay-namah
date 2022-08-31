@@ -251,7 +251,7 @@ const CurrentAffair: React.FC = () => {
               {selectedSyllabus === undefined ? "Select Date to View Content" : selectedSyllabus.subheading}
             </Text>
           </Center>
-          {isLoading && (
+          {(isLoading && selectedSyllabus) && (
             <Center mt="8" w="full">
               {" "}
               Please wait, Loading...
