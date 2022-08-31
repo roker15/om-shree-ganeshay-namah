@@ -638,7 +638,7 @@ const SyllabusDrawer: React.FC<Props> = ({ book, changeParentProps }) => {
         <DrawerOverlay />
         <DrawerContent>
           <DrawerCloseButton />
-          <DrawerHeader>Create your account</DrawerHeader>
+          <DrawerHeader>Select Date from Month</DrawerHeader>
 
           <DrawerBody>
             <SyllabusForCurrentAffairs book={book} changeParentProps={changeParentProps} />
