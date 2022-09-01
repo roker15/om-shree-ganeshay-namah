@@ -87,7 +87,7 @@ function SuneditorSimple(props: {
       <Flex justifyContent="space-between">
         <Button
           size="xs"
-          visibility={props.isAdminNotes && props.userrole !== "ADMIN" ? "hidden" : "visible"}
+          visibility={props.isAdminNotes && props.userrole !== "ADMIN"||"MODERATOR" ? "hidden" : "visible"}
           leftIcon={<MdModeEdit />}
           onClick={() => {
             setReadMode(!readMode);
