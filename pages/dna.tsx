@@ -87,7 +87,9 @@ function SuneditorSimple(props: {
       <Flex justifyContent="space-between">
         <Button
           size="xs"
-          visibility={props.isAdminNotes && props.userrole !== "ADMIN" ? "hidden" : "visible"}
+          visibility={
+            props.isAdminNotes && props.userrole !== "ADMIN" && props.userrole !== "MODERATOR" ? "hidden" : "visible"
+          }
           leftIcon={<MdModeEdit />}
           onClick={() => {
             setReadMode(!readMode);
@@ -251,7 +253,7 @@ const CurrentAffair: React.FC = () => {
               {selectedSyllabus === undefined ? "Select Date to View Content" : selectedSyllabus.subheading}
             </Text>
           </Center>
-          {(isLoading && selectedSyllabus) && (
+          {isLoading && selectedSyllabus && (
             <Center mt="8" w="full">
               {" "}
               Please wait, Loading...
