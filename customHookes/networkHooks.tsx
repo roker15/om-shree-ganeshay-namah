@@ -149,6 +149,34 @@ export function useGetUserArticles(subheadingId: number | undefined, userid: str
     swrError: error,
   };
 }
+export function useGetUserArticless(subheadingId: number | undefined, userid: string | undefined) {
+  const { data, error } = useSWR(
+    subheadingId == undefined || userid === undefined ? null : [`/get-user-articles/${subheadingId}/${userid}`],
+    async () =>
+      await supabaseClient
+        .from<definitions["books_articles"]>("books_articles")
+        .select(`*`)
+        .eq("created_by", userid)
+        .eq("books_subheadings_fk", subheadingId),
+    {
+      revalidateIfStale: true,
+      revalidateOnFocus: false,
+      revalidateOnReconnect: false,
+    }
+  );
+  return {
+    // sharedPost_SUP_ERR:data?.error,
+    data: data?.data,
+    supError: data?.error,
+    isLoading: !error && !data,
+    swrError: error,
+  };
+}
+
+
+
+
+
 export function useGetUserArticlesFromTags(userid: string | undefined, tagsArray: number[] | undefined) {
   const { data, error } = useSWR(
     userid === undefined || tagsArray!.length === 0 ? null : [`/get-user-articles-bytags/${userid}/${tagsArray}`],

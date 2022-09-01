@@ -41,7 +41,7 @@ import { MdAdd, MdCancel, MdDone, MdOutlineContentCopy, MdOutlineMenuOpen } from
 import "suneditor/dist/css/suneditor.min.css"; // Import Sun Editor's CSS File
 // import SunEditor from "suneditor-react";
 import { useSWRConfig } from "swr";
-import { useGetUserArticles } from "../../customHookes/networkHooks";
+import { useGetUserArticles, useGetUserArticless } from "../../customHookes/networkHooks";
 import { currentAffairTags } from "../../lib/constants";
 import { elog, sentenseCase } from "../../lib/mylog";
 import { useAuthContext } from "../../state/Authcontext";
@@ -92,7 +92,7 @@ function CustomIconbutton(props: { handleArticleEdit: (arg0: any, arg1: boolean)
 
 const MyNotes: React.FC<Props> = ({ subjectId, subheadingid, notesCreator, changeParentProps, isCopyable, isEditable }) => {
   const { profile } = useAuthContext();
-  const { data: articles, isLoading: isArticleLoading, swrError } = useGetUserArticles(subheadingid, notesCreator);
+  const { data: articles, isLoading: isArticleLoading, swrError } = useGetUserArticless(subheadingid, notesCreator);
   const [isLoadingCopyButton, setIsLoadingCopyButton] = useState<boolean | undefined>(false);
   const [selectedArticleForEdit, setSelectedArticleForEdit] = useState<number | undefined>();
   const [isArticleCreating, setIsArticleCreating] = useState<"CREATING" | "EDITING" | "NONE">("NONE");
