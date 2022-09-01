@@ -306,7 +306,7 @@ const CurrentAffair: React.FC = () => {
                                     alignSelf={"baseline"}
                                     // bg="brand.100"
                                     p="2"
-                                    fontSize="14px"
+                                    fontSize="16px"
                                     align="left"
                                   >
                                     <Text as="b">In News :- </Text> {sentenseCase(x.article_title)}
