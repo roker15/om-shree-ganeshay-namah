@@ -149,6 +149,8 @@ export function useGetUserArticles(subheadingId: number | undefined, userid: str
     swrError: error,
   };
 }
+// this is used to view shared notes and to copy article.... 
+//please modify this to not get only required properties.
 export function useGetUserArticless(subheadingId: number | undefined, userid: string | undefined) {
   const { data, error } = useSWR(
     subheadingId == undefined || userid === undefined ? null : [`/get-user-articles/${subheadingId}/${userid}`],
