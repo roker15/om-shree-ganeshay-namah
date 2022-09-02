@@ -11,7 +11,7 @@ export const UserTrack = () => {
       .from<Profile>("profiles")
       .select("*")
       .order("last_login", { ascending: false })
-      .limit(25);
+      .limit(100);
     if (data) {
       setUsers(data);
     }
