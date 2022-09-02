@@ -453,7 +453,7 @@ const ArticleForm: React.FC<ArticleFormProps> = ({
               focusBorderColor="brand.500"
               type="number"
               placeholder="Notes Sequence (1,2,3  ....)"
-              {...register("sequence", { required: "This is required" })}
+              {...register("sequence", { required: "This field is required" })}
             />
             <FormErrorMessage>{errors.sequence && errors.sequence.message}</FormErrorMessage>
           </FormControl>
