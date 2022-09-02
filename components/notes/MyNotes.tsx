@@ -19,7 +19,8 @@ import {
   MenuItem,
   MenuList,
   Radio,
-  RadioGroup, Stack,
+  RadioGroup,
+  Stack,
   Tab,
   TabList,
   TabPanel,
@@ -29,7 +30,7 @@ import {
   Textarea,
   Tooltip,
   VStack,
-  Wrap
+  Wrap,
 } from "@chakra-ui/react";
 import { supabaseClient } from "@supabase/auth-helpers-nextjs";
 import "katex/dist/katex.min.css";
@@ -187,7 +188,8 @@ const MyNotes: React.FC<Props> = ({ subjectId, subheadingid, notesCreator, chang
                                 dialogueHeader={"Delete this Article?"}
                                 isIconButton={false}
                                 id={x.id}
-                                display={undefined}                              ></DeleteConfirmation>
+                                display={undefined}
+                              ></DeleteConfirmation>
                             </MenuItem>
                           </MenuList>
                         </Menu>
@@ -438,7 +440,10 @@ const ArticleForm: React.FC<ArticleFormProps> = ({
               minW={{ base: "300px", md: "500px" }}
               focusBorderColor="brand.500"
               placeholder="Notes Heading"
-              {...register("articleTitle", { required: "This is required" })}
+              {...register("articleTitle", {
+                required: "This field is required",
+                maxLength: { value: 400, message: "Maximum 400 Characters allowed" },
+              })}
             />
             <FormErrorMessage>{errors.articleTitle && errors.articleTitle.message}</FormErrorMessage>
           </FormControl>
@@ -485,7 +490,11 @@ const ArticleForm: React.FC<ArticleFormProps> = ({
                     focusBorderColor="brand"
                     type="number"
                     placeholder="Question year (1995-2022)"
-                    {...register("question_year", { required: true, min: 1995, max: 2022 })}
+                    {...register("question_year", {
+                      required: "This is required",
+                      min: { value: 1995, message: "min 1995" },
+                      max: 2022,
+                    })}
                   />
                   <FormErrorMessage>{errors.question_year && errors.question_year.message}</FormErrorMessage>
                 </FormControl>
