@@ -445,7 +445,7 @@ const ArticleForm: React.FC<ArticleFormProps> = ({
                 maxLength: { value: 400, message: "Maximum 400 Characters allowed" },
               })}
             />
-            <FormErrorMessage>{errors.articleTitle && errors.articleTitle.message}</FormErrorMessage>
+            <FormErrorMessage>{errors.articleTitle?.message}</FormErrorMessage>
           </FormControl>
           <FormControl p="2" isInvalid={errors.articleTitle as any} maxW="500px">
             <Input
@@ -455,7 +455,7 @@ const ArticleForm: React.FC<ArticleFormProps> = ({
               placeholder="Notes Sequence (1,2,3  ....)"
               {...register("sequence", { required: "This field is required" })}
             />
-            <FormErrorMessage>{errors.sequence && errors.sequence.message}</FormErrorMessage>
+            <FormErrorMessage>{errors.sequence?.message}</FormErrorMessage>
           </FormControl>
           <Checkbox
             size="sm"
@@ -481,7 +481,7 @@ const ArticleForm: React.FC<ArticleFormProps> = ({
                     <Text casing="capitalize">Previous year Question</Text>
                   </Radio>
                 </RadioGroup>
-                <FormErrorMessage>{errors.questionType && errors.questionType.message}</FormErrorMessage>
+                <FormErrorMessage>{errors.questionType?.message}</FormErrorMessage>
               </FormControl>
               {watchQuestionType === "PREV" && (
                 <FormControl p="2" isInvalid={errors.question_year as any} maxW="500px">
@@ -496,7 +496,7 @@ const ArticleForm: React.FC<ArticleFormProps> = ({
                       max: 2022,
                     })}
                   />
-                  <FormErrorMessage>{errors.question_year && errors.question_year.message}</FormErrorMessage>
+                  <FormErrorMessage>{errors.question_year?.message}</FormErrorMessage>
                 </FormControl>
               )}
             </Box>
