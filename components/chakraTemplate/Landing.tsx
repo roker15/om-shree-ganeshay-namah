@@ -81,7 +81,7 @@ export default function CallToActionWithVideo() {
         {/* </Box> */}
         <br />
         <br />
-        <Text color={"gray.600"}>7000+ aspirants using Jionote</Text>
+        <Text color={"gray.600"}>7000+ UPSC aspirants, 25000+ students using Jionote</Text>
         <Text fontWeight={"extrabold"} fontSize={{ base: "2xl", sm: "3xl", lg: "3xl" }}>
           Not Sure How to Use?{" "}
           <Link isExternal color="teal.400" href="https://youtu.be/XD3Rr1nLTkY">
