@@ -51,7 +51,7 @@ interface MobileProps extends FlexProps {
 }
 
 const MobileNav = ({ onOpen, ...rest }: MobileProps) => {
-  const [scrolling, setScrolling] = useState();
+  // const [scrolling, setScrolling] = useState();
   const { signInWithgoogle, signOut, profile } = useAuthContext();
   return (
     <Flex

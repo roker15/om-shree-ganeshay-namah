@@ -169,7 +169,7 @@ export const currentAffairTags: { id: number; tag: string }[] = [
 
   { id: 57, tag: "Miscellaneous ⭐" },
   { id: 571, tag: "Person in News" },
-  { id: 572, tag: "Place in News" },
+  { id: 5721, tag: "Place in News" },
   { id: 572, tag: "Geography" },
   { id: 58, tag: "Sustainable Developement" },
   { id: 59, tag: "Bills/Acts" },
