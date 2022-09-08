@@ -149,7 +149,7 @@ export function useGetUserArticles(subheadingId: number | undefined, userid: str
     swrError: error,
   };
 }
-// this is used to view shared notes and to copy article.... 
+// this is used to view shared notes and to copy article....
 //please modify this to not get only required properties.
 export function useGetUserArticless(subheadingId: number | undefined, userid: string | undefined) {
   const { data, error } = useSWR(
@@ -174,10 +174,6 @@ export function useGetUserArticless(subheadingId: number | undefined, userid: st
     swrError: error,
   };
 }
-
-
-
-
 
 export function useGetUserArticlesFromTags(userid: string | undefined, tagsArray: number[] | undefined) {
   const { data, error } = useSWR(
@@ -236,10 +232,11 @@ export function useGetArticleById(id: number) {
 export function useGetCurrentAffairs(isAdminNotes: boolean, subheadingId: number, userId: string) {
   const fetcher1 = async () =>
     await supabaseClient
-      .from<definitions["books_articles"]>("books_articles")
-      .select("*, created_by!inner(*),profiles(role)")
+      .from<any>("books_articles")
+      .select("*, created_by!inner(*)")
 
-      .or("role.eq.ADMIN, role.eq.MODERATOR", { foreignTable: "profiles" })
+      // .or("role.eq.ADMIN, role.eq.MODERATOR", { foreignTable: "profiles" })
+      .neq( "created_by.role",  "USER" )
 
       .eq("books_subheadings_fk", subheadingId);
 

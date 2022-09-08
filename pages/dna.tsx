@@ -396,7 +396,7 @@ const CurrentAffair: React.FC = () => {
               </Center>
             )}
 
-            <Box display={articleFormMode === "NONE" ? "none" : undefined}>
+            <Box display={articleFormMode === "NONE" ? "none" : !profile || isAdminNotes ? "none" : undefined}>
               <ArticleForm
                 subjectId={undefined}
                 subheadingid={selectedSyllabus?.subheading_id}
@@ -458,7 +458,7 @@ const ArticleForm: React.FC<ArticleFormProps> = ({
   setParentProps,
   x,
 }) => {
-  const [isLoading, setIsLoading] = useState();
+  const [isLoading, setIsLoading] = useState(false);
   const { profile } = useAuthContext();
   const {
     register,
@@ -480,6 +480,7 @@ const ArticleForm: React.FC<ArticleFormProps> = ({
   const watchIsQuestion = watch("isQuestion");
 
   const onSubmit: SubmitHandler<Inputs> = async (d) => {
+    setIsLoading(true);
     if (formMode === "CREATING") {
       const { data, error } = await supabaseClient.from<definitions["books_articles"]>("books_articles").insert([
         {
@@ -519,6 +520,7 @@ const ArticleForm: React.FC<ArticleFormProps> = ({
     }
     // x("NONE");
     setParentProps();
+    setIsLoading(false);
   };
   return (
     <Flex justifyContent="center" alignItems={"center"}>
@@ -635,7 +637,7 @@ const SyllabusDrawer: React.FC<Props> = ({ book, changeParentProps }) => {
   return (
     <>
       <Button size={{ base: "sm", sm: "sm", md: "md" }} ref={btnRef} colorScheme="teal" onClick={onOpen}>
-        Syllabus
+        Select Date
       </Button>
       <Drawer isOpen={isOpen} placement="left" onClose={onClose} finalFocusRef={btnRef}>
         <DrawerOverlay />
