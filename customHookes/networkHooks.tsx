@@ -237,11 +237,7 @@ export function useGetCurrentAffairs(isAdminNotes: boolean, subheadingId: number
       .select("*, created_by!inner(*)")
 
       // .or("role.eq.ADMIN, role.eq.MODERATOR", { foreignTable: "profiles" })
-<<<<<<< HEAD
-      .neq( "created_by.role",  "USER" )
-=======
       .neq("created_by.role", "USER")
->>>>>>> dev-only-jionote-v2
 
       .eq("books_subheadings_fk", subheadingId);
 
