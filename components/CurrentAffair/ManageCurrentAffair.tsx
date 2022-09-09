@@ -24,11 +24,12 @@ import {
 } from "@chakra-ui/react";
 import { supabaseClient } from "@supabase/auth-helpers-nextjs";
 import { useUser } from "@supabase/auth-helpers-react";
+import { Loading } from "@supabase/ui";
 import router from "next/router";
 import React, { useEffect, useState } from "react";
 import { FiTrendingUp } from "react-icons/fi";
 import { mutate } from "swr";
-import { useGetUserArticlesFromTags } from "../../customHookes/networkHooks";
+import { useGetUserArticlesFromTags, useSearchCurrentAffairs } from "../../customHookes/networkHooks";
 import { currentAffairTags } from "../../lib/constants";
 import { elog, sentenseCase } from "../../lib/mylog";
 import { useAuthContext } from "../../state/Authcontext";
@@ -39,6 +40,7 @@ import SuneditorForNotesMaking from "../editor/SuneditorForNotesMaking";
 import SuneditorForNotesMakingg from "../editor/SuneditorForNotesMakingg";
 import BookFilter from "../syllabus/BookFilter";
 import DeleteConfirmation from "../syllabus/DeleteConfirmation";
+import SearchPanel from "./SearchPanel";
 
 import Tags, { TagsDrawer } from "./Tags";
 
@@ -56,13 +58,27 @@ export function InfoAlert({ info }: { info: string }) {
 export default function ManageCurrentAffair() {
   const { profile } = useAuthContext();
   const { tagsArray, setTagsArray } = useNoteContext();
+  const [searchKeys, setSearchKeys] = useState<string | undefined>(undefined);
+  const { data: searchResult, isLoading: isSearching } = useSearchCurrentAffairs(searchKeys!);
   const {
     data: articles,
     isLoading: isArticleLoading,
     count,
     swrError,
   } = useGetUserArticlesFromTags(profile?.id, tagsArray);
-  const [book, setBook] = useState<BookResponse | undefined>();
+
+  const updateSearchResult = (searchKeys: string | undefined) => {
+    if (searchKeys && searchKeys !== "") {
+      setSearchKeys(searchKeys);
+      setTagsArray!([]);
+    }
+  };
+  useEffect(() => {
+    if (tagsArray && tagsArray?.length > 0) {
+      setSearchKeys(undefined);
+    }
+  }, [tagsArray]);
+  // const [book, setBook] = useState<BookResponse | undefined>();
 
   const ROUTE_POST_ID = "/notes/[bookid]";
   const navigateTo = (bookid: string) => {
@@ -72,14 +88,14 @@ export default function ManageCurrentAffair() {
     });
   };
 
-  useEffect(() => {
-    if (book) {
-      sessionStorage.setItem("book", JSON.stringify(book));
-      sessionStorage.setItem("selected-subheading", "undefined");
-      sessionStorage.setItem("selected-syllabus", "undefined");
-      navigateTo(book.id.toString());
-    }
-  }, [book]);
+  // useEffect(() => {
+  //   if (book) {
+  //     sessionStorage.setItem("book", JSON.stringify(book));
+  //     sessionStorage.setItem("selected-subheading", "undefined");
+  //     sessionStorage.setItem("selected-syllabus", "undefined");
+  //     navigateTo(book.id.toString());
+  //   }
+  // }, [book]);
 
   const deleteArticle = async (id: number): Promise<void> => {
     const { data, error } = await supabaseClient.from<definitions["books_articles"]>("books_articles").delete().eq("id", id);
@@ -91,12 +107,13 @@ export default function ManageCurrentAffair() {
       mutate([`/get-user-articles-bytags/${profile?.id}/${tagsArray}`]);
     }
   };
-  const updateBookProps = (x: BookResponse | undefined) => {
-    setBook(x);
-  };
+  // const updateBookProps = (x: BookResponse | undefined) => {
+  //   setBook(x);
+  // };
   return (
     <Box>
       <>
+        <SearchPanel handledata={updateSearchResult} />
         <Flex display={{ base: "block", sm: "block", md: "none" }}>
           <TagsDrawer></TagsDrawer>
         </Flex>
@@ -165,7 +182,7 @@ export default function ManageCurrentAffair() {
             </GridItem>
 
             <GridItem colSpan={{ base: 5, sm: 5, md: 4 }} px={{ base: "0.5", sm: "0.5", md: "0.5" }}>
-              {tagsArray && tagsArray.length === 0 ? (
+              {tagsArray && tagsArray.length === 0 && !searchKeys ? (
                 <InfoAlert info={"No Topic Selected, Please Select Some topics from Tag Panel to see notes"} />
               ) : swrError ? (
                 swrError.message
@@ -235,7 +252,7 @@ export default function ManageCurrentAffair() {
                     );
                   })}
                 </Accordion>
-              ) : (
+              ) : !searchKeys ? (
                 <>
                   <InfoAlert
                     info={
@@ -243,9 +260,79 @@ export default function ManageCurrentAffair() {
                     }
                   />
                   <Flex bg="gray.50" p="2" mt="2" justify={"center"} align={"center"} position={"relative"} w={"full"}>
-                    <BookFilter setParentProps={updateBookProps} />
+                    {/* <BookFilter setParentProps={updateBookProps} /> */}
                   </Flex>
                 </>
+              ) : null}
+
+              {isSearching ? (
+                <div>Searching...</div>
+              ) : searchResult?.length === 0 && searchKeys ? (
+                <div>No result found</div>
+              ) : (
+                <Accordion allowMultiple>
+                  {searchResult?.map((article) => {
+                    return (
+                      <AccordionItem key={article.id} borderTopWidth="0px" borderBottomWidth="0px" my="2">
+                        {({ isExpanded }) => (
+                          <>
+                            {/* <Flex pb="16"> */}
+                            {/* <VStack width="full"> */}
+                            <Flex>
+                              <DeleteConfirmation
+                                handleDelete={deleteArticle}
+                                dialogueHeader={"Delete this Article?"}
+                                isIconButton={true}
+                                id={article.id}
+                                display={undefined}
+                              ></DeleteConfirmation>
+                              <AccordionButton bg="gray.50" _expanded={{ bg: "blackAlpha.50" }}>
+                                <Box flex="1" textAlign="left">
+                                  <Flex alignSelf="start" alignItems="center">
+                                    <Text
+                                      alignSelf={"baseline"}
+                                      // bg="brand.100"
+                                      p="0.5"
+                                      fontSize="16px"
+                                      align="left"
+                                    >
+                                      <Text as="b">Article Name :- </Text> {sentenseCase(article.article_title)}
+                                    </Text>
+                                  </Flex>
+                                </Box>
+                                <AccordionIcon />
+                              </AccordionButton>
+                            </Flex>
+                            <AccordionPanel pb={4} borderTopWidth="0px" borderBottomWidth="0px" px={{ base: 0, lg: "4" }}>
+                              {isExpanded && (
+                                <Tabs variant="line" size="sm" colorScheme="gray" width="full">
+                                  <TabList>
+                                    <Tab>English</Tab>
+                                    <Tab>Hindi</Tab>
+                                  </TabList>
+                                  <TabPanels>
+                                    <TabPanel px={{ base: 0, lg: "4" }} width="full">
+                                      <SuneditorForNotesMakingg
+                                        article1={article.id}
+                                        language={"ENGLISH"}
+                                        isEditable={true}
+                                      />
+                                    </TabPanel>
+                                    <TabPanel px={{ base: 0, lg: "4" }} width="full">
+                                      <SuneditorForNotesMakingg article1={article.id} language={"HINDI"} isEditable={true} />
+                                    </TabPanel>
+                                  </TabPanels>
+                                </Tabs>
+                              )}
+                            </AccordionPanel>
+                            {/* </VStack> */}
+                            {/* </Flex> */}
+                          </>
+                        )}
+                      </AccordionItem>
+                    );
+                  })}
+                </Accordion>
               )}
             </GridItem>
           </>

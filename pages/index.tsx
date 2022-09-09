@@ -6,6 +6,7 @@ import router from "next/router";
 import React, { useEffect, useState } from "react";
 import Landing from "../components/chakraTemplate/Landing";
 import SelectSyllabus from "../components/chakraTemplate/SelectSyllabus";
+import SearchPanel from "../components/CurrentAffair/SearchPanel";
 import { UserTrack } from "../components/dashboard/UserTrack";
 import LayoutWithTopNavbar from "../layout/LayoutWithTopNavbar";
 import { useAuthContext } from "../state/Authcontext";
@@ -17,26 +18,46 @@ const Home: React.FunctionComponent = () => {
   const [book, setBook] = useState<BookResponse | undefined>(undefined);
   const { profile } = useAuthContext();
   const { user, error } = useUser();
+  const c1 = "west";
+  const c2 = "big";
+  // array of strings but in readonly mode
+  const namesArr = " india  cooperation";
+
+  // convert namesArr into string literal union type
+  type names = typeof namesArr[number]; // "John" | "Lily" | "Roy"
+
   const supabaseTest = async () => {
     const { data, error } = await supabaseClient
-      .from<definitions["books_article_sharing"]>("books_article_sharing")
-      .select(
-        `
-         id,books_subheadings_fk,shared_by(email),shared_with(email),profiles!books_article_sharing_shared_by_fkey!inner(id,email),
-         books_subheadings!inner(id,subheading)
-         `
-      )
-      .match({ "profiles.email": "buddyelusive@gmail.com", "books_subheadings.id": 24 });
+      .from("books_articles")
+      .select("article_title")
+      .textSearch("article_title", namesArr, { type: "websearch", config: "english" });
     if (error) {
       console.error("supabasetest error is " + error.message.toUpperCase);
     }
     if (data) {
-      // console.log("supabasetest data is " + data[0].shared_by.email);
+      console.log("supabasetest data is " + JSON.stringify(data));
     }
   };
+  // const supabaseTest = async () => {
+  //   const { data, error } = await supabaseClient
+  //     .from<definitions["books_article_sharing"]>("books_article_sharing")
+  //     .select(
+  //       `
+  //        id,books_subheadings_fk,shared_by(email),shared_with(email),profiles!books_article_sharing_shared_by_fkey!inner(id,email),
+  //        books_subheadings!inner(id,subheading)
+  //        `
+  //     )
+  //     .match({ "profiles.email": "buddyelusive@gmail.com", "books_subheadings.id": 24 });
+  //   if (error) {
+  //     console.error("supabasetest error is " + error.message.toUpperCase);
+  //   }
+  //   if (data) {
+  //     // console.log("supabasetest data is " + data[0].shared_by.email);
+  //   }
+  // };
 
   useEffect(() => {
-    // supabaseTest();
+    supabaseTest();
   }, []);
 
   const ROUTE_POST_ID = "/notes/[bookid]";
@@ -69,13 +90,15 @@ const Home: React.FunctionComponent = () => {
         {/* <SelectSyllabus /> */}
         {user && profile?.role === "ADMIN" && (
           <Box m="8" w="full">
+            <SearchPanel />
+
             <Link href="/manageSyllabus">
               <a>Manage syllabus</a>
             </Link>
             <Link href="/dna">
               <a>Current Affair 22-23</a>
             </Link>
-           
+
             <UserTrack />
           </Box>
         )}{" "}
