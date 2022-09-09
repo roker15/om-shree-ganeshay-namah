@@ -1,4 +1,5 @@
 import { supabaseClient } from "@supabase/auth-helpers-nextjs";
+import { useUser } from "@supabase/auth-helpers-react";
 import useSWR from "swr";
 import { useAuthContext } from "../state/Authcontext";
 import { useNoteContext } from "../state/NoteContext";
@@ -236,7 +237,11 @@ export function useGetCurrentAffairs(isAdminNotes: boolean, subheadingId: number
       .select("*, created_by!inner(*)")
 
       // .or("role.eq.ADMIN, role.eq.MODERATOR", { foreignTable: "profiles" })
+<<<<<<< HEAD
       .neq( "created_by.role",  "USER" )
+=======
+      .neq("created_by.role", "USER")
+>>>>>>> dev-only-jionote-v2
 
       .eq("books_subheadings_fk", subheadingId);
 
@@ -263,6 +268,29 @@ export function useGetCurrentAffairs(isAdminNotes: boolean, subheadingId: number
 
   return {
     data: data?.data,
+    isLoading: !error && !data,
+    isError: error,
+    mutate: mutate,
+  };
+}
+
+export function useSearchCurrentAffairs(searchKey: string) {
+  const { user } = useUser();
+  const fetcher = async () =>
+    await supabaseClient
+      .from<definitions["books_articles"]>("books_articles")
+      .throwOnError()
+      .select(`id,updated_at,article_title`, { count: "exact" })
+      .textSearch("article_title", searchKey, { type: "websearch", config: "english" })
+      .eq("created_by", user?.id);
+
+  // .limit(10);
+
+  const { data, error, mutate } = useSWR(searchKey === "" ? null : `/api/useSearchCurrentAffairs/${searchKey}`, fetcher);
+
+  return {
+    data: data?.data,
+    count: data?.count,
     isLoading: !error && !data,
     isError: error,
     mutate: mutate,

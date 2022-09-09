@@ -6,25 +6,17 @@ import {
   DrawerBody,
   DrawerCloseButton,
   DrawerContent,
-  DrawerFooter,
-  DrawerHeader,
-  DrawerOverlay,
-  Flex,
-  IconButton,
-  Input,
-  Text,
-  useDisclosure,
+  DrawerFooter, DrawerOverlay,
+  Flex, Text,
+  useDisclosure
 } from "@chakra-ui/react";
 import { supabaseClient } from "@supabase/auth-helpers-nextjs";
-import { groupBy } from "lodash";
 import React, { useEffect, useState } from "react";
-import { MdMenu, MdMenuBook, MdMenuOpen, MdOutlineMenu, MdSwitchRight } from "react-icons/md";
+import { MdSwitchRight } from "react-icons/md";
 import Sticky from "react-sticky-el";
-import { useGetSyllabusByBookId } from "../../customHookes/networkHooks";
 import { currentAffairTags } from "../../lib/constants";
 import { useAuthContext } from "../../state/Authcontext";
 import { useNoteContext } from "../../state/NoteContext";
-import { BookResponse, BookSyllabus } from "../../types/myTypes";
 import { definitions } from "../../types/supabase";
 
 const Tags: React.FC = () => {
