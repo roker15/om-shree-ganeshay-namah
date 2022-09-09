@@ -22,15 +22,7 @@ import {
   Grid,
   GridItem,
   HStack,
-  Input,
-  Popover,
-  PopoverArrow,
-  PopoverBody,
-  PopoverCloseButton,
-  PopoverContent,
-  PopoverHeader,
-  PopoverTrigger,
-  Radio,
+  Input, Radio,
   RadioGroup,
   Tab,
   TabList,
@@ -41,7 +33,7 @@ import {
   Textarea,
   useDisclosure,
   VStack,
-  Wrap,
+  Wrap
 } from "@chakra-ui/react";
 import { supabaseClient } from "@supabase/auth-helpers-nextjs";
 import katex from "katex";
@@ -52,11 +44,13 @@ import { BASE_URL, currentAffairTags, sunEditorButtonList } from "../lib/constan
 import { definitions } from "../types/supabase";
 // import DOMPurify from "dompurify";
 import { useUser } from "@supabase/auth-helpers-react";
-import { useState } from "react";
+import React, { useState } from "react";
 import { SubmitHandler, useForm } from "react-hook-form";
 import { MdAdd, MdCancel, MdDone, MdFileCopy, MdModeEdit } from "react-icons/md";
+import { InfoAlert } from "../components/CurrentAffair/ManageCurrentAffair";
 import SyllabusForCurrentAffairs from "../components/CurrentAffair/SyllabusForCurrentAffairs";
 import { customToast } from "../components/CustomToast";
+import { LoginCard } from "../components/LoginCard";
 import DeleteConfirmation from "../components/syllabus/DeleteConfirmation";
 import { useGetCurrentAffairs } from "../customHookes/networkHooks";
 import LayoutWithTopNavbar from "../layout/LayoutWithTopNavbar";
@@ -64,9 +58,6 @@ import { elog, sentenseCase } from "../lib/mylog";
 import { useAuthContext } from "../state/Authcontext";
 import { BookResponse, BookSyllabus } from "../types/myTypes";
 import PageWithLayoutType from "../types/pageWithLayout";
-import { LoginCard } from "../components/LoginCard";
-import React from "react";
-import { InfoAlert } from "../components/CurrentAffair/ManageCurrentAffair";
 const SunEditor = dynamic(() => import("suneditor-react"), {
   ssr: false,
 });

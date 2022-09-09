@@ -1,4 +1,5 @@
 import { supabaseClient } from "@supabase/auth-helpers-nextjs";
+import { useUser } from "@supabase/auth-helpers-react";
 import useSWR from "swr";
 import { useAuthContext } from "../state/Authcontext";
 import { useNoteContext } from "../state/NoteContext";
@@ -149,7 +150,7 @@ export function useGetUserArticles(subheadingId: number | undefined, userid: str
     swrError: error,
   };
 }
-// this is used to view shared notes and to copy article.... 
+// this is used to view shared notes and to copy article....
 //please modify this to not get only required properties.
 export function useGetUserArticless(subheadingId: number | undefined, userid: string | undefined) {
   const { data, error } = useSWR(
@@ -174,10 +175,6 @@ export function useGetUserArticless(subheadingId: number | undefined, userid: st
     swrError: error,
   };
 }
-
-
-
-
 
 export function useGetUserArticlesFromTags(userid: string | undefined, tagsArray: number[] | undefined) {
   const { data, error } = useSWR(
@@ -236,10 +233,11 @@ export function useGetArticleById(id: number) {
 export function useGetCurrentAffairs(isAdminNotes: boolean, subheadingId: number, userId: string) {
   const fetcher1 = async () =>
     await supabaseClient
-      .from<definitions["books_articles"]>("books_articles")
-      .select("*, created_by!inner(*),profiles(role)")
+      .from<any>("books_articles")
+      .select("*, created_by!inner(*)")
 
-      .or("role.eq.ADMIN, role.eq.MODERATOR", { foreignTable: "profiles" })
+      // .or("role.eq.ADMIN, role.eq.MODERATOR", { foreignTable: "profiles" })
+      .neq("created_by.role", "USER")
 
       .eq("books_subheadings_fk", subheadingId);
 
@@ -266,6 +264,29 @@ export function useGetCurrentAffairs(isAdminNotes: boolean, subheadingId: number
 
   return {
     data: data?.data,
+    isLoading: !error && !data,
+    isError: error,
+    mutate: mutate,
+  };
+}
+
+export function useSearchCurrentAffairs(searchKey: string) {
+  const { user } = useUser();
+  const fetcher = async () =>
+    await supabaseClient
+      .from<definitions["books_articles"]>("books_articles")
+      .throwOnError()
+      .select(`id,updated_at,article_title`, { count: "exact" })
+      .textSearch("article_title", searchKey, { type: "websearch", config: "english" })
+      .eq("created_by", user?.id);
+
+  // .limit(10);
+
+  const { data, error, mutate } = useSWR(searchKey === "" ? null : `/api/useSearchCurrentAffairs/${searchKey}`, fetcher);
+
+  return {
+    data: data?.data,
+    count: data?.count,
     isLoading: !error && !data,
     isError: error,
     mutate: mutate,
