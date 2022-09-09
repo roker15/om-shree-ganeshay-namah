@@ -79,7 +79,7 @@ function SuneditorSimple(props: {
         <Button
           size="xs"
           visibility={
-            props.isAdminNotes && props.userrole !== "ADMIN" && props.userrole !== "MODERATOR" ? "hidden" : "visible"
+            props.isAdminNotes && props.userrole !== "ADMIN" ? "hidden" : "visible"
           }
           leftIcon={<MdModeEdit />}
           onClick={() => {

@@ -268,7 +268,7 @@ export default function ManageCurrentAffair() {
               {isSearching ? (
                 <div>Searching...</div>
               ) : searchResult?.length === 0 && searchKeys ? (
-                <div>No result found</div>
+                <div>No notes found, Select Syllabus and Create some notes.</div>
               ) : (
                 <Accordion allowMultiple>
                   {searchResult?.map((article) => {
