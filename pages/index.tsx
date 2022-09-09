@@ -6,7 +6,6 @@ import router from "next/router";
 import React, { useEffect, useState } from "react";
 import Landing from "../components/chakraTemplate/Landing";
 import SelectSyllabus from "../components/chakraTemplate/SelectSyllabus";
-import SearchPanel from "../components/CurrentAffair/SearchPanel";
 import { UserTrack } from "../components/dashboard/UserTrack";
 import LayoutWithTopNavbar from "../layout/LayoutWithTopNavbar";
 import { useAuthContext } from "../state/Authcontext";
@@ -90,7 +89,6 @@ const Home: React.FunctionComponent = () => {
         {/* <SelectSyllabus /> */}
         {user && profile?.role === "ADMIN" && (
           <Box m="8" w="full">
-            <SearchPanel />
 
             <Link href="/manageSyllabus">
               <a>Manage syllabus</a>
