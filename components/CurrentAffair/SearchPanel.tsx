@@ -27,9 +27,9 @@ const SearchPanel = (props: { handledata: (x: string | undefined) => void }) => 
           </InputLeftAddon>
           <Input
             value={value}
-            bg="blackAlpha.200"
+            bg="blackAlpha.50"
             focusBorderColor={"blackAlpha.300"}
-            // borderColor={"blackAlpha.500"}
+            borderColor={"blackAlpha.200"}
             onChange={(event) => setValue(event.target.value)}
             placeholder="Type keywords and 'Press ENTER'"
           />

@@ -2,8 +2,8 @@ import dynamic from "next/dynamic";
 
 export const NEXT_PUBLIC_SUPABASE_URL = process.env.NEXT_PUBLIC_SUPABASE_URL;
 export const NEXT_PUBLIC_SUPABASE_ANON_KEY = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY;
-// export const BASE_URL = "http://www.localhost:3000";
-export const BASE_URL = "https://www.jionote.com";
+export const BASE_URL = "http://www.localhost:3000";
+// export const BASE_URL = "https://www.jionote.com";
 // export const BASE_URL = "https://om-shree-ganeshay-namah-git-dev-only-jionote-v2-roker15.vercel.app";
 
 // npx openapi-typescript https://hbvffqslxssdbkdxfqop.supabase.co/rest/v1/?apikey=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJyb2xlIjoiYW5vbiIsImlhdCI6MTYzMDIyNjQxOCwiZXhwIjoxOTQ1ODAyNDE4fQ.CCZ3y_Mzp5HjQJnuEXqL5Wq4tk2ZjZj97gVkODFYNh4 --output types/supabase.ts
