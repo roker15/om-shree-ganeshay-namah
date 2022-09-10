@@ -53,16 +53,21 @@ export default function CallToActionWithVideo() {
         direction={{ base: "column", md: "row" }}
       > */}
       <Heading
-        fontWeight={"bold"}
+        fontWeight={"normal"}
         fontSize={{ base: "xl", sm: "2xl", lg: "xl" }}
-        bg="gray.600"
-        p="2"
-        color="gray.50"
+        bg="gray.100"
+        p="4"
+        mt="2"
+        color="gray.600"
         borderRadius={"base"}
         // transform={"rotate(-20deg)"}
         // mb="24"
       >
-        <Text as={"span"}></Text>Jionote is an Online Notes making platform for UPSC, NCERT, Current Affairs etc.{" "}
+        <Text as={"span"}></Text>⭐ Jionote is an{" "}
+        <Text as="span" fontWeight="bold">
+          Online Notes making platform
+        </Text>{" "}
+        for UPSC, NCERT, Current Affairs etc.{" "}
       </Heading>
       <Stack flex={3} spacing={{ base: "2", md: 2 }} py={{ base: "16", md: 16 }} alignItems={"center"}>
         <button
