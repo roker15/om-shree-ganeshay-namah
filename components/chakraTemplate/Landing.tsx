@@ -63,7 +63,7 @@ export default function CallToActionWithVideo() {
         // transform={"rotate(-20deg)"}
         // mb="24"
       >
-        <Text as={"span"}></Text>⭐ Jionote is an{" "}
+        <Text as={"span"}></Text>Jionote is an{" "}
         <Text as="span" fontWeight="bold">
           Online Notes making platform
         </Text>{" "}
