@@ -40,7 +40,7 @@ import katex from "katex";
 import "katex/dist/katex.min.css";
 import dynamic from "next/dynamic";
 import "suneditor/dist/css/suneditor.min.css";
-import { BASE_URL, currentAffairTags, sunEditorButtonList } from "../lib/constants";
+import { BASE_URL, colors, currentAffairTags, sunEditorButtonList } from "../lib/constants";
 import { definitions } from "../types/supabase";
 // import DOMPurify from "dompurify";
 import { useUser } from "@supabase/auth-helpers-react";
@@ -101,7 +101,7 @@ function SuneditorSimple(props: {
         </Button>
       </Flex>
       <SunEditor
-        setDefaultStyle="font-family: arial; font-size: 14px;"
+        setDefaultStyle="font-family: arial; font-size: 16px;"
         defaultValue={props.content}
         hideToolbar={readMode}
         readOnly={readMode}
@@ -112,6 +112,7 @@ function SuneditorSimple(props: {
           mode: "classic",
           katex: katex,
           height: "100%",
+          colorList:colors,
           buttonList: sunEditorButtonList,
           resizingBar: false,
           hideToolbar: false,
