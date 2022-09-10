@@ -1,5 +1,6 @@
 import {
   Button,
+  Center,
   Container,
   createIcon,
   Divider,
@@ -44,7 +45,7 @@ export default function CallToActionWithVideo() {
     setBook(x);
   };
   return (
-    <Container maxW={"4xl"}  bg="gray.50" p="4">
+    <Container maxW={"4xl"} bg="gray.50" p="4">
       <Stack
         // align={"center"}
         spacing={{ base: 8, md: 10 }}
@@ -52,6 +53,7 @@ export default function CallToActionWithVideo() {
         direction={{ base: "column", md: "column" }}
       >
         <Stack flex={1} spacing={{ base: 5, md: 10 }}>
+        
           <Heading lineHeight={1.1} fontWeight={"extrabold"} fontSize={{ base: "xl", sm: "2xl", lg: "3xl" }}>
             <Text
               as={"span"}
@@ -67,17 +69,15 @@ export default function CallToActionWithVideo() {
                 zIndex: -1,
               }}
             >
-           Select Syllabus,
+              Select Syllabus,
             </Text>
             <br />
             <Text as={"span"} color={"orange.400"}>
-               And start making Notes
+              And start making Notes
             </Text>
           </Heading>
-        
         </Stack>
         <VStack spacing={"12"} flex={1} w="full">
-          
           <Flex justify={"center"} align={"center"} position={"relative"} w={"full"}>
             <BookFilter setParentProps={updateBookProps} />
           </Flex>
@@ -86,6 +86,3 @@ export default function CallToActionWithVideo() {
     </Container>
   );
 }
-
-
-

@@ -10,8 +10,8 @@ const BookFilter: React.FC<{ setParentProps: (x: BookResponse | undefined) => vo
   const categories = [
     { id: "7", name: "Competitive exams" },
     { id: "1", name: "NCERT" },
-    { id: "6", name: "ICSE" },
-    { id: "5", name: "Medical" },
+    // { id: "6", name: "ICSE" },
+    // { id: "5", name: "Medical" },
     // { id: "2", name: "IGNOU" },
     { id: "4", name: "Engineering" },
   ];

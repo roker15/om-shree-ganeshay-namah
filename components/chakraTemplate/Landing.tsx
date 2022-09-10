@@ -53,13 +53,16 @@ export default function CallToActionWithVideo() {
         direction={{ base: "column", md: "row" }}
       > */}
       <Heading
-        lineHeight={1}
-        fontWeight={"extrabold"}
-        fontSize={{ base: "3xl", sm: "4xl", lg: "4xl" }}
+        fontWeight={"bold"}
+        fontSize={{ base: "xl", sm: "2xl", lg: "xl" }}
+        bg="gray.600"
+        p="2"
+        color="gray.50"
+        borderRadius={"base"}
         // transform={"rotate(-20deg)"}
         // mb="24"
       >
-        <Text as={"span"}>Prepare Digital UPSC Notes</Text>
+        <Text as={"span"}></Text>Jionote is an Online Notes making platform for UPSC, NCERT, Current Affairs etc.{" "}
       </Heading>
       <Stack flex={3} spacing={{ base: "2", md: 2 }} py={{ base: "16", md: 16 }} alignItems={"center"}>
         <button
