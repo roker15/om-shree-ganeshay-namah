@@ -1,4 +1,5 @@
 import {
+  Center,
     Container,
     createIcon,
     Divider,
@@ -49,6 +50,7 @@ import BookFilter from "../syllabus/BookFilter";
           direction={{ base: "column", md: "column" }}
         >
           <Stack flex={1} spacing={{ base: 5, md: 10 }}>
+            <Center>hi</Center>
             <Heading lineHeight={1.1} fontWeight={700} fontSize={{ base: "3xl", sm: "4xl", lg: "6xl" }}>
               <Text
                 as={"span"}
