@@ -53,13 +53,24 @@ export default function CallToActionWithVideo() {
         direction={{ base: "column", md: "row" }}
       > */}
       <Heading
-        lineHeight={1}
-        fontWeight={"extrabold"}
-        fontSize={{ base: "3xl", sm: "4xl", lg: "4xl" }}
+        fontWeight={"normal"}
+        fontSize={{ base: "xl", sm: "2xl", lg: "xl" }}
+        bg="gray.100"
+        p="4"
+        mt="2"
+        color="gray.600"
+        borderRadius={"base"}
         // transform={"rotate(-20deg)"}
         // mb="24"
       >
-        <Text as={"span"}>Prepare Digital UPSC Notes</Text>
+        <Text as={"span"}></Text>Jionote is an{" "}
+        <Text as="span" fontWeight="bold">
+          Online Notes making platform
+        </Text>{" "}
+        for UPSC, NCERT, Current Affairs etc.{" "}
+        <Link isExternal color="telegram.400" fontWeight="bold" href="https://youtu.be/XD3Rr1nLTkY">
+          Watch Demo Video
+        </Link>
       </Heading>
       <Stack flex={3} spacing={{ base: "2", md: 2 }} py={{ base: "16", md: 16 }} alignItems={"center"}>
         <button
@@ -82,12 +93,12 @@ export default function CallToActionWithVideo() {
         <br />
         <br />
         <Text color={"gray.600"}>7000+ UPSC aspirants, 25000+ students using Jionote</Text>
-        <Text fontWeight={"extrabold"} fontSize={{ base: "2xl", sm: "3xl", lg: "3xl" }}>
+        {/* <Text fontWeight={"extrabold"} fontSize={{ base: "2xl", sm: "3xl", lg: "3xl" }}>
           Not Sure How to Use?{" "}
           <Link isExternal color="teal.400" href="https://youtu.be/XD3Rr1nLTkY">
             Watch Demo Video
           </Link>
-        </Text>
+        </Text> */}
         {/* <Stack spacing={{ base: 4, sm: 6 }} direction={{ base: "column", sm: "row" }}> */}
 
         {/* </Stack> */}

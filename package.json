@@ -12,9 +12,9 @@
     "analyze": "cross-env ANALYZE=true next build"
   },
   "dependencies": {
-    "@chakra-ui/icons": "^2.0.2",
-    "@chakra-ui/react": "^2.2.4",
-    "@chakra-ui/theme-tools": "^2.0.2",
+    "@chakra-ui/icons": "^2.0.9",
+    "@chakra-ui/react": "^2.3.2",
+    "@chakra-ui/theme-tools": "^2.0.11",
     "@emotion/react": "^11",
     "@emotion/styled": "^11",
     "@supabase/auth-helpers-nextjs": "^0.2.0",
@@ -55,7 +55,7 @@
     "yarn": "^1.22.19"
   },
   "devDependencies": {
-    "@chakra-ui/cli": "^2.1.2",
+    "@chakra-ui/cli": "^2.1.7",
     "@next/bundle-analyzer": "^12.2.5",
     "@types/dompurify": "^2.3.3",
     "@types/katex": "^0.14.0",
