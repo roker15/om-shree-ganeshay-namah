@@ -94,7 +94,7 @@ const Home: React.FunctionComponent = () => {
               <a>Manage syllabus</a>
             </Link>
             <Link href="/dna">
-              <a>Current Affair 22-23</a>
+              <a>Editable Current Affair 22-23</a>
             </Link>
 
             <UserTrack />
