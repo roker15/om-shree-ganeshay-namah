@@ -22,7 +22,8 @@ import {
   Grid,
   GridItem,
   HStack,
-  Input, Radio,
+  Input,
+  Radio,
   RadioGroup,
   Tab,
   TabList,
@@ -33,7 +34,7 @@ import {
   Textarea,
   useDisclosure,
   VStack,
-  Wrap
+  Wrap,
 } from "@chakra-ui/react";
 import { supabaseClient } from "@supabase/auth-helpers-nextjs";
 import katex from "katex";
@@ -78,9 +79,7 @@ function SuneditorSimple(props: {
       <Flex justifyContent="space-between" wrap={"wrap"}>
         <Button
           size="xs"
-          visibility={
-            props.isAdminNotes && props.userrole !== "ADMIN" ? "hidden" : "visible"
-          }
+          visibility={props.isAdminNotes && props.userrole !== "ADMIN" ? "hidden" : "visible"}
           leftIcon={<MdModeEdit />}
           onClick={() => {
             setReadMode(!readMode);
@@ -90,16 +89,13 @@ function SuneditorSimple(props: {
         </Button>
         <Button
           size="xs"
-          ml="2"
-          variant={"solid"}
-          colorScheme="facebook"
           display={props.canCopy ? undefined : "none"}
           leftIcon={<MdFileCopy />}
           onClick={() => {
             props.copyCallback(props.article);
           }}
         >
-         To Edit,  Click here and Copy this Note to Your Account
+          To Edit, Click here and Copy this Note to Your Account
         </Button>
       </Flex>
       <SunEditor
@@ -114,7 +110,7 @@ function SuneditorSimple(props: {
           mode: "classic",
           katex: katex,
           height: "100%",
-          colorList:colors,
+          colorList: colors,
           buttonList: sunEditorButtonList,
           resizingBar: false,
           hideToolbar: false,
