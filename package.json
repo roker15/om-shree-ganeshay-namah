@@ -55,7 +55,7 @@
     "yarn": "^1.22.19"
   },
   "devDependencies": {
-    "@chakra-ui/cli": "^2.1.2",
+    "@chakra-ui/cli": "^2.1.7",
     "@next/bundle-analyzer": "^12.2.5",
     "@types/dompurify": "^2.3.3",
     "@types/katex": "^0.14.0",
