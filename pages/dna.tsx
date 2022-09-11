@@ -97,7 +97,7 @@ function SuneditorSimple(props: {
             props.copyCallback(props.article);
           }}
         >
-         To Edit,  Copy this Note to Your Account
+         To Edit,  Click here and Copy this Note to Your Account
         </Button>
       </Flex>
       <SunEditor
