@@ -81,7 +81,7 @@ export default function CallToActionWithVideo() {
         >
           <span className="shadow"></span>
           <span className="edge"></span>
-          <span className="front">Current Affair 22-23 </span>
+          <span className="front">Editable Current Affairs 22-23 </span>
         </button>
 
         <br />
