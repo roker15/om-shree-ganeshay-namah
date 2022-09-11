@@ -75,7 +75,7 @@ function SuneditorSimple(props: {
   const [readMode, setReadMode] = useState<boolean>(true);
   return (
     <Box className={readMode ? "zaza" : "zazaza"}>
-      <Flex justifyContent="space-between">
+      <Flex justifyContent="space-between" wrap={"wrap"}>
         <Button
           size="xs"
           visibility={
