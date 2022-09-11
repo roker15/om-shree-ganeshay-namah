@@ -91,6 +91,8 @@ function SuneditorSimple(props: {
         <Button
           size="xs"
           ml="2"
+          variant={"solid"}
+          colorScheme="facebook"
           display={props.canCopy ? undefined : "none"}
           leftIcon={<MdFileCopy />}
           onClick={() => {
