@@ -149,10 +149,10 @@ width ::-webkit-scrollbar {
     border-radius: 12px;
     background: linear-gradient(
       to left,
-      hsl(340deg 100% 16%) 0%,
-      hsl(340deg 100% 32%) 8%,
-      hsl(340deg 100% 32%) 92%,
-      hsl(340deg 100% 16%) 100%
+      rgb(1, 53, 92) 0%,
+      rgb(3, 103, 180) 8%,
+      rgb(3, 103, 180) 92%,
+      rgb(0, 92, 163) 100%
     );
   }
   .front {
@@ -162,7 +162,7 @@ width ::-webkit-scrollbar {
     border-radius: 12px;
     font-size: 1.25rem;
     color: white;
-    background: hsl(345deg 100% 47%);
+    background:  rgb(5, 132, 228);
     will-change: transform;
     transform: translateY(-4px);
     transition:

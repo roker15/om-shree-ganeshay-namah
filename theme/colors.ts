@@ -11,4 +11,6 @@ export const colors = {
       "800": "#592B0D",
       "900": "#2C1607"
   },
+  // brand: "yellow",
+  
 };
