@@ -1,42 +1,17 @@
 import { Box, Container } from "@chakra-ui/react";
-import { supabaseClient } from "@supabase/auth-helpers-nextjs";
 import { useUser } from "@supabase/auth-helpers-react";
 import Link from "next/link";
-import router from "next/router";
-import React, { useEffect, useState } from "react";
+import React from "react";
 import Landing from "../components/chakraTemplate/Landing";
-import SelectSyllabus from "../components/chakraTemplate/SelectSyllabus";
 import { UserTrack } from "../components/dashboard/UserTrack";
 import LayoutWithTopNavbar from "../layout/LayoutWithTopNavbar";
 import { useAuthContext } from "../state/Authcontext";
-import { BookResponse } from "../types/myTypes";
 import PageWithLayoutType from "../types/pageWithLayout";
-import { definitions } from "../types/supabase";
 
 const Home: React.FunctionComponent = () => {
-  const [book, setBook] = useState<BookResponse | undefined>(undefined);
   const { profile } = useAuthContext();
   const { user, error } = useUser();
-  const c1 = "west";
-  const c2 = "big";
-  // array of strings but in readonly mode
-  const namesArr = " india  cooperation";
 
-  // convert namesArr into string literal union type
-  type names = typeof namesArr[number]; // "John" | "Lily" | "Roy"
-
-  const supabaseTest = async () => {
-    const { data, error } = await supabaseClient
-      .from("books_articles")
-      .select("article_title")
-      .textSearch("article_title", namesArr, { type: "websearch", config: "english" });
-    if (error) {
-      console.error("supabasetest error is " + error.message.toUpperCase);
-    }
-    if (data) {
-      console.log("supabasetest data is " + JSON.stringify(data));
-    }
-  };
   // const supabaseTest = async () => {
   //   const { data, error } = await supabaseClient
   //     .from<definitions["books_article_sharing"]>("books_article_sharing")
@@ -55,58 +30,24 @@ const Home: React.FunctionComponent = () => {
   //   }
   // };
 
-  useEffect(() => {
-    supabaseTest();
-  }, []);
-
-  const ROUTE_POST_ID = "/notes/[bookid]";
-  const navigateTo = (bookid: string) => {
-    router.push({
-      pathname: ROUTE_POST_ID,
-      query: { bookid },
-    });
-  };
-
-  useEffect(() => {
-    if (book) {
-      sessionStorage.setItem("book", JSON.stringify(book));
-      sessionStorage.setItem("selected-subheading", "undefined");
-      sessionStorage.setItem("selected-syllabus", "undefined");
-      navigateTo(book.id.toString());
-    }
-  }, [book]);
-
-  const updateBookProps = (x: BookResponse | undefined) => {
-    setBook(x);
-  };
+  // useEffect(() => {
+  //   supabaseTest();
+  // }, []);
 
   return (
     <Box minW="full">
-      {/* <FrequentHelp/> */}
-      {/* <GotoQuestion /> */}
       <Landing />
       <Container maxW={"6xl"} mb={{ base: "64", lg: "80" }} borderColor="gray.50">
-        {/* <SelectSyllabus /> */}
         {user && profile?.role === "ADMIN" && (
           <Box m="8" w="full">
-
             <Link href="/manageSyllabus">
               <a>Manage syllabus</a>
-            </Link>
-            <Link href="/dna">
-              <a>Editable Current Affair 22-23</a>
             </Link>
 
             <UserTrack />
           </Box>
         )}{" "}
       </Container>
-      {/* <CtaWithAnnotation /> */}
-      {/* <EditorFeatures />
-      <CtaWithVideo />
-      <QuestionDemo /> */}
-      {/* <SplitScreenWithImage /> */}
-      {/* <TwoColumn /> */}
     </Box>
   );
 };

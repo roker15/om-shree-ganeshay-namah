@@ -28,7 +28,7 @@ const SuneditorForNotesMaking: React.FunctionComponent<SuneditorForNotesMakingPr
 }) => {
   const [editorMode, setEditorMode] = React.useState("READ");
 
-  const [fontSize, setFontSize] = React.useState("font-family: arial; font-size: 14px;");
+  const [fontSize, setFontSize] = React.useState("font-family: arial; font-size: 16px;");
   const { article, isError, isLoading } = useGetArticleById(article1);
   const editor = useRef<SunEditorCore>();
   const getSunEditorInstance = (sunEditor: SunEditorCore) => {

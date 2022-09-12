@@ -37,21 +37,13 @@ export default function CallToActionWithVideo() {
     });
   };
   return (
-    // <Box w="100wh" bg="red">
     <Container maxW={"6xl"} px={{ base: "2", md: "8" }}>
       {!user && (
         <Flex justifyContent={"end"}>
           {" "}
-          {/* <br /> */}
           <LoginCard redirect={BASE_URL} />
         </Flex>
       )}
-      {/* <Stack
-        // alignItems={"center"}
-        spacing={{ base: 8, md: 10 }}
-        py={{ base: "16", md: 24 }}
-        direction={{ base: "column", md: "row" }}
-      > */}
       <Heading
         fontWeight={"normal"}
         fontSize={{ base: "xl", sm: "2xl", lg: "xl" }}
@@ -60,8 +52,6 @@ export default function CallToActionWithVideo() {
         mt="2"
         color="gray.600"
         borderRadius={"base"}
-        // transform={"rotate(-20deg)"}
-        // mb="24"
       >
         <Text as={"span"}></Text>Jionote is an{" "}
         <Text as="span" fontWeight="bold">
@@ -87,21 +77,10 @@ export default function CallToActionWithVideo() {
         <br />
         <br />
 
-        {/* <Box> */}
         <SelectSyllabus />
-        {/* </Box> */}
         <br />
         <br />
         <Text color={"gray.600"}>7000+ UPSC aspirants, 25000+ students using Jionote</Text>
-        {/* <Text fontWeight={"extrabold"} fontSize={{ base: "2xl", sm: "3xl", lg: "3xl" }}>
-          Not Sure How to Use?{" "}
-          <Link isExternal color="teal.400" href="https://youtu.be/XD3Rr1nLTkY">
-            Watch Demo Video
-          </Link>
-        </Text> */}
-        {/* <Stack spacing={{ base: 4, sm: 6 }} direction={{ base: "column", sm: "row" }}> */}
-
-        {/* </Stack> */}
         {/* <Box>
           <Flex
             alignItems={"center"}
@@ -149,11 +128,6 @@ export default function CallToActionWithVideo() {
           </Flex>
         </Box> */}
       </Stack>
-      {/* <Flex flex={1} justify={"center"} align={"center"} position={"relative"} w={"full"}>
-          <SelectSyllabus />
-        </Flex> */}
-      {/* </Stack> */}
     </Container>
-    //  </Box>
   );
 }

@@ -1,5 +1,5 @@
 import { Avatar, Box, Flex, Link, Text, VStack } from "@chakra-ui/react";
-import { groupBy } from "lodash";
+// import { groupBy } from "lodash";
 import React, { useState } from "react";
 import {
   SharedNotesList,

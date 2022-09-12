@@ -29,7 +29,7 @@ const SuneditorForNotesMaking: React.FunctionComponent<SuneditorForNotesMakingPr
 }) => {
   const [editorMode, setEditorMode] = React.useState("READ");
   // const [isAutosaveOn, setIsAutosaveOn] = React.useState(false); // for autosave to work
-  const [fontSize, setFontSize] = React.useState("font-family: arial; font-size: 14px;");
+  const [fontSize, setFontSize] = React.useState("font-family: arial; font-size: 16px;");
   const { profile } = useAuthContext();
   const editor = useRef<SunEditorCore>();
   const getSunEditorInstance = (sunEditor: SunEditorCore) => {

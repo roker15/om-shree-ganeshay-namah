@@ -1,24 +1,12 @@
 import {
-  Button,
-  Center,
-  Container,
-  createIcon,
-  Divider,
-  Flex,
-  Heading,
-  Icon,
-  IconProps,
-  Stack,
-  StackDivider,
-  Text,
-  VStack,
+  Container, Flex,
+  Heading, Stack, Text,
+  VStack
 } from "@chakra-ui/react";
 import { useUser } from "@supabase/auth-helpers-react";
 import router from "next/router";
 import { useEffect, useState } from "react";
-import { BASE_URL } from "../../lib/constants";
 import { BookResponse } from "../../types/myTypes";
-import { LoginCard } from "../LoginCard";
 import BookFilter from "../syllabus/BookFilter";
 
 export default function CallToActionWithVideo() {
