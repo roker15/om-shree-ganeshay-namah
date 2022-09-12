@@ -347,7 +347,7 @@ const QuestionBankEditor: React.FunctionComponent<PropsQuestionBankEditor> = ({ 
         <EditorStyle title={value === "READ" ? "READ" : "EDIT"}>
           <Box ml={{ base: "2", md: "10" }} p="0.5" bg="blue.50" borderRadius={"5px"}>
             <SunEditor
-              setDefaultStyle="font-family: arial; font-size: 14px;"
+              setDefaultStyle="font-family: arial; font-size: 16px;"
               // defaultValue={answer}
               getSunEditorInstance={getSunEditorInstance}
               hideToolbar={value === "READ" ? true : false}
