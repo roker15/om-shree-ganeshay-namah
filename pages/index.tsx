@@ -44,7 +44,7 @@ const Home: React.FunctionComponent = () => {
             <Link href="/manageSyllabus">
               <a>Manage syllabus</a>
             </Link>
-            <DesktopMenu />
+            
             <UserTrack />
           </Box>
         )}{" "}

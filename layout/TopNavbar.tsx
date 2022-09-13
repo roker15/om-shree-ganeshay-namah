@@ -26,6 +26,7 @@ import { useRouter } from "next/router";
 import { ReactNode, useEffect, useState } from "react";
 import { FaTelegram } from "react-icons/fa";
 import { FiChevronDown } from "react-icons/fi";
+import DesktopMenu from "../components/chakraTemplate/Customdrawer";
 import { CustomDrawerWithButton } from "../components/CustomChakraUi";
 import BookFilter from "../components/syllabus/BookFilter";
 import { useAuthContext } from "../state/Authcontext";
@@ -234,9 +235,10 @@ export function GotoQuestion() {
         </Link>
       </Text>
       <Box>
-        <CustomDrawerWithButton>
+        {/* <CustomDrawerWithButton>
           <BookFilter setParentProps={updateBookProps}></BookFilter>
-        </CustomDrawerWithButton>
+        </CustomDrawerWithButton> */}
+      <DesktopMenu/>
       </Box>
     </Flex>
   );
