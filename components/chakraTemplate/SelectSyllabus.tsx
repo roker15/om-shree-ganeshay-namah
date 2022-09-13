@@ -1,8 +1,4 @@
-import {
-  Container, Flex,
-  Heading, Stack, Text,
-  VStack
-} from "@chakra-ui/react";
+import { Container, Flex, Heading, Stack, Text, VStack } from "@chakra-ui/react";
 import { useUser } from "@supabase/auth-helpers-react";
 import router from "next/router";
 import { useEffect, useState } from "react";
@@ -19,7 +15,7 @@ export default function CallToActionWithVideo() {
       query: { bookid },
     });
   };
-
+ 
   useEffect(() => {
     if (book) {
       sessionStorage.setItem("book", JSON.stringify(book));
@@ -33,7 +29,7 @@ export default function CallToActionWithVideo() {
     setBook(x);
   };
   return (
-    <Container maxW={"4xl"} bg="gray.50" p="4">
+    <Container maxW={"4xl"} bg="gray.100" p="4">
       <Stack
         // align={"center"}
         spacing={{ base: 8, md: 10 }}
@@ -41,7 +37,6 @@ export default function CallToActionWithVideo() {
         direction={{ base: "column", md: "column" }}
       >
         <Stack flex={1} spacing={{ base: 5, md: 10 }}>
-        
           <Heading lineHeight={1.1} fontWeight={"extrabold"} fontSize={{ base: "xl", sm: "2xl", lg: "3xl" }}>
             <Text
               as={"span"}

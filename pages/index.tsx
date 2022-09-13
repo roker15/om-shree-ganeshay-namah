@@ -2,6 +2,7 @@ import { Box, Container } from "@chakra-ui/react";
 import { useUser } from "@supabase/auth-helpers-react";
 import Link from "next/link";
 import React from "react";
+import DesktopMenu from "../components/chakraTemplate/Customdrawer";
 import Landing from "../components/chakraTemplate/Landing";
 import { UserTrack } from "../components/dashboard/UserTrack";
 import LayoutWithTopNavbar from "../layout/LayoutWithTopNavbar";
@@ -43,7 +44,7 @@ const Home: React.FunctionComponent = () => {
             <Link href="/manageSyllabus">
               <a>Manage syllabus</a>
             </Link>
-
+            <DesktopMenu />
             <UserTrack />
           </Box>
         )}{" "}

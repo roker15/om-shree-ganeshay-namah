@@ -46,7 +46,7 @@ export default function CallToActionWithVideo() {
       )}
       <Heading
         fontWeight={"normal"}
-        fontSize={{ base: "xl", sm: "2xl", lg: "xl" }}
+        fontSize={{ base: "lg", sm: "xl", lg: "xl" }}
         bg="gray.100"
         p="4"
         mt="2"

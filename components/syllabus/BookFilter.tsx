@@ -1,10 +1,9 @@
 import { Box, Radio, RadioGroup, Select, Stack, Text } from "@chakra-ui/react";
 import router from "next/router";
-import React, { memo, useEffect, useState } from "react";
+import React, { useEffect, useState } from "react";
 import { useGetBooks, useGetSyllabusByBookId } from "../../customHookes/networkHooks";
 import { useNoteContext } from "../../state/NoteContext";
 import { BookResponse } from "../../types/myTypes";
-import Syllabus from "./Syllabus";
 
 const BookFilter: React.FC<{ setParentProps: (x: BookResponse | undefined) => void }> = ({ setParentProps }) => {
   const categories = [
@@ -31,6 +30,10 @@ const BookFilter: React.FC<{ setParentProps: (x: BookResponse | undefined) => vo
   //     navigateTo(bookid);
   //   }
   // }, [bookResponse, bookid]);
+  
+ 
+
+
   useEffect(() => {
     setClassList(
       data
@@ -78,7 +81,7 @@ const BookFilter: React.FC<{ setParentProps: (x: BookResponse | undefined) => vo
         <Stack direction={{ base: "column", md: "column", lg: "row" }}>
           {categories.map((x) => {
             return (
-              <Radio key={x.id} value={x.id} colorScheme="brand">
+              <Radio key={x.id} value={x.id} colorScheme="blue" borderColor= 'gray.500'>
                 <Text casing="capitalize">{x.name}</Text>
               </Radio>
             );
