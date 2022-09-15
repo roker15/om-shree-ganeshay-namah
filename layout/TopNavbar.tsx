@@ -231,7 +231,7 @@ export function GotoQuestion() {
         display={router.pathname === "/reviseCurrentAffair" ? "none" : "block"}
       >
         <Link href="/reviseCurrentAffair">
-          <a>Current Affairs</a>
+          <a>Search Notes</a>
         </Link>
       </Text>
       <Box>
