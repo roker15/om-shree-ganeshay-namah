@@ -111,6 +111,7 @@ function SuneditorSimple(props: {
           katex: katex,
           height: "100%",
           colorList: colors,
+          imageUploadUrl: `${BASE_URL}/api/uploadImage`,
           buttonList: sunEditorButtonList,
           resizingBar: false,
           hideToolbar: false,
