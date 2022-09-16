@@ -14,7 +14,11 @@ export type SharedNotesList = {
   shared_by_userid: string;
   shared_by: string;
 };
-
+const cacheOptions = {
+  revalidateIfStale: true,
+  revalidateOnFocus: false,
+  revalidateOnReconnect: false,
+};
 export function useGetBooks(bookId?: number) {
   const { data, error } = useSWR(
     bookId == undefined ? null : ["/publicationId", bookId],
@@ -27,11 +31,7 @@ export function useGetBooks(bookId?: number) {
       subject_fk(id,subject_name)`
         )
         .eq("publication_fk", bookId),
-    {
-      revalidateIfStale: true,
-      revalidateOnFocus: false,
-      revalidateOnReconnect: false,
-    }
+    cacheOptions
   );
   return {
     // sharedPost_SUP_ERR:data?.error,
@@ -48,11 +48,7 @@ export function useGetSyllabusByBookId(bookId?: number) {
       await supabaseClient.rpc("getSyllabusFromBookIdRightJoinToGetAllHeading", {
         bookid: bookId,
       }),
-    {
-      revalidateIfStale: false,
-      revalidateOnFocus: false,
-      revalidateOnReconnect: false,
-    }
+    cacheOptions
   );
   return {
     // sharedPost_SUP_ERR:data?.error,
@@ -79,11 +75,6 @@ export function useGetPublicNotesListBySubheading(subheadingId?: number) {
       .eq("ispublic", true)
       .neq("owned_by", profile?.id as string);
 
-  const cacheOptions = {
-    revalidateIfStale: true,
-    revalidateOnFocus: false,
-    revalidateOnReconnect: false,
-  };
   const { data, error } = useSWR(
     subheadingId == undefined ? null : [`/get-public-notes-list-by-subheading/${subheadingId}`],
     fetcher,
@@ -113,11 +104,7 @@ export function useGetSharedNotesListBySubheading(subheadingId: number | undefin
         .eq("books_subheadings_fk", subheadingId)
         .eq("shared_with", userid),
 
-    {
-      revalidateIfStale: true,
-      revalidateOnFocus: false,
-      revalidateOnReconnect: false,
-    }
+    cacheOptions
   );
   return {
     // sharedPost_SUP_ERR:data?.error,
@@ -136,11 +123,7 @@ export function useGetUserArticles(subheadingId: number | undefined, userid: str
         .select(`id,updated_at,article_title,current_affair_tags`)
         .eq("created_by", userid)
         .eq("books_subheadings_fk", subheadingId),
-    {
-      revalidateIfStale: true,
-      revalidateOnFocus: false,
-      revalidateOnReconnect: false,
-    }
+    cacheOptions
   );
   return {
     // sharedPost_SUP_ERR:data?.error,
@@ -161,11 +144,7 @@ export function useGetUserArticless(subheadingId: number | undefined, userid: st
         .select(`*`)
         .eq("created_by", userid)
         .eq("books_subheadings_fk", subheadingId),
-    {
-      revalidateIfStale: true,
-      revalidateOnFocus: false,
-      revalidateOnReconnect: false,
-    }
+    cacheOptions
   );
   return {
     // sharedPost_SUP_ERR:data?.error,
@@ -185,11 +164,7 @@ export function useGetUserArticlesFromTags(userid: string | undefined, tagsArray
         .select(`id,updated_at,article_title`, { count: "exact" })
         .eq("created_by", userid)
         .contains("current_affair_tags", tagsArray as number[]),
-    {
-      revalidateIfStale: true,
-      revalidateOnFocus: false,
-      revalidateOnReconnect: false,
-    }
+    cacheOptions
   );
 
   if (tagsArray && tagsArray.length === 0) {
@@ -222,7 +197,7 @@ export function useGetArticleById(id: number) {
       .limit(1)
       .single();
 
-  const { data, error } = useSWR(`/api/usergetarticlebyid/${id}`, fetcher);
+  const { data, error } = useSWR(`/api/usergetarticlebyid/${id}`, fetcher, cacheOptions);
 
   return {
     article: data?.data,
@@ -259,7 +234,8 @@ export function useGetCurrentAffairs(isAdminNotes: boolean, subheadingId: number
       : subheadingId && !isAdminNotes && !userId
       ? null
       : `/api/useGetCurrentAffairs/${isAdminNotes}/${subheadingId}/${userId}`,
-    isAdminNotes ? fetcher1 : fetcher2
+    isAdminNotes ? fetcher1 : fetcher2,
+    cacheOptions
   );
 
   return {
@@ -282,7 +258,11 @@ export function useSearchCurrentAffairs(searchKey: string) {
 
   // .limit(10);
 
-  const { data, error, mutate } = useSWR(searchKey === "" ? null : `/api/useSearchCurrentAffairs/${searchKey}`, fetcher);
+  const { data, error, mutate } = useSWR(
+    searchKey === "" ? null : `/api/useSearchCurrentAffairs/${searchKey}`,
+    fetcher,
+    cacheOptions
+  );
 
   return {
     data: data?.data,
