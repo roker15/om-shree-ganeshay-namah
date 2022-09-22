@@ -1,6 +1,7 @@
-import { supabaseClient } from "@supabase/auth-helpers-nextjs";
+// import { supabaseClient } from "@supabase/auth-helpers-nextjs";
 import { useUser } from "@supabase/auth-helpers-react";
 import useSWR from "swr";
+import { supabaseClient } from "../lib/supabaseClient";
 import { useAuthContext } from "../state/Authcontext";
 import { useNoteContext } from "../state/NoteContext";
 import { BookResponse } from "../types/myTypes";
@@ -24,7 +25,7 @@ export function useGetBooks(bookId?: number) {
     bookId == undefined ? null : ["/publicationId", bookId],
     async () =>
       await supabaseClient
-        .from<BookResponse>("books")
+        .from("books")
         .select(
           `id,book_name,
       class_fk(id,class),
@@ -46,7 +47,7 @@ export function useGetSyllabusByBookId(bookId?: number) {
     bookId == undefined ? null : [`/use-get-syllabus-by-bookid/${bookId}`],
     async () =>
       await supabaseClient.rpc("getSyllabusFromBookIdRightJoinToGetAllHeading", {
-        bookid: bookId,
+        bookid: bookId!,
       }),
     cacheOptions
   );
@@ -69,7 +70,7 @@ export function useGetPublicNotesListBySubheading(subheadingId?: number) {
     //   })
     //   .neq("owned_by_userid", profile?.id as string);
     await supabaseClient
-      .from<definitions["books_article_sharing"]>("books_article_sharing")
+      .from("books_article_sharing")
       .select(`*`)
       .eq("books_subheadings_fk", subheadingId)
       .eq("ispublic", true)
@@ -99,7 +100,7 @@ export function useGetSharedNotesListBySubheading(subheadingId: number | undefin
       //   sharedwith: userid,
       // })
       await supabaseClient
-        .from<definitions["books_article_sharing"]>("books_article_sharing")
+        .from("books_article_sharing")
         .select(`*`)
         .eq("books_subheadings_fk", subheadingId)
         .eq("shared_with", userid),
@@ -119,7 +120,7 @@ export function useGetUserArticles(subheadingId: number | undefined, userid: str
     subheadingId == undefined || userid === undefined ? null : [`/get-user-articles/${subheadingId}/${userid}`],
     async () =>
       await supabaseClient
-        .from<definitions["books_articles"]>("books_articles")
+        .from("books_articles")
         .select(`id,updated_at,article_title,current_affair_tags`)
         .eq("created_by", userid)
         .eq("books_subheadings_fk", subheadingId),
@@ -140,7 +141,7 @@ export function useGetUserArticless(subheadingId: number | undefined, userid: st
     subheadingId == undefined || userid === undefined ? null : [`/get-user-articles/${subheadingId}/${userid}`],
     async () =>
       await supabaseClient
-        .from<definitions["books_articles"]>("books_articles")
+        .from("books_articles")
         .select(`*`)
         .eq("created_by", userid)
         .eq("books_subheadings_fk", subheadingId),
@@ -160,7 +161,7 @@ export function useGetUserArticlesFromTags(userid: string | undefined, tagsArray
     userid === undefined || tagsArray!.length === 0 ? null : [`/get-user-articles-bytags/${userid}/${tagsArray}`],
     async () =>
       await supabaseClient
-        .from<definitions["books_articles"]>("books_articles")
+        .from("books_articles")
         .select(`id,updated_at,article_title`, { count: "exact" })
         .eq("created_by", userid)
         .contains("current_affair_tags", tagsArray as number[]),
@@ -190,8 +191,8 @@ export function useGetUserArticlesFromTags(userid: string | undefined, tagsArray
 export function useGetArticleById(id: number) {
   const fetcher = async () =>
     await supabaseClient
-      .from<definitions["books_articles"]>("books_articles")
-      .throwOnError() // supabase does not throw error by default, swr error works only when fetcher throws it.
+      .from("books_articles")
+      // .throwOnError() // supabase does not throw error by default, swr error works only when fetcher throws it.
       .select(`*`)
       .eq("id", id)
       .limit(1)
@@ -208,7 +209,7 @@ export function useGetArticleById(id: number) {
 export function useGetCurrentAffairs(isAdminNotes: boolean, subheadingId: number, userId: string) {
   const fetcher1 = async () =>
     await supabaseClient
-      .from<any>("books_articles")
+      .from("books_articles")
       .select("*, created_by!inner(*)")
 
       // .or("role.eq.ADMIN, role.eq.MODERATOR", { foreignTable: "profiles" })
@@ -220,7 +221,7 @@ export function useGetCurrentAffairs(isAdminNotes: boolean, subheadingId: number
 
   const fetcher2 = async () =>
     await supabaseClient
-      .from<definitions["books_articles"]>("books_articles")
+      .from("books_articles")
       .select("*, created_by!inner(*)")
 
       .match({ created_by: userId })
@@ -250,8 +251,8 @@ export function useSearchCurrentAffairs(searchKey: string) {
   const { user } = useUser();
   const fetcher = async () =>
     await supabaseClient
-      .from<definitions["books_articles"]>("books_articles")
-      .throwOnError()
+      .from("books_articles")
+      // .throwOnError()
       .select(`id,updated_at,article_title`, { count: "exact" })
       .textSearch("article_title", searchKey, { type: "websearch", config: "english" })
       .eq("created_by", user?.id);

@@ -1,7 +1,6 @@
 import { Button } from "@chakra-ui/button";
-import { LinkIcon, PhoneIcon } from "@chakra-ui/icons";
 import { Input } from "@chakra-ui/input";
-import { Box, Divider, Flex, Spacer, Stack } from "@chakra-ui/layout";
+import { Box, Divider, Stack } from "@chakra-ui/layout";
 import {
   AlertDialog,
   AlertDialogBody,
@@ -11,8 +10,6 @@ import {
   AlertDialogOverlay,
   Badge,
   Center,
-  Checkbox,
-  Circle,
   FormControl,
   FormErrorMessage,
   FormLabel,
@@ -39,15 +36,17 @@ import { MdDelete, MdLink, MdLinkOff, MdMode } from "react-icons/md";
 import styled from "styled-components";
 import "suneditor/dist/css/suneditor.min.css"; // Import Sun Editor's CSS File
 // now recommend to always use the mutate returned from the useSWRConfig hook:
-import useSWR, { mutate } from "swr";
+import { mutate } from "swr";
 import { useGetExamPapers, useGetQuestionsByPaperidAndYear, useSubheadingByPaperId } from "../customHookes/useUser";
 import { QuestionBank, SubheadingQuestionLink } from "../types/myTypes";
 // import Suneditor from "../components/Suneditor";
-import { supabaseClient } from "@supabase/auth-helpers-nextjs";
+// import { supabaseClient } from "@supabase/auth-helpers-nextjs";
 import { useUser } from "@supabase/auth-helpers-react";
-import { definitions } from "../types/supabase";
-import { BASE_URL, sunEditorButtonList } from "../lib/constants";
 import LayoutWithTopNavbar from "../layout/LayoutWithTopNavbar";
+import { BASE_URL, sunEditorButtonList } from "../lib/constants";
+import { Database } from "../lib/database.types";
+import { supabaseClient } from "../lib/supabaseClient";
+import { useAuthContext } from "../state/Authcontext";
 import PageWithLayoutType from "../types/pageWithLayout";
 
 const SunEditor = dynamic(() => import("suneditor-react"), {
@@ -74,8 +73,9 @@ const CreateQuestionBank: React.FC = () => {
   const [shouldfetch, setShouldfetch] = useState(false);
   const [isEditMode, setIsEditMode] = useState(false);
   const { user, error } = useUser();
+  const { profile } = useAuthContext();
   const [userId, setUserId] = useState("");
-  const [currentEditQuestion, setCurrentEditQuestion] = useState<QuestionBank>();
+  const [currentEditQuestion, setCurrentEditQuestion] = useState<Database["public"]["Tables"]["questionbank"]["Row"]>();
   const { examPapers, isLoading, isError } = useGetExamPapers(parseInt(examId));
   const [loading, setLoading] = useState(false);
   const {
@@ -94,22 +94,17 @@ const CreateQuestionBank: React.FC = () => {
     }
   }, [user]);
   const signUpUser = async (email: string, role: string) => {
-    let { user, error } = await supabaseClient.auth.signIn(
-      {
-        provider: "google",
-      },
-      {
-        // redirectTo: `${BASE_URL}/createQuestionBank`,
-        redirectTo: "https://www.jionote.com/createQuestionBank",
-      }
-    );
+    let { data, error } = await supabaseClient.auth.signInWithOAuth({
+      provider: "google",
+      options: { redirectTo: "https://www.jionote.com/createQuestionBank" },
+    });
   };
 
   const onSubmit: SubmitHandler<IFormInput> = async (values) => {
     setLoading(true);
     if (!isEditMode) {
       // window.alert("value of check box is " + values.searchKeys + " " + values.year);
-      const { data, error } = await supabaseClient.from<definitions["questionbank"]>("questionbank").insert({
+      const { data, error } = await supabaseClient.from("questionbank").insert({
         paper_id_new: values.paperId,
         question_content: values.questionContent,
         search_keys: values.searchKeys,
@@ -125,7 +120,7 @@ const CreateQuestionBank: React.FC = () => {
       mutate([`/questions/${paperId}/${year}`]);
     } else {
       const { data, error } = await supabaseClient
-        .from<definitions["questionbank"]>("questionbank")
+        .from("questionbank")
         .update({
           paper_id_new: values.paperId,
           question_content: values.questionContent,
@@ -165,7 +160,7 @@ const CreateQuestionBank: React.FC = () => {
     return () => subscription.unsubscribe();
   }, [watch]);
 
-  const handleQuestionEdit = (e: QuestionBank) => {
+  const handleQuestionEdit = (e: Database["public"]["Tables"]["questionbank"]["Row"]) => {
     // let { data, error } = await supabaseClient.rpc("getsyllabusd", {
     //   paper_idd:49,
     // });
@@ -179,20 +174,20 @@ const CreateQuestionBank: React.FC = () => {
     console.log("editing", e.id, e.question_content);
   };
   const handleQuestionDelete = async (e: QuestionBank) => {
-    const { data, error } = await supabaseClient.from<QuestionBank>("questionbank").delete().eq("id", e.id);
+    const { data, error } = await supabaseClient.from("questionbank").delete().eq("id", e.id);
     mutate([`/questions/${paperId}/${year}`]);
   };
 
   useEffect(() => {
     if (isEditMode) {
-      setValue("questionContent", currentEditQuestion?.question_content);
-      setValue("year", currentEditQuestion?.year);
-      setValue("sequence", currentEditQuestion?.sequence);
-      setValue("searchKeys", currentEditQuestion?.search_keys);
-      setValue("remark", currentEditQuestion?.remark);
+      setValue("questionContent", currentEditQuestion?.question_content!);
+      setValue("year", currentEditQuestion?.year!);
+      setValue("sequence", currentEditQuestion?.sequence!);
+      setValue("searchKeys", currentEditQuestion?.search_keys!);
+      setValue("remark", currentEditQuestion?.remark!);
     } else {
       setValue("questionContent", "");
-      setValue("year", currentEditQuestion?.year);
+      setValue("year", currentEditQuestion?.year!);
       setValue("sequence", undefined);
       setValue("searchKeys", "");
       setValue("remark", "");
@@ -240,8 +235,8 @@ const CreateQuestionBank: React.FC = () => {
         <RadioGroup
           ml="4"
           onChange={(e) => {
-            setPaperId(undefined)
-            setYear(undefined)
+            setPaperId(undefined);
+            setYear(undefined);
             setExamId(e);
           }}
           value={examId}
@@ -404,7 +399,7 @@ const CreateQuestionBank: React.FC = () => {
         )}
 
         {questions && questions.length != 0 ? (
-          (questions as QuestionBank[])
+          (questions as Database["public"]["Tables"]["questionbank"]["Row"][])
             .sort((a, b) => a.sequence! - b.sequence!)
             .map((x) => {
               return (
@@ -431,7 +426,7 @@ const CreateQuestionBank: React.FC = () => {
                   </HStack>
                   <EditorStyle>
                     <SunEditor
-                      setContents={x.question_content}
+                      setContents={x.question_content!}
                       hideToolbar={true}
                       readOnly={true}
                       disable={true}
@@ -483,32 +478,30 @@ const CreateQuestionBank: React.FC = () => {
     const [isLoading, setIsLoading] = useState(false);
     const handleLinkSyllabusButtonClick = async (x: number) => {
       const { data, error } = await supabaseClient
-        .from<SubheadingQuestionLink>("subheadingquestionlink")
+        .from("subheadingquestionlink")
         .select(
           `
             id,
             questionbank_id,
             subheading_id,
-            heading_id
+            heading_id,created_by
           
    `
         )
         .eq("questionbank_id", x);
-      console.log("questionlink", data);
       if (data) {
-        setQlink(data);
-        console.log("qlinkmmmm", data);
+        // setQlink(data);
       }
       onOpen();
       // { refreshInterval: 1000 }
     };
     const handlelinkClick = async (questionId: number, syllabusId: number, headingId: number) => {
       setIsLoading(true);
-      const { data, error } = await supabaseClient.from<SubheadingQuestionLink>("subheadingquestionlink").insert({
+      const { data, error } = await supabaseClient.from("subheadingquestionlink").insert({
         questionbank_id: questionId,
         subheading_id: syllabusId,
         heading_id: headingId,
-        created_by: supabaseClient.auth.user()?.id,
+        created_by: profile?.id,
       });
       if (data && data[0]) {
         setQlink([...qlink, data[0]]);
@@ -520,7 +513,7 @@ const CreateQuestionBank: React.FC = () => {
     const handleunlinkClick = async (questionId: number, syllabusId: number) => {
       setIsLoading(true);
       const { data, error } = await supabaseClient
-        .from<SubheadingQuestionLink>("subheadingquestionlink")
+        .from("subheadingquestionlink")
         .delete()
         .match({ questionbank_id: questionId, subheading_id: syllabusId });
       if (data && data[0]) {
@@ -621,7 +614,7 @@ export default CreateQuestionBank;
 
 interface AlertdialogueProps {
   handleDelete: (e: any) => Promise<void>;
-  x: QuestionBank;
+  x: Database["public"]["Tables"]["questionbank"]["Row"];
   dialogueHeader: string;
   isDisabled: boolean;
 }

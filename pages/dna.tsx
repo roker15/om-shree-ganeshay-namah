@@ -36,7 +36,7 @@ import {
   VStack,
   Wrap,
 } from "@chakra-ui/react";
-import { supabaseClient } from "@supabase/auth-helpers-nextjs";
+// import { supabaseClient } from "@supabase/auth-helpers-nextjs";
 import katex from "katex";
 import "katex/dist/katex.min.css";
 import dynamic from "next/dynamic";
@@ -59,19 +59,22 @@ import { elog, sentenseCase } from "../lib/mylog";
 import { useAuthContext } from "../state/Authcontext";
 import { BookResponse, BookSyllabus } from "../types/myTypes";
 import PageWithLayoutType from "../types/pageWithLayout";
+import { supabaseClient } from "../lib/supabaseClient";
+import { Database } from "../lib/database.types";
+
 const SunEditor = dynamic(() => import("suneditor-react"), {
   ssr: false,
 });
 
 function SuneditorSimple(props: {
-  article: definitions["books_articles"];
+  article: Database["public"]["Tables"]["books_articles"]["Insert"];
   content: string | undefined;
   canCopy: boolean;
   userrole: string;
   isAdminNotes: boolean;
   language: "HINDI" | "ENG";
   saveCallback: (id: number, content: string, language: "ENG" | "HINDI") => void;
-  copyCallback: (x: definitions["books_articles"]) => void;
+  copyCallback: (x: Database["public"]["Tables"]["books_articles"]["Insert"]) => void;
 }) {
   const [readMode, setReadMode] = useState<boolean>(true);
   return (
@@ -105,7 +108,7 @@ function SuneditorSimple(props: {
         readOnly={readMode}
         setOptions={{
           callBackSave(contents, isChanged) {
-            props.saveCallback(props.article.id, contents, props.language);
+            props.saveCallback(props.article.id!, contents, props.language);
           },
           mode: "classic",
           katex: katex,
@@ -148,17 +151,17 @@ const CurrentAffair: React.FC = () => {
   const changeParentProps = () => {
     mutate();
   };
-  const handleCopyNotes = async (d: definitions["books_articles"]) => {
+  const handleCopyNotes = async (d: Database["public"]["Tables"]["books_articles"]["Insert"]) => {
     if (!user) {
       customToast({ title: "Please Login to use this feature", status: "error", isUpdating: false });
       return;
     }
-    const { data, error } = await supabaseClient.from<definitions["books_articles"]>("books_articles").insert([
+    const { data, error } = await supabaseClient.from("books_articles").insert([
       {
         article_title: d.article_title,
         article_english: d.article_english,
         article_hindi: d.article_hindi,
-        created_by: profile?.id,
+        created_by: profile?.id!,
         books_subheadings_fk: d.books_subheadings_fk,
         sequence: d.sequence,
         current_affair_tags: d.current_affair_tags,
@@ -178,7 +181,7 @@ const CurrentAffair: React.FC = () => {
   };
   const saveArticle = async (id: number, content: string, language: string) => {
     const { data, error } = await supabaseClient
-      .from<definitions["books_articles"]>("books_articles")
+      .from("books_articles")
       .update(language === "ENG" ? { article_english: content } : { article_hindi: content })
       .eq("id", id);
     if (error) {
@@ -190,7 +193,7 @@ const CurrentAffair: React.FC = () => {
     }
   };
   const deleteArticle = async (id: number): Promise<void> => {
-    const { data, error } = await supabaseClient.from<definitions["books_articles"]>("books_articles").delete().eq("id", id);
+    const { data, error } = await supabaseClient.from("books_articles").delete().eq("id", id);
     if (error) {
       elog("MyNotes->deleteArticle", error.message);
       return;
@@ -412,7 +415,7 @@ const CurrentAffair: React.FC = () => {
 export default CurrentAffair;
 
 type ArticleFormProps = {
-  tags?: unknown[] | undefined;
+  tags?: number[] | undefined;
   subjectId: number | undefined;
   subheadingid: number | undefined;
   articleId?: number;
@@ -428,7 +431,7 @@ type ArticleFormProps = {
 type Inputs = {
   articleTitle: string;
   sequence: number;
-  tags: unknown[] | undefined;
+  tags: number[] | undefined;
   questionType: "MODEL" | "PREV" | "NONE" | undefined;
   question_year: number | undefined;
   isQuestion: boolean;
@@ -473,11 +476,11 @@ const ArticleForm: React.FC<ArticleFormProps> = ({
   const onSubmit: SubmitHandler<Inputs> = async (d) => {
     setIsLoading(true);
     if (formMode === "CREATING") {
-      const { data, error } = await supabaseClient.from<definitions["books_articles"]>("books_articles").insert([
+      const { data, error } = await supabaseClient.from("books_articles").insert([
         {
           article_title: d.articleTitle,
-          created_by: profile?.id,
-          books_subheadings_fk: subheadingid,
+          created_by: profile?.id!,
+          books_subheadings_fk: subheadingid!,
           sequence: d.sequence,
           current_affair_tags: d.tags ? d.tags : [],
           question_type: d.questionType ? d.questionType : "NONE",
@@ -492,7 +495,7 @@ const ArticleForm: React.FC<ArticleFormProps> = ({
 
     if (formMode === "EDITING") {
       const { data, error } = await supabaseClient
-        .from<definitions["books_articles"]>("books_articles")
+        .from("books_articles")
         .update({
           // id: articleId,
           article_title: d.articleTitle,

@@ -15,13 +15,13 @@ export const SunEditor = dynamic(() => import("suneditor-react"), {
 });
 export type Profile = {
   id: string;
-  avatar_url: string;
-  username: string;
-  website: string;
-  updated_at: string;
-  role: string;
-  email: string;
-  last_login: string;
+  updated_at: string | null;
+  username: string | null;
+  avatar_url: string | null;
+  website: string | null;
+  role: string | null;
+  email: string | null;
+  last_login: string | null;
 };
 export const sunEditorButtonList = [
   [
@@ -165,7 +165,7 @@ export const currentAffairTags: { id: number; tag: string }[] = [
   { id: 55, tag: "Security forces and agencies" },
 
   { id: 56, tag: "Disaster Management ⭐" },
-  
+
   { id: 501, tag: "Ethics ⭐" },
 
   { id: 57, tag: "Miscellaneous ⭐" },
@@ -176,4 +176,3 @@ export const currentAffairTags: { id: number; tag: string }[] = [
   { id: 59, tag: "Bills/Acts" },
   { id: 60, tag: "Study/Survey/Report/Index" },
 ];
-
