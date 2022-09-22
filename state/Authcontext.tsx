@@ -1,5 +1,5 @@
 // import { supabaseClient } from "@supabase/auth-helpers-nextjs";
-import { useUser } from "@supabase/auth-helpers-react";
+import { User, useUser } from "@supabase/auth-helpers-react";
 import { createContext, useContext, useEffect, useState } from "react";
 import { Profile } from "../lib/constants";
 import { elog, ilog } from "../lib/mylog";
@@ -22,7 +22,22 @@ const AuthContext = createContext<AuthContextValues>({
 export const AuthProvider = ({ children }: any) => {
   const [loading, setLoading] = useState(true);
   const [profile, setProfile] = useState<Profile | null>(null);
-  const { user, error } = useUser();
+  const [user, setUser] = useState<User>();
+  // cons;t { user, error } = useUser();
+
+  useEffect(() => {
+    const getUser = async () => {
+      const {
+        data: { user },
+      } = await supabaseClient.auth.getUser();
+      if (user) {
+        setUser(user);
+      } else {
+        setUser(undefined);
+      }
+    };
+    getUser();
+  }, []);
 
   useEffect(() => {
     setLoading(true);
