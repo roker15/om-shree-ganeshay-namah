@@ -79,22 +79,7 @@ export function useGetQuestionsByPaperidAndYear(paperId?: number, year?: number,
 export function useSubheadingByPaperId(paperId?: number) {
   const { data, error } = useSWR(
     paperId ? [`/subheadingviews/${paperId}`] : null,
-    async () =>
-      await supabaseClient
-        .from("subheadings_view")
-        .select(
-          `
-          subheading_id,
-          main_topic_id,
-          topic,
-          subheading_sequence,
-          heading_id,
-          main_topic,
-          heading_sequence,
-          paper_id
- `
-        )
-        .eq("paper_id", paperId)
+    async () => await supabaseClient.from("subheadings_view").select(`*`).eq("paper_id", paperId)
     // { refreshInterval: 1000 }
   );
   let subheadingsView: SubheadingViews[] | null | undefined = [];
