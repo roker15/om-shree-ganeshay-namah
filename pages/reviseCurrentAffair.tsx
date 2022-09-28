@@ -1,6 +1,5 @@
-import {
-  Box, Center
-} from "@chakra-ui/react";
+
+import { Center,Box } from "@chakra-ui/react";
 import { useUser } from "@supabase/auth-helpers-react";
 import router from "next/router";
 import React, { useEffect, useState } from "react";
