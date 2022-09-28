@@ -122,7 +122,7 @@ const MobileNav = ({ onOpen, ...rest }: MobileProps) => {
                     <Avatar
                       size={"sm"}
                       src={
-                        profile.avatar_url // change this to url from database avatar
+                        profile?.avatar_url! // change this to url from database avatar
                       }
                     />
                   )}
