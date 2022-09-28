@@ -53,7 +53,7 @@ export function useGetSyllabusByBookId(bookId?: number) {
   );
   return {
     // sharedPost_SUP_ERR:data?.error,
-    data: data?.data,
+    data: data?.data as any,
     supError: data?.error,
     isLoading: !error && !data,
     swrError: error,

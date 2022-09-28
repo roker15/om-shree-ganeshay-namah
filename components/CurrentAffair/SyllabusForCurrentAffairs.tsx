@@ -134,8 +134,8 @@ export default Syllabus;
 export const ArticleCounter = ({ subheadingId, creatorId }: { subheadingId: number; creatorId: string }) => {
   const getArticleCount = async () =>
     await supabaseClient
-      .from<definitions["books_articles"]>("books_articles")
-      .throwOnError()
+      .from("books_articles")
+      // .throwOnError()
       .select("*", { count: "exact", head: true })
       .match({ books_subheadings_fk: subheadingId, created_by: creatorId });
 

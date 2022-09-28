@@ -27,6 +27,7 @@ import "suneditor/dist/css/suneditor.min.css"; // Import Sun Editor's CSS File
 import SunEditorCore from "suneditor/src/lib/core";
 import { useGetExamPapers, useGetQuestionsByPaperidAndYear } from "../customHookes/useUser";
 import { BASE_URL, colors, sunEditorButtonList, sunEditorfontList } from "../lib/constants";
+import { Database } from "../lib/database.types";
 import { useAuthContext } from "../state/Authcontext";
 import { QuestionBank } from "../types/myTypes";
 import { definitions } from "../types/supabase";
@@ -169,7 +170,7 @@ const QuestionBanks: React.FC = () => {
         {isQuestionLoading ? (
           <Spinner size="100px" /> //this is not visible test it again
         ) : questions && questions.length != 0 ? (
-          (questions as QuestionBank[])
+          (questions as Database["public"]["Tables"]["questionbank"]["Row"][])
             .sort((a, b) => a.sequence! - b.sequence!)
             .map((x) => {
               return (
@@ -211,7 +212,7 @@ const EditorStyle1 = styled.div`
   }
 `;
 interface PropsQuestionBankEditor {
-  x: QuestionBank;
+  x: Database["public"]["Tables"]["questionbank"]["Row"];
   y?: boolean;
 }
 
@@ -230,7 +231,7 @@ const QuestionBankEditor: React.FunctionComponent<PropsQuestionBankEditor> = ({ 
   const getAnswer = async () => {
     setAnswerWritingOn(true);
     const { data, error } = await supabaseClient
-      .from<definitions["question_answer"]>("question_answer")
+      .from("question_answer")
       .select(`*`)
       .eq("question_id", x.id)
       .eq("answered_by", user?.id);
@@ -241,7 +242,7 @@ const QuestionBankEditor: React.FunctionComponent<PropsQuestionBankEditor> = ({ 
 
   const updateAnswer = async (answer: string) => {
     const { data, error } = await supabaseClient
-      .from<definitions["question_answer"]>("question_answer")
+      .from("question_answer")
       .update({
         answer_english: answer,
       })
@@ -252,7 +253,7 @@ const QuestionBankEditor: React.FunctionComponent<PropsQuestionBankEditor> = ({ 
     }
   };
   const insertAnswer = async (answer: string) => {
-    const { data, error } = await supabaseClient.from<definitions["question_answer"]>("question_answer").insert({
+    const { data, error } = await supabaseClient.from("question_answer").insert({
       question_id: x.id,
       answered_by: user?.id,
       answer_english: answer,
@@ -276,7 +277,7 @@ const QuestionBankEditor: React.FunctionComponent<PropsQuestionBankEditor> = ({ 
   useEffect(() => {
     const getAnswerCount = async () => {
       const { data, error, count } = await supabaseClient
-        .from<definitions["question_answer"]>("question_answer")
+        .from("question_answer")
         .select(`*`, { count: "exact", head: true })
         .eq("question_id", x.id)
         .eq("answered_by", user?.id);
@@ -294,7 +295,7 @@ const QuestionBankEditor: React.FunctionComponent<PropsQuestionBankEditor> = ({ 
     <>
       <EditorStyle1>
         <SunEditor
-          defaultValue={x.question_content}
+          defaultValue={x.question_content!}
           hideToolbar={true}
           readOnly={true}
           //   disable={true}

@@ -73,7 +73,7 @@ const SuneditorForNotesMaking: React.FunctionComponent<SuneditorForNotesMakingPr
   };
   const updateArticleInDatabase = async (newcontent: string | undefined) => {
     const { data, error } = await supabaseClient
-      .from<definitions["books_articles"]>("books_articles")
+      .from("books_articles")
       .update(language === "ENGLISH" ? { article_english: newcontent } : { article_hindi: newcontent })
       .eq("id", article.id);
     if (error) {

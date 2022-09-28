@@ -62,7 +62,7 @@ export const ArticleCounterByTag = ({ tagId, creatorId }: { tagId: number; creat
   useEffect(() => {
     const getArticleCount = async () => {
       const { data, error, count } = await supabaseClient
-        .from<definitions["books_articles"]>("books_articles")
+        .from("books_articles")
         .select("*", { count: "exact", head: true })
         .eq("created_by", creatorId)
         .contains("current_affair_tags", [tagId]);

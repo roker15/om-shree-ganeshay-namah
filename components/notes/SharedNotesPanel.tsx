@@ -6,13 +6,14 @@ import {
   useGetPublicNotesListBySubheading,
   useGetSharedNotesListBySubheading,
 } from "../../customHookes/networkHooks";
+import { Database } from "../../lib/database.types";
 import { useAuthContext } from "../../state/Authcontext";
 import { BookResponse, BookSyllabus } from "../../types/myTypes";
 import { definitions } from "../../types/supabase";
 
 interface Props {
   subheadingid: number | undefined;
-  changeParentProps: (x: definitions["books_article_sharing"]) => void;
+  changeParentProps: (x: Database["public"]["Tables"]["books_article_sharing"]["Row"]) => void;
 }
 
 const SharedNotesPanel: React.FC<Props> = ({ subheadingid, changeParentProps }) => {
@@ -34,7 +35,7 @@ const SharedNotesPanel: React.FC<Props> = ({ subheadingid, changeParentProps }) 
         {sharedNtoes && sharedNtoes.length > 0 ? (
           sharedNtoes!.map((x) => (
             <Flex my="2" ml="4" key={x.id} role={"group"} align="center">
-              <Avatar mx="2" size="2xs" src={x.ownedby_avatar} />
+              <Avatar mx="2" size="2xs" src={x.ownedby_avatar!} />
               <Text
                 as="label"
                 color={selectedSubheading === x.books_subheadings_fk ? "white" : "null"}
@@ -60,7 +61,7 @@ const SharedNotesPanel: React.FC<Props> = ({ subheadingid, changeParentProps }) 
           publicNotes!.map((x) => (
             <Flex my="2" key={x.id} role={"group"} align="center">
               {/* <Button variant="unstyled"> */}
-              <Avatar mx="2" size="2xs" src={x.ownedby_avatar} />
+              <Avatar mx="2" size="2xs" src={x.ownedby_avatar!} />
               <Text
                 as="label"
                 casing="capitalize"

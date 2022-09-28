@@ -38,6 +38,7 @@ import Notes from "./Notes";
 import { NotesSharing } from "./NotesSharing";
 import SharedNotesPanel from "./SharedNotesPanel";
 import SyllabusForNotes from "./SyllabusForNotes";
+import { Database } from "../../lib/database.types";
 // import { GotoQuestion } from "../../pages";
 
 type SelectedNotesType = {
@@ -120,24 +121,24 @@ const ManageNotes: React.FunctionComponent = () => {
       creatorId: profile?.id,
       isCopyable: false,
       isEditable: true,
-      ownerName: profile?.username,
+      ownerName: profile?.username!,
     });
     setSelectedTopic(x);
   };
-  const changeSelectedSharedNote = (x: definitions["books_article_sharing"]) => {
+  const changeSelectedSharedNote = (x: Database["public"]["Tables"]["books_article_sharing"]["Row"]) => {
     setSelectedNotes({
       subheadingId: x.books_subheadings_fk,
       creatorId: x.owned_by,
-      isEditable: x.allow_edit,
-      isCopyable: x.allow_copy,
-      ownerName: x.ownedby_name,
+      isEditable: x.allow_edit!,
+      isCopyable: x.allow_copy!,
+      ownerName: x.ownedby_name!,
     });
   };
 
   const updateSharingStatus = async (shouldBePublic: boolean) => {
     setIsPostPublic(undefined);
     if (shouldBePublic === true) {
-      const { data, error } = await supabase.from<definitions["books_article_sharing"]>("books_article_sharing").insert([
+      const { data, error } = await supabase.from("books_article_sharing").insert([
         {
           books_subheadings_fk: selectedNotes?.subheadingId,
           owned_by: profile?.id,
@@ -159,7 +160,7 @@ const ManageNotes: React.FunctionComponent = () => {
     if (shouldBePublic === false) {
       setIsPostPublic(undefined);
       const { data, error } = await supabase
-        .from<definitions["books_article_sharing"]>("books_article_sharing")
+        .from("books_article_sharing")
         .delete()
         .match({
           books_subheadings_fk: selectedNotes?.subheadingId,
@@ -182,7 +183,7 @@ const ManageNotes: React.FunctionComponent = () => {
     const getIfThisTopicIsPublic = async () => {
       setIsPostPublic(undefined);
       const { data, error } = await supabase
-        .from<definitions["books_article_sharing"]>("books_article_sharing")
+        .from("books_article_sharing")
         .select(`*`)
         .match({
           books_subheadings_fk: selectedNotes?.subheadingId,
@@ -208,7 +209,7 @@ const ManageNotes: React.FunctionComponent = () => {
 
   const handleCopyCheckbox = async (checkValue: boolean) => {
     const { data, error } = await supabase
-      .from<definitions["books_article_sharing"]>("books_article_sharing")
+      .from("books_article_sharing")
       .update({ allow_copy: checkValue })
       .match({ books_subheadings_fk: selectedNotes?.subheadingId, ispublic: true, owned_by: profile!.id });
     if (data && data.length !== 0) {

@@ -131,7 +131,7 @@ export const ArticleCounter = ({ subheadingId, creatorId }: { subheadingId: numb
   const [count, setCount] = useState<number | undefined>(undefined);
   const getArticleCount = async () => {
     const { data, error, count } = await supabaseClient
-      .from<definitions["books_articles"]>("books_articles")
+      .from("books_articles")
       .select("*", { count: "exact", head: true })
       .match({ books_subheadings_fk: subheadingId, created_by: creatorId });
     if (count) {

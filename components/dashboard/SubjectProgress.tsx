@@ -7,7 +7,7 @@ export const SubjectProgress = ({ a, b }: { a: number; b: string }) => {
     const [count, setCount] = useState<number | undefined>(undefined);
     const getArticleCount = async () => {
       const { data, error, count } = await supabaseClient
-        .from<definitions["books_articles"]>("books_articles")
+        .from("books_articles")
         .select("*", { count: "exact", head: true })
         .match({ books_subheadings_fk: a, created_by: b });
       if (count) {

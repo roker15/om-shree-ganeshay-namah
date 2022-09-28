@@ -1,9 +1,10 @@
 import { Box, Button, Center, CircularProgress, Container, ListItem, OrderedList, Text } from "@chakra-ui/react";
-import { supabaseClient } from "@supabase/auth-helpers-nextjs";
+// import { supabaseClient } from "@supabase/auth-helpers-nextjs";
 import copy from "copy-to-clipboard";
 import React, { useCallback, useEffect, useRef, useState } from "react";
 import { useDropzone } from "react-dropzone";
 import { v4 as uuid } from "uuid";
+import { supabaseClient } from "../lib/supabaseClient";
 import { customToast } from "./CustomToast";
 
 export function MyDropzone() {
@@ -57,11 +58,11 @@ export function MyDropzone() {
         upsert: true,
       });
       if (data) {
-        console.log("data is ", data.Key);
-        const { publicURL, error } = supabaseClient.storage.from("notes-images").getPublicUrl(filepath);
-        console.log("public url is  ", publicURL);
-        if (publicURL && mountedRef.current == true) {
-          setFilelist((oldArray) => [...oldArray, { file: file.name, link: publicURL }]);
+        // console.log("data is ", data.Key);
+        const { data} = supabaseClient.storage.from("notes-images").getPublicUrl(filepath);
+        console.log("public url is  ", data.publicUrl);
+        if (data.publicUrl && mountedRef.current == true) {
+          setFilelist((oldArray) => [...oldArray, { file: file.name, link: data.publicUrl }]);
         }
       }
       if (mountedRef.current == true) {

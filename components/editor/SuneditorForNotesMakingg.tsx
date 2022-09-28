@@ -14,6 +14,7 @@ import { supabaseClient } from "@supabase/auth-helpers-nextjs";
 import styled from "styled-components";
 import SunEditorCore from "suneditor/src/lib/core";
 import { useGetArticleById } from "../../customHookes/networkHooks";
+import { Database } from "../../lib/database.types";
 
 type SuneditorForNotesMakingProps = {
   article1: number; //definitions["books_articles"];
@@ -46,7 +47,7 @@ const SuneditorForNotesMaking: React.FunctionComponent<SuneditorForNotesMakingPr
 
   const updateArticleInDatabase = async (newcontent: string | undefined) => {
     const { data, error } = await supabaseClient
-      .from<definitions["books_articles"]>("books_articles")
+      .from("books_articles")
       .update(language === "ENGLISH" ? { article_english: newcontent } : { article_hindi: newcontent })
       .eq("id", article!.id);
     if (error) {
@@ -87,7 +88,7 @@ const SuneditorForNotesMaking: React.FunctionComponent<SuneditorForNotesMakingPr
               getSunEditorInstance={getSunEditorInstance}
               // handleOnChange={handleOnChange}
               updateArticleInDatabase={updateArticleInDatabase}
-              article={article! }
+              article={article }
               language={language}
             ></Editor>
           </Centerr>
@@ -177,7 +178,7 @@ interface editorProps {
   fontSize: string | undefined;
   editorMode: string;
   language: "HINDI" | "ENGLISH";
-  article: definitions["books_articles"] | undefined;
+  article: Database["public"]["Tables"]["books_articles"]["Row"] | undefined;
   // handleOnChange: ((content: string) => void) | undefined;
   updateArticleInDatabase: (arg0: string) => void;
 }
@@ -196,7 +197,7 @@ function Editor(props: editorProps): JSX.Element {
         getSunEditorInstance={props.getSunEditorInstance}
         setDefaultStyle={props.fontSize}
         hideToolbar={props.editorMode === "READ" ? true : false}
-        defaultValue={props.language === "ENGLISH" ? props.article.article_english : props.article.article_hindi}
+        defaultValue={props.language === "ENGLISH" ? props.article.article_english !: props.article.article_hindi!}
         // setContents={props.language === "ENGLISH" ? props.article.article_english : props.article.article_hindi} //cause blank editor to render first and then put content, so creates flickering effect . so move to defaultValue
         readOnly={props.editorMode === "READ" ? true : false}
         autoFocus={false} // disable={editorMode === "READ" ? true : false}

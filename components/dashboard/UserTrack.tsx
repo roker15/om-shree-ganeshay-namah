@@ -8,7 +8,7 @@ export const UserTrack = () => {
   const [users, setUsers] = useState<Profile[] | undefined>(undefined);
   const getArticleCount = async () => {
     const { data, error, count } = await supabaseClient
-      .from<Profile>("profiles")
+      .from("profiles")
       .select("*")
       .order("last_login", { ascending: false })
       .limit(100);
@@ -28,7 +28,7 @@ export const UserTrack = () => {
             <Flex key={x.id}  w="full" px="16" wrap={"wrap"}>
               <Box w="340px"><Text >{x.username}</Text></Box>
               <Box w="340px"><Text w="250px">{x.email}</Text></Box>
-              <Box w="250px"><Text w="200px">{isoToLocaldate(x.last_login)}</Text></Box>
+              <Box w="250px"><Text w="200px">{isoToLocaldate(x.last_login!)}</Text></Box>
             </Flex>
             <Divider />
           </>

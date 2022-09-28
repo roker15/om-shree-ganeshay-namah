@@ -44,6 +44,7 @@ import "suneditor/dist/css/suneditor.min.css"; // Import Sun Editor's CSS File
 import { useSWRConfig } from "swr";
 import { useGetUserArticles, useGetUserArticless } from "../../customHookes/networkHooks";
 import { currentAffairTags } from "../../lib/constants";
+import { Database } from "../../lib/database.types";
 import { elog, sentenseCase } from "../../lib/mylog";
 import { useAuthContext } from "../../state/Authcontext";
 import { useNoteContext } from "../../state/NoteContext";
@@ -101,7 +102,7 @@ const MyNotes: React.FC<Props> = ({ subjectId, subheadingid, notesCreator, chang
   const { setIsTagSearchActive, setTagsArray, tagsArray } = useNoteContext();
   // const { article, isError, isLoading } = useGetArticleById(article1);
   const deleteArticle = async (id: number): Promise<void> => {
-    const { data, error } = await supabaseClient.from<definitions["books_articles"]>("books_articles").delete().eq("id", id);
+    const { data, error } = await supabaseClient.from("books_articles").delete().eq("id", id);
     if (error) {
       elog("MyNotes->deleteArticle", error.message);
       return;
@@ -121,9 +122,9 @@ const MyNotes: React.FC<Props> = ({ subjectId, subheadingid, notesCreator, chang
     }
   };
 
-  const copyArticleToNewUser = async (x: definitions["books_articles"]) => {
+  const copyArticleToNewUser = async (x: Database["public"]["Tables"]["books_articles"]["Row"]) => {
     setIsLoadingCopyButton(true);
-    const { data, error } = await supabaseClient.from<definitions["books_articles"]>("books_articles").insert({
+    const { data, error } = await supabaseClient.from("books_articles").insert({
       books_subheadings_fk: x.books_subheadings_fk,
       article_hindi: x.article_hindi,
       article_english: x.article_english,
@@ -239,16 +240,16 @@ const MyNotes: React.FC<Props> = ({ subjectId, subheadingid, notesCreator, chang
                     </Flex>
                     {isArticleCreating === "EDITING" && x.id === selectedArticleForEdit ? (
                       <ArticleForm
-                        tags={x.current_affair_tags}
+                        tags={x.current_affair_tags!}
                         subjectId={subjectId}
                         subheadingid={subheadingid}
                         articleId={x.id}
                         articleTitle={x.article_title}
-                        sequence={x.sequence}
+                        sequence={x.sequence!}
                         formMode={"EDITING"}
                         x={setIsArticleCreating}
-                        question_year={x.question_year}
-                        question_type={x.question_type}
+                        question_year={x.question_year!}
+                        question_type={x.question_type!}
                       ></ArticleForm>
                     ) : null}
                     <AccordionPanel pb={4} borderTopWidth="0px" borderBottomWidth="0px" px={{ base: "0.5", lg: "4" }}>
@@ -391,7 +392,7 @@ const ArticleForm: React.FC<ArticleFormProps> = ({
 
   const onSubmit: SubmitHandler<Inputs> = async (d) => {
     if (formMode === "CREATING") {
-      const { data, error } = await supabaseClient.from<definitions["books_articles"]>("books_articles").insert([
+      const { data, error } = await supabaseClient.from("books_articles").insert([
         {
           article_title: d.articleTitle,
           created_by: profile?.id,
@@ -410,7 +411,7 @@ const ArticleForm: React.FC<ArticleFormProps> = ({
 
     if (formMode === "EDITING") {
       const { data, error } = await supabaseClient
-        .from<definitions["books_articles"]>("books_articles")
+        .from("books_articles")
         .update({
           // id: articleId,
           article_title: d.articleTitle,
