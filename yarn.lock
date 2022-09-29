@@ -1282,26 +1282,26 @@
   resolved "https://registry.yarnpkg.com/@sindresorhus/is/-/is-0.14.0.tgz#9fb3a3cf3132328151f353de4632e01e52102bea"
   integrity sha512-9NET910DNaIPngYnLLPeg+Ogzqsi9uM4mSboU5y6p8S5DzMTVEsJZrawi+BoDNUVBa2DhJqQYUFvMDfgU062LQ==
 
-"@supabase/auth-helpers-nextjs@0.2.0":
-  version "0.2.0"
-  resolved "https://registry.yarnpkg.com/@supabase/auth-helpers-nextjs/-/auth-helpers-nextjs-0.2.0.tgz#099be6f98aec8861f7b654f693b0de59b47a943c"
-  integrity sha512-1EBvhGenLZv5J9SfxEG8SNXtIyBvbvXSjpDBXjDpuKf0xHJ3Xrcblx3aRVJWLCCy5lquy9xkHGVtwzfcDODosg==
+"@supabase/auth-helpers-nextjs@^0.4.0-next.3":
+  version "0.4.0-next.3"
+  resolved "https://registry.yarnpkg.com/@supabase/auth-helpers-nextjs/-/auth-helpers-nextjs-0.4.0-next.3.tgz#4a532d9eb5dbc3c6fe47d7a2b139843379e3e6a5"
+  integrity sha512-WfYHNTPK3SNfotaYXNxrrn39nmKrbyt0yzp+sAr+VA1PEpNQKutilIqvGSFDq+6laaYUVtMSLsoAcuTPI62WYQ==
   dependencies:
-    "@supabase/auth-helpers-shared" "0.1.0"
+    "@supabase/auth-helpers-shared" "0.2.0-next.2"
 
-"@supabase/auth-helpers-react@0.2.0":
-  version "0.2.0"
-  resolved "https://registry.yarnpkg.com/@supabase/auth-helpers-react/-/auth-helpers-react-0.2.0.tgz#c10173c72f1291620dc0a6d2b8a59a9f694dc051"
-  integrity sha512-z76xHUJWn3/0Ixggp96zthkMJm7nsoYXojbjhVsQkUIjRLiglrKV329EJjEt1anuzvyamOkHuuseWwzGF1xtUA==
+"@supabase/auth-helpers-react@^0.3.0-next.2":
+  version "0.3.0-next.2"
+  resolved "https://registry.yarnpkg.com/@supabase/auth-helpers-react/-/auth-helpers-react-0.3.0-next.2.tgz#94b149a91571523742d418dc3ceb6065a5ccffcd"
+  integrity sha512-V3VaeMjLQFz+uK9KmBWC8/YIcI+CJf+zgAxd8/+/kstyCs2CYMH/hEIE5O8ciTBnfWvlzznttQTasoRxqecCNA==
   dependencies:
-    "@supabase/auth-helpers-shared" "0.1.0"
+    "@supabase/auth-helpers-shared" "0.2.0-next.2"
 
-"@supabase/auth-helpers-shared@0.1.0":
-  version "0.1.0"
-  resolved "https://registry.yarnpkg.com/@supabase/auth-helpers-shared/-/auth-helpers-shared-0.1.0.tgz#46f09874fa49bcb2c9fb472b883fc541d56fe11a"
-  integrity sha512-OuzSZgAOlyvIRM+h5DNbEIlEbPwLIgr9F0lCt6nTrylVVmg4OmSq95pyVXkdc+DMRXyuzgtGbLoo+Fg/UVmkYw==
+"@supabase/auth-helpers-shared@0.2.0-next.2":
+  version "0.2.0-next.2"
+  resolved "https://registry.yarnpkg.com/@supabase/auth-helpers-shared/-/auth-helpers-shared-0.2.0-next.2.tgz#e4f7a06c342e47ef563c1ee67307cd451c1b6da9"
+  integrity sha512-e+u5EuMgQoLVP4cHXdv22V4L7seSKObZVCtkkBT+eqOuHVuJlc/VDM7PYoJVX57gZoUl1Gi1TuZ+ZO70CYgG6A==
   dependencies:
-    jose "^4.8.1"
+    cookie "^0.5.0"
 
 "@supabase/functions-js@^2.0.0-rc.1":
   version "2.0.0-rc.2"
@@ -2188,6 +2188,11 @@ convert-source-map@^1.5.0:
   integrity sha512-+OQdjP49zViI/6i7nIJpA8rAl4sV/JdPfU9nZs3VqOwGIgizICvuN2ru6fMd+4llL0tar18UYJXfZ/TWtmhUjA==
   dependencies:
     safe-buffer "~5.1.1"
+
+cookie@^0.5.0:
+  version "0.5.0"
+  resolved "https://registry.yarnpkg.com/cookie/-/cookie-0.5.0.tgz#d1f5d71adec6558c58f389987c366aa47e994f8b"
+  integrity sha512-YZ3GUyn/o8gfKJlnlX7g7xq4gyO6OSuhGPKaaGssGB2qgDUS0gPgtTvoyZLTt9Ab6dC4hfc9dV5arkvc/OCmrw==
 
 copy-to-clipboard@3.3.1, copy-to-clipboard@^3.3.1:
   version "3.3.1"
@@ -3552,11 +3557,6 @@ isomorphic-dompurify@^0.22.0:
     "@types/dompurify" "^2.3.4"
     dompurify "^2.4.0"
     jsdom "^20.0.0"
-
-jose@^4.8.1:
-  version "4.8.1"
-  resolved "https://registry.yarnpkg.com/jose/-/jose-4.8.1.tgz#dc7c2660b115ba29b44880e588c5ac313c158247"
-  integrity sha512-+/hpTbRcCw9YC0TOfN1W47pej4a9lRmltdOVdRLz5FP5UvUq3CenhXjQK7u/8NdMIIShMXYAh9VLPhc7TjhvFw==
 
 js-sdsl@^4.1.4:
   version "4.1.4"

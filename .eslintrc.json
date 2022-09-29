@@ -2,9 +2,7 @@
   "extends": "next/core-web-vitals",
   "rules": {
     "react/display-name": "off",
-    "react-hooks/exhaustive-deps": "warn", // <--- THIS IS THE NEW RULE
-    "react/no-unescaped-entities": "warn",
-    "@next/next/no-page-custom-font": "warn"
+    "react-hooks/exhaustive-deps": "warn" // <--- THIS IS THE NEW RULE
   }
 }
 

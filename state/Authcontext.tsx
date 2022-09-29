@@ -1,5 +1,4 @@
 // import { supabaseClient } from "@supabase/auth-helpers-nextjs";
-import { User, useUser } from "@supabase/auth-helpers-react";
 import { createContext, useContext, useEffect, useState } from "react";
 import { Profile } from "../lib/constants";
 import { elog, ilog } from "../lib/mylog";
@@ -26,6 +25,7 @@ export const AuthProvider = ({ children }: any) => {
   // cons;t { user, error } = useUser();
 
   useEffect(() => {
+   
     const getUser = async () => {
       const {
         data: { user },
@@ -35,6 +35,7 @@ export const AuthProvider = ({ children }: any) => {
       } else {
         setUser(undefined);
       }
+
     };
     getUser();
   }, []);
@@ -98,7 +99,7 @@ export const AuthProvider = ({ children }: any) => {
     let { data, error } = await supabaseClient.auth.signInWithOAuth({
       provider: "google",
       options: {
-        redirectTo: "redirectUrl",
+        redirectTo: redirectUrl,
       },
     });
   };
