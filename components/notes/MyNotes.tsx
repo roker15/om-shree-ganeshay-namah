@@ -44,7 +44,7 @@ import "suneditor/dist/css/suneditor.min.css"; // Import Sun Editor's CSS File
 import { useSWRConfig } from "swr";
 import { useGetUserArticles, useGetUserArticless } from "../../customHookes/networkHooks";
 import { currentAffairTags } from "../../lib/constants";
-import { Database } from "../../lib/database.types";
+import { Database } from "../../lib/database";
 import { elog, sentenseCase } from "../../lib/mylog";
 import { useAuthContext } from "../../state/Authcontext";
 import { useNoteContext } from "../../state/NoteContext";

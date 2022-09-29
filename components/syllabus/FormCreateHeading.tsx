@@ -55,7 +55,7 @@ const FormCreateHeading: React.FC<Props> = ({ x }) => {
 
   async function onSubmit(values: any) {
     if (x?.formMode === "CREATE_HEADING") {
-      const { data, error } = await supabaseClient.from<definitions["books_headings"]>("books_headings").insert({
+      const { data, error } = await supabaseClient.from("books_headings").insert({
         books_fk: x?.book_id,
         heading: values.heading,
         sequence: values.sequence,
@@ -78,7 +78,7 @@ const FormCreateHeading: React.FC<Props> = ({ x }) => {
 
     if (x?.formMode === "UPDATE_HEADING") {
       const { data, error } = await supabaseClient
-        .from<definitions["books_headings"]>("books_headings")
+        .from("books_headings")
         .update({
           heading: values.heading,
           sequence: values.sequence,

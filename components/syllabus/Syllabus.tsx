@@ -20,7 +20,7 @@ const Syllabus: React.FC<Props> = ({ book, changeFormProps }) => {
   const { data } = useGetSyllabusByBookId(book ? book.id : undefined);
   const grouped1 = groupBy(data, (x) => [x.heading_sequence, x.heading_id, x.heading]);
   const deleteHeading = async (id: number): Promise<void> => {
-    const { data, error } = await supabaseClient.from<definitions["books_headings"]>("books_headings").delete().eq("id", id);
+    const { data, error } = await supabaseClient.from("books_headings").delete().eq("id", id);
     if (error) {
       elog("Syllabus->deleteHeading", error.message);
       return;
@@ -31,7 +31,7 @@ const Syllabus: React.FC<Props> = ({ book, changeFormProps }) => {
   };
   const deleteSubheading = async (id: number): Promise<void> => {
     const { data, error } = await supabaseClient
-      .from<definitions["books_subheadings"]>("books_subheadings")
+      .from("books_subheadings")
       .delete()
       .eq("id", id);
     if (error) {

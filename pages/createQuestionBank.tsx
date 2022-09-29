@@ -44,7 +44,7 @@ import { QuestionBank, SubheadingQuestionLink } from "../types/myTypes";
 import { useUser } from "@supabase/auth-helpers-react";
 import LayoutWithTopNavbar from "../layout/LayoutWithTopNavbar";
 import { BASE_URL, sunEditorButtonList } from "../lib/constants";
-import { Database } from "../lib/database.types";
+import { Database } from "../lib/database";
 import { supabaseClient } from "../lib/supabaseClient";
 import { useAuthContext } from "../state/Authcontext";
 import PageWithLayoutType from "../types/pageWithLayout";

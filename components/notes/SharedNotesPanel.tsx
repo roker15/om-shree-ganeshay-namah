@@ -6,7 +6,7 @@ import {
   useGetPublicNotesListBySubheading,
   useGetSharedNotesListBySubheading,
 } from "../../customHookes/networkHooks";
-import { Database } from "../../lib/database.types";
+import { Database } from "../../lib/database";
 import { useAuthContext } from "../../state/Authcontext";
 import { BookResponse, BookSyllabus } from "../../types/myTypes";
 import { definitions } from "../../types/supabase";

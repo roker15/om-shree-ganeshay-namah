@@ -38,7 +38,7 @@ import Notes from "./Notes";
 import { NotesSharing } from "./NotesSharing";
 import SharedNotesPanel from "./SharedNotesPanel";
 import SyllabusForNotes from "./SyllabusForNotes";
-import { Database } from "../../lib/database.types";
+import { Database } from "../../lib/database";
 // import { GotoQuestion } from "../../pages";
 
 type SelectedNotesType = {

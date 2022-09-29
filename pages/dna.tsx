@@ -60,7 +60,7 @@ import { useAuthContext } from "../state/Authcontext";
 import { BookResponse, BookSyllabus } from "../types/myTypes";
 import PageWithLayoutType from "../types/pageWithLayout";
 import { supabaseClient } from "../lib/supabaseClient";
-import { Database } from "../lib/database.types";
+import { Database } from "../lib/database";
 
 const SunEditor = dynamic(() => import("suneditor-react"), {
   ssr: false,

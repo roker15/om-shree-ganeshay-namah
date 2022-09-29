@@ -14,7 +14,7 @@ import { supabaseClient } from "@supabase/auth-helpers-nextjs";
 import styled from "styled-components";
 import SunEditorCore from "suneditor/src/lib/core";
 import { useGetArticleById } from "../../customHookes/networkHooks";
-import { Database } from "../../lib/database.types";
+import { Database } from "../../lib/database";
 
 type SuneditorForNotesMakingProps = {
   article1: number; //definitions["books_articles"];

@@ -27,7 +27,7 @@ import "suneditor/dist/css/suneditor.min.css"; // Import Sun Editor's CSS File
 import SunEditorCore from "suneditor/src/lib/core";
 import { useGetExamPapers, useGetQuestionsByPaperidAndYear } from "../customHookes/useUser";
 import { BASE_URL, colors, sunEditorButtonList, sunEditorfontList } from "../lib/constants";
-import { Database } from "../lib/database.types";
+import { Database } from "../lib/database";
 import { useAuthContext } from "../state/Authcontext";
 import { QuestionBank } from "../types/myTypes";
 import { definitions } from "../types/supabase";

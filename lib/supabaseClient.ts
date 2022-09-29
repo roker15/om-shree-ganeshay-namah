@@ -3,7 +3,7 @@ import { AuthSessionMissingError, createClient } from "@supabase/supabase-js";
 import { GetServerSideProps, NextApiRequest } from "next";
 // import { supabaseClient } from "@supabase/auth-helpers-nextjs";
 import { NEXT_PUBLIC_SUPABASE_URL, NEXT_PUBLIC_SUPABASE_ANON_KEY } from "./constants";
-import { Database } from "./database.types";
+import { Database } from "./database";
 
 if (!NEXT_PUBLIC_SUPABASE_URL) throw new Error("Missing env.NEXT_PUBLIC_SUPABASE_URL");
 if (!NEXT_PUBLIC_SUPABASE_ANON_KEY) throw new Error("Missing env.NEXT_PUBLIC_SUPABASE_ANON_KEY");

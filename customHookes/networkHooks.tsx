@@ -36,7 +36,7 @@ export function useGetBooks(bookId?: number) {
   );
   return {
     // sharedPost_SUP_ERR:data?.error,
-    data: data?.data,
+    data: data?.data as BookResponse[] | undefined,
     supError: data?.error,
     isLoading: !error && !data,
     swrError: error,
