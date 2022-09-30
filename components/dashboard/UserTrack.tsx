@@ -1,10 +1,11 @@
 import { Box, Divider, Flex, SimpleGrid, Text, VStack } from "@chakra-ui/react";
-import { supabaseClient } from "@supabase/auth-helpers-nextjs";
+import { useSessionContext } from "@supabase/auth-helpers-react";
 import { useState, useEffect } from "react";
 import { Profile } from "../../lib/constants";
 import { definitions } from "../../types/supabase";
 
 export const UserTrack = () => {
+  const {  supabaseClient } = useSessionContext();
   const [users, setUsers] = useState<Profile[] | undefined>(undefined);
   const getArticleCount = async () => {
     const { data, error, count } = await supabaseClient

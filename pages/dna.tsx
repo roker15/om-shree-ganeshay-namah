@@ -36,7 +36,6 @@ import {
   VStack,
   Wrap,
 } from "@chakra-ui/react";
-// import { supabaseClient } from "@supabase/auth-helpers-nextjs";
 import katex from "katex";
 import "katex/dist/katex.min.css";
 import dynamic from "next/dynamic";
@@ -44,7 +43,7 @@ import "suneditor/dist/css/suneditor.min.css";
 import { BASE_URL, colors, currentAffairTags, sunEditorButtonList } from "../lib/constants";
 import { definitions } from "../types/supabase";
 // import DOMPurify from "dompurify";
-import { useUser } from "@supabase/auth-helpers-react";
+import { useSessionContext, useUser } from "@supabase/auth-helpers-react";
 import React, { useState } from "react";
 import { SubmitHandler, useForm } from "react-hook-form";
 import { MdAdd, MdCancel, MdDone, MdFileCopy, MdModeEdit } from "react-icons/md";
@@ -59,7 +58,6 @@ import { elog, sentenseCase } from "../lib/mylog";
 import { useAuthContext } from "../state/Authcontext";
 import { BookResponse, BookSyllabus } from "../types/myTypes";
 import PageWithLayoutType from "../types/pageWithLayout";
-import { supabaseClient } from "../lib/supabaseClient";
 import { Database } from "../lib/database";
 
 const SunEditor = dynamic(() => import("suneditor-react"), {
@@ -126,8 +124,9 @@ function SuneditorSimple(props: {
 }
 
 const CurrentAffair: React.FC = () => {
+  const {  supabaseClient } = useSessionContext();
   // const [data, setData] = useState<definitions["books_articles"][] | undefined>(undefined);
-  const { user } = useUser();
+  const user  = useUser();
   const { profile } = useAuthContext();
   const [language, setLangauge] = useState<"ENG" | "HINDI">("ENG");
   const [book, setBook] = useState<BookResponse>({
@@ -183,7 +182,7 @@ const CurrentAffair: React.FC = () => {
     const { data, error } = await supabaseClient
       .from("books_articles")
       .update(language === "ENG" ? { article_english: content } : { article_hindi: content })
-      .eq("id", id);
+      .eq("id", id).select();
     if (error) {
       customToast({ title: "Article not updated error occurred  " + error.message, status: "error", isUpdating: false });
       return;
@@ -452,6 +451,7 @@ const ArticleForm: React.FC<ArticleFormProps> = ({
   setParentProps,
   x,
 }) => {
+  const {  supabaseClient } = useSessionContext();
   const [isLoading, setIsLoading] = useState(false);
   const { profile } = useAuthContext();
   const {

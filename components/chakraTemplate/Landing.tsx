@@ -8,7 +8,7 @@ import { BASE_URL } from "../../lib/constants";
 import { LoginCard } from "../LoginCard";
 import SelectSyllabus from "./SelectSyllabus";
 export default function CallToActionWithVideo() {
-  const { user, error } = useUser();
+  const user = useUser();
 
   const whatsappuri = useBreakpointValue(
     {

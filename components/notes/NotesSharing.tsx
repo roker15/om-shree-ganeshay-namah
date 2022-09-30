@@ -25,7 +25,7 @@ import {
   Tr,
   useDisclosure,
 } from "@chakra-ui/react";
-import { supabaseClient } from "@supabase/auth-helpers-nextjs";
+import { useSessionContext } from "@supabase/auth-helpers-react";
 import React, { useEffect, useRef, useState } from "react";
 import { MdCancel, MdDelete, MdShare } from "react-icons/md";
 import { Profile } from "../../lib/constants";
@@ -38,6 +38,7 @@ interface sharedProps {
   subheadingId: number;
 }
 export const NotesSharing: React.FC<sharedProps> = ({ subheadingId }) => {
+  const {  supabaseClient } = useSessionContext();
   const { isOpen, onOpen, onClose } = useDisclosure();
   const [inputEmail, setInputEmail] = React.useState("");
   const [message, setMessage] = React.useState("");
@@ -211,6 +212,7 @@ export const NotesSharing: React.FC<sharedProps> = ({ subheadingId }) => {
 };
 
 export const SharedList: React.FC<{ subheadingId: number }> = ({ subheadingId }) => {
+  const {  supabaseClient } = useSessionContext();
   const { profile } = useAuthContext();
   const [sharedlist, setSharedlist] = useState<definitions["books_article_sharing"][] | undefined>();
 

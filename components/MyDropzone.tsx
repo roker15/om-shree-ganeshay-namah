@@ -1,17 +1,16 @@
 import { Box, Button, Center, CircularProgress, Container, ListItem, OrderedList, Text } from "@chakra-ui/react";
-// import { supabaseClient } from "@supabase/auth-helpers-nextjs";
+import { useSessionContext } from "@supabase/auth-helpers-react";
 import copy from "copy-to-clipboard";
 import React, { useCallback, useEffect, useRef, useState } from "react";
 import { useDropzone } from "react-dropzone";
 import { v4 as uuid } from "uuid";
-import { supabaseClient } from "../lib/supabaseClient";
 import { customToast } from "./CustomToast";
 
 export function MyDropzone() {
   const [isLoading, setIsLoading] = useState<boolean>(false);
   const [filelist, setFilelist] = useState<{ file: string; link: string }[]>([]);
   const mountedRef = useRef(false);
-
+  const { isLoading: sessionLoading, session, error: sessionError, supabaseClient } = useSessionContext();
   // effect just for tracking mounted state
   useEffect(() => {
     mountedRef.current = true;
@@ -59,7 +58,7 @@ export function MyDropzone() {
       });
       if (data) {
         // console.log("data is ", data.Key);
-        const { data} = supabaseClient.storage.from("notes-images").getPublicUrl(filepath);
+        const { data } = supabaseClient.storage.from("notes-images").getPublicUrl(filepath);
         console.log("public url is  ", data.publicUrl);
         if (data.publicUrl && mountedRef.current == true) {
           setFilelist((oldArray) => [...oldArray, { file: file.name, link: data.publicUrl }]);

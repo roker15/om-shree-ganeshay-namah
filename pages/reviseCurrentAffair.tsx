@@ -12,7 +12,7 @@ import { BookResponse } from "../types/myTypes";
 import PageWithLayoutType from "../types/pageWithLayout";
 
 const ReviseCurrentAffair: React.FunctionComponent = () => {
-  const { user, error } = useUser();
+  const user = useUser();
   const [book, setBook] = useState<BookResponse | undefined>(undefined);
   const ROUTE_POST_ID = "/notes/[bookid]";
   const navigateTo = (bookid: string) => {

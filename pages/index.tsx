@@ -11,7 +11,7 @@ import PageWithLayoutType from "../types/pageWithLayout";
 
 const Home: React.FunctionComponent = () => {
   const { profile } = useAuthContext();
-  const { user, error } = useUser();
+  const user = useUser();
 
   // const supabaseTest = async () => {
   //   const { data, error } = await supabaseClient

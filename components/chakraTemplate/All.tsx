@@ -20,7 +20,7 @@ import BookFilter from "../syllabus/BookFilter";
   
   export default function CallToActionWithVideo() {
     const [book, setBook] = useState<BookResponse | undefined>(undefined);
-    const { user, error } = useUser();
+    const user = useUser();
     const ROUTE_POST_ID = "/notes/[bookid]";
     const navigateTo = (bookid: string) => {
       router.push({

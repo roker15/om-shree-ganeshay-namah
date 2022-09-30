@@ -16,9 +16,7 @@ import {
 import React, { useEffect, useState } from "react";
 import Sticky from "react-sticky-el";
 import { elog } from "../../lib/mylog";
-// import { supabase } from "../../lib/supabaseClient";
-import { supabaseClient as supabase } from "@supabase/auth-helpers-nextjs";
-import { useUser } from "@supabase/auth-helpers-react";
+import { useSessionContext, useUser } from "@supabase/auth-helpers-react";
 import { useAuthContext } from "../../state/Authcontext";
 import { BookResponse, BookSyllabus } from "../../types/myTypes";
 import { definitions } from "../../types/supabase";
@@ -54,7 +52,8 @@ type SelectedNotesType = {
 
 const ManageNotes: React.FunctionComponent = () => {
   // const { isTagSearchActive } = useNoteContext();
-  const { user, error } = useUser();
+  const {  supabaseClient } = useSessionContext();
+  const  user = useUser();
   const router = useRouter();
   const { isTagSearchActive, bookResponse, setBookResponse } = useNoteContext();
   const [book, setBook] = useState<BookResponse | undefined>();
@@ -138,7 +137,7 @@ const ManageNotes: React.FunctionComponent = () => {
   const updateSharingStatus = async (shouldBePublic: boolean) => {
     setIsPostPublic(undefined);
     if (shouldBePublic === true) {
-      const { data, error } = await supabase.from("books_article_sharing").insert([
+      const { data, error } = await supabaseClient.from("books_article_sharing").insert([
         {
           books_subheadings_fk: selectedNotes?.subheadingId,
           owned_by: profile?.id,
@@ -159,7 +158,7 @@ const ManageNotes: React.FunctionComponent = () => {
     }
     if (shouldBePublic === false) {
       setIsPostPublic(undefined);
-      const { data, error } = await supabase
+      const { data, error } = await supabaseClient
         .from("books_article_sharing")
         .delete()
         .match({
@@ -182,7 +181,7 @@ const ManageNotes: React.FunctionComponent = () => {
   useEffect(() => {
     const getIfThisTopicIsPublic = async () => {
       setIsPostPublic(undefined);
-      const { data, error } = await supabase
+      const { data, error } = await supabaseClient
         .from("books_article_sharing")
         .select(`*`)
         .match({
@@ -208,7 +207,7 @@ const ManageNotes: React.FunctionComponent = () => {
   }, [selectedNotes]);
 
   const handleCopyCheckbox = async (checkValue: boolean) => {
-    const { data, error } = await supabase
+    const { data, error } = await supabaseClient
       .from("books_article_sharing")
       .update({ allow_copy: checkValue })
       .match({ books_subheadings_fk: selectedNotes?.subheadingId, ispublic: true, owned_by: profile!.id });

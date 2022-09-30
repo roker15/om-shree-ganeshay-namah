@@ -12,7 +12,7 @@ import {
   useToast,
   VStack,
 } from "@chakra-ui/react";
-import { supabaseClient } from "@supabase/auth-helpers-nextjs";
+import { useSessionContext } from "@supabase/auth-helpers-react";
 import * as React from "react";
 import { useEffect } from "react";
 import { useForm } from "react-hook-form";
@@ -25,6 +25,7 @@ interface Props {
   x: FormProps | undefined;
 }
 const FormCreateHeading: React.FC<Props> = ({ x }) => {
+  const {  supabaseClient } = useSessionContext();
   interface FormValues {
     heading: string | undefined;
     sequence: number | undefined;

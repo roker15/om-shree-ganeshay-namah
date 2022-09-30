@@ -1,44 +1,24 @@
-// import { supabaseClient } from "@supabase/auth-helpers-nextjs";
+import { useSessionContext, useUser } from "@supabase/auth-helpers-react";
 import { createContext, useContext, useEffect, useState } from "react";
 import { Profile } from "../lib/constants";
 import { elog, ilog } from "../lib/mylog";
-import { supabaseClient } from "../lib/supabaseClient";
-// import { supabase } from "../lib/supabaseClient";
 interface AuthContextValues {
   signInWithgoogle: (redirectUrl: string) => void;
-  signIn: (data: any) => void;
   signOut: (data: any) => void;
   profile: Profile | null;
 }
 // create a context for authentication
 const AuthContext = createContext<AuthContextValues>({
   signInWithgoogle: () => {},
-  signIn: () => {},
   signOut: () => {},
   profile: null,
 });
 
 export const AuthProvider = ({ children }: any) => {
+  const { isLoading, session, error, supabaseClient } = useSessionContext();
+  const user = useUser();
   const [loading, setLoading] = useState(true);
   const [profile, setProfile] = useState<Profile | null>(null);
-  const [user, setUser] = useState<User>();
-  // cons;t { user, error } = useUser();
-
-  useEffect(() => {
-   
-    const getUser = async () => {
-      const {
-        data: { user },
-      } = await supabaseClient.auth.getUser();
-      if (user) {
-        setUser(user);
-      } else {
-        setUser(undefined);
-      }
-
-    };
-    getUser();
-  }, []);
 
   useEffect(() => {
     setLoading(true);
@@ -92,7 +72,7 @@ export const AuthProvider = ({ children }: any) => {
       setProfile(null);
       setLoading(false);
     }
-  }, [user]);
+  }, [supabaseClient, user]);
 
   // create signUp, signIn, signOut functions
   const signUpUser = async (redirectUrl: string) => {
@@ -108,8 +88,7 @@ export const AuthProvider = ({ children }: any) => {
     signInWithgoogle: (redirectUrl: string) => {
       signUpUser(redirectUrl);
     },
-    signIn: (data: any) => supabaseClient.auth.signInWithOAuth(data),
-    signOut: (data: any) => supabaseClient.auth.signOut(),
+    signOut: async (data: any) => await supabaseClient.auth.signOut(),
     profile: profile,
   };
 

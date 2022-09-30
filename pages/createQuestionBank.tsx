@@ -40,12 +40,10 @@ import { mutate } from "swr";
 import { useGetExamPapers, useGetQuestionsByPaperidAndYear, useSubheadingByPaperId } from "../customHookes/useUser";
 import { QuestionBank, SubheadingQuestionLink } from "../types/myTypes";
 // import Suneditor from "../components/Suneditor";
-// import { supabaseClient } from "@supabase/auth-helpers-nextjs";
-import { useUser } from "@supabase/auth-helpers-react";
+import { useSessionContext,  useUser } from "@supabase/auth-helpers-react";
 import LayoutWithTopNavbar from "../layout/LayoutWithTopNavbar";
 import { BASE_URL, sunEditorButtonList } from "../lib/constants";
 import { Database } from "../lib/database";
-import { supabaseClient } from "../lib/supabaseClient";
 import { useAuthContext } from "../state/Authcontext";
 import PageWithLayoutType from "../types/pageWithLayout";
 
@@ -67,12 +65,13 @@ interface IFormInput {
 }
 
 const CreateQuestionBank: React.FC = () => {
+  const {  supabaseClient } = useSessionContext();
   const [examId, setExamId] = useState("24");
   const [paperId, setPaperId] = useState<number | undefined>(undefined);
   const [year, setYear] = useState<number | undefined>(undefined);
   const [shouldfetch, setShouldfetch] = useState(false);
   const [isEditMode, setIsEditMode] = useState(false);
-  const { user, error } = useUser();
+  const user = useUser();
   const { profile } = useAuthContext();
   const [userId, setUserId] = useState("");
   const [currentEditQuestion, setCurrentEditQuestion] = useState<Database["public"]["Tables"]["questionbank"]["Row"]>();

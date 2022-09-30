@@ -1,5 +1,5 @@
 import { Box, Flex, HStack, IconButton, Text, Tooltip } from "@chakra-ui/react";
-import { supabaseClient } from "@supabase/auth-helpers-nextjs";
+import { useSessionContext } from "@supabase/auth-helpers-react";
 import { groupBy } from "lodash";
 import React from "react";
 import { MdAdd, MdDelete, MdModeEdit } from "react-icons/md";
@@ -17,6 +17,7 @@ interface Props {
 }
 
 const Syllabus: React.FC<Props> = ({ book, changeFormProps }) => {
+  const {  supabaseClient } = useSessionContext();
   const { data } = useGetSyllabusByBookId(book ? book.id : undefined);
   const grouped1 = groupBy(data, (x) => [x.heading_sequence, x.heading_id, x.heading]);
   const deleteHeading = async (id: number): Promise<void> => {

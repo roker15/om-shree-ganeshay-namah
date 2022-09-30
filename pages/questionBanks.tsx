@@ -15,7 +15,7 @@ type ProfileListPropss = {
 };
 
 const QuestionBank1: React.FC<ProfileListPropss> = ({}) => {
-  const { user, error } = useUser();
+  const user = useUser();
 
   if (!user) {
     return (

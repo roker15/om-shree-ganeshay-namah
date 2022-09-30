@@ -8,7 +8,7 @@ import PageWithLayoutType from "../types/pageWithLayout";
 
 const ManageSyllabus: React.FunctionComponent = () => {
   const { profile } = useAuthContext();
-  const { user, error } = useUser();
+  const user = useUser();
 
   return <Box minW="full">{user && profile?.role === "ADMIN" && <CreateBookSyllabus />} </Box>;
 };

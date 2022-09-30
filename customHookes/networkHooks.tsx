@@ -1,7 +1,5 @@
-// import { supabaseClient } from "@supabase/auth-helpers-nextjs";
-import { useUser } from "@supabase/auth-helpers-react";
+import { useSessionContext, useUser } from "@supabase/auth-helpers-react";
 import useSWR from "swr";
-import { supabaseClient } from "../lib/supabaseClient";
 import { useAuthContext } from "../state/Authcontext";
 import { useNoteContext } from "../state/NoteContext";
 import { BookResponse } from "../types/myTypes";
@@ -21,6 +19,8 @@ const cacheOptions = {
   revalidateOnReconnect: false,
 };
 export function useGetBooks(bookId?: number) {
+  const {  supabaseClient } = useSessionContext();
+  
   const { data, error } = useSWR(
     bookId == undefined ? null : ["/publicationId", bookId],
     async () =>
@@ -43,6 +43,7 @@ export function useGetBooks(bookId?: number) {
   };
 }
 export function useGetSyllabusByBookId(bookId?: number) {
+  const {  supabaseClient } = useSessionContext();
   const { data, error } = useSWR(
     bookId == undefined ? null : [`/use-get-syllabus-by-bookid/${bookId}`],
     async () =>
@@ -60,6 +61,7 @@ export function useGetSyllabusByBookId(bookId?: number) {
   };
 }
 export function useGetPublicNotesListBySubheading(subheadingId?: number) {
+  const {  supabaseClient } = useSessionContext();
   const { profile } = useAuthContext();
   //This may be the proper way to use swr with supabase.
   //https://github.com/supabase/supabase/discussions/3145#discussioncomment-1426310
@@ -90,6 +92,7 @@ export function useGetPublicNotesListBySubheading(subheadingId?: number) {
   };
 }
 export function useGetSharedNotesListBySubheading(subheadingId: number | undefined, userid: string | undefined) {
+  const {  supabaseClient } = useSessionContext();
   const { data, error } = useSWR(
     subheadingId == undefined || userid == undefined
       ? null
@@ -116,6 +119,7 @@ export function useGetSharedNotesListBySubheading(subheadingId: number | undefin
   };
 }
 export function useGetUserArticles(subheadingId: number | undefined, userid: string | undefined) {
+  const {  supabaseClient } = useSessionContext();
   const { data, error } = useSWR(
     subheadingId == undefined || userid === undefined ? null : [`/get-user-articles/${subheadingId}/${userid}`],
     async () =>
@@ -137,6 +141,7 @@ export function useGetUserArticles(subheadingId: number | undefined, userid: str
 // this is used to view shared notes and to copy article....
 //please modify this to not get only required properties.
 export function useGetUserArticless(subheadingId: number | undefined, userid: string | undefined) {
+  const {  supabaseClient } = useSessionContext();
   const { data, error } = useSWR(
     subheadingId == undefined || userid === undefined ? null : [`/get-user-articles/${subheadingId}/${userid}`],
     async () =>
@@ -157,6 +162,7 @@ export function useGetUserArticless(subheadingId: number | undefined, userid: st
 }
 
 export function useGetUserArticlesFromTags(userid: string | undefined, tagsArray: number[] | undefined) {
+  const {  supabaseClient } = useSessionContext();
   const { data, error } = useSWR(
     userid === undefined || tagsArray!.length === 0 ? null : [`/get-user-articles-bytags/${userid}/${tagsArray}`],
     async () =>
@@ -189,6 +195,7 @@ export function useGetUserArticlesFromTags(userid: string | undefined, tagsArray
   };
 }
 export function useGetArticleById(id: number) {
+  const {  supabaseClient } = useSessionContext();
   const fetcher = async () =>
     await supabaseClient
       .from("books_articles")
@@ -207,6 +214,7 @@ export function useGetArticleById(id: number) {
   };
 }
 export function useGetCurrentAffairs(isAdminNotes: boolean, subheadingId: number, userId: string) {
+  const {  supabaseClient } = useSessionContext();
   const fetcher1 = async () =>
     await supabaseClient
       .from("books_articles")
@@ -248,7 +256,8 @@ export function useGetCurrentAffairs(isAdminNotes: boolean, subheadingId: number
 }
 
 export function useSearchCurrentAffairs(searchKey: string) {
-  const { user } = useUser();
+  const {  supabaseClient } = useSessionContext();
+  const user  = useUser();
   const fetcher = async () =>
     await supabaseClient
       .from("books_articles")

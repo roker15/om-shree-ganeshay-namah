@@ -10,7 +10,7 @@ import {
   Flex, Text,
   useDisclosure
 } from "@chakra-ui/react";
-import { supabaseClient } from "@supabase/auth-helpers-nextjs";
+import { useSessionContext } from "@supabase/auth-helpers-react";
 import React, { useEffect, useState } from "react";
 import { MdSwitchRight } from "react-icons/md";
 import Sticky from "react-sticky-el";
@@ -57,6 +57,8 @@ const Tags: React.FC = () => {
 export default Tags;
 
 export const ArticleCounterByTag = ({ tagId, creatorId }: { tagId: number; creatorId: string }) => {
+  
+  const { isLoading: sessionLoading, session, error: sessionError, supabaseClient } = useSessionContext();
   const [count, setCount] = useState<number | undefined>(undefined);
 
   useEffect(() => {

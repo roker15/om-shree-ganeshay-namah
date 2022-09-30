@@ -32,7 +32,7 @@ import {
   VStack,
   Wrap,
 } from "@chakra-ui/react";
-import { supabaseClient } from "@supabase/auth-helpers-nextjs";
+import { useSessionContext } from "@supabase/auth-helpers-react";
 import "katex/dist/katex.min.css";
 import React, { useState } from "react";
 import { SubmitHandler, useForm } from "react-hook-form";
@@ -93,6 +93,7 @@ function CustomIconbutton(props: { handleArticleEdit: (arg0: any, arg1: boolean)
 }
 
 const MyNotes: React.FC<Props> = ({ subjectId, subheadingid, notesCreator, changeParentProps, isCopyable, isEditable }) => {
+  const {  supabaseClient } = useSessionContext();
   const { profile } = useAuthContext();
   const { data: articles, isLoading: isArticleLoading, swrError } = useGetUserArticless(subheadingid, notesCreator);
   const [isLoadingCopyButton, setIsLoadingCopyButton] = useState<boolean | undefined>(false);
@@ -368,6 +369,7 @@ const ArticleForm: React.FC<ArticleFormProps> = ({
   setParentProps,
   x,
 }) => {
+  const {  supabaseClient } = useSessionContext();
   const [isLoading, setIsLoading] = useState();
   const { mutate } = useSWRConfig();
   const { profile } = useAuthContext();

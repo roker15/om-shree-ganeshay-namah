@@ -1,5 +1,5 @@
 import { Box, Divider, Flex, IconButton, Link, Stack, Text } from "@chakra-ui/react";
-import { supabaseClient } from "@supabase/auth-helpers-nextjs";
+import { useSessionContext } from "@supabase/auth-helpers-react";
 import { groupBy } from "lodash";
 import React, { useEffect, useState } from "react";
 import { MdAdd, MdDelete, MdLightMode } from "react-icons/md";
@@ -128,6 +128,7 @@ const Syllabus: React.FC<Props> = ({ book, changeParentProps }) => {
 export default Syllabus;
 
 export const ArticleCounter = ({ subheadingId, creatorId }: { subheadingId: number; creatorId: string }) => {
+  const {  supabaseClient } = useSessionContext();
   const [count, setCount] = useState<number | undefined>(undefined);
   const getArticleCount = async () => {
     const { data, error, count } = await supabaseClient

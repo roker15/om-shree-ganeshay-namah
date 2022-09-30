@@ -14,8 +14,8 @@ import {
   Stack,
   Text,
 } from "@chakra-ui/react";
-import { supabaseClient } from "@supabase/auth-helpers-nextjs";
-import { useUser } from "@supabase/auth-helpers-react";
+
+import { useSessionContext, useUser } from "@supabase/auth-helpers-react";
 import katex from "katex";
 import "katex/dist/katex.min.css";
 import dynamic from "next/dynamic";
@@ -217,9 +217,10 @@ interface PropsQuestionBankEditor {
 }
 
 const QuestionBankEditor: React.FunctionComponent<PropsQuestionBankEditor> = ({ x, y }) => {
+  const { isLoading: sessionLoading, session, error: sessionError, supabaseClient } = useSessionContext();
   const [isAnswerWritingOn, setAnswerWritingOn] = useState(false);
   const [isAnswerExist, setAnswerExist] = useState(false);
-  const { user, error } = useUser();
+  const user = useUser();
   const [value, setValue] = React.useState("READ");
   const [showEditButton, setShowEditButton] = useState(y);
   const editor = useRef<SunEditorCore>();

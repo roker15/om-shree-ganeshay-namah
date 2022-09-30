@@ -11,10 +11,10 @@ import { customToast } from "../CustomToast";
 // import SunEditor from "suneditor-react";
 import "suneditor/dist/css/suneditor.min.css"; // Import Sun Editor's CSS File
 // import SunEditor from "suneditor-react";
-import { supabaseClient } from "@supabase/auth-helpers-nextjs";
 import styled from "styled-components";
 import SunEditorCore from "suneditor/src/lib/core";
 import { StringOrNumber } from "@chakra-ui/utils";
+import { useSessionContext } from "@supabase/auth-helpers-react";
 
 type SuneditorForNotesMakingProps = {
   article: definitions["books_articles"];
@@ -27,6 +27,7 @@ const SuneditorForNotesMaking: React.FunctionComponent<SuneditorForNotesMakingPr
   language,
   isEditable,
 }) => {
+  const {  supabaseClient } = useSessionContext();
   const [editorMode, setEditorMode] = React.useState("READ");
   // const [isAutosaveOn, setIsAutosaveOn] = React.useState(false); // for autosave to work
   const [fontSize, setFontSize] = React.useState("font-family: arial; font-size: 16px;");

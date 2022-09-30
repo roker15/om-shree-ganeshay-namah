@@ -19,7 +19,7 @@ import {
   useToast,
   VStack,
 } from "@chakra-ui/react";
-import { supabaseClient } from "@supabase/auth-helpers-nextjs";
+import { useSessionContext } from "@supabase/auth-helpers-react";
 import * as React from "react";
 import { useEffect } from "react";
 import { useForm } from "react-hook-form";
@@ -38,6 +38,7 @@ const FormCreateSubheading: React.FC<Props> = ({ x }) => {
   //this is customhooks using swr, it can be used in any component
   // The most beautiful thing is that there will be only 1 request sent to the API,
   // because they use the same SWR key and the request is deduped, cached and shared automatically.
+  const {  supabaseClient } = useSessionContext();
   const { profile } = useAuthContext();
 
   interface FormValues {

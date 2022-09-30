@@ -22,8 +22,7 @@ import {
   VStack,
   Wrap,
 } from "@chakra-ui/react";
-import { supabaseClient } from "@supabase/auth-helpers-nextjs";
-import { useUser } from "@supabase/auth-helpers-react";
+import { useSessionContext, useUser } from "@supabase/auth-helpers-react";
 import { Loading } from "@supabase/ui";
 import router from "next/router";
 import React, { useEffect, useState } from "react";
@@ -56,6 +55,7 @@ export function InfoAlert({ info }: { info: string }) {
 }
 
 export default function ManageCurrentAffair() {
+  const { isLoading: sessionLoading, session, error: sessionError, supabaseClient } = useSessionContext();
   const { profile } = useAuthContext();
   const { tagsArray, setTagsArray } = useNoteContext();
   const [searchKeys, setSearchKeys] = useState<string | undefined>(undefined);

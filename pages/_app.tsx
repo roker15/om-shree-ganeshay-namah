@@ -9,17 +9,19 @@ import { theme } from "../theme/theme";
 import { createBrowserSupabaseClient } from "@supabase/auth-helpers-nextjs";
 import { NoteContextWrapper } from "../state/NoteContext";
 import { SessionContextProvider } from "@supabase/auth-helpers-react";
+import { Database } from "../lib/database";
 type AppLayoutProps = {
   Component: PageWithLayoutType;
   pageProps: any;
 };
 
 function MyApp({ Component, pageProps }: AppLayoutProps) {
-  const [supabaseClient] = useState(() => createBrowserSupabaseClient());
+  const [supabaseClient] = useState(() => createBrowserSupabaseClient<Database>());
   useEffect(() => {
     ReactGA.initialize("UA-217198026-1");
     ReactGA.pageview(window.location.pathname + window.location.search);
   });
+  
   const Layout = Component.layout || (({ children }) => <>{children}</>);
   return (
     <>
