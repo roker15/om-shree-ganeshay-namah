@@ -3,7 +3,7 @@ import { colors } from "./colors";
 
 export const globalStyles = {
   body: {
-    bg: colors.error,
+    // bg: colors.error,
     // minH: "300vh"
     // color: "white",
   },

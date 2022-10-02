@@ -52,11 +52,6 @@ const Syllabus: React.FC<Props> = ({ book, changeFormProps }) => {
           </Text>
           <Tooltip label="Create New heading" fontSize="sm">
             <IconButton
-              // _groupHover={{ size: "" }}
-
-              _hover={{ color: " #FF1493", fontSize: "30px" }}
-              size="auto"
-              ml="2"
               onClick={() =>
                 changeFormProps({
                   formMode: "CREATE_HEADING",
@@ -67,11 +62,7 @@ const Syllabus: React.FC<Props> = ({ book, changeFormProps }) => {
                   heading_sequence: undefined,
                 })
               }
-              borderRadius={"full"}
-              variant="outline"
-              colorScheme="linkedin"
               aria-label="Call Sage"
-              fontSize="25px"
               icon={<MdAdd />}
             />
           </Tooltip>
@@ -90,15 +81,9 @@ const Syllabus: React.FC<Props> = ({ book, changeFormProps }) => {
                 <HStack display="none" _groupHover={{ display: "inline" }}>
                   <Tooltip label="Create New Subheading under this heading" fontSize="sm">
                     <IconButton
-                      // _groupHover={{ size: "" }}
-                      _hover={{ color: "pink", fontSize: "22px" }}
                       size="xs"
-                      ml="2"
-                      borderRadius={"full"}
-                      variant="outline"
-                      colorScheme="pink"
+                    
                       aria-label="Call Sage"
-                      fontSize="20px"
                       onClick={() =>
                         changeFormProps({
                           formMode: "CREATE_SUBHEADING",
@@ -112,17 +97,7 @@ const Syllabus: React.FC<Props> = ({ book, changeFormProps }) => {
                       icon={<MdAdd />}
                     />
                   </Tooltip>
-                  {/* <IconButton
-                    _hover={{ color: "pink", fontSize: "22px" }}
-                    size="xs"
-                    ml="2"
-                    borderRadius={"full"}
-                    variant="outline"
-                    colorScheme="pink"
-                    aria-label="Call Sage"
-                    fontSize="20px"
-                    icon={<MdDelete />}
-                  /> */}
+                
                   <DeleteAlertDialogue
                     isIconButton={true}
                     dialogueHeader={"Delete Heading"}
@@ -131,14 +106,8 @@ const Syllabus: React.FC<Props> = ({ book, changeFormProps }) => {
                     display={undefined}
                   />
                   <IconButton
-                    _hover={{ color: "pink", fontSize: "22px" }}
                     size="xs"
-                    ml="2"
-                    borderRadius={"full"}
-                    variant="outline"
-                    colorScheme="brand"
                     aria-label="Call Sage"
-                    fontSize="20px"
                     onClick={() =>
                       changeFormProps({
                         formMode: "UPDATE_HEADING",
@@ -170,14 +139,9 @@ const Syllabus: React.FC<Props> = ({ book, changeFormProps }) => {
                         display={undefined}
                       />
                       <IconButton
-                        _hover={{ color: "pink", fontSize: "22px" }}
                         size="xs"
-                        ml="2"
-                        borderRadius={"full"}
-                        variant="outline"
-                        colorScheme="brand"
+                       
                         aria-label="Call Sage"
-                        fontSize="20px"
                         onClick={() =>
                           changeFormProps({
                             formMode: "UPDATE_SUBHEADING",

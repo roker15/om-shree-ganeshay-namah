@@ -173,7 +173,7 @@ const FormCreateSubheading: React.FC<Props> = ({ x }) => {
             </FormControl>
 
             <FormControl isInvalid={errors.sequence as any}>
-              <FormLabel color="blue.600" htmlFor="sequence">
+              <FormLabel  htmlFor="sequence">
                 Subheading Sequence
               </FormLabel>
               <NumberInput alignSelf="start" min={1} max={600}>

@@ -213,7 +213,6 @@ const CreateQuestionBank: React.FC = () => {
             borderColor: "#bec3c9",
           }}
           variant=" outline"
-          color="violet"
           onClick={() => signUpUser("hello", "hello")}
         >
           Log In
@@ -226,7 +225,7 @@ const CreateQuestionBank: React.FC = () => {
       <Box mx={{ base: "4", md: "28", lg: "52" }}>
         <br />
         <Center>
-          <Badge colorScheme="purple" fontSize="xl">
+          <Badge fontSize="xl">
             Create Questions
           </Badge>
         </Center>
@@ -241,10 +240,10 @@ const CreateQuestionBank: React.FC = () => {
           value={examId}
         >
           <Stack direction="row">
-            <Radio size="sm" name="1" colorScheme="linkedin" value="24">
+            <Radio size="sm" name="1"  value="24">
               <Text casing="capitalize">UPSC</Text>
             </Radio>
-            <Radio size="sm" name="2" colorScheme="telegram" value="29">
+            <Radio size="sm" name="2" value="29">
               <Text casing="capitalize">UPPSC PCS</Text>
             </Radio>
           </Stack>
@@ -252,14 +251,9 @@ const CreateQuestionBank: React.FC = () => {
 
         <form onSubmit={handleSubmit(onSubmit)}>
           <FormControl m="2" isInvalid={errors.paperId as any}>
-            <FormLabel color="blue.600" htmlFor="paperId">
+            <FormLabel htmlFor="paperId">
               Exam paper
             </FormLabel>
-            {/* {errors?.paperId?.type === "required" && (
-              <Text fontSize="16px" color="#bf1650">
-                **This field is required
-              </Text>
-            )} */}
             <Select
               isDisabled={isEditMode}
               id="paperId"
@@ -287,14 +281,9 @@ const CreateQuestionBank: React.FC = () => {
           </FormControl>
 
           <FormControl m="2" isInvalid={errors.questionContent as any}>
-            <FormLabel color="blue.600" htmlFor="questionContent">
+            <FormLabel htmlFor="questionContent">
               Question content
             </FormLabel>
-            {/* {errors?.questionContent?.type === "required" && (
-              <Text fontSize="16px" color="#bf1650">
-                **This field is required
-              </Text>
-            )} */}
             <Controller
               name="questionContent"
               control={control}
@@ -323,27 +312,14 @@ const CreateQuestionBank: React.FC = () => {
             <FormErrorMessage>{errors.questionContent && errors.questionContent.message}</FormErrorMessage>
           </FormControl>
 
-          {/* <FormControl isInvalid={errors.searchKeys as any}>
-            <FormLabel color="blue.600" htmlFor="searchKeys">
-              check box
-            </FormLabel>
-            <Checkbox value="sasuke" {...register("searchKeys")}>
-              Sasuke
-            </Checkbox>
-            {errors?.searchKeys?.type === "required" && (
-              <Text fontSize="16px" color="#bf1650">
-                **This field is required
-              </Text>
-            )}
-          </FormControl> */}
 
           <HStack>
             <FormControl m="2" isInvalid={errors.year as any}>
-              <FormLabel color="blue.600" htmlFor="year">
+              <FormLabel htmlFor="year">
                 Question Year
               </FormLabel>
               {errors.year && (
-                <Text fontSize="16px" color="#bf1650">
+                <Text fontSize="16px" >
                   **Year should be from 1995 to 2021
                 </Text>
               )}
@@ -355,11 +331,11 @@ const CreateQuestionBank: React.FC = () => {
               />
             </FormControl>
             <FormControl m="2" isInvalid={errors.sequence as any}>
-              <FormLabel color="blue.600" htmlFor="sequence">
+              <FormLabel  htmlFor="sequence">
                 Question sequence
               </FormLabel>
               {errors.sequence && (
-                <Text fontSize="16px" color="#bf1650">
+                <Text fontSize="16px" >
                   **Sequence should be from 1 to 700
                 </Text>
               )}
@@ -372,17 +348,17 @@ const CreateQuestionBank: React.FC = () => {
           </HStack>
 
           <FormControl m="2">
-            <FormLabel color="blue.600" htmlFor="remark">
+            <FormLabel htmlFor="remark">
               Remark
             </FormLabel>
             {errors?.remark?.type === "required" && (
-              <Text fontSize="16px" color="#bf1650">
+              <Text fontSize="16px" >
                 **This field is required
               </Text>
             )}
             <Input {...register("remark", { required: false, maxLength: 100 })} />
           </FormControl>
-          <Button size="sm" mb="6" mt="6" colorScheme="purple" type="submit" isLoading={loading}>
+          <Button size="sm" mb="6" mt="6" type="submit" isLoading={loading}>
             {isEditMode ? "Update Question" : "Create Question"}
           </Button>
         </form>
@@ -406,7 +382,6 @@ const CreateQuestionBank: React.FC = () => {
                   <HStack>
                     <Button
                       isDisabled={isEditMode && currentEditQuestion?.id != x.id}
-                      colorScheme="teal"
                       variant="ghost"
                       leftIcon={<MdMode />}
                       size="xs"
@@ -446,13 +421,13 @@ const CreateQuestionBank: React.FC = () => {
                     />
                   </EditorStyle>
                   <HStack>
-                    <Badge color="teal" size="small">
+                    <Badge size="small">
                       {x.year}
                     </Badge>
-                    <Badge color="teal" size="small">
+                    <Badge size="small">
                       {x.remark}
                     </Badge>
-                    <Badge color="teal" size="small">
+                    <Badge size="small">
                       {x.sequence}
                     </Badge>
                   </HStack>
@@ -561,7 +536,7 @@ const CreateQuestionBank: React.FC = () => {
                     <Box p="2" key={x.subheading_id}>
                       <Text as="b" fontSize="smaller">
                         {x!.main_topic!}
-                        <Text color="blue" fontSize="smaller">
+                        <Text fontSize="smaller">
                           <>
                             {"  " + x!.topic}
                             {console.log("qlink", qlink)}
@@ -578,7 +553,6 @@ const CreateQuestionBank: React.FC = () => {
                               </Button>
                             ) : (
                               <Button
-                                colorScheme="green"
                                 onClick={() => handlelinkClick(questionId, x.subheading_id, x.heading_id!)}
                                 leftIcon={<MdLink />}
                                 variant="ghost"
@@ -629,7 +603,6 @@ function AlertDialogExample({ handleDelete, x, dialogueHeader, isDisabled }: Ale
   return (
     <>
       <Button
-        colorScheme="red"
         isDisabled={isDisabled}
         leftIcon={<MdDelete />}
         variant="ghost"
@@ -652,7 +625,7 @@ function AlertDialogExample({ handleDelete, x, dialogueHeader, isDisabled }: Ale
               <Button ref={cancelRef} size="sm" onClick={onClose}>
                 Cancel
               </Button>
-              <Button colorScheme="red" size="sm" onClick={() => handleQuestionDelete()} ml={3}>
+              <Button  size="sm" onClick={() => handleQuestionDelete()} ml={3}>
                 Delete
               </Button>
             </AlertDialogFooter>

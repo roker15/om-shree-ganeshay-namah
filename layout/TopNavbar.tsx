@@ -60,19 +60,11 @@ const MobileNav = ({ onOpen, ...rest }: MobileProps) => {
       px={{ base: "1", md: 4 }}
       height="16"
       alignItems="center"
-      // bg={useColorModeValue("#f8f6fa", "#e5e0f1")}
-      bg="white"
-      // bg="#f0f2f5"
-      borderBottomWidth="0px"
-      borderBottomColor={"gray.100"}
-      // shadow="sm"
-      // zIndex={"tooltip"}
-      // pos="fixed"
+     
       top={"0"}
       w="full"
       alignSelf={"flex-start"}
-      // boxShadow="md"
-      // borderBottomColor={useColorModeValue("gray.200", "gray.700")}
+    
       justifyContent={{ base: "space-between", md: "flex" }}
       {...rest}
     >
@@ -85,19 +77,14 @@ const MobileNav = ({ onOpen, ...rest }: MobileProps) => {
           <LinkOverlay
             _hover={{
               background: "none",
-              // color: "white",
             }}
             href="/"
           ></LinkOverlay>
           <Image
-            // p="2"
-            // bg="blackAlpha.100"
-            // priority={true}
             loading="eager"
             src="/logo-blue.png"
             alt="Logo"
             w="90px"
-            // w={{ base: "35px", md: "100px" }}
           />
         </LinkBox>
       </HStack>
@@ -129,7 +116,7 @@ const MobileNav = ({ onOpen, ...rest }: MobileProps) => {
 
                   <VStack display={{ base: "none", md: "flex" }} alignItems="flex-start" spacing="1px" ml="2">
                     {profile ? <Text fontSize="sm">{profile?.username}</Text> : null}
-                    <Text fontSize="xs" color="gray.600">
+                    <Text fontSize="xs" >
                       {/* Admin */}
                     </Text>
                   </VStack>
@@ -138,7 +125,7 @@ const MobileNav = ({ onOpen, ...rest }: MobileProps) => {
                   </Box>
                 </HStack>
               </MenuButton>
-              <MenuList border="1px" bg={"gray.50"} borderColor={"gray.100"}>
+              <MenuList border="1px" bg={"gray.50"} >
                 <MenuItem border="0px">Profile</MenuItem>
                 <MenuItem border="0px">Settings</MenuItem>
                 {profile ? (
@@ -200,12 +187,9 @@ export function GotoQuestion() {
       justifyContent={"center"}
       alignItems="left"
       columnGap={{ base: "1", md: "6" }}
-      // divider={<StackDivider borderColor={{ base: "gray.50", sm: "white" }} />}
-      borderColor="gray.200"
       display={{ base: "none", sm: "flex" }}
     >
       <Text
-        color="gray.600"
         fontWeight="semibold"
         fontSize={{ base: "small", md: "small", lg: "md" }}
         display={router.pathname === "/" ? "none" : "block"}
@@ -215,7 +199,6 @@ export function GotoQuestion() {
         </Link>
       </Text>
       <Text
-        color="gray.600"
         fontWeight="semibold"
         fontSize={{ base: "small", md: "small", lg: "md" }}
         display={router.pathname === "/questionBanks" ? "none" : "block"}
@@ -225,7 +208,6 @@ export function GotoQuestion() {
         </Link>
       </Text>
       <Text
-        color="gray.600"
         fontWeight="semibold"
         fontSize={{ base: "small", md: "small", lg: "md" }}
         display={router.pathname === "/reviseCurrentAffair" ? "none" : "block"}
@@ -271,21 +253,21 @@ export function CustomMenu() {
       <MenuButton as={IconButton} aria-label="Options" icon={<HamburgerIcon />} variant="ghost" />
       <MenuList bg="gray.50">
         <MenuItem minH="48px" display={router.pathname === "/" ? "none" : ""}>
-          <Text color="gray.600" fontWeight="semibold" fontSize={{ base: "small", md: "small", lg: "md" }}>
+          <Text  fontWeight="semibold" fontSize={{ base: "small", md: "small", lg: "md" }}>
             <Link href="/" >
               <a >Home</a>
             </Link>
           </Text>
         </MenuItem>
         <MenuItem minH="48px" display={router.pathname === "/questionBanks" ? "none" : ""}>
-          <Text color="gray.600" fontWeight="semibold" fontSize={{ base: "small", md: "small", lg: "md" }}>
+          <Text  fontWeight="semibold" fontSize={{ base: "small", md: "small", lg: "md" }}>
             <Link href="/questionBanks">
               <a>Question Bank</a>
             </Link>
           </Text>
         </MenuItem>
         <MenuItem minH="48px" display={router.pathname === "/reviseCurrentAffair" ? "none" : ""}>
-          <Text color="gray.600" fontWeight="semibold" fontSize={{ base: "small", md: "small", lg: "md" }}>
+          <Text  fontWeight="semibold" fontSize={{ base: "small", md: "small", lg: "md" }}>
             <Link href="/reviseCurrentAffair">
               <a>Current Affairs</a>
             </Link>

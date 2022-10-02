@@ -1,4 +1,5 @@
-import { Box, Button, Container,Text } from "@chakra-ui/react";
+import { SearchIcon } from "@chakra-ui/icons";
+import { Box, Button, Container,IconButton,Text } from "@chakra-ui/react";
 import { useUser } from "@supabase/auth-helpers-react";
 import Link from "next/link";
 import React from "react";
@@ -40,6 +41,7 @@ const Home: React.FunctionComponent = () => {
       <Landing />
       <Text color="error">hi5555555555555555555</Text>
       <Button>Hello</Button>
+      <IconButton aria-label='Search database' icon={<SearchIcon />} />
       <Container maxW={"6xl"} mb={{ base: "64", lg: "80" }} borderColor="gray.50">
         {user && profile?.role === "ADMIN" && (
           <Box m="8" w="full">

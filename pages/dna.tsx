@@ -224,7 +224,6 @@ const CurrentAffair: React.FC = () => {
             <Button
               size={{ base: "sm", sm: "sm", md: "md" }}
               display={selectedSyllabus ? undefined : "none"}
-              colorScheme="telegram"
               onClick={() => {
                 // setData(data);
                 setIsAdminNotes(!isAdminNotes);
@@ -324,7 +323,6 @@ const CurrentAffair: React.FC = () => {
                           <Tabs
                             variant="line"
                             size="sm"
-                            colorScheme="gray"
                             width="full"
                             index={language === "ENG" ? 0 : 1}
                             onChange={handleTabsChange}
@@ -542,7 +540,6 @@ const ArticleForm: React.FC<ArticleFormProps> = ({
           </FormControl>
           <Checkbox
             size="sm"
-            colorScheme="brand"
             {...register("isQuestion")}
             defaultChecked={question_type === "MODEL" || question_type === "PREV"}
           >
@@ -556,7 +553,6 @@ const ArticleForm: React.FC<ArticleFormProps> = ({
                     {...register("questionType", { required: "This is required" })}
                     value="MODEL"
                     pr="14"
-                    colorScheme={"brand"}
                   >
                     <Text casing="capitalize">Model Question</Text>
                   </Radio>
@@ -570,7 +566,6 @@ const ArticleForm: React.FC<ArticleFormProps> = ({
                 <FormControl p="2" isInvalid={errors.question_year as any} maxW="500px">
                   <Input
                     size="sm"
-                    focusBorderColor="brand"
                     type="number"
                     placeholder="Question year (1995-2022)"
                     {...register("question_year", { required: true, min: 1995, max: 2022 })}
@@ -594,7 +589,6 @@ const ArticleForm: React.FC<ArticleFormProps> = ({
               <Box key={value.id}>
                 <Checkbox
                   px="2"
-                  colorScheme={"brand"}
                   defaultChecked={tags?.includes(value.id) ? true : false}
                   size="sm"
                   type="checkbox"
@@ -647,7 +641,7 @@ const SyllabusDrawer: React.FC<Props> = ({ book, changeParentProps }) => {
             <Button variant="outline" mr={3} onClick={onClose}>
               Cancel
             </Button>
-            <Button colorScheme="blue">Save</Button>
+            <Button >Save</Button>
           </DrawerFooter>
         </DrawerContent>
       </Drawer>

@@ -29,7 +29,6 @@ export function customToast({ title, position, status, variant, duration, isClos
           ml="40"
           mb="16"
           p="2"
-          colorScheme={"yellow"}
           borderRadius={"full"}
         >
           {title}
