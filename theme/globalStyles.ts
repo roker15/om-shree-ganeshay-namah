@@ -1,6 +1,9 @@
+import { theme } from "@chakra-ui/react";
+import { colors } from "./colors";
+
 export const globalStyles = {
   body: {
-    // bg: "pink",
+    bg: colors.error,
     // minH: "300vh"
     // color: "white",
   },

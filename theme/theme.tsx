@@ -1,9 +1,11 @@
 import { extendTheme } from "@chakra-ui/react";
-import { buttons } from "./components/buttons";
+
 import { globalStyles } from "./globalStyles";
 import { selects } from "./components/selects";
 import { radio } from "./components/radio";
 import { colors } from "./colors";
+import buttons from "./components/buttons";
+
 
 // theme.js
 export const theme = extendTheme({
@@ -12,6 +14,7 @@ export const theme = extendTheme({
   // },
   colors: {
     brand: colors.brand,
+    error: colors.error,
   },
   styles: {
     global: globalStyles,
