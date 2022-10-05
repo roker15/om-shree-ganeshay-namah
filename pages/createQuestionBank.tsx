@@ -160,12 +160,6 @@ const CreateQuestionBank: React.FC = () => {
   }, [watch]);
 
   const handleQuestionEdit = (e: Database["public"]["Tables"]["questionbank"]["Row"]) => {
-    // let { data, error } = await supabaseClient.rpc("getsyllabusd", {
-    //   paper_idd:49,
-    // });
-
-    // if (error) console.error(error);
-    // else console.log(data);
 
     setIsEditMode(!isEditMode);
     setCurrentEditQuestion(e);
@@ -206,13 +200,7 @@ const CreateQuestionBank: React.FC = () => {
       <div>
         Please login to view content
         <Button
-          _active={{
-            border: "none",
-            bg: "#dddfe2",
-            transform: "scale(0.98)",
-            borderColor: "#bec3c9",
-          }}
-          variant=" outline"
+          
           onClick={() => signUpUser("hello", "hello")}
         >
           Log In
@@ -398,7 +386,6 @@ const CreateQuestionBank: React.FC = () => {
                     ></AlertDialogExample>
                     {/* <LinkSyllabusModal questionId={x.id}></LinkSyllabusModal> */}
                   </HStack>
-                  <EditorStyle>
                     <SunEditor
                       setContents={x.question_content!}
                       hideToolbar={true}
@@ -419,7 +406,6 @@ const CreateQuestionBank: React.FC = () => {
                       // setContents={field.value}
                       // onChange={field.onChange}
                     />
-                  </EditorStyle>
                   <HStack>
                     <Badge size="small">
                       {x.year}
@@ -504,12 +490,7 @@ const CreateQuestionBank: React.FC = () => {
     const btnRef = React.useRef(null);
     return (
       <>
-        {/* <RadioGroup value={scrollBehavior} onChange={setScrollBehavior}>
-          <Stack direction="row">
-            <Radio value="inside">inside</Radio>
-            <Radio value="outside">outside</Radio>
-          </Stack>
-        </RadioGroup> */}
+   
 
         <Button
           mt={3}
@@ -635,38 +616,3 @@ function AlertDialogExample({ handleDelete, x, dialogueHeader, isDisabled }: Ale
     </>
   );
 }
-
-const EditorStyle = styled.div`
-  .sun-editor {
-    border: 0px solid blue;
-  }
-
-  table {
-    border-collapse: collapse;
-    width: 100%;
-  }
-
-  th,
-  td {
-    text-align: left;
-    padding: 8px;
-    font-family: "Rock Salt", cursive;
-    padding: 20px;
-    // font-style: italic;
-    caption-side: bottom;
-    // color: #666;
-    text-align: right;
-    letter-spacing: 1px;
-    font-weight: lighter !important;
-  }
-  th {
-    font-style: italic;
-    caption-side: bottom;
-    color: #616 !important;
-    font-weight: lighter !important;
-  }
-
-  tr:nth-child(even) {
-    background-color: #f2f2f2;
-  }
-`;

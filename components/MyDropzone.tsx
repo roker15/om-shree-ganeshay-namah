@@ -35,7 +35,7 @@ export function MyDropzone() {
             </Text>{" "}
             uploaded sucessfully,{" "}
           </Text>
-          <Button size="xs" colorScheme="telegram" variant="solid" onClick={(e) => handleCopyLink(e, d.link)}>
+          <Button  onClick={(e) => handleCopyLink(e, d.link)}>
             Copy link
           </Button>
         </ListItem>

@@ -73,10 +73,7 @@ import BookFilter from "../syllabus/BookFilter";
                  And start making Notes
               </Text>
             </Heading>
-            {/* <Text color={"gray.500"}>
-              Switch to Any Syllabus & Content Right from here. No need to navigate from page to page for different Syllabus &
-              Content.
-            </Text> */}
+      
           </Stack>
           <VStack spacing={"12"} flex={1} w="full">
             {!user && (

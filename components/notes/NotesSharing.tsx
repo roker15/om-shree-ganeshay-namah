@@ -167,9 +167,7 @@ export const NotesSharing: React.FC<sharedProps> = ({ subheadingId }) => {
 
             <Checkbox
               size="sm"
-              colorScheme={"whatsapp"}
               textTransform={"capitalize"}
-              ml="0"
               onChange={(e) => setCanEdit(e.target.checked)}
             >
               <Text as="label" casing="capitalize">
@@ -191,9 +189,7 @@ export const NotesSharing: React.FC<sharedProps> = ({ subheadingId }) => {
 
           <ModalFooter>
             <Button
-              size="xs"
               isLoading={isLoading}
-              colorScheme="whatsapp"
               leftIcon={<MdShare />}
               onClick={handleSharePost}
               mr={3}
@@ -280,9 +276,7 @@ export const SharedList: React.FC<{ subheadingId: number }> = ({ subheadingId })
                   <Td>
                     {" "}
                     <Checkbox
-                      colorScheme={"whatsapp"}
                       textTransform={"capitalize"}
-                      ml="0"
                       defaultChecked={x.allow_edit}
                       onChange={(e) => handleEditCheckbox(x.id, e.target.checked)}
                     >
@@ -303,9 +297,6 @@ export const SharedList: React.FC<{ subheadingId: number }> = ({ subheadingId })
                   </Td>
                   <Td>
                     <IconButton
-                      variant="ghost"
-                      size="sm"
-                      colorScheme={"red"}
                       icon={<MdCancel />}
                       aria-label={""}
                       onClick={() => handleCancelSharing(x.id)}

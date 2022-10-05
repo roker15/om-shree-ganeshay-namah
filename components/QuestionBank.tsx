@@ -90,10 +90,10 @@ const QuestionBanks: React.FC = () => {
           value={examId}
         >
           <Stack direction="row">
-            <Radio size="sm" name="1" colorScheme="linkedin" value="24">
+            <Radio size="sm" name="1"  value="24">
               <Text casing="capitalize">UPSC</Text>
             </Radio>
-            <Radio size="sm" name="2" colorScheme="telegram" value="29">
+            <Radio size="sm" name="2"  value="29">
               <Text casing="capitalize">UPPSC PCS</Text>
             </Radio>
           </Stack>
@@ -136,7 +136,7 @@ const QuestionBanks: React.FC = () => {
             <CustomFormLabel text={"Question Year :"} htmlfor={"year"} />
 
             {errors.year && (
-              <Text fontSize="16px" color="#bf1650">
+              <Text fontSize="16px" >
                 **Year should be from 1995 to 2021
               </Text>
             )}
@@ -333,10 +333,10 @@ const QuestionBankEditor: React.FunctionComponent<PropsQuestionBankEditor> = ({ 
           {isAnswerWritingOn && (
             <RadioGroup ml="4" onChange={setValue} value={value}>
               <Stack direction="row">
-                <Radio size="sm" name="1" colorScheme="linkedin" value="READ">
+                <Radio name="1" value="READ">
                   <Text casing="capitalize">Read</Text>
                 </Radio>
-                <Radio size="sm" name="1" colorScheme="telegram" value="EDIT">
+                <Radio name="1" value="EDIT">
                   <Text casing="capitalize">Edit</Text>
                 </Radio>
               </Stack>

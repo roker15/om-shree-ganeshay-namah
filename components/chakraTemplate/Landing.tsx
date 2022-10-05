@@ -45,13 +45,7 @@ export default function CallToActionWithVideo() {
         </Flex>
       )}
       <Heading
-        fontWeight={"normal"}
         fontSize={{ base: "lg", sm: "xl", lg: "xl" }}
-        bg="gray.100"
-        p="4"
-        mt="2"
-        color="gray.600"
-        borderRadius={"base"}
       >
         <Text as={"span"}></Text>Jionote is an{" "}
         <Text as="span" fontWeight="bold">

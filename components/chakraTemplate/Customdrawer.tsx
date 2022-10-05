@@ -62,13 +62,12 @@ const DesktopMenu = () => {
           ref={btnRef}
           // onClick={onToggle}
           onClick={() => setIsModalOpen(true)}
-          color="gray.600"
           cursor={"pointer"}
         >
           Select Syllabus
         </Text>
       </Box>
-      <Slide ref={ref} direction="left" in={isModalOpen} style={{ height: "100vh", width: "full", zIndex: 100,backgroundColor:"white"}} >
+      <Slide ref={ref} direction="left" in={isModalOpen} style={{ height: "100vh", width: "full", zIndex: 100}} >
         <Box bg="white" rounded="md" h="100vh" w="full" shadow="xl" p="8">
           <IconButton
             right="2"

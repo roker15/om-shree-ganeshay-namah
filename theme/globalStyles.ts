@@ -14,6 +14,8 @@ export const globalStyles = {
     bg: "red",
     color: "white",
   },
+ 
+  
   // styles for the `a`
   a: {
     // color: "gray.600",

@@ -241,7 +241,7 @@ const CurrentAffair: React.FC = () => {
         <GridItem colSpan={[5, 5, 5, 4]}>
           <Center>
             {" "}
-            <Text fontWeight="bold" color="gray.600" justifySelf="center" p="2" mb="2">
+            <Text >
               {selectedSyllabus === undefined ? "Select Date to View Content" : selectedSyllabus.subheading}
             </Text>
           </Center>
@@ -366,17 +366,12 @@ const CurrentAffair: React.FC = () => {
               })}
             </Accordion>
             <Button
-              // mb="48"
-              // _groupHover={{ size: "" }}
+        
               display={!profile || isAdminNotes ? "none" : undefined}
-              ml="2"
               onClick={() => {
                 setArticleFormMode(articleFormMode !== "NONE" ? "NONE" : "CREATING");
               }}
-              // borderRadius={"full"}
-              variant="solid"
-              size="lg"
-              // colorScheme="gray"
+           
               leftIcon={articleFormMode !== "NONE" ? <MdCancel /> : <MdAdd />}
             >
               {articleFormMode !== "NONE" ? "Cancel" : "Create New Notes"}
@@ -520,9 +515,7 @@ const ArticleForm: React.FC<ArticleFormProps> = ({
         <VStack alignItems={"center"} p="2">
           <FormControl p="2" isInvalid={errors.articleTitle as any} maxW="500px">
             <Textarea
-              size="sm"
               minW={{ base: "300px", md: "500px" }}
-              focusBorderColor="brand.500"
               placeholder="Notes Heading"
               {...register("articleTitle", { required: "This is required" })}
             />
@@ -531,7 +524,6 @@ const ArticleForm: React.FC<ArticleFormProps> = ({
           <FormControl p="2" isInvalid={errors.articleTitle as any} maxW="500px">
             <Input
               size="sm"
-              focusBorderColor="brand.500"
               type="number"
               placeholder="Notes Sequence (1,2,3  ....)"
               {...register("sequence", { required: "This is required" })}
@@ -556,7 +548,7 @@ const ArticleForm: React.FC<ArticleFormProps> = ({
                   >
                     <Text casing="capitalize">Model Question</Text>
                   </Radio>
-                  <Radio {...register("questionType", { required: "This is required" })} value="PREV" colorScheme={"brand"}>
+                  <Radio {...register("questionType", { required: "This is required" })} value="PREV" >
                     <Text casing="capitalize">Previous year Question</Text>
                   </Radio>
                 </RadioGroup>
@@ -605,7 +597,7 @@ const ArticleForm: React.FC<ArticleFormProps> = ({
         </VStack>
         {/* ) : null} */}
 
-        <Button type="submit" isLoading={isLoading} colorScheme="facebook" aria-label="Call Sage" leftIcon={<MdDone />}>
+        <Button type="submit" isLoading={isLoading} aria-label="Call Sage" leftIcon={<MdDone />}>
           Done
         </Button>
       </form>
@@ -624,7 +616,7 @@ const SyllabusDrawer: React.FC<Props> = ({ book, changeParentProps }) => {
 
   return (
     <>
-      <Button size={{ base: "sm", sm: "sm", md: "md" }} ref={btnRef} colorScheme="teal" onClick={onOpen}>
+      <Button size={{ base: "sm", sm: "sm", md: "md" }} ref={btnRef} onClick={onOpen}>
         Select Date
       </Button>
       <Drawer isOpen={isOpen} placement="left" onClose={onClose} finalFocusRef={btnRef}>

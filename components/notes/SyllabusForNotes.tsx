@@ -82,10 +82,7 @@ const Syllabus: React.FC<Props> = ({ book, changeParentProps }) => {
                   _hover={{cursor:"pointer"}}
                 >
                   <IconButton
-                    color={"brand.500"}
-                    variant="icong"
                     aria-label="Call Sage"
-                    fontSize="16px"
                     icon={toggle === value[0].heading_id ? <MdLightMode /> : <MdAdd />}
                   />
                   <Text align="start" as="address" color=" #FF1493" casing="capitalize" pr="1">
@@ -145,7 +142,7 @@ export const ArticleCounter = ({ subheadingId, creatorId }: { subheadingId: numb
 
   return (
     <Flex alignItems={"center"} px="2">
-      <Text color="brand.500" as={"label" && "b"} fontSize="12px">
+      <Text as={"label" && "b"} fontSize="12px">
         {count}
       </Text>
     </Flex>

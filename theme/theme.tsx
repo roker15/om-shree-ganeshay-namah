@@ -5,6 +5,7 @@ import { selects } from "./components/selects";
 import { radio } from "./components/radio";
 import { colors } from "./colors";
 import buttons from "./components/buttons";
+import checkbox from "./components/checkbox";
 
 
 // theme.js
@@ -22,6 +23,7 @@ export const theme = extendTheme({
   components: {
     Button: buttons,
     Select: selects,
-    // Radio: radio
+    Checkbox: checkbox,
+    Radio: radio
   },
 });

@@ -25,9 +25,9 @@ const buttons =  {
           boxShadow: "0 0 2px 2px #efdfde",
         },
         // 4. We can override existing variants
-        solid: (props: StyleFunctionProps) => ({
-          bg: props.colorMode === "dark" ? "red.300" : "red.500",
-        }),
+        // solid: (props: StyleFunctionProps) => ({
+        //   bg: props.colorMode === "dark" ? "red.300" : "red.500",
+        // }),
         // 5. We can add responsive variants
         sm: {
           bg: "red.500",
@@ -37,7 +37,7 @@ const buttons =  {
       // 6. We can overwrite defaultProps
       defaultProps: {
         size: "xs", // default is md
-        variant: "solid", // default is solid
+        variant: "outline", // default is solid
         colorScheme: colors.colorSchemePrimary, // default is gray
       },
     }
