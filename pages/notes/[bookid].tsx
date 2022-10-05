@@ -1,4 +1,4 @@
-import { Container } from "@chakra-ui/react";
+import { Box, Container } from "@chakra-ui/react";
 import { useRouter } from "next/router";
 // import { GotoQuestion } from "..";
 import ManageNotes from "../../components/notes/ManageNotes";
@@ -10,14 +10,14 @@ const Notes: React.FC = () => {
   const { bookid, item } = router.query;
 
   return (
-    <Container maxW="full" px={{ base: "2", sm: "4", md: "2", lg: "8" }}>
+    <Box maxW="full" px={{ base: "0.5", sm: "0.5", md: "2", lg: "8" }}>
       {/* <GotoQuestion/> */}
       {/* <NoteContextWrapper> */}
         <ManageNotes />
       {/* </NoteContextWrapper> */}
       {/* <AnimatedText/> */}
       {/* <CreateBookSyllabus /> */}
-    </Container>
+    </Box>
   );
 };
 

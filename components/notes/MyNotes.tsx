@@ -146,8 +146,8 @@ const MyNotes: React.FC<Props> = ({ subjectId, subheadingid, notesCreator, chang
     setIsLoadingCopyButton(false);
   };
   return (
-    <Box mt="16">
-      <Accordion allowMultiple>
+    <Box mt="16" >
+      <Accordion allowMultiple >
         {articles
           ?.sort((a, b) => a.sequence! - b.sequence!)
           .map((x) => {
@@ -156,6 +156,7 @@ const MyNotes: React.FC<Props> = ({ subjectId, subheadingid, notesCreator, chang
                 key={x.id}
                 borderTopWidth="0px"
                 borderBottomWidth="0px"
+               
                 my={x.current_affair_tags && x.current_affair_tags.length > 0 ? "6" : "2"}
               >
                 {({ isExpanded }) => (
@@ -253,7 +254,7 @@ const MyNotes: React.FC<Props> = ({ subjectId, subheadingid, notesCreator, chang
                         question_type={x.question_type!}
                       ></ArticleForm>
                     ) : null}
-                    <AccordionPanel pb={4} borderTopWidth="0px" borderBottomWidth="0px" px={{ base: "0.5", lg: "4" }}>
+                    <AccordionPanel pb={4} borderTopWidth="0px" borderBottomWidth="0px" px={{ base: "-0.5", lg: "4" }}>
                       {isExpanded && (
                         <Tabs variant="line" size="sm" colorScheme="gray">
                           <TabList>
@@ -261,12 +262,12 @@ const MyNotes: React.FC<Props> = ({ subjectId, subheadingid, notesCreator, chang
                             <Tab>Hindi</Tab>
                           </TabList>
                           <TabPanels>
-                            <TabPanel px={{ base: "0.5", lg: "4" }}>
+                            <TabPanel px={{ base: "-0.5", lg: "4" }}>
                               <ErrorBoundary>
                                 <SuneditorForNotesMakingg article1={x.id} language={"ENGLISH"} isEditable={isEditable} />
                               </ErrorBoundary>
                             </TabPanel>
-                            <TabPanel px={{ base: "0.5", lg: "4" }}>
+                            <TabPanel px={{ base: "-0.5", lg: "4" }}>
                               <ErrorBoundary>
                                 <SuneditorForNotesMakingg article1={x.id} language={"HINDI"} isEditable={isEditable} />
                               </ErrorBoundary>

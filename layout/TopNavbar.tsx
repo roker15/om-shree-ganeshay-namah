@@ -269,7 +269,7 @@ export function CustomMenu() {
         <MenuItem minH="48px" display={router.pathname === "/reviseCurrentAffair" ? "none" : ""}>
           <Text  fontWeight="semibold" fontSize={{ base: "small", md: "small", lg: "md" }}>
             <Link href="/reviseCurrentAffair">
-              <a>Current Affairs</a>
+              <a>Search Notes</a>
             </Link>
           </Text>
         </MenuItem>
