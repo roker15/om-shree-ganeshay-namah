@@ -1311,16 +1311,16 @@
     cross-fetch "^3.1.5"
 
 "@supabase/gotrue-js@^2.0.0-rc.4":
-  version "2.0.0-rc.5"
-  resolved "https://registry.yarnpkg.com/@supabase/gotrue-js/-/gotrue-js-2.0.0-rc.5.tgz#47b3c102ce94fd63cbe37a3fcc140a5a2ea1727a"
-  integrity sha512-7oeQKkphuLNtCusXirckTCrmF7tu0mR/EM/j5rUwobBIc84gDJ6efcTdYoSLdGm7G30oNeoUmtOSidOUePRgPA==
+  version "2.0.0-rc.9"
+  resolved "https://registry.yarnpkg.com/@supabase/gotrue-js/-/gotrue-js-2.0.0-rc.9.tgz#89fe6db1e29864f2a4ac4428e13c40e86f2316be"
+  integrity sha512-lg9PR+6mg6pDucKW6PsxV0rCYkQ0Dyo9nbotCYFIoF5xaanVIKDWaJEi+tQ13l0nQwdPpnGCRZcSbZlZ3+0Z1g==
   dependencies:
     cross-fetch "^3.1.5"
 
 "@supabase/postgrest-js@^1.0.0-rc.5":
-  version "1.0.0-rc.5"
-  resolved "https://registry.yarnpkg.com/@supabase/postgrest-js/-/postgrest-js-1.0.0-rc.5.tgz#dd95570564ea332131c26da1ffa9f88429164850"
-  integrity sha512-rBOyhK+qLd2fdX6WbCW3e9gY9qbwC5Zeso6QWM+00RlRz3k156lxnreVpe4KKGXNT3JMqJwAHXjQ2lbxmtBJqg==
+  version "1.0.0-rc.6"
+  resolved "https://registry.yarnpkg.com/@supabase/postgrest-js/-/postgrest-js-1.0.0-rc.6.tgz#6dbe1394e8d405b58e82cb8da2f4847bff0115e8"
+  integrity sha512-Oe3f9T1TGUdbBStEMJbYSKxIbkAc53ccARhq4zcwBn1NS7/aBK3LTUNEc5qEn4wZGSGtnCLNf+Xc9BSn+IM6bQ==
   dependencies:
     cross-fetch "^3.1.5"
 
