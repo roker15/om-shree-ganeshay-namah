@@ -1,23 +1,16 @@
 import {
-  Button,
-  Center,
-  Container,
-  Input,
-  VStack,
-  Text,
-  Heading,
-  Highlight,
   Accordion,
   AccordionButton,
   AccordionIcon,
   AccordionItem,
   AccordionPanel,
-  Box,
-  ListItem,
-  OrderedList,
+  Box, Button,
+  Center,
+  Container, Highlight, Input, ListItem,
+  OrderedList, Tag, Text, VStack
 } from "@chakra-ui/react";
 import React from "react";
-import { useForm, SubmitHandler } from "react-hook-form";
+import { SubmitHandler, useForm } from "react-hook-form";
 import LayoutWithTopNavbar from "../layout/LayoutWithTopNavbar";
 import PageWithLayoutType from "../types/pageWithLayout";
 
@@ -88,9 +81,9 @@ function Faq() {
           </AccordionButton>
         </h2>
         <AccordionPanel pb={4}>
-          <OrderedList >
+          <OrderedList spacing={"3"}>
             <ListItem>How to make Notes?</ListItem>
-            <Text>Click Select Syllabus at top → Then Select Topic → Start Notes making in JIONOTE editor </Text> <ListItem>What is the last date for Registration?</ListItem>
+            <Text>Click  <Tag>Select Syllabus</Tag>  at top → Then Select Topic → Start Notes making in JIONOTE editor </Text> <ListItem>What is the last date for Registration?</ListItem>
             <Text>15-10-22</Text>
             <ListItem>What is the last date of Notes Sharing?</ListItem>
             <Text>15-10-22</Text>
