@@ -6,9 +6,9 @@ import { AuthProvider } from "../state/Authcontext";
 import "../styles/globals.css";
 import PageWithLayoutType from "../types/pageWithLayout";
 import { theme } from "../theme/theme";
-import { createBrowserSupabaseClient } from "@supabase/auth-helpers-nextjs";
+import { createBrowserSupabaseClient } from "auth-helper-nextjs-latest";
 import { NoteContextWrapper } from "../state/NoteContext";
-import { SessionContextProvider } from "@supabase/auth-helpers-react";
+// import { SessionContextProvider } from "@supabase/auth-helpers-react";
 import { Database } from "../lib/database";
 type AppLayoutProps = {
   Component: PageWithLayoutType;
