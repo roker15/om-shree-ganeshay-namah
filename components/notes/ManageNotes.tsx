@@ -16,7 +16,7 @@ import {
 import React, { useEffect, useState } from "react";
 import Sticky from "react-sticky-el";
 import { elog } from "../../lib/mylog";
-import { useSessionContext, useUser } from "@supabase/auth-helpers-react";
+import { useSupabaseClient, useUser } from "@supabase/auth-helpers-react";
 import { useAuthContext } from "../../state/Authcontext";
 import { BookResponse, BookSyllabus } from "../../types/myTypes";
 import { definitions } from "../../types/supabase";
@@ -52,7 +52,7 @@ type SelectedNotesType = {
 
 const ManageNotes: React.FunctionComponent = () => {
   // const { isTagSearchActive } = useNoteContext();
-  const {  supabaseClient } = useSessionContext();
+  const supabaseClient = useSupabaseClient<Database>();
   const  user = useUser();
   const router = useRouter();
   const { isTagSearchActive, bookResponse, setBookResponse } = useNoteContext();
@@ -139,8 +139,8 @@ const ManageNotes: React.FunctionComponent = () => {
     if (shouldBePublic === true) {
       const { data, error } = await supabaseClient.from("books_article_sharing").insert([
         {
-          books_subheadings_fk: selectedNotes?.subheadingId,
-          owned_by: profile?.id,
+          books_subheadings_fk: selectedNotes?.subheadingId!,
+          owned_by: profile?.id!,
           ownedby_email: profile?.email,
           ownedby_name: profile?.username,
           ownedby_avatar: profile?.avatar_url,
@@ -196,7 +196,7 @@ const ManageNotes: React.FunctionComponent = () => {
       }
       if (data && data.length !== 0) {
         setIsPostPublic(true);
-        setIsPostCopiable(data[0].allow_copy);
+        setIsPostCopiable(data[0].allow_copy!);
       }
       if (data && data.length === 0) {
         setIsPostPublic(false);

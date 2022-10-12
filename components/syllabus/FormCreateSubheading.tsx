@@ -19,12 +19,13 @@ import {
   useToast,
   VStack,
 } from "@chakra-ui/react";
-import { useSessionContext } from "@supabase/auth-helpers-react";
+import { useSupabaseClient } from "@supabase/auth-helpers-react";
 import * as React from "react";
 import { useEffect } from "react";
 import { useForm } from "react-hook-form";
 import useSWR, { mutate } from "swr";
 import { useGetExamPapers } from "../../customHookes/useUser";
+import { Database } from "../../lib/database";
 import { elog } from "../../lib/mylog";
 import { useAuthContext } from "../../state/Authcontext";
 import { Headings } from "../../types/myTypes";
@@ -38,7 +39,7 @@ const FormCreateSubheading: React.FC<Props> = ({ x }) => {
   //this is customhooks using swr, it can be used in any component
   // The most beautiful thing is that there will be only 1 request sent to the API,
   // because they use the same SWR key and the request is deduped, cached and shared automatically.
-  const {  supabaseClient } = useSessionContext();
+  const supabaseClient = useSupabaseClient<Database>();
   const { profile } = useAuthContext();
 
   interface FormValues {
@@ -70,7 +71,7 @@ const FormCreateSubheading: React.FC<Props> = ({ x }) => {
   async function onSubmit(values: any) {
     if (x?.formMode === "CREATE_SUBHEADING") {
       const { data, error } = await supabaseClient.from("books_subheadings").insert({
-        books_headings_fk: x?.heading_id,
+        books_headings_fk: x?.heading_id!,
         subheading: values.subheading,
         sequence: values.sequence,
       });

@@ -32,7 +32,7 @@ import {
   VStack,
   Wrap,
 } from "@chakra-ui/react";
-import { useSessionContext } from "@supabase/auth-helpers-react";
+import { useSupabaseClient } from "@supabase/auth-helpers-react";
 import "katex/dist/katex.min.css";
 import React, { useState } from "react";
 import { SubmitHandler, useForm } from "react-hook-form";
@@ -93,7 +93,7 @@ function CustomIconbutton(props: { handleArticleEdit: (arg0: any, arg1: boolean)
 }
 
 const MyNotes: React.FC<Props> = ({ subjectId, subheadingid, notesCreator, changeParentProps, isCopyable, isEditable }) => {
-  const {  supabaseClient } = useSessionContext();
+  const supabaseClient = useSupabaseClient<Database>();
   const { profile } = useAuthContext();
   const { data: articles, isLoading: isArticleLoading, swrError } = useGetUserArticless(subheadingid, notesCreator);
   const [isLoadingCopyButton, setIsLoadingCopyButton] = useState<boolean | undefined>(false);
@@ -130,7 +130,7 @@ const MyNotes: React.FC<Props> = ({ subjectId, subheadingid, notesCreator, chang
       article_hindi: x.article_hindi,
       article_english: x.article_english,
       article_audio_link: x.article_audio_link,
-      created_by: profile?.id,
+      created_by: profile?.id!,
       article_title: x.article_title,
       sequence: x.sequence,
       copied_from_articleid: x.id,
@@ -370,7 +370,7 @@ const ArticleForm: React.FC<ArticleFormProps> = ({
   setParentProps,
   x,
 }) => {
-  const {  supabaseClient } = useSessionContext();
+  const supabaseClient = useSupabaseClient<Database>();
   const [isLoading, setIsLoading] = useState();
   const { mutate } = useSWRConfig();
   const { profile } = useAuthContext();
@@ -398,10 +398,10 @@ const ArticleForm: React.FC<ArticleFormProps> = ({
       const { data, error } = await supabaseClient.from("books_articles").insert([
         {
           article_title: d.articleTitle,
-          created_by: profile?.id,
-          books_subheadings_fk: subheadingid,
+          created_by: profile?.id!,
+          books_subheadings_fk: subheadingid!,
           sequence: d.sequence,
-          current_affair_tags: d.tags ? d.tags : [],
+          current_affair_tags: d.tags ? d.tags as number[] : [],
           question_type: d.questionType ? d.questionType : "NONE",
           question_year: d.question_year ? d.question_year : 0,
         },
@@ -421,7 +421,7 @@ const ArticleForm: React.FC<ArticleFormProps> = ({
           // created_by: profile?.id,
           // books_subheadings_fk: subheadingid,
           sequence: d.sequence,
-          current_affair_tags: d.tags ? d.tags : [],
+          current_affair_tags: d.tags ? d.tags as number[] : [],
           question_type: d.questionType ? d.questionType : "NONE",
           question_year: d.question_year ? d.question_year : 0,
         })

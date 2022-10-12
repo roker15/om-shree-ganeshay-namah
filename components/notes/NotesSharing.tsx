@@ -25,10 +25,11 @@ import {
   Tr,
   useDisclosure,
 } from "@chakra-ui/react";
-import { useSessionContext } from "@supabase/auth-helpers-react";
+import { useSupabaseClient } from "@supabase/auth-helpers-react";
 import React, { useEffect, useRef, useState } from "react";
 import { MdCancel, MdDelete, MdShare } from "react-icons/md";
 import { Profile } from "../../lib/constants";
+import { Database } from "../../lib/database";
 import { elog } from "../../lib/mylog";
 import { useAuthContext } from "../../state/Authcontext";
 import { definitions } from "../../types/supabase";
@@ -38,7 +39,7 @@ interface sharedProps {
   subheadingId: number;
 }
 export const NotesSharing: React.FC<sharedProps> = ({ subheadingId }) => {
-  const {  supabaseClient } = useSessionContext();
+  const supabaseClient = useSupabaseClient<Database>();
   const { isOpen, onOpen, onClose } = useDisclosure();
   const [inputEmail, setInputEmail] = React.useState("");
   const [message, setMessage] = React.useState("");
@@ -81,22 +82,20 @@ export const NotesSharing: React.FC<sharedProps> = ({ subheadingId }) => {
         setMessage("This post is already shared with this user");
         setMessageColor("red");
       } else {
-        const { data: sharedData, error } = await supabaseClient
-          .from("books_article_sharing")
-          .insert({
-            books_subheadings_fk: subheadingId,
-            shared_with: profiles![0].id,
-            sharedwith_email: profiles![0].email,
-            sharedwith_name: profiles![0].username,
-            sharedwith_avatar: profiles![0].avatar_url,
-            owned_by: profile!.id,
-            ownedby_email: profile!.email,
-            ownedby_name: profile?.username,
-            ownedby_avatar: profile?.avatar_url,
-            shared_by: profile!.id,
-            allow_edit: canEdit,
-            allow_copy: canCopy,
-          });
+        const { data: sharedData, error } = await supabaseClient.from("books_article_sharing").insert({
+          books_subheadings_fk: subheadingId,
+          shared_with: profiles![0].id,
+          sharedwith_email: profiles![0].email,
+          sharedwith_name: profiles![0].username,
+          sharedwith_avatar: profiles![0].avatar_url,
+          owned_by: profile!.id,
+          ownedby_email: profile!.email,
+          ownedby_name: profile?.username,
+          ownedby_avatar: profile?.avatar_url,
+          shared_by: profile!.id,
+          allow_edit: canEdit,
+          allow_copy: canCopy,
+        });
         if (error) {
           elog("inserting shared data", error.message);
           setMessage(error.message);
@@ -165,11 +164,7 @@ export const NotesSharing: React.FC<sharedProps> = ({ subheadingId }) => {
               {/* <FormErrorMessage>{error}</FormErrorMessage> */}
             </FormControl>
 
-            <Checkbox
-              size="sm"
-              textTransform={"capitalize"}
-              onChange={(e) => setCanEdit(e.target.checked)}
-            >
+            <Checkbox size="sm" textTransform={"capitalize"} onChange={(e) => setCanEdit(e.target.checked)}>
               <Text as="label" casing="capitalize">
                 User Can edit
               </Text>
@@ -188,12 +183,7 @@ export const NotesSharing: React.FC<sharedProps> = ({ subheadingId }) => {
           </ModalBody>
 
           <ModalFooter>
-            <Button
-              isLoading={isLoading}
-              leftIcon={<MdShare />}
-              onClick={handleSharePost}
-              mr={3}
-            >
+            <Button isLoading={isLoading} leftIcon={<MdShare />} onClick={handleSharePost} mr={3}>
               Share
             </Button>
             <Button colorScheme="whatsapp" variant="outline" size="xs" onClick={onClose}>
@@ -208,9 +198,9 @@ export const NotesSharing: React.FC<sharedProps> = ({ subheadingId }) => {
 };
 
 export const SharedList: React.FC<{ subheadingId: number }> = ({ subheadingId }) => {
-  const {  supabaseClient } = useSessionContext();
+  const supabaseClient = useSupabaseClient<Database>();
   const { profile } = useAuthContext();
-  const [sharedlist, setSharedlist] = useState<definitions["books_article_sharing"][] | undefined>();
+  const [sharedlist, setSharedlist] = useState<Database["public"]["Tables"]["books_article_sharing"]["Row"][] | undefined>();
 
   useEffect(() => {
     const getSharedList = async () => {
@@ -240,10 +230,7 @@ export const SharedList: React.FC<{ subheadingId: number }> = ({ subheadingId })
       .match({ id: sharingId });
   };
   const handleCancelSharing = async (sharingId: number) => {
-    const { data, error } = await supabaseClient
-      .from("books_article_sharing")
-      .delete()
-      .match({ id: sharingId });
+    const { data, error } = await supabaseClient.from("books_article_sharing").delete().match({ id: sharingId });
     if (error) {
       elog("Notesharing-->handlecancelsharing", error.message);
       return;
@@ -277,7 +264,7 @@ export const SharedList: React.FC<{ subheadingId: number }> = ({ subheadingId })
                     {" "}
                     <Checkbox
                       textTransform={"capitalize"}
-                      defaultChecked={x.allow_edit}
+                      defaultChecked={x.allow_edit!}
                       onChange={(e) => handleEditCheckbox(x.id, e.target.checked)}
                     >
                       {/* Can Edit */}
@@ -289,18 +276,14 @@ export const SharedList: React.FC<{ subheadingId: number }> = ({ subheadingId })
                       colorScheme={"whatsapp"}
                       textTransform={"capitalize"}
                       ml="0"
-                      defaultChecked={x.allow_copy}
+                      defaultChecked={x.allow_copy!}
                       onChange={(e) => handleCopyCheckbox(x.id, e.target.checked)}
                     >
                       {/* Can Edit */}
                     </Checkbox>
                   </Td>
                   <Td>
-                    <IconButton
-                      icon={<MdCancel />}
-                      aria-label={""}
-                      onClick={() => handleCancelSharing(x.id)}
-                    ></IconButton>
+                    <IconButton icon={<MdCancel />} aria-label={""} onClick={() => handleCancelSharing(x.id)}></IconButton>
                   </Td>
                 </Tr>
               );

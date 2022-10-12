@@ -1,16 +1,17 @@
 import { Box, Button, Center, CircularProgress, Container, ListItem, OrderedList, Text } from "@chakra-ui/react";
-import { useSessionContext } from "@supabase/auth-helpers-react";
+import { useSupabaseClient } from "@supabase/auth-helpers-react";
 import copy from "copy-to-clipboard";
 import React, { useCallback, useEffect, useRef, useState } from "react";
 import { useDropzone } from "react-dropzone";
 import { v4 as uuid } from "uuid";
+import { Database } from "../lib/database";
 import { customToast } from "./CustomToast";
 
 export function MyDropzone() {
   const [isLoading, setIsLoading] = useState<boolean>(false);
   const [filelist, setFilelist] = useState<{ file: string; link: string }[]>([]);
   const mountedRef = useRef(false);
-  const { isLoading: sessionLoading, session, error: sessionError, supabaseClient } = useSessionContext();
+  const  supabaseClient  = useSupabaseClient<Database>();
   // effect just for tracking mounted state
   useEffect(() => {
     mountedRef.current = true;

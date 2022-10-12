@@ -12,11 +12,12 @@ import {
   useToast,
   VStack,
 } from "@chakra-ui/react";
-import { useSessionContext } from "@supabase/auth-helpers-react";
+import { useSupabaseClient } from "@supabase/auth-helpers-react";
 import * as React from "react";
 import { useEffect } from "react";
 import { useForm } from "react-hook-form";
 import { mutate } from "swr";
+import { Database } from "../../lib/database";
 import { elog } from "../../lib/mylog";
 import { definitions } from "../../types/supabase";
 import { FormProps } from "./CreateBookSyllabus";
@@ -25,7 +26,7 @@ interface Props {
   x: FormProps | undefined;
 }
 const FormCreateHeading: React.FC<Props> = ({ x }) => {
-  const {  supabaseClient } = useSessionContext();
+  const supabaseClient = useSupabaseClient<Database>();
   interface FormValues {
     heading: string | undefined;
     sequence: number | undefined;

@@ -14,7 +14,7 @@ import styled from "styled-components";
 import SunEditorCore from "suneditor/src/lib/core";
 import { useGetArticleById } from "../../customHookes/networkHooks";
 import { Database } from "../../lib/database";
-import { useSessionContext } from "@supabase/auth-helpers-react";
+import { useSupabaseClient } from "@supabase/auth-helpers-react";
 
 type SuneditorForNotesMakingProps = {
   article1: number; //definitions["books_articles"];
@@ -27,7 +27,7 @@ const SuneditorForNotesMaking: React.FunctionComponent<SuneditorForNotesMakingPr
   language,
   isEditable,
 }) => {
-  const {  supabaseClient } = useSessionContext();
+  const supabaseClient = useSupabaseClient<Database>();
   const [editorMode, setEditorMode] = React.useState("READ");
 
   const [fontSize, setFontSize] = React.useState("font-family: arial; font-size: 16px;");
@@ -89,7 +89,7 @@ const SuneditorForNotesMaking: React.FunctionComponent<SuneditorForNotesMakingPr
               getSunEditorInstance={getSunEditorInstance}
               // handleOnChange={handleOnChange}
               updateArticleInDatabase={updateArticleInDatabase}
-              article={article }
+              article={article! }
               language={language}
             ></Editor>
           </Centerr>

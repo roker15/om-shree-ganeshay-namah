@@ -1,10 +1,11 @@
 import { Box, Flex, HStack, IconButton, Text, Tooltip } from "@chakra-ui/react";
-import { useSessionContext } from "@supabase/auth-helpers-react";
+import { useSupabaseClient } from "@supabase/auth-helpers-react";
 import { groupBy } from "lodash";
 import React from "react";
 import { MdAdd, MdDelete, MdModeEdit } from "react-icons/md";
 import { mutate } from "swr";
 import { useGetSyllabusByBookId } from "../../customHookes/networkHooks";
+import { Database } from "../../lib/database";
 import { elog } from "../../lib/mylog";
 import { BookResponse, SubheadingQuestionLink } from "../../types/myTypes";
 import { definitions } from "../../types/supabase";
@@ -17,7 +18,7 @@ interface Props {
 }
 
 const Syllabus: React.FC<Props> = ({ book, changeFormProps }) => {
-  const {  supabaseClient } = useSessionContext();
+  const supabaseClient = useSupabaseClient<Database>();
   const { data } = useGetSyllabusByBookId(book ? book.id : undefined);
   const grouped1 = groupBy(data, (x) => [x.heading_sequence, x.heading_id, x.heading]);
   const deleteHeading = async (id: number): Promise<void> => {

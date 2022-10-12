@@ -2,10 +2,11 @@ import { Headings, Papers, Post, QuestionBank, SharedPost, Subheading, Subheadin
 import useSWR, { useSWRConfig } from "swr";
 import { definitions } from "../types/supabase";
 import { useAuthContext } from "../state/Authcontext";
-import { useSessionContext } from "@supabase/auth-helpers-react";
+import {useSupabaseClient} from "@supabase/auth-helpers-react";
+import { Database } from "../lib/database";
 
 export function useGetExamPapers(examId: number) {
-  const {  supabaseClient } = useSessionContext();
+  const supabaseClient = useSupabaseClient<Database>();
   interface papers {
     id: number;
     book_name: string;
@@ -31,7 +32,7 @@ export function useGetExamPapers(examId: number) {
   };
 }
 export function useGetHeadingsFromPaperId(id?: number) {
-  const {  supabaseClient } = useSessionContext();
+  const supabaseClient = useSupabaseClient<Database>();
   const { data, error } = useSWR(
     [`/upsc/${id}`],
     async () =>
@@ -47,7 +48,7 @@ export function useGetHeadingsFromPaperId(id?: number) {
   };
 }
 export function useGetQuestionsByPaperidAndYear(paperId?: number, year?: number, shouldFetch?: boolean) {
-  const {  supabaseClient } = useSessionContext();
+  const supabaseClient = useSupabaseClient<Database>();
   const { data, error } = useSWR(
     shouldFetch && paperId && year ? [`/questions/${paperId}/${year}`] : null,
     async () =>
@@ -79,7 +80,7 @@ export function useGetQuestionsByPaperidAndYear(paperId?: number, year?: number,
 }
 
 export function useSubheadingByPaperId(paperId?: number) {
-  const {  supabaseClient } = useSessionContext();
+  const supabaseClient = useSupabaseClient<Database>();
   const { data, error } = useSWR(
     paperId ? [`/subheadingviews/${paperId}`] : null,
     async () => await supabaseClient.from("subheadings_view").select(`*`).eq("paper_id", paperId)
@@ -99,7 +100,7 @@ export function useSubheadingByPaperId(paperId?: number) {
 }
 
 export function useGetSharedpostBySubheadingidAndUserid(currentSubheadingId?: number) {
-  const {  supabaseClient } = useSessionContext();
+  const supabaseClient = useSupabaseClient<Database>();
   const { profile } = useAuthContext();
   const { data, error } = useSWR(
     currentSubheadingId ? `/sharedPost/${currentSubheadingId}` : null,
@@ -144,7 +145,7 @@ export function useGetSharedpostBySubheadingidAndUserid(currentSubheadingId?: nu
 }
 
 export function useGetUserpostBySubheadingidAndUserid(currentSubheadingId?: number) {
-  const {  supabaseClient } = useSessionContext();
+  const supabaseClient = useSupabaseClient<Database>();
   const { profile } = useAuthContext();
   const { data, error } = useSWR(
     currentSubheadingId ? `/userpost/${currentSubheadingId}` : null,
@@ -180,7 +181,7 @@ export function useGetUserpostBySubheadingidAndUserid(currentSubheadingId?: numb
 }
 
 export function useGetSubheadingsFromHeadingId(currentHeadingId?: number) {
-  const {  supabaseClient } = useSessionContext();
+  const supabaseClient = useSupabaseClient<Database>();
   const { data, error } = useSWR(
     currentHeadingId == undefined ? null : ["/headingId", currentHeadingId],
     async () => await supabaseClient.from("subheadings").select("*").eq("main_topic_id", currentHeadingId),

@@ -22,7 +22,7 @@ import {
   VStack,
   Wrap,
 } from "@chakra-ui/react";
-import { useSessionContext, useUser } from "@supabase/auth-helpers-react";
+import { useSupabaseClient, useUser } from "@supabase/auth-helpers-react";
 import { Loading } from "@supabase/ui";
 import router from "next/router";
 import React, { useEffect, useState } from "react";
@@ -30,6 +30,7 @@ import { FiTrendingUp } from "react-icons/fi";
 import { mutate } from "swr";
 import { useGetUserArticlesFromTags, useSearchCurrentAffairs } from "../../customHookes/networkHooks";
 import { currentAffairTags } from "../../lib/constants";
+import { Database } from "../../lib/database";
 import { elog, sentenseCase } from "../../lib/mylog";
 import { useAuthContext } from "../../state/Authcontext";
 import { useNoteContext } from "../../state/NoteContext";
@@ -55,7 +56,7 @@ export function InfoAlert({ info }: { info: string }) {
 }
 
 export default function ManageCurrentAffair() {
-  const { isLoading: sessionLoading, session, error: sessionError, supabaseClient } = useSessionContext();
+  const  supabaseClient  = useSupabaseClient<Database>();
   const { profile } = useAuthContext();
   const { tagsArray, setTagsArray } = useNoteContext();
   const [searchKeys, setSearchKeys] = useState<string | undefined>(undefined);

@@ -1,6 +1,7 @@
-import { useSessionContext, useUser } from "@supabase/auth-helpers-react";
+import { useSupabaseClient, useUser } from "@supabase/auth-helpers-react";
 import { createContext, useContext, useEffect, useState } from "react";
 import { Profile } from "../lib/constants";
+import { Database } from "../lib/database";
 import { elog, ilog } from "../lib/mylog";
 interface AuthContextValues {
   signInWithgoogle: (redirectUrl: string) => void;
@@ -15,7 +16,7 @@ const AuthContext = createContext<AuthContextValues>({
 });
 
 export const AuthProvider = ({ children }: any) => {
-  const { isLoading, session, error, supabaseClient } = useSessionContext();
+  const supabaseClient = useSupabaseClient<Database>();
   const user = useUser();
   const [loading, setLoading] = useState(true);
   const [profile, setProfile] = useState<Profile | null>(null);

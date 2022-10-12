@@ -43,7 +43,7 @@ import "suneditor/dist/css/suneditor.min.css";
 import { BASE_URL, colors, currentAffairTags, sunEditorButtonList } from "../lib/constants";
 import { definitions } from "../types/supabase";
 // import DOMPurify from "dompurify";
-import { useSessionContext, useUser } from "@supabase/auth-helpers-react";
+import { useSupabaseClient, useUser } from "@supabase/auth-helpers-react";
 import React, { useState } from "react";
 import { SubmitHandler, useForm } from "react-hook-form";
 import { MdAdd, MdCancel, MdDone, MdFileCopy, MdModeEdit } from "react-icons/md";
@@ -124,7 +124,7 @@ function SuneditorSimple(props: {
 }
 
 const CurrentAffair: React.FC = () => {
-  const {  supabaseClient } = useSessionContext();
+  const supabaseClient = useSupabaseClient<Database>();
   // const [data, setData] = useState<definitions["books_articles"][] | undefined>(undefined);
   const user  = useUser();
   const { profile } = useAuthContext();
@@ -444,7 +444,7 @@ const ArticleForm: React.FC<ArticleFormProps> = ({
   setParentProps,
   x,
 }) => {
-  const {  supabaseClient } = useSessionContext();
+  const supabaseClient = useSupabaseClient<Database>();
   const [isLoading, setIsLoading] = useState(false);
   const { profile } = useAuthContext();
   const {

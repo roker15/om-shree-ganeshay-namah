@@ -40,7 +40,7 @@ import { mutate } from "swr";
 import { useGetExamPapers, useGetQuestionsByPaperidAndYear, useSubheadingByPaperId } from "../customHookes/useUser";
 import { QuestionBank, SubheadingQuestionLink } from "../types/myTypes";
 // import Suneditor from "../components/Suneditor";
-import { useSessionContext,  useUser } from "@supabase/auth-helpers-react";
+import { useSupabaseClient,  useUser } from "@supabase/auth-helpers-react";
 import LayoutWithTopNavbar from "../layout/LayoutWithTopNavbar";
 import { BASE_URL, sunEditorButtonList } from "../lib/constants";
 import { Database } from "../lib/database";
@@ -65,7 +65,7 @@ interface IFormInput {
 }
 
 const CreateQuestionBank: React.FC = () => {
-  const {  supabaseClient } = useSessionContext();
+  const supabaseClient = useSupabaseClient<Database>();
   const [examId, setExamId] = useState("24");
   const [paperId, setPaperId] = useState<number | undefined>(undefined);
   const [year, setYear] = useState<number | undefined>(undefined);

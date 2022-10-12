@@ -7,7 +7,8 @@ import { useAuthContext } from "../../state/Authcontext";
 import { BookResponse, BookSyllabus } from "../../types/myTypes";
 import { definitions } from "../../types/supabase";
 import useSWR from "swr";
-import { useSessionContext } from "@supabase/auth-helpers-react";
+import { useSupabaseClient } from "@supabase/auth-helpers-react";
+import { Database } from "../../lib/database";
 interface Props {
   book: BookResponse | undefined;
   changeParentProps: (x: BookSyllabus) => void;
@@ -132,7 +133,7 @@ const Syllabus: React.FC<Props> = ({ book, changeParentProps }) => {
 export default Syllabus;
 
 export const ArticleCounter = ({ subheadingId, creatorId }: { subheadingId: number; creatorId: string }) => {
-  const { isLoading: sessionLoading, session, error: sessionError, supabaseClient } = useSessionContext(); 
+  const  supabaseClient  = useSupabaseClient<Database>();
   const getArticleCount = async () =>
     await supabaseClient
       .from("books_articles")
