@@ -1,29 +1,13 @@
-import { ChevronDownIcon, PlusSquareIcon, SearchIcon } from "@chakra-ui/icons";
 import {
-  Box,
-  Button,
-  Checkbox,
-  Container,
-  IconButton,
-  Menu,
-  MenuButton,
-  MenuItem,
-  MenuList,
-  Select,
-  Stack,
-  Text,
-  VStack,
+  Box, Container
 } from "@chakra-ui/react";
-import { PrismaClient } from "@prisma/client";
 import { useUser } from "@supabase/auth-helpers-react";
 import Link from "next/link";
 import React, { useEffect } from "react";
-import DesktopMenu from "../components/chakraTemplate/Customdrawer";
 import Landing from "../components/chakraTemplate/Landing";
 import ChakraThemeTest from "../components/ChakraThemeTest";
 import { UserTrack } from "../components/dashboard/UserTrack";
 import LayoutWithTopNavbar from "../layout/LayoutWithTopNavbar";
-import { prismaTest } from "../lib/prismaa";
 import { useAuthContext } from "../state/Authcontext";
 import PageWithLayoutType from "../types/pageWithLayout";
 
@@ -53,7 +37,6 @@ const Home: React.FunctionComponent = () => {
 
   useEffect(() => {
     // supabaseTest();
-    prismaTest();
   }, []);
 
   return (

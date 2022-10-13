@@ -5,18 +5,19 @@ import { v4 as uuid } from "uuid";
 // import error from "next/error";
 // import { supabase } from "../../lib/supabaseClient";
 // import { useUser } from "@supabase/auth-helpers-react";
-// import { supabaseServerClient } from "@supabase/auth-helpers-nextjs";
 import fs from "fs";
-import { supabaseServerClient } from "../../lib/supabaseClient";
+import { createServerSupabaseClient } from "@supabase/auth-helpers-nextjs";
+import { Database } from "../../lib/database";
+// import { supabaseServerClient } from "../../lib/supabaseClient";
 export const config = {
   api: {
     bodyParser: false,
   },
 };
 export default async function handler(req: NextApiRequest, res: NextApiResponse, file: string) {
+  const supabaseServerClient = createServerSupabaseClient<Database>({ req, res });
 
-
-  const supabase = await supabaseServerClient({ req })
+  // const supabase = await supabaseServerClient({ req })
 
   // let error1 = null;
   // let publicurl = null;
@@ -42,7 +43,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse,
     // }
     const filepath = uuid() + "-" + user1.originalFilename;
     // name = filepath;
-    const { data, error } = await supabase.storage.from("notes-images").upload(filepath, rawData, {
+    const { data, error } = await supabaseServerClient.storage.from("notes-images").upload(filepath, rawData, {
       contentType: user1.mimetype,
       cacheControl: "3600",
       upsert: true,
@@ -52,7 +53,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse,
     }
     if (data) {
       // console.log("data is ", data.Key);
-      const { data} = await supabase.storage.from("notes-images").getPublicUrl(filepath);
+      const { data } = await supabaseServerClient.storage.from("notes-images").getPublicUrl(filepath);
       // publicurl = publicURL;
       // console.log("public url is  ", publicURL);
       //   if (publicURL && mountedRef.current == true) {

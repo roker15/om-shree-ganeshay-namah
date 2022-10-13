@@ -28,7 +28,7 @@ export const UserTrack = () => {
         return (
           <>
             <Flex key={x.id}  w="full" px="16" wrap={"wrap"}>
-              {/* <Box w="340px"><Text >{x.username}</Text></Box> */}
+              <Box w="340px"><Text >{x.username}</Text></Box>
               <Box w="340px"><Text w="250px">{x.email}</Text></Box>
               <Box w="250px"><Text w="200px">{isoToLocaldate(x.last_login as string)}</Text></Box>
             </Flex>
