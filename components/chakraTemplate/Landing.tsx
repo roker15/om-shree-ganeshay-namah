@@ -74,7 +74,7 @@ export default function CallToActionWithVideo() {
         <SelectSyllabus />
         <br />
         <br />
-        <Text color={"gray.600"}>7000+ UPSC aspirants, 25000+ students using Jionote</Text>
+        <Text >7000+ UPSC aspirants, 25000+ students using Jionote</Text>
         {/* <Box>
           <Flex
             alignItems={"center"}

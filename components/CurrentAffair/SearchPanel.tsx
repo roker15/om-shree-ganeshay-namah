@@ -12,10 +12,7 @@ const SearchPanel = (props: { handledata: (x: string | undefined) => void }) => 
     setsearchKey(value);
     props.handledata(value);
   };
-  // }
-  // useEffect(() => {
-  //   props.handledata(searchKey);
-  // }, [props, searchKey]);
+ 
 
   return (
     <Container maxW="2xl">
@@ -27,9 +24,7 @@ const SearchPanel = (props: { handledata: (x: string | undefined) => void }) => 
           </InputLeftAddon>
           <Input
             value={value}
-            bg="blackAlpha.50"
-            focusBorderColor={"blackAlpha.300"}
-            borderColor={"blackAlpha.200"}
+            
             onChange={(event) => setValue(event.target.value)}
             placeholder="Type keywords and 'Press ENTER'"
           />

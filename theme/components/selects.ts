@@ -11,14 +11,14 @@ export const selects = {
       px: "1000px",
       // border: "4px solid",
       _hover: {
-        bg: "blue.100",
+        // bg: "blue.100",
       },
     },
     icon: {
       // bg: "brand.500",
       color: "brand.300",
       _hover: {
-        bg: "brand.100",
+        bg: "brand.600",
       },
     },
   },
@@ -58,18 +58,18 @@ export const selects = {
         borderRadius: "full",
         border: "1px solid",
         borderColor: "brand.500",
-        color: "brand.800",
+        // color: "brand.800",
         size: "sm",
         transition: "transform .2s",
         _hover: {
-          boxShadow: "md",
+          // boxShadow: "md",
           transform: "scale(1.002)",
         },
       },
     }),
   },
   defaultProps: {
-    focusBorderColor: "brand.100",
+    focusBorderColor: "red.100",
     variant: "outline",
     size: "md",
   },

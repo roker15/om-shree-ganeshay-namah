@@ -24,6 +24,6 @@ export const theme = extendTheme({
     Button: buttons,
     Select: selects,
     Checkbox: checkbox,
-    Radio: radio
+    Radio: radio,
   },
 });

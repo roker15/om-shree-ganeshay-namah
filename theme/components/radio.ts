@@ -21,6 +21,6 @@ export const radio = {
   // 6. We can overwrite defaultProps
   defaultProps: {
     size: "sm", // default is md
-    colorScheme: "brand", // default is gray
+    colorScheme: "red", // default is gray
   },
 };

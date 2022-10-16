@@ -23,7 +23,7 @@ const DesktopMenu = () => {
   const btnRef = useRef(null);
   const ref = useRef(null);
   const [isModalOpen, setIsModalOpen] = useState(false);
-  
+
   useOutsideClick({
     ref: ref,
     handler: () => setIsModalOpen(false),
@@ -52,12 +52,8 @@ const DesktopMenu = () => {
   return (
     <>
       <Box style={{ position: "absolute", zIndex: "100" }} w="container.md">
-        {/* <Button ref={btnRef} colorScheme="teal" onClick={onToggle}>
-          Controls
-        </Button> */}
-
         <Text
-          fontWeight="semibold"
+          
           fontSize={{ base: "small", md: "small", lg: "md" }}
           ref={btnRef}
           // onClick={onToggle}
@@ -67,23 +63,11 @@ const DesktopMenu = () => {
           Select Syllabus
         </Text>
       </Box>
-      <Slide ref={ref} direction="left" in={isModalOpen} style={{ height: "100vh", width: "full", zIndex: 100}} >
-        <Box bg="white" rounded="md" h="100vh" w="full" shadow="xl" p="8">
-          <IconButton
-            right="2"
-            mt="2"
-            aria-label="Close Control Panel"
-            icon={<CloseIcon />}
-            // onClick={onToggle}
-            onClick={() => setIsModalOpen(false)}
-            color="black"
-          />
-          <VStack color="black" bg="white">
-            {/* <Box p={5} shadow="md" borderWidth="1px" m="5px">
-              <Flex justify={"center"} align={"center"} position={"relative"} w={"full"}> */}
+      <Slide ref={ref} direction="left" in={isModalOpen} style={{ height: "100vh", width: "full", zIndex: 100 }}>
+        <Box  h="100vh" w="full" >
+          <IconButton aria-label="Close Control Panel" icon={<CloseIcon />} onClick={() => setIsModalOpen(false)} />
+          <VStack >
             <BookFilter setParentProps={updateBookProps} />
-            {/* </Flex>
-            </Box> */}
           </VStack>
         </Box>
       </Slide>
