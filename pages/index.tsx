@@ -1,8 +1,10 @@
 import { Box, Container } from "@chakra-ui/react";
+import { books } from "@prisma/client";
 import { useSupabaseClient, useUser } from "@supabase/auth-helpers-react";
+import axios, { AxiosResponse } from "axios";
 import Link from "next/link";
 import React, { useEffect } from "react";
-import useSWR from "swr";
+import useSWR, { Fetcher } from "swr";
 import Landing from "../components/chakraTemplate/Landing";
 import ChakraThemeTest from "../components/ChakraThemeTest";
 import { UserTrack } from "../components/dashboard/UserTrack";
@@ -10,6 +12,7 @@ import LayoutWithTopNavbar from "../layout/LayoutWithTopNavbar";
 import { Database } from "../lib/database";
 import { useAuthContext } from "../state/Authcontext";
 import PageWithLayoutType from "../types/pageWithLayout";
+import { Data } from "./api/prisma/posts/posts";
 
 const Home: React.FunctionComponent = () => {
   const { profile } = useAuthContext();
@@ -17,55 +20,25 @@ const Home: React.FunctionComponent = () => {
   const supabaseClient = useSupabaseClient<Database>();
 
   const fetcher = async () => {
-    const response = await fetch("api/posts");
-    return response;
+    // if (window.confirm("Do you want to delete this food?")) {
+    const response = await axios.get<Data>("/api/prisma/posts/posts").catch((e) => {
+      throw e;
+      // console.log("error is ",e)
+    });
+    return response.data;
+    // }
   };
-  const { data, error } = useSWR("/api/posts", fetcher);
-  // if (error) return <div>An error occured.</div>;
-  // if (!data) return <div>Loading ...</div>;
-
-  // const supabaseTest = async () => {
-  //   const { data, error } = await supabaseClient
-  //     .from("books_subheadings")
-  //     .select(
-  //       `
-  //       *
-  //        `
-  //     )
-  //     .eq("books_headings_fk",280).limit(1);
-  //   if (error) {
-  //     console.error("supabasetest error is " + error.message);
-  //   }
-  //   if (data) {
-  //     console.log("supabasetest data is " + JSON.stringify(data));
-  //   }
-  // };
-
-  const supabaseTest = async () => {
-    const { data, error } = await supabaseClient
-      .from("books_article_sharing")
-      .select(
-        `
-         id,books_subheadings_fk,shared_by(email),shared_with(email),profiles!books_article_sharing_shared_by_fkey!inner(id,email),
-         books_subheadings!inner(id,subheading)
-         `
-      )
-      .eq("owned_bys", 45)
-      .match({ "profiles.email": "buddyelusive@gmail.com", "books_subheadings.id": 24 });
-    if (error) {
-      console.error("supabasetest error is " + error.message);
-    }
-    if (data) {
-      console.log("supabasetest data is " + JSON.stringify(data));
-    }
-  };
+  const { data, error } = useSWR("/api/prisma/posts/posts", fetcher);
 
   useEffect(() => {
-    // supabaseTest();
-    console.log(data) }, []);
+    // alert(data?.data?.book_name);
+  }, [data]);
+  if (error) return <div>An error occured.{error.message}</div>;
+  if (!data) return <div>Loading ...</div>;
 
   return (
     <Box minW="full">
+      {data ? data.book_name : "no data"}
       <Landing />
       <ChakraThemeTest />
 

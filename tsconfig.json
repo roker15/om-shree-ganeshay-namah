@@ -24,7 +24,7 @@
     "**/*.ts",
     "**/*.tsx",
     "utils/supabaseClient.js"
-  ],
+, "db"  ],
   "exclude": [
     "node_modules"
   ]

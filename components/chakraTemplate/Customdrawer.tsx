@@ -51,22 +51,23 @@ const DesktopMenu = () => {
   };
   return (
     <>
-      <Box style={{ position: "absolute", zIndex: "100" }} w="container.md">
-        <Text
-          
-          fontSize={{ base: "small", md: "small", lg: "md" }}
-          ref={btnRef}
-          // onClick={onToggle}
-          onClick={() => setIsModalOpen(true)}
-          cursor={"pointer"}
-        >
-          Select Syllabus
-        </Text>
-      </Box>
+      {/* <Box style={{ position: "absolute", zIndex: "100" }} w="container.md"> */}
+      <Text
+        fontSize={{ base: "small", md: "small", lg: "md" }}
+        ref={btnRef}
+        fontWeight="semibold"
+        onClick={() => setIsModalOpen(true)}
+        cursor={"pointer"}
+      >
+        Select Syllabus
+      </Text>
+      {/* </Box> */}
       <Slide ref={ref} direction="left" in={isModalOpen} style={{ height: "100vh", width: "full", zIndex: 100 }}>
-        <Box  h="100vh" w="full" >
-          <IconButton aria-label="Close Control Panel" icon={<CloseIcon />} onClick={() => setIsModalOpen(false)} />
-          <VStack >
+        <Box h="100vh" w="full" bg="brand.50" p="4" shadow="lg">
+          <Flex justifyContent="end">
+            <IconButton aria-label="Close Control Panel" icon={<CloseIcon />} onClick={() => setIsModalOpen(false)} />
+          </Flex>
+          <VStack>
             <BookFilter setParentProps={updateBookProps} />
           </VStack>
         </Box>
