@@ -9,12 +9,14 @@ export type Data = {
   id: bigint;
   book_name: string;
   books_headings: {
+    id: number;
     heading: string | null;
     sequence: bigint | null;
     books: {
       id: bigint;
     } | null;
     books_subheadings: {
+      id: number;
       sequence: bigint | null;
       subheading: string | null;
     }[];
@@ -22,11 +24,13 @@ export type Data = {
 } | null;
 
 export default async function handle(req: NextApiRequest, res: NextApiResponse<Data | string>) {
-  const supabaseServerClient = createServerSupabaseClient<Database>({ req, res })
+  const supabaseServerClient = createServerSupabaseClient<Database>({ req, res });
 
-  const { data: { user } } = await supabaseServerClient.auth.getUser()
-  
-  console.log("user is ",JSON.stringify(user?.email));
+  const {
+    data: { user },
+  } = await supabaseServerClient.auth.getUser();
+
+  console.log("user is ", JSON.stringify(user?.email));
   const c = "hello world";
   try {
     const posts = await prisma.books.findUnique({
@@ -36,21 +40,22 @@ export default async function handle(req: NextApiRequest, res: NextApiResponse<D
         book_name: true,
         books_headings: {
           select: {
+            id:true,
             heading: true,
             sequence: true,
             books: { select: { id: true } },
-            books_subheadings: { select: { sequence: true, subheading: true }, orderBy: { sequence: "asc" } },
+            books_subheadings: { select: { id: true, sequence: true, subheading: true }, orderBy: { sequence: "asc" } },
           },
+          orderBy: { sequence: "asc" },
         },
       },
     });
     console.log(toJson(posts)!);
     return res.status(200).send(toJson(posts)!);
   } catch (error) {
-    console.log("message is", (error as any).message, "end");
-    res.status((error as any).requestResult.statusCode).json('User already exists' );
-    // throw (error);
+    // console.log("message is", (error as any).message, "end");
+    // res.status((error as any).requestResult.statusCode).json('User already exists' );
+    throw error;
     // res.status(403).send( "Error occured." );
   }
-  }
-
+}

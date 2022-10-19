@@ -28,24 +28,24 @@ const Home: React.FunctionComponent = () => {
     return response.data;
     // }
   };
-  const { data, error } = useSWR("/api/prisma/posts/posts", fetcher);
+  // const { data, error } = useSWR("/api/prisma/posts/posts", fetcher);
 
-  useEffect(() => {
-    // alert(data?.data?.book_name);
-  }, [data]);
-  if (error) return <div>An error occured.{error.message}</div>;
-  if (!data) return <div>Loading ...</div>;
+  // useEffect(() => {
+  //   // alert(data?.data?.book_name);
+  // }, [data]);
+  // if (error) return <div>An error occured.{error.message}</div>;
+  // if (!data) return <div>Loading ...</div>;
 
   return (
     <Box minW="full">
-      {data ? data.book_name : "no data"}
+      {/* {data ? data.book_name : "no data"} */}
       <Landing />
       <ChakraThemeTest />
 
       <Container maxW={"6xl"} mb={{ base: "64", lg: "80" }}>
         {user && profile?.role === "ADMIN" && (
           <Box m="8" w="full">
-            <Link href="/manageSyllabus">
+            <Link href="/manageSyllabusv2">
               <a>Manage syllabus</a>
             </Link>
 
