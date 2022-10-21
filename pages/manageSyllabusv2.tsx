@@ -8,7 +8,8 @@ import LayoutWithTopNavbar from "../layout/LayoutWithTopNavbar";
 import { Database } from "../lib/database";
 import { useAuthContext } from "../state/Authcontext";
 import PageWithLayoutType from "../types/pageWithLayout";
-import { Data } from "./api/prisma/syllabus/posts";
+import { Data1 } from "./api/prisma/posts/postCountbySyllabus";
+import { Data } from "./api/prisma/syllabus/syllabus";
 
 const ManageSyllabusv2: React.FunctionComponent = () => {
   const { profile } = useAuthContext();
@@ -16,14 +17,14 @@ const ManageSyllabusv2: React.FunctionComponent = () => {
   const [selectedHeading, setselectedHeading] = useState<number | undefined>(undefined);
   const fetcher = async () => {
     // if (window.confirm("Do you want to delete this food?")) {
-    const response = await axios.get<Data>("/api/prisma/posts/posts").catch((e) => {
+    const response = await axios.get<Data>("/api/prisma/syllabus/syllabus").catch((e) => {
       throw e;
       // console.log("error is ",e)
     });
     return response.data;
     // }
   };
-  const { data, error } = useSWR("/api/prisma/posts/posts", fetcher);
+  const { data, error } = useSWR("/api/prisma/syllabus/syllabus", fetcher);
 
   useEffect(() => {
     console.log(JSON.stringify(data));
@@ -82,25 +83,38 @@ const ManageSyllabusv2: React.FunctionComponent = () => {
 export default ManageSyllabusv2;
 
 export const ArticleCounter = ({ subheadingId, creatorId }: { subheadingId: number; creatorId: string }) => {
-  const supabaseClient = useSupabaseClient<Database>();
-  const [count, setCount] = useState<number | undefined>(undefined);
-  const getArticleCount = async () => {
-    const { data, error, count } = await supabaseClient
-      .from("books_articles")
-      .select("*", { count: "exact", head: true })
-      .match({ books_subheadings_fk: subheadingId, created_by: creatorId });
-    if (count) {
-      setCount(count);
-    }
+  // const supabaseClient = useSupabaseClient<Database>();
+  // const [count, setCount] = useState<number | undefined>(undefined);
+  // const getArticleCount = async () => {
+  //   const { data, error, count } = await supabaseClient
+  //     .from("books_articles")
+  //     .select("*", { count: "exact", head: true })
+  //     .match({ books_subheadings_fk: subheadingId, created_by: creatorId });
+  //   if (count) {
+  //     setCount(count);
+  //   }
+  // };
+  const fetcher = async () => {
+    // if (window.confirm("Do you want to delete this food?")) {
+    const response = await axios
+      .get<Data1>("/api/prisma/posts/postCountbySyllabus", { params: { subheadingId, creatorId } })
+      .catch((e) => {
+        throw e;
+        // console.log("error is ",e)
+      });
+    return response.data;
+    // }
   };
-  useEffect(() => {
-    getArticleCount();
-  }, []);
+  const { data, error } = useSWR(["/api/prisma/posts/postCountbySyllabus", subheadingId, creatorId], fetcher);
+
+  // useEffect(() => {
+  //   getArticleCount();
+  // }, []);
 
   return (
     <Flex alignItems={"center"} px="2">
       <Text as={"label" && "b"} fontSize="12px">
-        {count}
+        {data?.count ? data?.count : 0}
       </Text>
     </Flex>
   );

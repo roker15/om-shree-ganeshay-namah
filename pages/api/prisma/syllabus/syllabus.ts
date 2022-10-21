@@ -50,7 +50,8 @@ export default async function handle(req: NextApiRequest, res: NextApiResponse<D
         },
       },
     });
-    console.log(toJson(posts)!);
+    console.log("api syllabus hit")
+    // console.log(toJson(posts)!)
     return res.status(200).send(toJson(posts)!);
   } catch (error) {
     // console.log("message is", (error as any).message, "end");

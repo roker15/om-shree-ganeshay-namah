@@ -12,7 +12,7 @@ import LayoutWithTopNavbar from "../layout/LayoutWithTopNavbar";
 import { Database } from "../lib/database";
 import { useAuthContext } from "../state/Authcontext";
 import PageWithLayoutType from "../types/pageWithLayout";
-import { Data } from "./api/prisma/syllabus/posts";
+import { Data } from "./api/prisma/syllabus/syllabus";
 
 const Home: React.FunctionComponent = () => {
   const { profile } = useAuthContext();
