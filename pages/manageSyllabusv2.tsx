@@ -8,7 +8,7 @@ import LayoutWithTopNavbar from "../layout/LayoutWithTopNavbar";
 import { Database } from "../lib/database";
 import { useAuthContext } from "../state/Authcontext";
 import PageWithLayoutType from "../types/pageWithLayout";
-import { Data1 } from "./api/prisma/posts/postCountbySyllabus";
+// import { Data1 } from "./api/prisma/posts/postCountbySyllabus";
 import { Data } from "./api/prisma/syllabus/syllabus";
 
 const ManageSyllabusv2: React.FunctionComponent = () => {
@@ -24,7 +24,9 @@ const ManageSyllabusv2: React.FunctionComponent = () => {
     return response.data;
     // }
   };
-  const { data, error } = useSWR("/api/prisma/syllabus/syllabus", fetcher);
+  const { data, error } = useSWR("/api/prisma/syllabus/syllabus", fetcher, {
+    revalidateOnFocus: false,
+  });
 
   useEffect(() => {
     console.log(JSON.stringify(data));
@@ -65,7 +67,9 @@ const ManageSyllabusv2: React.FunctionComponent = () => {
                         <Text fontSize={"sm"} casing={"capitalize"}>
                           {subheading.subheading}
                         </Text>
-                        {profile && profile.id && <ArticleCounter subheadingId={subheading.id} creatorId={profile.id} />}
+                        {profile && profile.id && selectedHeading === headings.id && (
+                          <ArticleCounter subheadingId={subheading.id} creatorId={profile.id} />
+                        )}
                       </Flex>
                     ))}
                   </VStack>
@@ -83,38 +87,26 @@ const ManageSyllabusv2: React.FunctionComponent = () => {
 export default ManageSyllabusv2;
 
 export const ArticleCounter = ({ subheadingId, creatorId }: { subheadingId: number; creatorId: string }) => {
-  // const supabaseClient = useSupabaseClient<Database>();
-  // const [count, setCount] = useState<number | undefined>(undefined);
-  // const getArticleCount = async () => {
-  //   const { data, error, count } = await supabaseClient
-  //     .from("books_articles")
-  //     .select("*", { count: "exact", head: true })
-  //     .match({ books_subheadings_fk: subheadingId, created_by: creatorId });
-  //   if (count) {
-  //     setCount(count);
-  //   }
-  // };
   const fetcher = async () => {
-    // if (window.confirm("Do you want to delete this food?")) {
     const response = await axios
-      .get<Data1>("/api/prisma/posts/postCountbySyllabus", { params: { subheadingId, creatorId } })
+      .get<number>("/api/prisma/posts/postcountbysyllabus", { params: { subheadingId, creatorId } })
       .catch((e) => {
         throw e;
-        // console.log("error is ",e)
       });
     return response.data;
-    // }
   };
-  const { data, error } = useSWR(["/api/prisma/posts/postCountbySyllabus", subheadingId, creatorId], fetcher);
+  const { data, error } = useSWR(["/api/prisma/posts/postCountbySyllabus", subheadingId, creatorId], fetcher, {
+    revalidateOnFocus: false,
+  });
 
-  // useEffect(() => {
-  //   getArticleCount();
-  // }, []);
+  useEffect(() => {
+    console.log("data in use effect " + JSON.stringify(data));
+  }, [data]);
 
   return (
     <Flex alignItems={"center"} px="2">
       <Text as={"label" && "b"} fontSize="12px">
-        {data?.count ? data?.count : 0}
+        {data && data !== 0 ? data?.toString() : ""}
       </Text>
     </Flex>
   );
