@@ -30,16 +30,15 @@ export default async function handle(req: NextApiRequest, res: NextApiResponse<D
     data: { user },
   } = await supabaseServerClient.auth.getUser();
 
- 
   try {
     const posts = await prisma.books.findUnique({
-      where: { id: 125 },
+      where: { id: 12 },
       select: {
         id: true,
         book_name: true,
         books_headings: {
           select: {
-            id:true,
+            id: true,
             heading: true,
             sequence: true,
             books: { select: { id: true } },
@@ -49,13 +48,14 @@ export default async function handle(req: NextApiRequest, res: NextApiResponse<D
         },
       },
     });
-    console.log("api syllabus hit-syllabus")
+    console.log("api syllabus hit-syllabus");
     // console.log(toJson(posts)!)
     return res.status(200).send(toJson(posts)!);
   } catch (error) {
+    return res.status(500).send(toJson(error)!);
     // console.log("message is", (error as any).message, "end");
     // res.status((error as any).requestResult.statusCode).json('User already exists' );
-    throw error;
+    // throw error;
     // res.status(403).send( "Error occured." );
   }
 }

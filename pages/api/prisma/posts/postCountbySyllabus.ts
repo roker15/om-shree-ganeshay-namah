@@ -21,7 +21,7 @@ export default async function handle(req: NextApiRequest, res: NextApiResponse<n
     });
     // console.log("count is ", toJson(posts)!);
     console.log("api syllabus hit-counter");
-    return res.status(200).send(toJson(posts)!);
+    return res.status(201).send(toJson(posts)!);
   } catch (error: any) {
     res.status(500).send(error.message);
     throw error;

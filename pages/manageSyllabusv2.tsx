@@ -1,4 +1,4 @@
-import { Box, Flex, IconButton, Text, VStack } from "@chakra-ui/react";
+import { Box, Center, Flex, IconButton, Text, VStack } from "@chakra-ui/react";
 import { useSupabaseClient, useUser } from "@supabase/auth-helpers-react";
 import axios from "axios";
 import React, { useEffect, useState } from "react";
@@ -19,19 +19,16 @@ const ManageSyllabusv2: React.FunctionComponent = () => {
     // if (window.confirm("Do you want to delete this food?")) {
     const response = await axios.get<Data>("/api/prisma/syllabus/syllabus").catch((e) => {
       throw e;
-      // console.log("error is ",e)
     });
     return response.data;
-    // }
   };
   const { data, error } = useSWR("/api/prisma/syllabus/syllabus", fetcher, {
     revalidateOnFocus: false,
   });
 
-  useEffect(() => {
-    console.log(JSON.stringify(data));
-  }, [data]);
-
+  if (error) {
+    return <Center h="100vh">{error.message}</Center>;
+  }
   return (
     <Box minW="full">
       {user && profile?.role === "ADMIN" && (
@@ -39,44 +36,37 @@ const ManageSyllabusv2: React.FunctionComponent = () => {
           <Box p="2" bg="brand.50">
             {data?.book_name}
           </Box>
-          <Box display="inline-block">
-            <VStack alignItems="left" spacing="4">
-              {data?.books_headings.map((headings, index) => (
-                <VStack key={headings.id} alignItems="left">
-                  <Flex
-                    alignItems={"baseline"}
-                    onClick={() => setselectedHeading(selectedHeading !== headings.id ? headings.id : undefined)}
-                  >
-                    <IconButton
-                      variant="ghost"
-                      icon={selectedHeading !== headings.id ? <MdAdd /> : <MdLightMode />}
-                      aria-label={""}
-                    ></IconButton>
-                    <Text as="b" casing={"capitalize"} cursor="pointer">
-                      {headings.heading}
-                    </Text>
-                  </Flex>
-                  <VStack
-                    alignItems={"left"}
-                    pl="8"
-                    display={selectedHeading === headings.id ? "block" : "none"}
-                    spacing="4"
-                  >
-                    {headings.books_subheadings.map((subheading) => (
-                      <Flex key={subheading.id}>
-                        <Text fontSize={"sm"} casing={"capitalize"}>
-                          {subheading.subheading}
-                        </Text>
-                        {profile && profile.id && selectedHeading === headings.id && (
-                          <ArticleCounter subheadingId={subheading.id} creatorId={profile.id} />
-                        )}
-                      </Flex>
-                    ))}
-                  </VStack>
+          <VStack alignItems="left" spacing="4">
+            {data?.books_headings.map((headings) => (
+              <VStack key={headings.id} alignItems="left">
+                <Flex
+                  alignItems={"baseline"}
+                  onClick={() => setselectedHeading(selectedHeading !== headings.id ? headings.id : undefined)}
+                >
+                  <IconButton
+                    variant="ghost"
+                    icon={selectedHeading !== headings.id ? <MdAdd /> : <MdLightMode />}
+                    aria-label={""}
+                  ></IconButton>
+                  <Text as="b" casing={"capitalize"} cursor="pointer">
+                    {headings.heading}
+                  </Text>
+                </Flex>
+                <VStack alignItems={"left"} pl="8" display={selectedHeading === headings.id ? "block" : "none"} spacing="4">
+                  {headings.books_subheadings.map((subheading) => (
+                    <Flex key={subheading.id}>
+                      <Text fontSize={"sm"} casing={"capitalize"}>
+                        {subheading.subheading}
+                      </Text>
+                      {profile && profile.id && selectedHeading === headings.id && (
+                        <ArticleCounter subheadingId={subheading.id} creatorId={profile.id} />
+                      )}
+                    </Flex>
+                  ))}
                 </VStack>
-              ))}
-            </VStack>
-          </Box>
+              </VStack>
+            ))}
+          </VStack>
         </VStack>
       )}{" "}
     </Box>
@@ -93,20 +83,17 @@ export const ArticleCounter = ({ subheadingId, creatorId }: { subheadingId: numb
       .catch((e) => {
         throw e;
       });
+    console.log(JSON.stringify(response));
     return response.data;
   };
   const { data, error } = useSWR(["/api/prisma/posts/postCountbySyllabus", subheadingId, creatorId], fetcher, {
     revalidateOnFocus: false,
   });
 
-  useEffect(() => {
-    console.log("data in use effect " + JSON.stringify(data));
-  }, [data]);
-
   return (
     <Flex alignItems={"center"} px="2">
       <Text as={"label" && "b"} fontSize="12px">
-        {data && data !== 0 ? data?.toString() : ""}
+        {data && data !== 0 ? data : ""}
       </Text>
     </Flex>
   );
