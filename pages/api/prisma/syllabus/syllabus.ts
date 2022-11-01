@@ -5,22 +5,26 @@ import { Database } from "../../../../lib/database";
 import prisma from "../../../../lib/prisma";
 import { toJson } from "../../../../lib/utils";
 
-export type Data = {
-  id: bigint;
-  book_name: string;
-  books_headings: {
+export type Data_subheadings = {
+  id: number;
+  sequence: number | null;
+  subheading: string | null;
+};
+
+export type Data_headings = {
+  id: number;
+  heading: string | null;
+  sequence: number | null;
+  books: {
     id: number;
-    heading: string | null;
-    sequence: bigint | null;
-    books: {
-      id: bigint;
-    } | null;
-    books_subheadings: {
-      id: number;
-      sequence: bigint | null;
-      subheading: string | null;
-    }[];
-  }[];
+  } | null;
+  books_subheadings: Data_subheadings[];
+};
+
+export type Data = {
+  id: number;
+  book_name: string;
+  books_headings: Data_headings[];
 } | null;
 
 export default async function handle(req: NextApiRequest, res: NextApiResponse<Data | string>) {

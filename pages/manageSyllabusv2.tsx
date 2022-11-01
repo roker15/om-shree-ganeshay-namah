@@ -9,6 +9,8 @@ import {
   FormControl,
   FormErrorMessage,
   FormLabel,
+  Grid,
+  GridItem,
   HStack,
   IconButton,
   Input,
@@ -26,20 +28,49 @@ import React, { useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
 import { MdDelete, MdEdit } from "react-icons/md";
 import { mutate } from "swr";
-import { FormProps } from "../components/syllabus/CreateBookSyllabus";
 import { useGetSyllabusByBookId } from "../customHookes/apiHooks";
 import LayoutWithTopNavbar from "../layout/LayoutWithTopNavbar";
 import { Database } from "../lib/database";
 import { elog } from "../lib/mylog";
 import { useAuthContext } from "../state/Authcontext";
 import PageWithLayoutType from "../types/pageWithLayout";
+import { Data, Data_headings, Data_subheadings } from "./api/prisma/syllabus/syllabus";
 // import { Data1 } from "./api/prisma/posts/postCountbySyllabus";
 
-export type FormMode = "heading_new" | "heading_edit" | "subheading_new" | "subheading_edit";
+export type SubheadingformProps = {
+  formMode: "CREATE_SUBHEADING" | "UPDATE_SUBHEADING";
+  id: number;
+  subheading: string;
+  sequence: number;
+  heading_fk: number;
+};
+export type HeadingformProps = {
+  formMode: "CREATE_HEADING" | "UPDATE_HEADING";
+  id: number;
+  heading: string;
+  sequence: number;
+  book_fk: number;
+};
+
 const ManageSyllabusv2: React.FunctionComponent = () => {
   const { profile } = useAuthContext();
   const user = useUser();
-  return <Box minW="full">{user && profile?.role === "ADMIN" && <Syllabus />} </Box>;
+  const [formMode, setFormMode] = useState<SubheadingformProps | HeadingformProps | undefined>(undefined);
+
+  return (
+    <Box>
+      <Grid templateColumns="repeat(5, 1fr)" gap={2}>
+        <GridItem w="100%" bg="blue.100" colSpan={2}>
+          <Syllabus />
+        </GridItem>
+        <GridItem w="100%" bg="blue.100" colSpan={3}>
+          {(formMode as HeadingformProps).formMode === ("CREATE_HEADING" && "UPDATE_HEADING") && (
+            <HeadingForm x={formMode as HeadingformProps} />
+          )}
+        </GridItem>
+      </Grid>
+    </Box>
+  );
 };
 
 (ManageSyllabusv2 as PageWithLayoutType).layout = LayoutWithTopNavbar;
@@ -50,84 +81,43 @@ const Syllabus = () => {
   const user = useUser();
   const [selectedHeading, setselectedHeading] = useState<number | undefined>(undefined);
   const { data, swrError } = useGetSyllabusByBookId(40);
-  const [action, setAction] = useState<FormMode | undefined>(undefined);
   const supabaseClient = useSupabaseClient<Database>();
 
   type Heading = { heading: string; books_fk: number; sequence: number };
-  const fetcher = async (x: Heading) => {
-    const { error } = await supabaseClient
-      .from("books_headings")
-      .insert({ books_fk: x.books_fk, heading: x.heading, sequence: x.sequence });
-  };
+  // const fetcher = async (x: Heading) => {
+  //   const { error } = await supabaseClient
+  //     .from("books_headings")
+  //     .insert({ books_fk: x.books_fk, heading: x.heading, sequence: x.sequence });
+  // };
 
   if (swrError) {
     return <Center h="100vh">{swrError.message}</Center>;
   }
   return (
-    <Box maxW="xl" p="2" bg="brand.50">
+    <Box maxW="full" p="2" bg="brand.50">
       {user && profile?.role === "ADMIN" && (
         <VStack display="inline-block">
           <HStack bg="brand.50" alignItems={"baseline"} p="4">
             <Text fontSize="lg" as="u">
               {data?.book_name}
             </Text>
-            <Button variant="solid" size="xs" onClick={() => setAction("heading_new")}>
+            {/* <Button variant="solid" size="xs" onClick={() => setAction("CREATE_HEADING")}>
               {" "}
               Add Chapter
-            </Button>
+            </Button> */}
           </HStack>
           <VStack alignItems="left" spacing="4">
-            {data?.books_headings.map((headings) => (
-              <VStack key={headings.id} alignItems="left">
-                <HStack
-                  alignItems={"baseline"}
-                  onClick={() => setselectedHeading(selectedHeading !== headings.id ? headings.id : undefined)}
-                >
-                  <IconButton
-                    onClick={() =>
-                      fetcher({
-                        books_fk: Number(headings.books?.id),
-                        heading: headings.heading!,
-                        sequence: Number(headings.sequence!),
-                      })
-                    }
-                    icon={<MdEdit />}
-                    variant="ghost"
-                    size="xs"
-                    aria-label={""}
-                  ></IconButton>
-                  <Text as="b" casing={"capitalize"} cursor="pointer">
-                    {headings.heading}
-                  </Text>
-                  <Button variant="solid" size="xs">
-                    {" "}
-                    Add Topic
-                  </Button>
-                </HStack>
-                <VStack alignItems={"left"} pl="8" spacing="4">
-                  {headings.books_subheadings.map((subheading) => (
-                    <Flex key={subheading.id}>
-                      <IconButton icon={<MdDelete />} variant="ghost" size="xs" aria-label={""}></IconButton>
-                      <IconButton icon={<MdEdit />} variant="ghost" size="xs" aria-label={""}></IconButton>
-                      <Text fontSize={"sm"} casing={"capitalize"}>
-                        {subheading.subheading}
-                      </Text>
-                    </Flex>
-                  ))}
-                </VStack>
-              </VStack>
-            ))}
+            {data?.books_headings.map((headings) => getHeadings(headings, setselectedHeading, selectedHeading))}
           </VStack>
         </VStack>
       )}{" "}
     </Box>
   );
 };
-
-interface Props {
-  x: FormProps | undefined;
+interface IHeadingformProps {
+  x: HeadingformProps;
 }
-const HeadingForm: React.FC<Props> = ({ x }) => {
+const HeadingForm: React.FC<IHeadingformProps> = ({ x }) => {
   const supabaseClient = useSupabaseClient<Database>();
   interface FormValues {
     heading: string | undefined;
@@ -147,7 +137,7 @@ const HeadingForm: React.FC<Props> = ({ x }) => {
       //   setValue("sequence", x.heading_sequence, { shouldValidate: true });
       reset({
         heading: x.heading,
-        sequence: x.heading_sequence,
+        sequence: x.sequence,
       });
     } else {
       setValue("heading", "");
@@ -160,7 +150,7 @@ const HeadingForm: React.FC<Props> = ({ x }) => {
   async function onSubmit(values: any) {
     if (x?.formMode === "CREATE_HEADING") {
       const { data, error } = await supabaseClient.from("books_headings").insert({
-        books_fk: x?.book_id,
+        books_fk: x?.book_fk,
         heading: values.heading,
         sequence: values.sequence,
       });
@@ -168,7 +158,7 @@ const HeadingForm: React.FC<Props> = ({ x }) => {
 
       if (data) {
         //   mutate(`/book_id_syllabus/${x?.book_id}`);
-        mutate([`/book_id_syllabuss/${x?.book_id}`]);
+        mutate([`/book_id_syllabuss/${x?.book_fk}`]);
         toast({
           title: "Data saved.",
           //   description: `New Topic----   '${data[0].main_topic}'   added`,
@@ -187,7 +177,7 @@ const HeadingForm: React.FC<Props> = ({ x }) => {
           heading: values.heading,
           sequence: values.sequence,
         })
-        .eq("id", x.heading_id);
+        .eq("id", x.id);
 
       if (error) {
         elog("FormCreateHeading->onSubmit", error.message);
@@ -210,10 +200,10 @@ const HeadingForm: React.FC<Props> = ({ x }) => {
 
   return (
     <Container mt="2" maxW={{ base: "container.xl", md: "container.md" }}>
-      <Text>{x?.book_name}</Text>
+      {/* <Text>{x?.book_name}</Text>
       <Text>{x?.formMode}</Text>
       <Text>{x?.book_id}</Text>
-      <Text>{x?.heading_sequence}</Text>
+      <Text>{x?.heading_sequence}</Text> */}
       <form onSubmit={handleSubmit(onSubmit)}>
         <VStack
           // divider={<StackDivider borderColor="gray.200" />}
@@ -271,13 +261,10 @@ const HeadingForm: React.FC<Props> = ({ x }) => {
     </Container>
   );
 };
-interface Props {
-  x: FormProps | undefined;
+interface ISubheadingformProps {
+  x: SubheadingformProps;
 }
-const FormSubheading: React.FC<Props> = ({ x }) => {
-  //this is customhooks using swr, it can be used in any component
-  // The most beautiful thing is that there will be only 1 request sent to the API,
-  // because they use the same SWR key and the request is deduped, cached and shared automatically.
+const FormSubheading: React.FC<ISubheadingformProps> = ({ x }) => {
   const supabaseClient = useSupabaseClient<Database>();
   const { profile } = useAuthContext();
 
@@ -294,11 +281,9 @@ const FormSubheading: React.FC<Props> = ({ x }) => {
   } = useForm<FormValues>();
   useEffect(() => {
     if (x && x?.formMode === "UPDATE_SUBHEADING") {
-      // setValue("subheading", x.subheading,{ shouldValidate: true });
-      // setValue("sequence", x.subheading_sequence, { shouldValidate: true });
       reset({
         subheading: x.subheading,
-        sequence: x.subheading_sequence,
+        sequence: x.sequence,
       });
     } else {
       setValue("subheading", "");
@@ -310,15 +295,15 @@ const FormSubheading: React.FC<Props> = ({ x }) => {
   async function onSubmit(values: any) {
     if (x?.formMode === "CREATE_SUBHEADING") {
       const { data, error } = await supabaseClient.from("books_subheadings").insert({
-        books_headings_fk: x?.heading_id!,
-        subheading: values.subheading,
+        books_headings_fk: x?.heading_fk!,
+        subheading: values.subheadin,
         sequence: values.sequence,
       });
       isSubmitting == false;
 
       if (data) {
         //   mutate(`/book_id_syllabus/${x?.book_id}`);
-        mutate([`/book_id_syllabuss/${x?.book_id}`]);
+        mutate([`/book_id_syllabuss/${x?.id}`]);
         toast({
           title: "Data saved.",
           //   description: `New Topic----   '${data[0].main_topic}'   added`,
@@ -337,7 +322,7 @@ const FormSubheading: React.FC<Props> = ({ x }) => {
           subheading: values.subheading,
           sequence: values.sequence,
         })
-        .eq("id", x.subheading_id);
+        .eq("id", x.id);
       if (error) {
         elog("FormCreateSubheading->onSubmit", error.message);
         return;
@@ -345,7 +330,7 @@ const FormSubheading: React.FC<Props> = ({ x }) => {
       isSubmitting == false;
 
       if (data) {
-        mutate([`/book_id_syllabuss/${x?.book_id}`]);
+        mutate([`/book_id_syllabuss/${x?.id}`]);
         toast({
           title: "Data updated.",
           //   description: `New Topic----   '${data[0].main_topic}'   updated`,
@@ -361,9 +346,9 @@ const FormSubheading: React.FC<Props> = ({ x }) => {
   if (profile) {
     return (
       <Container mt="2" maxW={{ base: "container.xl", md: "container.md" }}>
-        <Text>{x?.book_name}</Text>
+        {/* <Text>{x?.book_name}</Text>
         <Text>{x?.formMode}</Text>
-        <Text>{x?.heading}</Text>
+        <Text>{x?.heading}</Text> */}
         <form onSubmit={handleSubmit(onSubmit)}>
           <VStack
             // divider={<StackDivider borderColor="gray.200" />}
@@ -453,3 +438,39 @@ const FormSubheading: React.FC<Props> = ({ x }) => {
     );
   }
 };
+function getHeadings(
+  headings: Data_headings,
+  onChange: React.Dispatch<React.SetStateAction<number | undefined>>,
+  value: number | undefined
+): JSX.Element {
+  return (
+    <VStack key={Number(headings!.id!)} alignItems="left">
+      <HStack alignItems={"baseline"} onClick={() => onChange(value !== headings.id ? headings.id : undefined)}>
+        <IconButton icon={<MdEdit />} variant="ghost" size="xs" aria-label={""}></IconButton>
+        <IconButton icon={<MdDelete />} variant="ghost" size="xs" aria-label={""}></IconButton>
+        <Text as="b" casing={"capitalize"} cursor="pointer">
+          {headings.heading}
+        </Text>
+        <Button variant="solid" size="xs">
+          {" "}
+          Add Topic
+        </Button>
+      </HStack>
+      <VStack alignItems={"left"} pl="8" spacing="4">
+        {headings.books_subheadings.map((subheading) => getSubheadings(subheading))}
+      </VStack>
+    </VStack>
+  );
+}
+
+function getSubheadings(subheading: Data_subheadings): JSX.Element {
+  return (
+    <Flex key={subheading.id}>
+      <IconButton icon={<MdDelete />} variant="ghost" size="xs" aria-label={""}></IconButton>
+      <IconButton icon={<MdEdit />} variant="ghost" size="xs" aria-label={""}></IconButton>
+      <Text fontSize={"sm"} casing={"capitalize"}>
+        {subheading.subheading}
+      </Text>
+    </Flex>
+  );
+}
