@@ -11,6 +11,7 @@ import {
   FormLabel,
   Grid,
   GridItem,
+  Heading,
   HStack,
   IconButton,
   Input,
@@ -33,40 +34,41 @@ import LayoutWithTopNavbar from "../layout/LayoutWithTopNavbar";
 import { Database } from "../lib/database";
 import { elog } from "../lib/mylog";
 import { useAuthContext } from "../state/Authcontext";
+import {
+  HeadingformProps,
+  SubheadingformProps,
+  SyllabusContextProviderWrapper,
+  useSyllabusContext,
+} from "../state/SyllabusContext";
 import PageWithLayoutType from "../types/pageWithLayout";
 import { Data, Data_headings, Data_subheadings } from "./api/prisma/syllabus/syllabus";
 // import { Data1 } from "./api/prisma/posts/postCountbySyllabus";
 
-export type SubheadingformProps = {
-  formMode: "CREATE_SUBHEADING" | "UPDATE_SUBHEADING";
-  id: number;
-  subheading: string;
-  sequence: number;
-  heading_fk: number;
-};
-export type HeadingformProps = {
-  formMode: "CREATE_HEADING" | "UPDATE_HEADING";
-  id: number;
-  heading: string;
-  sequence: number;
-  book_fk: number;
-};
+export const SyllabusContext = React.createContext<string>("hello");
 
 const ManageSyllabusv2: React.FunctionComponent = () => {
+  return (
+    <SyllabusContextProviderWrapper>
+      <ManageSyllabusv3 />
+    </SyllabusContextProviderWrapper>
+  );
+};
+const ManageSyllabusv3: React.FunctionComponent = () => {
   const { profile } = useAuthContext();
   const user = useUser();
-  const [formMode, setFormMode] = useState<SubheadingformProps | HeadingformProps | undefined>(undefined);
+  const { formType, headingFormProps, subheadingFormProps, setFormType } = useSyllabusContext();
+  undefined;
+  // const [formType, setformType] = useState<"HEAD" | "SUBHEAD" | undefined>(undefined);
 
   return (
     <Box>
-      <Grid templateColumns="repeat(5, 1fr)" gap={2}>
+      <Grid templateColumns="repeat(6, 1fr)" gap={2}>
         <GridItem w="100%" bg="blue.100" colSpan={2}>
           <Syllabus />
         </GridItem>
-        <GridItem w="100%" bg="blue.100" colSpan={3}>
-          {(formMode as HeadingformProps).formMode === ("CREATE_HEADING" && "UPDATE_HEADING") && (
-            <HeadingForm x={formMode as HeadingformProps} />
-          )}
+        <GridItem w="100%" bg="brand.50" colSpan={4}>
+          {formType === "HEAD" && <HeadingForm x={headingFormProps} />}
+          {formType === "SUBHEAD" && <SubheadingForm x={subheadingFormProps} />}
         </GridItem>
       </Grid>
     </Box>
@@ -79,20 +81,20 @@ export default ManageSyllabusv2;
 const Syllabus = () => {
   const { profile } = useAuthContext();
   const user = useUser();
-  const [selectedHeading, setselectedHeading] = useState<number | undefined>(undefined);
   const { data, swrError } = useGetSyllabusByBookId(40);
   const supabaseClient = useSupabaseClient<Database>();
+  const { formType, setFormType, setHeadingFormProps } = useSyllabusContext();
 
-  type Heading = { heading: string; books_fk: number; sequence: number };
+  // type Heading = { heading: string; books_fk: number; sequence: number };
   // const fetcher = async (x: Heading) => {
   //   const { error } = await supabaseClient
   //     .from("books_headings")
   //     .insert({ books_fk: x.books_fk, heading: x.heading, sequence: x.sequence });
   // };
 
-  if (swrError) {
-    return <Center h="100vh">{swrError.message}</Center>;
-  }
+  // if (swrError) {
+  //   return <Center h="100vh">{swrError.message}</Center>;
+  // }
   return (
     <Box maxW="full" p="2" bg="brand.50">
       {user && profile?.role === "ADMIN" && (
@@ -101,13 +103,20 @@ const Syllabus = () => {
             <Text fontSize="lg" as="u">
               {data?.book_name}
             </Text>
-            {/* <Button variant="solid" size="xs" onClick={() => setAction("CREATE_HEADING")}>
+            <Button
+              variant="solid"
+              size="xs"
+              onClick={() => {
+                setFormType("HEAD");
+                setHeadingFormProps({ formMode: "CREATE_HEADING",book_fk:40 });
+              }}
+            >
               {" "}
               Add Chapter
-            </Button> */}
+            </Button>
           </HStack>
           <VStack alignItems="left" spacing="4">
-            {data?.books_headings.map((headings) => getHeadings(headings, setselectedHeading, selectedHeading))}
+            {data?.books_headings.map((headings) => Headings(headings))}
           </VStack>
         </VStack>
       )}{" "}
@@ -115,7 +124,7 @@ const Syllabus = () => {
   );
 };
 interface IHeadingformProps {
-  x: HeadingformProps;
+  x: HeadingformProps | undefined;
 }
 const HeadingForm: React.FC<IHeadingformProps> = ({ x }) => {
   const supabaseClient = useSupabaseClient<Database>();
@@ -200,10 +209,7 @@ const HeadingForm: React.FC<IHeadingformProps> = ({ x }) => {
 
   return (
     <Container mt="2" maxW={{ base: "container.xl", md: "container.md" }}>
-      {/* <Text>{x?.book_name}</Text>
-      <Text>{x?.formMode}</Text>
-      <Text>{x?.book_id}</Text>
-      <Text>{x?.heading_sequence}</Text> */}
+      <Heading mb="16">{x?.formMode === "CREATE_HEADING" ? "Create New Chapter" : "Edit Chapter"}</Heading>
       <form onSubmit={handleSubmit(onSubmit)}>
         <VStack
           // divider={<StackDivider borderColor="gray.200" />}
@@ -216,12 +222,12 @@ const HeadingForm: React.FC<IHeadingformProps> = ({ x }) => {
             </FormLabel>
             <Input
               id="heading"
-              placeholder="Heading"
+              placeholder="Heading name"
               {...register("heading", {
                 required: "This is required",
                 minLength: {
-                  value: 4,
-                  message: "Minimum length should be 4",
+                  value: 3,
+                  message: "Minimum length should be 3",
                 },
               })}
             />
@@ -235,19 +241,15 @@ const HeadingForm: React.FC<IHeadingformProps> = ({ x }) => {
             <NumberInput alignSelf="start" min={1} max={100}>
               <NumberInputField
                 id="sequence"
-                placeholder="Sequence"
+                placeholder="1, 2, 3 ..."
                 {...register("sequence", {
                   required: "This is required",
                   min: {
                     value: 1,
-                    message: "Minimum length should be 1",
+                    message: "Minimum value should be 1",
                   },
                 })}
               />
-              <NumberInputStepper>
-                <NumberIncrementStepper />
-                <NumberDecrementStepper />
-              </NumberInputStepper>
             </NumberInput>
 
             <FormErrorMessage>{errors.sequence && errors.sequence.message}</FormErrorMessage>
@@ -262,9 +264,9 @@ const HeadingForm: React.FC<IHeadingformProps> = ({ x }) => {
   );
 };
 interface ISubheadingformProps {
-  x: SubheadingformProps;
+  x: SubheadingformProps | undefined;
 }
-const FormSubheading: React.FC<ISubheadingformProps> = ({ x }) => {
+const SubheadingForm: React.FC<ISubheadingformProps> = ({ x }) => {
   const supabaseClient = useSupabaseClient<Database>();
   const { profile } = useAuthContext();
 
@@ -296,14 +298,14 @@ const FormSubheading: React.FC<ISubheadingformProps> = ({ x }) => {
     if (x?.formMode === "CREATE_SUBHEADING") {
       const { data, error } = await supabaseClient.from("books_subheadings").insert({
         books_headings_fk: x?.heading_fk!,
-        subheading: values.subheadin,
+        subheading: values.subheading,
         sequence: values.sequence,
       });
       isSubmitting == false;
 
       if (data) {
         //   mutate(`/book_id_syllabus/${x?.book_id}`);
-        mutate([`/book_id_syllabuss/${x?.id}`]);
+        // mutate([`/book_id_syllabuss/${x?.id}`]);
         toast({
           title: "Data saved.",
           //   description: `New Topic----   '${data[0].main_topic}'   added`,
@@ -330,7 +332,7 @@ const FormSubheading: React.FC<ISubheadingformProps> = ({ x }) => {
       isSubmitting == false;
 
       if (data) {
-        mutate([`/book_id_syllabuss/${x?.id}`]);
+        // mutate([`/book_id_syllabuss/${x?.id}`]);
         toast({
           title: "Data updated.",
           //   description: `New Topic----   '${data[0].main_topic}'   updated`,
@@ -346,9 +348,7 @@ const FormSubheading: React.FC<ISubheadingformProps> = ({ x }) => {
   if (profile) {
     return (
       <Container mt="2" maxW={{ base: "container.xl", md: "container.md" }}>
-        {/* <Text>{x?.book_name}</Text>
-        <Text>{x?.formMode}</Text>
-        <Text>{x?.heading}</Text> */}
+        <Heading mb="16">{x?.formMode === "CREATE_SUBHEADING" ? "Create Subheading" : "Edit Subheading"}</Heading>
         <form onSubmit={handleSubmit(onSubmit)}>
           <VStack
             // divider={<StackDivider borderColor="gray.200" />}
@@ -438,39 +438,73 @@ const FormSubheading: React.FC<ISubheadingformProps> = ({ x }) => {
     );
   }
 };
-function getHeadings(
-  headings: Data_headings,
-  onChange: React.Dispatch<React.SetStateAction<number | undefined>>,
-  value: number | undefined
-): JSX.Element {
+
+const Headings = (headings: Data_headings) => {
+  const { setFormType, setSubheadingFormProps, setHeadingFormProps } = useSyllabusContext();
   return (
     <VStack key={Number(headings!.id!)} alignItems="left">
-      <HStack alignItems={"baseline"} onClick={() => onChange(value !== headings.id ? headings.id : undefined)}>
-        <IconButton icon={<MdEdit />} variant="ghost" size="xs" aria-label={""}></IconButton>
+      <HStack alignItems={"baseline"}>
+        <IconButton
+          icon={<MdEdit />}
+          onClick={() => {
+            setFormType("HEAD");
+            setHeadingFormProps({
+              formMode: "UPDATE_HEADING",
+              id: Number(headings!.id!),
+              heading: headings?.heading!,
+              sequence: headings?.sequence!,
+            });
+          }}
+          variant="ghost"
+          size="xs"
+          aria-label={""}
+        ></IconButton>
         <IconButton icon={<MdDelete />} variant="ghost" size="xs" aria-label={""}></IconButton>
         <Text as="b" casing={"capitalize"} cursor="pointer">
           {headings.heading}
         </Text>
-        <Button variant="solid" size="xs">
+        <Button
+          variant="solid"
+          size="xs"
+          onClick={() => {
+            setFormType("SUBHEAD");
+            setSubheadingFormProps({ formMode: "CREATE_SUBHEADING",heading_fk:headings.id });
+          }}
+        >
           {" "}
           Add Topic
         </Button>
       </HStack>
-      <VStack alignItems={"left"} pl="8" spacing="4">
-        {headings.books_subheadings.map((subheading) => getSubheadings(subheading))}
+      <VStack alignItems={"left"} pl="16" spacing="4">
+        {headings.books_subheadings.map((subheading) => Subheading(subheading))}
       </VStack>
     </VStack>
   );
-}
+};
 
-function getSubheadings(subheading: Data_subheadings): JSX.Element {
+const Subheading = (subheading: Data_subheadings): JSX.Element => {
+  const { setFormType, setSubheadingFormProps, setHeadingFormProps } = useSyllabusContext();
   return (
     <Flex key={subheading.id}>
       <IconButton icon={<MdDelete />} variant="ghost" size="xs" aria-label={""}></IconButton>
-      <IconButton icon={<MdEdit />} variant="ghost" size="xs" aria-label={""}></IconButton>
+      <IconButton
+        icon={<MdEdit />}
+        variant="ghost"
+        size="xs"
+        aria-label={""}
+        onClick={() => {
+          setFormType("SUBHEAD");
+          setSubheadingFormProps({
+            formMode: "UPDATE_SUBHEADING",
+            id: Number(subheading!.id!),
+            subheading: subheading?.subheading!,
+            sequence: subheading?.sequence!,
+          });
+        }}
+      ></IconButton>
       <Text fontSize={"sm"} casing={"capitalize"}>
         {subheading.subheading}
       </Text>
     </Flex>
   );
-}
+};
