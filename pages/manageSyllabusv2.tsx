@@ -1,5 +1,11 @@
 import {
   Alert,
+  AlertDialog,
+  AlertDialogBody,
+  AlertDialogContent,
+  AlertDialogFooter,
+  AlertDialogHeader,
+  AlertDialogOverlay,
   AlertIcon,
   Box,
   Button,
@@ -53,6 +59,13 @@ const ManageSyllabusv2: React.FunctionComponent = () => {
     </SyllabusContextProviderWrapper>
   );
 };
+interface props {
+  children: React.ReactNode;
+}
+const CHeading: React.FunctionComponent<props> = ({ children }) => {
+  return <Heading color="gray.700">{children}</Heading>;
+};
+
 const ManageSyllabusv3: React.FunctionComponent = () => {
   const { profile } = useAuthContext();
   const user = useUser();
@@ -63,10 +76,15 @@ const ManageSyllabusv3: React.FunctionComponent = () => {
   return (
     <Box>
       <Grid templateColumns="repeat(6, 1fr)" gap={2}>
-        <GridItem w="100%" bg="blue.100" colSpan={2}>
+        <GridItem w="100%" colSpan={2}>
           <Syllabus />
         </GridItem>
-        <GridItem w="100%" bg="brand.50" colSpan={4}>
+        <GridItem w="100%" colSpan={4}>
+          {formType === undefined && (
+            <Center h="60vh">
+              <CHeading>Select action from Left</CHeading>
+            </Center>
+          )}
           {formType === "HEAD" && <HeadingForm x={headingFormProps} />}
           {formType === "SUBHEAD" && <SubheadingForm x={subheadingFormProps} />}
         </GridItem>
@@ -81,9 +99,8 @@ export default ManageSyllabusv2;
 const Syllabus = () => {
   const { profile } = useAuthContext();
   const user = useUser();
-  const { data, swrError } = useGetSyllabusByBookId(40);
-  const supabaseClient = useSupabaseClient<Database>();
   const { formType, setFormType, setHeadingFormProps } = useSyllabusContext();
+  const { data, swrError } = useGetSyllabusByBookId(40);
 
   // type Heading = { heading: string; books_fk: number; sequence: number };
   // const fetcher = async (x: Heading) => {
@@ -108,7 +125,7 @@ const Syllabus = () => {
               size="xs"
               onClick={() => {
                 setFormType("HEAD");
-                setHeadingFormProps({ formMode: "CREATE_HEADING",book_fk:40 });
+                setHeadingFormProps({ formMode: "CREATE_HEADING", book_fk: 40 });
               }}
             >
               {" "}
@@ -116,7 +133,9 @@ const Syllabus = () => {
             </Button>
           </HStack>
           <VStack alignItems="left" spacing="4">
-            {data?.books_headings.map((headings) => Headings(headings))}
+            {data?.books_headings.map((headings) => (
+              <Headings key={headings.id} headings={headings} />
+            ))}
           </VStack>
         </VStack>
       )}{" "}
@@ -165,9 +184,9 @@ const HeadingForm: React.FC<IHeadingformProps> = ({ x }) => {
       });
       isSubmitting == false;
 
-      if (data) {
-        //   mutate(`/book_id_syllabus/${x?.book_id}`);
-        mutate([`/book_id_syllabuss/${x?.book_fk}`]);
+      if (!error) {
+        // mutate(`/book_id_syllabus/${x?.book_id}`);
+        mutate([`/api/prisma/syllabus/syllabus/${40}`]);
         toast({
           title: "Data saved.",
           //   description: `New Topic----   '${data[0].main_topic}'   added`,
@@ -194,7 +213,7 @@ const HeadingForm: React.FC<IHeadingformProps> = ({ x }) => {
       }
       isSubmitting == false;
 
-      if (data) {
+      if (!error) {
         toast({
           title: "Data updated.",
           //   description: `New Topic----   '${data[0].main_topic}'   updated`,
@@ -303,9 +322,10 @@ const SubheadingForm: React.FC<ISubheadingformProps> = ({ x }) => {
       });
       isSubmitting == false;
 
-      if (data) {
+      if (!error) {
+        console.log("data hai create subheading me");
         //   mutate(`/book_id_syllabus/${x?.book_id}`);
-        // mutate([`/book_id_syllabuss/${x?.id}`]);
+        mutate([`/api/prisma/syllabus/syllabus/${40}`]);
         toast({
           title: "Data saved.",
           //   description: `New Topic----   '${data[0].main_topic}'   added`,
@@ -318,7 +338,7 @@ const SubheadingForm: React.FC<ISubheadingformProps> = ({ x }) => {
     }
 
     if (x?.formMode === "UPDATE_SUBHEADING") {
-      const { data, error } = await supabaseClient
+      const { error } = await supabaseClient
         .from("books_subheadings")
         .update({
           subheading: values.subheading,
@@ -331,17 +351,16 @@ const SubheadingForm: React.FC<ISubheadingformProps> = ({ x }) => {
       }
       isSubmitting == false;
 
-      if (data) {
-        // mutate([`/book_id_syllabuss/${x?.id}`]);
-        toast({
-          title: "Data updated.",
-          //   description: `New Topic----   '${data[0].main_topic}'   updated`,
-          status: "success",
-          duration: 3000,
-          isClosable: true,
-          position: "top",
-        });
-      }
+      console.log("data hai update subheading me");
+      mutate([`/api/prisma/syllabus/syllabus/${40}`]);
+      toast({
+        title: "Data updated.",
+        //   description: `New Topic----   '${data[0].main_topic}'   updated`,
+        status: "success",
+        duration: 3000,
+        isClosable: true,
+        position: "top",
+      });
     }
   }
 
@@ -438,9 +457,17 @@ const SubheadingForm: React.FC<ISubheadingformProps> = ({ x }) => {
     );
   }
 };
-
-const Headings = (headings: Data_headings) => {
+interface IheadingsProps {
+  headings: Data_headings;
+}
+const Headings: React.FunctionComponent<IheadingsProps> = ({ headings }) => {
   const { setFormType, setSubheadingFormProps, setHeadingFormProps } = useSyllabusContext();
+  const { mutate } = useGetSyllabusByBookId(40);
+  const supabaseClient = useSupabaseClient<Database>();
+  const deleteHeading = async (id: number) => {
+    const { error } = await supabaseClient.from("books_headings").delete().eq("id", id);
+    mutate();
+  };
   return (
     <VStack key={Number(headings!.id!)} alignItems="left">
       <HStack alignItems={"baseline"}>
@@ -459,7 +486,7 @@ const Headings = (headings: Data_headings) => {
           size="xs"
           aria-label={""}
         ></IconButton>
-        <IconButton icon={<MdDelete />} variant="ghost" size="xs" aria-label={""}></IconButton>
+        <DeleteAlert handleDelete={deleteHeading} dialogueHeader={"Delete Heading"} id={headings.id} />
         <Text as="b" casing={"capitalize"} cursor="pointer">
           {headings.heading}
         </Text>
@@ -468,7 +495,7 @@ const Headings = (headings: Data_headings) => {
           size="xs"
           onClick={() => {
             setFormType("SUBHEAD");
-            setSubheadingFormProps({ formMode: "CREATE_SUBHEADING",heading_fk:headings.id });
+            setSubheadingFormProps({ formMode: "CREATE_SUBHEADING", heading_fk: headings.id });
           }}
         >
           {" "}
@@ -476,17 +503,27 @@ const Headings = (headings: Data_headings) => {
         </Button>
       </HStack>
       <VStack alignItems={"left"} pl="16" spacing="4">
-        {headings.books_subheadings.map((subheading) => Subheading(subheading))}
+        {headings.books_subheadings.map((subheading) => (
+          <Subheading key={subheading.id} subheading={subheading} />
+        ))}
       </VStack>
     </VStack>
   );
 };
-
-const Subheading = (subheading: Data_subheadings): JSX.Element => {
+interface IsubheadingProps {
+  subheading: Data_subheadings;
+}
+const Subheading: React.FunctionComponent<IsubheadingProps> = ({ subheading }) => {
+  const supabaseClient = useSupabaseClient<Database>();
+  const { mutate } = useGetSyllabusByBookId(40);
+  const deleteSubheading = async (id: number) => {
+    const { data, error } = await supabaseClient.from("books_subheadings").delete().eq("id", id);
+    mutate();
+  };
   const { setFormType, setSubheadingFormProps, setHeadingFormProps } = useSyllabusContext();
   return (
     <Flex key={subheading.id}>
-      <IconButton icon={<MdDelete />} variant="ghost" size="xs" aria-label={""}></IconButton>
+      <DeleteAlert handleDelete={deleteSubheading} dialogueHeader={"Delete Subheading"} id={subheading.id} />
       <IconButton
         icon={<MdEdit />}
         variant="ghost"
@@ -506,5 +543,48 @@ const Subheading = (subheading: Data_subheadings): JSX.Element => {
         {subheading.subheading}
       </Text>
     </Flex>
+  );
+};
+
+interface AlertdialogueProps {
+  handleDelete: (id: number) => Promise<void>;
+  dialogueHeader: string;
+  id: number;
+}
+
+const DeleteAlert = ({ handleDelete, dialogueHeader, id }: AlertdialogueProps) => {
+  const [isOpen, setIsOpen] = React.useState(false);
+  const onClose = () => setIsOpen(false);
+  const cancelRef = React.useRef(null);
+  const confirmDelete = () => {
+    handleDelete(id);
+    onClose();
+  };
+
+  return (
+    <>
+      <IconButton size="xs" variant="ghost" aria-label="Call Sage" onClick={() => setIsOpen(true)} icon={<MdDelete />} />
+
+      <AlertDialog isOpen={isOpen} leastDestructiveRef={cancelRef} onClose={onClose}>
+        <AlertDialogOverlay>
+          <AlertDialogContent>
+            <AlertDialogHeader p="2" bg="gray.100">
+              {dialogueHeader}
+            </AlertDialogHeader>
+
+            <AlertDialogBody py="8">Are you sure? You can`t undo this action afterwards.</AlertDialogBody>
+
+            <AlertDialogFooter>
+              <Button ref={cancelRef} size="sm" onClick={onClose}>
+                Cancel
+              </Button>
+              <Button colorScheme="red" size="sm" onClick={() => confirmDelete()} ml={3}>
+                Delete
+              </Button>
+            </AlertDialogFooter>
+          </AlertDialogContent>
+        </AlertDialogOverlay>
+      </AlertDialog>
+    </>
   );
 };

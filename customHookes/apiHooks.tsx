@@ -19,12 +19,13 @@ export function useGetSyllabusByBookId(bookId: number) {
     });
     return response.data;
   };
-  const { data, error } = useSWR("/api/prisma/syllabus/syllabus", fetcher, cacheOptions);
+  const { data, error, mutate } = useSWR([`/api/prisma/syllabus/syllabus/${bookId}`], fetcher, cacheOptions);
 
   return {
     data: data,
     isLoading: !error && !data,
     swrError: error,
+    mutate: mutate,
   };
 }
 export function useGetArticleCount(subheadingId: number, creatorId: string) {
