@@ -48,7 +48,6 @@ import { Database } from "../../lib/database";
 import { elog, sentenseCase } from "../../lib/mylog";
 import { useAuthContext } from "../../state/Authcontext";
 import { useNoteContext } from "../../state/NoteContext";
-import { definitions } from "../../types/supabase";
 import { customToast } from "../CustomToast";
 import SuneditorForNotesMakingg from "../editor/SuneditorForNotesMakingg";
 import ErrorBoundary from "../ErrorBoundary";

@@ -31,52 +31,31 @@ import {
   VStack,
 } from "@chakra-ui/react";
 import { useSupabaseClient, useUser } from "@supabase/auth-helpers-react";
-import React, { useEffect, useState } from "react";
+import React, { useEffect } from "react";
 import { useForm } from "react-hook-form";
 import { MdDelete, MdEdit } from "react-icons/md";
-import { mutate } from "swr";
 import { useGetSyllabusByBookId } from "../customHookes/apiHooks";
 import LayoutWithTopNavbar from "../layout/LayoutWithTopNavbar";
 import { Database } from "../lib/database";
 import { elog } from "../lib/mylog";
 import { useAuthContext } from "../state/Authcontext";
-import {
-  HeadingformProps,
-  SubheadingformProps,
-  SyllabusContextProviderWrapper,
-  useSyllabusContext,
-} from "../state/SyllabusContext";
+import { HeadingformProps, SubheadingformProps, useSyllabusContext } from "../state/SyllabusContext";
 import PageWithLayoutType from "../types/pageWithLayout";
-import { Data, Data_headings, Data_subheadings } from "./api/prisma/syllabus/syllabus";
+import { Data_headings, Data_subheadings } from "./api/prisma/syllabus/syllabus";
 // import { Data1 } from "./api/prisma/posts/postCountbySyllabus";
 
-export const SyllabusContext = React.createContext<string>("hello");
 
-const ManageSyllabusv2: React.FunctionComponent = () => {
-  return (
-    <SyllabusContextProviderWrapper>
-      <ManageSyllabusv3 />
-    </SyllabusContextProviderWrapper>
-  );
-};
-interface props {
-  children: React.ReactNode;
-}
-const CHeading: React.FunctionComponent<props> = ({ children }) => {
-  return <Heading color="gray.700">{children}</Heading>;
+const CHeading = (props: { children: React.ReactNode }) => {
+  return <Heading color="gray.700">{props.children}</Heading>;
 };
 
-const ManageSyllabusv3: React.FunctionComponent = () => {
-  const { profile } = useAuthContext();
-  const user = useUser();
-  const { formType, headingFormProps, subheadingFormProps, setFormType } = useSyllabusContext();
-  undefined;
-  // const [formType, setformType] = useState<"HEAD" | "SUBHEAD" | undefined>(undefined);
-
+const SyllabusContainer: React.FunctionComponent = () => {
+  const { formType, headingFormProps, subheadingFormProps, setFormType, book } = useSyllabusContext();
+  // undefined;
   return (
     <Box>
       <Grid templateColumns="repeat(6, 1fr)" gap={2}>
-        <GridItem w="100%" colSpan={2}>
+        <GridItem w="100%" colSpan={2} minH="100vh" bg="brand.50">
           <Syllabus />
         </GridItem>
         <GridItem w="100%" colSpan={4}>
@@ -93,39 +72,29 @@ const ManageSyllabusv3: React.FunctionComponent = () => {
   );
 };
 
-(ManageSyllabusv2 as PageWithLayoutType).layout = LayoutWithTopNavbar;
-export default ManageSyllabusv2;
+(SyllabusContainer as PageWithLayoutType).layout = LayoutWithTopNavbar;
+export default SyllabusContainer;
 
-const Syllabus = () => {
+const Syllabus: React.FunctionComponent = () => {
   const { profile } = useAuthContext();
   const user = useUser();
-  const { formType, setFormType, setHeadingFormProps } = useSyllabusContext();
-  const { data, swrError } = useGetSyllabusByBookId(40);
+  const { formType, setFormType, setHeadingFormProps, book } = useSyllabusContext();
+  const { data, swrError } = useGetSyllabusByBookId(book!);
 
-  // type Heading = { heading: string; books_fk: number; sequence: number };
-  // const fetcher = async (x: Heading) => {
-  //   const { error } = await supabaseClient
-  //     .from("books_headings")
-  //     .insert({ books_fk: x.books_fk, heading: x.heading, sequence: x.sequence });
-  // };
-
-  // if (swrError) {
-  //   return <Center h="100vh">{swrError.message}</Center>;
-  // }
   return (
     <Box maxW="full" p="2" bg="brand.50">
       {user && profile?.role === "ADMIN" && (
         <VStack display="inline-block">
           <HStack bg="brand.50" alignItems={"baseline"} p="4">
             <Text fontSize="lg" as="u">
-              {data?.book_name}
+              {book!.bookName}
             </Text>
             <Button
               variant="solid"
               size="xs"
               onClick={() => {
                 setFormType("HEAD");
-                setHeadingFormProps({ formMode: "CREATE_HEADING", book_fk: 40 });
+                setHeadingFormProps({ formMode: "CREATE_HEADING", book_fk: book?.bookId });
               }}
             >
               {" "}
@@ -147,6 +116,8 @@ interface IHeadingformProps {
 }
 const HeadingForm: React.FC<IHeadingformProps> = ({ x }) => {
   const supabaseClient = useSupabaseClient<Database>();
+  const { book } = useSyllabusContext();
+  const { mutate } = useGetSyllabusByBookId(book!);
   interface FormValues {
     heading: string | undefined;
     sequence: number | undefined;
@@ -161,8 +132,6 @@ const HeadingForm: React.FC<IHeadingformProps> = ({ x }) => {
 
   useEffect(() => {
     if (x && x?.formMode === "UPDATE_HEADING") {
-      //   setValue("heading", x.heading), { shouldValidate: true };;
-      //   setValue("sequence", x.heading_sequence, { shouldValidate: true });
       reset({
         heading: x.heading,
         sequence: x.sequence,
@@ -185,8 +154,7 @@ const HeadingForm: React.FC<IHeadingformProps> = ({ x }) => {
       isSubmitting == false;
 
       if (!error) {
-        // mutate(`/book_id_syllabus/${x?.book_id}`);
-        mutate([`/api/prisma/syllabus/syllabus/${40}`]);
+        mutate();
         toast({
           title: "Data saved.",
           //   description: `New Topic----   '${data[0].main_topic}'   added`,
@@ -214,6 +182,7 @@ const HeadingForm: React.FC<IHeadingformProps> = ({ x }) => {
       isSubmitting == false;
 
       if (!error) {
+        mutate();
         toast({
           title: "Data updated.",
           //   description: `New Topic----   '${data[0].main_topic}'   updated`,
@@ -288,7 +257,8 @@ interface ISubheadingformProps {
 const SubheadingForm: React.FC<ISubheadingformProps> = ({ x }) => {
   const supabaseClient = useSupabaseClient<Database>();
   const { profile } = useAuthContext();
-
+  const { book } = useSyllabusContext();
+  const { mutate } = useGetSyllabusByBookId(book!);
   interface FormValues {
     subheading: string | undefined;
     sequence: number | undefined;
@@ -323,9 +293,7 @@ const SubheadingForm: React.FC<ISubheadingformProps> = ({ x }) => {
       isSubmitting == false;
 
       if (!error) {
-        console.log("data hai create subheading me");
-        //   mutate(`/book_id_syllabus/${x?.book_id}`);
-        mutate([`/api/prisma/syllabus/syllabus/${40}`]);
+        mutate();
         toast({
           title: "Data saved.",
           //   description: `New Topic----   '${data[0].main_topic}'   added`,
@@ -350,9 +318,7 @@ const SubheadingForm: React.FC<ISubheadingformProps> = ({ x }) => {
         return;
       }
       isSubmitting == false;
-
-      console.log("data hai update subheading me");
-      mutate([`/api/prisma/syllabus/syllabus/${40}`]);
+      mutate();
       toast({
         title: "Data updated.",
         //   description: `New Topic----   '${data[0].main_topic}'   updated`,
@@ -461,8 +427,9 @@ interface IheadingsProps {
   headings: Data_headings;
 }
 const Headings: React.FunctionComponent<IheadingsProps> = ({ headings }) => {
-  const { setFormType, setSubheadingFormProps, setHeadingFormProps } = useSyllabusContext();
-  const { mutate } = useGetSyllabusByBookId(40);
+  const { setFormType, setSubheadingFormProps, setHeadingFormProps, book } = useSyllabusContext();
+
+  const { mutate } = useGetSyllabusByBookId(book!);
   const supabaseClient = useSupabaseClient<Database>();
   const deleteHeading = async (id: number) => {
     const { error } = await supabaseClient.from("books_headings").delete().eq("id", id);
@@ -515,7 +482,8 @@ interface IsubheadingProps {
 }
 const Subheading: React.FunctionComponent<IsubheadingProps> = ({ subheading }) => {
   const supabaseClient = useSupabaseClient<Database>();
-  const { mutate } = useGetSyllabusByBookId(40);
+  const { book } = useSyllabusContext();
+  const { mutate } = useGetSyllabusByBookId(book!);
   const deleteSubheading = async (id: number) => {
     const { data, error } = await supabaseClient.from("books_subheadings").delete().eq("id", id);
     mutate();
@@ -552,7 +520,7 @@ interface AlertdialogueProps {
   id: number;
 }
 
-const DeleteAlert = ({ handleDelete, dialogueHeader, id }: AlertdialogueProps) => {
+export const DeleteAlert = ({ handleDelete, dialogueHeader, id }: AlertdialogueProps) => {
   const [isOpen, setIsOpen] = React.useState(false);
   const onClose = () => setIsOpen(false);
   const cancelRef = React.useRef(null);

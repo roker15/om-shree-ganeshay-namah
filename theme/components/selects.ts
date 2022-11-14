@@ -16,7 +16,7 @@ export const selects = {
     },
     icon: {
       // bg: "brand.500",
-      color: "brand.300",
+      // color: "brand.300",
       _hover: {
         bg: "brand.600",
       },
@@ -69,9 +69,9 @@ export const selects = {
     }),
   },
   defaultProps: {
-    focusBorderColor: "red.100",
-    variant: "outline",
-    size: "md",
+    focusBorderColor: "brand.100",
+    variant: "filled",
+    size: "sm",
   },
 
   // },

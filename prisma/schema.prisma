@@ -12,14 +12,16 @@ model books {
   created_at                DateTime?                  @default(now()) @db.Timestamptz(6)
   updated_at                DateTime?                  @default(now()) @db.Timestamptz(6)
   book_name                 String
-  subject_fk                BigInt
+  subject_fk                BigInt?
   class_fk                  BigInt?
   board_or_university_fk    BigInt?
   publication_fk            BigInt?
+  colleges_fk               BigInt?
   books_board_or_university books_board_or_university? @relation(fields: [board_or_university_fk], references: [id], onDelete: NoAction, onUpdate: NoAction)
   books_class               books_class?               @relation(fields: [class_fk], references: [id], onDelete: NoAction, onUpdate: NoAction)
+  colleges                  colleges?                  @relation(fields: [colleges_fk], references: [id], onDelete: NoAction, onUpdate: NoAction)
   books_publication         books_publication?         @relation(fields: [publication_fk], references: [id], onDelete: NoAction, onUpdate: NoAction)
-  subjects                  subjects                   @relation(fields: [subject_fk], references: [id], onDelete: NoAction, onUpdate: NoAction)
+  subjects                  subjects?                  @relation(fields: [subject_fk], references: [id], onDelete: NoAction, onUpdate: NoAction)
   books_headings            books_headings[]
   questionbank              questionbank[]
 }
@@ -225,7 +227,6 @@ model profiles {
   questionbank_old                                                  questionbank_old[]
   sharedpost                                                        sharedpost[]
   subheadingquestionlink                                            subheadingquestionlink[]
-  userfiles                                                         userfiles?
 }
 
 model question_answer {
@@ -333,7 +334,13 @@ model userfiles {
   id         String    @id @db.Uuid
   created_at DateTime? @default(now()) @db.Timestamptz(6)
   url        String?
-  profiles   profiles  @relation(fields: [id], references: [id], onDelete: NoAction, onUpdate: NoAction)
+}
+
+model colleges {
+  id           BigInt    @id @default(autoincrement())
+  created_at   DateTime? @default(now()) @db.Timestamptz(6)
+  college_name String?
+  books        books[]
 }
 
 enum continents {

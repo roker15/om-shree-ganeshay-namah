@@ -11,6 +11,7 @@ import { NoteContextWrapper } from "../state/NoteContext";
 import { Database } from "../lib/database";
 import { createBrowserSupabaseClient } from "@supabase/auth-helpers-nextjs";
 import { SessionContextProvider } from "@supabase/auth-helpers-react";
+import { SyllabusContextProviderWrapper } from "../state/SyllabusContext";
 type AppLayoutProps = {
   Component: PageWithLayoutType;
   pageProps: any;
@@ -22,7 +23,7 @@ function MyApp({ Component, pageProps }: AppLayoutProps) {
     ReactGA.initialize("UA-217198026-1");
     ReactGA.pageview(window.location.pathname + window.location.search);
   });
-  
+
   const Layout = Component.layout || (({ children }) => <>{children}</>);
   return (
     <>
@@ -31,13 +32,15 @@ function MyApp({ Component, pageProps }: AppLayoutProps) {
       </Head>
       <SessionContextProvider supabaseClient={supabaseClient} initialSession={pageProps.initialSession}>
         <AuthProvider>
-          <NoteContextWrapper>
-            <ChakraProvider theme={theme}>
-              <Layout>
-                <Component {...pageProps} />
-              </Layout>
-            </ChakraProvider>
-          </NoteContextWrapper>
+          <SyllabusContextProviderWrapper>
+            <NoteContextWrapper>
+              <ChakraProvider theme={theme}>
+                <Layout>
+                  <Component {...pageProps} />
+                </Layout>
+              </ChakraProvider>
+            </NoteContextWrapper>
+          </SyllabusContextProviderWrapper>
         </AuthProvider>
       </SessionContextProvider>
     </>

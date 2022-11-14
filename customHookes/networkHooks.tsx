@@ -4,9 +4,8 @@ import { useAuthContext } from "../state/Authcontext";
 import { BookResponse } from "../types/myTypes";
 
 // Retrieving a supabase client object from the SessionContext:
-import { useSupabaseClient } from '@supabase/auth-helpers-react';
+import { useSupabaseClient } from "@supabase/auth-helpers-react";
 import { Database } from "../lib/database";
-
 
 export type SharedNotesList = {
   id: number;
@@ -23,12 +22,12 @@ const cacheOptions = {
 };
 export function useGetBooks(bookId?: number) {
   const supabaseClient = useSupabaseClient<Database>();
-  
+
   const { data, error } = useSWR(
     bookId == undefined ? null : ["/publicationId", bookId],
     async () =>
       await supabaseClient
-      .from("books")
+        .from("books")
         .select(
           `id,book_name,
       class_fk(id,class),
@@ -260,7 +259,7 @@ export function useGetCurrentAffairs(isAdminNotes: boolean, subheadingId: number
 
 export function useSearchCurrentAffairs(searchKey: string) {
   const supabaseClient = useSupabaseClient<Database>();
-  const user  = useUser();
+  const user = useUser();
   const fetcher = async () =>
     await supabaseClient
       .from("books_articles")
@@ -283,5 +282,53 @@ export function useSearchCurrentAffairs(searchKey: string) {
     isLoading: !error && !data,
     isError: error,
     mutate: mutate,
+  };
+}
+export function useGetColleges() {
+  const supabaseClient = useSupabaseClient<Database>();
+  const fetcher = async () => {
+    const { data, error } = await supabaseClient.from("colleges").select();
+    if (error) throw error;
+    return data;
+  };
+
+  const { data, error } = useSWR(`/api/supabase/usegetcolleges`, fetcher, cacheOptions);
+
+  return {
+    colleges: data,
+    isLoading: !error && !data,
+    isError: error,
+  };
+}
+export function useGetCollegesCourses(collegeId: number) {
+  const supabaseClient = useSupabaseClient<Database>();
+  const fetcher = async () => {
+    const { data, error } = await supabaseClient.from("books").select().eq("colleges_fk", collegeId);
+    if (error) throw error;
+    return data;
+  };
+
+  const { data, error } = useSWR(`/api/supabase/useGetCollegesCourses/${collegeId}`, fetcher, cacheOptions);
+
+  return {
+    collegesCourses: data,
+    isLoading: !error && !data,
+    isError: error,
+  };
+}
+export function useGetPersonalCourses(userId: string) {
+  const supabaseClient = useSupabaseClient<Database>();
+  const fetcher = async () => {
+    const { data, error } = await supabaseClient.from("books").select().eq("syllabus_owner_fk", userId);
+    if (error) throw error;
+    return data;
+  };
+
+  const { data, error } = useSWR(`/api/supabase/useGetPersonalCourses/${userId}`, fetcher, cacheOptions);
+
+  return {
+    personalCourses: data,
+    isLoading: !error && !data,
+    isError: error,
   };
 }

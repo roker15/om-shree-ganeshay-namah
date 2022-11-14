@@ -9,7 +9,7 @@ type LayoutProps = {
 
 const Layout: React.FunctionComponent<LayoutProps> = ({ children }) => {
   return (
-    <Box  >
+    <Box >
       <TopNavbar>{children}</TopNavbar>
       {/* <DesktopMenu /> */}
     </Box>

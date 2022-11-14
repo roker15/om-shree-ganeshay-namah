@@ -3,6 +3,7 @@ import axios from "axios";
 import useSWR from "swr";
 import { Database } from "../lib/database";
 import { Data } from "../pages/api/prisma/syllabus/syllabus";
+import { Book } from "../state/SyllabusContext";
 
 const cacheOptions = {
   revalidateIfStale: true,
@@ -10,16 +11,17 @@ const cacheOptions = {
   revalidateOnReconnect: false,
 };
 
-export function useGetSyllabusByBookId(bookId: number) {
+export function useGetSyllabusByBookId(book: Book) {
+  console.log("get syllabus swr hit ",book.bookId)
   const supabaseClient = useSupabaseClient<Database>();
 
   const fetcher = async () => {
-    const response = await axios.get<Data>("/api/prisma/syllabus/syllabus", { params: { bookId: bookId } }).catch((e) => {
+    const response = await axios.get<Data>("/api/prisma/syllabus/syllabus", { params: { bookId: book.bookId } }).catch((e) => {
       throw e;
     });
     return response.data;
   };
-  const { data, error, mutate } = useSWR([`/api/prisma/syllabus/syllabus/${bookId}`], fetcher, cacheOptions);
+  const { data, error, mutate } = useSWR([`/api/prisma/syllabus/syllabus/${book.bookId}`], fetcher, cacheOptions);
 
   return {
     data: data,

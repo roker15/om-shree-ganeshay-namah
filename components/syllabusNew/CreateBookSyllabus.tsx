@@ -1,7 +1,7 @@
 import { Box, Flex, VStack, Text } from "@chakra-ui/react";
 import React, { useState } from "react";
 import { BookResponse } from "../../types/myTypes";
-import BookFilter from "./BookFilter";
+import BookFilter from "./BookFilterNew";
 import FormCreateHeading from "./FormCreateHeading";
 import FormCreateSubheading from "./FormCreateSubheading";
 import Syllabus from "./Syllabus";

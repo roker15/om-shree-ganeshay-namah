@@ -29,7 +29,9 @@ import { FiChevronDown } from "react-icons/fi";
 import DesktopMenu from "../components/chakraTemplate/Customdrawer";
 import { CustomDrawerWithButton } from "../components/CustomChakraUi";
 import BookFilter from "../components/syllabus/BookFilter";
+import BookFilterContainer from "../components/syllabusNew/BookFilterNew";
 import { useAuthContext } from "../state/Authcontext";
+import { SyllabusContextProviderWrapper } from "../state/SyllabusContext";
 import { BookResponse } from "../types/myTypes";
 
 // const LinkItems: Array<Subheading> = [];
@@ -40,9 +42,9 @@ export default function TopNavbar({ children }: { children: ReactNode }) {
   return (
     //overflowx = hidden is because body was visible in mobile view. test is again and then
     // finalize
-    <Box  >
+    <Box>
       <MobileNav onOpen={onOpen} />
-      <Box >{children}</Box>
+      <Box p="2" >{children}</Box>
     </Box>
   );
 }
@@ -58,21 +60,24 @@ const MobileNav = ({ onOpen, ...rest }: MobileProps) => {
     <Flex
       // ml={{ base: 10, md: 60 }}
       px={{ base: "1", md: 4 }}
-      height="16"
+      height="32"
+      
       alignItems="center"
-     
       top={"0"}
+      shadow={"md"}
       w="full"
       alignSelf={"flex-start"}
-    
       justifyContent={{ base: "space-between", md: "flex" }}
       {...rest}
     >
       <HStack>
         <Box display={{ base: "block", md: "none" }}>
-          <CustomMenu />
+          {/* <CustomMenu /> */}
+          <BookFilterContainer />
         </Box>
-        <Text fontWeight="bold"display={{ base: "block", md: "none" }}>Jionote</Text>
+        <Text fontWeight="bold" display={{ base: "block", md: "none" }}>
+          Jionote
+        </Text>
         <LinkBox alignItems="center" display={{ base: "none", md: "flex" }}>
           <LinkOverlay
             _hover={{
@@ -80,16 +85,13 @@ const MobileNav = ({ onOpen, ...rest }: MobileProps) => {
             }}
             href="/"
           ></LinkOverlay>
-          <Image
-            loading="eager"
-            src="/logo-blue.png"
-            alt="Logo"
-            w="90px"
-          />
+          <Image loading="eager" src="/logo-blue.png" alt="Logo" w="90px" />
         </LinkBox>
       </HStack>
       <Box display={{ base: "none", md: "block" }}>
-        <GotoQuestion />
+        {/* <GotoQuestion /> */}
+
+        <BookFilterContainer />
       </Box>
       {/* <Box display={{ base: "none", sm: "initial" }}> */}
       {/* </Box> */}
@@ -116,16 +118,14 @@ const MobileNav = ({ onOpen, ...rest }: MobileProps) => {
 
                   <VStack display={{ base: "none", md: "flex" }} alignItems="flex-start" spacing="1px" ml="2">
                     {profile ? <Text fontSize="sm">{profile?.username}</Text> : null}
-                    <Text fontSize="xs" >
-                      {/* Admin */}
-                    </Text>
+                    <Text fontSize="xs">{/* Admin */}</Text>
                   </VStack>
                   <Box display={{ base: "none", md: "flex" }}>
                     <FiChevronDown />
                   </Box>
                 </HStack>
               </MenuButton>
-              <MenuList border="1px" bg={"gray.50"} >
+              <MenuList border="1px" bg={"gray.50"}>
                 <MenuItem border="0px">Profile</MenuItem>
                 <MenuItem border="0px">Settings</MenuItem>
                 {profile ? (
@@ -220,7 +220,7 @@ export function GotoQuestion() {
         {/* <CustomDrawerWithButton>
           <BookFilter setParentProps={updateBookProps}></BookFilter>
         </CustomDrawerWithButton> */}
-      <DesktopMenu/>
+        <DesktopMenu />
       </Box>
     </Flex>
   );
@@ -249,25 +249,25 @@ export function CustomMenu() {
     setBook(x);
   };
   return (
-    <Menu >
+    <Menu>
       <MenuButton as={IconButton} aria-label="Options" icon={<HamburgerIcon />} variant="ghost" />
       <MenuList bg="gray.50">
         <MenuItem minH="48px" display={router.pathname === "/" ? "none" : ""}>
-          <Text  fontWeight="semibold" fontSize={{ base: "small", md: "small", lg: "md" }}>
-            <Link href="/" >
-              <a >Home</a>
+          <Text fontWeight="semibold" fontSize={{ base: "small", md: "small", lg: "md" }}>
+            <Link href="/">
+              <a>Home</a>
             </Link>
           </Text>
         </MenuItem>
         <MenuItem minH="48px" display={router.pathname === "/questionBanks" ? "none" : ""}>
-          <Text  fontWeight="semibold" fontSize={{ base: "small", md: "small", lg: "md" }}>
+          <Text fontWeight="semibold" fontSize={{ base: "small", md: "small", lg: "md" }}>
             <Link href="/questionBanks">
               <a>Question Bank</a>
             </Link>
           </Text>
         </MenuItem>
         <MenuItem minH="48px" display={router.pathname === "/reviseCurrentAffair" ? "none" : ""}>
-          <Text  fontWeight="semibold" fontSize={{ base: "small", md: "small", lg: "md" }}>
+          <Text fontWeight="semibold" fontSize={{ base: "small", md: "small", lg: "md" }}>
             <Link href="/reviseCurrentAffair">
               <a>Search Notes</a>
             </Link>

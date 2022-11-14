@@ -1,25 +1,21 @@
-import { Badge, Button, Code, createStandaloneToast, Tag } from "@chakra-ui/react";
-import { MdMessage, MdShare } from "react-icons/md";
+import { Button, createStandaloneToast } from "@chakra-ui/react";
+import { MdMessage } from "react-icons/md";
 
-const { ToastContainer, toast } = createStandaloneToast()
+const { ToastContainer, toast } = createStandaloneToast();
 interface CustomtoastProps {
   title: string;
-  position?: "bottom-right" | "top" | "top-right" | "top-left" | "bottom" | "bottom-right" | "bottom-left";
   status: "success" | "error" | "warning" | "info";
-  variant?: "solid" | "subtle" | "left-accent" | "top-accent";
-  duration?: 2000;
-  isClosable?: true;
   isUpdating?: boolean;
 }
-export function customToast({ title, position, status, variant, duration, isClosable, isUpdating }: CustomtoastProps) {
+export function customToast({ title, status, isUpdating }: CustomtoastProps) {
   if (isUpdating) {
     return toast({
       title,
-      position: "bottom-right",
+      position: "top",
       status,
-      variant,
+      variant: "solid",
       duration: 5000,
-      isClosable,
+      isClosable: true,
       render: () => (
         <Button
           rightIcon={<MdMessage />}
@@ -40,8 +36,6 @@ export function customToast({ title, position, status, variant, duration, isClos
     title,
     position: "top",
     status,
-    variant,
     duration: 3000,
-    isClosable,
   });
 }
