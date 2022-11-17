@@ -34,8 +34,8 @@ const buttons = {
   },
   // 6. We can overwrite defaultProps
   defaultProps: {
-    size: "sm", // default is md
-    variant: "sm", // default is solid
+    size: "xs", // default is md
+    variant: "solid", // default is solid
     colorScheme: colors.colorSchemePrimary, // default is gray
   },
 };

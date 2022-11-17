@@ -292,15 +292,16 @@ export function useGetColleges() {
     return data;
   };
 
-  const { data, error } = useSWR(`/api/supabase/usegetcolleges`, fetcher, cacheOptions);
+  const { data, error, mutate } = useSWR(`/api/supabase/usegetcolleges`, fetcher, cacheOptions);
 
   return {
     colleges: data,
     isLoading: !error && !data,
     isError: error,
+    mutate: mutate,
   };
 }
-export function useGetCollegesCourses(collegeId: number) {
+export function useGetCollegesCourses(collegeId: number | undefined) {
   const supabaseClient = useSupabaseClient<Database>();
   const fetcher = async () => {
     const { data, error } = await supabaseClient.from("books").select().eq("colleges_fk", collegeId);
@@ -308,15 +309,20 @@ export function useGetCollegesCourses(collegeId: number) {
     return data;
   };
 
-  const { data, error } = useSWR(`/api/supabase/useGetCollegesCourses/${collegeId}`, fetcher, cacheOptions);
+  const { data, error, mutate } = useSWR(
+    collegeId ? `/api/supabase/useGetCollegesCourses/${collegeId}` : null,
+    fetcher,
+    cacheOptions
+  );
 
   return {
     collegesCourses: data,
     isLoading: !error && !data,
     isError: error,
+    mutate: mutate,
   };
 }
-export function useGetPersonalCourses(userId: string) {
+export function useGetPersonalCourses(userId: string | undefined) {
   const supabaseClient = useSupabaseClient<Database>();
   const fetcher = async () => {
     const { data, error } = await supabaseClient.from("books").select().eq("syllabus_owner_fk", userId);
@@ -324,11 +330,16 @@ export function useGetPersonalCourses(userId: string) {
     return data;
   };
 
-  const { data, error } = useSWR(`/api/supabase/useGetPersonalCourses/${userId}`, fetcher, cacheOptions);
+  const { data, error, mutate } = useSWR(
+    userId ? `/api/supabase/useGetPersonalCourses/${userId}` : null,
+    fetcher,
+    cacheOptions
+  );
 
   return {
     personalCourses: data,
     isLoading: !error && !data,
     isError: error,
+    mutate: mutate,
   };
 }

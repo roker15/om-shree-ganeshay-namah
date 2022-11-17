@@ -19,17 +19,20 @@ export interface Book {
   bookName: string;
 }
 
+type formType = "HEAD" | "SUBHEAD" | undefined;
+type displayType = "SYLLABUS" | "COLLEGE" | "COLLEGE_COURSE" | "PERSONAL_COURSE" | undefined;
+
 interface State {
   headingFormProps: HeadingformProps | undefined;
   setHeadingFormProps: Dispatch<SetStateAction<HeadingformProps | undefined>>;
   subheadingFormProps: SubheadingformProps | undefined;
   setSubheadingFormProps: Dispatch<SetStateAction<SubheadingformProps | undefined>>;
-  formType: "HEAD" | "SUBHEAD" | "ADD_COLLEGE" | "ADD_COLLEGE_COURSE" | "ADD_PERSONAL_COURSE" | undefined;
-  setFormType: Dispatch<
-    SetStateAction<"HEAD" | "SUBHEAD" | "ADD_COLLEGE" | "ADD_COLLEGE_COURSE" | "ADD_PERSONAL_COURSE" | undefined>
-  >;
+  formType: formType;
+  setFormType: Dispatch<SetStateAction<formType>>;
   book: Book | undefined;
   setBook: Dispatch<SetStateAction<Book | undefined>>;
+  displayMode: displayType;
+  setDisplayMode: Dispatch<SetStateAction<displayType>>;
 }
 
 const SyllabusContext = createContext<State>({} as State);
@@ -38,9 +41,8 @@ const SyllabusContext = createContext<State>({} as State);
 export function SyllabusContextProviderWrapper({ children }: { children: ReactNode }) {
   const [headingFormProps, setHeadingFormProps] = useState<HeadingformProps | undefined>(undefined);
   const [subheadingFormProps, setSubheadingFormProps] = useState<SubheadingformProps | undefined>(undefined);
-  const [formType, setFormType] = useState<
-    "HEAD" | "SUBHEAD" | "ADD_COLLEGE" | "ADD_COLLEGE_COURSE" | "ADD_PERSONAL_COURSE" | undefined
-  >(undefined);
+  const [formType, setFormType] = useState<formType>(undefined);
+  const [displayMode, setDisplayMode] = useState<displayType>(undefined);
   const [book, setBook] = useState<Book | undefined>({ bookId: 40, bookName: "Neurology" });
 
   let sharedState: State = {
@@ -53,6 +55,8 @@ export function SyllabusContextProviderWrapper({ children }: { children: ReactNo
     setFormType,
     book,
     setBook,
+    displayMode,
+    setDisplayMode,
   };
   //return provider
   return <SyllabusContext.Provider value={sharedState}>{children}</SyllabusContext.Provider>;

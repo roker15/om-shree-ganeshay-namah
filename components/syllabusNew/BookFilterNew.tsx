@@ -1,4 +1,4 @@
-import { Box, Container, IconButton, Input, Radio, RadioGroup, Select, Stack, Text, VStack } from "@chakra-ui/react";
+import { Box, Button, Container, IconButton, Input, Radio, RadioGroup, Select, Stack, Text, VStack } from "@chakra-ui/react";
 import { useSupabaseClient } from "@supabase/auth-helpers-react";
 import router from "next/router";
 import React, { useEffect, useState } from "react";
@@ -22,18 +22,47 @@ const BookFilterContainer = () => {
   const [category, setCategory] = React.useState("7");
   const [selectedCollege, setSelectedCollege] = useState<number | undefined>(undefined);
   const [selectedCourse, setselectedCourse] = useState<Book | undefined>(undefined);
-  const { setBook, book } = useSyllabusContext();
+  const { setBook, book, setDisplayMode } = useSyllabusContext();
 
   return (
     <VStack bg="red.100" p="2" height="32">
       <Categories category={category} onChangeCallback={setCategory} />
       {category === "8" ? (
         <Stack direction={"row"}>
-          <CollegeOptions onChangeCallback={setSelectedCollege} />
-          {selectedCollege && <CollegeCourses collegeId={selectedCollege} onChangeCallback={setBook} />}
+          <VStack>
+            <Colleges onChangeCallback={setSelectedCollege} />
+            <Button
+              onClick={() => {
+                setDisplayMode("COLLEGE");
+              }}
+            >
+              Add College
+            </Button>
+          </VStack>
+          {selectedCollege && (
+            <VStack>
+              <CollegeCourses collegeId={selectedCollege} onChangeCallback={setBook} />{" "}
+              <Button
+                onClick={() => {
+                  setDisplayMode("COLLEGE_COURSE");
+                }}
+              >
+                Add New Course
+              </Button>
+            </VStack>
+          )}
         </Stack>
       ) : category === "9" ? (
-        <PersonalSyllabus onChangeCallback={setBook} />
+        <>
+          <PersonalSyllabus onChangeCallback={setBook} />
+          <Button
+            onClick={() => {
+              setDisplayMode("PERSONAL_COURSE");
+            }}
+          >
+            Add New
+          </Button>
+        </>
       ) : (
         <BookFilterNew onChangeCallback={setBook} category={category} />
       )}
@@ -79,7 +108,7 @@ const Categories = (props: ICategory) => {
   );
 };
 
-const CollegeOptions = (props: { onChangeCallback: React.Dispatch<React.SetStateAction<number | undefined>> }) => {
+const Colleges = (props: { onChangeCallback: React.Dispatch<React.SetStateAction<number | undefined>> }) => {
   const { colleges, isError, isLoading } = useGetColleges();
 
   return (
@@ -104,10 +133,12 @@ const CollegeOptions = (props: { onChangeCallback: React.Dispatch<React.SetState
 const PersonalSyllabus = (props: { onChangeCallback: React.Dispatch<React.SetStateAction<Book | undefined>> }) => {
   const { profile } = useAuthContext();
   const { personalCourses, isError, isLoading } = useGetPersonalCourses(profile?.id!);
+  const { setDisplayMode } = useSyllabusContext();
   //Functions
   const handleChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
     const x = personalCourses!.find((c) => c.id === Number(e.target.value));
     props.onChangeCallback({ bookId: x?.id!, bookName: x?.book_name! });
+    setDisplayMode("SYLLABUS");
   };
   return (
     <Container maxW="2xl">
@@ -135,11 +166,13 @@ const CollegeCourses = (props: {
 }) => {
   //states
   const { collegesCourses, isError, isLoading } = useGetCollegesCourses(props.collegeId);
+  const { setDisplayMode } = useSyllabusContext();
 
   //Functions
   const handleChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
     const x = collegesCourses!.find((c) => c.id === Number(e.target.value));
     props.onChangeCallback({ bookId: x?.id!, bookName: x?.book_name! });
+    setDisplayMode("SYLLABUS");
   };
 
   return (
@@ -168,6 +201,7 @@ const BookFilterNew = (props: {
 }) => {
   // const [value, setValue] = React.useState(props.category);
   const { data } = useGetBooks(Number(props.category));
+  const { setDisplayMode } = useSyllabusContext();
   // const { data: d } = useGetSyllabusByBookId(2);
   const [classList, setClassList] = React.useState<BookResponse[] | null>([]);
   const [selectedClass, setSelectedClass] = React.useState<number | undefined>();
@@ -270,6 +304,7 @@ const BookFilterNew = (props: {
             const x = data?.find((item) => item.id === Number(e.target.value));
             props.onChangeCallback({ bookId: x?.id!, bookName: x?.book_name! });
             setIsTagSearchActive(false);
+            setDisplayMode("SYLLABUS");
             // navigateTo(e.target.value, "hello");
           }}
         >
@@ -289,84 +324,6 @@ const BookFilterNew = (props: {
 };
 export default BookFilterContainer;
 
-interface ICollegeValue {
-  action: "CREATE" | "UPDATE";
-  college: { id?: number; name: string } | undefined;
-}
-const Colleges = (props: { onChangeCallback: React.Dispatch<React.SetStateAction<ICollegeValue | undefined>> }) => {
-  const supabaseClient = useSupabaseClient<Database>();
-  const deleteHeading = async (id: number) => {
-    const { error } = await supabaseClient.from("colleges").delete().eq("id", id);
-    // mutate();
-  };
-  const { colleges } = useGetColleges();
-  const collegeList = colleges?.map((x) => (
-    <Stack direction="row" key={x.id}>
-      <Text>{x.college_name}</Text>;<IconButton variant="ghost" size="xs" aria-label={"Edit"} icon={<MdEdit />}></IconButton>
-      <DeleteAlert handleDelete={deleteHeading} dialogueHeader={"Delete Heading"} id={x.id} />{" "}
-    </Stack>
-  ));
-  return <>{collegeList} </>;
-};
-interface IAddCollegeInputs {
-  collegeName: string;
-}
-const CollegeCrud = (props: {
-  collegeId: number;
-  onChangeCallback: React.Dispatch<React.SetStateAction<Book | undefined>>;
-}) => {
-  const [formType, setFormType] = useState<"ADD" | "UPDATE">("ADD");
-  const {
-    register,
-    handleSubmit,
-    formState: { errors },
-  } = useForm<IAddCollegeInputs>();
-  const onSubmit: SubmitHandler<IAddCollegeInputs> = (data) => console.log(data);
-
-  return (
-    /* "handleSubmit" will validate your inputs before invoking "onSubmit" */
-    <form onSubmit={handleSubmit(onSubmit)}>
-      {/* include validation with required or other standard HTML validation rules */}
-      <Input placeholder="College Name" {...register("collegeName", { required: true })} />
-      {/* errors will return when field validation fails  */}
-      {errors.collegeName && <span>This field is required</span>}
-      <input type="submit" />
-    </form>
-  );
-};
-
-const CollegeCourseCrud = (props: {
-  collegeId: number;
-  onChangeCallback: React.Dispatch<React.SetStateAction<Book | undefined>>;
-}) => {
-  //states
-  const { collegesCourses, isError, isLoading } = useGetCollegesCourses(props.collegeId);
-
-  //Functions
-  const handleChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
-    const x = collegesCourses!.find((c) => c.id === Number(e.target.value));
-    props.onChangeCallback({ bookId: x?.id!, bookName: x?.book_name! });
-  };
-
-  return (
-    <Container maxW="2xl">
-      <Select
-        placeholder={"Choose Course"}
-        onChange={(e) => {
-          handleChange(e);
-        }}
-      >
-        {collegesCourses?.map((x) => {
-          return (
-            <option key={x.id} value={x.id}>
-              {x.book_name}
-            </option>
-          );
-        })}
-      </Select>
-    </Container>
-  );
-};
 const PersonalSyllabusCrud = (props: {
   collegeId: number;
   onChangeCallback: React.Dispatch<React.SetStateAction<Book | undefined>>;
@@ -383,7 +340,7 @@ const PersonalSyllabusCrud = (props: {
   return (
     <Container maxW="2xl">
       <Select
-        placeholder={"Choose Course"}
+        placeholder={"Select College"}
         onChange={(e) => {
           handleChange(e);
         }}

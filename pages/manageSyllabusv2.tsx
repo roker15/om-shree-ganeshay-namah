@@ -26,48 +26,56 @@ import {
   NumberInput,
   NumberInputField,
   NumberInputStepper,
+  Select,
+  Stack,
   Text,
   useToast,
   VStack,
 } from "@chakra-ui/react";
 import { useSupabaseClient, useUser } from "@supabase/auth-helpers-react";
-import React, { useEffect } from "react";
-import { useForm } from "react-hook-form";
+import React, { useEffect, useState } from "react";
+import { SubmitHandler, useForm } from "react-hook-form";
 import { MdDelete, MdEdit } from "react-icons/md";
 import { useGetSyllabusByBookId } from "../customHookes/apiHooks";
+import { useGetColleges, useGetCollegesCourses, useGetPersonalCourses } from "../customHookes/networkHooks";
 import LayoutWithTopNavbar from "../layout/LayoutWithTopNavbar";
 import { Database } from "../lib/database";
 import { elog } from "../lib/mylog";
 import { useAuthContext } from "../state/Authcontext";
-import { HeadingformProps, SubheadingformProps, useSyllabusContext } from "../state/SyllabusContext";
+import { Book, HeadingformProps, SubheadingformProps, useSyllabusContext } from "../state/SyllabusContext";
 import PageWithLayoutType from "../types/pageWithLayout";
 import { Data_headings, Data_subheadings } from "./api/prisma/syllabus/syllabus";
 // import { Data1 } from "./api/prisma/posts/postCountbySyllabus";
-
 
 const CHeading = (props: { children: React.ReactNode }) => {
   return <Heading color="gray.700">{props.children}</Heading>;
 };
 
 const SyllabusContainer: React.FunctionComponent = () => {
-  const { formType, headingFormProps, subheadingFormProps, setFormType, book } = useSyllabusContext();
+  const { formType, headingFormProps, subheadingFormProps, setFormType, book, displayMode } = useSyllabusContext();
   // undefined;
   return (
     <Box>
-      <Grid templateColumns="repeat(6, 1fr)" gap={2}>
-        <GridItem w="100%" colSpan={2} minH="100vh" bg="brand.50">
-          <Syllabus />
-        </GridItem>
-        <GridItem w="100%" colSpan={4}>
-          {formType === undefined && (
-            <Center h="60vh">
-              <CHeading>Select action from Left</CHeading>
-            </Center>
-          )}
-          {formType === "HEAD" && <HeadingForm x={headingFormProps} />}
-          {formType === "SUBHEAD" && <SubheadingForm x={subheadingFormProps} />}
-        </GridItem>
-      </Grid>
+      {displayMode === "SYLLABUS" && (
+        <Grid templateColumns="repeat(6, 1fr)" gap={2}>
+          <GridItem w="100%" colSpan={2} minH="100vh" bg="brand.50">
+            <Syllabus />
+          </GridItem>
+          <GridItem w="100%" colSpan={4}>
+            {formType === undefined && (
+              <Center h="60vh">
+                <CHeading>Select action from Left</CHeading>
+              </Center>
+            )}
+
+            {formType === "HEAD" && <HeadingForm x={headingFormProps} />}
+            {formType === "SUBHEAD" && <SubheadingForm x={subheadingFormProps} />}
+          </GridItem>
+        </Grid>
+      )}
+      {displayMode === "COLLEGE" && <CollegeContainer />}
+      {displayMode === "COLLEGE_COURSE" && <CollegeCourseContainer />}
+      {displayMode === "PERSONAL_COURSE" && <PrivateBookscontainer />}
     </Box>
   );
 };
@@ -554,5 +562,320 @@ export const DeleteAlert = ({ handleDelete, dialogueHeader, id }: AlertdialogueP
         </AlertDialogOverlay>
       </AlertDialog>
     </>
+  );
+};
+
+interface ICollegeValue {
+  action: "CREATE" | "UPDATE";
+  formData: { id?: number | undefined; name: string };
+}
+export const CollegeContainer = () => {
+  const [selectedCollege, setSelectedCollege] = useState<ICollegeValue | undefined>(undefined);
+  return (
+    <Container maxW="2xl">
+      <Colleges onChangeCallback={setSelectedCollege} />
+      {selectedCollege && <CollegeCrud data={selectedCollege} />}
+    </Container>
+  );
+};
+
+const Colleges = (props: { onChangeCallback: React.Dispatch<React.SetStateAction<ICollegeValue | undefined>> }) => {
+  const supabaseClient = useSupabaseClient<Database>();
+  const deleteCollege = async (id: number) => {
+    const { error } = await supabaseClient.from("colleges").delete().eq("id", id);
+    if (error) {
+      alert(error.message);
+      return;
+    }
+    mutate();
+  };
+  const handleEditClick = async (x: College) => {
+    props.onChangeCallback({ action: "UPDATE", formData: { id: x.id, name: x.college_name! } });
+  };
+  const handleAddClick = async () => {
+    props.onChangeCallback({ action: "CREATE", formData: { id: undefined, name: "" } });
+  };
+  interface College {
+    id: number;
+    college_name: string | null;
+  }
+  const { colleges, mutate } = useGetColleges();
+  const collegeList = colleges?.map((x) => (
+    <Stack direction="row" key={x.id}>
+      <Text>{x.college_name}</Text>;
+      <IconButton
+        onClick={() => {
+          handleEditClick(x);
+        }}
+        variant="ghost"
+        size="xs"
+        aria-label={"Edit"}
+        icon={<MdEdit />}
+      ></IconButton>
+      <DeleteAlert handleDelete={deleteCollege} dialogueHeader={"Delete Heading"} id={x.id} />{" "}
+    </Stack>
+  ));
+  return (
+    <>
+      <Button onClick={() => handleAddClick()}>Add College</Button>
+      {collegeList}
+    </>
+  );
+};
+
+const CollegeCrud = (props: { data: ICollegeValue }) => {
+  const {
+    register,
+    reset,
+    handleSubmit,
+    formState: { errors },
+  } = useForm<typeof props.data.formData>();
+  const supabaseClient = useSupabaseClient<Database>();
+  const { mutate } = useGetColleges();
+
+  //form submit method
+  const onSubmit: SubmitHandler<typeof props.data.formData> = async (data) => {
+    const { error } = await supabaseClient.from("colleges").upsert({ id: props.data.formData.id, college_name: data.name });
+    mutate();
+  };
+
+  // reset form data to new props value on props change
+  useEffect(() => {
+    reset({ name: props.data.formData.name });
+  }, [reset, props]);
+
+  return (
+    /* "handleSubmit" will validate your inputs before invoking "onSubmit" */
+    <form onSubmit={handleSubmit(onSubmit)}>
+      <Input placeholder="College Name" {...register("name", { required: true })} />
+      {errors.name && <span>This field is required</span>}
+      <Button type="submit">{props.data.action === "UPDATE" ? "Update" : "Create"}</Button>
+    </form>
+  );
+};
+interface ICollegeCourseValue {
+  action: "CREATE" | "UPDATE";
+  formData: { id?: number | undefined; courseName: string; collegeid: number };
+}
+export const CollegeCourseContainer = () => {
+  const [selectedCollege, setSelectedCollege] = useState<ICollegeCourseValue | undefined>(undefined);
+  const [showForm, setShowform] = useState<boolean>(false);
+
+  return (
+    <Container maxW="2xl">
+      <Courses onChangeCallback={setSelectedCollege} setShowFrom={setShowform} />
+      {selectedCollege && showForm && <CollegeCourseCrud data={selectedCollege} />}
+    </Container>
+  );
+};
+
+const Courses = (props: {
+  onChangeCallback: React.Dispatch<React.SetStateAction<ICollegeCourseValue | undefined>>;
+  setShowFrom: React.Dispatch<React.SetStateAction<boolean>>;
+}) => {
+  const [selectedCollege, setselectedCollege] = useState<number | undefined>(undefined);
+  const { collegesCourses, isError, isLoading, mutate } = useGetCollegesCourses(selectedCollege);
+
+  const supabaseClient = useSupabaseClient<Database>();
+  const deleteCourse = async (id: number) => {
+    const { error } = await supabaseClient.from("books").delete().eq("id", id);
+    if (error) {
+      alert(error.message);
+      return;
+    }
+    mutate();
+  };
+  const handleEditClick = async (x: Course) => {
+    props.setShowFrom(true);
+    props.onChangeCallback({
+      action: "UPDATE",
+      formData: { id: x.id, courseName: x.courseName!, collegeid: selectedCollege! },
+    });
+  };
+  const handleAddClick = async () => {
+    props.setShowFrom(true);
+    props.onChangeCallback({
+      action: "CREATE",
+      formData: { id: undefined, courseName: "", collegeid: selectedCollege! },
+    });
+  };
+  interface Course {
+    id: number;
+    courseName: string | null;
+  }
+  const { colleges } = useGetColleges();
+  const collegeList = colleges?.map((x) => (
+    <option key={x.id} value={x.id}>
+      {x.college_name}
+    </option>
+  ));
+  const collegesCourseList = collegesCourses?.map((x) => (
+    <Stack direction="row" key={x.id}>
+      <Text>{x.book_name}</Text>;
+      <IconButton
+        onClick={() => {
+          handleEditClick({ id: x.id, courseName: x.book_name });
+        }}
+        variant="ghost"
+        size="xs"
+        aria-label={"Edit"}
+        icon={<MdEdit />}
+      ></IconButton>
+      <DeleteAlert handleDelete={deleteCourse} dialogueHeader={"Delete Heading"} id={x.id} />{" "}
+    </Stack>
+  ));
+  return (
+    <>
+      <Select
+        placeholder={"Select College"}
+        onChange={(e) => {
+          setselectedCollege(Number(e.target.value));
+          props.setShowFrom(false);
+        }}
+      >
+        {collegeList}{" "}
+      </Select>
+      {collegesCourseList}
+      {!!selectedCollege && <Button onClick={() => handleAddClick()}>Add New Course</Button>}
+    </>
+  );
+};
+
+const CollegeCourseCrud = (props: { data: ICollegeCourseValue }) => {
+  const {
+    register,
+    reset,
+    handleSubmit,
+    formState: { errors },
+  } = useForm<typeof props.data.formData>();
+  const supabaseClient = useSupabaseClient<Database>();
+  const { mutate } = useGetCollegesCourses(props.data.formData.collegeid);
+
+  //form submit method
+  const onSubmit: SubmitHandler<typeof props.data.formData> = async (data) => {
+    const { error } = await supabaseClient
+      .from("books")
+      .upsert({ id: props.data.formData.id, book_name: data.courseName, colleges_fk: props.data.formData.collegeid });
+    if (error) {
+      alert(error.message);
+    }
+    mutate();
+  };
+
+  // reset form data to new props value on props change
+  useEffect(() => {
+    reset({ courseName: props.data.formData.courseName });
+  }, [reset, props]);
+
+  return (
+    /* "handleSubmit" will validate your inputs before invoking "onSubmit" */
+    <form onSubmit={handleSubmit(onSubmit)}>
+      <Input placeholder="Course Name" {...register("courseName", { required: true })} />
+      {errors.courseName && <span>This field is required</span>}
+      <Button type="submit">{props.data.action === "UPDATE" ? "Update" : "Create"}</Button>
+    </form>
+  );
+};
+
+//Persnal Syllabus
+
+interface IPrivateBookscontainer {
+  action: "CREATE" | "UPDATE";
+  formData: { id?: number | undefined; name: string };
+}
+export const PrivateBookscontainer = () => {
+  const [selectedBook, setSelectedBook] = useState<IPrivateBookscontainer | undefined>(undefined);
+  return (
+    <Container maxW="2xl">
+      <VStack spacing="16">
+        <Box>
+          <PrivateBookList onChangeCallback={setSelectedBook} />
+        </Box>
+        {selectedBook && <PrivateBooksCrud data={selectedBook} />}
+      </VStack>
+    </Container>
+  );
+};
+
+const PrivateBookList = (props: {
+  onChangeCallback: React.Dispatch<React.SetStateAction<IPrivateBookscontainer | undefined>>;
+}) => {
+  const supabaseClient = useSupabaseClient<Database>();
+  const { profile } = useAuthContext();
+  const deleteBook = async (id: number) => {
+    const { error } = await supabaseClient.from("books").delete().eq("id", id);
+    if (error) {
+      alert(error.message);
+      return;
+    }
+    mutate();
+  };
+  const handleEditClick = async (x: College) => {
+    props.onChangeCallback({ action: "UPDATE", formData: { id: x.id, name: x.book_name! } });
+  };
+  const handleAddClick = async () => {
+    props.onChangeCallback({ action: "CREATE", formData: { id: undefined, name: "" } });
+  };
+  interface College {
+    id: number;
+    book_name: string | null;
+  }
+  const { personalCourses, mutate } = useGetPersonalCourses(profile?.id);
+  const personalBookList = personalCourses?.map((x) => (
+    <Stack direction="row" key={x.id}>
+      <Text>{x.book_name}</Text>;
+      <IconButton
+        onClick={() => {
+          handleEditClick({ id: x.id, book_name: x.book_name });
+        }}
+        variant="ghost"
+        size="xs"
+        aria-label={"Edit"}
+        icon={<MdEdit />}
+      ></IconButton>
+      <DeleteAlert handleDelete={deleteBook} dialogueHeader={"Delete Heading"} id={x.id} />{" "}
+    </Stack>
+  ));
+  return (
+    <>
+      {personalBookList}
+      <Button onClick={() => handleAddClick()}>Add Syllabus</Button>
+    </>
+  );
+};
+
+const PrivateBooksCrud = (props: { data: IPrivateBookscontainer }) => {
+  const {
+    register,
+    reset,
+    handleSubmit,
+    formState: { errors },
+  } = useForm<typeof props.data.formData>();
+  const { profile } = useAuthContext();
+  const supabaseClient = useSupabaseClient<Database>();
+  const { mutate } = useGetPersonalCourses(profile?.id);
+
+  //form submit method
+  const onSubmit: SubmitHandler<typeof props.data.formData> = async (data) => {
+    const { error } = await supabaseClient
+      .from("books")
+      .upsert({ id: props.data.formData.id, book_name: data.name, syllabus_owner_fk: profile?.id });
+    mutate();
+  };
+
+  // reset form data to new props value on props change
+  useEffect(() => {
+    reset({ name: props.data.formData.name });
+  }, [reset, props]);
+
+  return (
+    /* "handleSubmit" will validate your inputs before invoking "onSubmit" */
+    <form onSubmit={handleSubmit(onSubmit)}>
+      <Input placeholder="Syllabus Name" {...register("name", { required: true })} />
+      {errors.name && <span>This field is required</span>}
+      <Button size="md" type="submit">
+        {props.data.action === "UPDATE" ? "Update" : "Create"}
+      </Button>
+    </form>
   );
 };
