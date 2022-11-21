@@ -17,13 +17,17 @@ model books {
   board_or_university_fk    BigInt?
   publication_fk            BigInt?
   colleges_fk               BigInt?
+  syllabus_owner_fk         String?                    @db.Uuid
+  moderator                 String[]                   @db.Uuid
   books_board_or_university books_board_or_university? @relation(fields: [board_or_university_fk], references: [id], onDelete: NoAction, onUpdate: NoAction)
   books_class               books_class?               @relation(fields: [class_fk], references: [id], onDelete: NoAction, onUpdate: NoAction)
   colleges                  colleges?                  @relation(fields: [colleges_fk], references: [id], onDelete: NoAction, onUpdate: NoAction)
   books_publication         books_publication?         @relation(fields: [publication_fk], references: [id], onDelete: NoAction, onUpdate: NoAction)
   subjects                  subjects?                  @relation(fields: [subject_fk], references: [id], onDelete: NoAction, onUpdate: NoAction)
+  profiles                  profiles?                  @relation(fields: [syllabus_owner_fk], references: [id], onDelete: NoAction, onUpdate: NoAction)
   books_headings            books_headings[]
   questionbank              questionbank[]
+  syllabus_moderator        syllabus_moderator[]
 }
 
 model books_article_sharing {
@@ -217,6 +221,7 @@ model profiles {
   role                                                              String?
   email                                                             String?
   last_login                                                        DateTime?                @db.Timestamptz(6)
+  books                                                             books[]
   books_article_sharing_books_article_sharing_owned_byToprofiles    books_article_sharing[]  @relation("books_article_sharing_owned_byToprofiles")
   books_article_sharing_books_article_sharing_shared_byToprofiles   books_article_sharing[]  @relation("books_article_sharing_shared_byToprofiles")
   books_article_sharing_books_article_sharing_shared_withToprofiles books_article_sharing[]  @relation("books_article_sharing_shared_withToprofiles")
@@ -227,6 +232,7 @@ model profiles {
   questionbank_old                                                  questionbank_old[]
   sharedpost                                                        sharedpost[]
   subheadingquestionlink                                            subheadingquestionlink[]
+  syllabus_moderator                                                syllabus_moderator[]
 }
 
 model question_answer {
@@ -341,6 +347,16 @@ model colleges {
   created_at   DateTime? @default(now()) @db.Timestamptz(6)
   college_name String?
   books        books[]
+}
+
+model syllabus_moderator {
+  id           BigInt    @id @default(autoincrement())
+  created_at   DateTime? @default(now()) @db.Timestamptz(6)
+  book_fk      BigInt
+  moderator_fk String?   @db.Uuid
+  is_disabled  Boolean?
+  books        books     @relation(fields: [book_fk], references: [id], onDelete: NoAction, onUpdate: NoAction)
+  profiles     profiles? @relation(fields: [moderator_fk], references: [id], onDelete: NoAction, onUpdate: NoAction)
 }
 
 enum continents {

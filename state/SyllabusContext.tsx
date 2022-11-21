@@ -17,10 +17,13 @@ export type HeadingformProps = {
 export interface Book {
   bookId: number;
   bookName: string;
+  colleges_fk?: number | null| undefined;
+  syllabus_owner_fk?: string | null| undefined;
+  moderator?: string[] | null| undefined;
 }
 
 type formType = "HEAD" | "SUBHEAD" | undefined;
-type displayType = "SYLLABUS" | "COLLEGE" | "COLLEGE_COURSE" | "PERSONAL_COURSE" | undefined;
+type displayType = "SYLLABUS" | "COLLEGE" | "COLLEGE_COURSE" | "PERSONAL_COURSE" |"NONE"| undefined;
 
 interface State {
   headingFormProps: HeadingformProps | undefined;
@@ -43,7 +46,7 @@ export function SyllabusContextProviderWrapper({ children }: { children: ReactNo
   const [subheadingFormProps, setSubheadingFormProps] = useState<SubheadingformProps | undefined>(undefined);
   const [formType, setFormType] = useState<formType>(undefined);
   const [displayMode, setDisplayMode] = useState<displayType>(undefined);
-  const [book, setBook] = useState<Book | undefined>({ bookId: 40, bookName: "Neurology" });
+  const [book, setBook] = useState<Book | undefined>(undefined);
 
   let sharedState: State = {
     /* whatever you want */

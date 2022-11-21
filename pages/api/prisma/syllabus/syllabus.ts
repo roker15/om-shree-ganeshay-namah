@@ -29,14 +29,17 @@ export type Data = {
 
 export default async function handle(req: NextApiRequest, res: NextApiResponse<Data | string>) {
   const supabaseServerClient = createServerSupabaseClient<Database>({ req, res });
-  const bookId = Number(req.query.bookId);
+  // const bookId = Number(req.query.bookId);
   const {
     data: { user },
   } = await supabaseServerClient.auth.getUser();
+  const { method, } = req;
+  console.log("method is ", method);
+  const { bookId } = req.query;
 
   try {
     const posts = await prisma.books.findUnique({
-      where: { id: bookId },
+      where: { id: Number(bookId) },
       select: {
         id: true,
         book_name: true,

@@ -1,3 +1,4 @@
+import { Search2Icon } from "@chakra-ui/icons";
 import {
   Alert,
   AlertDialog,
@@ -21,6 +22,9 @@ import {
   HStack,
   IconButton,
   Input,
+  InputGroup,
+  InputLeftAddon,
+  InputRightElement,
   NumberDecrementStepper,
   NumberIncrementStepper,
   NumberInput,
@@ -36,13 +40,13 @@ import { useSupabaseClient, useUser } from "@supabase/auth-helpers-react";
 import React, { useEffect, useState } from "react";
 import { SubmitHandler, useForm } from "react-hook-form";
 import { MdDelete, MdEdit } from "react-icons/md";
-import { useGetSyllabusByBookId } from "../customHookes/apiHooks";
+import { useGetSyllabusByBookId, useGetSyllabusModerator } from "../customHookes/apiHooks";
 import { useGetColleges, useGetCollegesCourses, useGetPersonalCourses } from "../customHookes/networkHooks";
 import LayoutWithTopNavbar from "../layout/LayoutWithTopNavbar";
 import { Database } from "../lib/database";
 import { elog } from "../lib/mylog";
 import { useAuthContext } from "../state/Authcontext";
-import { Book, HeadingformProps, SubheadingformProps, useSyllabusContext } from "../state/SyllabusContext";
+import { HeadingformProps, SubheadingformProps, useSyllabusContext } from "../state/SyllabusContext";
 import PageWithLayoutType from "../types/pageWithLayout";
 import { Data_headings, Data_subheadings } from "./api/prisma/syllabus/syllabus";
 // import { Data1 } from "./api/prisma/posts/postCountbySyllabus";
@@ -53,30 +57,53 @@ const CHeading = (props: { children: React.ReactNode }) => {
 
 const SyllabusContainer: React.FunctionComponent = () => {
   const { formType, headingFormProps, subheadingFormProps, setFormType, book, displayMode } = useSyllabusContext();
+  const { profile } = useAuthContext();
+  const shudShow = (() => {
+    if (displayMode === "PERSONAL_COURSE") {
+      return true;
+    } else if (book?.moderator && book?.moderator.includes(profile?.id!)) {
+      return true;
+    } else if (book?.syllabus_owner_fk === profile?.id) {
+      return true;
+    } else if (profile?.role === "ADMIN") {
+      return true;
+    }
+    return false;
+  })();
   // undefined;
   return (
-    <Box>
-      {displayMode === "SYLLABUS" && (
-        <Grid templateColumns="repeat(6, 1fr)" gap={2}>
-          <GridItem w="100%" colSpan={2} minH="100vh" bg="brand.50">
-            <Syllabus />
-          </GridItem>
-          <GridItem w="100%" colSpan={4}>
-            {formType === undefined && (
-              <Center h="60vh">
-                <CHeading>Select action from Left</CHeading>
-              </Center>
-            )}
+    <>
+      <ManageModerator />
 
-            {formType === "HEAD" && <HeadingForm x={headingFormProps} />}
-            {formType === "SUBHEAD" && <SubheadingForm x={subheadingFormProps} />}
-          </GridItem>
-        </Grid>
+      {shudShow ? (
+        <Box>
+          {displayMode === "SYLLABUS" && (
+            <Grid templateColumns="repeat(6, 1fr)" gap={2}>
+              <GridItem w="100%" colSpan={2} minH="100vh" bg="brand.50">
+                <Syllabus />
+              </GridItem>
+              <GridItem w="100%" colSpan={4}>
+                {formType === undefined && (
+                  <Center h="60vh">
+                    <CHeading>Select action from Left</CHeading>
+                  </Center>
+                )}
+
+                {formType === "HEAD" && <HeadingForm x={headingFormProps} />}
+                {formType === "SUBHEAD" && <SubheadingForm x={subheadingFormProps} />}
+              </GridItem>
+            </Grid>
+          )}
+          {displayMode === "COLLEGE" && <CollegeContainer />}
+          {displayMode === "COLLEGE_COURSE" && <CollegeCourseContainer />}
+          {displayMode === "PERSONAL_COURSE" && <PrivateBookscontainer />}
+        </Box>
+      ) : (
+        <Center h="50vh">
+          <CHeading>You are Not Authorized to Edit this Syllabus !</CHeading>
+        </Center>
       )}
-      {displayMode === "COLLEGE" && <CollegeContainer />}
-      {displayMode === "COLLEGE_COURSE" && <CollegeCourseContainer />}
-      {displayMode === "PERSONAL_COURSE" && <PrivateBookscontainer />}
-    </Box>
+    </>
   );
 };
 
@@ -91,7 +118,7 @@ const Syllabus: React.FunctionComponent = () => {
 
   return (
     <Box maxW="full" p="2" bg="brand.50">
-      {user && profile?.role === "ADMIN" && (
+      {user && (
         <VStack display="inline-block">
           <HStack bg="brand.50" alignItems={"baseline"} p="4">
             <Text fontSize="lg" as="u">
@@ -580,6 +607,7 @@ export const CollegeContainer = () => {
 };
 
 const Colleges = (props: { onChangeCallback: React.Dispatch<React.SetStateAction<ICollegeValue | undefined>> }) => {
+  const { profile } = useAuthContext();
   const supabaseClient = useSupabaseClient<Database>();
   const deleteCollege = async (id: number) => {
     const { error } = await supabaseClient.from("colleges").delete().eq("id", id);
@@ -600,26 +628,31 @@ const Colleges = (props: { onChangeCallback: React.Dispatch<React.SetStateAction
     college_name: string | null;
   }
   const { colleges, mutate } = useGetColleges();
-  const collegeList = colleges?.map((x) => (
-    <Stack direction="row" key={x.id}>
-      <Text>{x.college_name}</Text>;
-      <IconButton
-        onClick={() => {
-          handleEditClick(x);
-        }}
-        variant="ghost"
-        size="xs"
-        aria-label={"Edit"}
-        icon={<MdEdit />}
-      ></IconButton>
-      <DeleteAlert handleDelete={deleteCollege} dialogueHeader={"Delete Heading"} id={x.id} />{" "}
-    </Stack>
-  ));
+  const collegeList = colleges
+    ?.sort((a, b) => a.college_name!.localeCompare(b.college_name!, undefined, { sensitivity: "base" }))
+    .map((x) => (
+      <Stack direction="row" key={x.id}>
+        <IconButton
+          onClick={() => {
+            handleEditClick(x);
+          }}
+          variant="ghost"
+          size="xs"
+          aria-label={"Edit"}
+          icon={<MdEdit />}
+        ></IconButton>
+        <DeleteAlert handleDelete={deleteCollege} dialogueHeader={"Delete Heading"} id={x.id} />{" "}
+        <Text>{x.college_name}</Text>;
+      </Stack>
+    ));
   return (
-    <>
-      <Button onClick={() => handleAddClick()}>Add College</Button>
+    <VStack alignItems="left">
       {collegeList}
-    </>
+
+      <Button size="md" onClick={() => handleAddClick()}>
+        Add College
+      </Button>
+    </VStack>
   );
 };
 
@@ -647,9 +680,13 @@ const CollegeCrud = (props: { data: ICollegeValue }) => {
   return (
     /* "handleSubmit" will validate your inputs before invoking "onSubmit" */
     <form onSubmit={handleSubmit(onSubmit)}>
-      <Input placeholder="College Name" {...register("name", { required: true })} />
-      {errors.name && <span>This field is required</span>}
-      <Button type="submit">{props.data.action === "UPDATE" ? "Update" : "Create"}</Button>
+      <VStack>
+        <Input placeholder="College Name" {...register("name", { required: true })} />
+        {errors.name && <span>This field is required</span>}
+        <Button type="submit" size="md">
+          {props.data.action === "UPDATE" ? "Update" : "Add"}
+        </Button>
+      </VStack>
     </form>
   );
 };
@@ -675,6 +712,7 @@ const Courses = (props: {
 }) => {
   const [selectedCollege, setselectedCollege] = useState<number | undefined>(undefined);
   const { collegesCourses, isError, isLoading, mutate } = useGetCollegesCourses(selectedCollege);
+  const { profile } = useAuthContext();
 
   const supabaseClient = useSupabaseClient<Database>();
   const deleteCourse = async (id: number) => {
@@ -704,28 +742,31 @@ const Courses = (props: {
     courseName: string | null;
   }
   const { colleges } = useGetColleges();
-  const collegeList = colleges?.map((x) => (
-    <option key={x.id} value={x.id}>
-      {x.college_name}
-    </option>
-  ));
-  const collegesCourseList = collegesCourses?.map((x) => (
-    <Stack direction="row" key={x.id}>
-      <Text>{x.book_name}</Text>;
-      <IconButton
-        onClick={() => {
-          handleEditClick({ id: x.id, courseName: x.book_name });
-        }}
-        variant="ghost"
-        size="xs"
-        aria-label={"Edit"}
-        icon={<MdEdit />}
-      ></IconButton>
-      <DeleteAlert handleDelete={deleteCourse} dialogueHeader={"Delete Heading"} id={x.id} />{" "}
-    </Stack>
-  ));
+  const collegeList = colleges
+    ?.sort((a, b) => a.college_name!.localeCompare(b.college_name!, undefined, { sensitivity: "base" }))
+    .map((x) => (
+      <option key={x.id} value={x.id}>
+        {x.college_name}
+      </option>
+    ));
+  const collegesCourseList = collegesCourses
+    ?.sort((a, b) => a.book_name.localeCompare(b.book_name, undefined, { sensitivity: "base" }))
+    .map((x) => (
+      <Stack direction="row" key={x.id}>
+        <IconButton
+          onClick={() => {
+            handleEditClick({ id: x.id, courseName: x.book_name });
+          }}
+          variant="ghost"
+          size="xs"
+          aria-label={"Edit"}
+          icon={<MdEdit />}
+        ></IconButton>
+        <DeleteAlert handleDelete={deleteCourse} dialogueHeader={"Delete Heading"} id={x.id} /> <Text>{x.book_name}</Text>;
+      </Stack>
+    ));
   return (
-    <>
+    <VStack alignItems="left">
       <Select
         placeholder={"Select College"}
         onChange={(e) => {
@@ -736,8 +777,12 @@ const Courses = (props: {
         {collegeList}{" "}
       </Select>
       {collegesCourseList}
-      {!!selectedCollege && <Button onClick={() => handleAddClick()}>Add New Course</Button>}
-    </>
+      {!!selectedCollege && (
+        <Button size="md" onClick={() => handleAddClick()}>
+          Add New Course
+        </Button>
+      )}
+    </VStack>
   );
 };
 
@@ -770,9 +815,13 @@ const CollegeCourseCrud = (props: { data: ICollegeCourseValue }) => {
   return (
     /* "handleSubmit" will validate your inputs before invoking "onSubmit" */
     <form onSubmit={handleSubmit(onSubmit)}>
-      <Input placeholder="Course Name" {...register("courseName", { required: true })} />
-      {errors.courseName && <span>This field is required</span>}
-      <Button type="submit">{props.data.action === "UPDATE" ? "Update" : "Create"}</Button>
+      <VStack>
+        <Input placeholder="Course Name" {...register("courseName", { required: true })} />
+        {errors.courseName && <span>This field is required</span>}
+        <Button size="md" type="submit">
+          {props.data.action === "UPDATE" ? "Update Course" : "Add Course"}
+        </Button>
+      </VStack>
     </form>
   );
 };
@@ -787,12 +836,8 @@ export const PrivateBookscontainer = () => {
   const [selectedBook, setSelectedBook] = useState<IPrivateBookscontainer | undefined>(undefined);
   return (
     <Container maxW="2xl">
-      <VStack spacing="16">
-        <Box>
-          <PrivateBookList onChangeCallback={setSelectedBook} />
-        </Box>
-        {selectedBook && <PrivateBooksCrud data={selectedBook} />}
-      </VStack>
+      <PrivateBookList onChangeCallback={setSelectedBook} />
+      {selectedBook && <PrivateBooksCrud data={selectedBook} />}
     </Container>
   );
 };
@@ -821,26 +866,35 @@ const PrivateBookList = (props: {
     book_name: string | null;
   }
   const { personalCourses, mutate } = useGetPersonalCourses(profile?.id);
-  const personalBookList = personalCourses?.map((x) => (
-    <Stack direction="row" key={x.id}>
-      <Text>{x.book_name}</Text>;
-      <IconButton
-        onClick={() => {
-          handleEditClick({ id: x.id, book_name: x.book_name });
-        }}
-        variant="ghost"
-        size="xs"
-        aria-label={"Edit"}
-        icon={<MdEdit />}
-      ></IconButton>
-      <DeleteAlert handleDelete={deleteBook} dialogueHeader={"Delete Heading"} id={x.id} />{" "}
-    </Stack>
-  ));
+  const personalBookList = personalCourses
+    ?.sort((a, b) => a.book_name.localeCompare(b.book_name, undefined, { sensitivity: "base" }))
+    .map((x) => (
+      <HStack spacing="4" key={x.id}>
+        <IconButton
+          onClick={() => {
+            handleEditClick({ id: x.id, book_name: x.book_name });
+          }}
+          variant="ghost"
+          size="xs"
+          aria-label={"Edit"}
+          icon={<MdEdit />}
+        ></IconButton>
+        <DeleteAlert handleDelete={deleteBook} dialogueHeader={"Delete Heading"} id={x.id} /> <Text>{x.book_name}</Text>;
+      </HStack>
+    ));
   return (
-    <>
-      {personalBookList}
-      <Button onClick={() => handleAddClick()}>Add Syllabus</Button>
-    </>
+    <Box bg="gray.50" p="4">
+      <VStack alignItems="left">
+        <Text as="label">**Your Private Syllabus is only visible to you</Text>
+        <Text as="b" fontSize="large">
+          You have {personalBookList?.length} Private Syllabus
+        </Text>
+        {personalBookList}
+        <Button size="md" onClick={() => handleAddClick()}>
+          Add New Syllabus
+        </Button>
+      </VStack>
+    </Box>
   );
 };
 
@@ -871,11 +925,135 @@ const PrivateBooksCrud = (props: { data: IPrivateBookscontainer }) => {
   return (
     /* "handleSubmit" will validate your inputs before invoking "onSubmit" */
     <form onSubmit={handleSubmit(onSubmit)}>
-      <Input placeholder="Syllabus Name" {...register("name", { required: true })} />
-      {errors.name && <span>This field is required</span>}
-      <Button size="md" type="submit">
-        {props.data.action === "UPDATE" ? "Update" : "Create"}
-      </Button>
+      <VStack>
+        <Input placeholder="Syllabus Name" {...register("name", { required: true })} />
+        {errors.name && <span>This field is required**</span>}
+        <Button size="md" type="submit">
+          {props.data.action === "UPDATE" ? "Update" : "Create"}
+        </Button>
+      </VStack>
     </form>
+  );
+};
+
+// manage syllabus moderators
+
+const ManageModerator = () => {
+  const { book } = useSyllabusContext();
+  const { data } = useGetSyllabusModerator(book?.bookId);
+
+  return (
+    <Container minW="full" mb="16">
+      <VStack alignItems="start">
+        {book && <Moderators bookId={book?.bookId} />}
+        <br />
+        {book && <SearchUser bookId={book?.bookId} />}
+      </VStack>
+    </Container>
+  );
+};
+
+const SearchUser = (props: { bookId: number }) => {
+  const supabaseClient = useSupabaseClient<Database>();
+  const [user, setuser] = useState<{ id: string; email: string | null } | undefined>();
+  // const { book } = useSyllabusContext();
+  const { mutate } = useGetSyllabusModerator(props.bookId);
+
+  const getModerator = async (email: string | undefined) => {
+    const { data, error } = await supabaseClient.from("profiles").select(`id,email`).eq("email", email).single();
+    if (error) {
+      alert(error.message);
+      return;
+    }
+    setuser(data);
+  };
+  const addModerator = async () => {
+    const { data: d, error: e } = await supabaseClient
+      .from("syllabus_moderator")
+      .select()
+      .eq("book_fk", props.bookId)
+      .eq("moderator_fk", user!.id!);
+    if (e) {
+      alert(e.message);
+    }
+    if (d?.length !== 0) {
+      alert("Already a moderator of this Syllabus");
+      setuser(undefined);
+      return;
+    }
+
+    const { error } = await supabaseClient
+      .from("syllabus_moderator")
+      .insert({ book_fk: props.bookId, is_disabled: false, moderator_fk: user!.id! });
+    if (error) {
+      alert(error.message);
+      return;
+    }
+    mutate();
+    setuser(undefined);
+  };
+
+  return (
+    <VStack>
+      <SearchBox placeholder={"Search user by Email to add more Moderator"} changeValueCallback={getModerator} />
+      {user && (
+        <Box>
+          {" "}
+          {user?.email} <Button onClick={() => addModerator()}> Make moderator</Button>{" "}
+        </Box>
+      )}
+    </VStack>
+  );
+};
+
+export const SearchBox = (props: { placeholder: string; changeValueCallback: (x: string | undefined) => void }) => {
+  const [value, setValue] = useState<string>("");
+
+  const handleSubmit = (e?: any) => {
+    if (e !== undefined) {
+      e.preventDefault();
+    }
+    props.changeValueCallback(value);
+  };
+
+  return (
+    <Container px="-0.5" w="2xl">
+      <form onSubmit={handleSubmit}>
+        <InputGroup>
+          <Input value={value} onChange={(event) => setValue(event.target.value)} placeholder={props.placeholder} />
+
+          <InputRightElement>
+            <Search2Icon onClick={() => handleSubmit()} _hover={{ cursor: "pointer" }} />
+          </InputRightElement>
+        </InputGroup>
+      </form>
+    </Container>
+  );
+};
+
+export const Moderators = (props: { bookId: number }) => {
+  const { data, mutate } = useGetSyllabusModerator(props.bookId);
+  const supabaseClient = useSupabaseClient<Database>();
+  const handleDelete = async (id: number) => {
+    const { error } = await supabaseClient.from("syllabus_moderator").delete().eq("id", id);
+    if (error) {
+      alert(error.message);
+      return;
+    }
+    mutate();
+  };
+  return (
+    <div>
+      <Text as="b">Current Moderators</Text>
+      {data &&
+        data?.map((x) => {
+          return (
+            <HStack key={x.id}>
+              <Text>{x.profiles?.email} </Text>
+              <DeleteAlert handleDelete={handleDelete} dialogueHeader={"Delete Moderator"} id={x.id} />
+            </HStack>
+          );
+        })}
+    </div>
   );
 };

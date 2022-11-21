@@ -1,18 +1,7 @@
-import { Box, Button, Container, IconButton, Input, Radio, RadioGroup, Select, Stack, Text, VStack } from "@chakra-ui/react";
-import { useSupabaseClient } from "@supabase/auth-helpers-react";
+import { Box, Button, Container, Radio, RadioGroup, Select, Stack, Text, VStack } from "@chakra-ui/react";
 import router from "next/router";
 import React, { useEffect, useState } from "react";
-import { useForm, SubmitHandler } from "react-hook-form";
-import { MdEdit } from "react-icons/md";
-import {
-  useGetBooks,
-  useGetColleges,
-  useGetCollegesCourses,
-  useGetPersonalCourses,
-  useGetSyllabusByBookId,
-} from "../../customHookes/networkHooks";
-import { Database } from "../../lib/database";
-import { DeleteAlert } from "../../pages/manageSyllabusv2";
+import { useGetBooks, useGetColleges, useGetCollegesCourses, useGetPersonalCourses } from "../../customHookes/networkHooks";
 import { useAuthContext } from "../../state/Authcontext";
 import { useNoteContext } from "../../state/NoteContext";
 import { Book, useSyllabusContext } from "../../state/SyllabusContext";
@@ -23,32 +12,37 @@ const BookFilterContainer = () => {
   const [selectedCollege, setSelectedCollege] = useState<number | undefined>(undefined);
   const [selectedCourse, setselectedCourse] = useState<Book | undefined>(undefined);
   const { setBook, book, setDisplayMode } = useSyllabusContext();
+  const { profile } = useAuthContext();
 
   return (
-    <VStack bg="red.100" p="2" height="32">
+    <VStack p="2" height="32" _hover={{ color: "red", bg: "brand.100" }}>
       <Categories category={category} onChangeCallback={setCategory} />
       {category === "8" ? (
         <Stack direction={"row"}>
           <VStack>
             <Colleges onChangeCallback={setSelectedCollege} />
-            <Button
-              onClick={() => {
-                setDisplayMode("COLLEGE");
-              }}
-            >
-              Add College
-            </Button>
+            {profile && profile.role === "ADMIN" && (
+              <Button
+                onClick={() => {
+                  setDisplayMode("COLLEGE");
+                }}
+              >
+                Add College
+              </Button>
+            )}
           </VStack>
           {selectedCollege && (
             <VStack>
               <CollegeCourses collegeId={selectedCollege} onChangeCallback={setBook} />{" "}
-              <Button
-                onClick={() => {
-                  setDisplayMode("COLLEGE_COURSE");
-                }}
-              >
-                Add New Course
-              </Button>
+              {profile && profile.role === "ADMIN" && (
+                <Button
+                  onClick={() => {
+                    setDisplayMode("COLLEGE_COURSE");
+                  }}
+                >
+                  Add New Course
+                </Button>
+              )}
             </VStack>
           )}
         </Stack>
@@ -133,12 +127,19 @@ const Colleges = (props: { onChangeCallback: React.Dispatch<React.SetStateAction
 const PersonalSyllabus = (props: { onChangeCallback: React.Dispatch<React.SetStateAction<Book | undefined>> }) => {
   const { profile } = useAuthContext();
   const { personalCourses, isError, isLoading } = useGetPersonalCourses(profile?.id!);
-  const { setDisplayMode } = useSyllabusContext();
+  const { setDisplayMode,setFormType } = useSyllabusContext();
   //Functions
   const handleChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
     const x = personalCourses!.find((c) => c.id === Number(e.target.value));
-    props.onChangeCallback({ bookId: x?.id!, bookName: x?.book_name! });
+    props.onChangeCallback({
+      bookId: x?.id!,
+      bookName: x?.book_name!,
+      colleges_fk: x?.colleges_fk,
+      moderator: x?.moderator,
+      syllabus_owner_fk: x?.syllabus_owner_fk,
+    });
     setDisplayMode("SYLLABUS");
+    setFormType(undefined)
   };
   return (
     <Container maxW="2xl">
@@ -166,13 +167,21 @@ const CollegeCourses = (props: {
 }) => {
   //states
   const { collegesCourses, isError, isLoading } = useGetCollegesCourses(props.collegeId);
-  const { setDisplayMode } = useSyllabusContext();
+  const { setDisplayMode,setFormType } = useSyllabusContext();
 
   //Functions
   const handleChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
     const x = collegesCourses!.find((c) => c.id === Number(e.target.value));
-    props.onChangeCallback({ bookId: x?.id!, bookName: x?.book_name! });
+    const book = {
+      bookId: x?.id!,
+      bookName: x?.book_name!,
+      colleges_fk: x?.colleges_fk,
+      moderator: x?.moderator,
+      syllabus_owner_fk: x?.syllabus_owner_fk,
+    };
+    props.onChangeCallback(book);
     setDisplayMode("SYLLABUS");
+    setFormType(undefined)
   };
 
   return (
@@ -201,7 +210,7 @@ const BookFilterNew = (props: {
 }) => {
   // const [value, setValue] = React.useState(props.category);
   const { data } = useGetBooks(Number(props.category));
-  const { setDisplayMode } = useSyllabusContext();
+  const { setDisplayMode ,setFormType} = useSyllabusContext();
   // const { data: d } = useGetSyllabusByBookId(2);
   const [classList, setClassList] = React.useState<BookResponse[] | null>([]);
   const [selectedClass, setSelectedClass] = React.useState<number | undefined>();
@@ -305,6 +314,7 @@ const BookFilterNew = (props: {
             props.onChangeCallback({ bookId: x?.id!, bookName: x?.book_name! });
             setIsTagSearchActive(false);
             setDisplayMode("SYLLABUS");
+            setFormType(undefined)
             // navigateTo(e.target.value, "hello");
           }}
         >
@@ -323,36 +333,3 @@ const BookFilterNew = (props: {
   );
 };
 export default BookFilterContainer;
-
-const PersonalSyllabusCrud = (props: {
-  collegeId: number;
-  onChangeCallback: React.Dispatch<React.SetStateAction<Book | undefined>>;
-}) => {
-  //states
-  const { collegesCourses, isError, isLoading } = useGetCollegesCourses(props.collegeId);
-
-  //Functions
-  const handleChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
-    const x = collegesCourses!.find((c) => c.id === Number(e.target.value));
-    props.onChangeCallback({ bookId: x?.id!, bookName: x?.book_name! });
-  };
-
-  return (
-    <Container maxW="2xl">
-      <Select
-        placeholder={"Select College"}
-        onChange={(e) => {
-          handleChange(e);
-        }}
-      >
-        {collegesCourses?.map((x) => {
-          return (
-            <option key={x.id} value={x.id}>
-              {x.book_name}
-            </option>
-          );
-        })}
-      </Select>
-    </Container>
-  );
-};

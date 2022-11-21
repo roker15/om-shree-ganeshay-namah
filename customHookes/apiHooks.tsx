@@ -3,6 +3,7 @@ import axios from "axios";
 import useSWR from "swr";
 import { Database } from "../lib/database";
 import { Data } from "../pages/api/prisma/syllabus/syllabus";
+import { SyllabusModerator } from "../pages/api/prisma/syllabus/usegetsyllabusmoderator";
 import { Book } from "../state/SyllabusContext";
 
 const cacheOptions = {
@@ -12,13 +13,15 @@ const cacheOptions = {
 };
 
 export function useGetSyllabusByBookId(book: Book) {
-  console.log("get syllabus swr hit ",book.bookId)
+  console.log("get syllabus swr hit ", book.bookId);
   const supabaseClient = useSupabaseClient<Database>();
 
   const fetcher = async () => {
-    const response = await axios.get<Data>("/api/prisma/syllabus/syllabus", { params: { bookId: book.bookId } }).catch((e) => {
-      throw e;
-    });
+    const response = await axios
+      .get<Data>("/api/prisma/syllabus/syllabus", { params: { bookId: book.bookId } })
+      .catch((e) => {
+        throw e;
+      });
     return response.data;
   };
   const { data, error, mutate } = useSWR([`/api/prisma/syllabus/syllabus/${book.bookId}`], fetcher, cacheOptions);
@@ -47,5 +50,27 @@ export function useGetArticleCount(subheadingId: number, creatorId: string) {
     data: data,
     isLoading: !error && !data,
     swrError: error,
+  };
+}
+export function useGetSyllabusModerator(bookId: number | undefined) {
+  const fetcher = async () => {
+    const response = await axios
+      .get<SyllabusModerator[]>("/api/prisma/syllabus/usegetsyllabusmoderator", { params: { bookId } })
+      .catch((e) => {
+        throw e;
+      });
+    return response.data;
+  };
+  const { data, error, mutate } = useSWR(
+    bookId ? ["/api/prisma/syllabus/usegetsyllabusmoderator", bookId] : null,
+    fetcher,
+    cacheOptions
+  );
+
+  return {
+    data: data,
+    isLoading: !error && !data,
+    swrError: error,
+    mutate: mutate,
   };
 }
