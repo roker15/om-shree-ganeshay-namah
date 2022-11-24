@@ -40,9 +40,12 @@ const Home: React.FunctionComponent = () => {
     <Box minW="full">
       {/* {data ? data.book_name : "no data"} */}
       <Landing />
-      <ChakraThemeTest />
+      {/* <ChakraThemeTest /> */}
 
       <Container maxW={"6xl"} mb={{ base: "64", lg: "80" }}>
+        <Link href="/notes">
+          <a>Notes</a>
+        </Link>
         {user && profile?.role === "ADMIN" && (
           <Box m="8" w="full">
             <Link href="/manageSyllabusv2">

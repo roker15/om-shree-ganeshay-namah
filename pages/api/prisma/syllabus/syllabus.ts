@@ -29,7 +29,6 @@ export type Data = {
 
 export default async function handle(req: NextApiRequest, res: NextApiResponse<Data | string>) {
   const supabaseServerClient = createServerSupabaseClient<Database>({ req, res });
-  // const bookId = Number(req.query.bookId);
   const {
     data: { user },
   } = await supabaseServerClient.auth.getUser();
@@ -55,14 +54,8 @@ export default async function handle(req: NextApiRequest, res: NextApiResponse<D
         },
       },
     });
-    console.log("api syllabus hit-syllabus");
-    // console.log(toJson(posts)!)
     return res.status(200).send(toJson(posts)!);
   } catch (error) {
     return res.status(500).send(toJson(error)!);
-    // console.log("message is", (error as any).message, "end");
-    // res.status((error as any).requestResult.statusCode).json('User already exists' );
-    // throw error;
-    // res.status(403).send( "Error occured." );
   }
 }

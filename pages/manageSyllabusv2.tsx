@@ -31,6 +31,7 @@ import {
   NumberInputField,
   NumberInputStepper,
   Select,
+  Spinner,
   Stack,
   Text,
   useToast,
@@ -40,9 +41,12 @@ import { useSupabaseClient, useUser } from "@supabase/auth-helpers-react";
 import React, { useEffect, useState } from "react";
 import { SubmitHandler, useForm } from "react-hook-form";
 import { MdDelete, MdEdit } from "react-icons/md";
+import { customToast } from "../components/CustomToast";
+import { LoginCard } from "../components/LoginCard";
 import { useGetSyllabusByBookId, useGetSyllabusModerator } from "../customHookes/apiHooks";
 import { useGetColleges, useGetCollegesCourses, useGetPersonalCourses } from "../customHookes/networkHooks";
 import LayoutWithTopNavbar from "../layout/LayoutWithTopNavbar";
+import { BASE_URL } from "../lib/constants";
 import { Database } from "../lib/database";
 import { elog } from "../lib/mylog";
 import { useAuthContext } from "../state/Authcontext";
@@ -56,12 +60,14 @@ const CHeading = (props: { children: React.ReactNode }) => {
 };
 
 const SyllabusContainer: React.FunctionComponent = () => {
-  const { formType, headingFormProps, subheadingFormProps, setFormType, book, displayMode } = useSyllabusContext();
+  const { formType, headingFormProps, subheadingFormProps, setFormType, book, displayMode, category } = useSyllabusContext();
   const { profile } = useAuthContext();
+  const { data, isLoading } = useGetSyllabusModerator(book?.bookId);
+  const isModerator = data?.some((x) => x.profiles?.id === profile?.id && x.is_active === true);
   const shudShow = (() => {
     if (displayMode === "PERSONAL_COURSE") {
       return true;
-    } else if (book?.moderator && book?.moderator.includes(profile?.id!)) {
+    } else if (isModerator) {
       return true;
     } else if (book?.syllabus_owner_fk === profile?.id) {
       return true;
@@ -70,10 +76,24 @@ const SyllabusContainer: React.FunctionComponent = () => {
     }
     return false;
   })();
-  // undefined;
+
+  if (isLoading) {
+    return (
+      <Center h="70vh">
+        <Spinner />
+      </Center>
+    );
+  }
+  if (!profile) {
+    return (
+      <Center h="70vh">
+        <LoginCard redirect={`${BASE_URL}/manageSyllabusv2`} />
+      </Center>
+    );
+  }
   return (
     <>
-      <ManageModerator />
+      {book?.publication_fk !== 9 && profile.role === "ADMIN" && <ManageModerator />}
 
       {shudShow ? (
         <Box>
@@ -98,9 +118,21 @@ const SyllabusContainer: React.FunctionComponent = () => {
           {displayMode === "COLLEGE_COURSE" && <CollegeCourseContainer />}
           {displayMode === "PERSONAL_COURSE" && <PrivateBookscontainer />}
         </Box>
+      ) : book ? (
+        <Center h="50vh">
+          <VStack>
+            <Text as="b" color="gray.50" bg="orange.500" px="2">
+              {book.bookName}
+            </Text>
+            <CHeading>You are not Authorized to edit this Syllabus !</CHeading>
+            <RequestManageSyllabus bookId={book.bookId} userId={profile.id} />
+          </VStack>
+        </Center>
       ) : (
         <Center h="50vh">
-          <CHeading>You are Not Authorized to Edit this Syllabus !</CHeading>
+          <VStack>
+            <CHeading>Select Syllabus from Top </CHeading>
+          </VStack>
         </Center>
       )}
     </>
@@ -114,7 +146,7 @@ const Syllabus: React.FunctionComponent = () => {
   const { profile } = useAuthContext();
   const user = useUser();
   const { formType, setFormType, setHeadingFormProps, book } = useSyllabusContext();
-  const { data, swrError } = useGetSyllabusByBookId(book!);
+  const { data, swrError } = useGetSyllabusByBookId(book?.bookId);
 
   return (
     <Box maxW="full" p="2" bg="brand.50">
@@ -152,7 +184,7 @@ interface IHeadingformProps {
 const HeadingForm: React.FC<IHeadingformProps> = ({ x }) => {
   const supabaseClient = useSupabaseClient<Database>();
   const { book } = useSyllabusContext();
-  const { mutate } = useGetSyllabusByBookId(book!);
+  const { mutate } = useGetSyllabusByBookId(book?.bookId);
   interface FormValues {
     heading: string | undefined;
     sequence: number | undefined;
@@ -293,7 +325,7 @@ const SubheadingForm: React.FC<ISubheadingformProps> = ({ x }) => {
   const supabaseClient = useSupabaseClient<Database>();
   const { profile } = useAuthContext();
   const { book } = useSyllabusContext();
-  const { mutate } = useGetSyllabusByBookId(book!);
+  const { mutate } = useGetSyllabusByBookId(book?.bookId);
   interface FormValues {
     subheading: string | undefined;
     sequence: number | undefined;
@@ -913,7 +945,7 @@ const PrivateBooksCrud = (props: { data: IPrivateBookscontainer }) => {
   const onSubmit: SubmitHandler<typeof props.data.formData> = async (data) => {
     const { error } = await supabaseClient
       .from("books")
-      .upsert({ id: props.data.formData.id, book_name: data.name, syllabus_owner_fk: profile?.id });
+      .upsert({ id: props.data.formData.id, book_name: data.name, syllabus_owner_fk: profile?.id, publication_fk: 9 });
     mutate();
   };
 
@@ -940,7 +972,6 @@ const PrivateBooksCrud = (props: { data: IPrivateBookscontainer }) => {
 
 const ManageModerator = () => {
   const { book } = useSyllabusContext();
-  const { data } = useGetSyllabusModerator(book?.bookId);
 
   return (
     <Container minW="full" mb="16">
@@ -956,7 +987,6 @@ const ManageModerator = () => {
 const SearchUser = (props: { bookId: number }) => {
   const supabaseClient = useSupabaseClient<Database>();
   const [user, setuser] = useState<{ id: string; email: string | null } | undefined>();
-  // const { book } = useSyllabusContext();
   const { mutate } = useGetSyllabusModerator(props.bookId);
 
   const getModerator = async (email: string | undefined) => {
@@ -984,7 +1014,7 @@ const SearchUser = (props: { bookId: number }) => {
 
     const { error } = await supabaseClient
       .from("syllabus_moderator")
-      .insert({ book_fk: props.bookId, is_disabled: false, moderator_fk: user!.id! });
+      .insert({ book_fk: props.bookId, is_active: false, moderator_fk: user!.id! });
     if (error) {
       alert(error.message);
       return;
@@ -1032,7 +1062,7 @@ export const SearchBox = (props: { placeholder: string; changeValueCallback: (x:
 };
 
 export const Moderators = (props: { bookId: number }) => {
-  const { data, mutate } = useGetSyllabusModerator(props.bookId);
+  const { data, mutate, isLoading } = useGetSyllabusModerator(props.bookId);
   const supabaseClient = useSupabaseClient<Database>();
   const handleDelete = async (id: number) => {
     const { error } = await supabaseClient.from("syllabus_moderator").delete().eq("id", id);
@@ -1043,17 +1073,91 @@ export const Moderators = (props: { bookId: number }) => {
     mutate();
   };
   return (
-    <div>
-      <Text as="b">Current Moderators</Text>
+    <VStack alignItems="left">
+      <Text as="b">Syllabus Moderators</Text>
+      {isLoading && <Spinner />}
       {data &&
-        data?.map((x) => {
-          return (
-            <HStack key={x.id}>
-              <Text>{x.profiles?.email} </Text>
-              <DeleteAlert handleDelete={handleDelete} dialogueHeader={"Delete Moderator"} id={x.id} />
-            </HStack>
-          );
-        })}
-    </div>
+        data.length !== 0 &&
+        data
+          .sort((a, b) => a.profiles!.email!.localeCompare(b.profiles!.email!, undefined, { sensitivity: "base" }))
+          .map((x) => {
+            return (
+              <HStack key={x.id} spacing="4">
+                <DeleteAlert handleDelete={handleDelete} dialogueHeader={"Delete Moderator"} id={x.id} />
+                <Activate id={x.id} activeState={x.is_active} bookId={props.bookId} />
+                <Text>{x.profiles?.email} </Text>
+              </HStack>
+            );
+          })}
+      {data && data.length === 0 && (
+        <Text as="label" bg="blue.100">
+          No Moderator Assigned
+        </Text>
+      )}
+    </VStack>
+  );
+};
+export const RequestManageSyllabus = (props: { bookId: number; userId: string }) => {
+  const supabaseClient = useSupabaseClient<Database>();
+  const askPermission = async () => {
+    const { data, error } = await supabaseClient
+      .from("syllabus_moderator")
+      .select()
+      .eq("book_fk", props.bookId)
+      .eq("moderator_fk", props.userId);
+    if (error) {
+      alert(error.message);
+      return;
+    }
+    if (data && data.length !== 0) {
+      customToast({ title: "Already requested", status: "success" });
+      return;
+    }
+
+    const { error: e } = await supabaseClient
+      .from("syllabus_moderator")
+      .insert({ book_fk: props.bookId, moderator_fk: props.userId, is_active: false });
+    if (e) {
+      alert(e.message);
+      return;
+    }
+    customToast({ title: "Request sent", status: "success" });
+    // mutate();
+  };
+
+  return (
+    <VStack alignItems="left">
+      <Button size="md" onClick={() => askPermission()}>
+        Request Permission
+      </Button>
+    </VStack>
+  );
+};
+export const Activate = (props: { id: number; activeState: boolean; bookId: number }) => {
+  const supabaseClient = useSupabaseClient<Database>();
+  const [isLoading, setisLoading] = useState(false);
+  const { mutate } = useGetSyllabusModerator(props.bookId);
+  const changeActiveState = async () => {
+    setisLoading(true);
+    const { data, error } = await supabaseClient
+      .from("syllabus_moderator")
+      .update({ is_active: !props.activeState })
+      .eq("id", props.id)
+      .select();
+    if (error) {
+      alert(error.message);
+      return;
+    }
+    mutate().then(() => {
+      setisLoading(false);
+    });
+  };
+
+  return (
+    <>
+      <Button isLoading={isLoading} onClick={() => changeActiveState()}>
+        {props.activeState ? "Deactivate" : "Activate"}
+      </Button>
+    </>
   );
 };

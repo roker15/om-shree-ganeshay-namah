@@ -176,3 +176,5 @@ export const currentAffairTags: { id: number; tag: string }[] = [
   { id: 59, tag: "Bills/Acts" },
   { id: 60, tag: "Study/Survey/Report/Index" },
 ];
+
+export const markitWebColor = "#4154f1";

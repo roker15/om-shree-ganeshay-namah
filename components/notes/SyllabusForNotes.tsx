@@ -1,16 +1,16 @@
-import { Box, Divider, Flex, IconButton, Link, Stack, Text } from "@chakra-ui/react";
+import { Box, Flex, IconButton, Link, Text } from "@chakra-ui/react";
 import { useSupabaseClient } from "@supabase/auth-helpers-react";
 import { groupBy } from "lodash";
 import React, { useEffect, useState } from "react";
-import { MdAdd, MdDelete, MdLightMode } from "react-icons/md";
+import { MdAdd, MdLightMode } from "react-icons/md";
 import { useGetSyllabusByBookId } from "../../customHookes/networkHooks";
 import { Database } from "../../lib/database";
 import { useAuthContext } from "../../state/Authcontext";
-import { BookResponse, BookSyllabus } from "../../types/myTypes";
-import { definitions } from "../../types/supabase";
+import { NoteBook } from "../../state/NoteContext";
+import { BookSyllabus } from "../../types/myTypes";
 
 interface Props {
-  book: BookResponse | undefined;
+  book: NoteBook | undefined;
   changeParentProps: (x: BookSyllabus) => void;
 }
 
@@ -57,10 +57,10 @@ const Syllabus: React.FC<Props> = ({ book, changeParentProps }) => {
 
   return (
     <Box pb="6" minW="full">
-      {book?.book_name && (
+      {book?.bookName && (
         <Flex bg="brand.100" p="2" borderTopRadius="md">
           <Text fontWeight={"normal"} casing={"capitalize"}>
-            {book?.book_name}
+            {book?.bookName}
           </Text>
         </Flex>
       )}

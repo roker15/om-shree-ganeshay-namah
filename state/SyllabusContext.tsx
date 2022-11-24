@@ -19,7 +19,8 @@ export interface Book {
   bookName: string;
   colleges_fk?: number | null| undefined;
   syllabus_owner_fk?: string | null| undefined;
-  moderator?: string[] | null| undefined;
+  moderator?: string[] | null | undefined;
+  publication_fk?: number | null| undefined;
 }
 
 type formType = "HEAD" | "SUBHEAD" | undefined;
@@ -36,6 +37,8 @@ interface State {
   setBook: Dispatch<SetStateAction<Book | undefined>>;
   displayMode: displayType;
   setDisplayMode: Dispatch<SetStateAction<displayType>>;
+  category: string| undefined;
+  setCategory:Dispatch<SetStateAction<string| undefined>>;
 }
 
 const SyllabusContext = createContext<State>({} as State);
@@ -47,7 +50,8 @@ export function SyllabusContextProviderWrapper({ children }: { children: ReactNo
   const [formType, setFormType] = useState<formType>(undefined);
   const [displayMode, setDisplayMode] = useState<displayType>(undefined);
   const [book, setBook] = useState<Book | undefined>(undefined);
-
+  const [category, setCategory] = useState<string | undefined>(undefined);
+ 
   let sharedState: State = {
     /* whatever you want */
     headingFormProps,
@@ -60,6 +64,8 @@ export function SyllabusContextProviderWrapper({ children }: { children: ReactNo
     setBook,
     displayMode,
     setDisplayMode,
+    category,
+    setCategory
   };
   //return provider
   return <SyllabusContext.Provider value={sharedState}>{children}</SyllabusContext.Provider>;

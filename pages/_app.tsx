@@ -12,6 +12,7 @@ import { Database } from "../lib/database";
 import { createBrowserSupabaseClient } from "@supabase/auth-helpers-nextjs";
 import { SessionContextProvider } from "@supabase/auth-helpers-react";
 import { SyllabusContextProviderWrapper } from "../state/SyllabusContext";
+import { NotesContextNewWrapper } from "../state/NotesContextNew";
 type AppLayoutProps = {
   Component: PageWithLayoutType;
   pageProps: any;
@@ -33,13 +34,13 @@ function MyApp({ Component, pageProps }: AppLayoutProps) {
       <SessionContextProvider supabaseClient={supabaseClient} initialSession={pageProps.initialSession}>
         <AuthProvider>
           <SyllabusContextProviderWrapper>
-            <NoteContextWrapper>
+            <NotesContextNewWrapper>
               <ChakraProvider theme={theme}>
                 <Layout>
                   <Component {...pageProps} />
                 </Layout>
               </ChakraProvider>
-            </NoteContextWrapper>
+            </NotesContextNewWrapper>
           </SyllabusContextProviderWrapper>
         </AuthProvider>
       </SessionContextProvider>

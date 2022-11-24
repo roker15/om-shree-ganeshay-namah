@@ -30,6 +30,7 @@ import DesktopMenu from "../components/chakraTemplate/Customdrawer";
 import { CustomDrawerWithButton } from "../components/CustomChakraUi";
 import BookFilter from "../components/syllabus/BookFilter";
 import BookFilterForMangeSyllabus from "../components/syllabusNew/BookFilterForMangeSyllabus";
+import BookFilterForNotesMaking from "../components/syllabusNew/BookFilterForNotesMaking";
 import { useAuthContext } from "../state/Authcontext";
 import { SyllabusContextProviderWrapper } from "../state/SyllabusContext";
 import { BookResponse } from "../types/myTypes";
@@ -73,7 +74,7 @@ const MobileNav = ({ onOpen, ...rest }: MobileProps) => {
       <HStack>
         <Box display={{ base: "block", md: "none" }}>
           {/* <CustomMenu /> */}
-          <BookFilterForMangeSyllabus />
+          <BookFilterForNotesMaking />
         </Box>
         <Text fontWeight="bold" display={{ base: "block", md: "none" }}>
           Jionote
@@ -91,7 +92,7 @@ const MobileNav = ({ onOpen, ...rest }: MobileProps) => {
       <Box display={{ base: "none", md: "block" }}>
         {/* <GotoQuestion /> */}
 
-        <BookFilterForMangeSyllabus />
+        <BookFilterForNotesMaking />
       </Box>
       {/* <Box display={{ base: "none", sm: "initial" }}> */}
       {/* </Box> */}

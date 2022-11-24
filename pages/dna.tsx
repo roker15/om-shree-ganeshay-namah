@@ -41,7 +41,6 @@ import "katex/dist/katex.min.css";
 import dynamic from "next/dynamic";
 import "suneditor/dist/css/suneditor.min.css";
 import { BASE_URL, colors, currentAffairTags, sunEditorButtonList } from "../lib/constants";
-import { definitions } from "../types/supabase";
 // import DOMPurify from "dompurify";
 import { useSupabaseClient, useUser } from "@supabase/auth-helpers-react";
 import React, { useState } from "react";

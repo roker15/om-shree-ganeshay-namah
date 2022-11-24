@@ -343,3 +343,22 @@ export function useGetPersonalCourses(userId: string | undefined) {
     mutate: mutate,
   };
 }
+export function useGetUserRequest() {
+  const supabaseClient = useSupabaseClient<Database>();
+  const fetcher = async () => {
+    const { data, error } = await supabaseClient
+      .from("request")
+      .select(`id,message,mobile,user_fk(id,email)`);
+    if (error) throw error;
+    return data;
+  };
+
+  const { data, error, mutate } = useSWR(`/api/supabase/useGetUserRequest`, fetcher, cacheOptions);
+
+  return {
+    userRequest: data,
+    isLoading: !error && !data,
+    isError: error,
+    mutate: mutate,
+  };
+}

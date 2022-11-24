@@ -29,7 +29,6 @@ import { Database } from "../../lib/database";
 import { elog } from "../../lib/mylog";
 import { useAuthContext } from "../../state/Authcontext";
 import { Headings } from "../../types/myTypes";
-import { definitions } from "../../types/supabase";
 import { FormProps } from "./CreateBookSyllabus";
 
 interface Props {

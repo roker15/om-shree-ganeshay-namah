@@ -1,4 +1,3 @@
-import { definitions } from "./supabase";
 
 export type Exam = {
   id: number;
@@ -110,6 +109,16 @@ export type BookResponse = {
   };
   publication_fk?: number;
 };
+  export interface BookResponse1 {
+    bookId: number;
+    bookName: string;
+    colleges_fk?: number | null| undefined;
+    syllabus_owner_fk?: string | null| undefined;
+    moderator?: string[] | null | undefined;
+    publication_fk?: number | null| undefined;
+  }
+
+
 export type BookSyllabus = {
   subheading_id: number;
   subheading: string;

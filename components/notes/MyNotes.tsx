@@ -91,7 +91,7 @@ function CustomIconbutton(props: { handleArticleEdit: (arg0: any, arg1: boolean)
   );
 }
 
-const MyNotes: React.FC<Props> = ({ subjectId, subheadingid, notesCreator, changeParentProps, isCopyable, isEditable }) => {
+const MyNotes: React.FC<Props> = ({ subheadingid, notesCreator, changeParentProps, isCopyable, isEditable }) => {
   const supabaseClient = useSupabaseClient<Database>();
   const { profile } = useAuthContext();
   const { data: articles, isLoading: isArticleLoading, swrError } = useGetUserArticless(subheadingid, notesCreator);
@@ -242,7 +242,6 @@ const MyNotes: React.FC<Props> = ({ subjectId, subheadingid, notesCreator, chang
                     {isArticleCreating === "EDITING" && x.id === selectedArticleForEdit ? (
                       <ArticleForm
                         tags={x.current_affair_tags!}
-                        subjectId={subjectId}
                         subheadingid={subheadingid}
                         articleId={x.id}
                         articleTitle={x.article_title}
@@ -287,7 +286,6 @@ const MyNotes: React.FC<Props> = ({ subjectId, subheadingid, notesCreator, chang
 
           {isArticleCreating === "CREATING" && subheadingid ? (
             <ArticleForm
-              subjectId={subjectId}
               subheadingid={subheadingid}
               formMode={"CREATING"}
               x={setIsArticleCreating}
@@ -344,7 +342,7 @@ export default MyNotes;
 
 type ArticleFormProps = {
   tags?: unknown[] | undefined;
-  subjectId: number | undefined;
+  // subjectId: number | undefined;
   subheadingid: number | undefined;
   articleId?: number;
   articleTitle?: string;
@@ -357,7 +355,7 @@ type ArticleFormProps = {
 };
 const ArticleForm: React.FC<ArticleFormProps> = ({
   tags,
-  subjectId,
+  // subjectId,
   subheadingid,
   formMode,
   articleId,
