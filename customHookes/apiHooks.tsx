@@ -2,6 +2,7 @@ import { useSupabaseClient } from "@supabase/auth-helpers-react";
 import axios from "axios";
 import useSWR from "swr";
 import { Database } from "../lib/database";
+import { ApiArticleTitle } from "../pages/api/prisma/posts/getarticlesbyuserandsubheading";
 import { SyllabusModerator2 } from "../pages/api/prisma/syllabus/getsyllabusmoderatorbystatus";
 import { Data } from "../pages/api/prisma/syllabus/syllabus";
 import { SyllabusModerator } from "../pages/api/prisma/syllabus/usegetsyllabusmoderator";
@@ -17,14 +18,12 @@ export function useGetSyllabusByBookId(bookId: number | undefined) {
   const supabaseClient = useSupabaseClient<Database>();
 
   const fetcher = async () => {
-    const response = await axios
-      .get<Data>("/api/prisma/syllabus/syllabus", { params: { bookId: bookId } })
-      .catch((e) => {
-        throw e;
-      });
+    const response = await axios.get<Data>("/api/prisma/syllabus/syllabus", { params: { bookId: bookId } }).catch((e) => {
+      throw e;
+    });
     return response.data;
   };
-  const { data, error, mutate, isValidating} = useSWR(
+  const { data, error, mutate, isValidating } = useSWR(
     bookId ? [`/api/prisma/syllabus/syllabus/${bookId}`] : null,
     fetcher,
     cacheOptions
@@ -95,6 +94,30 @@ export function useGetSyllbusModeratorbyStatus(isActive: string | undefined) {
   );
   return {
     data: data,
+    //isValidating ensures no loading condition when request is rejected in case of null key
+    isLoading: !data && !error && isValidating,
+    swrError: error,
+    mutate: mutate,
+  };
+}
+export function useGetArticlesbyUserandSubheading(props: { subheadingId: number; creatorId: string }) {
+  const fetcher = async () => {
+    const response = await axios
+      .get<ApiArticleTitle[]>("/api/prisma/posts/getarticlesbyuserandsubheading", {
+        params: { subheadingId: props.subheadingId, creatorId: props.creatorId },
+      })
+      .catch((e) => {
+        throw e;
+      });
+    return response.data;
+  };
+  const { data, error, mutate, isValidating } = useSWR(
+    ["/api/prisma/posts/getarticlesbyuserandsubheading", props],
+    fetcher,
+    cacheOptions
+  );
+  return {
+    articleTitles: data,
     //isValidating ensures no loading condition when request is rejected in case of null key
     isLoading: !data && !error && isValidating,
     swrError: error,

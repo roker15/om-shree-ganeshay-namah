@@ -1,0 +1,13 @@
+
+const Subheading = (props: { subheading: Data_subheadings }) => {
+  const { setSelectedSubheading } = useNotesContextNew();
+  const changeContextSubheading = () => {
+    setSelectedSubheading({ id: props.subheading.id, name: props.subheading.subheading! });
+  };
+  return (
+    <Text fontSize={"sm"} casing={"capitalize"} cursor="pointer" onClick={changeContextSubheading}>
+      {props.subheading.subheading}
+    </Text>
+  );
+};
+  
