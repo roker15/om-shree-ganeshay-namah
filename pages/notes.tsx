@@ -142,11 +142,10 @@ const NotesContainer = () => {
   const { book, selectedSubheading } = useNotesContextNew();
   const [formMode, setFormMode] = useState<"CREATING" | "EDITING" | undefined>(undefined);
   const [selectedNotes, setSelectedNotes] = useState<ApiArticleTitle | undefined>(undefined);
-  const changeFormProps = (x: ApiArticleTitle| undefined) => {
+  const changeFormProps = (x: ApiArticleTitle | undefined) => {
     setSelectedNotes(x);
     setFormMode("EDITING");
   };
-  
 
   return (
     <div>
@@ -164,22 +163,25 @@ const NotesContainer = () => {
       {selectedSubheading && <NoteList subheadingId={selectedSubheading?.id!} onChangeCallback={changeFormProps} />}
       {formMode && (
         <ArticleForm
-          id={undefined}
-          subheadingid={0}
+          id={selectedNotes?.id}
+          subheadingid={selectedSubheading?.id!}
           mutate={undefined}
           subjectId={0}
           formInput={{
-            articleTitle: undefined,
-            sequence: undefined,
+            articleTitle: selectedNotes?.article_title,
+            sequence: selectedNotes?.sequence!,
             isQuestion: false,
-            questionType: undefined,
-            question_year: undefined,
-            tags: undefined,
+            questionType: selectedNotes?.question_type,
+            question_year: selectedNotes?.question_year,
+            tags: selectedNotes?.current_affair_tags,
           }}
         />
       )}
       <Button
-        onClick={() => setFormMode(formMode ? undefined : "CREATING")}
+        onClick={() => {
+          setFormMode(formMode ? undefined : "CREATING");
+          setSelectedNotes(undefined);
+        }}
         variant="solid"
         size="lg"
         colorScheme="gray"
@@ -192,10 +194,7 @@ const NotesContainer = () => {
   );
 };
 
-export const NoteList = (props: {
-  subheadingId: number;
-  onChangeCallback: (x: ApiArticleTitle| undefined)=>void;
-}) => {
+export const NoteList = (props: { subheadingId: number; onChangeCallback: (x: ApiArticleTitle | undefined) => void }) => {
   const supabaseClient = useSupabaseClient<Database>();
   const { profile } = useAuthContext();
   const { articleTitles } = useGetArticlesbyUserandSubheading({ subheadingId: props.subheadingId, creatorId: profile?.id! });
@@ -261,7 +260,7 @@ export const NoteList = (props: {
 
 const NotesContextMenu = (props: {
   article: ApiArticleTitle | undefined;
-  onChangeCallback: (x: ApiArticleTitle| undefined)=>void;
+  onChangeCallback: (x: ApiArticleTitle | undefined) => void;
 }) => {
   return (
     <Menu>
@@ -298,8 +297,8 @@ interface IArticleForm {
     articleTitle: string | undefined;
     sequence: number | undefined;
     isQuestion: boolean;
-    questionType: "MODEL" | "PREV" | "NONE" | undefined;
-    question_year: number | undefined;
+    questionType: "MODEL" | "PREV" | "NONE" | null | string | undefined;
+    question_year: number | undefined | null;
     tags: number[] | undefined;
   };
 }
@@ -346,6 +345,7 @@ const ArticleForm = (props: IArticleForm) => {
     }
     props.mutate();
   };
+  const isQuestion = props.formInput.questionType === "MODEL" || props.formInput.questionType === "PREV";
   return (
     <Flex justifyContent="center" alignItems={"center"}>
       <form onSubmit={handleSubmit(onSubmit)}>
@@ -377,11 +377,12 @@ const ArticleForm = (props: IArticleForm) => {
             size="sm"
             colorScheme="brand"
             {...register("isQuestion")}
-            defaultChecked={props.formInput.questionType === "MODEL" || props.formInput.questionType === "PREV"}
+            defaultChecked={isQuestion
+          }
           >
             <Text casing="capitalize">This is a Question</Text>
           </Checkbox>
-          {watchIsQuestion && (
+          {isQuestion && (
             <Box>
               <FormControl p="2" isInvalid={errors.questionType as any} maxW="500px" bg="gray.50">
                 <RadioGroup defaultValue={props.formInput.questionType} size="sm">
@@ -459,8 +460,10 @@ const ArticleForm = (props: IArticleForm) => {
         >
           Done
         </Button>
-        {/* </ButtonGroup> */}
+        
       </form>
     </Flex>
   );
 };
+
+
