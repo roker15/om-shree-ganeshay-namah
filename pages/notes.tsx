@@ -23,6 +23,7 @@ import {
   MenuList,
   Radio,
   RadioGroup,
+  Spinner,
   Stack,
   Tab,
   TabList,
@@ -34,10 +35,10 @@ import {
   VStack,
 } from "@chakra-ui/react";
 import { useSupabaseClient, useUser } from "@supabase/auth-helpers-react";
-import { Dispatch, SetStateAction, useState } from "react";
+import { Dispatch, SetStateAction, useEffect, useState } from "react";
 import { useForm, SubmitHandler, useFormState } from "react-hook-form";
 import { MdAdd, MdCancel, MdDone, MdLightMode, MdMoreVert, MdOutlineMenuOpen } from "react-icons/md";
-import { useSWRConfig } from "swr";
+import { mutate, useSWRConfig } from "swr";
 import SuneditorForNotesMakingg from "../components/editor/SuneditorForNotesMakingg";
 import ErrorBoundary from "../components/ErrorBoundary";
 import { CustomAlert } from "../componentv2/CustomAlert";
@@ -51,7 +52,8 @@ import { BookCtx, useNotesContextNew } from "../state/NotesContextNew";
 import PageWithLayoutType from "../types/pageWithLayout";
 import { ApiArticleTitle } from "./api/prisma/posts/getarticlesbyuserandsubheading";
 import { Data_headings, Data_subheadings } from "./api/prisma/syllabus/syllabus";
-import { DeleteAlert } from "./manageSyllabusv2";
+import { DeleteAlert } from "../componentv2/DeleteAlert";
+import LandingPageCurrentAffairs from "../componentv2/LandingPageCurrentAffairs";
 // import { GotoQuestion } from "..";
 
 const Notes: React.FC = () => {
@@ -59,7 +61,15 @@ const Notes: React.FC = () => {
   return (
     <Box>
       {!book ? (
-        <CustomAlert title={"Syllabus not Selected"} des={"Select Syllabus from top to Create or View Notes"} />
+        <VStack>
+          {/* <Center bg="gray.900" w="full">
+            <Text fontSize="larger" color="white">
+              Jionote is a Digital Notes making platform. Select Syllbaus from Top and Make notes
+            </Text>
+          </Center>{" "} */}
+          <CustomAlert title={"Syllabus not Selected"} des={"Select Syllabus from top to Create or View Notes"} />{" "}
+          <LandingPageCurrentAffairs/>
+        </VStack>
       ) : (
         <Grid templateColumns="repeat(7, 1fr)" gap={2}>
           <GridItem w="100%" colSpan={2} minH="100vh" bg="brand.50">
@@ -70,6 +80,7 @@ const Notes: React.FC = () => {
           </GridItem>
         </Grid>
       )}
+     
     </Box>
   );
 };
@@ -81,22 +92,28 @@ const Syllabus: React.FunctionComponent = () => {
   const { book } = useNotesContextNew();
   const { profile } = useAuthContext();
   const user = useUser();
-  const { data, swrError } = useGetSyllabusByBookId(book?.bookId);
+  const { data, swrError, isLoading } = useGetSyllabusByBookId(book?.bookId);
 
   return (
     <Box maxW="full" p="2" bg="brand.50">
       {user && (
-        <VStack display="inline-block">
+        <VStack display="inline-block" w="full">
           <HStack bg="brand.50" alignItems={"baseline"} p="4">
             <Text casing="capitalize" fontSize="lg" fontWeight="medium" color={markitWebColor}>
               {book?.bookName}
             </Text>
           </HStack>
-          <VStack alignItems="left" spacing="4">
-            {data?.books_headings.map((headings) => (
-              <Headings key={headings.id} headings={headings} />
-            ))}
-          </VStack>
+          {isLoading ? (
+            <Center h="70vh" w="full">
+              <Spinner />
+            </Center>
+          ) : (
+            <VStack alignItems="left" spacing="4">
+              {data?.books_headings.map((headings) => (
+                <Headings key={headings.id} headings={headings} />
+              ))}
+            </VStack>
+          )}
         </VStack>
       )}{" "}
     </Box>
@@ -142,6 +159,16 @@ const NotesContainer = () => {
   const { book, selectedSubheading } = useNotesContextNew();
   const [formMode, setFormMode] = useState<"CREATING" | "EDITING" | undefined>(undefined);
   const [selectedNotes, setSelectedNotes] = useState<ApiArticleTitle | undefined>(undefined);
+  const { profile } = useAuthContext();
+  const { mutate } = useGetArticlesbyUserandSubheading({
+    subheadingId: selectedSubheading?.id!,
+    creatorId: profile?.id!,
+  });
+  useEffect(() => {
+    setFormMode(undefined);
+    setSelectedNotes(undefined);
+  }, [selectedSubheading]);
+
   const changeFormProps = (x: ApiArticleTitle | undefined) => {
     setSelectedNotes(x);
     setFormMode("EDITING");
@@ -149,7 +176,6 @@ const NotesContainer = () => {
 
   return (
     <div>
-      {selectedNotes?.id}
       {!selectedSubheading && (
         <CustomAlert title={"Topic not Selected"} des={"Select Topic from Syllabus to Create or View Notes"} />
       )}
@@ -163,41 +189,47 @@ const NotesContainer = () => {
       {selectedSubheading && <NoteList subheadingId={selectedSubheading?.id!} onChangeCallback={changeFormProps} />}
       {formMode && (
         <ArticleForm
+          key={selectedNotes?.id}
           id={selectedNotes?.id}
           subheadingid={selectedSubheading?.id!}
-          mutate={undefined}
-          subjectId={0}
+          mutate={mutate}
+          bookId={book?.bookId!}
           formInput={{
             articleTitle: selectedNotes?.article_title,
             sequence: selectedNotes?.sequence!,
-            isQuestion: false,
             questionType: selectedNotes?.question_type,
             question_year: selectedNotes?.question_year,
             tags: selectedNotes?.current_affair_tags,
           }}
         />
       )}
-      <Button
-        onClick={() => {
-          setFormMode(formMode ? undefined : "CREATING");
-          setSelectedNotes(undefined);
-        }}
-        variant="solid"
-        size="lg"
-        colorScheme="gray"
-        aria-label="Call Sage"
-        leftIcon={formMode ? <MdCancel /> : <MdAdd />}
-      >
-        {formMode ? "Cancel" : "Create New Notes"}
-      </Button>
+      <br />
+      {selectedSubheading && (
+        <Center>
+          <Button
+            onClick={() => {
+              setFormMode(formMode ? undefined : "CREATING");
+              setSelectedNotes(undefined);
+            }}
+            variant="solid"
+            size="lg"
+            colorScheme="gray"
+            leftIcon={formMode ? <MdCancel /> : <MdAdd />}
+          >
+            {formMode ? "Cancel" : "Create New Notes"}
+          </Button>
+        </Center>
+      )}
     </div>
   );
 };
 
 export const NoteList = (props: { subheadingId: number; onChangeCallback: (x: ApiArticleTitle | undefined) => void }) => {
-  const supabaseClient = useSupabaseClient<Database>();
   const { profile } = useAuthContext();
-  const { articleTitles } = useGetArticlesbyUserandSubheading({ subheadingId: props.subheadingId, creatorId: profile?.id! });
+  const { articleTitles, mutate } = useGetArticlesbyUserandSubheading({
+    subheadingId: props.subheadingId,
+    creatorId: profile?.id!,
+  });
 
   return (
     <Box mt="16">
@@ -206,8 +238,8 @@ export const NoteList = (props: { subheadingId: number; onChangeCallback: (x: Ap
           {articleTitles
             ?.sort((a, b) => a.sequence! - b.sequence!)
             .map((x) => (
-              <HStack key={x.id} w="full">
-                <NotesContextMenu article={x} onChangeCallback={props.onChangeCallback} />
+              <HStack key={x.id} w="full" alignItems="baseline">
+                <NotesContextMenu article={x} onChangeCallback={props.onChangeCallback} mutate={mutate} />
                 <AccordionItem w="full" borderTopWidth="0px" borderBottomWidth="0px">
                   {({ isExpanded }) => (
                     <Box key={x.id}>
@@ -259,9 +291,19 @@ export const NoteList = (props: { subheadingId: number; onChangeCallback: (x: Ap
 };
 
 const NotesContextMenu = (props: {
+  mutate: any;
   article: ApiArticleTitle | undefined;
   onChangeCallback: (x: ApiArticleTitle | undefined) => void;
 }) => {
+  const supabaseClient = useSupabaseClient<Database>();
+  const deleteArticle = async () => {
+    const { error } = await supabaseClient.from("books_articles").delete().eq("id", props.article!.id);
+    if (error) {
+      alert(error.message);
+      return;
+    }
+    props.mutate();
+  };
   return (
     <Menu>
       <MenuButton>
@@ -273,16 +315,9 @@ const NotesContextMenu = (props: {
         </MenuItem>
 
         <MenuItem>
-          <Box ml="-1.5">
-            <DeleteAlert
-              handleDelete={function (id: number): Promise<void> {
-                throw new Error("Function not implemented.");
-              }}
-              dialogueHeader={"Delete Article"}
-              id={props.article!.id}
-            />
+          <Box ml="-4" w="full">
+            <DeleteAlert buttonType="MENU" handleDelete={deleteArticle} dialogueHeader={"Delete Article"} />
           </Box>
-          <Box ml="2">Delete Article</Box>
         </MenuItem>
       </MenuList>
     </Menu>
@@ -292,11 +327,10 @@ interface IArticleForm {
   id: number | undefined;
   subheadingid: number;
   mutate: any;
-  subjectId: number;
+  bookId: number;
   formInput: {
     articleTitle: string | undefined;
     sequence: number | undefined;
-    isQuestion: boolean;
     questionType: "MODEL" | "PREV" | "NONE" | null | string | undefined;
     question_year: number | undefined | null;
     tags: number[] | undefined;
@@ -304,7 +338,9 @@ interface IArticleForm {
 }
 const ArticleForm = (props: IArticleForm) => {
   const supabaseClient = useSupabaseClient<Database>();
-  const [isLoading, setIsLoading] = useState();
+  const [isLoading, setIsLoading] = useState(false);
+  const isQuestionc = props.formInput.questionType === "MODEL" || props.formInput.questionType === "PREV";
+  const [isQuestion, setIsQuestion] = useState(isQuestionc);
   const { mutate } = useSWRConfig();
   const { profile } = useAuthContext();
   const {
@@ -316,7 +352,6 @@ const ArticleForm = (props: IArticleForm) => {
     defaultValues: {
       articleTitle: props.formInput.articleTitle,
       sequence: props.formInput.sequence,
-      isQuestion: props.formInput.isQuestion,
       questionType: props.formInput.questionType,
       question_year: props.formInput.question_year,
       tags: props.formInput.tags,
@@ -324,9 +359,9 @@ const ArticleForm = (props: IArticleForm) => {
     shouldUnregister: true, // This to prevent submitting hidden form values
   });
   const watchQuestionType = watch("questionType");
-  const watchIsQuestion = watch("isQuestion");
 
   const onSubmit: SubmitHandler<IArticleForm["formInput"]> = async (d) => {
+    setIsLoading(true);
     const { data, error } = await supabaseClient.from("books_articles").upsert([
       {
         id: props.id,
@@ -343,9 +378,9 @@ const ArticleForm = (props: IArticleForm) => {
       elog("MyNotes->onSubmit", error.message);
       return;
     }
-    props.mutate();
+    props.mutate().then(setIsLoading(false));
   };
-  const isQuestion = props.formInput.questionType === "MODEL" || props.formInput.questionType === "PREV";
+
   return (
     <Flex justifyContent="center" alignItems={"center"}>
       <form onSubmit={handleSubmit(onSubmit)}>
@@ -376,16 +411,15 @@ const ArticleForm = (props: IArticleForm) => {
           <Checkbox
             size="sm"
             colorScheme="brand"
-            {...register("isQuestion")}
-            defaultChecked={isQuestion
-          }
+            defaultChecked={isQuestion}
+            onChange={(e) => setIsQuestion(e.target.checked)}
           >
             <Text casing="capitalize">This is a Question</Text>
           </Checkbox>
           {isQuestion && (
             <Box>
               <FormControl p="2" isInvalid={errors.questionType as any} maxW="500px" bg="gray.50">
-                <RadioGroup defaultValue={props.formInput.questionType} size="sm">
+                <RadioGroup defaultValue={props.formInput.questionType!} size="sm">
                   <Radio
                     {...register("questionType", { required: "This is required" })}
                     value="MODEL"
@@ -420,7 +454,7 @@ const ArticleForm = (props: IArticleForm) => {
           )}
         </VStack>
 
-        {props.subjectId === 60 && (
+        {props.bookId === 125 && (
           <VStack py="4">
             <Text bg="brand.100" fontSize="xs">
               {" "}
@@ -450,20 +484,18 @@ const ArticleForm = (props: IArticleForm) => {
         )}
 
         <Button
-          m="2"
+          // m="2"
           type="submit"
           isLoading={isLoading}
           // borderRadius={"full"}
           variant="solid"
+          size="md"
           colorScheme="facebook"
           leftIcon={<MdDone />}
         >
           Done
         </Button>
-        
       </form>
     </Flex>
   );
 };
-
-

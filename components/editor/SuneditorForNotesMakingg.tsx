@@ -3,7 +3,6 @@ import katex from "katex";
 import "katex/dist/katex.min.css";
 import React, { useEffect, useRef } from "react";
 import { BASE_URL, colors, SunEditor, sunEditorButtonList, sunEditorfontList } from "../../lib/constants";
-import { definitions } from "../../types/supabase";
 
 import { customToast } from "../CustomToast";
 // import SunEditor from "suneditor-react";

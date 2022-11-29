@@ -1,12 +1,6 @@
 import { Search2Icon } from "@chakra-ui/icons";
 import {
   Alert,
-  AlertDialog,
-  AlertDialogBody,
-  AlertDialogContent,
-  AlertDialogFooter,
-  AlertDialogHeader,
-  AlertDialogOverlay,
   AlertIcon,
   Box,
   Button,
@@ -40,7 +34,7 @@ import {
 import { useSupabaseClient, useUser } from "@supabase/auth-helpers-react";
 import React, { useEffect, useState } from "react";
 import { SubmitHandler, useForm } from "react-hook-form";
-import { MdDelete, MdEdit } from "react-icons/md";
+import { MdEdit } from "react-icons/md";
 import { customToast } from "../components/CustomToast";
 import { LoginCard } from "../components/LoginCard";
 import { useGetSyllabusByBookId, useGetSyllabusModerator } from "../customHookes/apiHooks";
@@ -53,6 +47,7 @@ import { useAuthContext } from "../state/Authcontext";
 import { HeadingformProps, SubheadingformProps, useSyllabusContext } from "../state/SyllabusContext";
 import PageWithLayoutType from "../types/pageWithLayout";
 import { Data_headings, Data_subheadings } from "./api/prisma/syllabus/syllabus";
+import { DeleteAlert } from "../componentv2/DeleteAlert";
 // import { Data1 } from "./api/prisma/posts/postCountbySyllabus";
 
 const CHeading = (props: { children: React.ReactNode }) => {
@@ -578,49 +573,6 @@ const Subheading: React.FunctionComponent<IsubheadingProps> = ({ subheading }) =
         {subheading.subheading}
       </Text>
     </Flex>
-  );
-};
-
-interface AlertdialogueProps {
-  handleDelete: (id: number) => Promise<void>;
-  dialogueHeader: string;
-  id: number;
-}
-
-export const DeleteAlert = ({ handleDelete, dialogueHeader, id }: AlertdialogueProps) => {
-  const [isOpen, setIsOpen] = React.useState(false);
-  const onClose = () => setIsOpen(false);
-  const cancelRef = React.useRef(null);
-  const confirmDelete = () => {
-    handleDelete(id);
-    onClose();
-  };
-
-  return (
-    <>
-      <IconButton size="xs" variant="ghost" aria-label="Call Sage" onClick={() => setIsOpen(true)} icon={<MdDelete />} />
-
-      <AlertDialog isOpen={isOpen} leastDestructiveRef={cancelRef} onClose={onClose}>
-        <AlertDialogOverlay>
-          <AlertDialogContent>
-            <AlertDialogHeader p="2" bg="gray.100">
-              {dialogueHeader}
-            </AlertDialogHeader>
-
-            <AlertDialogBody py="8">Are you sure? You can`t undo this action afterwards.</AlertDialogBody>
-
-            <AlertDialogFooter>
-              <Button ref={cancelRef} size="sm" onClick={onClose}>
-                Cancel
-              </Button>
-              <Button colorScheme="red" size="sm" onClick={() => confirmDelete()} ml={3}>
-                Delete
-              </Button>
-            </AlertDialogFooter>
-          </AlertDialogContent>
-        </AlertDialogOverlay>
-      </AlertDialog>
-    </>
   );
 };
 

@@ -3,6 +3,7 @@ import axios from "axios";
 import useSWR from "swr";
 import { Database } from "../lib/database";
 import { ApiArticleTitle } from "../pages/api/prisma/posts/getarticlesbyuserandsubheading";
+import { ApiLatestCurrentAffairs } from "../pages/api/prisma/posts/getlatestcurrentaffairs";
 import { SyllabusModerator2 } from "../pages/api/prisma/syllabus/getsyllabusmoderatorbystatus";
 import { Data } from "../pages/api/prisma/syllabus/syllabus";
 import { SyllabusModerator } from "../pages/api/prisma/syllabus/usegetsyllabusmoderator";
@@ -113,6 +114,30 @@ export function useGetArticlesbyUserandSubheading(props: { subheadingId: number;
   };
   const { data, error, mutate, isValidating } = useSWR(
     ["/api/prisma/posts/getarticlesbyuserandsubheading", props],
+    fetcher,
+    cacheOptions
+  );
+  return {
+    articleTitles: data,
+    //isValidating ensures no loading condition when request is rejected in case of null key
+    isLoading: !data && !error && isValidating,
+    swrError: error,
+    mutate: mutate,
+  };
+}
+export function useGetLatestCurrentaffairs() {
+  const fetcher = async () => {
+    const response = await axios
+      .get<ApiLatestCurrentAffairs[]>("/api/prisma/posts/getlatestcurrentaffairs", {
+        // params: { subheadingId: props.subheadingId, creatorId: props.creatorId },
+      })
+      .catch((e) => {
+        throw e;
+      });
+    return response.data;
+  };
+  const { data, error, mutate, isValidating } = useSWR(
+    ["/api/prisma/posts/getlatestcurrentaffairs"],
     fetcher,
     cacheOptions
   );
