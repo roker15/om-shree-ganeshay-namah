@@ -2,7 +2,7 @@ import { Box, Select } from "@chakra-ui/react";
 import React from "react";
 import { useGetBooks } from "../../customHookes/networkHooks";
 import { BookResponse } from "../../types/myTypes";
-import { definitions } from "../../types/supabase";
+
 
 const BookList: React.FC<{ setParentProps: (x: BookResponse | undefined) => void }> = ({ setParentProps }) => {
   const { data } = useGetBooks(1);

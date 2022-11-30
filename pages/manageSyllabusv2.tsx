@@ -35,8 +35,8 @@ import { useSupabaseClient, useUser } from "@supabase/auth-helpers-react";
 import React, { useEffect, useState } from "react";
 import { SubmitHandler, useForm } from "react-hook-form";
 import { MdEdit } from "react-icons/md";
-import { customToast } from "../components/CustomToast";
-import { LoginCard } from "../components/LoginCard";
+import { customToast } from "../componentv2/CustomToast";
+import { LoginCard } from "../componentv2/LoginCard";
 import { useGetSyllabusByBookId, useGetSyllabusModerator } from "../customHookes/apiHooks";
 import { useGetColleges, useGetCollegesCourses, useGetPersonalCourses } from "../customHookes/networkHooks";
 import LayoutWithTopNavbar from "../layout/LayoutWithTopNavbar";
@@ -48,6 +48,7 @@ import { HeadingformProps, SubheadingformProps, useSyllabusContext } from "../st
 import PageWithLayoutType from "../types/pageWithLayout";
 import { Data_headings, Data_subheadings } from "./api/prisma/syllabus/syllabus";
 import { DeleteAlert } from "../componentv2/DeleteAlert";
+import { ArticleCounter } from "../componentv2/ArticleCounter";
 // import { Data1 } from "./api/prisma/posts/postCountbySyllabus";
 
 const CHeading = (props: { children: React.ReactNode }) => {
@@ -491,7 +492,7 @@ interface IheadingsProps {
 const Headings: React.FunctionComponent<IheadingsProps> = ({ headings }) => {
   const { setFormType, setSubheadingFormProps, setHeadingFormProps, book } = useSyllabusContext();
 
-  const { mutate } = useGetSyllabusByBookId(book!);
+  const { mutate } = useGetSyllabusByBookId(book?.bookId!);
   const supabaseClient = useSupabaseClient<Database>();
   const deleteHeading = async (id: number) => {
     const { error } = await supabaseClient.from("books_headings").delete().eq("id", id);
@@ -544,8 +545,9 @@ interface IsubheadingProps {
 }
 const Subheading: React.FunctionComponent<IsubheadingProps> = ({ subheading }) => {
   const supabaseClient = useSupabaseClient<Database>();
-  const { book } = useSyllabusContext();
-  const { mutate } = useGetSyllabusByBookId(book!);
+  const { book, } = useSyllabusContext();
+  const { profile } = useAuthContext();
+  const { mutate } = useGetSyllabusByBookId(book?.bookId!);
   const deleteSubheading = async (id: number) => {
     const { data, error } = await supabaseClient.from("books_subheadings").delete().eq("id", id);
     mutate();
@@ -572,6 +574,9 @@ const Subheading: React.FunctionComponent<IsubheadingProps> = ({ subheading }) =
       <Text fontSize={"sm"} casing={"capitalize"}>
         {subheading.subheading}
       </Text>
+      {profile && profile.id &&  (
+        <ArticleCounter subheadingId={subheading.id} creatorId={profile.id} />
+      )}
     </Flex>
   );
 };
@@ -1113,3 +1118,4 @@ export const Activate = (props: { id: number; activeState: boolean; bookId: numb
     </>
   );
 };
+

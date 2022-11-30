@@ -30,7 +30,7 @@ import { Database } from "../../lib/database";
 import { elog, sentenseCase } from "../../lib/mylog";
 import { useAuthContext } from "../../state/Authcontext";
 import { useNoteContext } from "../../state/NoteContext";
-import SuneditorForNotesMakingg from "../editor/SuneditorForNotesMakingg";
+import SuneditorForNotesMakingg from "../../componentv2/editor/SuneditorForNotesMakingg";
 import DeleteConfirmation from "../syllabus/DeleteConfirmation";
 import SearchPanel from "./SearchPanel";
 

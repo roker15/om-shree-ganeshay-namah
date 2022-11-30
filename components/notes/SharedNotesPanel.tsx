@@ -9,7 +9,7 @@ import {
 import { Database } from "../../lib/database";
 import { useAuthContext } from "../../state/Authcontext";
 import { BookResponse, BookSyllabus } from "../../types/myTypes";
-import { definitions } from "../../types/supabase";
+
 
 interface Props {
   subheadingid: number | undefined;

@@ -13,7 +13,7 @@ interface Props {
   changeParentProps: () => void;
 }
 
-const Notes: React.FC<Props> = ({ subheadingid, notesCreator, changeParentProps, isCopyable, isEditable }) => {
+const Notes: React.FC<Props> = ({ subjectId,subheadingid, notesCreator, changeParentProps, isCopyable, isEditable }) => {
   const { profile } = useAuthContext();
   const { data: d } = useGetSharedNotesListBySubheading(subheadingid, profile?.id);
   // const handleSyllabusClick = (x: BookSyllabus) => {

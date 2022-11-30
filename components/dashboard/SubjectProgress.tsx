@@ -2,7 +2,7 @@ import { Flex,Text } from "@chakra-ui/react";
 import { useSupabaseClient } from "@supabase/auth-helpers-react";
 import { useState, useEffect } from "react";
 import { Database } from "../../lib/database";
-import { definitions } from "../../types/supabase";
+
 
 export const SubjectProgress = ({ a, b }: { a: number; b: string }) => {
   const supabaseClient = useSupabaseClient<Database>();

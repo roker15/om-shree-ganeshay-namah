@@ -86,16 +86,7 @@ export type SubheadingViews = {
   heading_sequence?: number;
   paper_id?: number;
 };
-export type Books = {
-  id: number;
-  created_at?: string | undefined;
-  updated_at?: string | undefined;
-  book_name: string;
-  subject_fk: number | definitions["subjects"];
-  class_fk?: number | definitions["books_class"] | undefined;
-  board_or_university_fk?: number | undefined;
-  publication_fk?: number | definitions["books_publication"] | undefined;
-};
+
 export type BookResponse = {
   id: number;
   book_name?: string;

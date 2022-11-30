@@ -6,8 +6,8 @@ export interface CurrentAppState {
   setIsTagSearchActive: (tagSearchActive: boolean) => void;
   tagsArray?: number[];
   setTagsArray?: (tags: number[]) => void;
-  bookResponse: NoteBook | undefined;
-  setBookResponse: Dispatch<SetStateAction<NoteBook | undefined>>;
+  bookResponse: BookResponse | undefined;
+  setBookResponse: Dispatch<SetStateAction<BookResponse | undefined>>;
 }
 
 const NoteContext = createContext<CurrentAppState>({
@@ -25,7 +25,7 @@ export type NoteBook = {
 };
 export function NoteContextWrapper({ children }: { children: ReactNode }) {
   const [isTagSearchActive, setIsTagSearchActive] = useState<boolean | undefined>(false);
-  const [bookResponse, setBookResponse] = useState<NoteBook | undefined>();
+  const [bookResponse, setBookResponse] = useState<BookResponse | undefined>();
   const [tagsArray, setTagsArray] = useState<number[]>([]);
 
   function updateIsTagSearchActive(x: boolean) {

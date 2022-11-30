@@ -14,19 +14,19 @@ import React from "react";
 import { MdDelete, MdDeleteOutline } from "react-icons/md";
 
 interface AlertdialogueProps {
-  handleDelete: () => Promise<void>;
+  handleDelete: (id: number) => Promise<void>;
   dialogueHeader: string;
   buttonType?: "MENU" | "BUTTON" | undefined;
   // id should not be required, rethink how it can be done
-  // id: number;
+  id: number;
 }
 
-export const DeleteAlert = ({ handleDelete, dialogueHeader, buttonType }: AlertdialogueProps) => {
+export const DeleteAlert = ({ handleDelete, dialogueHeader, buttonType, id }: AlertdialogueProps) => {
   const [isOpen, setIsOpen] = React.useState(false);
   const onClose = () => setIsOpen(false);
   const cancelRef = React.useRef(null);
-  const confirmDelete = () => {
-    handleDelete();
+  const confirmDelete = (id: number) => {
+    handleDelete(id);
     onClose();
   };
 
@@ -54,7 +54,7 @@ export const DeleteAlert = ({ handleDelete, dialogueHeader, buttonType }: Alertd
               <Button ref={cancelRef} size="sm" onClick={onClose}>
                 Cancel
               </Button>
-              <Button colorScheme="red" size="sm" onClick={() => confirmDelete()} ml={3}>
+              <Button colorScheme="red" size="sm" onClick={() => confirmDelete(id)} ml={3}>
                 Delete
               </Button>
             </AlertDialogFooter>

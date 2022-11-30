@@ -19,7 +19,7 @@ import { elog } from "../../lib/mylog";
 import { useSupabaseClient, useUser } from "@supabase/auth-helpers-react";
 import { useAuthContext } from "../../state/Authcontext";
 import { BookResponse, BookSyllabus } from "../../types/myTypes";
-import { definitions } from "../../types/supabase";
+
 import ManageCurrentAffair from "../CurrentAffair/ManageCurrentAffair";
 
 import { useRouter } from "next/router";
@@ -31,7 +31,7 @@ import {
   CustomCircularProgress,
   CustomDrawer, CustomSwitch, LabelText, SpanTextWithBackground
 } from "../CustomChakraUi";
-import { LoginCard } from "../LoginCard";
+import { LoginCard } from "../../componentv2/LoginCard";
 import Notes from "./Notes";
 import { NotesSharing } from "./NotesSharing";
 import SharedNotesPanel from "./SharedNotesPanel";

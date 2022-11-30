@@ -7,10 +7,10 @@ import { useGetSyllabusByBookId } from "../../customHookes/networkHooks";
 import { Database } from "../../lib/database";
 import { useAuthContext } from "../../state/Authcontext";
 import { NoteBook } from "../../state/NoteContext";
-import { BookSyllabus } from "../../types/myTypes";
+import { BookResponse, BookSyllabus } from "../../types/myTypes";
 
 interface Props {
-  book: NoteBook | undefined;
+  book: BookResponse | undefined;
   changeParentProps: (x: BookSyllabus) => void;
 }
 
@@ -57,10 +57,10 @@ const Syllabus: React.FC<Props> = ({ book, changeParentProps }) => {
 
   return (
     <Box pb="6" minW="full">
-      {book?.bookName && (
+      {book?.book_name && (
         <Flex bg="brand.100" p="2" borderTopRadius="md">
           <Text fontWeight={"normal"} casing={"capitalize"}>
-            {book?.bookName}
+            {book?.book_name}
           </Text>
         </Flex>
       )}

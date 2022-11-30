@@ -5,7 +5,7 @@ import { MdAdd, MdDelete, MdLightMode } from "react-icons/md";
 import { useGetSyllabusByBookId } from "../../customHookes/networkHooks";
 import { useAuthContext } from "../../state/Authcontext";
 import { BookResponse, BookSyllabus } from "../../types/myTypes";
-import { definitions } from "../../types/supabase";
+
 import useSWR from "swr";
 import { useSupabaseClient } from "@supabase/auth-helpers-react";
 import { Database } from "../../lib/database";

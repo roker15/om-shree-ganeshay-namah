@@ -32,7 +32,7 @@ import { Profile } from "../../lib/constants";
 import { Database } from "../../lib/database";
 import { elog } from "../../lib/mylog";
 import { useAuthContext } from "../../state/Authcontext";
-import { definitions } from "../../types/supabase";
+
 
 interface sharedProps {
   // postId: number;

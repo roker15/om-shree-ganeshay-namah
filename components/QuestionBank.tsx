@@ -30,9 +30,8 @@ import { BASE_URL, colors, sunEditorButtonList, sunEditorfontList } from "../lib
 import { Database } from "../lib/database";
 import { useAuthContext } from "../state/Authcontext";
 import { QuestionBank } from "../types/myTypes";
-import { definitions } from "../types/supabase";
-import { customToast } from "./CustomToast";
-import { EditorStyle } from "./editor/SuneditorForNotesMaking";
+import { customToast } from "../componentv2/CustomToast";
+import { EditorStyle } from "../componentv2/editor/SuneditorForNotesMaking";
 // import Suneditor from "../components/Suneditor";
 
 const SunEditor = dynamic(() => import("suneditor-react"), {

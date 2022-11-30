@@ -19,7 +19,7 @@ import { useForm } from "react-hook-form";
 import { mutate } from "swr";
 import { Database } from "../../lib/database";
 import { elog } from "../../lib/mylog";
-import { definitions } from "../../types/supabase";
+
 import { FormProps } from "./CreateBookSyllabus";
 
 interface Props {

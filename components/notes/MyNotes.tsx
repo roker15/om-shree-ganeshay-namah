@@ -48,8 +48,8 @@ import { Database } from "../../lib/database";
 import { elog, sentenseCase } from "../../lib/mylog";
 import { useAuthContext } from "../../state/Authcontext";
 import { useNoteContext } from "../../state/NoteContext";
-import { customToast } from "../CustomToast";
-import SuneditorForNotesMakingg from "../editor/SuneditorForNotesMakingg";
+import { customToast } from "../../componentv2/CustomToast";
+import SuneditorForNotesMakingg from "../../componentv2/editor/SuneditorForNotesMakingg";
 import ErrorBoundary from "../ErrorBoundary";
 
 import DeleteConfirmation from "../syllabus/DeleteConfirmation";
@@ -145,8 +145,8 @@ const MyNotes: React.FC<Props> = ({ subheadingid, notesCreator, changeParentProp
     setIsLoadingCopyButton(false);
   };
   return (
-    <Box mt="16" >
-      <Accordion allowMultiple >
+    <Box mt="16">
+      <Accordion allowMultiple>
         {articles
           ?.sort((a, b) => a.sequence! - b.sequence!)
           .map((x) => {
@@ -155,7 +155,6 @@ const MyNotes: React.FC<Props> = ({ subheadingid, notesCreator, changeParentProp
                 key={x.id}
                 borderTopWidth="0px"
                 borderBottomWidth="0px"
-               
                 my={x.current_affair_tags && x.current_affair_tags.length > 0 ? "6" : "2"}
               >
                 {({ isExpanded }) => (
@@ -250,6 +249,7 @@ const MyNotes: React.FC<Props> = ({ subheadingid, notesCreator, changeParentProp
                         x={setIsArticleCreating}
                         question_year={x.question_year!}
                         question_type={x.question_type!}
+                        subjectId={undefined}
                       ></ArticleForm>
                     ) : null}
                     <AccordionPanel pb={4} borderTopWidth="0px" borderBottomWidth="0px" px={{ base: "-0.5", lg: "4" }}>
@@ -291,6 +291,7 @@ const MyNotes: React.FC<Props> = ({ subheadingid, notesCreator, changeParentProp
               x={setIsArticleCreating}
               question_year={undefined}
               question_type={undefined}
+              subjectId={undefined}
             ></ArticleForm>
           ) : null}
         </Box>
@@ -342,7 +343,7 @@ export default MyNotes;
 
 type ArticleFormProps = {
   tags?: unknown[] | undefined;
-  // subjectId: number | undefined;
+  subjectId: number | undefined;
   subheadingid: number | undefined;
   articleId?: number;
   articleTitle?: string;
@@ -355,7 +356,7 @@ type ArticleFormProps = {
 };
 const ArticleForm: React.FC<ArticleFormProps> = ({
   tags,
-  // subjectId,
+  subjectId,
   subheadingid,
   formMode,
   articleId,
@@ -398,7 +399,7 @@ const ArticleForm: React.FC<ArticleFormProps> = ({
           created_by: profile?.id!,
           books_subheadings_fk: subheadingid!,
           sequence: d.sequence,
-          current_affair_tags: d.tags ? d.tags as number[] : [],
+          current_affair_tags: d.tags ? (d.tags as number[]) : [],
           question_type: d.questionType ? d.questionType : "NONE",
           question_year: d.question_year ? d.question_year : 0,
         },
@@ -418,7 +419,7 @@ const ArticleForm: React.FC<ArticleFormProps> = ({
           // created_by: profile?.id,
           // books_subheadings_fk: subheadingid,
           sequence: d.sequence,
-          current_affair_tags: d.tags ? d.tags as number[] : [],
+          current_affair_tags: d.tags ? (d.tags as number[]) : [],
           question_type: d.questionType ? d.questionType : "NONE",
           question_year: d.question_year ? d.question_year : 0,
         })

@@ -8,7 +8,7 @@ import { useGetSyllabusByBookId } from "../../customHookes/networkHooks";
 import { Database } from "../../lib/database";
 import { elog } from "../../lib/mylog";
 import { BookResponse, SubheadingQuestionLink } from "../../types/myTypes";
-import { definitions } from "../../types/supabase";
+
 import { FormProps } from "./CreateBookSyllabus";
 import DeleteAlertDialogue from "./DeleteConfirmation";
 

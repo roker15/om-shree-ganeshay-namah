@@ -35,7 +35,7 @@ const CreateBookSyllabus = () => {
       </Box>
       <VStack>
         <Box ml="8">
-          <BookFilter setParentProps={updateBookAndFormProps}></BookFilter>
+          {/* <BookFilter setParentProps={updateBookAndFormProps}></BookFilter> */}
         </Box>
         <Text>{formProps?.book_name}</Text>
         {/* <FormCreateHeading x={formProps}></FormCreateHeading> */}

@@ -129,7 +129,7 @@ const BookFilter: React.FC<{ setParentProps: (x: BookResponse | undefined) => vo
           placeholder={value === "7" ? "Select Syllabus" : "Select Book"}
           onChange={(e) => {
             setBookid(e.target.value);
-            setBookResponse(data?.find((item) => item.id === Number(e.target.value)));
+            // setBookResponse(data?.find((item) => item.id === Number(e.target.value)));
             setParentProps!(data?.find((item) => item.id === Number(e.target.value)));
             setIsTagSearchActive(false);
             // navigateTo(e.target.value, "hello");

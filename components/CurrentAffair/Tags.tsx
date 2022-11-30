@@ -18,7 +18,7 @@ import { currentAffairTags } from "../../lib/constants";
 import { Database } from "../../lib/database";
 import { useAuthContext } from "../../state/Authcontext";
 import { useNoteContext } from "../../state/NoteContext";
-import { definitions } from "../../types/supabase";
+
 
 const Tags: React.FC = () => {
   const { tagsArray, setTagsArray } = useNoteContext();

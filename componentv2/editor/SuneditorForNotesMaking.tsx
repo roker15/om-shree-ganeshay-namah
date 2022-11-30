@@ -5,7 +5,7 @@ import { debounce } from "lodash";
 import React, { ChangeEvent, useCallback, useEffect, useRef } from "react";
 import { BASE_URL, colors, SunEditor, sunEditorButtonList, sunEditorfontList } from "../../lib/constants";
 import { useAuthContext } from "../../state/Authcontext";
-import { definitions } from "../../types/supabase";
+
 
 import { customToast } from "../CustomToast";
 // import SunEditor from "suneditor-react";
@@ -18,7 +18,7 @@ import { useSupabaseClient } from "@supabase/auth-helpers-react";
 import { Database } from "../../lib/database";
 
 type SuneditorForNotesMakingProps = {
-  article: definitions["books_articles"];
+  article: Database["public"]["Tables"]["books_articles"]["Row"];
   language: "HINDI" | "ENGLISH";
   isEditable: boolean | undefined;
 };
@@ -218,7 +218,7 @@ interface editorProps {
   fontSize: string | undefined;
   editorMode: string;
   language: "HINDI" | "ENGLISH";
-  article: definitions["books_articles"];
+  article: Database["public"]["Tables"]["books_articles"]["Row"];
   // handleOnChange: ((content: string) => void) | undefined;
   updateArticleInDatabase: (arg0: string) => void;
 }
@@ -230,7 +230,7 @@ function Editor(props: editorProps): JSX.Element {
         getSunEditorInstance={props.getSunEditorInstance}
         setDefaultStyle={props.fontSize}
         hideToolbar={props.editorMode === "READ" ? true : false}
-        defaultValue={props.language === "ENGLISH" ? props.article.article_english : props.article.article_hindi}
+        defaultValue={props.language === "ENGLISH" ? props.article.article_english! : props.article.article_hindi!}
         // setContents={props.language === "ENGLISH" ? props.article.article_english : props.article.article_hindi} //cause blank editor to render first and then put content, so creates flickering effect . so move to defaultValue
         // onChange={props.handleOnChange} // required atuosave to work
         readOnly={props.editorMode === "READ" ? true : false}

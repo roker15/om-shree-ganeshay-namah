@@ -5,7 +5,7 @@ import { useEffect } from "react";
 import { FaTelegram, FaWhatsapp } from "react-icons/fa";
 import { MdSettings } from "react-icons/md";
 import { BASE_URL } from "../../lib/constants";
-import { LoginCard } from "../LoginCard";
+import { LoginCard } from "../../componentv2/LoginCard";
 import SelectSyllabus from "./SelectSyllabus";
 export default function CallToActionWithVideo() {
   const user = useUser();

@@ -1,11 +1,15 @@
-import { Box, Button, Center, Container, Flex, Spacer, Text } from "@chakra-ui/react";
+import { Box, Button, Center, Spacer, Text } from "@chakra-ui/react";
+import router from "next/router";
 import React from "react";
-import DesktopMenu from "../components/chakraTemplate/Customdrawer";
-import TopNavbar from "./TopNavbar";
 import TopNavbarForNotes from "./TopNavbarForNotes";
 
 type LayoutProps = {
   children: React.ReactNode;
+};
+const navigateTo = (path: string) => {
+  router.push({
+    pathname: path,
+  });
 };
 
 const Layout: React.FunctionComponent<LayoutProps> = ({ children }) => {
@@ -18,7 +22,7 @@ const Layout: React.FunctionComponent<LayoutProps> = ({ children }) => {
           Jionote is a Digital Notes making platform. Select Syllbaus from below and Make notes
         </Text>
         <Spacer />
-        <Button size="md" colorScheme={"yellow"} mr="20" bg="#FAF089">
+        <Button size="md" colorScheme={"yellow"} mr="20" bg="#FAF089" onClick={()=>navigateTo("/manageSyllabusv2")}>
           Create Syllabus
         </Button>
       </Center>{" "}

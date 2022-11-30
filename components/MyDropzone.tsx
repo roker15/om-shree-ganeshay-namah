@@ -5,7 +5,7 @@ import React, { useCallback, useEffect, useRef, useState } from "react";
 import { useDropzone } from "react-dropzone";
 import { v4 as uuid } from "uuid";
 import { Database } from "../lib/database";
-import { customToast } from "./CustomToast";
+import { customToast } from "../componentv2/CustomToast";
 
 export function MyDropzone() {
   const [isLoading, setIsLoading] = useState<boolean>(false);
