@@ -39,15 +39,17 @@ import { SubmitHandler, useForm } from "react-hook-form";
 import { MdAdd, MdCancel, MdDone, MdLightMode, MdMoreVert } from "react-icons/md";
 import { useSWRConfig } from "swr";
 // import { ArticleCounter } from "../components/CurrentAffair/SyllabusForCurrentAffairs";
-import SuneditorForNotesMakingg from "../componentv2/editor/SuneditorForNotesMakingg";
 import ErrorBoundary from "../components/ErrorBoundary";
 import { ArticleCounter } from "../componentv2/ArticleCounter";
 import { CustomAlert } from "../componentv2/CustomAlert";
 import { DeleteAlert } from "../componentv2/DeleteAlert";
+import SuneditorForNotesMakingg from "../componentv2/editor/SuneditorForNotesMakingg";
 import LandingPageCurrentAffairs from "../componentv2/LandingPageCurrentAffairs";
+import NotesSharing from "../componentv2/NotesSharing";
+import SharedNotesPanel from "../componentv2/SharedNotesPanel";
 import { useGetArticlesbyUserandSubheading, useGetSyllabusByBookId } from "../customHookes/apiHooks";
 import LayoutWithTopNavbarForNotes from "../layout/LayoutWithTopNavbarForNotes";
-import { currentAffairTags, markitWebColor } from "../lib/constants";
+import { colorPrimary, currentAffairTags, fontPrimary } from "../lib/constants";
 import { Database } from "../lib/database";
 import { elog, sentenseCase } from "../lib/mylog";
 import { useAuthContext } from "../state/Authcontext";
@@ -56,23 +58,30 @@ import PageWithLayoutType from "../types/pageWithLayout";
 import { ApiArticleTitle } from "./api/prisma/posts/getarticlesbyuserandsubheading";
 import { Data_headings, Data_subheadings } from "./api/prisma/syllabus/syllabus";
 // import { GotoQuestion } from "..";
-
 const Notes: React.FC = () => {
-  const { book, selectedSubheading } = useNotesContextNew();
+  const { book, selectedSubheading, setNotesCreator, notesCreator } = useNotesContextNew();
+  const changeContextNotesCreator = (id: string, name: string) => {
+    setNotesCreator({ id: id, name: name });
+  };
   return (
     <Box>
-      {!book ? (
+      {!book && (
         <VStack>
-          <CustomAlert title={"Syllabus not Selected"} des={"Select syllabus from top to create or view notes"} />{" "}
+          <CustomAlert title={"Syllabus not selected"} des={"Select syllabus from top to create or view notes"} />{" "}
           <LandingPageCurrentAffairs />
         </VStack>
-      ) : (
-        <Grid templateColumns="repeat(7, 1fr)" gap={2}>
+      )}
+
+      {book && (
+        <Grid templateColumns="repeat(9, 1fr)" gap={0.5}>
           <GridItem w="100%" colSpan={2} minH="100vh" bg="brand.50">
-            <Syllabus />
+            <Syllabus bookId={book.bookId} bookName={book.bookName} />
           </GridItem>
-          <GridItem w="100%" colSpan={5}>
+          <GridItem w="100%" colSpan={6}>
             <NotesContainer />
+          </GridItem>
+          <GridItem w="100%" colSpan={1} bg="brand.50">
+            <SharedNotesPanel subheadingid={selectedSubheading?.id} changeParentProps={changeContextNotesCreator} />
           </GridItem>
         </Grid>
       )}
@@ -83,19 +92,18 @@ const Notes: React.FC = () => {
 (Notes as PageWithLayoutType).layout = LayoutWithTopNavbarForNotes;
 export default Notes;
 
-const Syllabus: React.FunctionComponent = () => {
-  const { book } = useNotesContextNew();
-  const { profile } = useAuthContext();
+export const Syllabus = (props: { bookId: number | undefined; bookName: string | undefined }) => {
+  // const { book } = useNotesContextNew();
   const user = useUser();
-  const { data, swrError, isLoading } = useGetSyllabusByBookId(book?.bookId);
+  const { data, swrError, isLoading } = useGetSyllabusByBookId(props.bookId);
 
   return (
     <Box maxW="full" p="2" bg="brand.50">
       {user && (
         <VStack display="inline-block" w="full">
           <HStack bg="brand.50" alignItems={"baseline"} p="4">
-            <Text casing="capitalize" fontSize="lg" fontWeight="medium" color={markitWebColor}>
-              {book?.bookName}
+            <Text fontFamily={fontPrimary} casing="capitalize" fontSize="lg" fontWeight="bold" color={colorPrimary}>
+              {props?.bookName}
             </Text>
           </HStack>
           {isLoading ? (
@@ -130,24 +138,27 @@ const Headings = (props: { headings: Data_headings }) => {
           {props.headings.heading}
         </Text>
       </HStack>
-      <VStack alignItems={"left"} pl="16" spacing="4" display={hide ? "none" : undefined}>
-        {props.headings.books_subheadings.map((subheading) => (
-          <Subheading key={subheading.id} subheading={subheading} />
-        ))}
-      </VStack>
+      {!hide && (
+        <VStack alignItems={"left"} pl="12" spacing="4">
+          {props.headings.books_subheadings.map((subheading) => (
+            <Subheading key={subheading.id} subheading={subheading} />
+          ))}
+        </VStack>
+      )}
     </VStack>
   );
 };
 const Subheading = (props: { subheading: Data_subheadings }) => {
-  const { setSelectedSubheading } = useNotesContextNew();
+  const { setSelectedSubheading, setNotesCreator } = useNotesContextNew();
   const { profile } = useAuthContext();
   const changeContextSubheading = () => {
     setSelectedSubheading({ id: props.subheading.id, name: props.subheading.subheading! });
+    setNotesCreator({ id: profile?.id, name: profile?.username });
   };
   return (
     <HStack>
-      <Text fontSize={"sm"} casing={"capitalize"} cursor="pointer" onClick={changeContextSubheading}>
-        {props.subheading.subheading}
+      <Text fontSize={"sm"} cursor="pointer" onClick={changeContextSubheading}>
+        {sentenseCase(props.subheading.subheading!)}
       </Text>
       {profile && <ArticleCounter subheadingId={props.subheading.id} creatorId={profile.id} />}
     </HStack>
@@ -155,13 +166,12 @@ const Subheading = (props: { subheading: Data_subheadings }) => {
 };
 
 const NotesContainer = () => {
-  const { book, selectedSubheading } = useNotesContextNew();
+  const { book, selectedSubheading, notesCreator } = useNotesContextNew();
   const [formMode, setFormMode] = useState<"CREATING" | "EDITING" | undefined>(undefined);
   const [selectedNotes, setSelectedNotes] = useState<ApiArticleTitle | undefined>(undefined);
-  const { profile } = useAuthContext();
   const { mutate } = useGetArticlesbyUserandSubheading({
     subheadingId: selectedSubheading?.id!,
-    creatorId: profile?.id!,
+    creatorId: notesCreator?.id!,
   });
   useEffect(() => {
     setFormMode(undefined);
@@ -179,13 +189,17 @@ const NotesContainer = () => {
         <CustomAlert title={"Topic not Selected"} des={"Select Topic from Syllabus to Create or View Notes"} />
       )}
       {selectedSubheading && (
-        <Center h="16">
-          <Text casing="capitalize" fontSize="lg" fontWeight="medium" color={markitWebColor}>
+        <Center h="16" gap="4">
+          <Text casing="capitalize" fontSize="large" fontFamily={fontPrimary} fontWeight="bold" color={colorPrimary}>
             {selectedSubheading.name}
           </Text>
+          
+          <NotesSharing subheadingId={selectedSubheading.id!}/>
         </Center>
       )}
-      {selectedSubheading && <NoteList subheadingId={selectedSubheading?.id!} onChangeCallback={changeFormProps} />}
+      {selectedSubheading && (
+        <NoteList subheadingId={selectedSubheading?.id!} onChangeCallback={changeFormProps} creatorId={notesCreator?.id!} />
+      )}
       {formMode && (
         <ArticleForm
           key={selectedNotes?.id}
@@ -223,11 +237,15 @@ const NotesContainer = () => {
   );
 };
 
-export const NoteList = (props: { subheadingId: number; onChangeCallback: (x: ApiArticleTitle | undefined) => void }) => {
+export const NoteList = (props: {
+  subheadingId: number;
+  creatorId: string;
+  onChangeCallback: (x: ApiArticleTitle | undefined) => void;
+}) => {
   const { profile } = useAuthContext();
   const { articleTitles, mutate } = useGetArticlesbyUserandSubheading({
     subheadingId: props.subheadingId,
-    creatorId: profile?.id!,
+    creatorId: props.creatorId,
   });
 
   return (
@@ -239,14 +257,15 @@ export const NoteList = (props: { subheadingId: number; onChangeCallback: (x: Ap
             .map((x) => (
               <HStack key={x.id} w="full" alignItems="baseline">
                 <NotesContextMenu article={x} onChangeCallback={props.onChangeCallback} mutate={mutate} />
-                <AccordionItem w="full" borderTopWidth="0px" borderBottomWidth="0px">
+                <AccordionItem w="full"  border="none">
                   {({ isExpanded }) => (
                     <Box key={x.id}>
                       <Flex alignItems="left">
                         <AccordionButton
-                          bg="pink.100"
-                          _hover={{ color: markitWebColor }}
-                          _expanded={{ bg: "blue.50", color: markitWebColor }}
+                          border={"0px"}
+                          bg="brand.50"
+                          _hover={{ bg: "brand.100" }}
+                          _expanded={{ bg: "brand.100", color: colorPrimary }}
                           justifyContent="space-between"
                         >
                           <Text p="1" fontSize="16px" lineHeight={"tall"} align="start">
@@ -256,7 +275,7 @@ export const NoteList = (props: { subheadingId: number; onChangeCallback: (x: Ap
                         </AccordionButton>
                       </Flex>
 
-                      <AccordionPanel pb={4} borderTopWidth="0px" borderBottomWidth="0px" px={{ base: "-0.5", lg: "4" }}>
+                      <AccordionPanel pb={4} borderTopWidth="0px" borderBottomWidth="0px" px={{ base: "-0.5", lg: "0" }}>
                         {isExpanded && (
                           <Tabs variant="line" size="sm" colorScheme="gray">
                             <TabList>
@@ -270,9 +289,7 @@ export const NoteList = (props: { subheadingId: number; onChangeCallback: (x: Ap
                                 </ErrorBoundary>
                               </TabPanel>
                               <TabPanel px={{ base: "-0.5", lg: "4" }}>
-                                <ErrorBoundary>
-                                  <SuneditorForNotesMakingg article1={x.id} language={"HINDI"} isEditable={true} />
-                                </ErrorBoundary>
+                                <SuneditorForNotesMakingg article1={x.id} language={"HINDI"} isEditable={true} />
                               </TabPanel>
                             </TabPanels>
                           </Tabs>
@@ -313,16 +330,14 @@ const NotesContextMenu = (props: {
           Edit Notes Title
         </MenuItem>
 
-        <MenuItem>
-          <Box ml="-4" w="full">
-            <DeleteAlert
-              buttonType="MENU"
-              handleDelete={deleteArticle}
-              dialogueHeader={"Delete Article"}
-              id={props.article!.id}
-            />
-          </Box>
-        </MenuItem>
+        <Box w="full">
+          <DeleteAlert
+            buttonType="MENU"
+            handleDelete={deleteArticle}
+            dialogueHeader={"Delete Article"}
+            id={props.article!.id}
+          />
+        </Box>
       </MenuList>
     </Menu>
   );

@@ -2,7 +2,8 @@ import { Box, Button, Center, Container, Heading, Spinner, Text, VStack } from "
 import React, { useState } from "react";
 import SuneditorForNotesMakingg from "./editor/SuneditorForNotesMakingg";
 import { useGetLatestCurrentaffairs } from "../customHookes/apiHooks";
-import { markitWebColor } from "../lib/constants";
+import { colorPrimary, fontPrimary } from "../lib/constants";
+import GotoCurrentAffairs from "./GotoCurrentAffairs";
 
 const LandingPageCurrentAffairs = () => {
   const [language, setLanguage] = useState<"HINDI" | "ENGLISH">("ENGLISH");
@@ -11,6 +12,7 @@ const LandingPageCurrentAffairs = () => {
       <Center >
         <VStack>
           <br />
+          <GotoCurrentAffairs />
           <Heading as="u" fontSize="xl">
             Latest Current Affairs
           </Heading>
@@ -52,10 +54,10 @@ export const CurrentAffairsContainer = (props: { language: "HINDI" | "ENGLISH" }
       <VStack alignItems="left" spacing="16">
         {articleTitles?.map((x) => (
           <VStack key={x.id} spacing="2" alignItems="left">
-            <Heading fontSize="4xl" color="gray.800" >
+            <Heading fontSize="4xl" color={colorPrimary} >
             💡 {x.article_title}
             </Heading>
-            <Text as="label" color={markitWebColor} >
+            <Text as="label" color={colorPrimary} >
               {new Date(x.created_at).toLocaleString("en-US", {
                 year: "numeric",
                 month: "long",

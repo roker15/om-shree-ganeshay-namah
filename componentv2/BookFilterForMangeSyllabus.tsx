@@ -1,49 +1,62 @@
 import { Box, Button, Container, Radio, RadioGroup, Select, Stack, Text, VStack } from "@chakra-ui/react";
 import router from "next/router";
 import React, { useEffect, useState } from "react";
-import { useGetBooks, useGetColleges, useGetCollegesCourses, useGetPersonalCourses } from "../../customHookes/networkHooks";
-import { markitWebColor } from "../../lib/constants";
-import { useAuthContext } from "../../state/Authcontext";
-import { BookCtx, useNotesContextNew } from "../../state/NotesContextNew";
-import { BookResponse } from "../../types/myTypes";
-// import { Book1, useSyllabusContext } from "../../state/SyllabusContext";
-import RequestDrawer from "../RequestDrawer";
+import { useGetColleges, useGetPersonalCourses, useGetCollegesCourses, useGetBooks } from "../customHookes/networkHooks";
+import { useAuthContext } from "../state/Authcontext";
+import { useNoteContext } from "../state/NoteContext";
+import { Book, useSyllabusContext } from "../state/SyllabusContext";
+import { BookResponse } from "../types/myTypes";
+import RequestDrawer from "./RequestDrawer";
+
 
 const BookFilterForMangeSyllabus = () => {
   const [category, setCategory] = React.useState("7");
   const [selectedCollege, setSelectedCollege] = useState<number | undefined>(undefined);
-  const [selectedCourse, setselectedCourse] = useState<BookCtx | undefined>(undefined);
-  // const { setBookResponse, book, setDisplayMode, setCategory: setCat } = useSyllabusContext();
+  const [selectedCourse, setselectedCourse] = useState<Book | undefined>(undefined);
+  const { setBook, book, setDisplayMode, setCategory: setCat } = useSyllabusContext();
   const { profile } = useAuthContext();
-  const { setBook, setSelectedSubheading } = useNotesContextNew();
 
   const changeCategory = (category: string) => {
     setCategory(category);
-    // setCat(category);
-  };
-  const handleSyllabusChange = (book: BookCtx) => {
-    setBook(book);
-    setSelectedSubheading(undefined);
+    setCat(category);
   };
 
   return (
-    <VStack px="2" height="32" _hover={{ color: markitWebColor, bg: "brand.100" }}>
+    <VStack px="2" height="32" _hover={{ color: "#4154f1", bg: "brand.100" }}>
       <Categories category={category} onChangeCallback={changeCategory} />
       {category === "8" ? (
         <Stack direction={"row"}>
           <VStack>
             <Colleges onChangeCallback={setSelectedCollege} />
+            {profile && profile.role === "ADMIN" && (
+              <Button
+                onClick={() => {
+                  setDisplayMode("COLLEGE");
+                }}
+              >
+                Add College
+              </Button>
+            )}
           </VStack>
           {selectedCollege && (
             <VStack>
-              <CollegeCourses collegeId={selectedCollege} onChangeCallback={handleSyllabusChange} />{" "}
+              <CollegeCourses collegeId={selectedCollege} onChangeCallback={setBook} />{" "}
+              {profile && profile.role === "ADMIN" && (
+                <Button
+                  onClick={() => {
+                    setDisplayMode("COLLEGE_COURSE");
+                  }}
+                >
+                  Add New Course
+                </Button>
+              )}
             </VStack>
           )}
         </Stack>
       ) : category === "9" ? (
         <>
-          <PersonalSyllabus onChangeCallback={handleSyllabusChange} />
-          {/* {profile && (
+          <PersonalSyllabus onChangeCallback={setBook} />
+          {profile && (
             <Button
               onClick={() => {
                 setDisplayMode("PERSONAL_COURSE");
@@ -51,12 +64,12 @@ const BookFilterForMangeSyllabus = () => {
             >
               Add New
             </Button>
-          )} */}
+          )}
         </>
       ) : (
-        <BookFilterNew onChangeCallback={handleSyllabusChange} category={category} />
+        <BookFilterNew onChangeCallback={setBook} category={category} />
       )}
-      <RequestDrawer buttonType={"md"} />
+      <RequestDrawer buttonType={"md"}/>
     </VStack>
   );
 };
@@ -121,18 +134,23 @@ const Colleges = (props: { onChangeCallback: React.Dispatch<React.SetStateAction
     </Container>
   );
 };
-const PersonalSyllabus = (props: { onChangeCallback: (book: BookCtx) => void }) => {
+const PersonalSyllabus = (props: { onChangeCallback: React.Dispatch<React.SetStateAction<Book | undefined>> }) => {
   const { profile } = useAuthContext();
   const { personalCourses, isError, isLoading } = useGetPersonalCourses(profile?.id!);
-  // const { setDisplayMode, setFormType } = useSyllabusContext();
+  const { setDisplayMode, setFormType } = useSyllabusContext();
   //Functions
   const handleChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
     const x = personalCourses!.find((c) => c.id === Number(e.target.value));
-    const book = {
+    props.onChangeCallback({
       bookId: x?.id!,
       bookName: x?.book_name!,
-    };
-    props.onChangeCallback(book);
+      colleges_fk: x?.colleges_fk,
+      moderator: x?.moderator,
+      syllabus_owner_fk: x?.syllabus_owner_fk,
+      publication_fk: x?.publication_fk,
+    });
+    setDisplayMode("SYLLABUS");
+    setFormType(undefined);
   };
   if (!profile) {
     return <Text fontSize={"smaller"}>**Login to view personal Syllabus</Text>;
@@ -159,10 +177,13 @@ const PersonalSyllabus = (props: { onChangeCallback: (book: BookCtx) => void }) 
     </Container>
   );
 };
-const CollegeCourses = (props: { collegeId: number; onChangeCallback: (book: BookCtx) => void }) => {
+const CollegeCourses = (props: {
+  collegeId: number;
+  onChangeCallback: React.Dispatch<React.SetStateAction<Book | undefined>>;
+}) => {
   //states
   const { collegesCourses, isError, isLoading } = useGetCollegesCourses(props.collegeId);
-  // const { setDisplayMode, setFormType } = useSyllabusContext();
+  const { setDisplayMode, setFormType } = useSyllabusContext();
 
   //Functions
   const handleChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
@@ -170,8 +191,14 @@ const CollegeCourses = (props: { collegeId: number; onChangeCallback: (book: Boo
     const book = {
       bookId: x?.id!,
       bookName: x?.book_name!,
+      colleges_fk: x?.colleges_fk,
+      moderator: x?.moderator,
+      syllabus_owner_fk: x?.syllabus_owner_fk,
+      publication_fk: x?.publication_fk,
     };
     props.onChangeCallback(book);
+    setDisplayMode("SYLLABUS");
+    setFormType(undefined);
   };
 
   return (
@@ -194,17 +221,20 @@ const CollegeCourses = (props: { collegeId: number; onChangeCallback: (book: Boo
   );
 };
 
-const BookFilterNew = (props: { category: string; onChangeCallback: (book: BookCtx) => void }) => {
+const BookFilterNew = (props: {
+  category: string;
+  onChangeCallback: React.Dispatch<React.SetStateAction<Book | undefined>>;
+}) => {
   // const [value, setValue] = React.useState(props.category);
   const { data } = useGetBooks(Number(props.category));
-  // const { setDisplayMode, setFormType } = useSyllabusContext();
+  const { setDisplayMode, setFormType } = useSyllabusContext();
   // const { data: d } = useGetSyllabusByBookId(2);
   const [classList, setClassList] = React.useState<BookResponse[] | null>([]);
   const [selectedClass, setSelectedClass] = React.useState<number | undefined>();
   const [subjectList, setSubjectList] = React.useState<BookResponse[] | null>([]);
   const [selectedSubject, setSelectedSubject] = React.useState<number | undefined>();
   const [bookList, setBookList] = React.useState<BookResponse[] | null>([]);
-  // const { setBook } = useNotesContextNew();
+  const { setIsTagSearchActive, setBookResponse, bookResponse } = useNoteContext();
   const [bookid, setBookid] = useState<string | undefined>();
 
   // useEffect(() => {
@@ -293,14 +323,16 @@ const BookFilterNew = (props: { category: string; onChangeCallback: (book: BookC
         </Select>
         <Select
           id="paper"
-          placeholder={props.category === "7" ? "Select Syllabus" : "Select Book1"}
+          placeholder={props.category === "7" ? "Select Syllabus" : "Select Book"}
           onChange={(e) => {
             setBookid(e.target.value);
-            const selectedBook = data?.find((item) => item.id === Number(e.target.value));
-            // setBook({ bookId: selectedBook?.id, bookName: selectedBook?.book_name, colleges_fk: undefined });
+            // setBookResponse(data?.find((item) => item.id === Number(e.target.value)));
             const x = data?.find((item) => item.id === Number(e.target.value));
-            props.onChangeCallback({ bookId: selectedBook?.id, bookName: selectedBook?.book_name });
-            // setIsTagSearchActive(false);
+            props.onChangeCallback({ bookId: x?.id!, bookName: x?.book_name! });
+            setIsTagSearchActive(false);
+            setDisplayMode("SYLLABUS");
+            setFormType(undefined);
+            // navigateTo(e.target.value, "hello");
           }}
         >
           {bookList?.map((x) => {

@@ -2,8 +2,11 @@ import { HamburgerIcon } from "@chakra-ui/icons";
 import {
   Avatar,
   Box,
+  Divider,
   Flex,
   FlexProps,
+  Grid,
+  GridItem,
   HStack,
   IconButton,
   Image,
@@ -29,8 +32,8 @@ import { FiChevronDown } from "react-icons/fi";
 import DesktopMenu from "../components/chakraTemplate/Customdrawer";
 import { CustomDrawerWithButton } from "../components/CustomChakraUi";
 import BookFilter from "../components/syllabus/BookFilter";
-import BookFilterForMangeSyllabus from "../components/syllabusNew/BookFilterForMangeSyllabus";
-import BookFilterForNotesMaking from "../components/syllabusNew/BookFilterForNotesMaking";
+import BookFilterForNotesMaking from "../componentv2/BookFilterForNotesMaking";
+import RequestDrawer from "../componentv2/RequestDrawer";
 import { useAuthContext } from "../state/Authcontext";
 import { SyllabusContextProviderWrapper } from "../state/SyllabusContext";
 import { BookResponse } from "../types/myTypes";
@@ -45,7 +48,7 @@ export default function TopNavbar({ children }: { children: ReactNode }) {
     // finalize
     <Box>
       <MobileNav onOpen={onOpen} />
-      <Box p="2" >{children}</Box>
+      <Box p="2">{children}</Box>
     </Box>
   );
 }
@@ -62,7 +65,6 @@ const MobileNav = ({ onOpen, ...rest }: MobileProps) => {
       // ml={{ base: 10, md: 60 }}
       px={{ base: "1", md: 4 }}
       height="32"
-      
       alignItems="center"
       top={"0"}
       shadow={"md"}
@@ -91,60 +93,72 @@ const MobileNav = ({ onOpen, ...rest }: MobileProps) => {
       </HStack>
       <Box display={{ base: "none", md: "block" }}>
         {/* <GotoQuestion /> */}
-
         <BookFilterForNotesMaking />
       </Box>
       {/* <Box display={{ base: "none", sm: "initial" }}> */}
       {/* </Box> */}
+      <Grid h="full" templateRows="repeat(3, 1fr)">
+        <GridItem rowStart={2}>
+          <HStack spacing={{ base: "0", md: "6" }}>
+            {!profile ? (
+              <HStack>{JoinTelegram}</HStack>
+            ) : (
+              <Flex border="0px" alignItems={"center"}>
+                {JoinTelegram}
+                <Menu boundary="clippingParents">
+                  <MenuButton border="0px" py={2} transition="all 0.3s" _focus={{ boxShadow: "none" }}>
+                    <HStack>
+                      {!profile ? (
+                        <Avatar size={"sm"} src="https://bit.ly/broken-link" />
+                      ) : (
+                        <Avatar
+                          size={"sm"}
+                          src={
+                            profile?.avatar_url! // change this to url from database avatar
+                          }
+                        />
+                      )}
 
-      <HStack spacing={{ base: "0", md: "6" }}>
-        {!profile ? (
-          <HStack>{JoinTelegram}</HStack>
-        ) : (
-          <Flex border="0px" alignItems={"center"}>
-            {JoinTelegram}
-            <Menu boundary="clippingParents">
-              <MenuButton border="0px" py={2} transition="all 0.3s" _focus={{ boxShadow: "none" }}>
-                <HStack>
-                  {!profile ? (
-                    <Avatar size={"sm"} src="https://bit.ly/broken-link" />
-                  ) : (
-                    <Avatar
-                      size={"sm"}
-                      src={
-                        profile?.avatar_url! // change this to url from database avatar
-                      }
-                    />
-                  )}
-
-                  <VStack display={{ base: "none", md: "flex" }} alignItems="flex-start" spacing="1px" ml="2">
-                    {profile ? <Text fontSize="sm">{profile?.username}</Text> : null}
-                    <Text fontSize="xs">{/* Admin */}</Text>
-                  </VStack>
-                  <Box display={{ base: "none", md: "flex" }}>
-                    <FiChevronDown />
-                  </Box>
-                </HStack>
-              </MenuButton>
-              <MenuList border="1px" bg={"gray.50"}>
-                <MenuItem border="0px">Profile</MenuItem>
-                <MenuItem border="0px">Settings</MenuItem>
-                {profile ? (
-                  <>
-                    {" "}
-                    <MenuDivider />
-                    <MenuItem border="0px" onClick={() => signOut("vv")}>
-                      Sign out
-                    </MenuItem>
-                  </>
-                ) : (
-                  ""
-                )}
-              </MenuList>
-            </Menu>
+                      <VStack display={{ base: "none", md: "flex" }} alignItems="flex-start" spacing="1px" ml="2">
+                        {profile ? <Text fontSize="sm">{profile?.username}</Text> : null}
+                        <Text fontSize="xs">{/* Admin */}</Text>
+                      </VStack>
+                      <Box display={{ base: "none", md: "flex" }}>
+                        <FiChevronDown />
+                      </Box>
+                    </HStack>
+                  </MenuButton>
+                  <MenuList bg={"gray.50"}>
+                    <Text pl="4">{profile.username}</Text>
+                    <br />
+                    <br />
+                    <br />
+                    <MenuItem border="0px">Profile</MenuItem>
+                    <MenuItem border="0px">Settings</MenuItem>
+                    {profile ? (
+                      <>
+                        {" "}
+                        <MenuDivider />
+                        <MenuItem border="0px" onClick={() => signOut("vv")}>
+                          Sign out
+                        </MenuItem>
+                      </>
+                    ) : (
+                      ""
+                    )}
+                  </MenuList>
+                </Menu>
+              </Flex>
+            )}
+          </HStack>
+        </GridItem>
+        <GridItem rowStart={3}>
+          <Flex align={"end"} justifyContent="end" h="full" pb="1.5">
+            <RequestDrawer buttonType={"md"} />
+            <CustomMenu />
           </Flex>
-        )}
-      </HStack>
+        </GridItem>
+      </Grid>
     </Flex>
   );
 };
@@ -253,6 +267,7 @@ export function CustomMenu() {
     <Menu>
       <MenuButton as={IconButton} aria-label="Options" icon={<HamburgerIcon />} variant="ghost" />
       <MenuList bg="gray.50">
+        <Divider bg={"red"} />
         <MenuItem minH="48px" display={router.pathname === "/" ? "none" : ""}>
           <Text fontWeight="semibold" fontSize={{ base: "small", md: "small", lg: "md" }}>
             <Link href="/">

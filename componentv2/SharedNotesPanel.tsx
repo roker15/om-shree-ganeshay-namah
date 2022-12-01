@@ -1,19 +1,16 @@
-import { Avatar, Box, Flex, Link, Text, VStack } from "@chakra-ui/react";
+import { Avatar, Box, Divider, Flex, Link, Text, VStack } from "@chakra-ui/react";
 // import { groupBy } from "lodash";
 import React, { useState } from "react";
 import {
-  SharedNotesList,
   useGetPublicNotesListBySubheading,
-  useGetSharedNotesListBySubheading,
-} from "../../customHookes/networkHooks";
-import { Database } from "../../lib/database";
-import { useAuthContext } from "../../state/Authcontext";
-import { BookResponse, BookSyllabus } from "../../types/myTypes";
-
+  useGetSharedNotesListBySubheading
+} from "../customHookes/networkHooks";
+import { colorPrimary, fontPrimary } from "../lib/constants";
+import { useAuthContext } from "../state/Authcontext";
 
 interface Props {
   subheadingid: number | undefined;
-  changeParentProps: (x: Database["public"]["Tables"]["books_article_sharing"]["Row"]) => void;
+  changeParentProps: (id: string, name: string) => void;
 }
 
 const SharedNotesPanel: React.FC<Props> = ({ subheadingid, changeParentProps }) => {
@@ -29,9 +26,10 @@ const SharedNotesPanel: React.FC<Props> = ({ subheadingid, changeParentProps }) 
   return (
     <Box>
       <VStack align="left">
-        <Text align="start" bg="brand.100" fontWeight="normal" p="2" borderTopRadius={"md"}>
+        <Text align="start"  fontFamily={fontPrimary} color={colorPrimary}  fontWeight="bold" p="2" borderTopRadius={"md"}>
           Shared Notes
         </Text>
+        <Divider/>
         {sharedNtoes && sharedNtoes.length > 0 ? (
           sharedNtoes!.map((x) => (
             <Flex my="2" ml="4" key={x.id} role={"group"} align="center">
@@ -44,7 +42,7 @@ const SharedNotesPanel: React.FC<Props> = ({ subheadingid, changeParentProps }) 
                 px="0.5"
                 casing="capitalize"
               >
-                <Link onClick={() => changeParentProps(x)}>{x.ownedby_name}</Link>
+                <Link onClick={() => changeParentProps(x.owned_by, x.ownedby_name!)}>{x.ownedby_name}</Link>
               </Text>
               {/* </Button> */}
             </Flex>
@@ -54,9 +52,10 @@ const SharedNotesPanel: React.FC<Props> = ({ subheadingid, changeParentProps }) 
             No shared notes with you on this topic
           </Text>
         )}
-        <Text align="start" fontWeight="normal"  bg="brand.100" p="2">
+        <Text align="start" color={colorPrimary} fontFamily={fontPrimary}  fontWeight="bold"  p="2">
           Public Notes
         </Text>
+        <Divider/>
         {publicNotes && publicNotes.length > 0 ? (
           publicNotes!.map((x) => (
             <Flex my="2" key={x.id} role={"group"} align="center">
@@ -71,7 +70,7 @@ const SharedNotesPanel: React.FC<Props> = ({ subheadingid, changeParentProps }) 
                 align="start"
                 px="0.5"
               >
-                <Link onClick={() => changeParentProps(x)}>{x.ownedby_name}</Link>
+                <Link onClick={() => changeParentProps(x.owned_by, x.ownedby_name!)}>{x.ownedby_name}</Link>
               </Text>
               {/* </Button> */}
             </Flex>

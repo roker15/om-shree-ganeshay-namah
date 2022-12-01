@@ -54,9 +54,9 @@ const SuneditorForNotesMaking: React.FunctionComponent<SuneditorForNotesMakingPr
       customToast({ title: "Article not updated error occurred  " + error.message, status: "error", isUpdating: false });
       return;
     }
-    if (data) {
+    // if (data) {
       customToast({ title: "Updated...", status: "success", isUpdating: true });
-    }
+    // }
   };
 
   return (

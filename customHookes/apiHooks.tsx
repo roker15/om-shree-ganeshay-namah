@@ -102,10 +102,12 @@ export function useGetSyllbusModeratorbyStatus(isActive: string | undefined) {
   };
 }
 export function useGetArticlesbyUserandSubheading(props: { subheadingId: number; creatorId: string }) {
+  const subid = props.subheadingId;
+  const creatorId = props.creatorId;
   const fetcher = async () => {
     const response = await axios
       .get<ApiArticleTitle[]>("/api/prisma/posts/getarticlesbyuserandsubheading", {
-        params: { subheadingId: props.subheadingId, creatorId: props.creatorId },
+        params: { subheadingId: subid, creatorId: creatorId },
       })
       .catch((e) => {
         throw e;
@@ -113,7 +115,7 @@ export function useGetArticlesbyUserandSubheading(props: { subheadingId: number;
     return response.data;
   };
   const { data, error, mutate, isValidating } = useSWR(
-    ["/api/prisma/posts/getarticlesbyuserandsubheading", props],
+    subid && creatorId ? ["/api/prisma/posts/getarticlesbyuserandsubheading", props] : null,
     fetcher,
     cacheOptions
   );
@@ -136,11 +138,7 @@ export function useGetLatestCurrentaffairs() {
       });
     return response.data;
   };
-  const { data, error, mutate, isValidating } = useSWR(
-    ["/api/prisma/posts/getlatestcurrentaffairs"],
-    fetcher,
-    cacheOptions
-  );
+  const { data, error, mutate, isValidating } = useSWR(["/api/prisma/posts/getlatestcurrentaffairs"], fetcher, cacheOptions);
   return {
     articleTitles: data,
     //isValidating ensures no loading condition when request is rejected in case of null key

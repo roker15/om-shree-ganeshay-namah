@@ -177,4 +177,13 @@ export const currentAffairTags: { id: number; tag: string }[] = [
   { id: 60, tag: "Study/Survey/Report/Index" },
 ];
 
-export const markitWebColor = "#4154f1";
+const colorsFromWeb = {
+  markitDarkblue: "#012970",
+  markitAccentblue: "#4154f1",
+};
+const fontFromWeb = {
+  marketNunito: "Nunito, sans-serif",
+  marketOpensans: "Open Sans, sans-serif",
+};
+export const colorPrimary = colorsFromWeb.markitDarkblue;
+export const fontPrimary = fontFromWeb.marketNunito;

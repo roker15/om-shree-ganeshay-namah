@@ -1,3 +1,4 @@
+import { navigateTo } from "../lib/utils";
 import { Box, Button, Center, Spacer, Text } from "@chakra-ui/react";
 import router from "next/router";
 import React from "react";
@@ -5,11 +6,6 @@ import TopNavbarForNotes from "./TopNavbarForNotes";
 
 type LayoutProps = {
   children: React.ReactNode;
-};
-const navigateTo = (path: string) => {
-  router.push({
-    pathname: path,
-  });
 };
 
 const Layout: React.FunctionComponent<LayoutProps> = ({ children }) => {

@@ -22,7 +22,7 @@ import { SubmitHandler, useForm } from "react-hook-form";
 import { mutate } from "swr";
 import { Database } from "../lib/database";
 import { useAuthContext } from "../state/Authcontext";
-import { customToast } from "../componentv2/CustomToast";
+import { customToast } from "./CustomToast";
 
 const RequestDrawer = (props: { buttonType: "xs" | "md" | "icon" }) => {
   const { isOpen, onOpen, onClose } = useDisclosure();
@@ -110,7 +110,7 @@ const RequestDrawer = (props: { buttonType: "xs" | "md" | "icon" }) => {
 };
 const ButtonSmall = (props: { onClick: () => void }) => {
   return (
-    <Button size="xs" colorScheme="red" onClick={() => props.onClick()}>
+    <Button size="md" colorScheme="gray" variant="solid" onClick={() => props.onClick()}>
       Ask Anything
     </Button>
   );

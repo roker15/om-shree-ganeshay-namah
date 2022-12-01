@@ -2,6 +2,7 @@ import {
   Box,
   Button,
   ButtonGroup,
+  Center,
   Checkbox,
   FormControl,
   FormLabel,
@@ -28,11 +29,10 @@ import {
 import { useSupabaseClient } from "@supabase/auth-helpers-react";
 import React, { useEffect, useRef, useState } from "react";
 import { MdCancel, MdDelete, MdShare } from "react-icons/md";
-import { Profile } from "../../lib/constants";
-import { Database } from "../../lib/database";
-import { elog } from "../../lib/mylog";
-import { useAuthContext } from "../../state/Authcontext";
-
+import { colorPrimary, Profile } from "../lib/constants";
+import { Database } from "../lib/database";
+import { elog } from "../lib/mylog";
+import { useAuthContext } from "../state/Authcontext";
 
 interface sharedProps {
   // postId: number;
@@ -104,11 +104,11 @@ export const NotesSharing: React.FC<sharedProps> = ({ subheadingId }) => {
           return;
         }
 
-        if (sharedData) {
-          setMessage("Shared successfully");
-          setMessageColor("green");
-          setIsLoading(false);
-        }
+        // if (sharedData) {
+        setMessage("Shared successfully");
+        setMessageColor("green");
+        setIsLoading(false);
+        // }
       }
     }
     setIsLoading(false);
@@ -122,23 +122,24 @@ export const NotesSharing: React.FC<sharedProps> = ({ subheadingId }) => {
   return (
     <>
       {/* <ButtonGroup mb="" justifyContent="end" size="sm" isAttached variant="outline"> */}
-      <Button
+      <IconButton
         // colorScheme="whatsapp"
         variant="unstyled"
-        size={"xs"}
-        leftIcon={<MdShare />}
+        size={"sm"}
+        color="whatsapp.800"
+        icon={<MdShare />}
         onClick={onOpen}
         aria-label={"d"}
         // ml="-1"
       >
-        Share Notes{" "}
-      </Button>
+        {/* Share Notes{" "} */}
+      </IconButton>
       {/* </ButtonGroup> */}
 
       <Modal size="xl" initialFocusRef={initialRef} finalFocusRef={finalRef} isOpen={isOpen} onClose={onClose}>
         <ModalOverlay />
         <ModalContent>
-          <ModalHeader>Share this Topic</ModalHeader>
+          <ModalHeader>Share notes from this Topic</ModalHeader>
           {/* <div>
             {message}
           </div> */}
@@ -208,14 +209,12 @@ export const SharedList: React.FC<{ subheadingId: number }> = ({ subheadingId })
         .from("books_article_sharing")
         .select(`*`)
         .match({ books_subheadings_fk: subheadingId, shared_by: profile?.id, ispublic: false });
-      // .is("ispublic", null);
-
       if (data) {
         setSharedlist(data);
       }
     };
     getSharedList();
-  }, [profile?.id, subheadingId]);
+  }, [profile?.id, subheadingId, supabaseClient]);
 
   const handleEditCheckbox = async (sharingId: number, checkValue: boolean) => {
     const { data, error } = await supabaseClient
@@ -232,17 +231,31 @@ export const SharedList: React.FC<{ subheadingId: number }> = ({ subheadingId })
   const handleCancelSharing = async (sharingId: number) => {
     const { data, error } = await supabaseClient.from("books_article_sharing").delete().match({ id: sharingId });
     if (error) {
-      elog("Notesharing-->handlecancelsharing", error.message);
+      alert(error.message);
       return;
     }
-    if (data) {
-      sharedlist!.splice(
-        sharedlist!.findIndex((item) => item.id === sharingId),
-        1
-      );
-      setSharedlist([...sharedlist!]);
-    }
+    // if (data) {
+    sharedlist!.splice(
+      sharedlist!.findIndex((item) => item.id === sharingId),
+      1
+    );
+    setSharedlist([...sharedlist!]);
+    // }
   };
+  if (!sharedlist) {
+    return (
+      <Center w="full" h="16">
+        <Spinner />
+      </Center>
+    );
+  }
+  if (sharedlist.length === 0) {
+    return (
+      <Center w="full" h="16">
+        <Text as="label" color={"blue.400"}bg="blue.50" p="2" >This topic has not been shared with anyone</Text>
+      </Center>
+    );
+  }
   return (
     <>
       <Table size="sm">
@@ -254,44 +267,43 @@ export const SharedList: React.FC<{ subheadingId: number }> = ({ subheadingId })
             <Th>Delete</Th>
           </Tr>
         </Thead>
-        {sharedlist ? (
-          <Tbody>
-            {sharedlist.map((x) => {
-              return (
-                <Tr key={x.id}>
-                  <Td>{x.sharedwith_email}</Td>
-                  <Td>
-                    {" "}
-                    <Checkbox
-                      textTransform={"capitalize"}
-                      defaultChecked={x.allow_edit!}
-                      onChange={(e) => handleEditCheckbox(x.id, e.target.checked)}
-                    >
-                      {/* Can Edit */}
-                    </Checkbox>
-                  </Td>
-                  <Td>
-                    {" "}
-                    <Checkbox
-                      colorScheme={"whatsapp"}
-                      textTransform={"capitalize"}
-                      ml="0"
-                      defaultChecked={x.allow_copy!}
-                      onChange={(e) => handleCopyCheckbox(x.id, e.target.checked)}
-                    >
-                      {/* Can Edit */}
-                    </Checkbox>
-                  </Td>
-                  <Td>
-                    <IconButton icon={<MdCancel />} aria-label={""} onClick={() => handleCancelSharing(x.id)}></IconButton>
-                  </Td>
-                </Tr>
-              );
-            })}
-          </Tbody>
-        ) : (
-          <Spinner mx="50%" m="8" />
-        )}
+
+        <Tbody>
+          {sharedlist.map((x) => {
+            return (
+              <Tr key={x.id}>
+                <Td>{x.sharedwith_email}</Td>
+                <Td>
+                  {" "}
+                  <Checkbox
+                     size="sm"
+                    textTransform={"capitalize"}
+                    defaultChecked={x.allow_edit!}
+                    onChange={(e) => handleEditCheckbox(x.id, e.target.checked)}
+                  >
+                    {/* Can Edit */}
+                  </Checkbox>
+                </Td>
+                <Td>
+                  {" "}
+                  <Checkbox
+                     size="sm"
+                    colorScheme={"whatsapp"}
+                    textTransform={"capitalize"}
+                    ml="0"
+                    defaultChecked={x.allow_copy!}
+                    onChange={(e) => handleCopyCheckbox(x.id, e.target.checked)}
+                  >
+                    {/* Can Edit */}
+                  </Checkbox>
+                </Td>
+                <Td>
+                  <IconButton icon={<MdCancel />} aria-label={""} onClick={() => handleCancelSharing(x.id)}></IconButton>
+                </Td>
+              </Tr>
+            );
+          })}
+        </Tbody>
       </Table>
     </>
   );

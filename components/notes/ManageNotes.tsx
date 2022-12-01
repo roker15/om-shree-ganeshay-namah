@@ -33,8 +33,8 @@ import {
 } from "../CustomChakraUi";
 import { LoginCard } from "../../componentv2/LoginCard";
 import Notes from "./Notes";
-import { NotesSharing } from "./NotesSharing";
-import SharedNotesPanel from "./SharedNotesPanel";
+import { NotesSharing } from "../../componentv2/NotesSharing";
+import SharedNotesPanel from "../../componentv2/SharedNotesPanel";
 import SyllabusForNotes from "./SyllabusForNotes";
 import { Database } from "../../lib/database";
 // import { GotoQuestion } from "../../pages";

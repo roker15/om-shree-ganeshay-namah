@@ -29,7 +29,7 @@ import { FiChevronDown } from "react-icons/fi";
 import DesktopMenu from "../components/chakraTemplate/Customdrawer";
 import { CustomDrawerWithButton } from "../components/CustomChakraUi";
 import BookFilter from "../components/syllabus/BookFilter";
-import BookFilterForMangeSyllabus from "../components/syllabusNew/BookFilterForMangeSyllabus";
+import BookFilterForMangeSyllabus from "../componentv2/BookFilterForMangeSyllabus";
 import { useAuthContext } from "../state/Authcontext";
 import { SyllabusContextProviderWrapper } from "../state/SyllabusContext";
 import { BookResponse } from "../types/myTypes";
