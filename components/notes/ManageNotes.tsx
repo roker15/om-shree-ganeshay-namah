@@ -271,10 +271,10 @@ const ManageNotes: React.FunctionComponent = () => {
                   <SyllabusForNotes book={book} changeParentProps={changeSelectedSubheading}></SyllabusForNotes>
                 </CustomDrawer>
                 <CustomDrawer  buttonLabel={"Share Panel"}>
-                  <SharedNotesPanel
+                  {/* <SharedNotesPanel
                     subheadingid={selectedNotes?.subheadingId}
                     changeParentProps={changeSelectedSharedNote}
-                  ></SharedNotesPanel>
+                  ></SharedNotesPanel> */}
                 </CustomDrawer>
               </>
             </Flex>
@@ -335,10 +335,10 @@ const ManageNotes: React.FunctionComponent = () => {
             borderLeftColor={"gray.100"}
             borderLeftRadius="md"
           >
-            <SharedNotesPanel
+            {/* <SharedNotesPanel
               subheadingid={selectedNotes?.subheadingId}
               changeParentProps={changeSelectedSharedNote}
-            ></SharedNotesPanel>
+            ></SharedNotesPanel> */}
           </GridItem>
         </Grid>
       )}
