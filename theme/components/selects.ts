@@ -6,11 +6,19 @@ export const selects = {
   parts: ["field", "icon"],
   baseStyle: {
     field: {
-      bg: "brand.500",
+      // bg: "brand.50",
+      // color:"red",
       px: "1000px",
       // border: "4px solid",
       _hover: {
-        bg: "blue.50",
+        // bg: "blue.100",
+      },
+    },
+    icon: {
+      // bg: "brand.500",
+      // color: "brand.300",
+      _hover: {
+        bg: "brand.600",
       },
     },
   },
@@ -35,7 +43,7 @@ export const selects = {
     filled: (props: any) => ({
       field: {
         bg: "brand.50",
-        borderRadius:"full",
+        borderRadius: "full",
         // color: "white",
         _hover: {
           bg: mode(darken("#00008B", -20), whiten("#00008B", 20))(props),
@@ -47,14 +55,14 @@ export const selects = {
     outline: (props: any) => ({
       field: {
         bg: "transparent",
-        borderRadius:"full",
+        borderRadius: "full",
         border: "1px solid",
         borderColor: "brand.500",
-        color: "brand.800",
+        // color: "brand.800",
         size: "sm",
         transition: "transform .2s",
         _hover: {
-          boxShadow: "md",
+          // boxShadow: "md",
           transform: "scale(1.002)",
         },
       },
@@ -62,8 +70,8 @@ export const selects = {
   },
   defaultProps: {
     focusBorderColor: "brand.100",
-    variant: "outline",
-    size: "md",
+    variant: "filled",
+    size: "sm",
   },
 
   // },

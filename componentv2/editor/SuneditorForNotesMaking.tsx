@@ -5,19 +5,20 @@ import { debounce } from "lodash";
 import React, { ChangeEvent, useCallback, useEffect, useRef } from "react";
 import { BASE_URL, colors, SunEditor, sunEditorButtonList, sunEditorfontList } from "../../lib/constants";
 import { useAuthContext } from "../../state/Authcontext";
-import { definitions } from "../../types/supabase";
+
 
 import { customToast } from "../CustomToast";
 // import SunEditor from "suneditor-react";
 import "suneditor/dist/css/suneditor.min.css"; // Import Sun Editor's CSS File
 // import SunEditor from "suneditor-react";
-import { supabaseClient } from "@supabase/auth-helpers-nextjs";
 import styled from "styled-components";
 import SunEditorCore from "suneditor/src/lib/core";
 import { StringOrNumber } from "@chakra-ui/utils";
+import { useSupabaseClient } from "@supabase/auth-helpers-react";
+import { Database } from "../../lib/database";
 
 type SuneditorForNotesMakingProps = {
-  article: definitions["books_articles"];
+  article: Database["public"]["Tables"]["books_articles"]["Row"];
   language: "HINDI" | "ENGLISH";
   isEditable: boolean | undefined;
 };
@@ -27,6 +28,7 @@ const SuneditorForNotesMaking: React.FunctionComponent<SuneditorForNotesMakingPr
   language,
   isEditable,
 }) => {
+  const supabaseClient = useSupabaseClient<Database>();
   const [editorMode, setEditorMode] = React.useState("READ");
   // const [isAutosaveOn, setIsAutosaveOn] = React.useState(false); // for autosave to work
   const [fontSize, setFontSize] = React.useState("font-family: arial; font-size: 16px;");
@@ -73,7 +75,7 @@ const SuneditorForNotesMaking: React.FunctionComponent<SuneditorForNotesMakingPr
   };
   const updateArticleInDatabase = async (newcontent: string | undefined) => {
     const { data, error } = await supabaseClient
-      .from<definitions["books_articles"]>("books_articles")
+      .from("books_articles")
       .update(language === "ENGLISH" ? { article_english: newcontent } : { article_hindi: newcontent })
       .eq("id", article.id);
     if (error) {
@@ -216,7 +218,7 @@ interface editorProps {
   fontSize: string | undefined;
   editorMode: string;
   language: "HINDI" | "ENGLISH";
-  article: definitions["books_articles"];
+  article: Database["public"]["Tables"]["books_articles"]["Row"];
   // handleOnChange: ((content: string) => void) | undefined;
   updateArticleInDatabase: (arg0: string) => void;
 }
@@ -228,7 +230,7 @@ function Editor(props: editorProps): JSX.Element {
         getSunEditorInstance={props.getSunEditorInstance}
         setDefaultStyle={props.fontSize}
         hideToolbar={props.editorMode === "READ" ? true : false}
-        defaultValue={props.language === "ENGLISH" ? props.article.article_english : props.article.article_hindi}
+        defaultValue={props.language === "ENGLISH" ? props.article.article_english! : props.article.article_hindi!}
         // setContents={props.language === "ENGLISH" ? props.article.article_english : props.article.article_hindi} //cause blank editor to render first and then put content, so creates flickering effect . so move to defaultValue
         // onChange={props.handleOnChange} // required atuosave to work
         readOnly={props.editorMode === "READ" ? true : false}

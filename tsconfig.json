@@ -1,6 +1,6 @@
 {
   "compilerOptions": {
-    "target": "es6",
+    "target": "es2017",
     "lib": [
       "dom",
       "dom.iterable",
@@ -24,7 +24,7 @@
     "**/*.ts",
     "**/*.tsx",
     "utils/supabaseClient.js"
-  ],
+, "db"  ],
   "exclude": [
     "node_modules"
   ]

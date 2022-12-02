@@ -1,16 +1,17 @@
 import { Box, Button, Center, CircularProgress, Container, ListItem, OrderedList, Text } from "@chakra-ui/react";
-import { supabaseClient } from "@supabase/auth-helpers-nextjs";
+import { useSupabaseClient } from "@supabase/auth-helpers-react";
 import copy from "copy-to-clipboard";
 import React, { useCallback, useEffect, useRef, useState } from "react";
 import { useDropzone } from "react-dropzone";
 import { v4 as uuid } from "uuid";
-import { customToast } from "./CustomToast";
+import { Database } from "../lib/database";
+import { customToast } from "../componentv2/CustomToast";
 
 export function MyDropzone() {
   const [isLoading, setIsLoading] = useState<boolean>(false);
   const [filelist, setFilelist] = useState<{ file: string; link: string }[]>([]);
   const mountedRef = useRef(false);
-
+  const  supabaseClient  = useSupabaseClient<Database>();
   // effect just for tracking mounted state
   useEffect(() => {
     mountedRef.current = true;
@@ -35,7 +36,7 @@ export function MyDropzone() {
             </Text>{" "}
             uploaded sucessfully,{" "}
           </Text>
-          <Button size="xs" colorScheme="telegram" variant="solid" onClick={(e) => handleCopyLink(e, d.link)}>
+          <Button  onClick={(e) => handleCopyLink(e, d.link)}>
             Copy link
           </Button>
         </ListItem>
@@ -57,11 +58,11 @@ export function MyDropzone() {
         upsert: true,
       });
       if (data) {
-        console.log("data is ", data.Key);
-        const { publicURL, error } = supabaseClient.storage.from("notes-images").getPublicUrl(filepath);
-        console.log("public url is  ", publicURL);
-        if (publicURL && mountedRef.current == true) {
-          setFilelist((oldArray) => [...oldArray, { file: file.name, link: publicURL }]);
+        // console.log("data is ", data.Key);
+        const { data } = supabaseClient.storage.from("notes-images").getPublicUrl(filepath);
+        console.log("public url is  ", data.publicUrl);
+        if (data.publicUrl && mountedRef.current == true) {
+          setFilelist((oldArray) => [...oldArray, { file: file.name, link: data.publicUrl }]);
         }
       }
       if (mountedRef.current == true) {

@@ -36,22 +36,20 @@ import {
   VStack,
   Wrap,
 } from "@chakra-ui/react";
-import { supabaseClient } from "@supabase/auth-helpers-nextjs";
 import katex from "katex";
 import "katex/dist/katex.min.css";
 import dynamic from "next/dynamic";
 import "suneditor/dist/css/suneditor.min.css";
 import { BASE_URL, colors, currentAffairTags, sunEditorButtonList } from "../lib/constants";
-import { definitions } from "../types/supabase";
 // import DOMPurify from "dompurify";
-import { useUser } from "@supabase/auth-helpers-react";
+import { useSupabaseClient, useUser } from "@supabase/auth-helpers-react";
 import React, { useState } from "react";
 import { SubmitHandler, useForm } from "react-hook-form";
 import { MdAdd, MdCancel, MdDone, MdFileCopy, MdModeEdit } from "react-icons/md";
 import { InfoAlert } from "../components/CurrentAffair/ManageCurrentAffair";
 import SyllabusForCurrentAffairs from "../components/CurrentAffair/SyllabusForCurrentAffairs";
-import { customToast } from "../components/CustomToast";
-import { LoginCard } from "../components/LoginCard";
+import { customToast } from "../componentv2/CustomToast";
+import { LoginCard } from "../componentv2/LoginCard";
 import DeleteConfirmation from "../components/syllabus/DeleteConfirmation";
 import { useGetCurrentAffairs } from "../customHookes/networkHooks";
 import LayoutWithTopNavbar from "../layout/LayoutWithTopNavbar";
@@ -59,19 +57,23 @@ import { elog, sentenseCase } from "../lib/mylog";
 import { useAuthContext } from "../state/Authcontext";
 import { BookResponse, BookSyllabus } from "../types/myTypes";
 import PageWithLayoutType from "../types/pageWithLayout";
+import { Database } from "../lib/database";
+import { Syllabus } from ".";
+import { useNotesContextNew } from "../state/NotesContextNew";
+
 const SunEditor = dynamic(() => import("suneditor-react"), {
   ssr: false,
 });
 
 function SuneditorSimple(props: {
-  article: definitions["books_articles"];
+  article: Database["public"]["Tables"]["books_articles"]["Insert"];
   content: string | undefined;
   canCopy: boolean;
   userrole: string;
   isAdminNotes: boolean;
   language: "HINDI" | "ENG";
   saveCallback: (id: number, content: string, language: "ENG" | "HINDI") => void;
-  copyCallback: (x: definitions["books_articles"]) => void;
+  copyCallback: (x: Database["public"]["Tables"]["books_articles"]["Insert"]) => void;
 }) {
   const [readMode, setReadMode] = useState<boolean>(true);
   return (
@@ -105,7 +107,7 @@ function SuneditorSimple(props: {
         readOnly={readMode}
         setOptions={{
           callBackSave(contents, isChanged) {
-            props.saveCallback(props.article.id, contents, props.language);
+            props.saveCallback(props.article.id!, contents, props.language);
           },
           mode: "classic",
           katex: katex,
@@ -123,8 +125,9 @@ function SuneditorSimple(props: {
 }
 
 const CurrentAffair: React.FC = () => {
+  const supabaseClient = useSupabaseClient<Database>();
   // const [data, setData] = useState<definitions["books_articles"][] | undefined>(undefined);
-  const { user } = useUser();
+  const user = useUser();
   const { profile } = useAuthContext();
   const [language, setLangauge] = useState<"ENG" | "HINDI">("ENG");
   const [book, setBook] = useState<BookResponse>({
@@ -134,13 +137,9 @@ const CurrentAffair: React.FC = () => {
 
   const [isAdminNotes, setIsAdminNotes] = useState<boolean>(true);
   const [articleFormMode, setArticleFormMode] = useState<"CREATING" | "EDITING" | "NONE">("NONE");
-  const [selectedSyllabus, setSelectedSyllabus] = useState<BookSyllabus | undefined>();
+  const { selectedSubheading } = useNotesContextNew();
 
-  const { data, mutate, isError, isLoading } = useGetCurrentAffairs(
-    isAdminNotes,
-    selectedSyllabus?.subheading_id!,
-    user?.id!
-  );
+  const { data, mutate, isError, isLoading } = useGetCurrentAffairs(isAdminNotes, selectedSubheading?.id!, user?.id!);
 
   const handleTabsChange = (index: any) => {
     setLangauge(index === 0 ? "ENG" : "HINDI");
@@ -148,17 +147,17 @@ const CurrentAffair: React.FC = () => {
   const changeParentProps = () => {
     mutate();
   };
-  const handleCopyNotes = async (d: definitions["books_articles"]) => {
+  const handleCopyNotes = async (d: Database["public"]["Tables"]["books_articles"]["Insert"]) => {
     if (!user) {
       customToast({ title: "Please Login to use this feature", status: "error", isUpdating: false });
       return;
     }
-    const { data, error } = await supabaseClient.from<definitions["books_articles"]>("books_articles").insert([
+    const { data, error } = await supabaseClient.from("books_articles").insert([
       {
         article_title: d.article_title,
         article_english: d.article_english,
         article_hindi: d.article_hindi,
-        created_by: profile?.id,
+        created_by: profile?.id!,
         books_subheadings_fk: d.books_subheadings_fk,
         sequence: d.sequence,
         current_affair_tags: d.current_affair_tags,
@@ -178,9 +177,10 @@ const CurrentAffair: React.FC = () => {
   };
   const saveArticle = async (id: number, content: string, language: string) => {
     const { data, error } = await supabaseClient
-      .from<definitions["books_articles"]>("books_articles")
+      .from("books_articles")
       .update(language === "ENG" ? { article_english: content } : { article_hindi: content })
-      .eq("id", id);
+      .eq("id", id)
+      .select();
     if (error) {
       customToast({ title: "Article not updated error occurred  " + error.message, status: "error", isUpdating: false });
       return;
@@ -190,7 +190,7 @@ const CurrentAffair: React.FC = () => {
     }
   };
   const deleteArticle = async (id: number): Promise<void> => {
-    const { data, error } = await supabaseClient.from<definitions["books_articles"]>("books_articles").delete().eq("id", id);
+    const { data, error } = await supabaseClient.from("books_articles").delete().eq("id", id);
     if (error) {
       elog("MyNotes->deleteArticle", error.message);
       return;
@@ -201,11 +201,12 @@ const CurrentAffair: React.FC = () => {
   };
 
   const setSyllabus = (x: BookSyllabus) => {
-    setSelectedSyllabus(x);
+    // setSelectedSyllabus(x);
   };
 
   return (
     <Container maxW="7xl" py="2" px={{ base: "0.5", md: "2", lg: "4" }}>
+      {/* {selectedSyllabus?.subheading} */}
       {!user && (
         <Flex justifyContent="end" mb="8">
           <LoginCard redirect={`${BASE_URL}/dna`} />
@@ -221,8 +222,7 @@ const CurrentAffair: React.FC = () => {
             </Box>
             <Button
               size={{ base: "sm", sm: "sm", md: "md" }}
-              display={selectedSyllabus ? undefined : "none"}
-              colorScheme="telegram"
+              display={selectedSubheading?.id ? undefined : "none"}
               onClick={() => {
                 // setData(data);
                 setIsAdminNotes(!isAdminNotes);
@@ -234,17 +234,15 @@ const CurrentAffair: React.FC = () => {
         </GridItem>
         <GridItem colSpan={[0, 0, 0, 1]} display={["none", "none", "none", "block"]}>
           <Box height="full" w="52">
-            <SyllabusForCurrentAffairs book={book} changeParentProps={setSyllabus} />
+            <Syllabus bookId={book.id} bookName={book.book_name} />
           </Box>
         </GridItem>
         <GridItem colSpan={[5, 5, 5, 4]}>
           <Center>
             {" "}
-            <Text fontWeight="bold" color="gray.600" justifySelf="center" p="2" mb="2">
-              {selectedSyllabus === undefined ? "Select Date to View Content" : selectedSyllabus.subheading}
-            </Text>
+            <Text>{selectedSubheading?.id === undefined ? "Select Date to View Content" : selectedSubheading?.name}</Text>
           </Center>
-          {isLoading && selectedSyllabus && (
+          {isLoading && selectedSubheading?.id && (
             <Center mt="8" w="full">
               {" "}
               Please wait, Loading...
@@ -252,10 +250,14 @@ const CurrentAffair: React.FC = () => {
           )}
           {data && data.length == 0 && (
             <Center mt="8" w="full">
-              <InfoAlert info={"No notes found. We are Covering from 1-Jun onwards."} />{" "}
+              <InfoAlert info={"No notes found. We are Covering from 1-october onwards."} />{" "}
             </Center>
           )}
-          <VStack spellCheck="false" alignItems="start" visibility={selectedSyllabus === undefined ? "hidden" : undefined}>
+          <VStack
+            spellCheck="false"
+            alignItems="start"
+            visibility={selectedSubheading?.id === undefined ? "hidden" : undefined}
+          >
             <Accordion allowMultiple width={"full"}>
               {data?.map((x: any) => {
                 return (
@@ -273,11 +275,12 @@ const CurrentAffair: React.FC = () => {
                                       <Button
                                         size="xs"
                                         key={element.id}
+                                        variant="ghost"
                                         // onClick={() => {
                                         //   setIsTagSearchActive(true);
                                         //   setTagsArray!([element.id]);
                                         // }}
-                                        bg="white"
+                                        // bg="white"
                                         px="1.5"
                                         // fontWeight={"normal"}
                                         // fontSize="xs"
@@ -292,7 +295,7 @@ const CurrentAffair: React.FC = () => {
                             </Wrap>
                           ) : null}
                           <HStack w="full">
-                            <AccordionButton bg="gray.100" _expanded={{ bg: "gray.300" }}>
+                            <AccordionButton bg="gray.100" _expanded={{ bg: "gray.300" }} borderRadius="full">
                               <Box flex="1" textAlign="left">
                                 <Flex alignSelf="start" alignItems="center">
                                   <Text
@@ -322,7 +325,6 @@ const CurrentAffair: React.FC = () => {
                           <Tabs
                             variant="line"
                             size="sm"
-                            colorScheme="gray"
                             width="full"
                             index={language === "ENG" ? 0 : 1}
                             onChange={handleTabsChange}
@@ -366,17 +368,10 @@ const CurrentAffair: React.FC = () => {
               })}
             </Accordion>
             <Button
-              // mb="48"
-              // _groupHover={{ size: "" }}
               display={!profile || isAdminNotes ? "none" : undefined}
-              ml="2"
               onClick={() => {
                 setArticleFormMode(articleFormMode !== "NONE" ? "NONE" : "CREATING");
               }}
-              // borderRadius={"full"}
-              variant="solid"
-              size="lg"
-              // colorScheme="gray"
               leftIcon={articleFormMode !== "NONE" ? <MdCancel /> : <MdAdd />}
             >
               {articleFormMode !== "NONE" ? "Cancel" : "Create New Notes"}
@@ -390,7 +385,7 @@ const CurrentAffair: React.FC = () => {
             <Box display={articleFormMode === "NONE" ? "none" : !profile || isAdminNotes ? "none" : undefined}>
               <ArticleForm
                 subjectId={undefined}
-                subheadingid={selectedSyllabus?.subheading_id}
+                subheadingid={selectedSubheading?.id}
                 question_year={undefined}
                 question_type={undefined}
                 formMode={"CREATING"}
@@ -412,7 +407,7 @@ const CurrentAffair: React.FC = () => {
 export default CurrentAffair;
 
 type ArticleFormProps = {
-  tags?: unknown[] | undefined;
+  tags?: number[] | undefined;
   subjectId: number | undefined;
   subheadingid: number | undefined;
   articleId?: number;
@@ -428,7 +423,7 @@ type ArticleFormProps = {
 type Inputs = {
   articleTitle: string;
   sequence: number;
-  tags: unknown[] | undefined;
+  tags: number[] | undefined;
   questionType: "MODEL" | "PREV" | "NONE" | undefined;
   question_year: number | undefined;
   isQuestion: boolean;
@@ -449,6 +444,7 @@ const ArticleForm: React.FC<ArticleFormProps> = ({
   setParentProps,
   x,
 }) => {
+  const supabaseClient = useSupabaseClient<Database>();
   const [isLoading, setIsLoading] = useState(false);
   const { profile } = useAuthContext();
   const {
@@ -473,11 +469,11 @@ const ArticleForm: React.FC<ArticleFormProps> = ({
   const onSubmit: SubmitHandler<Inputs> = async (d) => {
     setIsLoading(true);
     if (formMode === "CREATING") {
-      const { data, error } = await supabaseClient.from<definitions["books_articles"]>("books_articles").insert([
+      const { data, error } = await supabaseClient.from("books_articles").insert([
         {
           article_title: d.articleTitle,
-          created_by: profile?.id,
-          books_subheadings_fk: subheadingid,
+          created_by: profile?.id!,
+          books_subheadings_fk: subheadingid!,
           sequence: d.sequence,
           current_affair_tags: d.tags ? d.tags : [],
           question_type: d.questionType ? d.questionType : "NONE",
@@ -492,7 +488,7 @@ const ArticleForm: React.FC<ArticleFormProps> = ({
 
     if (formMode === "EDITING") {
       const { data, error } = await supabaseClient
-        .from<definitions["books_articles"]>("books_articles")
+        .from("books_articles")
         .update({
           // id: articleId,
           article_title: d.articleTitle,
@@ -519,9 +515,7 @@ const ArticleForm: React.FC<ArticleFormProps> = ({
         <VStack alignItems={"center"} p="2">
           <FormControl p="2" isInvalid={errors.articleTitle as any} maxW="500px">
             <Textarea
-              size="sm"
               minW={{ base: "300px", md: "500px" }}
-              focusBorderColor="brand.500"
               placeholder="Notes Heading"
               {...register("articleTitle", { required: "This is required" })}
             />
@@ -530,7 +524,6 @@ const ArticleForm: React.FC<ArticleFormProps> = ({
           <FormControl p="2" isInvalid={errors.articleTitle as any} maxW="500px">
             <Input
               size="sm"
-              focusBorderColor="brand.500"
               type="number"
               placeholder="Notes Sequence (1,2,3  ....)"
               {...register("sequence", { required: "This is required" })}
@@ -539,7 +532,6 @@ const ArticleForm: React.FC<ArticleFormProps> = ({
           </FormControl>
           <Checkbox
             size="sm"
-            colorScheme="brand"
             {...register("isQuestion")}
             defaultChecked={question_type === "MODEL" || question_type === "PREV"}
           >
@@ -549,15 +541,10 @@ const ArticleForm: React.FC<ArticleFormProps> = ({
             <Box>
               <FormControl p="2" isInvalid={errors.questionType as any} maxW="500px" bg="gray.50">
                 <RadioGroup defaultValue={question_type} size="sm">
-                  <Radio
-                    {...register("questionType", { required: "This is required" })}
-                    value="MODEL"
-                    pr="14"
-                    colorScheme={"brand"}
-                  >
+                  <Radio {...register("questionType", { required: "This is required" })} value="MODEL" pr="14">
                     <Text casing="capitalize">Model Question</Text>
                   </Radio>
-                  <Radio {...register("questionType", { required: "This is required" })} value="PREV" colorScheme={"brand"}>
+                  <Radio {...register("questionType", { required: "This is required" })} value="PREV">
                     <Text casing="capitalize">Previous year Question</Text>
                   </Radio>
                 </RadioGroup>
@@ -567,7 +554,6 @@ const ArticleForm: React.FC<ArticleFormProps> = ({
                 <FormControl p="2" isInvalid={errors.question_year as any} maxW="500px">
                   <Input
                     size="sm"
-                    focusBorderColor="brand"
                     type="number"
                     placeholder="Question year (1995-2022)"
                     {...register("question_year", { required: true, min: 1995, max: 2022 })}
@@ -591,7 +577,6 @@ const ArticleForm: React.FC<ArticleFormProps> = ({
               <Box key={value.id}>
                 <Checkbox
                   px="2"
-                  colorScheme={"brand"}
                   defaultChecked={tags?.includes(value.id) ? true : false}
                   size="sm"
                   type="checkbox"
@@ -608,7 +593,7 @@ const ArticleForm: React.FC<ArticleFormProps> = ({
         </VStack>
         {/* ) : null} */}
 
-        <Button type="submit" isLoading={isLoading} colorScheme="facebook" aria-label="Call Sage" leftIcon={<MdDone />}>
+        <Button type="submit" isLoading={isLoading} aria-label="Call Sage" leftIcon={<MdDone />}>
           Done
         </Button>
       </form>
@@ -627,7 +612,7 @@ const SyllabusDrawer: React.FC<Props> = ({ book, changeParentProps }) => {
 
   return (
     <>
-      <Button size={{ base: "sm", sm: "sm", md: "md" }} ref={btnRef} colorScheme="teal" onClick={onOpen}>
+      <Button size={{ base: "sm", sm: "sm", md: "md" }} ref={btnRef} onClick={onOpen}>
         Select Date
       </Button>
       <Drawer isOpen={isOpen} placement="left" onClose={onClose} finalFocusRef={btnRef}>

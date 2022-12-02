@@ -30,7 +30,6 @@ export const CustomIconButton = (props: {
     <IconButton
       size="xs"
       variant="ghost"
-      colorScheme="whatsapp"
       aria-label="Call Sage"
       fontSize="20px"
       isLoading={props.isLoading}
@@ -43,8 +42,6 @@ export const CustomButton = (props: { label: string; state: boolean; changeState
   return (
     <Checkbox
       size="sm"
-      colorScheme="gray"
-      outlineColor={"red.600"}
       isChecked={props.state}
       onChange={(e) => props.changeState(e.target.checked)}
     >
@@ -58,8 +55,6 @@ export const CustomCheckBox = (props: { label: string; state: boolean; changeSta
   return (
     <Checkbox
       size="sm"
-      colorScheme="brand"
-      outlineColor={"red.600"}
       isChecked={props.state}
       onChange={(e) => props.changeState(e.target.checked)}
     >
@@ -118,7 +113,6 @@ export const CustomDrawer = (props: { children: React.ReactNode,buttonLabel:stri
           size="sm"
           leftIcon={<MdSwitchRight />}
           ref={btnRef}
-          colorScheme="gray"
           onClick={onOpen}
         >
           {props.buttonLabel}
@@ -155,7 +149,6 @@ export const CustomDrawerWithButton = (props: { children: React.ReactNode }) => 
         fontSize={{ base: "small", md: "small",lg:"md" }}
         ref={btnRef}
         onClick={onOpen}
-        color="gray.600"
         cursor={"pointer"}
        
       >

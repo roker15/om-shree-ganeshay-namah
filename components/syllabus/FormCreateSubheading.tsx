@@ -19,16 +19,17 @@ import {
   useToast,
   VStack,
 } from "@chakra-ui/react";
-import { supabaseClient } from "@supabase/auth-helpers-nextjs";
+import { useSupabaseClient } from "@supabase/auth-helpers-react";
 import * as React from "react";
 import { useEffect } from "react";
 import { useForm } from "react-hook-form";
 import useSWR, { mutate } from "swr";
 import { useGetExamPapers } from "../../customHookes/useUser";
+import { Database } from "../../lib/database";
 import { elog } from "../../lib/mylog";
 import { useAuthContext } from "../../state/Authcontext";
 import { Headings } from "../../types/myTypes";
-import { definitions } from "../../types/supabase";
+
 import { FormProps } from "./CreateBookSyllabus";
 
 interface Props {
@@ -38,6 +39,7 @@ const FormCreateSubheading: React.FC<Props> = ({ x }) => {
   //this is customhooks using swr, it can be used in any component
   // The most beautiful thing is that there will be only 1 request sent to the API,
   // because they use the same SWR key and the request is deduped, cached and shared automatically.
+  const supabaseClient = useSupabaseClient<Database>();
   const { profile } = useAuthContext();
 
   interface FormValues {
@@ -68,8 +70,8 @@ const FormCreateSubheading: React.FC<Props> = ({ x }) => {
 
   async function onSubmit(values: any) {
     if (x?.formMode === "CREATE_SUBHEADING") {
-      const { data, error } = await supabaseClient.from<definitions["books_subheadings"]>("books_subheadings").insert({
-        books_headings_fk: x?.heading_id,
+      const { data, error } = await supabaseClient.from("books_subheadings").insert({
+        books_headings_fk: x?.heading_id!,
         subheading: values.subheading,
         sequence: values.sequence,
       });
@@ -91,7 +93,7 @@ const FormCreateSubheading: React.FC<Props> = ({ x }) => {
 
     if (x?.formMode === "UPDATE_SUBHEADING") {
       const { data, error } = await supabaseClient
-        .from<definitions["books_subheadings"]>("books_subheadings")
+        .from("books_subheadings")
         .update({
           subheading: values.subheading,
           sequence: values.sequence,
@@ -172,7 +174,7 @@ const FormCreateSubheading: React.FC<Props> = ({ x }) => {
             </FormControl>
 
             <FormControl isInvalid={errors.sequence as any}>
-              <FormLabel color="blue.600" htmlFor="sequence">
+              <FormLabel  htmlFor="sequence">
                 Subheading Sequence
               </FormLabel>
               <NumberInput alignSelf="start" min={1} max={600}>

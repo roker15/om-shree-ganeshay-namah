@@ -1,13 +1,14 @@
 import { Box, Divider, Flex, IconButton, Link, Stack, Text } from "@chakra-ui/react";
-import { supabaseClient } from "@supabase/auth-helpers-nextjs";
 import { groupBy } from "lodash";
 import React, { useEffect, useState } from "react";
 import { MdAdd, MdDelete, MdLightMode } from "react-icons/md";
 import { useGetSyllabusByBookId } from "../../customHookes/networkHooks";
 import { useAuthContext } from "../../state/Authcontext";
 import { BookResponse, BookSyllabus } from "../../types/myTypes";
-import { definitions } from "../../types/supabase";
+
 import useSWR from "swr";
+import { useSupabaseClient } from "@supabase/auth-helpers-react";
+import { Database } from "../../lib/database";
 interface Props {
   book: BookResponse | undefined;
   changeParentProps: (x: BookSyllabus) => void;
@@ -83,15 +84,8 @@ const Syllabus: React.FC<Props> = ({ book, changeParentProps }) => {
                   }}
                   _hover={{ cursor: "pointer" }}
                 >
-                  <IconButton
-                    color={"brand.500"}
-                    variant="icong"
-                    aria-label="Call Sage"
-                    fontSize="16px"
-                    icon={toggle === value[0].heading_id ? <MdLightMode /> : <MdAdd />}
-                  />
+                  <IconButton aria-label="Call Sage" icon={toggle === value[0].heading_id ? <MdLightMode /> : <MdAdd />} />
                   <Text align="start" as="address" color=" #FF1493" casing="capitalize" pr="1">
-                    {/* {value[0].heading + " " + "(" + value[0].heading_sequence + ")"} */}
                     {value[0].heading}
                   </Text>
                 </Flex>
@@ -100,19 +94,15 @@ const Syllabus: React.FC<Props> = ({ book, changeParentProps }) => {
                   .map((x) => (
                     <Flex
                       alignItems="center"
-                      my="4"
-                      ml="10"
                       key={x.subheading_id}
-                      // role={"group"}
                       display={toggle === x.heading_id ? "flex" : "none"}
                     >
                       <Text
-                        color={selectedSubheading === x.subheading_id ? "white" : "gray.600"}
+                        color={selectedSubheading === x.subheading_id ? "white" : "brand.500"}
                         bg={selectedSubheading === x.subheading_id ? "brand.500" : "white"}
                         onClick={() => handleSyllabusClick(x)}
                         casing="capitalize"
                         as="label"
-                        fontSize="14px"
                       >
                         <Link>{x.subheading}</Link>
                       </Text>
@@ -132,10 +122,11 @@ const Syllabus: React.FC<Props> = ({ book, changeParentProps }) => {
 export default Syllabus;
 
 export const ArticleCounter = ({ subheadingId, creatorId }: { subheadingId: number; creatorId: string }) => {
+  const supabaseClient = useSupabaseClient<Database>();
   const getArticleCount = async () =>
     await supabaseClient
-      .from<definitions["books_articles"]>("books_articles")
-      .throwOnError()
+      .from("books_articles")
+      // .throwOnError()
       .select("*", { count: "exact", head: true })
       .match({ books_subheadings_fk: subheadingId, created_by: creatorId });
 
@@ -150,9 +141,7 @@ export const ArticleCounter = ({ subheadingId, creatorId }: { subheadingId: numb
   }
   return (
     <Flex alignItems={"center"} px="2">
-      <Text color="brand.500" as={"label" && "b"} fontSize="12px">
-        {data && data.count && data.count !== 0 ? data?.count : ""}
-      </Text>
+      <Text as={"label" && "b"}>{data && data.count && data.count !== 0 ? data?.count : ""}</Text>
     </Flex>
   );
 };

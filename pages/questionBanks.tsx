@@ -2,7 +2,7 @@ import { Center, Container, Flex } from "@chakra-ui/react";
 import { useUser } from "@supabase/auth-helpers-react";
 import Link from "next/link";
 import React from "react";
-import { LoginCard } from "../components/LoginCard";
+import { LoginCard } from "../componentv2/LoginCard";
 import QuestionBank from "../components/QuestionBank";
 import LayoutWithTopNavbar from "../layout/LayoutWithTopNavbar";
 import { BASE_URL } from "../lib/constants";
@@ -15,7 +15,7 @@ type ProfileListPropss = {
 };
 
 const QuestionBank1: React.FC<ProfileListPropss> = ({}) => {
-  const { user, error } = useUser();
+  const user = useUser();
 
   if (!user) {
     return (

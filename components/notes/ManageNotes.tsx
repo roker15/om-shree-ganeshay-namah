@@ -16,12 +16,10 @@ import {
 import React, { useEffect, useState } from "react";
 import Sticky from "react-sticky-el";
 import { elog } from "../../lib/mylog";
-// import { supabase } from "../../lib/supabaseClient";
-import { supabaseClient as supabase } from "@supabase/auth-helpers-nextjs";
-import { useUser } from "@supabase/auth-helpers-react";
+import { useSupabaseClient, useUser } from "@supabase/auth-helpers-react";
 import { useAuthContext } from "../../state/Authcontext";
 import { BookResponse, BookSyllabus } from "../../types/myTypes";
-import { definitions } from "../../types/supabase";
+
 import ManageCurrentAffair from "../CurrentAffair/ManageCurrentAffair";
 
 import { useRouter } from "next/router";
@@ -33,11 +31,12 @@ import {
   CustomCircularProgress,
   CustomDrawer, CustomSwitch, LabelText, SpanTextWithBackground
 } from "../CustomChakraUi";
-import { LoginCard } from "../LoginCard";
+import { LoginCard } from "../../componentv2/LoginCard";
 import Notes from "./Notes";
-import { NotesSharing } from "./NotesSharing";
-import SharedNotesPanel from "./SharedNotesPanel";
+import { NotesSharing } from "../../componentv2/NotesSharing";
+import SharedNotesPanel from "../../componentv2/SharedNotesPanel";
 import SyllabusForNotes from "./SyllabusForNotes";
+import { Database } from "../../lib/database";
 // import { GotoQuestion } from "../../pages";
 
 type SelectedNotesType = {
@@ -53,7 +52,8 @@ type SelectedNotesType = {
 
 const ManageNotes: React.FunctionComponent = () => {
   // const { isTagSearchActive } = useNoteContext();
-  const { user, error } = useUser();
+  const supabaseClient = useSupabaseClient<Database>();
+  const  user = useUser();
   const router = useRouter();
   const { isTagSearchActive, bookResponse, setBookResponse } = useNoteContext();
   const [book, setBook] = useState<BookResponse | undefined>();
@@ -120,27 +120,27 @@ const ManageNotes: React.FunctionComponent = () => {
       creatorId: profile?.id,
       isCopyable: false,
       isEditable: true,
-      ownerName: profile?.username,
+      ownerName: profile?.username!,
     });
     setSelectedTopic(x);
   };
-  const changeSelectedSharedNote = (x: definitions["books_article_sharing"]) => {
+  const changeSelectedSharedNote = (x: Database["public"]["Tables"]["books_article_sharing"]["Row"]) => {
     setSelectedNotes({
       subheadingId: x.books_subheadings_fk,
       creatorId: x.owned_by,
-      isEditable: x.allow_edit,
-      isCopyable: x.allow_copy,
-      ownerName: x.ownedby_name,
+      isEditable: x.allow_edit!,
+      isCopyable: x.allow_copy!,
+      ownerName: x.ownedby_name!,
     });
   };
 
   const updateSharingStatus = async (shouldBePublic: boolean) => {
     setIsPostPublic(undefined);
     if (shouldBePublic === true) {
-      const { data, error } = await supabase.from<definitions["books_article_sharing"]>("books_article_sharing").insert([
+      const { data, error } = await supabaseClient.from("books_article_sharing").insert([
         {
-          books_subheadings_fk: selectedNotes?.subheadingId,
-          owned_by: profile?.id,
+          books_subheadings_fk: selectedNotes?.subheadingId!,
+          owned_by: profile?.id!,
           ownedby_email: profile?.email,
           ownedby_name: profile?.username,
           ownedby_avatar: profile?.avatar_url,
@@ -158,8 +158,8 @@ const ManageNotes: React.FunctionComponent = () => {
     }
     if (shouldBePublic === false) {
       setIsPostPublic(undefined);
-      const { data, error } = await supabase
-        .from<definitions["books_article_sharing"]>("books_article_sharing")
+      const { data, error } = await supabaseClient
+        .from("books_article_sharing")
         .delete()
         .match({
           books_subheadings_fk: selectedNotes?.subheadingId,
@@ -181,8 +181,8 @@ const ManageNotes: React.FunctionComponent = () => {
   useEffect(() => {
     const getIfThisTopicIsPublic = async () => {
       setIsPostPublic(undefined);
-      const { data, error } = await supabase
-        .from<definitions["books_article_sharing"]>("books_article_sharing")
+      const { data, error } = await supabaseClient
+        .from("books_article_sharing")
         .select(`*`)
         .match({
           books_subheadings_fk: selectedNotes?.subheadingId,
@@ -196,7 +196,7 @@ const ManageNotes: React.FunctionComponent = () => {
       }
       if (data && data.length !== 0) {
         setIsPostPublic(true);
-        setIsPostCopiable(data[0].allow_copy);
+        setIsPostCopiable(data[0].allow_copy!);
       }
       if (data && data.length === 0) {
         setIsPostPublic(false);
@@ -207,8 +207,8 @@ const ManageNotes: React.FunctionComponent = () => {
   }, [selectedNotes]);
 
   const handleCopyCheckbox = async (checkValue: boolean) => {
-    const { data, error } = await supabase
-      .from<definitions["books_article_sharing"]>("books_article_sharing")
+    const { data, error } = await supabaseClient
+      .from("books_article_sharing")
       .update({ allow_copy: checkValue })
       .match({ books_subheadings_fk: selectedNotes?.subheadingId, ispublic: true, owned_by: profile!.id });
     if (data && data.length !== 0) {

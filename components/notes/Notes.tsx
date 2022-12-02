@@ -5,7 +5,7 @@ import { useAuthContext } from "../../state/Authcontext";
 import MyNotes from "./MyNotes";
 
 interface Props {
-  subjectId: number | undefined;
+  subjectId?: number | undefined;
   subheadingid: number | undefined;
   notesCreator: string | undefined;
   isCopyable: boolean| undefined;

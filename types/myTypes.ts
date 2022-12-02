@@ -1,4 +1,3 @@
-import { definitions } from "./supabase";
 
 export type Exam = {
   id: number;
@@ -87,16 +86,7 @@ export type SubheadingViews = {
   heading_sequence?: number;
   paper_id?: number;
 };
-export type Books = {
-  id: number;
-  created_at?: string | undefined;
-  updated_at?: string | undefined;
-  book_name: string;
-  subject_fk: number | definitions["subjects"];
-  class_fk?: number | definitions["books_class"] | undefined;
-  board_or_university_fk?: number | undefined;
-  publication_fk?: number | definitions["books_publication"] | undefined;
-};
+
 export type BookResponse = {
   id: number;
   book_name?: string;
@@ -110,6 +100,16 @@ export type BookResponse = {
   };
   publication_fk?: number;
 };
+  export interface BookResponse1 {
+    bookId: number;
+    bookName: string;
+    colleges_fk?: number | null| undefined;
+    syllabus_owner_fk?: string | null| undefined;
+    moderator?: string[] | null | undefined;
+    publication_fk?: number | null| undefined;
+  }
+
+
 export type BookSyllabus = {
   subheading_id: number;
   subheading: string;

@@ -4,7 +4,7 @@ import { BookResponse } from "../types/myTypes";
 export interface CurrentAppState {
   isTagSearchActive: boolean | undefined;
   setIsTagSearchActive: (tagSearchActive: boolean) => void;
-  tagsArray?: number[] ;
+  tagsArray?: number[];
   setTagsArray?: (tags: number[]) => void;
   bookResponse: BookResponse | undefined;
   setBookResponse: Dispatch<SetStateAction<BookResponse | undefined>>;
@@ -18,7 +18,11 @@ const NoteContext = createContext<CurrentAppState>({
   bookResponse: undefined,
   setBookResponse: () => {},
 });
-
+export type NoteBook = {
+  bookId: number | undefined | null;
+  bookName: string | undefined | null;
+  colleges_fk: number | undefined | null;
+};
 export function NoteContextWrapper({ children }: { children: ReactNode }) {
   const [isTagSearchActive, setIsTagSearchActive] = useState<boolean | undefined>(false);
   const [bookResponse, setBookResponse] = useState<BookResponse | undefined>();

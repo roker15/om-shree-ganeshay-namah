@@ -18,27 +18,19 @@ import {
   TabPanels,
   Tabs,
   Tag,
-  Text,
-  VStack,
-  Wrap,
+  Text, Wrap
 } from "@chakra-ui/react";
-import { supabaseClient } from "@supabase/auth-helpers-nextjs";
-import { useUser } from "@supabase/auth-helpers-react";
-import { Loading } from "@supabase/ui";
+import { useSupabaseClient } from "@supabase/auth-helpers-react";
 import router from "next/router";
-import React, { useEffect, useState } from "react";
-import { FiTrendingUp } from "react-icons/fi";
+import { useEffect, useState } from "react";
 import { mutate } from "swr";
 import { useGetUserArticlesFromTags, useSearchCurrentAffairs } from "../../customHookes/networkHooks";
 import { currentAffairTags } from "../../lib/constants";
+import { Database } from "../../lib/database";
 import { elog, sentenseCase } from "../../lib/mylog";
 import { useAuthContext } from "../../state/Authcontext";
 import { useNoteContext } from "../../state/NoteContext";
-import { BookResponse } from "../../types/myTypes";
-import { definitions } from "../../types/supabase";
-import SuneditorForNotesMaking from "../editor/SuneditorForNotesMaking";
-import SuneditorForNotesMakingg from "../editor/SuneditorForNotesMakingg";
-import BookFilter from "../syllabus/BookFilter";
+import SuneditorForNotesMakingg from "../../componentv2/editor/SuneditorForNotesMakingg";
 import DeleteConfirmation from "../syllabus/DeleteConfirmation";
 import SearchPanel from "./SearchPanel";
 
@@ -48,14 +40,13 @@ export function InfoAlert({ info }: { info: string }) {
   return (
     <Alert status="info" colorScheme={"gray"} alignItems="start" variant="left-accent">
       <AlertIcon />
-      {/* <Text as="p">{info}</Text> */}
       <div style={{ whiteSpace: "pre-line" }}>{info}</div>
-      {/* {info} */}
     </Alert>
   );
 }
 
 export default function ManageCurrentAffair() {
+  const  supabaseClient  = useSupabaseClient<Database>();
   const { profile } = useAuthContext();
   const { tagsArray, setTagsArray } = useNoteContext();
   const [searchKeys, setSearchKeys] = useState<string | undefined>(undefined);
@@ -88,17 +79,9 @@ export default function ManageCurrentAffair() {
     });
   };
 
-  // useEffect(() => {
-  //   if (book) {
-  //     sessionStorage.setItem("book", JSON.stringify(book));
-  //     sessionStorage.setItem("selected-subheading", "undefined");
-  //     sessionStorage.setItem("selected-syllabus", "undefined");
-  //     navigateTo(book.id.toString());
-  //   }
-  // }, [book]);
 
   const deleteArticle = async (id: number): Promise<void> => {
-    const { data, error } = await supabaseClient.from<definitions["books_articles"]>("books_articles").delete().eq("id", id);
+    const { data, error } = await supabaseClient.from("books_articles").delete().eq("id", id);
     if (error) {
       elog("MyNotes->deleteArticle", error.message);
       return;
@@ -107,9 +90,7 @@ export default function ManageCurrentAffair() {
       mutate([`/get-user-articles-bytags/${profile?.id}/${tagsArray}`]);
     }
   };
-  // const updateBookProps = (x: BookResponse | undefined) => {
-  //   setBook(x);
-  // };
+ 
   return (
     <Box>
       <>
@@ -125,13 +106,7 @@ export default function ManageCurrentAffair() {
                   if (element.id == x1) {
                     return (
                       <Button
-                        size="xs"
                         key={element.id}
-                        bg="gray.50"
-                        px="1.5"
-                        // fontWeight={"normal"}
-                        // fontSize="xs"
-                        mx="2"
                       >
                         {element.tag}
                       </Button>
@@ -147,24 +122,19 @@ export default function ManageCurrentAffair() {
           <Flex h="6" alignItems="center" my="2">
             {isArticleLoading ? (
               <Box alignItems="center" justifyContent="center" w="131px">
-                <Spinner ml="16" size={"xs"} colorScheme="gray" />
+                <Spinner />
               </Box>
             ) : count && count == 999 ? (
               <Box alignItems="center" w="131px">
-                <Tag bg="whatsapp.100">Select Some Tags</Tag>
+                <Tag >Select Some Tags</Tag>
               </Box>
             ) : (
               <Box alignItems="center" w="131px">
-                <Tag bg="whatsapp.100">{count} Articles Found</Tag>
+                <Tag >{count} Articles Found</Tag>
               </Box>
             )}
             {count && count == 999 ? null : (
               <Button
-                size="xs"
-                variant="outline"
-                px="1.5"
-                mx="2"
-                colorScheme={"green"}
                 onClick={() => {
                   setTagsArray!([]);
                 }}
@@ -177,7 +147,7 @@ export default function ManageCurrentAffair() {
 
         <Grid templateColumns="repeat(5, 1fr)" gap={"1.5"}>
           <>
-            <GridItem colSpan={{ base: 0, sm: 0, md: 1 }} display={{ base: "none", sm: "none", md: "block" }} bg="brand.50">
+            <GridItem colSpan={{ base: 0, sm: 0, md: 1 }} display={{ base: "none", sm: "none", md: "block" }} >
               <Tags></Tags>
             </GridItem>
 
@@ -195,8 +165,7 @@ export default function ManageCurrentAffair() {
                       <AccordionItem key={article.id} borderTopWidth="0px" borderBottomWidth="0px" my="2">
                         {({ isExpanded }) => (
                           <>
-                            {/* <Flex pb="16"> */}
-                            {/* <VStack width="full"> */}
+                           
                             <Flex>
                               <DeleteConfirmation
                                 handleDelete={deleteArticle}
@@ -205,15 +174,12 @@ export default function ManageCurrentAffair() {
                                 id={article.id}
                                 display={undefined}
                               ></DeleteConfirmation>
-                              <AccordionButton bg="gray.50" _expanded={{ bg: "blackAlpha.50" }}>
+                              <AccordionButton  _expanded={{ bg: "blackAlpha.50" }}>
                                 <Box flex="1" textAlign="left">
                                   <Flex alignSelf="start" alignItems="center">
                                     <Text
                                       alignSelf={"baseline"}
-                                      // bg="brand.100"
-                                      p="0.5"
-                                      fontSize="16px"
-                                      align="left"
+                                     
                                     >
                                       <Text as="b">Article Name :- </Text> {sentenseCase(article.article_title)}
                                     </Text>
@@ -224,7 +190,7 @@ export default function ManageCurrentAffair() {
                             </Flex>
                             <AccordionPanel pb={4} borderTopWidth="0px" borderBottomWidth="0px" px={{ base: 0, lg: "4" }}>
                               {isExpanded && (
-                                <Tabs variant="line" size="sm" colorScheme="gray" width="full">
+                                <Tabs variant="line" size="sm" colorScheme="brand" width="full">
                                   <TabList>
                                     <Tab>English</Tab>
                                     <Tab>Hindi</Tab>
@@ -286,15 +252,12 @@ export default function ManageCurrentAffair() {
                                 id={article.id}
                                 display={undefined}
                               ></DeleteConfirmation>
-                              <AccordionButton bg="gray.50" _expanded={{ bg: "blackAlpha.50" }}>
+                              <AccordionButton  _expanded={{ bg: "blackAlpha.50" }}>
                                 <Box flex="1" textAlign="left">
                                   <Flex alignSelf="start" alignItems="center">
                                     <Text
                                       alignSelf={"baseline"}
-                                      // bg="brand.100"
-                                      p="0.5"
-                                      fontSize="16px"
-                                      align="left"
+                                      
                                     >
                                       <Text as="b">Article Name :- </Text> {sentenseCase(article.article_title)}
                                     </Text>
@@ -305,7 +268,7 @@ export default function ManageCurrentAffair() {
                             </Flex>
                             <AccordionPanel pb={4} borderTopWidth="0px" borderBottomWidth="0px" px={{ base: 0, lg: "4" }}>
                               {isExpanded && (
-                                <Tabs variant="line" size="sm" colorScheme="gray" width="full">
+                                <Tabs variant="line" size="sm" width="full">
                                   <TabList>
                                     <Tab>English</Tab>
                                     <Tab>Hindi</Tab>

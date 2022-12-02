@@ -5,11 +5,10 @@ export const LoginCard = ({ redirect }: { redirect: string }) => {
   const { signInWithgoogle, signOut, profile } = useAuthContext();
   return (
     <Button
-      colorScheme={"telegram"}
       size="md"
       px={10}
-      borderRadius="full"
-      variant="outline"
+      // borderRadius="full"
+      // variant="outline"
       onClick={() => signInWithgoogle(redirect)}
     >
       Login

@@ -1,27 +1,25 @@
-import { supabaseClient } from "@supabase/auth-helpers-nextjs";
-import { useUser } from "@supabase/auth-helpers-react";
+import { useSupabaseClient, useUser } from "@supabase/auth-helpers-react";
 import { createContext, useContext, useEffect, useState } from "react";
 import { Profile } from "../lib/constants";
+import { Database } from "../lib/database";
 import { elog, ilog } from "../lib/mylog";
-// import { supabase } from "../lib/supabaseClient";
 interface AuthContextValues {
   signInWithgoogle: (redirectUrl: string) => void;
-  signIn: (data: any) => void;
   signOut: (data: any) => void;
   profile: Profile | null;
 }
 // create a context for authentication
 const AuthContext = createContext<AuthContextValues>({
   signInWithgoogle: () => {},
-  signIn: () => {},
   signOut: () => {},
   profile: null,
 });
 
 export const AuthProvider = ({ children }: any) => {
+  const supabaseClient = useSupabaseClient<Database>();
+  const user = useUser();
   const [loading, setLoading] = useState(true);
   const [profile, setProfile] = useState<Profile | null>(null);
-  const { user, error } = useUser();
 
   useEffect(() => {
     setLoading(true);
@@ -29,24 +27,20 @@ export const AuthProvider = ({ children }: any) => {
       const getProfile = async () => {
         try {
           //first check if profile exist or not
-          const { data: x, error: e } = await supabaseClient
-            .from<Profile>("profiles")
-            .select("*")
-            .eq("id", user?.id!)
-            .single();
+          const { data: x, error: e } = await supabaseClient.from("profiles").select("*").eq("id", user?.id!).single();
           if (x) {
             const d = new Date();
             let text = d.toISOString();
             setProfile(x);
             const { data, error } = await supabaseClient
-              .from<Profile>("profiles")
+              .from("profiles")
               .update({ last_login: text })
               .match({ id: user.id });
           } else {
             // .single();
             // const user = supabaseClient.auth.user();
             const { data, error } = await supabaseClient
-              .from<Profile>("profiles")
+              .from("profiles")
               .insert({
                 id: user.id,
                 role: "USER",
@@ -79,26 +73,23 @@ export const AuthProvider = ({ children }: any) => {
       setProfile(null);
       setLoading(false);
     }
-  }, [user]);
+  }, [supabaseClient, user]);
 
   // create signUp, signIn, signOut functions
   const signUpUser = async (redirectUrl: string) => {
-    let { user, error } = await supabaseClient.auth.signIn(
-      {
-        provider: "google",
-      },
-      {
+    let { data, error } = await supabaseClient.auth.signInWithOAuth({
+      provider: "google",
+      options: {
         redirectTo: redirectUrl,
-      }
-    );
+      },
+    });
   };
 
   const value: AuthContextValues = {
     signInWithgoogle: (redirectUrl: string) => {
       signUpUser(redirectUrl);
     },
-    signIn: (data: any) => supabaseClient.auth.signIn(data),
-    signOut: (data: any) => supabaseClient.auth.signOut(),
+    signOut: async (data: any) => await supabaseClient.auth.signOut(),
     profile: profile,
   };
 

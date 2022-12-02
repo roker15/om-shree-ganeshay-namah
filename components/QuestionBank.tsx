@@ -14,8 +14,8 @@ import {
   Stack,
   Text,
 } from "@chakra-ui/react";
-import { supabaseClient } from "@supabase/auth-helpers-nextjs";
-import { useUser } from "@supabase/auth-helpers-react";
+
+import { useSupabaseClient, useUser } from "@supabase/auth-helpers-react";
 import katex from "katex";
 import "katex/dist/katex.min.css";
 import dynamic from "next/dynamic";
@@ -27,11 +27,11 @@ import "suneditor/dist/css/suneditor.min.css"; // Import Sun Editor's CSS File
 import SunEditorCore from "suneditor/src/lib/core";
 import { useGetExamPapers, useGetQuestionsByPaperidAndYear } from "../customHookes/useUser";
 import { BASE_URL, colors, sunEditorButtonList, sunEditorfontList } from "../lib/constants";
+import { Database } from "../lib/database";
 import { useAuthContext } from "../state/Authcontext";
 import { QuestionBank } from "../types/myTypes";
-import { definitions } from "../types/supabase";
-import { customToast } from "./CustomToast";
-import { EditorStyle } from "./editor/SuneditorForNotesMaking";
+import { customToast } from "../componentv2/CustomToast";
+import { EditorStyle } from "../componentv2/editor/SuneditorForNotesMaking";
 // import Suneditor from "../components/Suneditor";
 
 const SunEditor = dynamic(() => import("suneditor-react"), {
@@ -89,10 +89,10 @@ const QuestionBanks: React.FC = () => {
           value={examId}
         >
           <Stack direction="row">
-            <Radio size="sm" name="1" colorScheme="linkedin" value="24">
+            <Radio size="sm" name="1"  value="24">
               <Text casing="capitalize">UPSC</Text>
             </Radio>
-            <Radio size="sm" name="2" colorScheme="telegram" value="29">
+            <Radio size="sm" name="2"  value="29">
               <Text casing="capitalize">UPPSC PCS</Text>
             </Radio>
           </Stack>
@@ -135,7 +135,7 @@ const QuestionBanks: React.FC = () => {
             <CustomFormLabel text={"Question Year :"} htmlfor={"year"} />
 
             {errors.year && (
-              <Text fontSize="16px" color="#bf1650">
+              <Text fontSize="16px" >
                 **Year should be from 1995 to 2021
               </Text>
             )}
@@ -169,7 +169,7 @@ const QuestionBanks: React.FC = () => {
         {isQuestionLoading ? (
           <Spinner size="100px" /> //this is not visible test it again
         ) : questions && questions.length != 0 ? (
-          (questions as QuestionBank[])
+          (questions as Database["public"]["Tables"]["questionbank"]["Row"][])
             .sort((a, b) => a.sequence! - b.sequence!)
             .map((x) => {
               return (
@@ -211,14 +211,15 @@ const EditorStyle1 = styled.div`
   }
 `;
 interface PropsQuestionBankEditor {
-  x: QuestionBank;
+  x: Database["public"]["Tables"]["questionbank"]["Row"];
   y?: boolean;
 }
 
 const QuestionBankEditor: React.FunctionComponent<PropsQuestionBankEditor> = ({ x, y }) => {
+  const supabaseClient = useSupabaseClient<Database>();
   const [isAnswerWritingOn, setAnswerWritingOn] = useState(false);
   const [isAnswerExist, setAnswerExist] = useState(false);
-  const { user, error } = useUser();
+  const user = useUser();
   const [value, setValue] = React.useState("READ");
   const [showEditButton, setShowEditButton] = useState(y);
   const editor = useRef<SunEditorCore>();
@@ -230,7 +231,7 @@ const QuestionBankEditor: React.FunctionComponent<PropsQuestionBankEditor> = ({ 
   const getAnswer = async () => {
     setAnswerWritingOn(true);
     const { data, error } = await supabaseClient
-      .from<definitions["question_answer"]>("question_answer")
+      .from("question_answer")
       .select(`*`)
       .eq("question_id", x.id)
       .eq("answered_by", user?.id);
@@ -241,7 +242,7 @@ const QuestionBankEditor: React.FunctionComponent<PropsQuestionBankEditor> = ({ 
 
   const updateAnswer = async (answer: string) => {
     const { data, error } = await supabaseClient
-      .from<definitions["question_answer"]>("question_answer")
+      .from("question_answer")
       .update({
         answer_english: answer,
       })
@@ -252,7 +253,7 @@ const QuestionBankEditor: React.FunctionComponent<PropsQuestionBankEditor> = ({ 
     }
   };
   const insertAnswer = async (answer: string) => {
-    const { data, error } = await supabaseClient.from<definitions["question_answer"]>("question_answer").insert({
+    const { data, error } = await supabaseClient.from("question_answer").insert({
       question_id: x.id,
       answered_by: user?.id,
       answer_english: answer,
@@ -276,7 +277,7 @@ const QuestionBankEditor: React.FunctionComponent<PropsQuestionBankEditor> = ({ 
   useEffect(() => {
     const getAnswerCount = async () => {
       const { data, error, count } = await supabaseClient
-        .from<definitions["question_answer"]>("question_answer")
+        .from("question_answer")
         .select(`*`, { count: "exact", head: true })
         .eq("question_id", x.id)
         .eq("answered_by", user?.id);
@@ -294,7 +295,7 @@ const QuestionBankEditor: React.FunctionComponent<PropsQuestionBankEditor> = ({ 
     <>
       <EditorStyle1>
         <SunEditor
-          defaultValue={x.question_content}
+          defaultValue={x.question_content!}
           hideToolbar={true}
           readOnly={true}
           //   disable={true}
@@ -331,10 +332,10 @@ const QuestionBankEditor: React.FunctionComponent<PropsQuestionBankEditor> = ({ 
           {isAnswerWritingOn && (
             <RadioGroup ml="4" onChange={setValue} value={value}>
               <Stack direction="row">
-                <Radio size="sm" name="1" colorScheme="linkedin" value="READ">
+                <Radio name="1" value="READ">
                   <Text casing="capitalize">Read</Text>
                 </Radio>
-                <Radio size="sm" name="1" colorScheme="telegram" value="EDIT">
+                <Radio name="1" value="EDIT">
                   <Text casing="capitalize">Edit</Text>
                 </Radio>
               </Stack>

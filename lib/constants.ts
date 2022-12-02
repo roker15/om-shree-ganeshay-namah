@@ -2,8 +2,8 @@ import dynamic from "next/dynamic";
 
 export const NEXT_PUBLIC_SUPABASE_URL = process.env.NEXT_PUBLIC_SUPABASE_URL;
 export const NEXT_PUBLIC_SUPABASE_ANON_KEY = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY;
-export const BASE_URL = "http://www.localhost:3000";
-// export const BASE_URL = "https://www.jionote.com";
+// export const BASE_URL = "http://www.localhost:3000";
+export const BASE_URL = "https://www.jionote.com";
 // export const BASE_URL = "https://om-shree-ganeshay-namah-git-dev-only-jionote-v1-roker15.vercel.app";
 // export const BASE_URL = "https://om-shree-ganeshay-namah-git-dev-only-jionote-v2-roker15.vercel.app";
 
@@ -15,13 +15,13 @@ export const SunEditor = dynamic(() => import("suneditor-react"), {
 });
 export type Profile = {
   id: string;
-  avatar_url: string;
-  username: string;
-  website: string;
-  updated_at: string;
-  role: string;
-  email: string;
-  last_login: string;
+  updated_at: string | null;
+  username: string | null;
+  avatar_url: string | null;
+  website: string | null;
+  role: string | null;
+  email: string | null;
+  last_login: string | null;
 };
 export const sunEditorButtonList = [
   [
@@ -165,7 +165,7 @@ export const currentAffairTags: { id: number; tag: string }[] = [
   { id: 55, tag: "Security forces and agencies" },
 
   { id: 56, tag: "Disaster Management ⭐" },
-  
+
   { id: 501, tag: "Ethics ⭐" },
 
   { id: 57, tag: "Miscellaneous ⭐" },
@@ -177,3 +177,13 @@ export const currentAffairTags: { id: number; tag: string }[] = [
   { id: 60, tag: "Study/Survey/Report/Index" },
 ];
 
+const colorsFromWeb = {
+  markitDarkblue: "#012970",
+  markitAccentblue: "#4154f1",
+};
+const fontFromWeb = {
+  marketNunito: "Nunito, sans-serif",
+  marketOpensans: "Open Sans, sans-serif",
+};
+export const colorPrimary = colorsFromWeb.markitDarkblue;
+export const fontPrimary = fontFromWeb.marketNunito;

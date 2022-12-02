@@ -1,7 +1,6 @@
 import { Button } from "@chakra-ui/button";
-import { LinkIcon, PhoneIcon } from "@chakra-ui/icons";
 import { Input } from "@chakra-ui/input";
-import { Box, Divider, Flex, Spacer, Stack } from "@chakra-ui/layout";
+import { Box, Divider, Stack } from "@chakra-ui/layout";
 import {
   AlertDialog,
   AlertDialogBody,
@@ -11,8 +10,6 @@ import {
   AlertDialogOverlay,
   Badge,
   Center,
-  Checkbox,
-  Circle,
   FormControl,
   FormErrorMessage,
   FormLabel,
@@ -39,15 +36,15 @@ import { MdDelete, MdLink, MdLinkOff, MdMode } from "react-icons/md";
 import styled from "styled-components";
 import "suneditor/dist/css/suneditor.min.css"; // Import Sun Editor's CSS File
 // now recommend to always use the mutate returned from the useSWRConfig hook:
-import useSWR, { mutate } from "swr";
+import { mutate } from "swr";
 import { useGetExamPapers, useGetQuestionsByPaperidAndYear, useSubheadingByPaperId } from "../customHookes/useUser";
 import { QuestionBank, SubheadingQuestionLink } from "../types/myTypes";
 // import Suneditor from "../components/Suneditor";
-import { supabaseClient } from "@supabase/auth-helpers-nextjs";
-import { useUser } from "@supabase/auth-helpers-react";
-import { definitions } from "../types/supabase";
-import { BASE_URL, sunEditorButtonList } from "../lib/constants";
+import { useSupabaseClient,  useUser } from "@supabase/auth-helpers-react";
 import LayoutWithTopNavbar from "../layout/LayoutWithTopNavbar";
+import { BASE_URL, sunEditorButtonList } from "../lib/constants";
+import { Database } from "../lib/database";
+import { useAuthContext } from "../state/Authcontext";
 import PageWithLayoutType from "../types/pageWithLayout";
 
 const SunEditor = dynamic(() => import("suneditor-react"), {
@@ -68,14 +65,16 @@ interface IFormInput {
 }
 
 const CreateQuestionBank: React.FC = () => {
+  const supabaseClient = useSupabaseClient<Database>();
   const [examId, setExamId] = useState("24");
   const [paperId, setPaperId] = useState<number | undefined>(undefined);
   const [year, setYear] = useState<number | undefined>(undefined);
   const [shouldfetch, setShouldfetch] = useState(false);
   const [isEditMode, setIsEditMode] = useState(false);
-  const { user, error } = useUser();
+  const user = useUser();
+  const { profile } = useAuthContext();
   const [userId, setUserId] = useState("");
-  const [currentEditQuestion, setCurrentEditQuestion] = useState<QuestionBank>();
+  const [currentEditQuestion, setCurrentEditQuestion] = useState<Database["public"]["Tables"]["questionbank"]["Row"]>();
   const { examPapers, isLoading, isError } = useGetExamPapers(parseInt(examId));
   const [loading, setLoading] = useState(false);
   const {
@@ -94,22 +93,17 @@ const CreateQuestionBank: React.FC = () => {
     }
   }, [user]);
   const signUpUser = async (email: string, role: string) => {
-    let { user, error } = await supabaseClient.auth.signIn(
-      {
-        provider: "google",
-      },
-      {
-        // redirectTo: `${BASE_URL}/createQuestionBank`,
-        redirectTo: "https://www.jionote.com/createQuestionBank",
-      }
-    );
+    let { data, error } = await supabaseClient.auth.signInWithOAuth({
+      provider: "google",
+      options: { redirectTo: "https://www.jionote.com/createQuestionBank" },
+    });
   };
 
   const onSubmit: SubmitHandler<IFormInput> = async (values) => {
     setLoading(true);
     if (!isEditMode) {
       // window.alert("value of check box is " + values.searchKeys + " " + values.year);
-      const { data, error } = await supabaseClient.from<definitions["questionbank"]>("questionbank").insert({
+      const { data, error } = await supabaseClient.from("questionbank").insert({
         paper_id_new: values.paperId,
         question_content: values.questionContent,
         search_keys: values.searchKeys,
@@ -125,7 +119,7 @@ const CreateQuestionBank: React.FC = () => {
       mutate([`/questions/${paperId}/${year}`]);
     } else {
       const { data, error } = await supabaseClient
-        .from<definitions["questionbank"]>("questionbank")
+        .from("questionbank")
         .update({
           paper_id_new: values.paperId,
           question_content: values.questionContent,
@@ -165,13 +159,7 @@ const CreateQuestionBank: React.FC = () => {
     return () => subscription.unsubscribe();
   }, [watch]);
 
-  const handleQuestionEdit = (e: QuestionBank) => {
-    // let { data, error } = await supabaseClient.rpc("getsyllabusd", {
-    //   paper_idd:49,
-    // });
-
-    // if (error) console.error(error);
-    // else console.log(data);
+  const handleQuestionEdit = (e: Database["public"]["Tables"]["questionbank"]["Row"]) => {
 
     setIsEditMode(!isEditMode);
     setCurrentEditQuestion(e);
@@ -179,20 +167,20 @@ const CreateQuestionBank: React.FC = () => {
     console.log("editing", e.id, e.question_content);
   };
   const handleQuestionDelete = async (e: QuestionBank) => {
-    const { data, error } = await supabaseClient.from<QuestionBank>("questionbank").delete().eq("id", e.id);
+    const { data, error } = await supabaseClient.from("questionbank").delete().eq("id", e.id);
     mutate([`/questions/${paperId}/${year}`]);
   };
 
   useEffect(() => {
     if (isEditMode) {
-      setValue("questionContent", currentEditQuestion?.question_content);
-      setValue("year", currentEditQuestion?.year);
-      setValue("sequence", currentEditQuestion?.sequence);
-      setValue("searchKeys", currentEditQuestion?.search_keys);
-      setValue("remark", currentEditQuestion?.remark);
+      setValue("questionContent", currentEditQuestion?.question_content!);
+      setValue("year", currentEditQuestion?.year!);
+      setValue("sequence", currentEditQuestion?.sequence!);
+      setValue("searchKeys", currentEditQuestion?.search_keys!);
+      setValue("remark", currentEditQuestion?.remark!);
     } else {
       setValue("questionContent", "");
-      setValue("year", currentEditQuestion?.year);
+      setValue("year", currentEditQuestion?.year!);
       setValue("sequence", undefined);
       setValue("searchKeys", "");
       setValue("remark", "");
@@ -212,14 +200,7 @@ const CreateQuestionBank: React.FC = () => {
       <div>
         Please login to view content
         <Button
-          _active={{
-            border: "none",
-            bg: "#dddfe2",
-            transform: "scale(0.98)",
-            borderColor: "#bec3c9",
-          }}
-          variant=" outline"
-          color="violet"
+          
           onClick={() => signUpUser("hello", "hello")}
         >
           Log In
@@ -232,7 +213,7 @@ const CreateQuestionBank: React.FC = () => {
       <Box mx={{ base: "4", md: "28", lg: "52" }}>
         <br />
         <Center>
-          <Badge colorScheme="purple" fontSize="xl">
+          <Badge fontSize="xl">
             Create Questions
           </Badge>
         </Center>
@@ -240,17 +221,17 @@ const CreateQuestionBank: React.FC = () => {
         <RadioGroup
           ml="4"
           onChange={(e) => {
-            setPaperId(undefined)
-            setYear(undefined)
+            setPaperId(undefined);
+            setYear(undefined);
             setExamId(e);
           }}
           value={examId}
         >
           <Stack direction="row">
-            <Radio size="sm" name="1" colorScheme="linkedin" value="24">
+            <Radio size="sm" name="1"  value="24">
               <Text casing="capitalize">UPSC</Text>
             </Radio>
-            <Radio size="sm" name="2" colorScheme="telegram" value="29">
+            <Radio size="sm" name="2" value="29">
               <Text casing="capitalize">UPPSC PCS</Text>
             </Radio>
           </Stack>
@@ -258,14 +239,9 @@ const CreateQuestionBank: React.FC = () => {
 
         <form onSubmit={handleSubmit(onSubmit)}>
           <FormControl m="2" isInvalid={errors.paperId as any}>
-            <FormLabel color="blue.600" htmlFor="paperId">
+            <FormLabel htmlFor="paperId">
               Exam paper
             </FormLabel>
-            {/* {errors?.paperId?.type === "required" && (
-              <Text fontSize="16px" color="#bf1650">
-                **This field is required
-              </Text>
-            )} */}
             <Select
               isDisabled={isEditMode}
               id="paperId"
@@ -293,14 +269,9 @@ const CreateQuestionBank: React.FC = () => {
           </FormControl>
 
           <FormControl m="2" isInvalid={errors.questionContent as any}>
-            <FormLabel color="blue.600" htmlFor="questionContent">
+            <FormLabel htmlFor="questionContent">
               Question content
             </FormLabel>
-            {/* {errors?.questionContent?.type === "required" && (
-              <Text fontSize="16px" color="#bf1650">
-                **This field is required
-              </Text>
-            )} */}
             <Controller
               name="questionContent"
               control={control}
@@ -329,27 +300,14 @@ const CreateQuestionBank: React.FC = () => {
             <FormErrorMessage>{errors.questionContent && errors.questionContent.message}</FormErrorMessage>
           </FormControl>
 
-          {/* <FormControl isInvalid={errors.searchKeys as any}>
-            <FormLabel color="blue.600" htmlFor="searchKeys">
-              check box
-            </FormLabel>
-            <Checkbox value="sasuke" {...register("searchKeys")}>
-              Sasuke
-            </Checkbox>
-            {errors?.searchKeys?.type === "required" && (
-              <Text fontSize="16px" color="#bf1650">
-                **This field is required
-              </Text>
-            )}
-          </FormControl> */}
 
           <HStack>
             <FormControl m="2" isInvalid={errors.year as any}>
-              <FormLabel color="blue.600" htmlFor="year">
+              <FormLabel htmlFor="year">
                 Question Year
               </FormLabel>
               {errors.year && (
-                <Text fontSize="16px" color="#bf1650">
+                <Text fontSize="16px" >
                   **Year should be from 1995 to 2021
                 </Text>
               )}
@@ -361,11 +319,11 @@ const CreateQuestionBank: React.FC = () => {
               />
             </FormControl>
             <FormControl m="2" isInvalid={errors.sequence as any}>
-              <FormLabel color="blue.600" htmlFor="sequence">
+              <FormLabel  htmlFor="sequence">
                 Question sequence
               </FormLabel>
               {errors.sequence && (
-                <Text fontSize="16px" color="#bf1650">
+                <Text fontSize="16px" >
                   **Sequence should be from 1 to 700
                 </Text>
               )}
@@ -378,17 +336,17 @@ const CreateQuestionBank: React.FC = () => {
           </HStack>
 
           <FormControl m="2">
-            <FormLabel color="blue.600" htmlFor="remark">
+            <FormLabel htmlFor="remark">
               Remark
             </FormLabel>
             {errors?.remark?.type === "required" && (
-              <Text fontSize="16px" color="#bf1650">
+              <Text fontSize="16px" >
                 **This field is required
               </Text>
             )}
             <Input {...register("remark", { required: false, maxLength: 100 })} />
           </FormControl>
-          <Button size="sm" mb="6" mt="6" colorScheme="purple" type="submit" isLoading={loading}>
+          <Button size="sm" mb="6" mt="6" type="submit" isLoading={loading}>
             {isEditMode ? "Update Question" : "Create Question"}
           </Button>
         </form>
@@ -404,7 +362,7 @@ const CreateQuestionBank: React.FC = () => {
         )}
 
         {questions && questions.length != 0 ? (
-          (questions as QuestionBank[])
+          (questions as Database["public"]["Tables"]["questionbank"]["Row"][])
             .sort((a, b) => a.sequence! - b.sequence!)
             .map((x) => {
               return (
@@ -412,7 +370,6 @@ const CreateQuestionBank: React.FC = () => {
                   <HStack>
                     <Button
                       isDisabled={isEditMode && currentEditQuestion?.id != x.id}
-                      colorScheme="teal"
                       variant="ghost"
                       leftIcon={<MdMode />}
                       size="xs"
@@ -429,9 +386,8 @@ const CreateQuestionBank: React.FC = () => {
                     ></AlertDialogExample>
                     {/* <LinkSyllabusModal questionId={x.id}></LinkSyllabusModal> */}
                   </HStack>
-                  <EditorStyle>
                     <SunEditor
-                      setContents={x.question_content}
+                      setContents={x.question_content!}
                       hideToolbar={true}
                       readOnly={true}
                       disable={true}
@@ -450,15 +406,14 @@ const CreateQuestionBank: React.FC = () => {
                       // setContents={field.value}
                       // onChange={field.onChange}
                     />
-                  </EditorStyle>
                   <HStack>
-                    <Badge color="teal" size="small">
+                    <Badge size="small">
                       {x.year}
                     </Badge>
-                    <Badge color="teal" size="small">
+                    <Badge size="small">
                       {x.remark}
                     </Badge>
-                    <Badge color="teal" size="small">
+                    <Badge size="small">
                       {x.sequence}
                     </Badge>
                   </HStack>
@@ -483,32 +438,30 @@ const CreateQuestionBank: React.FC = () => {
     const [isLoading, setIsLoading] = useState(false);
     const handleLinkSyllabusButtonClick = async (x: number) => {
       const { data, error } = await supabaseClient
-        .from<SubheadingQuestionLink>("subheadingquestionlink")
+        .from("subheadingquestionlink")
         .select(
           `
             id,
             questionbank_id,
             subheading_id,
-            heading_id
+            heading_id,created_by
           
    `
         )
         .eq("questionbank_id", x);
-      console.log("questionlink", data);
       if (data) {
-        setQlink(data);
-        console.log("qlinkmmmm", data);
+        // setQlink(data);
       }
       onOpen();
       // { refreshInterval: 1000 }
     };
     const handlelinkClick = async (questionId: number, syllabusId: number, headingId: number) => {
       setIsLoading(true);
-      const { data, error } = await supabaseClient.from<SubheadingQuestionLink>("subheadingquestionlink").insert({
+      const { data, error } = await supabaseClient.from("subheadingquestionlink").insert({
         questionbank_id: questionId,
         subheading_id: syllabusId,
         heading_id: headingId,
-        created_by: supabaseClient.auth.user()?.id,
+        created_by: profile?.id,
       });
       if (data && data[0]) {
         setQlink([...qlink, data[0]]);
@@ -520,7 +473,7 @@ const CreateQuestionBank: React.FC = () => {
     const handleunlinkClick = async (questionId: number, syllabusId: number) => {
       setIsLoading(true);
       const { data, error } = await supabaseClient
-        .from<SubheadingQuestionLink>("subheadingquestionlink")
+        .from("subheadingquestionlink")
         .delete()
         .match({ questionbank_id: questionId, subheading_id: syllabusId });
       if (data && data[0]) {
@@ -537,12 +490,7 @@ const CreateQuestionBank: React.FC = () => {
     const btnRef = React.useRef(null);
     return (
       <>
-        {/* <RadioGroup value={scrollBehavior} onChange={setScrollBehavior}>
-          <Stack direction="row">
-            <Radio value="inside">inside</Radio>
-            <Radio value="outside">outside</Radio>
-          </Stack>
-        </RadioGroup> */}
+   
 
         <Button
           mt={3}
@@ -569,7 +517,7 @@ const CreateQuestionBank: React.FC = () => {
                     <Box p="2" key={x.subheading_id}>
                       <Text as="b" fontSize="smaller">
                         {x!.main_topic!}
-                        <Text color="blue" fontSize="smaller">
+                        <Text fontSize="smaller">
                           <>
                             {"  " + x!.topic}
                             {console.log("qlink", qlink)}
@@ -586,7 +534,6 @@ const CreateQuestionBank: React.FC = () => {
                               </Button>
                             ) : (
                               <Button
-                                colorScheme="green"
                                 onClick={() => handlelinkClick(questionId, x.subheading_id, x.heading_id!)}
                                 leftIcon={<MdLink />}
                                 variant="ghost"
@@ -621,7 +568,7 @@ export default CreateQuestionBank;
 
 interface AlertdialogueProps {
   handleDelete: (e: any) => Promise<void>;
-  x: QuestionBank;
+  x: Database["public"]["Tables"]["questionbank"]["Row"];
   dialogueHeader: string;
   isDisabled: boolean;
 }
@@ -637,7 +584,6 @@ function AlertDialogExample({ handleDelete, x, dialogueHeader, isDisabled }: Ale
   return (
     <>
       <Button
-        colorScheme="red"
         isDisabled={isDisabled}
         leftIcon={<MdDelete />}
         variant="ghost"
@@ -660,7 +606,7 @@ function AlertDialogExample({ handleDelete, x, dialogueHeader, isDisabled }: Ale
               <Button ref={cancelRef} size="sm" onClick={onClose}>
                 Cancel
               </Button>
-              <Button colorScheme="red" size="sm" onClick={() => handleQuestionDelete()} ml={3}>
+              <Button  size="sm" onClick={() => handleQuestionDelete()} ml={3}>
                 Delete
               </Button>
             </AlertDialogFooter>
@@ -670,38 +616,3 @@ function AlertDialogExample({ handleDelete, x, dialogueHeader, isDisabled }: Ale
     </>
   );
 }
-
-const EditorStyle = styled.div`
-  .sun-editor {
-    border: 0px solid blue;
-  }
-
-  table {
-    border-collapse: collapse;
-    width: 100%;
-  }
-
-  th,
-  td {
-    text-align: left;
-    padding: 8px;
-    font-family: "Rock Salt", cursive;
-    padding: 20px;
-    // font-style: italic;
-    caption-side: bottom;
-    // color: #666;
-    text-align: right;
-    letter-spacing: 1px;
-    font-weight: lighter !important;
-  }
-  th {
-    font-style: italic;
-    caption-side: bottom;
-    color: #616 !important;
-    font-weight: lighter !important;
-  }
-
-  tr:nth-child(even) {
-    background-color: #f2f2f2;
-  }
-`;

@@ -1,12 +1,13 @@
-import { Box, Divider, Flex, IconButton, Link, Stack, Text } from "@chakra-ui/react";
-import { supabaseClient } from "@supabase/auth-helpers-nextjs";
+import { Box, Flex, IconButton, Link, Text } from "@chakra-ui/react";
+import { useSupabaseClient } from "@supabase/auth-helpers-react";
 import { groupBy } from "lodash";
 import React, { useEffect, useState } from "react";
-import { MdAdd, MdDelete, MdLightMode } from "react-icons/md";
+import { MdAdd, MdLightMode } from "react-icons/md";
 import { useGetSyllabusByBookId } from "../../customHookes/networkHooks";
+import { Database } from "../../lib/database";
 import { useAuthContext } from "../../state/Authcontext";
+import { NoteBook } from "../../state/NoteContext";
 import { BookResponse, BookSyllabus } from "../../types/myTypes";
-import { definitions } from "../../types/supabase";
 
 interface Props {
   book: BookResponse | undefined;
@@ -82,10 +83,7 @@ const Syllabus: React.FC<Props> = ({ book, changeParentProps }) => {
                   _hover={{cursor:"pointer"}}
                 >
                   <IconButton
-                    color={"brand.500"}
-                    variant="icong"
                     aria-label="Call Sage"
-                    fontSize="16px"
                     icon={toggle === value[0].heading_id ? <MdLightMode /> : <MdAdd />}
                   />
                   <Text align="start" as="address" color=" #FF1493" casing="capitalize" pr="1">
@@ -128,10 +126,11 @@ const Syllabus: React.FC<Props> = ({ book, changeParentProps }) => {
 export default Syllabus;
 
 export const ArticleCounter = ({ subheadingId, creatorId }: { subheadingId: number; creatorId: string }) => {
+  const supabaseClient = useSupabaseClient<Database>();
   const [count, setCount] = useState<number | undefined>(undefined);
   const getArticleCount = async () => {
     const { data, error, count } = await supabaseClient
-      .from<definitions["books_articles"]>("books_articles")
+      .from("books_articles")
       .select("*", { count: "exact", head: true })
       .match({ books_subheadings_fk: subheadingId, created_by: creatorId });
     if (count) {
@@ -144,7 +143,7 @@ export const ArticleCounter = ({ subheadingId, creatorId }: { subheadingId: numb
 
   return (
     <Flex alignItems={"center"} px="2">
-      <Text color="brand.500" as={"label" && "b"} fontSize="12px">
+      <Text as={"label" && "b"} fontSize="12px">
         {count}
       </Text>
     </Flex>

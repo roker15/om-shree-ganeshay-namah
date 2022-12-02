@@ -10,14 +10,15 @@ import {
   Flex, Text,
   useDisclosure
 } from "@chakra-ui/react";
-import { supabaseClient } from "@supabase/auth-helpers-nextjs";
+import { useSupabaseClient } from "@supabase/auth-helpers-react";
 import React, { useEffect, useState } from "react";
 import { MdSwitchRight } from "react-icons/md";
 import Sticky from "react-sticky-el";
 import { currentAffairTags } from "../../lib/constants";
+import { Database } from "../../lib/database";
 import { useAuthContext } from "../../state/Authcontext";
 import { useNoteContext } from "../../state/NoteContext";
-import { definitions } from "../../types/supabase";
+
 
 const Tags: React.FC = () => {
   const { tagsArray, setTagsArray } = useNoteContext();
@@ -57,12 +58,14 @@ const Tags: React.FC = () => {
 export default Tags;
 
 export const ArticleCounterByTag = ({ tagId, creatorId }: { tagId: number; creatorId: string }) => {
+  
+  const  supabaseClient  = useSupabaseClient<Database>();
   const [count, setCount] = useState<number | undefined>(undefined);
 
   useEffect(() => {
     const getArticleCount = async () => {
       const { data, error, count } = await supabaseClient
-        .from<definitions["books_articles"]>("books_articles")
+        .from("books_articles")
         .select("*", { count: "exact", head: true })
         .eq("created_by", creatorId)
         .contains("current_affair_tags", [tagId]);

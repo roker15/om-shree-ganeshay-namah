@@ -32,7 +32,7 @@ import {
   VStack,
   Wrap,
 } from "@chakra-ui/react";
-import { supabaseClient } from "@supabase/auth-helpers-nextjs";
+import { useSupabaseClient } from "@supabase/auth-helpers-react";
 import "katex/dist/katex.min.css";
 import React, { useState } from "react";
 import { SubmitHandler, useForm } from "react-hook-form";
@@ -44,12 +44,12 @@ import "suneditor/dist/css/suneditor.min.css"; // Import Sun Editor's CSS File
 import { useSWRConfig } from "swr";
 import { useGetUserArticles, useGetUserArticless } from "../../customHookes/networkHooks";
 import { currentAffairTags } from "../../lib/constants";
+import { Database } from "../../lib/database";
 import { elog, sentenseCase } from "../../lib/mylog";
 import { useAuthContext } from "../../state/Authcontext";
 import { useNoteContext } from "../../state/NoteContext";
-import { definitions } from "../../types/supabase";
-import { customToast } from "../CustomToast";
-import SuneditorForNotesMakingg from "../editor/SuneditorForNotesMakingg";
+import { customToast } from "../../componentv2/CustomToast";
+import SuneditorForNotesMakingg from "../../componentv2/editor/SuneditorForNotesMakingg";
 import ErrorBoundary from "../ErrorBoundary";
 
 import DeleteConfirmation from "../syllabus/DeleteConfirmation";
@@ -91,7 +91,8 @@ function CustomIconbutton(props: { handleArticleEdit: (arg0: any, arg1: boolean)
   );
 }
 
-const MyNotes: React.FC<Props> = ({ subjectId, subheadingid, notesCreator, changeParentProps, isCopyable, isEditable }) => {
+const MyNotes: React.FC<Props> = ({ subheadingid, notesCreator, changeParentProps, isCopyable, isEditable }) => {
+  const supabaseClient = useSupabaseClient<Database>();
   const { profile } = useAuthContext();
   const { data: articles, isLoading: isArticleLoading, swrError } = useGetUserArticless(subheadingid, notesCreator);
   const [isLoadingCopyButton, setIsLoadingCopyButton] = useState<boolean | undefined>(false);
@@ -101,7 +102,7 @@ const MyNotes: React.FC<Props> = ({ subjectId, subheadingid, notesCreator, chang
   const { setIsTagSearchActive, setTagsArray, tagsArray } = useNoteContext();
   // const { article, isError, isLoading } = useGetArticleById(article1);
   const deleteArticle = async (id: number): Promise<void> => {
-    const { data, error } = await supabaseClient.from<definitions["books_articles"]>("books_articles").delete().eq("id", id);
+    const { data, error } = await supabaseClient.from("books_articles").delete().eq("id", id);
     if (error) {
       elog("MyNotes->deleteArticle", error.message);
       return;
@@ -121,14 +122,14 @@ const MyNotes: React.FC<Props> = ({ subjectId, subheadingid, notesCreator, chang
     }
   };
 
-  const copyArticleToNewUser = async (x: definitions["books_articles"]) => {
+  const copyArticleToNewUser = async (x: Database["public"]["Tables"]["books_articles"]["Row"]) => {
     setIsLoadingCopyButton(true);
-    const { data, error } = await supabaseClient.from<definitions["books_articles"]>("books_articles").insert({
+    const { data, error } = await supabaseClient.from("books_articles").insert({
       books_subheadings_fk: x.books_subheadings_fk,
       article_hindi: x.article_hindi,
       article_english: x.article_english,
       article_audio_link: x.article_audio_link,
-      created_by: profile?.id,
+      created_by: profile?.id!,
       article_title: x.article_title,
       sequence: x.sequence,
       copied_from_articleid: x.id,
@@ -144,8 +145,8 @@ const MyNotes: React.FC<Props> = ({ subjectId, subheadingid, notesCreator, chang
     setIsLoadingCopyButton(false);
   };
   return (
-    <Box mt="16" >
-      <Accordion allowMultiple >
+    <Box mt="16">
+      <Accordion allowMultiple>
         {articles
           ?.sort((a, b) => a.sequence! - b.sequence!)
           .map((x) => {
@@ -154,7 +155,6 @@ const MyNotes: React.FC<Props> = ({ subjectId, subheadingid, notesCreator, chang
                 key={x.id}
                 borderTopWidth="0px"
                 borderBottomWidth="0px"
-               
                 my={x.current_affair_tags && x.current_affair_tags.length > 0 ? "6" : "2"}
               >
                 {({ isExpanded }) => (
@@ -240,16 +240,16 @@ const MyNotes: React.FC<Props> = ({ subjectId, subheadingid, notesCreator, chang
                     </Flex>
                     {isArticleCreating === "EDITING" && x.id === selectedArticleForEdit ? (
                       <ArticleForm
-                        tags={x.current_affair_tags}
-                        subjectId={subjectId}
+                        tags={x.current_affair_tags!}
                         subheadingid={subheadingid}
                         articleId={x.id}
                         articleTitle={x.article_title}
-                        sequence={x.sequence}
+                        sequence={x.sequence!}
                         formMode={"EDITING"}
                         x={setIsArticleCreating}
-                        question_year={x.question_year}
-                        question_type={x.question_type}
+                        question_year={x.question_year!}
+                        question_type={x.question_type!}
+                        subjectId={undefined}
                       ></ArticleForm>
                     ) : null}
                     <AccordionPanel pb={4} borderTopWidth="0px" borderBottomWidth="0px" px={{ base: "-0.5", lg: "4" }}>
@@ -286,12 +286,12 @@ const MyNotes: React.FC<Props> = ({ subjectId, subheadingid, notesCreator, chang
 
           {isArticleCreating === "CREATING" && subheadingid ? (
             <ArticleForm
-              subjectId={subjectId}
               subheadingid={subheadingid}
               formMode={"CREATING"}
               x={setIsArticleCreating}
               question_year={undefined}
               question_type={undefined}
+              subjectId={undefined}
             ></ArticleForm>
           ) : null}
         </Box>
@@ -368,6 +368,7 @@ const ArticleForm: React.FC<ArticleFormProps> = ({
   setParentProps,
   x,
 }) => {
+  const supabaseClient = useSupabaseClient<Database>();
   const [isLoading, setIsLoading] = useState();
   const { mutate } = useSWRConfig();
   const { profile } = useAuthContext();
@@ -392,13 +393,13 @@ const ArticleForm: React.FC<ArticleFormProps> = ({
 
   const onSubmit: SubmitHandler<Inputs> = async (d) => {
     if (formMode === "CREATING") {
-      const { data, error } = await supabaseClient.from<definitions["books_articles"]>("books_articles").insert([
+      const { data, error } = await supabaseClient.from("books_articles").insert([
         {
           article_title: d.articleTitle,
-          created_by: profile?.id,
-          books_subheadings_fk: subheadingid,
+          created_by: profile?.id!,
+          books_subheadings_fk: subheadingid!,
           sequence: d.sequence,
-          current_affair_tags: d.tags ? d.tags : [],
+          current_affair_tags: d.tags ? (d.tags as number[]) : [],
           question_type: d.questionType ? d.questionType : "NONE",
           question_year: d.question_year ? d.question_year : 0,
         },
@@ -411,14 +412,14 @@ const ArticleForm: React.FC<ArticleFormProps> = ({
 
     if (formMode === "EDITING") {
       const { data, error } = await supabaseClient
-        .from<definitions["books_articles"]>("books_articles")
+        .from("books_articles")
         .update({
           // id: articleId,
           article_title: d.articleTitle,
           // created_by: profile?.id,
           // books_subheadings_fk: subheadingid,
           sequence: d.sequence,
-          current_affair_tags: d.tags ? d.tags : [],
+          current_affair_tags: d.tags ? (d.tags as number[]) : [],
           question_type: d.questionType ? d.questionType : "NONE",
           question_year: d.question_year ? d.question_year : 0,
         })

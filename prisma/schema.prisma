@@ -1,0 +1,387 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model books {
+  id                        BigInt                     @id @default(autoincrement())
+  created_at                DateTime?                  @default(now()) @db.Timestamptz(6)
+  updated_at                DateTime?                  @default(now()) @db.Timestamptz(6)
+  book_name                 String
+  subject_fk                BigInt?
+  class_fk                  BigInt?
+  board_or_university_fk    BigInt?
+  publication_fk            BigInt?
+  colleges_fk               BigInt?
+  syllabus_owner_fk         String?                    @db.Uuid
+  moderator                 String[]                   @db.Uuid
+  books_board_or_university books_board_or_university? @relation(fields: [board_or_university_fk], references: [id], onDelete: NoAction, onUpdate: NoAction)
+  books_class               books_class?               @relation(fields: [class_fk], references: [id], onDelete: NoAction, onUpdate: NoAction)
+  colleges                  colleges?                  @relation(fields: [colleges_fk], references: [id], onDelete: NoAction, onUpdate: NoAction)
+  books_publication         books_publication?         @relation(fields: [publication_fk], references: [id], onDelete: NoAction, onUpdate: NoAction)
+  subjects                  subjects?                  @relation(fields: [subject_fk], references: [id], onDelete: NoAction, onUpdate: NoAction)
+  profiles                  profiles?                  @relation(fields: [syllabus_owner_fk], references: [id], onDelete: NoAction, onUpdate: NoAction)
+  books_headings            books_headings[]
+  moderator_request         moderator_request[]
+  questionbank              questionbank[]
+  syllabus_moderator        syllabus_moderator[]
+}
+
+model books_article_sharing {
+  id                                                   BigInt            @id @default(autoincrement())
+  created_at                                           DateTime?         @default(now()) @db.Timestamptz(6)
+  updated_at                                           DateTime?         @default(now()) @db.Timestamptz(6)
+  books_subheadings_fk                                 BigInt
+  shared_by                                            String?           @db.Uuid
+  shared_with                                          String?           @db.Uuid
+  owned_by                                             String            @db.Uuid
+  ispublic                                             Boolean?          @default(false)
+  allow_copy                                           Boolean?          @default(false)
+  allow_edit                                           Boolean?          @default(false)
+  sharedwith_email                                     String?
+  ownedby_email                                        String?
+  ownedby_name                                         String?
+  ownedby_avatar                                       String?
+  sharedwith_name                                      String?
+  sharedwith_avatar                                    String?
+  books_subheadings                                    books_subheadings @relation(fields: [books_subheadings_fk], references: [id], onDelete: NoAction, onUpdate: NoAction)
+  profiles_books_article_sharing_owned_byToprofiles    profiles          @relation("books_article_sharing_owned_byToprofiles", fields: [owned_by], references: [id], onDelete: NoAction, onUpdate: NoAction)
+  profiles_books_article_sharing_shared_byToprofiles   profiles?         @relation("books_article_sharing_shared_byToprofiles", fields: [shared_by], references: [id], onDelete: NoAction, onUpdate: NoAction)
+  profiles_books_article_sharing_shared_withToprofiles profiles?         @relation("books_article_sharing_shared_withToprofiles", fields: [shared_with], references: [id], onDelete: NoAction, onUpdate: NoAction)
+}
+
+model books_articles {
+  id                    BigInt            @id(map: "books_artticles_pkey") @default(autoincrement())
+  created_at            DateTime?         @default(now()) @db.Timestamptz(6)
+  updated_at            DateTime?         @default(now()) @db.Timestamptz(6)
+  books_subheadings_fk  BigInt
+  article_hindi         String?
+  article_english       String?
+  article_audio_link    String?
+  created_by            String            @db.Uuid
+  article_title         String
+  sequence              BigInt?
+  copied_from_userid    String?           @db.Uuid
+  copied_from_articleid BigInt?
+  current_affair_tags   Int[]             @db.SmallInt
+  question_type         String?
+  question_year         Int?
+  books_subheadings     books_subheadings @relation(fields: [books_subheadings_fk], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "books_artticles_books_subheadings_fk_fkey")
+  profiles              profiles          @relation(fields: [created_by], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "books_artticles_created_by_fkey")
+}
+
+model books_board_or_university {
+  id         BigInt    @id(map: "board_or_university_pkey") @default(autoincrement())
+  created_at DateTime? @default(now()) @db.Timestamptz(6)
+  updated_at DateTime? @default(now()) @db.Timestamptz(6)
+  name       String
+  books      books[]
+}
+
+model books_class {
+  id         BigInt    @id(map: "class_pkey") @default(autoincrement())
+  created_at DateTime? @default(now()) @db.Timestamptz(6)
+  updated_at DateTime? @default(now()) @db.Timestamptz(6)
+  class      String
+  books      books[]
+}
+
+model books_headings {
+  id                BigInt              @id @default(autoincrement())
+  created_at        DateTime?           @default(now()) @db.Timestamptz(6)
+  updated_at        DateTime?           @default(now()) @db.Timestamptz(6)
+  heading           String?
+  books_fk          BigInt?
+  sequence          BigInt?
+  books             books?              @relation(fields: [books_fk], references: [id], onDelete: NoAction, onUpdate: NoAction)
+  books_subheadings books_subheadings[]
+}
+
+model books_publication {
+  id               BigInt    @id(map: "publication_pkey") @default(autoincrement())
+  created_at       DateTime? @default(now()) @db.Timestamptz(6)
+  updated_at       DateTime? @default(now()) @db.Timestamptz(6)
+  publication_name String
+  books            books[]
+}
+
+model books_subheadings {
+  id                    BigInt                  @id @default(autoincrement())
+  created_at            DateTime?               @default(now()) @db.Timestamptz(6)
+  updated_at            DateTime?               @default(now()) @db.Timestamptz(6)
+  subheading            String?
+  books_headings_fk     BigInt
+  sequence              BigInt?
+  books_headings        books_headings          @relation(fields: [books_headings_fk], references: [id], onDelete: NoAction, onUpdate: NoAction)
+  books_article_sharing books_article_sharing[]
+  books_articles        books_articles[]
+}
+
+model countries {
+  id         BigInt      @id @default(autoincrement())
+  name       String?
+  iso2       String
+  iso3       String?
+  local_name String?
+  continent  continents?
+}
+
+model current_affair {
+  id                      BigInt                    @id @default(autoincrement())
+  created_at              DateTime?                 @default(now()) @db.Timestamptz(6)
+  update_at               DateTime?                 @default(now()) @db.Timestamptz(6)
+  name                    String
+  current_affair_headings current_affair_headings[]
+}
+
+model current_affair_headings {
+  id                         BigInt                       @id(map: "current_affairs_headings_pkey") @default(autoincrement())
+  created_at                 DateTime?                    @default(now()) @db.Timestamptz(6)
+  updated_at                 DateTime?                    @default(now()) @db.Timestamptz(6)
+  heading                    String?
+  current_affair_fk          BigInt?
+  sequence                   BigInt?
+  current_affair             current_affair?              @relation(fields: [current_affair_fk], references: [id], onDelete: NoAction, onUpdate: NoAction)
+  current_affair_subheadings current_affair_subheadings[]
+}
+
+model current_affair_subheadings {
+  id                         BigInt                  @id @default(autoincrement())
+  created_at                 DateTime?               @default(now()) @db.Timestamptz(6)
+  updated_at                 DateTime?               @default(now()) @db.Timestamptz(6)
+  subheading                 String?
+  current_affair_headings_fk BigInt
+  sequence                   BigInt?
+  current_affair_headings    current_affair_headings @relation(fields: [current_affair_headings_fk], references: [id], onDelete: NoAction, onUpdate: NoAction)
+}
+
+model current_affair_tag {
+  id         BigInt    @id @default(autoincrement())
+  created_at DateTime? @default(now()) @db.Timestamptz(6)
+  tag_name   String
+}
+
+model exam {
+  id                BigInt    @id(map: "exams_pkey") @default(autoincrement())
+  created_at        DateTime? @default(now()) @db.Timestamptz(6)
+  updated_at        DateTime? @default(now()) @db.Timestamptz(6)
+  exame_name        String?   @db.VarChar
+  state_or_central  String?   @db.VarChar
+  regular_or_random String?   @db.VarChar
+  job_or_entrance   String?   @db.VarChar
+  papers            papers[]
+}
+
+model headings {
+  id                     BigInt                   @id(map: "mainTopics_pkey") @default(autoincrement())
+  created_at             DateTime?                @default(now()) @db.Timestamptz(6)
+  updated_at             DateTime?                @default(now()) @db.Timestamptz(6)
+  main_topic             String?
+  paper_id               BigInt?
+  sequence               BigInt?
+  papers                 papers?                  @relation(fields: [paper_id], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "mainTopics_paper_id_fkey")
+  subheadingquestionlink subheadingquestionlink[]
+  subheadings            subheadings[]
+}
+
+model papers {
+  id                   BigInt             @id @default(autoincrement())
+  created_at           DateTime?          @default(now()) @db.Timestamptz(6)
+  updated_at           DateTime?          @default(now()) @db.Timestamptz(6)
+  paper_name           String?
+  is_multiple_subjects Boolean?           @default(false)
+  exam_id              BigInt?
+  exam                 exam?              @relation(fields: [exam_id], references: [id], onDelete: NoAction, onUpdate: NoAction)
+  headings             headings[]
+  questionbank         questionbank[]
+  questionbank_old     questionbank_old[]
+}
+
+model posts {
+  id            BigInt       @id @default(autoincrement())
+  created_at    DateTime?    @default(now()) @db.Timestamptz(6)
+  updated_at    DateTime?    @default(now()) @db.Timestamptz(6)
+  post          String?
+  subheading_id BigInt?
+  created_by    String?      @db.Uuid
+  profiles      profiles?    @relation(fields: [created_by], references: [id], onDelete: NoAction, onUpdate: NoAction)
+  subheadings   subheadings? @relation(fields: [subheading_id], references: [id], onDelete: NoAction, onUpdate: NoAction)
+  sharedpost    sharedpost[]
+}
+
+model profiles {
+  id                                                                String                   @id @db.Uuid
+  updated_at                                                        DateTime?                @default(now()) @db.Timestamptz(6)
+  username                                                          String?
+  avatar_url                                                        String?
+  website                                                           String?
+  role                                                              String?
+  email                                                             String?
+  last_login                                                        DateTime?                @db.Timestamptz(6)
+  books                                                             books[]
+  books_article_sharing_books_article_sharing_owned_byToprofiles    books_article_sharing[]  @relation("books_article_sharing_owned_byToprofiles")
+  books_article_sharing_books_article_sharing_shared_byToprofiles   books_article_sharing[]  @relation("books_article_sharing_shared_byToprofiles")
+  books_article_sharing_books_article_sharing_shared_withToprofiles books_article_sharing[]  @relation("books_article_sharing_shared_withToprofiles")
+  books_articles                                                    books_articles[]
+  posts                                                             posts[]
+  question_answer                                                   question_answer[]
+  questionbank                                                      questionbank[]
+  questionbank_old                                                  questionbank_old[]
+  sharedpost                                                        sharedpost[]
+  subheadingquestionlink                                            subheadingquestionlink[]
+  syllabus_moderator                                                syllabus_moderator[]
+}
+
+model question_answer {
+  id             BigInt        @id @default(autoincrement())
+  created_at     DateTime?     @default(now()) @db.Timestamptz(6)
+  question_id    BigInt?
+  answered_by    String?       @db.Uuid
+  answer_hindi   String?
+  answer_english String?
+  profiles       profiles?     @relation(fields: [answered_by], references: [id], onDelete: NoAction, onUpdate: NoAction)
+  questionbank   questionbank? @relation(fields: [question_id], references: [id], onDelete: NoAction, onUpdate: NoAction)
+}
+
+model questionbank {
+  id                     BigInt                   @id(map: "questionbank_duplicate_pkey") @default(autoincrement())
+  created_at             DateTime?                @default(now()) @db.Timestamptz(6)
+  updated_at             DateTime?                @default(now()) @db.Timestamptz(6)
+  sequence               BigInt?
+  question_content       String?
+  search_keys            String?
+  year                   BigInt?
+  paper_id               BigInt?
+  remark                 String?
+  created_by             String?                  @db.Uuid
+  paper_id_new           BigInt?
+  profiles               profiles?                @relation(fields: [created_by], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "questionbank_duplicate_created_by_fkey")
+  papers                 papers?                  @relation(fields: [paper_id], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "questionbank_duplicate_paper_id_fkey")
+  books                  books?                   @relation(fields: [paper_id_new], references: [id], onDelete: NoAction, onUpdate: NoAction)
+  question_answer        question_answer[]
+  subheadingquestionlink subheadingquestionlink[]
+}
+
+model questionbank_old {
+  id               BigInt    @id(map: "questionbank_pkey") @default(autoincrement())
+  created_at       DateTime? @default(now()) @db.Timestamptz(6)
+  updated_at       DateTime? @default(now()) @db.Timestamptz(6)
+  sequence         BigInt?
+  question_content String?
+  search_keys      String?
+  year             BigInt?
+  paper_id         BigInt?
+  remark           String?
+  created_by       String?   @db.Uuid
+  profiles         profiles? @relation(fields: [created_by], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "questionbank_created_by_fkey")
+  papers           papers?   @relation(fields: [paper_id], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "questionbank_paper_id_fkey")
+}
+
+model sharedpost {
+  id            BigInt       @id @default(autoincrement())
+  created_at    DateTime?    @default(now()) @db.Timestamptz(6)
+  updated_at    DateTime?    @default(now()) @db.Timestamptz(6)
+  post_id       BigInt?
+  shared_with   String?      @db.Uuid
+  subheading_id BigInt?
+  is_public     Boolean?
+  posts         posts?       @relation(fields: [post_id], references: [id], onDelete: NoAction, onUpdate: NoAction)
+  profiles      profiles?    @relation(fields: [shared_with], references: [id], onDelete: NoAction, onUpdate: NoAction)
+  subheadings   subheadings? @relation(fields: [subheading_id], references: [id], onDelete: NoAction, onUpdate: NoAction)
+}
+
+model subheadingquestionlink {
+  id              BigInt        @id(map: "syllabusquestionlink_pkey") @default(autoincrement())
+  created_at      DateTime?     @default(now()) @db.Timestamptz(6)
+  updated_at      DateTime?     @default(now()) @db.Timestamptz(6)
+  created_by      String?       @db.Uuid
+  subheading_id   BigInt?
+  questionbank_id BigInt?
+  heading_id      BigInt?
+  headings        headings?     @relation(fields: [heading_id], references: [id], onDelete: NoAction, onUpdate: NoAction)
+  questionbank    questionbank? @relation(fields: [questionbank_id], references: [id], onDelete: NoAction, onUpdate: NoAction)
+  profiles        profiles?     @relation(fields: [created_by], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "syllabusquestionlink_created_by_fkey")
+  subheadings     subheadings?  @relation(fields: [subheading_id], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "syllabusquestionlink_subheading_id_fkey")
+}
+
+model subheadings {
+  id                     BigInt                   @id(map: "topics_pkey") @default(autoincrement())
+  created_at             DateTime?                @default(now()) @db.Timestamptz(6)
+  updated_at             DateTime?                @default(now()) @db.Timestamptz(6)
+  topic                  String?
+  main_topic_id          BigInt?
+  sequence               BigInt?
+  headings               headings?                @relation(fields: [main_topic_id], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "topics_main_topic_id_fkey")
+  posts                  posts[]
+  sharedpost             sharedpost[]
+  subheadingquestionlink subheadingquestionlink[]
+}
+
+model subjects {
+  id           BigInt    @id @default(autoincrement())
+  created_at   DateTime? @default(now()) @db.Timestamptz(6)
+  updated_at   DateTime? @default(now()) @db.Timestamptz(6)
+  subject_name String
+  books        books[]
+}
+
+model tree {
+  id     Int                   @id @default(autoincrement())
+  letter String?               @db.Char(1)
+  path   Unsupported("ltree")?
+
+  @@index([path], type: Gist)
+}
+
+model userfiles {
+  id         String    @id @db.Uuid
+  created_at DateTime? @default(now()) @db.Timestamptz(6)
+  url        String?
+}
+
+model colleges {
+  id           BigInt    @id @default(autoincrement())
+  created_at   DateTime? @default(now()) @db.Timestamptz(6)
+  college_name String?
+  books        books[]
+}
+
+model syllabus_moderator {
+  id           BigInt    @id @default(autoincrement())
+  created_at   DateTime? @default(now()) @db.Timestamptz(6)
+  book_fk      BigInt
+  moderator_fk String?   @db.Uuid
+  is_active    Boolean   @default(false)
+  mobile       String?
+  books        books     @relation(fields: [book_fk], references: [id], onDelete: NoAction, onUpdate: NoAction)
+  profiles     profiles? @relation(fields: [moderator_fk], references: [id], onDelete: NoAction, onUpdate: NoAction)
+}
+
+model moderator_request {
+  id         BigInt    @id @default(autoincrement())
+  created_at DateTime? @default(now()) @db.Timestamptz(6)
+  user_fk    BigInt?
+  book_fk    BigInt?
+  mobile     String?
+  books      books?    @relation(fields: [book_fk], references: [id], onDelete: NoAction, onUpdate: NoAction)
+}
+
+enum continents {
+  Africa
+  Antarctica
+  Asia
+  Europe
+  Oceania
+  North_America @map("North America")
+  South_America @map("South America")
+}
+
+enum mood {
+  sad
+  ok
+  happy
+}

@@ -3,17 +3,17 @@ import katex from "katex";
 import "katex/dist/katex.min.css";
 import React, { useEffect, useRef } from "react";
 import { BASE_URL, colors, SunEditor, sunEditorButtonList, sunEditorfontList } from "../../lib/constants";
-import { definitions } from "../../types/supabase";
 
 import { customToast } from "../CustomToast";
 // import SunEditor from "suneditor-react";
 import "suneditor/dist/css/suneditor.min.css"; // Import Sun Editor's CSS File
 // import SunEditor from "suneditor-react";
 import { StringOrNumber } from "@chakra-ui/utils";
-import { supabaseClient } from "@supabase/auth-helpers-nextjs";
 import styled from "styled-components";
 import SunEditorCore from "suneditor/src/lib/core";
 import { useGetArticleById } from "../../customHookes/networkHooks";
+import { Database } from "../../lib/database";
+import { useSupabaseClient } from "@supabase/auth-helpers-react";
 
 type SuneditorForNotesMakingProps = {
   article1: number; //definitions["books_articles"];
@@ -26,6 +26,7 @@ const SuneditorForNotesMaking: React.FunctionComponent<SuneditorForNotesMakingPr
   language,
   isEditable,
 }) => {
+  const supabaseClient = useSupabaseClient<Database>();
   const [editorMode, setEditorMode] = React.useState("READ");
 
   const [fontSize, setFontSize] = React.useState("font-family: arial; font-size: 16px;");
@@ -46,16 +47,16 @@ const SuneditorForNotesMaking: React.FunctionComponent<SuneditorForNotesMakingPr
 
   const updateArticleInDatabase = async (newcontent: string | undefined) => {
     const { data, error } = await supabaseClient
-      .from<definitions["books_articles"]>("books_articles")
+      .from("books_articles")
       .update(language === "ENGLISH" ? { article_english: newcontent } : { article_hindi: newcontent })
       .eq("id", article!.id);
     if (error) {
       customToast({ title: "Article not updated error occurred  " + error.message, status: "error", isUpdating: false });
       return;
     }
-    if (data) {
+    // if (data) {
       customToast({ title: "Updated...", status: "success", isUpdating: true });
-    }
+    // }
   };
 
   return (
@@ -177,7 +178,7 @@ interface editorProps {
   fontSize: string | undefined;
   editorMode: string;
   language: "HINDI" | "ENGLISH";
-  article: definitions["books_articles"] | undefined;
+  article: Database["public"]["Tables"]["books_articles"]["Row"] | undefined;
   // handleOnChange: ((content: string) => void) | undefined;
   updateArticleInDatabase: (arg0: string) => void;
 }
@@ -196,7 +197,7 @@ function Editor(props: editorProps): JSX.Element {
         getSunEditorInstance={props.getSunEditorInstance}
         setDefaultStyle={props.fontSize}
         hideToolbar={props.editorMode === "READ" ? true : false}
-        defaultValue={props.language === "ENGLISH" ? props.article.article_english : props.article.article_hindi}
+        defaultValue={props.language === "ENGLISH" ? props.article.article_english !: props.article.article_hindi!}
         // setContents={props.language === "ENGLISH" ? props.article.article_english : props.article.article_hindi} //cause blank editor to render first and then put content, so creates flickering effect . so move to defaultValue
         readOnly={props.editorMode === "READ" ? true : false}
         autoFocus={false} // disable={editorMode === "READ" ? true : false}

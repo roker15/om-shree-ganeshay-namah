@@ -5,10 +5,10 @@ import { useEffect } from "react";
 import { FaTelegram, FaWhatsapp } from "react-icons/fa";
 import { MdSettings } from "react-icons/md";
 import { BASE_URL } from "../../lib/constants";
-import { LoginCard } from "../LoginCard";
+import { LoginCard } from "../../componentv2/LoginCard";
 import SelectSyllabus from "./SelectSyllabus";
 export default function CallToActionWithVideo() {
-  const { user, error } = useUser();
+  const user = useUser();
 
   const whatsappuri = useBreakpointValue(
     {
@@ -45,13 +45,7 @@ export default function CallToActionWithVideo() {
         </Flex>
       )}
       <Heading
-        fontWeight={"normal"}
-        fontSize={{ base: "xl", sm: "2xl", lg: "xl" }}
-        bg="gray.100"
-        p="4"
-        mt="2"
-        color="gray.600"
-        borderRadius={"base"}
+        fontSize={{ base: "lg", sm: "xl", lg: "xl" }}
       >
         <Text as={"span"}></Text>Jionote is an{" "}
         <Text as="span" fontWeight="bold">
@@ -80,7 +74,7 @@ export default function CallToActionWithVideo() {
         <SelectSyllabus />
         <br />
         <br />
-        <Text color={"gray.600"}>7000+ UPSC aspirants, 25000+ students using Jionote</Text>
+        <Text >7000+ UPSC aspirants, 25000+ students using Jionote</Text>
         {/* <Box>
           <Flex
             alignItems={"center"}

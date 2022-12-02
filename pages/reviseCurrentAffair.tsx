@@ -4,14 +4,14 @@ import { useUser } from "@supabase/auth-helpers-react";
 import router from "next/router";
 import React, { useEffect, useState } from "react";
 import ManageCurrentAffair from "../components/CurrentAffair/ManageCurrentAffair";
-import { LoginCard } from "../components/LoginCard";
+import { LoginCard } from "../componentv2/LoginCard";
 import LayoutWithTopNavbar from "../layout/LayoutWithTopNavbar";
 import { BASE_URL } from "../lib/constants";
 import { BookResponse } from "../types/myTypes";
 import PageWithLayoutType from "../types/pageWithLayout";
 
 const ReviseCurrentAffair: React.FunctionComponent = () => {
-  const { user, error } = useUser();
+  const user = useUser();
   const [book, setBook] = useState<BookResponse | undefined>(undefined);
   const ROUTE_POST_ID = "/notes/[bookid]";
   const navigateTo = (bookid: string) => {
