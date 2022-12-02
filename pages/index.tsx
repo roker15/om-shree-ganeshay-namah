@@ -9,6 +9,7 @@ import {
   Button,
   Center,
   Checkbox,
+  Container,
   Flex,
   FormControl,
   FormErrorMessage,
@@ -45,6 +46,7 @@ import { CustomAlert } from "../componentv2/CustomAlert";
 import { DeleteAlert } from "../componentv2/DeleteAlert";
 import SuneditorForNotesMakingg from "../componentv2/editor/SuneditorForNotesMakingg";
 import LandingPageCurrentAffairs from "../componentv2/LandingPageCurrentAffairs";
+import NotesSearchResult from "../componentv2/NotesSearchResult";
 import NotesSharing from "../componentv2/NotesSharing";
 import SharedNotesPanel from "../componentv2/SharedNotesPanel";
 import { useGetArticlesbyUserandSubheading, useGetSyllabusByBookId } from "../customHookes/apiHooks";
@@ -59,10 +61,17 @@ import { ApiArticleTitle } from "./api/prisma/posts/getarticlesbyuserandsubheadi
 import { Data_headings, Data_subheadings } from "./api/prisma/syllabus/syllabus";
 // import { GotoQuestion } from "..";
 const Notes: React.FC = () => {
-  const { book, selectedSubheading, setNotesCreator, notesCreator } = useNotesContextNew();
+  const { book, selectedSubheading, setNotesCreator, notesCreator, searchText } = useNotesContextNew();
   const changeContextNotesCreator = (id: string, name: string) => {
     setNotesCreator({ id: id, name: name });
   };
+  if (searchText) {
+    return (
+      <Container maxW="5xl">
+        <NotesSearchResult searchKeys={searchText}  />
+      </Container>
+    );
+  }
   return (
     <Box>
       {!book && (
@@ -193,8 +202,8 @@ const NotesContainer = () => {
           <Text casing="capitalize" fontSize="large" fontFamily={fontPrimary} fontWeight="bold" color={colorPrimary}>
             {selectedSubheading.name}
           </Text>
-          
-          <NotesSharing subheadingId={selectedSubheading.id!}/>
+
+          <NotesSharing subheadingId={selectedSubheading.id!} />
         </Center>
       )}
       {selectedSubheading && (
@@ -257,7 +266,7 @@ export const NoteList = (props: {
             .map((x) => (
               <HStack key={x.id} w="full" alignItems="baseline">
                 <NotesContextMenu article={x} onChangeCallback={props.onChangeCallback} mutate={mutate} />
-                <AccordionItem w="full"  border="none">
+                <AccordionItem w="full" border="none">
                   {({ isExpanded }) => (
                     <Box key={x.id}>
                       <Flex alignItems="left">
@@ -306,7 +315,7 @@ export const NoteList = (props: {
   );
 };
 
-const NotesContextMenu = (props: {
+export const NotesContextMenu = (props: {
   mutate: any;
   article: ApiArticleTitle | undefined;
   onChangeCallback: (x: ApiArticleTitle | undefined) => void;

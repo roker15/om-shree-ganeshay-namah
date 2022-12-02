@@ -18,6 +18,7 @@ import {
   MenuDivider,
   MenuItem,
   MenuList,
+  Spacer,
   Stack,
   StackDivider,
   Text,
@@ -48,7 +49,7 @@ export default function TopNavbar({ children }: { children: ReactNode }) {
     // finalize
     <Box>
       <MobileNav onOpen={onOpen} />
-      <Box p="2">{children}</Box>
+      <Box p={{ base: "none", lg: "2" }}>{children}</Box>
     </Box>
   );
 }
@@ -63,13 +64,13 @@ const MobileNav = ({ onOpen, ...rest }: MobileProps) => {
   return (
     <Flex
       // ml={{ base: 10, md: 60 }}
-      px={{ base: "1", md: 4 }}
+      // px={{ base: "1", md: 4 }}
       height="32"
       alignItems="center"
       top={"0"}
       shadow={"md"}
-      w="full"
-      alignSelf={"flex-start"}
+      // w="full"
+      // alignSelf={"flex-start"}
       justifyContent={{ base: "space-between", md: "flex" }}
       {...rest}
     >
@@ -91,71 +92,20 @@ const MobileNav = ({ onOpen, ...rest }: MobileProps) => {
           <Image loading="eager" src="/logo-blue.png" alt="Logo" w="90px" />
         </LinkBox>
       </HStack>
-      <Box display={{ base: "none", md: "block" }}>
+      <Flex display={{ base: "none", md: "flex" }} placeSelf="center" >
         {/* <GotoQuestion /> */}
         <BookFilterForNotesMaking />
-      </Box>
+      </Flex>
       {/* <Box display={{ base: "none", sm: "initial" }}> */}
       {/* </Box> */}
       <Grid h="full" templateRows="repeat(3, 1fr)">
         <GridItem rowStart={2}>
-          <HStack spacing={{ base: "0", md: "6" }}>
-            {!profile ? (
-              <HStack>{JoinTelegram}</HStack>
-            ) : (
-              <Flex border="0px" alignItems={"center"}>
-                {JoinTelegram}
-                <Menu boundary="clippingParents">
-                  <MenuButton border="0px" py={2} transition="all 0.3s" _focus={{ boxShadow: "none" }}>
-                    <HStack>
-                      {!profile ? (
-                        <Avatar size={"sm"} src="https://bit.ly/broken-link" />
-                      ) : (
-                        <Avatar
-                          size={"sm"}
-                          src={
-                            profile?.avatar_url! // change this to url from database avatar
-                          }
-                        />
-                      )}
-
-                      <VStack display={{ base: "none", md: "flex" }} alignItems="flex-start" spacing="1px" ml="2">
-                        {profile ? <Text fontSize="sm">{profile?.username}</Text> : null}
-                        <Text fontSize="xs">{/* Admin */}</Text>
-                      </VStack>
-                      <Box display={{ base: "none", md: "flex" }}>
-                        <FiChevronDown />
-                      </Box>
-                    </HStack>
-                  </MenuButton>
-                  <MenuList bg={"gray.50"}>
-                    <Text pl="4">{profile.username}</Text>
-                    <br />
-                    <br />
-                    <br />
-                    <MenuItem border="0px">Profile</MenuItem>
-                    <MenuItem border="0px">Settings</MenuItem>
-                    {profile ? (
-                      <>
-                        {" "}
-                        <MenuDivider />
-                        <MenuItem border="0px" onClick={() => signOut("vv")}>
-                          Sign out
-                        </MenuItem>
-                      </>
-                    ) : (
-                      ""
-                    )}
-                  </MenuList>
-                </Menu>
-              </Flex>
-            )}
-          </HStack>
+          <HStack spacing={{ base: "0", md: "6" }}></HStack>
         </GridItem>
         <GridItem rowStart={3}>
-          <Flex align={"end"} justifyContent="end" h="full" pb="1.5">
+          <Flex align={"end"} justifyContent="end" h="full" p="1.5">
+            {JoinTelegram}
             <RequestDrawer buttonType={"md"} />
-            <CustomMenu />
           </Flex>
         </GridItem>
       </Grid>

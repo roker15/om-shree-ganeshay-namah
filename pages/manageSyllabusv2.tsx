@@ -1004,10 +1004,10 @@ export const SearchBox = (props: { placeholder: string; changeValueCallback: (x:
   };
 
   return (
-    <Container px="-0.5" w="2xl">
+    <Container px="-0.5" maxW="2xl">
       <form onSubmit={handleSubmit}>
-        <InputGroup>
-          <Input value={value} onChange={(event) => setValue(event.target.value)} placeholder={props.placeholder} />
+        <InputGroup >
+          <Input size="md" bg= "brand.50" focusBorderColor="brand.50" borderRadius="full" value={value} onChange={(event) => setValue(event.target.value)} placeholder={props.placeholder} />
 
           <InputRightElement>
             <Search2Icon onClick={() => handleSubmit()} _hover={{ cursor: "pointer" }} />

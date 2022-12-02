@@ -3,6 +3,7 @@ import router from "next/router";
 import React, { useEffect, useState } from "react";
 import { useGetBooks, useGetColleges, useGetCollegesCourses, useGetPersonalCourses } from "../customHookes/networkHooks";
 import { colorPrimary } from "../lib/constants";
+import { SearchBox } from "../pages/manageSyllabusv2";
 import { useAuthContext } from "../state/Authcontext";
 import { BookCtx, useNotesContextNew } from "../state/NotesContextNew";
 import { BookResponse } from "../types/myTypes";
@@ -14,7 +15,7 @@ const BookFilterForMangeSyllabus = () => {
   const [selectedCourse, setselectedCourse] = useState<BookCtx | undefined>(undefined);
   // const { setBookResponse, book, setDisplayMode, setCategory: setCat } = useSyllabusContext();
   const { profile } = useAuthContext();
-  const { setBook, setSelectedSubheading } = useNotesContextNew();
+  const { setBook, setSelectedSubheading, setSearchText, searchText } = useNotesContextNew();
 
   const changeCategory = (category: string) => {
     setCategory(category);
@@ -23,10 +24,12 @@ const BookFilterForMangeSyllabus = () => {
   const handleSyllabusChange = (book: BookCtx) => {
     setBook(book);
     setSelectedSubheading(undefined);
+    setSearchText(undefined)
   };
-
+  
   return (
-    <VStack px="2" height="32" _hover={{ color: colorPrimary, bg: "brand.100",transition:"1s" }}>
+    <VStack px="2" pt="0.5" height="32" _hover={{ color: colorPrimary, bg: "brand.100", transition: "1s" }}>
+      <SearchBox placeholder={"Search notes by typing keywords"} changeValueCallback={setSearchText} />
       <Categories category={category} onChangeCallback={changeCategory} />
       {category === "8" ? (
         <Stack direction={"row"}>
@@ -42,15 +45,6 @@ const BookFilterForMangeSyllabus = () => {
       ) : category === "9" ? (
         <>
           <PersonalSyllabus onChangeCallback={handleSyllabusChange} />
-          {/* {profile && (
-            <Button
-              onClick={() => {
-                setDisplayMode("PERSONAL_COURSE");
-              }}
-            >
-              Add New
-            </Button>
-          )} */}
         </>
       ) : (
         <BookFilterNew onChangeCallback={handleSyllabusChange} category={category} />
@@ -87,7 +81,9 @@ const Categories = (props: ICategory) => {
           {categories.map((x) => {
             return (
               <Radio key={x.id} value={x.id} colorScheme="gray" borderColor="gray.500">
-                <Text casing="capitalize" fontWeight="black">{x.name}</Text>
+                <Text casing="capitalize" fontWeight="black">
+                  {x.name}
+                </Text>
               </Radio>
             );
           })}

@@ -1,18 +1,17 @@
 import { ChakraProvider } from "@chakra-ui/react";
 import Head from "next/head";
-import React, { useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import ReactGA from "react-ga";
 import { AuthProvider } from "../state/Authcontext";
 import "../styles/globals.css";
-import PageWithLayoutType from "../types/pageWithLayout";
 import { theme } from "../theme/theme";
-import { NoteContextWrapper } from "../state/NoteContext";
+import PageWithLayoutType from "../types/pageWithLayout";
 // import { SessionContextProvider } from "@supabase/auth-helpers-react";
-import { Database } from "../lib/database";
 import { createBrowserSupabaseClient } from "@supabase/auth-helpers-nextjs";
 import { SessionContextProvider } from "@supabase/auth-helpers-react";
-import { SyllabusContextProviderWrapper } from "../state/SyllabusContext";
+import { Database } from "../lib/database";
 import { NotesContextNewWrapper } from "../state/NotesContextNew";
+import { SyllabusContextProviderWrapper } from "../state/SyllabusContext";
 type AppLayoutProps = {
   Component: PageWithLayoutType;
   pageProps: any;

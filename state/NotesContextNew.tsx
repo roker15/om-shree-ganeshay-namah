@@ -18,6 +18,8 @@ interface State {
   setBook: Dispatch<SetStateAction<BookCtx | undefined>>;
   notesCreator: NotesCreatorCtx | undefined;
   setNotesCreator: Dispatch<SetStateAction<NotesCreatorCtx | undefined>>;
+  searchText: string | undefined;
+  setSearchText: Dispatch<SetStateAction<string | undefined>>;
 }
 
 const NotesContextNew = createContext<State>({} as State);
@@ -27,6 +29,7 @@ export function NotesContextNewWrapper({ children }: { children: ReactNode }) {
   const [book, setBook] = useState<BookCtx | undefined>(undefined);
   const [selectedSubheading, setSelectedSubheading] = useState<SubheadingCtx | undefined>(undefined);
   const [notesCreator, setNotesCreator] = useState<NotesCreatorCtx | undefined>(undefined);
+  const [searchText, setSearchText] = useState<string | undefined>(undefined);
   let sharedState: State = {
     /* whatever you want */
     book,
@@ -35,6 +38,8 @@ export function NotesContextNewWrapper({ children }: { children: ReactNode }) {
     setSelectedSubheading,
     notesCreator,
     setNotesCreator,
+    searchText,
+    setSearchText
   };
   //return provider
   return <NotesContextNew.Provider value={sharedState}>{children}</NotesContextNew.Provider>;

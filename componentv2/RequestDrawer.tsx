@@ -62,6 +62,8 @@ const RequestDrawer = (props: { buttonType: "xs" | "md" | "icon" }) => {
         <DrawerContent>
           <DrawerCloseButton />
           <DrawerHeader borderBottomWidth="1px">Request us Anything</DrawerHeader>
+          <br/>
+          <br/>
           <DrawerBody>
             <form onSubmit={handleSubmit(onSubmit)}>
               <Stack spacing="24px">
@@ -110,8 +112,8 @@ const RequestDrawer = (props: { buttonType: "xs" | "md" | "icon" }) => {
 };
 const ButtonSmall = (props: { onClick: () => void }) => {
   return (
-    <Button size="md" colorScheme="gray" variant="solid" onClick={() => props.onClick()}>
-      Ask Anything
+    <Button size="sm" colorScheme="pink" variant="solid" onClick={() => props.onClick()}>
+      Tell us what you want 
     </Button>
   );
 };
