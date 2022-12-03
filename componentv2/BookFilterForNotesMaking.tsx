@@ -3,7 +3,7 @@ import router from "next/router";
 import React, { useEffect, useState } from "react";
 import { useGetBooks, useGetColleges, useGetCollegesCourses, useGetPersonalCourses } from "../customHookes/networkHooks";
 import { colorPrimary } from "../lib/constants";
-import { SearchBox } from "../pages/manageSyllabusv2";
+import { SearchBox } from "../pages/manageSyllabusv";
 import { useAuthContext } from "../state/Authcontext";
 import { BookCtx, useNotesContextNew } from "../state/NotesContextNew";
 import { BookResponse } from "../types/myTypes";
