@@ -69,7 +69,7 @@ const BookFilterForMangeSyllabus = () => {
       ) : (
         <BookFilterNew onChangeCallback={setBook} category={category} />
       )}
-      <RequestDrawer buttonType={"md"}/>
+      {/* <RequestDrawer buttonType={"md"}/> */}
     </VStack>
   );
 };

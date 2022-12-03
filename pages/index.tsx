@@ -46,12 +46,13 @@ import { CustomAlert } from "../componentv2/CustomAlert";
 import { DeleteAlert } from "../componentv2/DeleteAlert";
 import SuneditorForNotesMakingg from "../componentv2/editor/SuneditorForNotesMakingg";
 import LandingPageCurrentAffairs from "../componentv2/LandingPageCurrentAffairs";
+import { LoginCard } from "../componentv2/LoginCard";
 import NotesSearchResult from "../componentv2/NotesSearchResult";
 import NotesSharing from "../componentv2/NotesSharing";
 import SharedNotesPanel from "../componentv2/SharedNotesPanel";
 import { useGetArticlesbyUserandSubheading, useGetSyllabusByBookId } from "../customHookes/apiHooks";
 import LayoutWithTopNavbarForNotes from "../layout/LayoutWithTopNavbarForNotes";
-import { colorPrimary, currentAffairTags, fontPrimary } from "../lib/constants";
+import { BASE_URL, colorPrimary, currentAffairTags, fontPrimary } from "../lib/constants";
 import { Database } from "../lib/database";
 import { elog, sentenseCase } from "../lib/mylog";
 import { useAuthContext } from "../state/Authcontext";
@@ -61,6 +62,7 @@ import { ApiArticleTitle } from "./api/prisma/posts/getarticlesbyuserandsubheadi
 import { Data_headings, Data_subheadings } from "./api/prisma/syllabus/syllabus";
 // import { GotoQuestion } from "..";
 const Notes: React.FC = () => {
+  const { profile } = useAuthContext();
   const { book, selectedSubheading, setNotesCreator, notesCreator, searchText } = useNotesContextNew();
   const changeContextNotesCreator = (id: string, name: string) => {
     setNotesCreator({ id: id, name: name });
@@ -68,7 +70,7 @@ const Notes: React.FC = () => {
   if (searchText) {
     return (
       <Container maxW="5xl">
-        <NotesSearchResult searchKeys={searchText}  />
+        <NotesSearchResult searchKeys={searchText} />
       </Container>
     );
   }
@@ -87,7 +89,14 @@ const Notes: React.FC = () => {
             <Syllabus bookId={book.bookId} bookName={book.bookName} />
           </GridItem>
           <GridItem w="100%" colSpan={6}>
-            <NotesContainer />
+            {profile ? (
+              <NotesContainer />
+            ) : (
+              <Center h="52" flexDirection={"column"}>
+                <Text bg="brand.100" p="1.5">Login first to view or create notes!</Text> <br />
+                <LoginCard redirect={`${BASE_URL}`} />
+              </Center>
+            )}{" "}
           </GridItem>
           <GridItem w="100%" colSpan={1} bg="brand.50">
             <SharedNotesPanel subheadingid={selectedSubheading?.id} changeParentProps={changeContextNotesCreator} />
@@ -108,26 +117,26 @@ export const Syllabus = (props: { bookId: number | undefined; bookName: string |
 
   return (
     <Box maxW="full" p="2" bg="brand.50">
-      {user && (
-        <VStack display="inline-block" w="full">
-          <HStack bg="brand.50" alignItems={"baseline"} p="4">
-            <Text fontFamily={fontPrimary} casing="capitalize" fontSize="lg" fontWeight="bold" color={colorPrimary}>
-              {props?.bookName}
-            </Text>
-          </HStack>
-          {isLoading ? (
-            <Center h="70vh" w="full">
-              <Spinner />
-            </Center>
-          ) : (
-            <VStack alignItems="left" spacing="4">
-              {data?.books_headings.map((headings) => (
-                <Headings key={headings.id} headings={headings} />
-              ))}
-            </VStack>
-          )}
-        </VStack>
-      )}{" "}
+      {/* {user && ( */}
+      <VStack display="inline-block" w="full">
+        <HStack bg="brand.50" alignItems={"baseline"} p="4">
+          <Text fontFamily={fontPrimary} casing="capitalize" fontSize="lg" fontWeight="bold" color={colorPrimary}>
+            {props?.bookName}
+          </Text>
+        </HStack>
+        {isLoading ? (
+          <Center h="70vh" w="full">
+            <Spinner />
+          </Center>
+        ) : (
+          <VStack alignItems="left" spacing="4">
+            {data?.books_headings.map((headings) => (
+              <Headings key={headings.id} headings={headings} />
+            ))}
+          </VStack>
+        )}
+      </VStack>
+      {/* )}{" "} */}
     </Box>
   );
 };

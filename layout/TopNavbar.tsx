@@ -1,7 +1,7 @@
 import { HamburgerIcon } from "@chakra-ui/icons";
 import {
-  Avatar,
   Box,
+  Center,
   Flex,
   FlexProps,
   HStack,
@@ -12,26 +12,22 @@ import {
   LinkOverlay,
   Menu,
   MenuButton,
-  MenuDivider,
   MenuItem,
   MenuList,
-  Stack,
-  StackDivider,
   Text,
   useDisclosure,
-  VStack,
 } from "@chakra-ui/react";
 import Link from "next/link";
 import { useRouter } from "next/router";
 import { ReactNode, useEffect, useState } from "react";
 import { FaTelegram } from "react-icons/fa";
-import { FiChevronDown } from "react-icons/fi";
 import DesktopMenu from "../components/chakraTemplate/Customdrawer";
 import { CustomDrawerWithButton } from "../components/CustomChakraUi";
 import BookFilter from "../components/syllabus/BookFilter";
 import BookFilterForMangeSyllabus from "../componentv2/BookFilterForMangeSyllabus";
+import RequestDrawer from "../componentv2/RequestDrawer";
+import SignIn from "../componentv2/SignIn";
 import { useAuthContext } from "../state/Authcontext";
-import { SyllabusContextProviderWrapper } from "../state/SyllabusContext";
 import { BookResponse } from "../types/myTypes";
 
 // const LinkItems: Array<Subheading> = [];
@@ -43,8 +39,11 @@ export default function TopNavbar({ children }: { children: ReactNode }) {
     //overflowx = hidden is because body was visible in mobile view. test is again and then
     // finalize
     <Box>
+      <Flex h="12" bg="gray.900" justify="end" align="center">
+        <SignIn />
+      </Flex>
       <MobileNav onOpen={onOpen} />
-      <Box p="2" >{children}</Box>
+      <Box p="2">{children}</Box>
     </Box>
   );
 }
@@ -61,7 +60,6 @@ const MobileNav = ({ onOpen, ...rest }: MobileProps) => {
       // ml={{ base: 10, md: 60 }}
       px={{ base: "1", md: 4 }}
       height="32"
-      
       alignItems="center"
       top={"0"}
       shadow={"md"}
@@ -97,52 +95,10 @@ const MobileNav = ({ onOpen, ...rest }: MobileProps) => {
       {/* </Box> */}
 
       <HStack spacing={{ base: "0", md: "6" }}>
-        {!profile ? (
-          <HStack>{JoinTelegram}</HStack>
-        ) : (
-          <Flex border="0px" alignItems={"center"}>
-            {JoinTelegram}
-            <Menu boundary="clippingParents">
-              <MenuButton border="0px" py={2} transition="all 0.3s" _focus={{ boxShadow: "none" }}>
-                <HStack>
-                  {!profile ? (
-                    <Avatar size={"sm"} src="https://bit.ly/broken-link" />
-                  ) : (
-                    <Avatar
-                      size={"sm"}
-                      src={
-                        profile?.avatar_url! // change this to url from database avatar
-                      }
-                    />
-                  )}
-
-                  <VStack display={{ base: "none", md: "flex" }} alignItems="flex-start" spacing="1px" ml="2">
-                    {profile ? <Text fontSize="sm">{profile?.username}</Text> : null}
-                    <Text fontSize="xs">{/* Admin */}</Text>
-                  </VStack>
-                  <Box display={{ base: "none", md: "flex" }}>
-                    <FiChevronDown />
-                  </Box>
-                </HStack>
-              </MenuButton>
-              <MenuList border="1px" bg={"gray.50"}>
-                <MenuItem border="0px">Profile</MenuItem>
-                <MenuItem border="0px">Settings</MenuItem>
-                {profile ? (
-                  <>
-                    {" "}
-                    <MenuDivider />
-                    <MenuItem border="0px" onClick={() => signOut("vv")}>
-                      Sign out
-                    </MenuItem>
-                  </>
-                ) : (
-                  ""
-                )}
-              </MenuList>
-            </Menu>
-          </Flex>
-        )}
+        <Flex align={"end"} justifyContent="end" h="full" p="1.5">
+          {JoinTelegram}
+          <RequestDrawer buttonType={"md"} />
+        </Flex>
       </HStack>
     </Flex>
   );

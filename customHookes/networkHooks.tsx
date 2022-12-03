@@ -239,7 +239,7 @@ export function useGetCurrentAffairs(isAdminNotes: boolean, subheadingId: number
       .eq("books_subheadings_fk", subheadingId);
   // .limit(10);
 
-  const { data, error, mutate } = useSWR(
+  const { data, error, mutate, isValidating} = useSWR(
     !subheadingId
       ? null
       : subheadingId && !isAdminNotes && !userId
@@ -251,7 +251,7 @@ export function useGetCurrentAffairs(isAdminNotes: boolean, subheadingId: number
 
   return {
     data: data?.data,
-    isLoading: !error && !data,
+    isLoading: !data && !error && isValidating,
     isError: error,
     mutate: mutate,
   };

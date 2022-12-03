@@ -40,7 +40,7 @@ import katex from "katex";
 import "katex/dist/katex.min.css";
 import dynamic from "next/dynamic";
 import "suneditor/dist/css/suneditor.min.css";
-import { BASE_URL, colors, currentAffairTags, sunEditorButtonList } from "../lib/constants";
+import { BASE_URL, colorPrimary, colors, currentAffairTags, sunEditorButtonList } from "../lib/constants";
 // import DOMPurify from "dompurify";
 import { useSupabaseClient, useUser } from "@supabase/auth-helpers-react";
 import React, { useState } from "react";
@@ -60,6 +60,8 @@ import PageWithLayoutType from "../types/pageWithLayout";
 import { Database } from "../lib/database";
 import { Syllabus } from ".";
 import { useNotesContextNew } from "../state/NotesContextNew";
+import LayoutWithTopNavbarForNotes from "../layout/LayoutWithTopNavbarForNotes";
+import SignIn from "../componentv2/SignIn";
 
 const SunEditor = dynamic(() => import("suneditor-react"), {
   ssr: false,
@@ -205,205 +207,225 @@ const CurrentAffair: React.FC = () => {
   };
 
   return (
-    <Container maxW="7xl" py="2" px={{ base: "0.5", md: "2", lg: "4" }}>
-      {/* {selectedSyllabus?.subheading} */}
-      {!user && (
-        <Flex justifyContent="end" mb="8">
-          <LoginCard redirect={`${BASE_URL}/dna`} />
-        </Flex>
-      )}
-      <Grid templateColumns="repeat(5, 1fr)" column={2} rowGap={2}>
-        <GridItem colSpan={[0, 0, 0, 1]} display={["none", "none", "none", "block"]}></GridItem>
-        <GridItem colSpan={[5, 5, 5, 4]}>
-          {" "}
-          <HStack>
-            <Box display={["block", "block", "block", "none"]}>
-              <SyllabusDrawer book={book} changeParentProps={setSyllabus} />
-            </Box>
-            <Button
-              size={{ base: "sm", sm: "sm", md: "md" }}
-              display={selectedSubheading?.id ? undefined : "none"}
-              onClick={() => {
-                // setData(data);
-                setIsAdminNotes(!isAdminNotes);
-              }}
-            >
-              {isAdminNotes ? "Switch to Your Private Notes" : "Switch to Official Notes"}
-            </Button>{" "}
-          </HStack>
-        </GridItem>
-        <GridItem colSpan={[0, 0, 0, 1]} display={["none", "none", "none", "block"]}>
-          <Box height="full" w="52">
-            <Syllabus bookId={book.id} bookName={book.book_name} />
-          </Box>
-        </GridItem>
-        <GridItem colSpan={[5, 5, 5, 4]}>
-          <Center>
+    <>
+      {" "}
+      <Flex boxShadow={"md"} h="12" px="2" bg="gray.900" justify="end" align="center">
+        <SignIn />
+      </Flex>
+      <Container maxW="8xl" py="2" px={{ base: "0.5", md: "2", lg: "4" }}>
+        {/* {selectedSyllabus?.subheading} */}
+
+        {!user && (
+          <Flex justifyContent="end" mb="8">
+            <LoginCard redirect={`${BASE_URL}/dna`} />
+          </Flex>
+        )}
+        <Grid templateColumns="repeat(5, 1fr)" column={2} rowGap={2}>
+          <GridItem colSpan={[0, 0, 0, 1]} display={["none", "none", "none", "block"]}></GridItem>
+          <GridItem colSpan={[5, 5, 5, 4]}>
             {" "}
-            <Text>{selectedSubheading?.id === undefined ? "Select Date to View Content" : selectedSubheading?.name}</Text>
-          </Center>
-          {isLoading && selectedSubheading?.id && (
-            <Center mt="8" w="full">
-              {" "}
-              Please wait, Loading...
-            </Center>
-          )}
-          {data && data.length == 0 && (
-            <Center mt="8" w="full">
-              <InfoAlert info={"No notes found. We are Covering from 1-october onwards."} />{" "}
-            </Center>
-          )}
-          <VStack
-            spellCheck="false"
-            alignItems="start"
-            visibility={selectedSubheading?.id === undefined ? "hidden" : undefined}
-          >
-            <Accordion allowMultiple width={"full"}>
-              {data?.map((x: any) => {
-                return (
-                  <AccordionItem key={x.id} borderTopWidth="0px" borderBottomWidth="0px" mb="6">
-                    {({ isExpanded }) => (
-                      <>
-                        <VStack alignItems={"start"}>
-                          {x.current_affair_tags && x.current_affair_tags.length > 0 ? (
-                            <Wrap spacing="5px" mb="-2">
-                              {(x.current_affair_tags as number[]).map((x1) => {
-                                for (let index = 0; index < currentAffairTags.length; index++) {
-                                  const element = currentAffairTags[index];
-                                  if (element.id == x1) {
-                                    return (
-                                      <Button
-                                        size="xs"
-                                        key={element.id}
-                                        variant="ghost"
-                                        // onClick={() => {
-                                        //   setIsTagSearchActive(true);
-                                        //   setTagsArray!([element.id]);
-                                        // }}
-                                        // bg="white"
-                                        px="1.5"
-                                        // fontWeight={"normal"}
-                                        // fontSize="xs"
-                                        mx="2"
-                                      >
-                                        {element.tag}
-                                      </Button>
-                                    );
-                                  }
-                                }
-                              })}
-                            </Wrap>
-                          ) : null}
-                          <HStack w="full">
-                            <AccordionButton bg="gray.100" _expanded={{ bg: "gray.300" }} borderRadius="full">
-                              <Box flex="1" textAlign="left">
-                                <Flex alignSelf="start" alignItems="center">
-                                  <Text
-                                    alignSelf={"baseline"}
-                                    // bg="brand.100"
-                                    p="2"
-                                    fontSize="16px"
-                                    align="left"
-                                  >
-                                    <Text as="b">In News :- </Text> {sentenseCase(x.article_title)}
-                                  </Text>
-                                </Flex>
-                              </Box>
-                              <AccordionIcon />
-                            </AccordionButton>
-                            <DeleteConfirmation
-                              handleDelete={deleteArticle}
-                              dialogueHeader={"Delete this Article?"}
-                              display={isAdminNotes && profile?.role !== "ADMIN" ? "none" : undefined}
-                              isIconButton={true}
-                              id={x.id}
-                            ></DeleteConfirmation>
-                          </HStack>
-                        </VStack>
-                        <AccordionPanel pb={4} borderTopWidth="0px" borderBottomWidth="0px" px={{ base: 0, lg: "4" }}>
-                          {/* {isExpanded && ( */}
-                          <Tabs
-                            variant="line"
-                            size="sm"
-                            width="full"
-                            index={language === "ENG" ? 0 : 1}
-                            onChange={handleTabsChange}
-                          >
-                            <TabList>
-                              <Tab>English</Tab>
-                              <Tab>Hindi</Tab>
-                            </TabList>
-                            <TabPanels>
-                              <TabPanel px={{ base: 0, lg: "4" }} width="full">
-                                <SuneditorSimple
-                                  article={x}
-                                  content={x.article_english}
-                                  saveCallback={saveArticle}
-                                  language={"ENG"}
-                                  userrole={profile?.role!}
-                                  isAdminNotes={isAdminNotes}
-                                  canCopy={x.created_by.id !== user?.id}
-                                  copyCallback={handleCopyNotes}
-                                ></SuneditorSimple>
-                              </TabPanel>
-                              <TabPanel px={{ base: 0, lg: "4" }} width="full">
-                                <SuneditorSimple
-                                  article={x}
-                                  content={x.article_hindi}
-                                  saveCallback={saveArticle}
-                                  language={"HINDI"}
-                                  userrole={profile?.role!}
-                                  isAdminNotes={isAdminNotes}
-                                  canCopy={x.created_by.id !== user?.id}
-                                  copyCallback={handleCopyNotes}
-                                ></SuneditorSimple>
-                              </TabPanel>
-                            </TabPanels>
-                          </Tabs>
-                        </AccordionPanel>
-                      </>
-                    )}
-                  </AccordionItem>
-                );
-              })}
-            </Accordion>
-            <Button
-              display={!profile || isAdminNotes ? "none" : undefined}
-              onClick={() => {
-                setArticleFormMode(articleFormMode !== "NONE" ? "NONE" : "CREATING");
-              }}
-              leftIcon={articleFormMode !== "NONE" ? <MdCancel /> : <MdAdd />}
-            >
-              {articleFormMode !== "NONE" ? "Cancel" : "Create New Notes"}
-            </Button>
-            {!user && (
-              <Center w="full" p="16">
-                <LoginCard redirect={`${BASE_URL}/dna`} />
+            <HStack>
+              <Box display={["block", "block", "block", "none"]}>
+                <SyllabusDrawer book={book} changeParentProps={setSyllabus} />
+              </Box>
+              <Button
+                size={{ base: "sm", sm: "sm", md: "md" }}
+                display={selectedSubheading?.id ? undefined : "none"}
+                onClick={() => {
+                  // setData(data);
+                  setIsAdminNotes(!isAdminNotes);
+                }}
+              >
+                {isAdminNotes ? "Switch to Your Private Notes" : "Switch to Official Notes"}
+              </Button>{" "}
+            </HStack>
+          </GridItem>
+          <GridItem colSpan={[0, 0, 0, 1]} display={["none", "none", "none", "block"]}>
+            <Box height="full" w="64">
+              <Syllabus bookId={book.id} bookName={book.book_name} />
+            </Box>
+          </GridItem>
+          <GridItem colSpan={[5, 5, 5, 4]}>
+            {selectedSubheading?.id === undefined ? (
+              <Center h="16" flexDirection={"column"}>
+                {" "}
+                <Text fontSize="larger" color={colorPrimary} fontWeight="black">
+                  Select Date to View Content
+                </Text>
+                <Text fontSize="xs" color={colorPrimary} fontWeight="black">
+                  (From 1- october onwards)
+                </Text>
+              </Center>
+            ) : (
+              <Center h="16" fontSize="larger" color={colorPrimary} fontWeight="black">
+                <Text as="b">{selectedSubheading?.name}</Text>
               </Center>
             )}
 
-            <Box display={articleFormMode === "NONE" ? "none" : !profile || isAdminNotes ? "none" : undefined}>
-              <ArticleForm
-                subjectId={undefined}
-                subheadingid={selectedSubheading?.id}
-                question_year={undefined}
-                question_type={undefined}
-                formMode={"CREATING"}
-                setParentProps={changeParentProps}
-              />
-            </Box>
-            <br />
-            <br />
-            <br />
-            <br />
-          </VStack>
-        </GridItem>
-      </Grid>
-    </Container>
+            {isLoading && selectedSubheading?.id && (
+              <Center mt="8" w="full">
+                {" "}
+                Please wait, Loading...
+              </Center>
+            )}
+            {data && data.length == 0 && (
+              <Center mt="8" w="full">
+                <InfoAlert info={"No notes found. We are Covering from 1-october onwards."} />{" "}
+              </Center>
+            )}
+            <VStack
+              spellCheck="false"
+              alignItems="start"
+              visibility={selectedSubheading?.id === undefined ? "hidden" : undefined}
+            >
+              <Accordion allowMultiple width={"full"}>
+                {data?.map((x: any) => {
+                  return (
+                    <AccordionItem key={x.id} borderTopWidth="0px" borderBottomWidth="0px" mb="6">
+                      {({ isExpanded }) => (
+                        <>
+                          <VStack alignItems={"start"}>
+                            {x.current_affair_tags && x.current_affair_tags.length > 0 ? (
+                              <Wrap spacing="5px" mb="-2">
+                                {(x.current_affair_tags as number[]).map((x1) => {
+                                  for (let index = 0; index < currentAffairTags.length; index++) {
+                                    const element = currentAffairTags[index];
+                                    if (element.id == x1) {
+                                      return (
+                                        <Button
+                                          size="xs"
+                                          key={element.id}
+                                          variant="ghost"
+                                          // onClick={() => {
+                                          //   setIsTagSearchActive(true);
+                                          //   setTagsArray!([element.id]);
+                                          // }}
+                                          // bg="white"
+                                          px="1.5"
+                                          // fontWeight={"normal"}
+                                          // fontSize="xs"
+                                          mx="2"
+                                        >
+                                          {element.tag}
+                                        </Button>
+                                      );
+                                    }
+                                  }
+                                })}
+                              </Wrap>
+                            ) : null}
+                            <HStack w="full">
+                              <AccordionButton bg="gray.100" _expanded={{ bg: "gray.300" }} borderRadius="full">
+                                <Box flex="1" textAlign="left">
+                                  <Flex alignSelf="start" alignItems="center">
+                                    <Text
+                                      alignSelf={"baseline"}
+                                      // bg="brand.100"
+                                      p="2"
+                                      fontSize="16px"
+                                      align="left"
+                                    >
+                                      <Text as="b">In News :- </Text> {sentenseCase(x.article_title)}
+                                    </Text>
+                                  </Flex>
+                                </Box>
+                                <AccordionIcon />
+                              </AccordionButton>
+                              <DeleteConfirmation
+                                handleDelete={deleteArticle}
+                                dialogueHeader={"Delete this Article?"}
+                                display={isAdminNotes && profile?.role !== "ADMIN" ? "none" : undefined}
+                                isIconButton={true}
+                                id={x.id}
+                              ></DeleteConfirmation>
+                            </HStack>
+                          </VStack>
+                          <AccordionPanel pb={4} borderTopWidth="0px" borderBottomWidth="0px" px={{ base: 0, lg: "4" }}>
+                            {/* {isExpanded && ( */}
+                            <Tabs
+                              variant="line"
+                              size="sm"
+                              width="full"
+                              index={language === "ENG" ? 0 : 1}
+                              onChange={handleTabsChange}
+                            >
+                              <TabList>
+                                <Tab>English</Tab>
+                                <Tab>Hindi</Tab>
+                              </TabList>
+                              <TabPanels>
+                                <TabPanel px={{ base: 0, lg: "4" }} width="full">
+                                  <SuneditorSimple
+                                    article={x}
+                                    content={x.article_english}
+                                    saveCallback={saveArticle}
+                                    language={"ENG"}
+                                    userrole={profile?.role!}
+                                    isAdminNotes={isAdminNotes}
+                                    canCopy={x.created_by.id !== user?.id}
+                                    copyCallback={handleCopyNotes}
+                                  ></SuneditorSimple>
+                                </TabPanel>
+                                <TabPanel px={{ base: 0, lg: "4" }} width="full">
+                                  <SuneditorSimple
+                                    article={x}
+                                    content={x.article_hindi}
+                                    saveCallback={saveArticle}
+                                    language={"HINDI"}
+                                    userrole={profile?.role!}
+                                    isAdminNotes={isAdminNotes}
+                                    canCopy={x.created_by.id !== user?.id}
+                                    copyCallback={handleCopyNotes}
+                                  ></SuneditorSimple>
+                                </TabPanel>
+                              </TabPanels>
+                            </Tabs>
+                          </AccordionPanel>
+                        </>
+                      )}
+                    </AccordionItem>
+                  );
+                })}
+              </Accordion>
+              <Button
+                size="md"
+                display={!profile || isAdminNotes ? "none" : undefined}
+                onClick={() => {
+                  setArticleFormMode(articleFormMode !== "NONE" ? "NONE" : "CREATING");
+                }}
+                leftIcon={articleFormMode !== "NONE" ? <MdCancel /> : <MdAdd />}
+              >
+                {articleFormMode !== "NONE" ? "Cancel" : "Create New Notes"}
+              </Button>
+              {!user && (
+                <Center w="full" p="16">
+                  <LoginCard redirect={`${BASE_URL}/dna`} />
+                </Center>
+              )}
+
+              <Box display={articleFormMode === "NONE" ? "none" : !profile || isAdminNotes ? "none" : undefined}>
+                <ArticleForm
+                  subjectId={undefined}
+                  subheadingid={selectedSubheading?.id}
+                  question_year={undefined}
+                  question_type={undefined}
+                  formMode={"CREATING"}
+                  setParentProps={changeParentProps}
+                />
+              </Box>
+              <br />
+              <br />
+              <br />
+              <br />
+            </VStack>
+          </GridItem>
+        </Grid>
+      </Container>
+    </>
   );
 };
 
-(CurrentAffair as PageWithLayoutType).layout = LayoutWithTopNavbar;
+// (CurrentAffair as PageWithLayoutType).layout = LayoutWithTopNavbarForNotes;
 export default CurrentAffair;
 
 type ArticleFormProps = {
