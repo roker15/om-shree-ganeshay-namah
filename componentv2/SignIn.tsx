@@ -18,7 +18,7 @@ export const SignIn = () => {
           <Text
             cursor={"pointer"}
             onClick={() => {
-              signInWithgoogle(`${BASE_URL}/manageSyllabusv`);
+              signInWithgoogle(`${BASE_URL}/manageSyllabus`);
             }}
             color="#ffffff"
           >

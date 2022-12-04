@@ -35,7 +35,7 @@ const Layout: React.FunctionComponent<LayoutProps> = ({ children }) => {
         </GridItem>
         <GridItem colSpan={1}>
           <Center pr="2" h="48px" bg="gray.900" gap="2" justifyContent={"end"}>
-            <Button size="md" colorScheme={"yellow"} bg="#FAF089" onClick={() => navigateTo("/manageSyllabusv")}>
+            <Button size="md" colorScheme={"yellow"} bg="#FAF089" onClick={() => navigateTo("/manageSyllabus")}>
               Create Syllabus
             </Button>
             {!profile ? (
