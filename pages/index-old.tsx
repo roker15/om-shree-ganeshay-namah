@@ -7,7 +7,7 @@ import React, { useEffect } from "react";
 import useSWR, { Fetcher } from "swr";
 import Landing from "../components/chakraTemplate/Landing";
 import ChakraThemeTest from "../components/ChakraThemeTest";
-import { UserTrack } from "../components/dashboard/UserTrack";
+import { UserTrack } from "../componentv2/UserTrack";
 import LayoutWithTopNavbar from "../layout/LayoutWithTopNavbar";
 import { Database } from "../lib/database";
 import { useAuthContext } from "../state/Authcontext";

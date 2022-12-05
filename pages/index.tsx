@@ -39,6 +39,7 @@ import { useEffect, useState } from "react";
 import { SubmitHandler, useForm } from "react-hook-form";
 import { MdAdd, MdCancel, MdDone, MdLightMode, MdMoreVert } from "react-icons/md";
 import { useSWRConfig } from "swr";
+import { UserTrack } from "../componentv2/UserTrack";
 // import { ArticleCounter } from "../components/CurrentAffair/SyllabusForCurrentAffairs";
 import ErrorBoundary from "../components/ErrorBoundary";
 import { ArticleCounter } from "../componentv2/ArticleCounter";
@@ -93,7 +94,10 @@ const Notes: React.FC = () => {
               <NotesContainer />
             ) : (
               <Center h="52" flexDirection={"column"}>
-                <Text bg="brand.100" p="1.5">Login first to view or create notes!</Text> <br />
+                <Text bg="brand.100" p="1.5">
+                  Login first to view or create notes!
+                </Text>{" "}
+                <br />
                 <LoginCard redirect={`${BASE_URL}`} />
               </Center>
             )}{" "}
@@ -103,6 +107,7 @@ const Notes: React.FC = () => {
           </GridItem>
         </Grid>
       )}
+      <Center>{profile && profile.role === "ADMIN" && <UserTrack />}</Center>
     </Box>
   );
 };
