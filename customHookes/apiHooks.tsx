@@ -42,13 +42,13 @@ export function useGetArticleCount(subheadingId: number, creatorId: string) {
 
   const fetcher = async () => {
     const response = await axios
-      .get<number>("/api/prisma/posts/postcountbysyllabus", { params: { subheadingId, creatorId } })
+      .get<number>("/api/prisma/posts/postcountbysyllabuss", { params: { subheadingId, creatorId } })
       .catch((e) => {
         throw e;
       });
     return response.data;
   };
-  const { data, error } = useSWR(["/api/prisma/posts/postCountbySyllabus", subheadingId, creatorId], fetcher, cacheOptions);
+  const { data, error } = useSWR(["/api/prisma/posts/postcountbysyllabuss", subheadingId, creatorId], fetcher, cacheOptions);
 
   return {
     data: data,
