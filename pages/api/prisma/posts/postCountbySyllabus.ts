@@ -20,7 +20,7 @@ export default async function handle(req: NextApiRequest, res: NextApiResponse<n
       where: { books_subheadings_fk: subheadingId, created_by: creatorId },
     });
     // console.log("count is ", toJson(posts)!);
-    console.log("api syllabus hit-counter");
+    console.log("api syllabus hit-counter",posts);
     return res.status(201).send(toJson(posts)!);
   } catch (error: any) {
     res.status(500).send(error.message);
