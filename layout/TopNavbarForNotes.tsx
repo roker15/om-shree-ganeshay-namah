@@ -1,6 +1,5 @@
 import { HamburgerIcon } from "@chakra-ui/icons";
 import {
-  Avatar,
   Box,
   Divider,
   Flex,
@@ -14,29 +13,20 @@ import {
   LinkBox,
   LinkOverlay,
   Menu,
-  MenuButton,
-  MenuDivider,
-  MenuItem,
-  MenuList,
-  Spacer,
-  Stack,
-  StackDivider,
-  Text,
-  useDisclosure,
-  VStack,
+  MenuButton, MenuItem,
+  MenuList, Text,
+  useDisclosure
 } from "@chakra-ui/react";
 import Link from "next/link";
 import { useRouter } from "next/router";
 import { ReactNode, useEffect, useState } from "react";
 import { FaTelegram } from "react-icons/fa";
-import { FiChevronDown } from "react-icons/fi";
 import DesktopMenu from "../components/chakraTemplate/Customdrawer";
 import { CustomDrawerWithButton } from "../components/CustomChakraUi";
 import BookFilter from "../components/syllabus/BookFilter";
 import BookFilterForNotesMaking from "../componentv2/BookFilterForNotesMaking";
 import RequestDrawer from "../componentv2/RequestDrawer";
 import { useAuthContext } from "../state/Authcontext";
-import { SyllabusContextProviderWrapper } from "../state/SyllabusContext";
 import { BookResponse } from "../types/myTypes";
 
 // const LinkItems: Array<Subheading> = [];
@@ -66,22 +56,23 @@ const MobileNav = ({ onOpen, ...rest }: MobileProps) => {
       // ml={{ base: 10, md: 60 }}
       // px={{ base: "1", md: 4 }}
       height="32"
-      alignItems="center"
+      // alignItems="center"
       top={"0"}
+      bg="yellow"
       shadow={"md"}
       // w="full"
       // alignSelf={"flex-start"}
-      justifyContent={{ base: "space-between", md: "flex" }}
+      // justifyContent={{ base: "space-between", md: "flex" }}
       {...rest}
     >
       <HStack>
-        <Box display={{ base: "block", md: "none" }}>
+        <Box display={{ base: "block", md: "none" }} placeSelf="center">
           {/* <CustomMenu /> */}
           <BookFilterForNotesMaking />
         </Box>
-        <Text fontWeight="bold" display={{ base: "block", md: "none" }}>
+        {/* <Text fontWeight="bold" display={{ base: "block", md: "none" }}>
           Jionote
-        </Text>
+        </Text> */}
         <LinkBox alignItems="center" display={{ base: "none", md: "flex" }}>
           <LinkOverlay
             _hover={{
@@ -92,7 +83,7 @@ const MobileNav = ({ onOpen, ...rest }: MobileProps) => {
           <Image loading="eager" src="/logo-blue.png" alt="Logo" w="90px" />
         </LinkBox>
       </HStack>
-      <Flex display={{ base: "none", md: "flex" }} placeSelf="center" >
+      <Flex display={{ base: "none", md: "flex" }} placeSelf="center">
         {/* <GotoQuestion /> */}
         <BookFilterForNotesMaking />
       </Flex>
