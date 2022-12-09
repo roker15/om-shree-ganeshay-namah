@@ -24,12 +24,12 @@ const BookFilterForMangeSyllabus = () => {
   };
 
   return (
-    <Stack
-      direction={{ base: "row", md: "row", lg: "column" }}
+    <Box
+      // direction={{ base: "row", md: "row", lg: "column" }}
       px="2"
       pt="0.5"
       // h="32"
-      bg="red"
+      // bg="aqua"
       _hover={{ color: colorPrimary, bg: "brand.100", transition: "1s" }}
     >
       {/* <SearchBox placeholder={"Search notes by typing keywords"} changeValueCallback={setSearchText} /> */}
@@ -50,7 +50,7 @@ const BookFilterForMangeSyllabus = () => {
       ) : (
         <BookFilterNew onChangeCallback={handleSyllabusChange} category={category} />
       )}
-    </Stack>
+    </Box>
   );
 };
 interface ICategory {
@@ -78,7 +78,7 @@ const Categories = (props: ICategory) => {
         }}
         value={value}
       >
-        <Flex direction={{ base: "column", md: "column", lg: "row" }} wrap="wrap" h="32">
+        <Flex  direction="row" >
           {categories.map((x) => {
             return (
               <Radio size={{ base: "sm" }} key={x.id} value={x.id} colorScheme="gray" borderColor="gray.500">

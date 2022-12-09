@@ -13,9 +13,11 @@ import {
   LinkBox,
   LinkOverlay,
   Menu,
-  MenuButton, MenuItem,
-  MenuList, Text,
-  useDisclosure
+  MenuButton,
+  MenuItem,
+  MenuList,
+  Text,
+  useDisclosure,
 } from "@chakra-ui/react";
 import Link from "next/link";
 import { useRouter } from "next/router";
@@ -52,28 +54,23 @@ const MobileNav = ({ onOpen, ...rest }: MobileProps) => {
   // const [scrolling, setScrolling] = useState();
   const { signInWithgoogle, signOut, profile } = useAuthContext();
   return (
-    <Flex
+    <Grid
       // ml={{ base: 10, md: 60 }}
       // px={{ base: "1", md: 4 }}
-      height="32"
+      height="full"
       // alignItems="center"
       top={"0"}
-      bg="yellow"
+      // direction={"columnn"}
+      // bg="yellow"
       shadow={"md"}
+      templateColumns={{base:"repeat(3, 1fr)",lg:"repeat(9, 1fr)"}}
       // w="full"
       // alignSelf={"flex-start"}
-      // justifyContent={{ base: "space-between", md: "flex" }}
-      {...rest}
+      // {...rest}
     >
-      <HStack>
-        <Box display={{ base: "block", md: "none" }} placeSelf="center">
-          {/* <CustomMenu /> */}
-          <BookFilterForNotesMaking />
-        </Box>
-        {/* <Text fontWeight="bold" display={{ base: "block", md: "none" }}>
-          Jionote
-        </Text> */}
-        <LinkBox alignItems="center" display={{ base: "none", md: "flex" }}>
+      {/* <HStack> */}
+      <GridItem colSpan={2}  display={{ base: "none", lg: "flex" }}>
+        <LinkBox alignItems="center">
           <LinkOverlay
             _hover={{
               background: "none",
@@ -82,30 +79,32 @@ const MobileNav = ({ onOpen, ...rest }: MobileProps) => {
           ></LinkOverlay>
           <Image loading="eager" src="/logo-blue.png" alt="Logo" w="90px" />
         </LinkBox>
-      </HStack>
-      <Flex display={{ base: "none", md: "flex" }} placeSelf="center">
-        {/* <GotoQuestion /> */}
+      </GridItem>
+      <GridItem colSpan={5}>
+        {/* <CustomMenu /> */}
         <BookFilterForNotesMaking />
-      </Flex>
+      </GridItem>
+      {/* <Text fontWeight="bold" display={{ base: "block", md: "none" }}>
+          Jionote
+        </Text> */}
+      {/* </HStack> */}
+
       {/* <Box display={{ base: "none", sm: "initial" }}> */}
       {/* </Box> */}
-      <Grid h="full" templateRows="repeat(3, 1fr)">
-        <GridItem rowStart={2}>
-          <HStack spacing={{ base: "0", md: "6" }}></HStack>
-        </GridItem>
-        <GridItem rowStart={3}>
-          <Flex align={"end"} justifyContent="end" h="full" p="1.5">
-            {JoinTelegram}
-            <RequestDrawer buttonType={"md"} />
-          </Flex>
-        </GridItem>
-      </Grid>
-    </Flex>
+      {/* <Grid h="full" templateRows="repeat(3, 1fr)" display={{ base: "none", lg: "flex" }}> */}
+      <GridItem colSpan={2}   display={{ base: "none", lg: "flex" }}>
+        <Flex w="full" wrap="wrap" alignItems="end" justifyContent="end" direction="row">
+          {JoinTelegram}
+          <RequestDrawer buttonType={"md"} />
+        </Flex>
+      </GridItem>
+      {/* </Grid> */}
+    </Grid>
   );
 };
 
 const JoinTelegram = (
-  <HStack alignItems={"center"} mx="2" px="2" py="0.5" bg="telegram.300">
+  <HStack alignItems={"end"} mx="2" px="2" py="0.5" bg="telegram.300">
     {" "}
     <L color="white" href="https://t.me/+Rhiv7nfLc_pkZDM1" isExternal>
       Join Telegram
