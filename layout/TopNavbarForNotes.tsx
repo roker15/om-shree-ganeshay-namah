@@ -41,7 +41,7 @@ export default function TopNavbar({ children }: { children: ReactNode }) {
     // finalize
     <Box>
       <MobileNav onOpen={onOpen} />
-      <Box p={{ base: "none", lg: "2" }}>{children}</Box>
+      <Box p={{ base: "2", lg: "2" }}>{children}</Box>
     </Box>
   );
 }
@@ -55,18 +55,10 @@ const MobileNav = ({ onOpen, ...rest }: MobileProps) => {
   const { signInWithgoogle, signOut, profile } = useAuthContext();
   return (
     <Grid
-      // ml={{ base: 10, md: 60 }}
-      // px={{ base: "1", md: 4 }}
-      height="full"
-      // alignItems="center"
+      minH="32"
       top={"0"}
-      // direction={"columnn"}
-      // bg="yellow"
       shadow={"md"}
       templateColumns={{base:"repeat(3, 1fr)",lg:"repeat(9, 1fr)"}}
-      // w="full"
-      // alignSelf={"flex-start"}
-      // {...rest}
     >
       {/* <HStack> */}
       <GridItem colSpan={2}  display={{ base: "none", lg: "flex" }}>

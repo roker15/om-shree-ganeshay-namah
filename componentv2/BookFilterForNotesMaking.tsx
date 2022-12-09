@@ -1,4 +1,4 @@
-import { Box, Button, Container, Radio, RadioGroup, Select, Stack, Text, VStack as Flex } from "@chakra-ui/react";
+import { Box, Button, Container, Radio, RadioGroup, Select, Stack, Text, Flex } from "@chakra-ui/react";
 import router from "next/router";
 import React, { useEffect, useState } from "react";
 import { useGetBooks, useGetColleges, useGetCollegesCourses, useGetPersonalCourses } from "../customHookes/networkHooks";
@@ -32,7 +32,7 @@ const BookFilterForMangeSyllabus = () => {
       // bg="aqua"
       _hover={{ color: colorPrimary, bg: "brand.100", transition: "1s" }}
     >
-      {/* <SearchBox placeholder={"Search notes by typing keywords"} changeValueCallback={setSearchText} /> */}
+      <SearchBox placeholder={"Search notes by typing keywords"} changeValueCallback={setSearchText} />
       <Categories category={category} onChangeCallback={changeCategory} />
       {category === "8" ? (
         <Stack direction={{ base: "column", lg: "row" }}>
@@ -71,14 +71,13 @@ const Categories = (props: ICategory) => {
     props.onChangeCallback(e);
   };
   return (
-    <div>
       <RadioGroup
         onChange={(e) => {
           handleChange(e);
         }}
         value={value}
       >
-        <Flex  direction="row" >
+        <Flex  direction="row" wrap="wrap"  justify="space-evenly" gap={2}>
           {categories.map((x) => {
             return (
               <Radio size={{ base: "sm" }} key={x.id} value={x.id} colorScheme="gray" borderColor="gray.500">
@@ -90,7 +89,6 @@ const Categories = (props: ICategory) => {
           })}
         </Flex>
       </RadioGroup>
-    </div>
   );
 };
 
@@ -168,7 +166,7 @@ const CollegeCourses = (props: { collegeId: number; onChangeCallback: (book: Boo
   };
 
   return (
-    <Flex maxW="2xl">
+    // <Flex >
       <Select
         placeholder={"Choose Course"}
         onChange={(e) => {
@@ -183,7 +181,7 @@ const CollegeCourses = (props: { collegeId: number; onChangeCallback: (book: Boo
           );
         })}
       </Select>
-    </Flex>
+    // </Flex>
   );
 };
 
