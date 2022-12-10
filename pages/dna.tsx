@@ -213,7 +213,7 @@ const CurrentAffair: React.FC = () => {
           </Text>
         </Link>
 
-        <SignIn />
+        {/* <SignIn /> */}
       </Flex>
       <Container maxW="8xl" py="2" px={{ base: "0.5", md: "2", lg: "4" }}>
         {/* {selectedSyllabus?.subheading} */}
