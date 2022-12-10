@@ -284,10 +284,10 @@ const BookFilterNew = (props: { category: string; onChangeCallback: (book: BookC
         </Select>
         <Select
           id="paper"
-          placeholder={props.category === "7" ? "Select Syllabus" : "Select Book1"}
+          placeholder={props.category !== "1" ? "Select Syllabus" : "Select Book"}
           onChange={(e) => {
             setBookid(e.target.value);
-            const selectedBook = data?.find((item) => item.id === Number(e.target.value));
+            const selectedBook = data?.find((item:any) => item.id === Number(e.target.value));
             // setBook({ bookId: selectedBook?.id, bookName: selectedBook?.book_name, colleges_fk: undefined });
             const x = data?.find((item) => item.id === Number(e.target.value));
             props.onChangeCallback({ bookId: selectedBook?.id, bookName: selectedBook?.book_name });
