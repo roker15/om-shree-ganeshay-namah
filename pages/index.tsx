@@ -73,6 +73,7 @@ const Notes: React.FC = () => {
     <SharedNotesPanel subheadingid={selectedSubheading?.id} changeParentProps={changeContextNotesCreator} />
   );
   const drawerChildSyllabus = <Syllabus bookId={book?.bookId} bookName={book?.bookName} />;
+  
   if (searchText) {
     return (
       <Container maxW="5xl">
