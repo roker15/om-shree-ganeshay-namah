@@ -61,7 +61,7 @@ import { useNotesContextNew } from "../state/NotesContextNew";
 import PageWithLayoutType from "../types/pageWithLayout";
 import { ApiArticleTitle } from "./api/prisma/posts/getarticlesbyuserandsubheading";
 import { Data_headings, Data_subheadings } from "./api/prisma/syllabus/syllabus";
-import NotesSyllabusDrawer from "../componentv2/NotesSyllabusDrawer";
+import Drawer1 from "../componentv2/Drawer1";
 // import { GotoQuestion } from "..";
 const Notes: React.FC = () => {
   const { profile } = useAuthContext();
@@ -99,8 +99,8 @@ const Notes: React.FC = () => {
             {profile ? (
               <>
                 <Box display={{ base: "block", lg: "none" }}>
-                  <NotesSyllabusDrawer buttonText={"Syllabus"}>{drawerChildSyllabus}</NotesSyllabusDrawer>
-                  <NotesSyllabusDrawer buttonText={"Sharing"}>{drawerChildSharing}</NotesSyllabusDrawer>
+                  <Drawer1 buttonText={"Syllabus"}>{drawerChildSyllabus}</Drawer1>
+                  <Drawer1 buttonText={"Sharing"}>{drawerChildSharing}</Drawer1>
                 </Box>
                 <NotesContainer />
               </>
