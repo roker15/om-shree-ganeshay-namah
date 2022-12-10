@@ -21,6 +21,7 @@ import {
   FormErrorMessage,
   Grid,
   GridItem,
+  Heading,
   HStack,
   Input,
   Radio,
@@ -61,7 +62,7 @@ import { useNotesContextNew } from "../state/NotesContextNew";
 import { BookResponse, BookSyllabus } from "../types/myTypes";
 import Link from "next/link";
 import { AvatarMenu } from "../layout/AvatarMenu";
-import NotesSyllabusDrawer from "../componentv2/NotesSyllabusDrawer";
+import Drawer1 from "../componentv2/Drawer1";
 const SunEditor = dynamic(() => import("suneditor-react"), {
   ssr: false,
 });
@@ -202,10 +203,6 @@ const CurrentAffair: React.FC = () => {
     }
   };
 
-  const setSyllabus = (x: BookSyllabus) => {
-    // setSelectedSyllabus(x);
-  };
-
   return (
     <>
       {" "}
@@ -220,7 +217,10 @@ const CurrentAffair: React.FC = () => {
       </Flex>
       <Container maxW="8xl" py="2" px={{ base: "0.5", md: "2", lg: "4" }}>
         {/* {selectedSyllabus?.subheading} */}
-
+        <Center >
+          <Heading fontWeight="black" >Editable Current Affairs</Heading>
+        </Center>
+        <br/>
         {!user && (
           <Flex justifyContent="end" mb="8">
             <LoginCard redirect={`${BASE_URL}/dna`} />
@@ -233,7 +233,7 @@ const CurrentAffair: React.FC = () => {
             <HStack>
               <Box display={["block", "block", "block", "none"]}>
                 {/* <SyllabusDrawer book={book} changeParentProps={setSyllabus} /> */}
-                <NotesSyllabusDrawer buttonText={"Select Date"}>{c}</NotesSyllabusDrawer>
+                <Drawer1 buttonText={"Select Date"}>{c}</Drawer1>
               </Box>
               <Button
                 size={{ base: "sm", sm: "sm", md: "md" }}
