@@ -60,6 +60,8 @@ import { useAuthContext } from "../state/Authcontext";
 import { useNotesContextNew } from "../state/NotesContextNew";
 import { BookResponse, BookSyllabus } from "../types/myTypes";
 import Link from "next/link";
+import { AvatarMenu } from "../layout/AvatarMenu";
+import NotesSyllabusDrawer from "../componentv2/NotesSyllabusDrawer";
 const SunEditor = dynamic(() => import("suneditor-react"), {
   ssr: false,
 });
@@ -139,6 +141,7 @@ const CurrentAffair: React.FC = () => {
   const { selectedSubheading } = useNotesContextNew();
 
   const { data, mutate, isError, isLoading } = useGetCurrentAffairs(isAdminNotes, selectedSubheading?.id!, user?.id!);
+  const c = <Syllabus bookId={book.id} bookName={book.book_name} />;
 
   const handleTabsChange = (index: any) => {
     setLangauge(index === 0 ? "ENG" : "HINDI");
@@ -212,7 +215,7 @@ const CurrentAffair: React.FC = () => {
             Home
           </Text>
         </Link>
-
+        {profile && <AvatarMenu />}
         {/* <SignIn /> */}
       </Flex>
       <Container maxW="8xl" py="2" px={{ base: "0.5", md: "2", lg: "4" }}>
@@ -229,7 +232,8 @@ const CurrentAffair: React.FC = () => {
             {" "}
             <HStack>
               <Box display={["block", "block", "block", "none"]}>
-                <SyllabusDrawer book={book} changeParentProps={setSyllabus} />
+                {/* <SyllabusDrawer book={book} changeParentProps={setSyllabus} /> */}
+                <NotesSyllabusDrawer buttonText={"Select Date"}>{c}</NotesSyllabusDrawer>
               </Box>
               <Button
                 size={{ base: "sm", sm: "sm", md: "md" }}
@@ -318,7 +322,7 @@ const CurrentAffair: React.FC = () => {
                               </Wrap>
                             ) : null}
                             <HStack w="full">
-                              <AccordionButton bg="gray.100" _expanded={{ bg: "gray.300" }} borderRadius="full">
+                              <AccordionButton bg="gray.100" _expanded={{ bg: "gray.300" }}>
                                 <Box flex="1" textAlign="left">
                                   <Flex alignSelf="start" alignItems="center">
                                     <Text
