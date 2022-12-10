@@ -28,12 +28,12 @@ const Layout: React.FunctionComponent<LayoutProps> = ({ children }) => {
       <Flex bg="gray.900" >
           <Center h="48px" px="2">
             <Text fontSize={{base:"sm",xl:"larger"}} color="white">
-              Jionote is a Digital Notes making platform. Select syllbaus from below and make Notes
+              Jionote is a Digital Notes making platform
             </Text>
         </Center>
         <Spacer/>
           <Center pr="2" h="48px" bg="gray.900" gap="2" justifyContent={"end"}>
-            <Button size="md" colorScheme={"yellow"} bg="#FAF089" onClick={() => navigateTo("/manageSyllabus")}>
+            <Button size={{base:"sm",lg:"md"}} colorScheme={"yellow"} bg="#FAF089" onClick={() => navigateTo("/manageSyllabus")}>
               Create Syllabus
             </Button>
             {!profile ? (

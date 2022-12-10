@@ -78,13 +78,13 @@ const Syllabus: React.FC<Props> = ({ book, changeParentProps }) => {
                   align="baseline"
                   justifyContent="left"
                   role="group"
-                  my="2"
+                  my="4"
                   onClick={() => {
                     toggle === value[0].heading_id ? setToogle(-100) : setToogle(value[0].heading_id);
                   }}
                   _hover={{ cursor: "pointer" }}
                 >
-                  <IconButton aria-label="Call Sage" icon={toggle === value[0].heading_id ? <MdLightMode /> : <MdAdd />} />
+                  <IconButton variant="ghost" aria-label="Call Sage" icon={toggle === value[0].heading_id ? <MdLightMode /> : <MdAdd />} />
                   <Text align="start" as="address" color=" #FF1493" casing="capitalize" pr="1">
                     {value[0].heading}
                   </Text>
@@ -96,6 +96,8 @@ const Syllabus: React.FC<Props> = ({ book, changeParentProps }) => {
                       alignItems="center"
                       key={x.subheading_id}
                       display={toggle === x.heading_id ? "flex" : "none"}
+                      pl="6"
+                      my="2"
                     >
                       <Text
                         color={selectedSubheading === x.subheading_id ? "white" : "brand.500"}
@@ -140,8 +142,8 @@ export const ArticleCounter = ({ subheadingId, creatorId }: { subheadingId: numb
     console.log("counter error " + error);
   }
   return (
-    <Flex alignItems={"center"} px="2">
-      <Text as={"label" && "b"}>{data && data.count && data.count !== 0 ? data?.count : ""}</Text>
+    <Flex alignItems={"center"} pl="3">
+      <Text as={"label" } fontWeight="bold">{data && data.count && data.count !== 0 ? data?.count : ""}</Text>
     </Flex>
   );
 };
