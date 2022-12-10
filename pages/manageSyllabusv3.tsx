@@ -65,7 +65,7 @@ const ManageSyllabusv3: React.FunctionComponent = () => {
 export default ManageSyllabusv3;
 
 export const ArticleCounter = ({ subheadingId, creatorId }: { subheadingId: number; creatorId: string }) => {
-  const { data, swrError } = useGetArticleCount(subheadingId, creatorId);
+  const { data,  } = useGetArticleCount(subheadingId, creatorId);
 
   return (
     <Flex alignItems={"center"} px="2">

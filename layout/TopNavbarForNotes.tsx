@@ -1,6 +1,5 @@
 import { HamburgerIcon } from "@chakra-ui/icons";
 import {
-  Avatar,
   Box,
   Divider,
   Flex,
@@ -15,28 +14,21 @@ import {
   LinkOverlay,
   Menu,
   MenuButton,
-  MenuDivider,
   MenuItem,
   MenuList,
-  Spacer,
-  Stack,
-  StackDivider,
   Text,
   useDisclosure,
-  VStack,
 } from "@chakra-ui/react";
 import Link from "next/link";
 import { useRouter } from "next/router";
 import { ReactNode, useEffect, useState } from "react";
 import { FaTelegram } from "react-icons/fa";
-import { FiChevronDown } from "react-icons/fi";
 import DesktopMenu from "../components/chakraTemplate/Customdrawer";
 import { CustomDrawerWithButton } from "../components/CustomChakraUi";
 import BookFilter from "../components/syllabus/BookFilter";
 import BookFilterForNotesMaking from "../componentv2/BookFilterForNotesMaking";
 import RequestDrawer from "../componentv2/RequestDrawer";
 import { useAuthContext } from "../state/Authcontext";
-import { SyllabusContextProviderWrapper } from "../state/SyllabusContext";
 import { BookResponse } from "../types/myTypes";
 
 // const LinkItems: Array<Subheading> = [];
@@ -49,7 +41,7 @@ export default function TopNavbar({ children }: { children: ReactNode }) {
     // finalize
     <Box>
       <MobileNav onOpen={onOpen} />
-      <Box p={{ base: "none", lg: "2" }}>{children}</Box>
+      <Box px={{ base: "0.5", lg: "2" }} pt="2">{children}</Box>
     </Box>
   );
 }
@@ -62,27 +54,15 @@ const MobileNav = ({ onOpen, ...rest }: MobileProps) => {
   // const [scrolling, setScrolling] = useState();
   const { signInWithgoogle, signOut, profile } = useAuthContext();
   return (
-    <Flex
-      // ml={{ base: 10, md: 60 }}
-      // px={{ base: "1", md: 4 }}
-      height="32"
-      alignItems="center"
+    <Grid
+      minH="32"
       top={"0"}
       shadow={"md"}
-      // w="full"
-      // alignSelf={"flex-start"}
-      justifyContent={{ base: "space-between", md: "flex" }}
-      {...rest}
+      templateColumns={{base:"repeat(3, 1fr)",lg:"repeat(9, 1fr)"}}
     >
-      <HStack>
-        <Box display={{ base: "block", md: "none" }}>
-          {/* <CustomMenu /> */}
-          <BookFilterForNotesMaking />
-        </Box>
-        <Text fontWeight="bold" display={{ base: "block", md: "none" }}>
-          Jionote
-        </Text>
-        <LinkBox alignItems="center" display={{ base: "none", md: "flex" }}>
+      {/* <HStack> */}
+      <GridItem colSpan={2}  display={{ base: "none", lg: "flex" }}>
+        <LinkBox alignItems="center">
           <LinkOverlay
             _hover={{
               background: "none",
@@ -91,30 +71,32 @@ const MobileNav = ({ onOpen, ...rest }: MobileProps) => {
           ></LinkOverlay>
           <Image loading="eager" src="/logo-blue.png" alt="Logo" w="90px" />
         </LinkBox>
-      </HStack>
-      <Flex display={{ base: "none", md: "flex" }} placeSelf="center" >
-        {/* <GotoQuestion /> */}
+      </GridItem>
+      <GridItem colSpan={5}>
+        {/* <CustomMenu /> */}
         <BookFilterForNotesMaking />
-      </Flex>
+      </GridItem>
+      {/* <Text fontWeight="bold" display={{ base: "block", md: "none" }}>
+          Jionote
+        </Text> */}
+      {/* </HStack> */}
+
       {/* <Box display={{ base: "none", sm: "initial" }}> */}
       {/* </Box> */}
-      <Grid h="full" templateRows="repeat(3, 1fr)">
-        <GridItem rowStart={2}>
-          <HStack spacing={{ base: "0", md: "6" }}></HStack>
-        </GridItem>
-        <GridItem rowStart={3}>
-          <Flex align={"end"} justifyContent="end" h="full" p="1.5">
-            {JoinTelegram}
-            <RequestDrawer buttonType={"md"} />
-          </Flex>
-        </GridItem>
-      </Grid>
-    </Flex>
+      {/* <Grid h="full" templateRows="repeat(3, 1fr)" display={{ base: "none", lg: "flex" }}> */}
+      <GridItem colSpan={2}   display={{ base: "none", lg: "flex" }}>
+        <Flex w="full" wrap="wrap" alignItems="end" justifyContent="end" direction="row">
+          {JoinTelegram}
+          <RequestDrawer buttonType={"md"} />
+        </Flex>
+      </GridItem>
+      {/* </Grid> */}
+    </Grid>
   );
 };
 
 const JoinTelegram = (
-  <HStack alignItems={"center"} mx="2" px="2" py="0.5" bg="telegram.300">
+  <HStack alignItems={"end"} mx="2" px="2" py="0.5" bg="telegram.300">
     {" "}
     <L color="white" href="https://t.me/+Rhiv7nfLc_pkZDM1" isExternal>
       Join Telegram

@@ -83,7 +83,7 @@ const SyllabusContainer: React.FunctionComponent = () => {
   if (!profile) {
     return (
       <Center h="70vh">
-        <LoginCard redirect={`${BASE_URL}/manageSyllabusv2`} />
+        <LoginCard redirect={`${BASE_URL}/manageSyllabus`} />
       </Center>
     );
   }

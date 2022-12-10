@@ -38,7 +38,6 @@ export function useGetSyllabusByBookId(bookId: number | undefined) {
   };
 }
 export function useGetArticleCount(subheadingId: number, creatorId: string) {
-  const supabaseClient = useSupabaseClient<Database>();
 
   const fetcher = async () => {
     const response = await axios
@@ -53,7 +52,7 @@ export function useGetArticleCount(subheadingId: number, creatorId: string) {
   return {
     data: data,
     isLoading: !error && !data,
-    swrError: error,
+    error: error,
   };
 }
 export function useGetSyllabusModerator(bookId: number | undefined) {

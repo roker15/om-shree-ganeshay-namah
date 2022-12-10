@@ -1,4 +1,4 @@
-import { Box, Button, Container, Radio, RadioGroup, Select, Stack, Text, VStack } from "@chakra-ui/react";
+import { Box, Button, Container, Radio, RadioGroup, Select, Stack, Text, Flex } from "@chakra-ui/react";
 import router from "next/router";
 import React, { useEffect, useState } from "react";
 import { useGetBooks, useGetColleges, useGetCollegesCourses, useGetPersonalCourses } from "../customHookes/networkHooks";
@@ -12,34 +12,35 @@ import { BookResponse } from "../types/myTypes";
 const BookFilterForMangeSyllabus = () => {
   const [category, setCategory] = React.useState("7");
   const [selectedCollege, setSelectedCollege] = useState<number | undefined>(undefined);
-  const [selectedCourse, setselectedCourse] = useState<BookCtx | undefined>(undefined);
-  // const { setBookResponse, book, setDisplayMode, setCategory: setCat } = useSyllabusContext();
-  const { profile } = useAuthContext();
   const { setBook, setSelectedSubheading, setSearchText, searchText } = useNotesContextNew();
 
   const changeCategory = (category: string) => {
     setCategory(category);
-    // setCat(category);
   };
   const handleSyllabusChange = (book: BookCtx) => {
     setBook(book);
     setSelectedSubheading(undefined);
-    setSearchText(undefined)
+    setSearchText(undefined);
   };
-  
+
   return (
-    <VStack px="2" pt="0.5" height="32" _hover={{ color: colorPrimary, bg: "brand.100", transition: "1s" }}>
+    <Box
+      // direction={{ base: "row", md: "row", lg: "column" }}
+      px="2"
+      pt="0.5"
+      // h="32"
+      // bg="aqua"
+      _hover={{ color: colorPrimary, bg: "brand.100", transition: "1s" }}
+    >
       <SearchBox placeholder={"Search notes by typing keywords"} changeValueCallback={setSearchText} />
       <Categories category={category} onChangeCallback={changeCategory} />
       {category === "8" ? (
-        <Stack direction={"row"}>
-          <VStack>
-            <Colleges onChangeCallback={setSelectedCollege} />
-          </VStack>
+        <Stack direction={{ base: "column", lg: "row" }}>
+          <Colleges onChangeCallback={setSelectedCollege} />
           {selectedCollege && (
-            <VStack>
+            <>
               <CollegeCourses collegeId={selectedCollege} onChangeCallback={handleSyllabusChange} />{" "}
-            </VStack>
+            </>
           )}
         </Stack>
       ) : category === "9" ? (
@@ -49,7 +50,7 @@ const BookFilterForMangeSyllabus = () => {
       ) : (
         <BookFilterNew onChangeCallback={handleSyllabusChange} category={category} />
       )}
-    </VStack>
+    </Box>
   );
 };
 interface ICategory {
@@ -70,26 +71,24 @@ const Categories = (props: ICategory) => {
     props.onChangeCallback(e);
   };
   return (
-    <div>
       <RadioGroup
         onChange={(e) => {
           handleChange(e);
         }}
         value={value}
       >
-        <Stack direction={{ base: "column", md: "column", lg: "row" }}>
+        <Flex  direction="row" wrap="wrap"  justify="space-evenly" gap={2}>
           {categories.map((x) => {
             return (
-              <Radio key={x.id} value={x.id} colorScheme="gray" borderColor="gray.500">
+              <Radio size={{ base: "sm" }} key={x.id} value={x.id} colorScheme="gray" borderColor="gray.500">
                 <Text casing="capitalize" fontWeight="black">
                   {x.name}
                 </Text>
               </Radio>
             );
           })}
-        </Stack>
+        </Flex>
       </RadioGroup>
-    </div>
   );
 };
 
@@ -97,22 +96,22 @@ const Colleges = (props: { onChangeCallback: React.Dispatch<React.SetStateAction
   const { colleges, isError, isLoading } = useGetColleges();
 
   return (
-    <Container maxW="2xl">
-      <Select
-        placeholder={"Choose College"}
-        onChange={(e) => {
-          props.onChangeCallback(Number(e.target.value));
-        }}
-      >
-        {colleges?.map((x) => {
-          return (
-            <option key={x.id} value={x.id}>
-              {x.college_name}
-            </option>
-          );
-        })}
-      </Select>
-    </Container>
+    // <Container maxW="2xl" bg="red">
+    <Select
+      placeholder={"Choose College"}
+      onChange={(e) => {
+        props.onChangeCallback(Number(e.target.value));
+      }}
+    >
+      {colleges?.map((x) => {
+        return (
+          <option key={x.id} value={x.id}>
+            {x.college_name}
+          </option>
+        );
+      })}
+    </Select>
+    // </Container>
   );
 };
 const PersonalSyllabus = (props: { onChangeCallback: (book: BookCtx) => void }) => {
@@ -156,9 +155,7 @@ const PersonalSyllabus = (props: { onChangeCallback: (book: BookCtx) => void }) 
 const CollegeCourses = (props: { collegeId: number; onChangeCallback: (book: BookCtx) => void }) => {
   //states
   const { collegesCourses, isError, isLoading } = useGetCollegesCourses(props.collegeId);
-  // const { setDisplayMode, setFormType } = useSyllabusContext();
 
-  //Functions
   const handleChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
     const x = collegesCourses!.find((c) => c.id === Number(e.target.value));
     const book = {
@@ -169,7 +166,7 @@ const CollegeCourses = (props: { collegeId: number; onChangeCallback: (book: Boo
   };
 
   return (
-    <Container maxW="2xl">
+    // <Flex >
       <Select
         placeholder={"Choose Course"}
         onChange={(e) => {
@@ -184,7 +181,7 @@ const CollegeCourses = (props: { collegeId: number; onChangeCallback: (book: Boo
           );
         })}
       </Select>
-    </Container>
+    // </Flex>
   );
 };
 
@@ -249,7 +246,7 @@ const BookFilterNew = (props: { category: string; onChangeCallback: (book: BookC
   };
 
   return (
-    <Box minW="full">
+    <Box>
       <Stack direction={{ base: "column", md: "column", lg: "row" }}>
         <Select
           id="paper"

@@ -3,6 +3,7 @@ import {
   Box,
   Button,
   Center,
+  Flex,
   Grid,
   GridItem,
   Spacer,
@@ -24,18 +25,15 @@ const Layout: React.FunctionComponent<LayoutProps> = ({ children }) => {
   const { profile,signInWithgoogle } = useAuthContext();
   return (
     <Box>
-      <Grid templateColumns="repeat(5, 1fr)" bg="gray.900" >
-        <GridItem colSpan={1} h="48px"></GridItem>
-        <GridItem colSpan={3} h="48px">
-          <Center h="48px">
-            <Text fontSize="larger" color="white">
-              Jionote is a Digital Notes making platform. Select syllbaus from below and make Notes
+      <Flex bg="gray.900" >
+          <Center h="48px" px="2">
+            <Text fontSize={{base:"sm",xl:"larger"}} color="white">
+              Jionote is a Digital Notes making platform
             </Text>
-          </Center>
-        </GridItem>
-        <GridItem colSpan={1}>
+        </Center>
+        <Spacer/>
           <Center pr="2" h="48px" bg="gray.900" gap="2" justifyContent={"end"}>
-            <Button size="md" colorScheme={"yellow"} bg="#FAF089" onClick={() => navigateTo("/manageSyllabus")}>
+            <Button size={{base:"sm",lg:"md"}} colorScheme={"yellow"} bg="#FAF089" onClick={() => navigateTo("/manageSyllabus")}>
               Create Syllabus
             </Button>
             {!profile ? (
@@ -52,8 +50,7 @@ const Layout: React.FunctionComponent<LayoutProps> = ({ children }) => {
               <AvatarMenu />
             )}
           </Center>
-        </GridItem>
-      </Grid>{" "}
+      </Flex>
       <TopNavbarForNotes>{children}</TopNavbarForNotes>
       {/* <DesktopMenu /> */}
     </Box>

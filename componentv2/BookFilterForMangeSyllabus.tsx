@@ -1,19 +1,16 @@
 import { Box, Button, Container, Radio, RadioGroup, Select, Stack, Text, VStack } from "@chakra-ui/react";
-import router from "next/router";
 import React, { useEffect, useState } from "react";
-import { useGetColleges, useGetPersonalCourses, useGetCollegesCourses, useGetBooks } from "../customHookes/networkHooks";
+import { useGetBooks, useGetColleges, useGetCollegesCourses, useGetPersonalCourses } from "../customHookes/networkHooks";
 import { useAuthContext } from "../state/Authcontext";
 import { useNoteContext } from "../state/NoteContext";
 import { Book, useSyllabusContext } from "../state/SyllabusContext";
 import { BookResponse } from "../types/myTypes";
-import RequestDrawer from "./RequestDrawer";
 
 
 const BookFilterForMangeSyllabus = () => {
   const [category, setCategory] = React.useState("7");
   const [selectedCollege, setSelectedCollege] = useState<number | undefined>(undefined);
-  const [selectedCourse, setselectedCourse] = useState<Book | undefined>(undefined);
-  const { setBook, book, setDisplayMode, setCategory: setCat } = useSyllabusContext();
+  const { setBook, setDisplayMode, setCategory: setCat } = useSyllabusContext();
   const { profile } = useAuthContext();
 
   const changeCategory = (category: string) => {
@@ -69,7 +66,6 @@ const BookFilterForMangeSyllabus = () => {
       ) : (
         <BookFilterNew onChangeCallback={setBook} category={category} />
       )}
-      {/* <RequestDrawer buttonType={"md"}/> */}
     </VStack>
   );
 };
@@ -237,12 +233,6 @@ const BookFilterNew = (props: {
   const { setIsTagSearchActive, setBookResponse, bookResponse } = useNoteContext();
   const [bookid, setBookid] = useState<string | undefined>();
 
-  // useEffect(() => {
-  //   if (bookResponse && bookid) {
-  //     navigateTo(bookid);
-  //   }
-  // }, [bookResponse, bookid]);
-
   useEffect(() => {
     setClassList(
       data
@@ -273,16 +263,6 @@ const BookFilterNew = (props: {
         : null
     );
   }, [data, selectedClass, selectedSubject]);
-
-  const ROUTE_POST_ID = "/notes/[bookid]";
-  const navigateTo = (bookid: string) => {
-    router.push({
-      pathname: ROUTE_POST_ID,
-      query: { bookid },
-
-      // href:"www.localhost.com"
-    });
-  };
 
   return (
     <Box minW="full">

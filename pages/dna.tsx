@@ -46,23 +46,20 @@ import { useSupabaseClient, useUser } from "@supabase/auth-helpers-react";
 import React, { useState } from "react";
 import { SubmitHandler, useForm } from "react-hook-form";
 import { MdAdd, MdCancel, MdDone, MdFileCopy, MdModeEdit } from "react-icons/md";
+import { Syllabus } from ".";
 import { InfoAlert } from "../components/CurrentAffair/ManageCurrentAffair";
 import SyllabusForCurrentAffairs from "../components/CurrentAffair/SyllabusForCurrentAffairs";
+import DeleteConfirmation from "../components/syllabus/DeleteConfirmation";
 import { customToast } from "../componentv2/CustomToast";
 import { LoginCard } from "../componentv2/LoginCard";
-import DeleteConfirmation from "../components/syllabus/DeleteConfirmation";
+import SignIn from "../componentv2/SignIn";
 import { useGetCurrentAffairs } from "../customHookes/networkHooks";
-import LayoutWithTopNavbar from "../layout/LayoutWithTopNavbar";
+import { Database } from "../lib/database";
 import { elog, sentenseCase } from "../lib/mylog";
 import { useAuthContext } from "../state/Authcontext";
-import { BookResponse, BookSyllabus } from "../types/myTypes";
-import PageWithLayoutType from "../types/pageWithLayout";
-import { Database } from "../lib/database";
-import { Syllabus } from ".";
 import { useNotesContextNew } from "../state/NotesContextNew";
-import LayoutWithTopNavbarForNotes from "../layout/LayoutWithTopNavbarForNotes";
-import SignIn from "../componentv2/SignIn";
-
+import { BookResponse, BookSyllabus } from "../types/myTypes";
+import Link from "next/link";
 const SunEditor = dynamic(() => import("suneditor-react"), {
   ssr: false,
 });
@@ -209,7 +206,13 @@ const CurrentAffair: React.FC = () => {
   return (
     <>
       {" "}
-      <Flex boxShadow={"md"} h="12" px="2" bg="gray.900" justify="end" align="center">
+      <Flex boxShadow={"md"} h="12" px="2" bg="gray.900" justify="space-between" align="center">
+        <Link href="/">
+          <Text color="white" cursor="pointer">
+            Home
+          </Text>
+        </Link>
+
         <SignIn />
       </Flex>
       <Container maxW="8xl" py="2" px={{ base: "0.5", md: "2", lg: "4" }}>
