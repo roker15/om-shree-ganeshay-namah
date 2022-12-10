@@ -61,6 +61,7 @@ import { useNotesContextNew } from "../state/NotesContextNew";
 import PageWithLayoutType from "../types/pageWithLayout";
 import { ApiArticleTitle } from "./api/prisma/posts/getarticlesbyuserandsubheading";
 import { Data_headings, Data_subheadings } from "./api/prisma/syllabus/syllabus";
+import NotesSyllabusDrawer from "../componentv2/NotesSyllabusDrawer";
 // import { GotoQuestion } from "..";
 const Notes: React.FC = () => {
   const { profile } = useAuthContext();
@@ -87,6 +88,7 @@ const Notes: React.FC = () => {
       {book && (
         <Grid templateColumns="repeat(9, 1fr)" gap={0.5}>
           <GridItem w="100%" colSpan={2} minH="100vh" bg="brand.50">
+            <NotesSyllabusDrawer buttonType={"xs"}/>
             <Syllabus bookId={book.bookId} bookName={book.bookName} />
           </GridItem>
           <GridItem w="100%" colSpan={6}>

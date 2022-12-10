@@ -41,7 +41,7 @@ export default function TopNavbar({ children }: { children: ReactNode }) {
     // finalize
     <Box>
       <MobileNav onOpen={onOpen} />
-      <Box p={{ base: "2", lg: "2" }}>{children}</Box>
+      <Box px={{ base: "0.5", lg: "2" }} pt="2">{children}</Box>
     </Box>
   );
 }
