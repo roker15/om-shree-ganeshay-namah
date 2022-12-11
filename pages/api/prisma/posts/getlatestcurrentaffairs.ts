@@ -12,7 +12,8 @@ export type ApiLatestCurrentAffairs = {
   current_affair_tags: number[];
   question_type: string | null;
   question_year: number | null;
-  created_at:string,
+  created_at: string,
+  created_by: string;
 };
 
 export default async function handle(req: NextApiRequest, res: NextApiResponse) {
@@ -35,6 +36,7 @@ export default async function handle(req: NextApiRequest, res: NextApiResponse) 
         id: true,
         article_english: true,
         article_hindi: true,
+        created_by:true,
         books_subheadings_fk: true,
         article_title: true,
         created_at:true,

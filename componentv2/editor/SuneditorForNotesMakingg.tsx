@@ -55,14 +55,14 @@ const SuneditorForNotesMaking: React.FunctionComponent<SuneditorForNotesMakingPr
       return;
     }
     // if (data) {
-      customToast({ title: "Updated...", status: "success", isUpdating: true });
+    customToast({ title: "Updated...", status: "success", isUpdating: true });
     // }
   };
 
   return (
     <div>
-      <Box spellCheck="false">
-        {/* //use above attrivutes if you want to override spellcheck of browser */}
+      <Box spellCheck={editorMode === "READ" ? "false" : "true"}>
+        {/* //use above attributes if you want to override spellcheck of browser */}
         <Flex
           // display={profile?.id !== article.created_by ? "none" : "undefined"}
           display={isEditable ? "undefined" : "none"}
@@ -88,7 +88,7 @@ const SuneditorForNotesMaking: React.FunctionComponent<SuneditorForNotesMakingPr
               getSunEditorInstance={getSunEditorInstance}
               // handleOnChange={handleOnChange}
               updateArticleInDatabase={updateArticleInDatabase}
-              article={article! }
+              article={article!}
               language={language}
             ></Editor>
           </Centerr>
@@ -103,6 +103,12 @@ export const Centerr = styled.div`
   th,
   td {
     min-width: 250px;
+   
+  }
+  .sun-editor-editable table {
+    display: block;
+    overflow-x: auto;
+    /* white-space: nowrap; */
   }
   .__se__customClass {
     display: inline-block;
@@ -141,12 +147,12 @@ function ChangeEditorMode(props: {
   return (
     <RadioGroup onChange={props.setEditorMode} value={props.editorMode}>
       <Stack direction="row">
-        <Radio colorScheme="whatsapp" size="sm" value="READ">
+        <Radio colorScheme="whatsapp" borderColor={"gray.400"} size="sm" value="READ">
           <Text as="b" casing="capitalize">
             Read
           </Text>
         </Radio>
-        <Radio colorScheme="pink" size="sm" value="EDIT">
+        <Radio colorScheme="pink" borderColor={"gray.400"} size="sm" value="EDIT">
           <Text as="b" casing="capitalize">
             Edit
           </Text>
@@ -197,7 +203,7 @@ function Editor(props: editorProps): JSX.Element {
         getSunEditorInstance={props.getSunEditorInstance}
         setDefaultStyle={props.fontSize}
         hideToolbar={props.editorMode === "READ" ? true : false}
-        defaultValue={props.language === "ENGLISH" ? props.article.article_english !: props.article.article_hindi!}
+        defaultValue={props.language === "ENGLISH" ? props.article.article_english! : props.article.article_hindi!}
         // setContents={props.language === "ENGLISH" ? props.article.article_english : props.article.article_hindi} //cause blank editor to render first and then put content, so creates flickering effect . so move to defaultValue
         readOnly={props.editorMode === "READ" ? true : false}
         autoFocus={false} // disable={editorMode === "READ" ? true : false}
