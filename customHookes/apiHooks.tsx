@@ -135,16 +135,7 @@ export function useGetLatestCurrentaffairs() {
       });
     return response.data;
   };
-  const fetcher1 = async () => {
-    const { data, error } = await supabaseClient.from("books_articles").select(`id: number;
-sequence,
-article_title,
-current_affair_tags,
-question_type,
-question_year,
-created_at,
-created_by`);
-  };
+
   const { data, error, mutate, isValidating } = useSWR(["/api/prisma/posts/getlatestcurrentaffairs"], fetcher, cacheOptions);
   return {
     articleTitles: data,
