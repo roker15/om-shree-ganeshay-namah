@@ -22,7 +22,7 @@ export type Profile = {
   role: string | null;
   email: string | null;
   last_login: string | null;
-};
+}
 export const sunEditorButtonList = [
   [
     // "undo",
