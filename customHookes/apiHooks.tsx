@@ -16,8 +16,6 @@ const cacheOptions = {
 };
 
 export function useGetSyllabusByBookId(bookId: number | undefined) {
-  const supabaseClient = useSupabaseClient<Database>();
-
   const fetcher = async () => {
     const response = await axios.get<Data>("/api/prisma/syllabus/syllabus", { params: { bookId: bookId } }).catch((e) => {
       throw e;
@@ -38,7 +36,6 @@ export function useGetSyllabusByBookId(bookId: number | undefined) {
   };
 }
 export function useGetArticleCount(subheadingId: number, creatorId: string) {
-
   const fetcher = async () => {
     const response = await axios
       .get<number>("/api/prisma/posts/postcountbysyllabuss", { params: { subheadingId, creatorId } })
@@ -127,6 +124,7 @@ export function useGetArticlesbyUserandSubheading(props: { subheadingId: number;
   };
 }
 export function useGetLatestCurrentaffairs() {
+  const supabaseClient = useSupabaseClient<Database>();
   const fetcher = async () => {
     const response = await axios
       .get<ApiLatestCurrentAffairs[]>("/api/prisma/posts/getlatestcurrentaffairs", {
@@ -137,6 +135,7 @@ export function useGetLatestCurrentaffairs() {
       });
     return response.data;
   };
+
   const { data, error, mutate, isValidating } = useSWR(["/api/prisma/posts/getlatestcurrentaffairs"], fetcher, cacheOptions);
   return {
     articleTitles: data,

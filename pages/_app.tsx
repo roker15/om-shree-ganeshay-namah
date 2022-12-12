@@ -12,6 +12,7 @@ import { SessionContextProvider } from "@supabase/auth-helpers-react";
 import { Database } from "../lib/database";
 import { NotesContextNewWrapper } from "../state/NotesContextNew";
 import { SyllabusContextProviderWrapper } from "../state/SyllabusContext";
+import { Analytics } from '@vercel/analytics/react';
 type AppLayoutProps = {
   Component: PageWithLayoutType;
   pageProps: any;
@@ -43,6 +44,7 @@ function MyApp({ Component, pageProps }: AppLayoutProps) {
           </SyllabusContextProviderWrapper>
         </AuthProvider>
       </SessionContextProvider>
+      <Analytics />
     </>
   );
 }
