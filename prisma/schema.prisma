@@ -26,7 +26,6 @@ model books {
   subjects                  subjects?                  @relation(fields: [subject_fk], references: [id], onDelete: NoAction, onUpdate: NoAction)
   profiles                  profiles?                  @relation(fields: [syllabus_owner_fk], references: [id], onDelete: NoAction, onUpdate: NoAction)
   books_headings            books_headings[]
-  moderator_request         moderator_request[]
   questionbank              questionbank[]
   syllabus_moderator        syllabus_moderator[]
 }
@@ -227,10 +226,12 @@ model profiles {
   books_article_sharing_books_article_sharing_shared_byToprofiles   books_article_sharing[]  @relation("books_article_sharing_shared_byToprofiles")
   books_article_sharing_books_article_sharing_shared_withToprofiles books_article_sharing[]  @relation("books_article_sharing_shared_withToprofiles")
   books_articles                                                    books_articles[]
+  events_registration                                               events_registration[]
   posts                                                             posts[]
   question_answer                                                   question_answer[]
   questionbank                                                      questionbank[]
   questionbank_old                                                  questionbank_old[]
+  request                                                           request[]
   sharedpost                                                        sharedpost[]
   subheadingquestionlink                                            subheadingquestionlink[]
   syllabus_moderator                                                syllabus_moderator[]
@@ -361,13 +362,23 @@ model syllabus_moderator {
   profiles     profiles? @relation(fields: [moderator_fk], references: [id], onDelete: NoAction, onUpdate: NoAction)
 }
 
-model moderator_request {
+model events_registration {
   id         BigInt    @id @default(autoincrement())
   created_at DateTime? @default(now()) @db.Timestamptz(6)
-  user_fk    BigInt?
-  book_fk    BigInt?
+  profile_fk String?   @db.Uuid
+  name       String?
   mobile     String?
-  books      books?    @relation(fields: [book_fk], references: [id], onDelete: NoAction, onUpdate: NoAction)
+  event      String?
+  profiles   profiles? @relation(fields: [profile_fk], references: [id], onDelete: NoAction, onUpdate: NoAction)
+}
+
+model request {
+  id         BigInt    @id @default(autoincrement())
+  created_at DateTime? @default(now()) @db.Timestamptz(6)
+  message    String?
+  mobile     String?
+  user_fk    String?   @db.Uuid
+  profiles   profiles? @relation(fields: [user_fk], references: [id], onDelete: NoAction, onUpdate: NoAction)
 }
 
 enum continents {

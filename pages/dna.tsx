@@ -55,7 +55,6 @@ import { customToast } from "../componentv2/CustomToast";
 import { LoginCard } from "../componentv2/LoginCard";
 import SignIn from "../componentv2/SignIn";
 import { useGetCurrentAffairs } from "../customHookes/networkHooks";
-import { Database } from "../lib/database";
 import { elog, sentenseCase } from "../lib/mylog";
 import { useAuthContext } from "../state/Authcontext";
 import { useNotesContextNew } from "../state/NotesContextNew";
@@ -63,6 +62,7 @@ import { BookResponse, BookSyllabus } from "../types/myTypes";
 import Link from "next/link";
 import { AvatarMenu } from "../layout/AvatarMenu";
 import Drawer1 from "../componentv2/Drawer1";
+import { Database } from "../lib/database";
 const SunEditor = dynamic(() => import("suneditor-react"), {
   ssr: false,
 });
