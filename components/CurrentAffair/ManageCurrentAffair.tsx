@@ -190,12 +190,12 @@ export default function ManageCurrentAffair() {
                             </Flex>
                             <AccordionPanel pb={4} borderTopWidth="0px" borderBottomWidth="0px" px={{ base: 0, lg: "4" }}>
                               {isExpanded && (
-                                idth="full">
+                                <Tabs variant="line" size="sm" colorScheme="brand" width="full">
                                   <TabList>
                                     <Tab>English</Tab>
                                     <Tab>Hindi</Tab>
                                   </TabList>
-                                  <TabPanels><Tabs variant="line" size="sm" colorScheme="brand" w
+                                  <TabPanels>
                                     <TabPanel px={{ base: 0, lg: "4" }} width="full">
                                       <SuneditorForNotesMakingg
                                         article1={article.id}
