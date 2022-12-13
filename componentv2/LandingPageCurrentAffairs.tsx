@@ -33,7 +33,7 @@ const LandingPageCurrentAffairs = () => {
           </Heading>
           <br />
           <br />
-          <Button
+          {/* <Button
             size="md"
             w="28"
             colorScheme="blue"
@@ -44,7 +44,7 @@ const LandingPageCurrentAffairs = () => {
           >
             {language === "HINDI" ? "ENGLISH" : "HINDI"}
           </Button>
-          <br />
+          <br /> */}
         </VStack>
       </Center>
       <CurrentAffairsContainer key={language} language={language} />
@@ -71,7 +71,7 @@ export const CurrentAffairsContainer = (props: { language: "HINDI" | "ENGLISH" }
     );
   }
   return (
-    <Container maxW="5xl">
+    <Container maxW="5xl" p="0.5">
       <Button
         size="md"
         colorScheme="blue"
@@ -80,12 +80,15 @@ export const CurrentAffairsContainer = (props: { language: "HINDI" | "ENGLISH" }
           setTabIndex(tabIndex === 0 ? 1 : 0);
         }}
       >
-        {tabIndex === 0 ? "Switch to Hindi" : "Switch to English"}
+        {tabIndex === 0 ? "SWITCH TO HINDI" : "SWITCH TO ENGLISH"}
       </Button>
-      <VStack alignItems="left" spacing="16">
+      <br/>
+      <br/>
+      <br/>
+      <VStack alignItems="left" spacing="16" >
         {articleTitles?.map((x) => (
           <VStack key={x.id} spacing="2" alignItems="left">
-            <Heading fontSize="4xl" color={colorPrimary}>
+            <Heading fontSize={{base:"2xl",md:"3xl",lg:"4xl"}} color={colorPrimary}>
               💡 {x.article_title}
             </Heading>
             <Text as="label" color={colorPrimary}>
@@ -98,14 +101,14 @@ export const CurrentAffairsContainer = (props: { language: "HINDI" | "ENGLISH" }
               })}
             </Text>
             <br />
-            <Tabs index={tabIndex} onChange={handleTabsChange} variant="line" size="sm" colorScheme="brand" width="full">
+            <Tabs  index={tabIndex} onChange={handleTabsChange} variant="line" size="sm" colorScheme="brand" width="full">
               <TabList>
                 <Tab>English</Tab>
                 <Tab>Hindi</Tab>
               </TabList>
-              <TabPanels>
-                <TabPanel>
-                  <Box p="2" bg="facebook.100" borderRadius={"10"}>
+              <TabPanels >
+                <TabPanel >
+                  <Box p="2" mx="-4" bg="facebook.100" borderRadius={"10"}>
                     <SuneditorForNotesMakingg
                       article1={x.id}
                       language={"ENGLISH"}
@@ -114,7 +117,7 @@ export const CurrentAffairsContainer = (props: { language: "HINDI" | "ENGLISH" }
                   </Box>
                 </TabPanel>
                 <TabPanel>
-                  <Box p="2" bg="facebook.100" borderRadius={"10"}>
+                  <Box p="2" mx="-4" bg="facebook.100" borderRadius={"10"}>
                     <SuneditorForNotesMakingg
                       article1={x.id}
                       language={"HINDI"}
