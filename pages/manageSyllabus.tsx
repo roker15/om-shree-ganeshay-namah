@@ -574,9 +574,9 @@ const Subheading: React.FunctionComponent<IsubheadingProps> = ({ subheading }) =
       <Text fontSize={"sm"} casing={"capitalize"}>
         {subheading.subheading}
       </Text>
-      {profile && profile.id &&  (
+      {/* {profile && profile.id &&  (
         <ArticleCounter subheadingId={subheading.id} creatorId={profile.id} />
-      )}
+      )} */}
     </Flex>
   );
 };
