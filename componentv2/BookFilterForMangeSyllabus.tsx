@@ -6,7 +6,6 @@ import { useNoteContext } from "../state/NoteContext";
 import { Book, useSyllabusContext } from "../state/SyllabusContext";
 import { BookResponse } from "../types/myTypes";
 
-
 const BookFilterForMangeSyllabus = () => {
   const [category, setCategory] = React.useState("7");
   const [selectedCollege, setSelectedCollege] = useState<number | undefined>(undefined);
@@ -19,7 +18,7 @@ const BookFilterForMangeSyllabus = () => {
   };
 
   return (
-    <VStack px="2" height="32" _hover={{ color: "#4154f1", bg: "brand.100" }}>
+    <Box px="2"  _hover={{ color: "#4154f1", bg: "brand.100" }}>
       <Categories category={category} onChangeCallback={changeCategory} />
       {category === "8" ? (
         <Stack direction={"row"}>
@@ -66,7 +65,7 @@ const BookFilterForMangeSyllabus = () => {
       ) : (
         <BookFilterNew onChangeCallback={setBook} category={category} />
       )}
-    </VStack>
+    </Box>
   );
 };
 interface ICategory {
