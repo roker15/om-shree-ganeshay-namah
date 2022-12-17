@@ -14,10 +14,10 @@ export type ApiArticleTitle = {
   question_type: string | null;
   question_year: number | null;
 } ;
-export const books = {
-select:{profiles:{select:{avatar_url:true}}}
+// export const books = {
+// select:{profiles:{select:{avatar_url:true}}}
   
-} satisfies Prisma.books_articlesArgs;
+// } satisfies Prisma.books_articlesArgs;
 
 export default async function handle(req: NextApiRequest, res: NextApiResponse) {
   const supabaseServerClient = createServerSupabaseClient<Database>({ req, res });

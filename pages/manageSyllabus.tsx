@@ -550,7 +550,7 @@ const Headings: React.FunctionComponent<IheadingsProps> = ({ headings }) => {
           variant="solid"
           size="xs"
           onClick={() => {
-            setHide(!hide);
+            // setHide(!hide);
             setFormType("SUBHEAD");
             setSubheadingFormProps({ formMode: "CREATE_SUBHEADING", heading_fk: headings.id });
           }}
