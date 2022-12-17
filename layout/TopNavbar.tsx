@@ -4,6 +4,8 @@ import {
   Center,
   Flex,
   FlexProps,
+  Grid,
+  GridItem,
   HStack,
   IconButton,
   Image,
@@ -56,27 +58,9 @@ const MobileNav = ({ onOpen, ...rest }: MobileProps) => {
   // const [scrolling, setScrolling] = useState();
   const { signInWithgoogle, signOut, profile } = useAuthContext();
   return (
-    <Flex
-      // ml={{ base: 10, md: 60 }}
-      px={{ base: "1", md: 4 }}
-      height="32"
-      alignItems="center"
-      top={"0"}
-      shadow={"md"}
-      w="full"
-      alignSelf={"flex-start"}
-      justifyContent={{ base: "space-between", md: "flex" }}
-      {...rest}
-    >
-      <HStack>
-        <Box display={{ base: "block", md: "none" }}>
-          {/* <CustomMenu /> */}
-          <BookFilterForMangeSyllabus />
-        </Box>
-        <Text fontWeight="bold" display={{ base: "block", md: "none" }}>
-          Jionote
-        </Text>
-        <LinkBox alignItems="center" display={{ base: "none", md: "flex" }}>
+    <Grid minH="32" top={"0"} shadow={"md"} templateColumns={{ base: "repeat(3, 1fr)", lg: "repeat(9, 1fr)" }}>
+      <GridItem colSpan={2} display={{ base: "none", lg: "flex" }}>
+        <LinkBox alignItems="center">
           <LinkOverlay
             _hover={{
               background: "none",
@@ -85,22 +69,22 @@ const MobileNav = ({ onOpen, ...rest }: MobileProps) => {
           ></LinkOverlay>
           <Image loading="eager" src="/logo-blue.png" alt="Logo" w="90px" />
         </LinkBox>
-      </HStack>
-      <Box display={{ base: "none", md: "block" }}>
+      </GridItem>
+      <GridItem colSpan={5}>
         {/* <GotoQuestion /> */}
 
         <BookFilterForMangeSyllabus />
-      </Box>
+      </GridItem>
       {/* <Box display={{ base: "none", sm: "initial" }}> */}
       {/* </Box> */}
 
-      <HStack spacing={{ base: "0", md: "6" }}>
-        <Flex align={"end"} justifyContent="end" h="full" p="1.5">
+      <GridItem colSpan={2} display={{ base: "none", lg: "flex" }}>
+        <Flex w="full" wrap="wrap" alignItems="end" justifyContent="end" direction="row">
           {JoinTelegram}
           <RequestDrawer buttonType={"md"} />
         </Flex>
-      </HStack>
-    </Flex>
+      </GridItem>
+    </Grid>
   );
 };
 

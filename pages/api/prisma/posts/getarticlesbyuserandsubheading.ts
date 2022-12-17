@@ -1,4 +1,5 @@
 // import { books, books_article_sharing, PrismaClient, profiles } from "@prisma/client";
+import { Prisma } from "@prisma/client";
 import { createServerSupabaseClient } from "@supabase/auth-helpers-nextjs";
 import { NextApiRequest, NextApiResponse } from "next";
 import { Database } from "../../../../lib/database";
@@ -12,7 +13,11 @@ export type ApiArticleTitle = {
   current_affair_tags: number[];
   question_type: string | null;
   question_year: number | null;
-};
+} ;
+export const books = {
+select:{profiles:{select:{avatar_url:true}}}
+  
+} satisfies Prisma.books_articlesArgs;
 
 export default async function handle(req: NextApiRequest, res: NextApiResponse) {
   const supabaseServerClient = createServerSupabaseClient<Database>({ req, res });
@@ -25,7 +30,8 @@ export default async function handle(req: NextApiRequest, res: NextApiResponse) 
     data: { user },
   } = await supabaseServerClient.auth.getUser();
   try {
-    const data = await prisma.books_articles.findMany({
+    const data = await prisma.books_articles.findMany(
+      {
       where: { books_subheadings_fk: Number(subheadingId), created_by: creatorId.toString() },
       select: {
         id: true,
@@ -36,7 +42,8 @@ export default async function handle(req: NextApiRequest, res: NextApiResponse) 
         question_type: true,
         question_year: true,
       },
-    });
+      }
+    );
     return res.status(200).send(toJson(data)!);
   } catch (error) {
     return res.status(500).send(toJson(error)!);

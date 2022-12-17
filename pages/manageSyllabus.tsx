@@ -34,7 +34,7 @@ import {
 import { useSupabaseClient, useUser } from "@supabase/auth-helpers-react";
 import React, { useEffect, useState } from "react";
 import { SubmitHandler, useForm } from "react-hook-form";
-import { MdEdit } from "react-icons/md";
+import { MdAdd, MdEdit, MdLightMode } from "react-icons/md";
 import { customToast } from "../componentv2/CustomToast";
 import { LoginCard } from "../componentv2/LoginCard";
 import { useGetSyllabusByBookId, useGetSyllabusModerator } from "../customHookes/apiHooks";
@@ -49,6 +49,7 @@ import PageWithLayoutType from "../types/pageWithLayout";
 import { Data_headings, Data_subheadings } from "./api/prisma/syllabus/syllabus";
 import { DeleteAlert } from "../componentv2/DeleteAlert";
 import { ArticleCounter } from "../componentv2/ArticleCounter";
+import Drawer1 from "../componentv2/Drawer1";
 // import { Data1 } from "./api/prisma/posts/postCountbySyllabus";
 
 const CHeading = (props: { children: React.ReactNode }) => {
@@ -94,19 +95,28 @@ const SyllabusContainer: React.FunctionComponent = () => {
       {shudShow ? (
         <Box>
           {displayMode === "SYLLABUS" && (
-            <Grid templateColumns="repeat(6, 1fr)" gap={2}>
-              <GridItem w="100%" colSpan={2} minH="100vh" bg="brand.50">
+            <Grid templateColumns={{ base: "repeat(6, 1fr)", lg: "repeat(9, 1fr)" }} gap={0.5}>
+              <GridItem w="100%" colSpan={3} minH="100vh" bg="brand.50" display={{ base: "none", lg: "block" }}>
+                {" "}
                 <Syllabus />
               </GridItem>
-              <GridItem w="100%" colSpan={4}>
-                {formType === undefined && (
-                  <Center h="60vh">
-                    <CHeading>Select action from Left</CHeading>
-                  </Center>
-                )}
+              <GridItem w="100%" colSpan={6}>
+                <>
+                  <Box display={{ base: "block", lg: "none" }}>
+                    <Drawer1 buttonText={"Syllabus"}>
+                      <Syllabus />
+                    </Drawer1>
+                  </Box>
 
-                {formType === "HEAD" && <HeadingForm x={headingFormProps} />}
-                {formType === "SUBHEAD" && <SubheadingForm x={subheadingFormProps} />}
+                  {formType === undefined && (
+                    <Center h="60vh">
+                      <CHeading>Select action from Left</CHeading>
+                    </Center>
+                  )}
+
+                  {formType === "HEAD" && <HeadingForm x={headingFormProps} />}
+                  {formType === "SUBHEAD" && <SubheadingForm x={subheadingFormProps} />}
+                </>{" "}
               </GridItem>
             </Grid>
           )}
@@ -139,7 +149,6 @@ const SyllabusContainer: React.FunctionComponent = () => {
 export default SyllabusContainer;
 
 const Syllabus: React.FunctionComponent = () => {
-  const { profile } = useAuthContext();
   const user = useUser();
   const { formType, setFormType, setHeadingFormProps, book } = useSyllabusContext();
   const { data, swrError } = useGetSyllabusByBookId(book?.bookId);
@@ -148,7 +157,7 @@ const Syllabus: React.FunctionComponent = () => {
     <Box maxW="full" p="2" bg="brand.50">
       {user && (
         <VStack display="inline-block">
-          <HStack bg="brand.50" alignItems={"baseline"} p="4">
+          <Flex bg="brand.50" alignItems={"baseline"} p="4" wrap="wrap">
             <Text fontSize="lg" as="u">
               {book!.bookName}
             </Text>
@@ -163,7 +172,7 @@ const Syllabus: React.FunctionComponent = () => {
               {" "}
               Add Chapter
             </Button>
-          </HStack>
+          </Flex>
           <VStack alignItems="left" spacing="4">
             {data?.books_headings.map((headings) => (
               <Headings key={headings.id} headings={headings} />
@@ -498,9 +507,19 @@ const Headings: React.FunctionComponent<IheadingsProps> = ({ headings }) => {
     const { error } = await supabaseClient.from("books_headings").delete().eq("id", id);
     mutate();
   };
+  const [hide, setHide] = useState(true);
   return (
     <VStack key={Number(headings!.id!)} alignItems="left">
       <HStack alignItems={"baseline"}>
+        <IconButton
+          onClick={() => {
+            setHide(!hide);
+          }}
+          variant="ghost"
+          size="md"
+          aria-label="Call Sage"
+          icon={hide ? <MdAdd /> : <MdLightMode />}
+        />
         <IconButton
           icon={<MdEdit />}
           onClick={() => {
@@ -517,13 +536,21 @@ const Headings: React.FunctionComponent<IheadingsProps> = ({ headings }) => {
           aria-label={""}
         ></IconButton>
         <DeleteAlert handleDelete={deleteHeading} dialogueHeader={"Delete Heading"} id={headings.id} />
-        <Text as="b" casing={"capitalize"} cursor="pointer">
+        <Text
+          as="b"
+          casing={"capitalize"}
+          cursor="pointer"
+          onClick={() => {
+            setHide(!hide);
+          }}
+        >
           {headings.heading}
         </Text>
         <Button
           variant="solid"
           size="xs"
           onClick={() => {
+            setHide(!hide);
             setFormType("SUBHEAD");
             setSubheadingFormProps({ formMode: "CREATE_SUBHEADING", heading_fk: headings.id });
           }}
@@ -532,11 +559,13 @@ const Headings: React.FunctionComponent<IheadingsProps> = ({ headings }) => {
           Add Topic
         </Button>
       </HStack>
-      <VStack alignItems={"left"} pl="16" spacing="4">
-        {headings.books_subheadings.map((subheading) => (
-          <Subheading key={subheading.id} subheading={subheading} />
-        ))}
-      </VStack>
+      {!hide && (
+        <VStack alignItems={"left"} pl="16" spacing="4">
+          {headings.books_subheadings.map((subheading) => (
+            <Subheading key={subheading.id} subheading={subheading} />
+          ))}
+        </VStack>
+      )}
     </VStack>
   );
 };
@@ -545,7 +574,7 @@ interface IsubheadingProps {
 }
 const Subheading: React.FunctionComponent<IsubheadingProps> = ({ subheading }) => {
   const supabaseClient = useSupabaseClient<Database>();
-  const { book, } = useSyllabusContext();
+  const { book } = useSyllabusContext();
   const { profile } = useAuthContext();
   const { mutate } = useGetSyllabusByBookId(book?.bookId!);
   const deleteSubheading = async (id: number) => {
@@ -1006,8 +1035,16 @@ export const SearchBox = (props: { placeholder: string; changeValueCallback: (x:
   return (
     <Container px="-0.5" maxW="2xl">
       <form onSubmit={handleSubmit}>
-        <InputGroup >
-          <Input size="md" bg= "brand.50" focusBorderColor="brand.50" borderRadius="full" value={value} onChange={(event) => setValue(event.target.value)} placeholder={props.placeholder} />
+        <InputGroup>
+          <Input
+            size="md"
+            bg="brand.50"
+            focusBorderColor="brand.50"
+            borderRadius="full"
+            value={value}
+            onChange={(event) => setValue(event.target.value)}
+            placeholder={props.placeholder}
+          />
 
           <InputRightElement>
             <Search2Icon onClick={() => handleSubmit()} _hover={{ cursor: "pointer" }} />
@@ -1118,4 +1155,3 @@ export const Activate = (props: { id: number; activeState: boolean; bookId: numb
     </>
   );
 };
-
