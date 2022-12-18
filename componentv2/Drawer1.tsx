@@ -1,6 +1,5 @@
 import { CloseIcon } from "@chakra-ui/icons";
 import { Button, Flex, IconButton, Slide, Spacer, useDisclosure, VStack } from "@chakra-ui/react";
-import config from "next/config";
 // you can use react-swipeable package to add swiping features
 const Drawer1 = (props: { children: React.ReactNode; buttonText: string }) => {
   const { isOpen, onToggle } = useDisclosure();
