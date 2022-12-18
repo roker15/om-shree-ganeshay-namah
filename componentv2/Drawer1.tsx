@@ -23,6 +23,7 @@ const Drawer1 = (props: { children: React.ReactNode; buttonText: string }) => {
           </Flex>
           {props.children}
           <br/>
+          <br/>
         </VStack>
       </Slide>
     </>
