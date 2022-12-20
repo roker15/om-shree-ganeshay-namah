@@ -108,13 +108,13 @@ export const CurrentAffairsContainer = (props: { language: "HINDI" | "ENGLISH" }
               </TabList>
               <TabPanels >
                 <TabPanel >
-                  {/* <Box p="2" mx="-4" bg="facebook.100" borderRadius={"10"}> */}
+                  <Box p="2" mx="-4" bg="facebook.100" borderRadius={"10"}>
                     <SuneditorForNotesMakingg
                       article1={x.id}
                       language={"ENGLISH"}
                       isEditable={profile?.role === "ADMIN" || profile?.id === x.created_by || profile?.role === "M1"}
                     />
-                  {/* </Box> */}
+                  </Box>
                 </TabPanel>
                 <TabPanel>
                   <Box p="2" mx="-4" bg="facebook.100" borderRadius={"10"}>

@@ -320,6 +320,7 @@ export const NoteList = (props: {
                             <TabPanels>
                               <TabPanel px={{ base: "-0.5", lg: "4" }}>
                                 <ErrorBoundary>
+                                  
                                   <SuneditorForNotesMakingg article1={x.id} language={"ENGLISH"} isEditable={true} />
                                 </ErrorBoundary>
                               </TabPanel>
