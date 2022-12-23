@@ -32,7 +32,7 @@ export default async function handle(req: NextApiRequest, res: NextApiResponse) 
   try {
     const data = await prisma.books_articles.findMany(
       {
-      where: { books_subheadings_fk: Number(subheadingId), created_by: creatorId.toString() },
+      where: { books_subheadings_fk: Number(subheadingId), created_by: creatorId?.toString() },
       select: {
         id: true,
         books_subheadings_fk:true,

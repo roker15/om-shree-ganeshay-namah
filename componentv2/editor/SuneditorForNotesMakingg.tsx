@@ -102,7 +102,7 @@ export default SuneditorForNotesMaking;
 export const Centerr = styled.div`
   th,
   td {
-    min-width: 250px;
+    /* min-width: 50px; */
    
   }
   .sun-editor-editable table {
@@ -145,7 +145,7 @@ function ChangeEditorMode(props: {
   editorMode: StringOrNumber | undefined;
 }) {
   return (
-    <RadioGroup onChange={props.setEditorMode} value={props.editorMode}>
+    <RadioGroup onChange={props.setEditorMode} value={props.editorMode?.toString()}>
       <Stack direction="row">
         <Radio colorScheme="whatsapp" borderColor={"gray.400"} size="sm" value="READ">
           <Text as="b" casing="capitalize">

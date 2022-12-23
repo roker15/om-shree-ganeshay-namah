@@ -179,7 +179,7 @@ function ChangeEditorMode(props: {
   editorMode: StringOrNumber | undefined;
 }) {
   return (
-    <RadioGroup onChange={props.setEditorMode} value={props.editorMode}>
+    <RadioGroup onChange={props.setEditorMode} value={props.editorMode?.toString()}>
       <Stack direction="row">
         <Radio colorScheme="whatsapp" size="sm" value="READ">
           <Text as="b" casing="capitalize">

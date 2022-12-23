@@ -57,22 +57,22 @@ ul {
   list-style-type: none;
   padding: 10px 20px;
 }
- td, th {
+ /* td, th {
   border: 1px solid #ddd;
   padding: 8px;
-}
+} */
 
 tr:nth-child(even){background-color: #f2f2f2;}
 
 /* tr:hover {background-color: #ddd;} */
 
-th {
+/* th {
   padding-top: 12px;
   padding-bottom: 12px;
   text-align: left;
   background-color: #d4e9f5;
   color: rgb(53, 48, 48);
-}
+} */
 
 .zaza .sun-editor {
   border: none !important;
