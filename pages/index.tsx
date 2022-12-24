@@ -84,10 +84,11 @@ const Notes: React.FC = () => {
   return (
     <Box>
       {!book && (
-        <VStack>
+        // Here using vstack was causing table problem in suneditor so replaced by Flex
+        <Flex direction="column"> 
           <CustomAlert title={"Syllabus not selected"} des={"Select syllabus from top to create or view notes"} />{" "}
           <LandingPageCurrentAffairs />
-        </VStack>
+        </Flex>
       )}
 
       {book && (
@@ -113,10 +114,10 @@ const Notes: React.FC = () => {
                 <LoginCard redirect={`${BASE_URL}`} />
               </Center>
             )}{" "}
-          </GridItem>
+          </GridItem>  
           <GridItem w="100%" colSpan={1} bg="brand.50" display={{ base: "none", lg: "block" }}>
             <SharedNotesPanel subheadingid={selectedSubheading?.id} changeParentProps={changeContextNotesCreator} />
-          </GridItem>
+          </GridItem>    
         </Grid>
       )}
       <Center>{profile && profile.role === "ADMIN" && <UserTrack />}</Center>
@@ -158,7 +159,7 @@ export const Syllabus = (props: { bookId: number | undefined; bookName: string |
   );
 };
 
-const Headings = (props: { headings: Data_headings }) => {
+const Headings = (props: { headings: Data_headings }) => {   
   const [hide, setHide] = useState(true);
   return (
     <VStack key={Number(props.headings!.id!)} alignItems="left">

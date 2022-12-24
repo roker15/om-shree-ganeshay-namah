@@ -28,10 +28,10 @@ const LandingPageCurrentAffairs = () => {
         <VStack>
           <br />
           <GotoCurrentAffairs />
+          <br/>
           <Heading as="u" fontSize="xl">
             Latest Current Affairs
           </Heading>
-          <br />
           <br />
           {/* <Button
             size="md"
