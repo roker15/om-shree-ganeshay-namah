@@ -1038,7 +1038,7 @@ export const SearchBox = (props: { placeholder: string; changeValueCallback: (x:
         <InputGroup>
           <Input
             size="md"
-            bg="brand.50"
+            bg="blue.100"
             focusBorderColor="brand.50"
             borderRadius="full"
             value={value}

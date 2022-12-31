@@ -26,6 +26,7 @@ import {
   Input,
   Radio,
   RadioGroup,
+  Select,
   Tab,
   TabList,
   TabPanel,
@@ -132,18 +133,28 @@ const CurrentAffair: React.FC = () => {
   const user = useUser();
   const { profile } = useAuthContext();
   const [language, setLangauge] = useState<"ENG" | "HINDI">("ENG");
-  const [book, setBook] = useState<BookResponse>({
-    id: 125,
-    book_name: "News and PIB",
-  });
+  const [book, setBook] = useState<number>(220);
 
   const [isAdminNotes, setIsAdminNotes] = useState<boolean>(true);
   const [articleFormMode, setArticleFormMode] = useState<"CREATING" | "EDITING" | "NONE">("NONE");
   const { selectedSubheading } = useNotesContextNew();
 
   const { data, mutate, isError, isLoading } = useGetCurrentAffairs(isAdminNotes, selectedSubheading?.id!, user?.id!);
-  const c = <Syllabus bookId={book.id} bookName={book.book_name} />;
-
+  const c = (
+    <Box key={book}>
+      <Select
+        placeholder="Select year"
+        onChange={(e) => {
+          setBook(Number(e.target.value));
+        }}
+        bg="blue.100"
+      >
+        <option value="125" selected={book===125}>2022</option>
+        <option value="220" selected={book===220}>2023</option>
+      </Select>
+      <Syllabus bookId={book} bookName={"News and PIB"} />
+    </Box>
+  );
   const handleTabsChange = (index: any) => {
     setLangauge(index === 0 ? "ENG" : "HINDI");
   };
@@ -174,9 +185,9 @@ const CurrentAffair: React.FC = () => {
       elog("MyNotes->onSubmit", error.message);
       return;
     }
-    if (data) {
-      customToast({ title: "Article copied, Check inside your Private notes", status: "success", isUpdating: false });
-    }
+    // if (data) {
+    customToast({ title: "Article copied, Check inside your Private notes", status: "success", isUpdating: false });
+    // }
   };
   const saveArticle = async (id: number, content: string, language: string) => {
     const { data, error } = await supabaseClient
@@ -217,10 +228,10 @@ const CurrentAffair: React.FC = () => {
       </Flex>
       <Container maxW="8xl" py="2" px={{ base: "0.5", md: "2", lg: "4" }}>
         {/* {selectedSyllabus?.subheading} */}
-        <Center >
-          <Heading fontWeight="black" >Editable Current Affairs</Heading>
+        <Center>
+          <Heading fontWeight="black">Editable Current Affairs</Heading>
         </Center>
-        <br/>
+        <br />
         {!user && (
           <Flex justifyContent="end" mb="8">
             <LoginCard redirect={`${BASE_URL}/dna`} />
@@ -249,7 +260,20 @@ const CurrentAffair: React.FC = () => {
           </GridItem>
           <GridItem colSpan={[0, 0, 0, 1]} display={["none", "none", "none", "block"]}>
             <Box height="full" w="64">
-              <Syllabus bookId={book.id} bookName={book.book_name} />
+              <Select
+                placeholder="Select year"
+                onChange={(e) => {
+                  setBook(Number(e.target.value));
+                }}
+                bg="blue.100"
+              >
+                <option value="125" selected={book===125}>2022</option>
+                <option value="220" selected={book===220}>
+                  2023
+                </option>
+              </Select>
+              <br />
+              <Syllabus bookId={book} bookName={"News & PIB"} />
             </Box>
           </GridItem>
           <GridItem colSpan={[5, 5, 5, 4]}>
@@ -630,40 +654,40 @@ const ArticleForm: React.FC<ArticleFormProps> = ({
   );
 };
 
-interface Props {
-  book: BookResponse | undefined;
-  changeParentProps: (x: BookSyllabus) => void;
-}
+// interface Props {
+//   book: BookResponse | undefined;
+//   changeParentProps: (x: BookSyllabus) => void;
+// }
 
-const SyllabusDrawer: React.FC<Props> = ({ book, changeParentProps }) => {
-  const { isOpen, onOpen, onClose } = useDisclosure();
-  const btnRef = React.useRef(null);
+// const SyllabusDrawer: React.FC<Props> = ({ book, changeParentProps }) => {
+//   const { isOpen, onOpen, onClose } = useDisclosure();
+//   const btnRef = React.useRef(null);
 
-  return (
-    <>
-      <Button size={{ base: "sm", sm: "sm", md: "md" }} ref={btnRef} onClick={onOpen}>
-        Select Date
-      </Button>
-      <Drawer isOpen={isOpen} placement="left" onClose={onClose} finalFocusRef={btnRef}>
-        <DrawerOverlay />
-        <DrawerContent>
-          <DrawerCloseButton />
-          <DrawerHeader>Select Date from Month</DrawerHeader>
+//   return (
+//     <>
+//       <Button size={{ base: "sm", sm: "sm", md: "md" }} ref={btnRef} onClick={onOpen}>
+//         Select Date
+//       </Button>
+//       <Drawer isOpen={isOpen} placement="left" onClose={onClose} finalFocusRef={btnRef}>
+//         <DrawerOverlay />
+//         <DrawerContent>
+//           <DrawerCloseButton />
+//           <DrawerHeader>Select Date from Month</DrawerHeader>
 
-          <DrawerBody>
-            <SyllabusForCurrentAffairs book={book} changeParentProps={changeParentProps} />
-          </DrawerBody>
+//           <DrawerBody>
+//             <SyllabusForCurrentAffairs book={book} changeParentProps={changeParentProps} />
+//           </DrawerBody>
 
-          <DrawerFooter>
-            <Button variant="outline" mr={3} onClick={onClose}>
-              Cancel
-            </Button>
-          </DrawerFooter>
-        </DrawerContent>
-      </Drawer>
-    </>
-  );
-};
+//           <DrawerFooter>
+//             <Button variant="outline" mr={3} onClick={onClose}>
+//               Cancel
+//             </Button>
+//           </DrawerFooter>
+//         </DrawerContent>
+//       </Drawer>
+//     </>
+//   );
+// };
 
 // export const getServerSideProps: GetServerSideProps = async (context) => {
 //   // Database logic here
