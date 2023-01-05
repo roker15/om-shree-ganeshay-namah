@@ -15,10 +15,10 @@ import {
 } from "@chakra-ui/react";
 import React, { useState } from "react";
 import SuneditorForNotesMakingg from "./editor/SuneditorForNotesMakingg";
-import { useGetLatestCurrentaffairs } from "../customHookes/apiHooks";
 import { colorPrimary, fontPrimary } from "../lib/constants";
 import GotoCurrentAffairs from "./GotoCurrentAffairs";
 import { useAuthContext } from "../state/Authcontext";
+import { useGetLatestCurrentaffairs } from "../customHookes/apiHooks";
 
 const LandingPageCurrentAffairs = () => {
   const [language, setLanguage] = useState<"HINDI" | "ENGLISH">("ENGLISH");
@@ -47,7 +47,7 @@ const LandingPageCurrentAffairs = () => {
           <br /> */}
         </VStack>
       </Center>
-      <CurrentAffairsContainer key={language} language={language} />
+      {/* <CurrentAffairsContainer key={language} language={language} /> */}
       {/* keys can be faster also - source reactorg docs*/}
     </div>
   );
@@ -72,6 +72,7 @@ export const CurrentAffairsContainer = (props: { language: "HINDI" | "ENGLISH" }
   }
   return (
     <Container maxW="5xl" p="0.5">
+      <Button>hello</Button>
       <Button
         size="md"
         colorScheme="blue"
@@ -82,6 +83,13 @@ export const CurrentAffairsContainer = (props: { language: "HINDI" | "ENGLISH" }
       >
         {tabIndex === 0 ? "SWITCH TO HINDI" : "SWITCH TO ENGLISH"}
       </Button>
+      <br/>
+      <br/>
+      <br/>
+      <br/>
+      <br/>
+      <br/>
+      <br/>
       <br/>
       <br/>
       <br/>
