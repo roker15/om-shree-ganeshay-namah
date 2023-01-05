@@ -47,7 +47,7 @@ const LandingPageCurrentAffairs = () => {
           <br /> */}
         </VStack>
       </Center>
-      {/* <CurrentAffairsContainer key={language} language={language} /> */}
+      <CurrentAffairsContainer key={language} language={language} />
       {/* keys can be faster also - source reactorg docs*/}
     </div>
   );
