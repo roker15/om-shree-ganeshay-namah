@@ -47,7 +47,7 @@ const LandingPageCurrentAffairs = () => {
           <br /> */}
         </VStack>
       </Center>
-      {/* <CurrentAffairsContainer key={language} language={language} /> */}
+      <CurrentAffairsContainer key={language} language={language} />
       {/* keys can be faster also - source reactorg docs*/}
     </div>
   );
@@ -72,7 +72,7 @@ export const CurrentAffairsContainer = (props: { language: "HINDI" | "ENGLISH" }
   }
   return (
     <Container maxW="5xl" p="0.5">
-      <Button>hello</Button>
+      {/* <Button>hello</Button> */}
       <Button
         size="md"
         colorScheme="blue"
@@ -83,13 +83,6 @@ export const CurrentAffairsContainer = (props: { language: "HINDI" | "ENGLISH" }
       >
         {tabIndex === 0 ? "SWITCH TO HINDI" : "SWITCH TO ENGLISH"}
       </Button>
-      <br/>
-      <br/>
-      <br/>
-      <br/>
-      <br/>
-      <br/>
-      <br/>
       <br/>
       <br/>
       <br/>
