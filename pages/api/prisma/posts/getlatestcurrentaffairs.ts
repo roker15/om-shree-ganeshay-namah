@@ -28,7 +28,7 @@ export default async function handle(req: NextApiRequest, res: NextApiResponse) 
   } = await supabaseServerClient.auth.getUser();
   try {
     const data = await prisma.books_articles.findMany({
-      where: { books_subheadings: { books_headings: { books_fk: { equals: 125 } } }, profiles: { role: "MODERATOR" } },
+      where: { books_subheadings: { books_headings: { books_fk: { equals: 220 } } }, profiles: { role: "MODERATOR" } },
 
       // skip:0,
       take: 10,
