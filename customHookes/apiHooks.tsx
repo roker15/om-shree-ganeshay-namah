@@ -124,6 +124,7 @@ export function useGetArticlesbyUserandSubheading(props: { subheadingId: number;
   };
 }
 export function useGetLatestCurrentaffairs() {
+  console.log("ddddddddddddd")
   const supabaseClient = useSupabaseClient<Database>();
   const fetcher = async () => {
     const response = await axios

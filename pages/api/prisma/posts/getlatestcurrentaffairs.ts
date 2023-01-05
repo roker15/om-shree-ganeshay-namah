@@ -17,18 +17,16 @@ export type ApiLatestCurrentAffairs = {
 };
 
 export default async function handle(req: NextApiRequest, res: NextApiResponse) {
-  const supabaseServerClient = createServerSupabaseClient<Database>({ req, res });
-  // const bookId = Number(req.query.bookId);
-  const {
-    query: { subheadingId, creatorId },
-    method,
-  } = req;
-  const {
-    data: { user },
-  } = await supabaseServerClient.auth.getUser();
+  // const supabaseServerClient = createServerSupabaseClient<Database>({ req, res });
+  // // const bookId = Number(req.query.bookId);
+ 
+  // const {
+  //   data: { user },
+  // } = await supabaseServerClient.auth.getUser();
+  console.log("rrrrrrrrrrrrrrrrrrrrrrrr")
   try {
     const data = await prisma.books_articles.findMany({
-      where: { books_subheadings: { books_headings: { books_fk: { equals: 125 } } }, profiles: { role: "MODERATOR" } },
+      where: { books_subheadings: { books_headings: { books_fk: { equals: 220 } } }, profiles: { role: "MODERATOR" } },
 
       // skip:0,
       take: 10,
@@ -47,6 +45,7 @@ export default async function handle(req: NextApiRequest, res: NextApiResponse) 
       },
       orderBy: { updated_at: "desc" },
     });
+    console.log("rrrrrrrrrrr")
     return res.status(200).send(toJson(data)!);
   } catch (error) {
     return res.status(500).send(toJson(error)!);
