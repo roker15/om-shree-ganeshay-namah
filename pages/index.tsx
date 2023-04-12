@@ -37,7 +37,13 @@ import {
 import { useSupabaseClient, useUser } from "@supabase/auth-helpers-react";
 import { useEffect, useState } from "react";
 import { SubmitHandler, useForm } from "react-hook-form";
-import { MdAdd, MdCancel, MdDone, MdLightMode, MdMoreVert } from "react-icons/md";
+import {
+  MdAdd,
+  MdCancel,
+  MdDone,
+  MdLightMode,
+  MdMoreVert,
+} from "react-icons/md";
 import { useSWRConfig } from "swr";
 import { UserTrack } from "../componentv2/UserTrack";
 // import { ArticleCounter } from "../components/CurrentAffair/SyllabusForCurrentAffairs";
@@ -51,56 +57,98 @@ import { LoginCard } from "../componentv2/LoginCard";
 import NotesSearchResult from "../componentv2/NotesSearchResult";
 import NotesSharing from "../componentv2/NotesSharing";
 import SharedNotesPanel from "../componentv2/SharedNotesPanel";
-import { useGetArticlesbyUserandSubheading, useGetSyllabusByBookId } from "../customHookes/apiHooks";
+import {
+  useGetArticlesbyUserandSubheading,
+  useGetSyllabusByBookId,
+} from "../customHookes/apiHooks";
 import LayoutWithTopNavbarForNotes from "../layout/LayoutWithTopNavbarForNotes";
-import { BASE_URL, colorPrimary, currentAffairTags, fontPrimary } from "../lib/constants";
+import {
+  BASE_URL,
+  colorPrimary,
+  currentAffairTags,
+  fontPrimary,
+} from "../lib/constants";
 import { Database } from "../lib/database";
 import { elog, sentenseCase } from "../lib/mylog";
 import { useAuthContext } from "../state/Authcontext";
 import { useNotesContextNew } from "../state/NotesContextNew";
 import PageWithLayoutType from "../types/pageWithLayout";
 import { ApiArticleTitle } from "./api/prisma/posts/getarticlesbyuserandsubheading";
-import { Data_headings, Data_subheadings } from "./api/prisma/syllabus/syllabus";
+import {
+  Data_headings,
+  Data_subheadings,
+} from "./api/prisma/syllabus/syllabus";
 import Drawer1 from "../componentv2/Drawer1";
 // import { GotoQuestion } from "..";
 const Notes: React.FC = () => {
   const { profile } = useAuthContext();
-  const { book, selectedSubheading, setNotesCreator, notesCreator, searchText } = useNotesContextNew();
+  const {
+    book,
+    selectedSubheading,
+    setNotesCreator,
+    notesCreator,
+    searchText,
+  } = useNotesContextNew();
   const changeContextNotesCreator = (id: string, name: string) => {
     setNotesCreator({ id: id, name: name });
   };
   const drawerChildSharing = (
-    <SharedNotesPanel subheadingid={selectedSubheading?.id} changeParentProps={changeContextNotesCreator} />
+    <SharedNotesPanel
+      subheadingid={selectedSubheading?.id}
+      changeParentProps={changeContextNotesCreator}
+    />
   );
-  const drawerChildSyllabus = <Syllabus bookId={book?.bookId} bookName={book?.bookName} />;
-  
+
+
+
+  const drawerChildSyllabus = (
+    <Syllabus bookId={book?.bookId} bookName={book?.bookName} />
+  );
   if (searchText) {
     return (
-      <Container maxW="5xl">
-        <NotesSearchResult searchKeys={searchText} />
-      </Container>
+      <>
+     
+
+        <Container maxW="5xl">
+          <NotesSearchResult searchKeys={searchText} />
+        </Container>
+      </>
     );
   }
   return (
     <Box>
       {!book && (
         // Here using vstack was causing table problem in suneditor so replaced by Flex
-        <Flex direction="column"> 
-          <CustomAlert title={"Syllabus not selected"} des={"Select syllabus from top to create or view notes"} />{" "}
+        <Flex direction="column">
+          <CustomAlert
+            title={"Syllabus not selected"}
+            des={"Select syllabus from top to create or view notes"}
+          />{" "}
           <LandingPageCurrentAffairs />
         </Flex>
       )}
 
       {book && (
-        <Grid templateColumns={{ base: "repeat(6, 1fr)", lg: "repeat(9, 1fr)" }} gap={0.5}>
-          <GridItem w="100%" colSpan={2} minH="100vh" bg="brand.50" display={{ base: "none", lg: "block" }}>
+        <Grid
+          templateColumns={{ base: "repeat(6, 1fr)", lg: "repeat(9, 1fr)" }}
+          gap={0.5}
+        >
+          <GridItem
+            w="100%"
+            colSpan={2}
+            minH="100vh"
+            bg="brand.50"
+            display={{ base: "none", lg: "block" }}
+          >
             <Syllabus bookId={book.bookId} bookName={book.bookName} />
           </GridItem>
           <GridItem w="100%" colSpan={6}>
             {profile ? (
               <>
                 <Box display={{ base: "block", lg: "none" }}>
-                  <Drawer1 buttonText={"Syllabus"}>{drawerChildSyllabus}</Drawer1>
+                  <Drawer1 buttonText={"Syllabus"}>
+                    {drawerChildSyllabus}
+                  </Drawer1>
                   <Drawer1 buttonText={"Sharing"}>{drawerChildSharing}</Drawer1>
                 </Box>
                 <NotesContainer />
@@ -114,10 +162,18 @@ const Notes: React.FC = () => {
                 <LoginCard redirect={`${BASE_URL}`} />
               </Center>
             )}{" "}
-          </GridItem>  
-          <GridItem w="100%" colSpan={1} bg="brand.50" display={{ base: "none", lg: "block" }}>
-            <SharedNotesPanel subheadingid={selectedSubheading?.id} changeParentProps={changeContextNotesCreator} />
-          </GridItem>    
+          </GridItem>
+          <GridItem
+            w="100%"
+            colSpan={1}
+            bg="brand.50"
+            display={{ base: "none", lg: "block" }}
+          >
+            <SharedNotesPanel
+              subheadingid={selectedSubheading?.id}
+              changeParentProps={changeContextNotesCreator}
+            />
+          </GridItem>
         </Grid>
       )}
       <Center>{profile && profile.role === "ADMIN" && <UserTrack />}</Center>
@@ -128,7 +184,10 @@ const Notes: React.FC = () => {
 (Notes as PageWithLayoutType).layout = LayoutWithTopNavbarForNotes;
 export default Notes;
 
-export const Syllabus = (props: { bookId: number | undefined; bookName: string | undefined }) => {
+export const Syllabus = (props: {
+  bookId: number | undefined;
+  bookName: string | undefined;
+}) => {
   // const { book } = useNotesContextNew();
   const user = useUser();
   const { data, swrError, isLoading } = useGetSyllabusByBookId(props.bookId);
@@ -138,7 +197,13 @@ export const Syllabus = (props: { bookId: number | undefined; bookName: string |
       {/* {user && ( */}
       <VStack display="inline-block" w="full">
         <HStack bg="brand.50" alignItems={"baseline"} p="4">
-          <Text fontFamily={fontPrimary} casing="capitalize" fontSize="lg" fontWeight="bold" color={colorPrimary}>
+          <Text
+            fontFamily={fontPrimary}
+            casing="capitalize"
+            fontSize="lg"
+            fontWeight="bold"
+            color={colorPrimary}
+          >
             {props?.bookName}
           </Text>
         </HStack>
@@ -159,7 +224,7 @@ export const Syllabus = (props: { bookId: number | undefined; bookName: string |
   );
 };
 
-const Headings = (props: { headings: Data_headings }) => {   
+const Headings = (props: { headings: Data_headings }) => {
   const [hide, setHide] = useState(true);
   return (
     <VStack key={Number(props.headings!.id!)} alignItems="left">
@@ -169,8 +234,18 @@ const Headings = (props: { headings: Data_headings }) => {
           setHide(!hide);
         }}
       >
-        <IconButton variant="ghost" size="md" aria-label="Call Sage" icon={hide ? <MdAdd /> : <MdLightMode />} />
-        <Text casing={"capitalize"} cursor="pointer" as="address" color=" #FF1493">
+        <IconButton
+          variant="ghost"
+          size="md"
+          aria-label="Call Sage"
+          icon={hide ? <MdAdd /> : <MdLightMode />}
+        />
+        <Text
+          casing={"capitalize"}
+          cursor="pointer"
+          as="address"
+          color=" #FF1493"
+        >
           {props.headings.heading}
         </Text>
       </HStack>
@@ -188,7 +263,10 @@ const Subheading = (props: { subheading: Data_subheadings }) => {
   const { setSelectedSubheading, setNotesCreator } = useNotesContextNew();
   const { profile } = useAuthContext();
   const changeContextSubheading = () => {
-    setSelectedSubheading({ id: props.subheading.id, name: props.subheading.subheading! });
+    setSelectedSubheading({
+      id: props.subheading.id,
+      name: props.subheading.subheading!,
+    });
     setNotesCreator({ id: profile?.id, name: profile?.username });
   };
   return (
@@ -196,15 +274,24 @@ const Subheading = (props: { subheading: Data_subheadings }) => {
       <Text fontSize={"sm"} cursor="pointer" onClick={changeContextSubheading}>
         {sentenseCase(props.subheading.subheading!)}
       </Text>
-      {profile && <ArticleCounter subheadingId={props.subheading.id} creatorId={profile.id} />}
+      {profile && (
+        <ArticleCounter
+          subheadingId={props.subheading.id}
+          creatorId={profile.id}
+        />
+      )}
     </HStack>
   );
 };
 
 const NotesContainer = () => {
   const { book, selectedSubheading, notesCreator } = useNotesContextNew();
-  const [formMode, setFormMode] = useState<"CREATING" | "EDITING" | undefined>(undefined);
-  const [selectedNotes, setSelectedNotes] = useState<ApiArticleTitle | undefined>(undefined);
+  const [formMode, setFormMode] = useState<"CREATING" | "EDITING" | undefined>(
+    undefined
+  );
+  const [selectedNotes, setSelectedNotes] = useState<
+    ApiArticleTitle | undefined
+  >(undefined);
   const { mutate } = useGetArticlesbyUserandSubheading({
     subheadingId: selectedSubheading?.id!,
     creatorId: notesCreator?.id!,
@@ -222,11 +309,20 @@ const NotesContainer = () => {
   return (
     <div>
       {!selectedSubheading && (
-        <CustomAlert title={"Topic not Selected"} des={"Select Topic from Syllabus to Create or View Notes"} />
+        <CustomAlert
+          title={"Topic not Selected"}
+          des={"Select Topic from Syllabus to Create or View Notes"}
+        />
       )}
       {selectedSubheading && (
         <Center h="16" gap="4">
-          <Text casing="capitalize" fontSize="large" fontFamily={fontPrimary} fontWeight="bold" color={colorPrimary}>
+          <Text
+            casing="capitalize"
+            fontSize="large"
+            fontFamily={fontPrimary}
+            fontWeight="bold"
+            color={colorPrimary}
+          >
             {selectedSubheading.name}
           </Text>
 
@@ -234,7 +330,11 @@ const NotesContainer = () => {
         </Center>
       )}
       {selectedSubheading && (
-        <NoteList subheadingId={selectedSubheading?.id!} onChangeCallback={changeFormProps} creatorId={notesCreator?.id!} />
+        <NoteList
+          subheadingId={selectedSubheading?.id!}
+          onChangeCallback={changeFormProps}
+          creatorId={notesCreator?.id!}
+        />
       )}
       {formMode && (
         <ArticleForm
@@ -292,7 +392,11 @@ export const NoteList = (props: {
             ?.sort((a, b) => a.sequence! - b.sequence!)
             .map((x) => (
               <HStack key={x.id} w="full" alignItems="baseline">
-                <NotesContextMenu article={x} onChangeCallback={props.onChangeCallback} mutate={mutate} />
+                <NotesContextMenu
+                  article={x}
+                  onChangeCallback={props.onChangeCallback}
+                  mutate={mutate}
+                />
                 <AccordionItem w="full" border="none">
                   {({ isExpanded }) => (
                     <Box key={x.id}>
@@ -304,14 +408,25 @@ export const NoteList = (props: {
                           _expanded={{ bg: "brand.100", color: colorPrimary }}
                           justifyContent="space-between"
                         >
-                          <Text p="1" fontSize="16px" lineHeight={"tall"} align="start">
-                            <Text as="b">Article Name :- </Text> {sentenseCase(x.article_title)}
+                          <Text
+                            p="1"
+                            fontSize="16px"
+                            lineHeight={"tall"}
+                            align="start"
+                          >
+                            <Text as="b">Article Name :- </Text>{" "}
+                            {sentenseCase(x.article_title)}
                           </Text>
                           <AccordionIcon />
                         </AccordionButton>
                       </Flex>
 
-                      <AccordionPanel pb={4} borderTopWidth="0px" borderBottomWidth="0px" px={{ base: "-0.5", lg: "0" }}>
+                      <AccordionPanel
+                        pb={4}
+                        borderTopWidth="0px"
+                        borderBottomWidth="0px"
+                        px={{ base: "-0.5", lg: "0" }}
+                      >
                         {isExpanded && (
                           <Tabs variant="line" size="sm" colorScheme="gray">
                             <TabList>
@@ -321,12 +436,19 @@ export const NoteList = (props: {
                             <TabPanels>
                               <TabPanel px={{ base: "-0.5", lg: "4" }}>
                                 <ErrorBoundary>
-                                  
-                                  <SuneditorForNotesMakingg article1={x.id} language={"ENGLISH"} isEditable={true} />
+                                  <SuneditorForNotesMakingg
+                                    article1={x.id}
+                                    language={"ENGLISH"}
+                                    isEditable={true}
+                                  />
                                 </ErrorBoundary>
                               </TabPanel>
                               <TabPanel px={{ base: "-0.5", lg: "4" }}>
-                                <SuneditorForNotesMakingg article1={x.id} language={"HINDI"} isEditable={true} />
+                                <SuneditorForNotesMakingg
+                                  article1={x.id}
+                                  language={"HINDI"}
+                                  isEditable={true}
+                                />
                               </TabPanel>
                             </TabPanels>
                           </Tabs>
@@ -350,7 +472,10 @@ export const NotesContextMenu = (props: {
 }) => {
   const supabaseClient = useSupabaseClient<Database>();
   const deleteArticle = async (id: number) => {
-    const { error } = await supabaseClient.from("books_articles").delete().eq("id", id);
+    const { error } = await supabaseClient
+      .from("books_articles")
+      .delete()
+      .eq("id", id);
     if (error) {
       alert(error.message);
       return;
@@ -363,7 +488,10 @@ export const NotesContextMenu = (props: {
         <MdMoreVert />
       </MenuButton>
       <MenuList>
-        <MenuItem icon={<EditIcon />} onClick={() => props.onChangeCallback(props.article)}>
+        <MenuItem
+          icon={<EditIcon />}
+          onClick={() => props.onChangeCallback(props.article)}
+        >
           Edit Notes Title
         </MenuItem>
 
@@ -395,7 +523,9 @@ interface IArticleForm {
 const ArticleForm = (props: IArticleForm) => {
   const supabaseClient = useSupabaseClient<Database>();
   const [isLoading, setIsLoading] = useState(false);
-  const isQuestionc = props.formInput.questionType === "MODEL" || props.formInput.questionType === "PREV";
+  const isQuestionc =
+    props.formInput.questionType === "MODEL" ||
+    props.formInput.questionType === "PREV";
   const [isQuestion, setIsQuestion] = useState(isQuestionc);
   const { mutate } = useSWRConfig();
   const { profile } = useAuthContext();
@@ -441,7 +571,11 @@ const ArticleForm = (props: IArticleForm) => {
     <Flex justifyContent="center" alignItems={"center"}>
       <form onSubmit={handleSubmit(onSubmit)}>
         <VStack alignItems={"center"} p="2">
-          <FormControl p="2" isInvalid={errors.articleTitle as any} maxW="500px">
+          <FormControl
+            p="2"
+            isInvalid={errors.articleTitle as any}
+            maxW="500px"
+          >
             <Textarea
               size="sm"
               minW={{ base: "300px", md: "500px" }}
@@ -449,12 +583,19 @@ const ArticleForm = (props: IArticleForm) => {
               placeholder="Notes Heading"
               {...register("articleTitle", {
                 required: "This field is required",
-                maxLength: { value: 400, message: "Maximum 400 Characters allowed" },
+                maxLength: {
+                  value: 400,
+                  message: "Maximum 400 Characters allowed",
+                },
               })}
             />
             <FormErrorMessage>{errors.articleTitle?.message}</FormErrorMessage>
           </FormControl>
-          <FormControl p="2" isInvalid={errors.articleTitle as any} maxW="500px">
+          <FormControl
+            p="2"
+            isInvalid={errors.articleTitle as any}
+            maxW="500px"
+          >
             <Input
               size="sm"
               focusBorderColor="brand.500"
@@ -474,24 +615,46 @@ const ArticleForm = (props: IArticleForm) => {
           </Checkbox>
           {isQuestion && (
             <Box>
-              <FormControl p="2" isInvalid={errors.questionType as any} maxW="500px" bg="gray.50">
-                <RadioGroup defaultValue={props.formInput.questionType!} size="sm">
+              <FormControl
+                p="2"
+                isInvalid={errors.questionType as any}
+                maxW="500px"
+                bg="gray.50"
+              >
+                <RadioGroup
+                  defaultValue={props.formInput.questionType!}
+                  size="sm"
+                >
                   <Radio
-                    {...register("questionType", { required: "This is required" })}
+                    {...register("questionType", {
+                      required: "This is required",
+                    })}
                     value="MODEL"
                     pr="14"
                     colorScheme={"brand"}
                   >
                     <Text casing="capitalize">Model Question</Text>
                   </Radio>
-                  <Radio {...register("questionType", { required: "This is required" })} value="PREV" colorScheme={"brand"}>
+                  <Radio
+                    {...register("questionType", {
+                      required: "This is required",
+                    })}
+                    value="PREV"
+                    colorScheme={"brand"}
+                  >
                     <Text casing="capitalize">Previous year Question</Text>
                   </Radio>
                 </RadioGroup>
-                <FormErrorMessage>{errors.questionType?.message}</FormErrorMessage>
+                <FormErrorMessage>
+                  {errors.questionType?.message}
+                </FormErrorMessage>
               </FormControl>
               {watchQuestionType === "PREV" && (
-                <FormControl p="2" isInvalid={errors.question_year as any} maxW="500px">
+                <FormControl
+                  p="2"
+                  isInvalid={errors.question_year as any}
+                  maxW="500px"
+                >
                   <Input
                     size="sm"
                     focusBorderColor="brand"
@@ -503,7 +666,9 @@ const ArticleForm = (props: IArticleForm) => {
                       max: 2022,
                     })}
                   />
-                  <FormErrorMessage>{errors.question_year?.message}</FormErrorMessage>
+                  <FormErrorMessage>
+                    {errors.question_year?.message}
+                  </FormErrorMessage>
                 </FormControl>
               )}
             </Box>
@@ -514,16 +679,22 @@ const ArticleForm = (props: IArticleForm) => {
           <VStack py="4">
             <Text bg="brand.100" fontSize="xs">
               {" "}
-              # Select Tags from below. Tags marked ⭐ are main Topics, others are subtopics. Topics taken from UPSC
-              notification. Some Extra Tags are for segregation purposes.
+              # Select Tags from below. Tags marked ⭐ are main Topics, others
+              are subtopics. Topics taken from UPSC notification. Some Extra
+              Tags are for segregation purposes.
             </Text>
-            <Grid templateColumns={{ base: "repeat(2, 1fr)", sm: "repeat(3, 1fr)" }} gap={"1"}>
+            <Grid
+              templateColumns={{ base: "repeat(2, 1fr)", sm: "repeat(3, 1fr)" }}
+              gap={"1"}
+            >
               {currentAffairTags.map((value) => (
                 <>
                   <Checkbox
                     px="2"
                     colorScheme={"brand"}
-                    defaultChecked={props.formInput.tags?.includes(value.id) ? true : false}
+                    defaultChecked={
+                      props.formInput.tags?.includes(value.id) ? true : false
+                    }
                     size="sm"
                     type="checkbox"
                     value={value.id}
@@ -555,3 +726,4 @@ const ArticleForm = (props: IArticleForm) => {
     </Flex>
   );
 };
+// rect component for collecting form data and submitting to supabase, form data should be name and mobile number
