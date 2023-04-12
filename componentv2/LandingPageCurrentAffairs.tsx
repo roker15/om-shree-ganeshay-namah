@@ -86,6 +86,10 @@ export const CurrentAffairsContainer = (props: { language: "HINDI" | "ENGLISH" }
       <br/>
       <br/>
       <br/>
+      <br/>
+      <br/>
+      <br/>
+      <br/>
       <VStack alignItems="left" spacing="16" >
         {articleTitles?.map((x) => (
           <VStack key={x.id} spacing="2" alignItems="left">
