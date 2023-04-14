@@ -211,7 +211,7 @@ const ManageNotes: React.FunctionComponent = () => {
       .from("books_article_sharing")
       .update({ allow_copy: checkValue })
       .match({ books_subheadings_fk: selectedNotes?.subheadingId, ispublic: true, owned_by: profile!.id });
-    if (data && data.length !== 0) {
+    if (!error) {
       setIsPostCopiable(checkValue);
     }
   };
