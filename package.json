@@ -31,7 +31,7 @@
     "formidable": "v3",
     "formik": "^2.2.9",
     "framer-motion": "^7.4.0",
-    "fs": "^0.0.1-security",
+    "fs": "^0.0.1-security",1   
     "html-react-parser": "^1.4.14",
     "isomorphic-dompurify": "^0.22.0",
     "katex": "^0.16.0",
