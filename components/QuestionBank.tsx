@@ -25,7 +25,7 @@ import { useForm } from "react-hook-form";
 import styled from "styled-components";
 import "suneditor/dist/css/suneditor.min.css"; // Import Sun Editor's CSS File
 import SunEditorCore from "suneditor/src/lib/core";
-import { useGetExamPapers, useGetQuestionsByPaperidAndYear } from "../customHookes/useUser";
+import { useGetExamPapers, useGetQuestionsByPaperidAndYear } from "../customHookes/useUsers";
 import { BASE_URL, colors, sunEditorButtonList, sunEditorfontList } from "../lib/constants";
 import { Database } from "../lib/database";
 import { useAuthContext } from "../state/Authcontext";

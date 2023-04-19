@@ -37,7 +37,6 @@ import styled from "styled-components";
 import "suneditor/dist/css/suneditor.min.css"; // Import Sun Editor's CSS File
 // now recommend to always use the mutate returned from the useSWRConfig hook:
 import { mutate } from "swr";
-import { useGetExamPapers, useGetQuestionsByPaperidAndYear, useSubheadingByPaperId } from "../customHookes/useUser";
 import { QuestionBank, SubheadingQuestionLink } from "../types/myTypes";
 // import Suneditor from "../components/Suneditor";
 import { useSupabaseClient,  useUser } from "@supabase/auth-helpers-react";
@@ -46,6 +45,7 @@ import { BASE_URL, sunEditorButtonList } from "../lib/constants";
 import { Database } from "../lib/database";
 import { useAuthContext } from "../state/Authcontext";
 import PageWithLayoutType from "../types/pageWithLayout";
+import { useGetExamPapers, useGetQuestionsByPaperidAndYear, useSubheadingByPaperIds } from "../customHookes/useUsers";
 
 const SunEditor = dynamic(() => import("suneditor-react"), {
   ssr: false,
@@ -83,7 +83,7 @@ const CreateQuestionBank: React.FC = () => {
     isError: isErrorQuestions,
   } = useGetQuestionsByPaperidAndYear(paperId, year, shouldfetch);
 
-  const { subheadingsView, isLoading_useSubheadingByPaperId } = useSubheadingByPaperId(paperId);
+  const { subheadingsView, isLoading_useSubheadingByPaperId } = useSubheadingByPaperIds(paperId);
 
   useEffect(() => {
     if (user) {

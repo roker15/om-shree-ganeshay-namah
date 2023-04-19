@@ -24,7 +24,7 @@ import * as React from "react";
 import { useEffect } from "react";
 import { useForm } from "react-hook-form";
 import useSWR, { mutate } from "swr";
-import { useGetExamPapers } from "../../customHookes/useUser";
+import { useGetExamPapers } from "../../customHookes/useUsers";
 import { Database } from "../../lib/database";
 import { elog } from "../../lib/mylog";
 import { useAuthContext } from "../../state/Authcontext";

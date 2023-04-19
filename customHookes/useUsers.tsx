@@ -78,25 +78,25 @@ export function useGetQuestionsByPaperidAndYear(paperId?: number, year?: number,
   };
 }
 
-// export function useSubheadingByPaperId(paperId?: number) {
-//   const supabaseClient = useSupabaseClient<Database>();
-//   const { data, error } = useSWR(
-//     paperId ? [`/subheadingviews/${paperId}`] : null,
-//     async () => await supabaseClient.from("subheadings_view").select(`*`).eq("paper_id", paperId)
-//     // { refreshInterval: 1000 }
-//   );
-//   let subheadingsView: SubheadingViews[] | null | undefined = [];
-//   if (data && data.data != null) {
-//     subheadingsView = data.data.sort((a, b) => a.heading_sequence! - b.heading_sequence!);
-//   } else {
-//     subheadingsView = null;
-//   }
-//   return {
-//     subheadingsView, //: data?.data,
-//     isLoading_useSubheadingByPaperId: !error && !data,
-//     isError: error,
-//   };
-// }
+export function useSubheadingByPaperIds(paperId?: number) {
+  const supabaseClient = useSupabaseClient<Database>();
+  const { data, error }:{data:any,error:any} = useSWR(
+    paperId ? [`/subheadingviews/${paperId}`] : null,
+    async () => await supabaseClient.from("subheadings_view").select(`*`).eq("paper_id", paperId)
+    // { refreshInterval: 1000 }
+  );
+  let subheadingsView: SubheadingViews[] | null | undefined = [];
+  if (data && data.data != null) {
+    subheadingsView = data.data.sort((a:any, b:any) => a.heading_sequence! - b.heading_sequence!);
+  } else {
+    subheadingsView = null;
+  }
+  return {
+    subheadingsView, //: data?.data,
+    isLoading_useSubheadingByPaperId: !error && !data,
+    isError: error,
+  };
+}
 
 export function useGetSharedpostBySubheadingidAndUserid(currentSubheadingId?: number) {
   const supabaseClient = useSupabaseClient<Database>();
