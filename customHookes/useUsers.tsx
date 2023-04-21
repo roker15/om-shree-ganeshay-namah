@@ -1,5 +1,5 @@
-import { Headings, Papers, Post, QuestionBank, SharedPost, Subheading, SubheadingViews } from "../types/myTypes";
-import useSWR, { useSWRConfig } from "swr";
+import { SubheadingViews } from "../types/myTypes";
+import useSWR from "swr";
 import { useAuthContext } from "../state/Authcontext";
 import {useSupabaseClient} from "@supabase/auth-helpers-react";
 import { Database } from "../lib/database";

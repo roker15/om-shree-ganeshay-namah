@@ -1,13 +1,11 @@
-import { useSupabaseClient } from "@supabase/auth-helpers-react";
+// import { useSupabaseClient } from "@supabase/auth-helpers-react";
 import axios from "axios";
 import useSWR from "swr";
-import { Database } from "../lib/database";
 import { ApiArticleTitle } from "../pages/api/prisma/posts/getarticlesbyuserandsubheading";
 import { ApiLatestCurrentAffairs } from "../pages/api/prisma/posts/getlatestcurrentaffairs";
 import { SyllabusModerator2 } from "../pages/api/prisma/syllabus/getsyllabusmoderatorbystatus";
 import { Data } from "../pages/api/prisma/syllabus/syllabus";
 import { SyllabusModerator } from "../pages/api/prisma/syllabus/usegetsyllabusmoderator";
-import { Book } from "../state/SyllabusContext";
 
 const cacheOptions = {
   revalidateIfStale: true,
@@ -124,7 +122,6 @@ export function useGetArticlesbyUserandSubheading(props: { subheadingId: number;
   };
 }
 export function useGetLatestCurrentaffairs() {
-  const supabaseClient = useSupabaseClient<Database>();
   const fetcher = async () => {
     const response = await axios
       .get<ApiLatestCurrentAffairs[]>("/api/prisma/posts/getlatestcurrentaffairs", {
