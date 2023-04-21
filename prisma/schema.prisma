@@ -1,7 +1,7 @@
 generator client {
   provider = "prisma-client-js"
 }
-
+ 
 datasource db {
   provider = "postgresql"
   url      = env("DATABASE_URL")
@@ -115,9 +115,9 @@ model books_subheadings {
   subheading            String?
   books_headings_fk     BigInt
   sequence              BigInt?
+  books_headings        books_headings          @relation(fields: [books_headings_fk], references: [id], onDelete: NoAction, onUpdate: NoAction)
   books_article_sharing books_article_sharing[]
   books_articles        books_articles[]
-  books_headings        books_headings          @relation(fields: [books_headings_fk], references: [id], onDelete: NoAction, onUpdate: NoAction)
 }
 
 model countries {
@@ -194,8 +194,8 @@ model papers {
   paper_name           String?
   is_multiple_subjects Boolean?           @default(false)
   exam_id              BigInt?
-  headings             headings[]
   exam                 exam?              @relation(fields: [exam_id], references: [id], onDelete: NoAction, onUpdate: NoAction)
+  headings             headings[]
   questionbank         questionbank[]
   questionbank_old     questionbank_old[]
 }
@@ -260,10 +260,10 @@ model questionbank {
   remark                 String?
   created_by             String?                  @db.Uuid
   paper_id_new           BigInt?
-  question_answer        question_answer[]
   profiles               profiles?                @relation(fields: [created_by], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "questionbank_duplicate_created_by_fkey")
   papers                 papers?                  @relation(fields: [paper_id], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "questionbank_duplicate_paper_id_fkey")
   books                  books?                   @relation(fields: [paper_id_new], references: [id], onDelete: NoAction, onUpdate: NoAction)
+  question_answer        question_answer[]
   subheadingquestionlink subheadingquestionlink[]
 }
 
@@ -316,10 +316,10 @@ model subheadings {
   topic                  String?
   main_topic_id          BigInt?
   sequence               BigInt?
+  headings               headings?                @relation(fields: [main_topic_id], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "topics_main_topic_id_fkey")
   posts                  posts[]
   sharedpost             sharedpost[]
   subheadingquestionlink subheadingquestionlink[]
-  headings               headings?                @relation(fields: [main_topic_id], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "topics_main_topic_id_fkey")
 }
 
 model subjects {
